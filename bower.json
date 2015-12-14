@@ -1,8 +1,11 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
-  "author": "",
+  "author": "Marius Andra <marius.andra@gmail.com>",
+  "main": [
+    "dist/react-calendar-timeline.js"
+  ],
   "private": true,
   "ignore": [
     "**/.*",

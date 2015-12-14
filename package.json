@@ -1,22 +1,47 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "react calendar timeline",
+  "main": "src/index.js",
   "scripts": {
-    "test": "eslint lib/ spec/ && ./node_modules/karma/bin/karma start karma.conf.js",
-    "watch-test": "./node_modules/karma/bin/karma start karma.conf.js --auto-watch --no-single-run",
-    "build": "webpack -p",
-    "rename-css-bower-dependencies": "find bower_components -name '*.css' | sed -e 'p;s/.css$/.scss/' | xargs -n2 mv",
-    "start": "webpack-dev-server --inline --hot",
-    "postinstall": "bower install"
+    "clean": "rimraf -rf ./build",
+    "watch": "npm run clean && node scripts/watch.js",
+    "build": "npm run clean && npm run build:dev && npm run build:prod",
+    "build:dev": "echo 'DEV - BUILD' && webpack --config webpack.config.js",
+    "build:prod": "echo 'PROD - BUILD' && webpack --config webpack.config.prod.js",
+    "release": "npm run build && babel src --out-dir build && cp README.md build/ && node scripts/release.js",
+    "lint": "eslint --ext .js,.jsx src --fix",
+    "upgrade:patch": "npm version patch",
+    "preversion": "npm run lint",
+    "version": "node scripts/updateVersion.js && git add \"src/index.js\"",
+    "postversion": "git push origin `git rev-parse --abbrev-ref HEAD` && git push origin `git describe`",
+    "npm:publish:next": "npm run release && cd build && npm publish --tag next",
+    "npm:publish:latest": "npm run release && cd build && npm publish",
+    "info": "npm info react-stockcharts",
+    "start": "webpack-dev-server --inline --hot"
   },
-  "author": "",
-  "license": "BSD",
+  "author": "Marius Andra <marius.andra@gmail.com>",
+  "license": "MIT",
   "keywords": [
     "react",
     "reactjs",
-    "react-component"
+    "react-component",
+    "timeline"
   ],
+  "dependencies": {
+    "interact.js": "^1.2.6",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-pure-render": "^1.0.2"
+  },
+  "peerDependencies": {
+    "react": "0.13.3 || ^0.14.0",
+    "moment": "*",
+    "lodash": "*",
+    "interact.js": "*"
+  },
   "devDependencies": {
     "babel-core": "~6.3.17",
     "babel-eslint": "^5.0.0-beta6",
@@ -38,17 +63,10 @@
     "karma-webpack": "~1.7.0",
     "react-addons-perf": "^0.14.3",
     "react-hot-loader": "^1.3.0",
+    "rimraf": "^2.4.4",
     "sass-loader": "~3.1.2",
     "style-loader": "~0.13.0",
     "webpack": "~1.12.9",
     "webpack-dev-server": "~1.14.0"
-  },
-  "dependencies": {
-    "interact.js": "^1.2.6",
-    "lodash": "^3.10.1",
-    "moment": "^2.10.6",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "react-pure-render": "^1.0.2"
   }
 }
