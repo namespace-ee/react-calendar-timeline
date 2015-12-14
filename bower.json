@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Marius Andra <marius.andra@gmail.com>",
   "main": [
-    "dist/react-calendar-timeline.js"
+    "build/dist/react-calendar-timeline.js"
   ],
   "private": true,
   "ignore": [
