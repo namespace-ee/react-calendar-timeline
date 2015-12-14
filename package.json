@@ -1,0 +1,54 @@
+{
+  "name": "react-calendar-timeline",
+  "version": "0.1.0",
+  "description": "react calendar timeline",
+  "scripts": {
+    "test": "eslint lib/ spec/ && ./node_modules/karma/bin/karma start karma.conf.js",
+    "watch-test": "./node_modules/karma/bin/karma start karma.conf.js --auto-watch --no-single-run",
+    "build": "webpack -p",
+    "rename-css-bower-dependencies": "find bower_components -name '*.css' | sed -e 'p;s/.css$/.scss/' | xargs -n2 mv",
+    "start": "webpack-dev-server --inline --hot",
+    "postinstall": "bower install"
+  },
+  "author": "",
+  "license": "BSD",
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-component"
+  ],
+  "devDependencies": {
+    "babel-core": "~6.3.17",
+    "babel-eslint": "^5.0.0-beta6",
+    "babel-loader": "~6.2.0",
+    "babel-plugin-add-module-exports": "^0.1.1",
+    "babel-preset-es2015": "^6.0.15",
+    "babel-preset-react": "^6.0.15",
+    "babel-preset-stage-0": "^6.0.15",
+    "css-loader": "~0.23.0",
+    "es5-shim": "~4.4.0",
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^3.11.3",
+    "jasmine": "~2.4.1",
+    "jasmine-core": "~2.4.1",
+    "karma": "~0.13.9",
+    "karma-jasmine": "~0.3.6",
+    "karma-phantomjs-launcher": "~0.2.1",
+    "karma-sourcemap-loader": "~0.3.5",
+    "karma-webpack": "~1.7.0",
+    "react-addons-perf": "^0.14.3",
+    "react-hot-loader": "^1.3.0",
+    "sass-loader": "~3.1.2",
+    "style-loader": "~0.13.0",
+    "webpack": "~1.12.9",
+    "webpack-dev-server": "~1.14.0"
+  },
+  "dependencies": {
+    "interact.js": "^1.2.6",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-pure-render": "^1.0.2"
+  }
+}

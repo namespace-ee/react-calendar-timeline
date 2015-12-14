@@ -1,0 +1,19 @@
+{
+  "name": "react-calendar-timeline",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "spec",
+    "test",
+    "tests"
+  ],
+  "moduleType": [
+    "amd",
+    "globals"
+  ]
+}
