@@ -3,7 +3,7 @@
   <title>react calendar timeline Demo</title>
   <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
-<body style='font-family: "Lato"'>
+<body style='font-family: "Lato";margin: 0;'>
   <div id="main"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
@@ -23,6 +23,14 @@
       {
         id: '3',
         title: "Third"
+      },
+      {
+        id: '4',
+        title: "Fourth"
+      },
+      {
+        id: '5',
+        title: "Fifth"
       }
     ];
 
@@ -40,6 +48,13 @@
         title: "Second Item",
         start: moment("2014-09-24T12:00:00Z").toDate(),
         end: moment("2014-09-24T16:00:00Z").toDate()
+      },
+      {
+        id: '1002',
+        group: '4',
+        title: "Third Item",
+        start: moment("2014-09-25T02:00:00Z").toDate(),
+        end: moment("2014-09-25T04:00:00Z").toDate()
       }
     ];
 

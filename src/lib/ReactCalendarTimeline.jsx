@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import Items from './items/Items.jsx';
 import InfoLabel from './layout/InfoLabel.jsx';
+import Controls from './layout/Controls.jsx';
 import Sidebar from './layout/Sidebar.jsx';
 import Header from './layout/Header.jsx';
 import VerticalLines from './lines/VerticalLines.jsx';
@@ -13,22 +14,20 @@ import TodayLine from './lines/TodayLine.jsx';
 import { iterateTimes, getMinUnit, getNextUnit, getParentPosition } from './utils.js';
 
 import _throttle from 'lodash/function/throttle';
+import _min from 'lodash/math/min';
+import _max from 'lodash/math/max';
 
 export default class ReactCalendarTimeline extends Component {
   constructor(props) {
     super(props);
 
-    let minTime = null,
-        maxTime = null;
+    let minTime = _min(this.props.items.map(item => item.start.getTime())),
+        maxTime = _max(this.props.items.map(item => item.end.getTime()));
 
-    this.props.items.forEach(item => {
-      if (minTime === null || item.start.getTime() < minTime) {
-        minTime = item.start.getTime();
-      }
-      if (maxTime === null || item.end.getTime() > maxTime) {
-        maxTime = item.end.getTime();
-      }
-    });
+    if (!minTime || !maxTime) {
+      minTime = new Date().getTime() - 86400 * 7 * 1000;
+      maxTime = new Date().getTime() + 86400 * 7 * 1000;
+    }
 
     this.state = {
       width: 1000,
@@ -339,9 +338,7 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <div style={this.props.style || {}} ref='container' className="react-calendar-timeline">
-        <p>
-          <a href='#' onClick={this.zoomIn.bind(this)}>Zoom in</a> | <a href='#' onClick={this.zoomOut.bind(this)}>Zoom out</a>
-        </p>
+        {this.props.controls ? <Controls changeZoom={this.changeZoom.bind(this)} /> : ''}
         <div>
           <Sidebar {...sidebarProps}/>
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
@@ -365,6 +362,7 @@ ReactCalendarTimeline.propTypes = {
   sidebarWidth: React.PropTypes.number,
   dragSnap: React.PropTypes.number,
   minResizeWidth: React.PropTypes.number,
+  controls: React.PropTypes.bool,
 
   moveItem: React.PropTypes.func,
   resizeItem: React.PropTypes.func
@@ -372,5 +370,6 @@ ReactCalendarTimeline.propTypes = {
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
   dragSnap: 1000 * 60 * 15, // 15min
-  minResizeWidth: 20
+  minResizeWidth: 20,
+  controls: false
 }

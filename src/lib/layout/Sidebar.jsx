@@ -7,8 +7,9 @@ export default class Sidebar extends Component {
 
   render() {
     let style = {
-      width: `${this.props.width - 1}px`,
+      width: `${this.props.width}px`,
       height: `${this.props.lineHeight * (this.props.groups.length + 2)}px`,
+      boxSizing: 'border-box',
       borderRight: '1px solid #000',
       overflow: 'hidden',
       display: 'inline-block',
@@ -26,9 +27,19 @@ export default class Sidebar extends Component {
                     }}>
                   </p>;
 
+    let elementStyle = {
+      height: `${this.props.lineHeight}px`,
+      lineHeight: `${this.props.lineHeight}px`,
+      padding: '0 4px',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      margin: '0'
+    }
+
     let groups = this.props.groups.map(group => {
       return (
-        <p key={group.id} style={{height:`${this.props.lineHeight}px`, lineHeight:`${this.props.lineHeight}px`, margin: '0'}}>
+        <p key={group.id} style={elementStyle}>
           {group.title}
         </p>
       );
