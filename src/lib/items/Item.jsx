@@ -162,14 +162,21 @@ export default class Item extends Component {
   }
 
   canResize(props = this.props) {
+    if (!this.props.canResize) {
+      return false;
+    }
     let width = parseInt(this.dimensions(props).width);
     return width >= props.minResizeWidth;
   }
 
+  canMove(props = this.props) {
+    return !!this.props.canMove;
+  }
+
   componentWillReceiveProps(nextProps) {
-    let couldDrag = this.props.selected,
+    let couldDrag = this.props.selected && this.canMove(this.props),
         couldResize = this.props.selected && this.canResize(this.props),
-        willBeAbleToDrag = nextProps.selected,
+        willBeAbleToDrag = nextProps.selected && this.canMove(nextProps),
         willBeAbleToResize = nextProps.selected && this.canResize(nextProps);
 
     if (couldResize !== willBeAbleToResize) {
@@ -228,7 +235,7 @@ export default class Item extends Component {
            className='timeline-item'
            style={{
               overflow: 'hidden',
-              cursor: this.props.selected ? 'move' : 'pointer',
+              cursor: this.props.selected && this.canMove(this.props) ? 'move' : 'pointer',
               position: 'absolute',
               boxSizing: 'border-box',
               left: dimensions.left,
@@ -259,6 +266,10 @@ Item.propTypes = {
   dragSnap: React.PropTypes.number,
   minResizeWidth: React.PropTypes.number,
   selected: React.PropTypes.bool,
+
+  canMove: React.PropTypes.bool.isRequired,
+  canResize: React.PropTypes.bool.isRequired,
+
   onSelect: React.PropTypes.func,
   onDrag: React.PropTypes.func,
   onDrop: React.PropTypes.func,

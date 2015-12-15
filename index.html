@@ -38,16 +38,19 @@
       {
         id: '1000',
         group: '1',
-        title: "First Item",
+        title: "First Item, can't move or resize",
         start: moment("2014-09-24T10:00:00Z").toDate(),
-        end: moment("2014-09-25T10:00:00Z").toDate()
+        end: moment("2014-09-25T10:00:00Z").toDate(),
+        canMove: false,
+        canResize: false
       },
       {
         id: '1001',
         group: '3',
-        title: "Second Item",
+        title: "Second Item, can't resize",
         start: moment("2014-09-24T12:00:00Z").toDate(),
-        end: moment("2014-09-24T16:00:00Z").toDate()
+        end: moment("2014-09-24T16:00:00Z").toDate(),
+        canResize: false
       },
       {
         id: '1002',
@@ -58,8 +61,15 @@
       }
     ];
 
+    var props = {
+      groups: groups,
+      items: items,
+      canMove: true, // defaults
+      canResize: true
+    }
+
     /* jshint undef:false */
-    ReactDOM.render(React.createElement(ReactCalendarTimeline['default'], {groups: groups, items: items}), document.getElementById('main'));
+    ReactDOM.render(React.createElement(ReactCalendarTimeline['default'], props), document.getElementById('main'));
   </script>
 </body>
 </html>
