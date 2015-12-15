@@ -201,6 +201,7 @@ export default class Item extends Component {
 
   onTouchEnd(e) {
     if (this.startedTouching) {
+      this.startedTouching = false;
       this.onClick(e);
     }
   }

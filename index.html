@@ -65,7 +65,10 @@
       groups: groups,
       items: items,
       canMove: true, // defaults
-      canResize: true
+      canResize: true,
+      itemClick: function(item) {
+        console.log("Clicked: " + item);
+      }
     }
 
     /* jshint undef:false */

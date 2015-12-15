@@ -196,7 +196,13 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   selectItem(item) {
-    this.setState({selectedItem: item});
+    if (this.state.selectedItem === item) {
+      if (item && this.props.itemClick) {
+        this.props.itemClick(item);
+      }
+    } else {
+      this.setState({selectedItem: item});
+    }
   }
 
   canvasClick(e) {
@@ -370,7 +376,8 @@ ReactCalendarTimeline.propTypes = {
   canResize: React.PropTypes.bool,
 
   moveItem: React.PropTypes.func,
-  resizeItem: React.PropTypes.func
+  resizeItem: React.PropTypes.func,
+  itemClick: React.PropTypes.func
 };
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
