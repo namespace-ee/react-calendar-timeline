@@ -133,6 +133,14 @@ export default class ReactCalendarTimeline extends Component {
           xPosition = e.clientX - parentPosition.x;
 
       this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width);
+    } else {
+      e.preventDefault();
+      if (e.deltaX != 0) {
+        this.refs.scrollComponent.scrollLeft += e.deltaX;
+      }
+      if (e.deltaY != 0) {
+        window.scroll(window.pageXOffset, window.pageYOffset + e.deltaY);
+      }
     }
   }
 
