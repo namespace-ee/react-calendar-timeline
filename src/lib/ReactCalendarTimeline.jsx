@@ -65,31 +65,78 @@ export default class ReactCalendarTimeline extends Component {
     if (e.touches.length == 2) {
       e.preventDefault();
 
-      this.lastTouchDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+      this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
+      this.singleTouchStart = null;
+      this.lastSingleTouch = null;
+    } else if(e.touches.length == 1) {
+      e.preventDefault();
+
+      let x = e.touches[0].clientX,
+          y = e.touches[0].clientY;
+
+      this.lastTouchDistance = null;
+      this.singleTouchStart = {x: x, y: y, screenY: window.pageYOffset};
+      this.lastSingleTouch = {x: x, y: y, screenY: window.pageYOffset};
     }
   }
 
   touchMove(e) {
-    if (this.lastTouchDistance) {
+    if (this.state.dragTime || this.state.resizeLength) {
+      e.preventDefault();
+      return;
+    }
+    if (this.lastTouchDistance && e.touches.length == 2) {
       e.preventDefault();
 
-      let touchDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+      let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
 
       let parentPosition = getParentPosition(e.currentTarget),
-          xPosition = (e.touches[0].clientX + e.touches[1].clientX) / 2 - parentPosition.x;
+          xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x;
 
       if (touchDistance != 0 && this.lastTouchDistance != 0) {
         this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width);
         this.lastTouchDistance = touchDistance;
       }
+    } else if (this.lastSingleTouch && e.touches.length == 1) {
+      e.preventDefault();
+
+      let x = e.touches[0].clientX,
+          y = e.touches[0].clientY;
+
+      let deltaX = x - this.lastSingleTouch.x,
+          deltaY = y - this.lastSingleTouch.y;
+
+      let deltaX0 = x - this.singleTouchStart.x,
+          deltaY0 = y - this.singleTouchStart.y;
+
+      this.lastSingleTouch = {x: x, y: y};
+
+      let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0),
+          moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0);
+
+      if (deltaX != 0 && moveX) {
+        this.refs.scrollComponent.scrollLeft -= deltaX;
+      }
+      if (moveY) {
+        window.scrollTo(window.pageXOffset, this.singleTouchStart.screenY - deltaY0);
+      }
+
     }
   }
 
   touchEnd(e) {
     if (this.lastTouchDistance) {
       e.preventDefault();
+      console.log('end multi');
 
       this.lastTouchDistance = null;
+    }
+    if (this.lastSingleTouch) {
+      e.preventDefault();
+
+      console.log('end');
+      this.lastSingleTouch = null;
+      this.singleTouchStart = null;
     }
   }
 
@@ -139,7 +186,7 @@ export default class ReactCalendarTimeline extends Component {
         this.refs.scrollComponent.scrollLeft += e.deltaX;
       }
       if (e.deltaY != 0) {
-        window.scroll(window.pageXOffset, window.pageYOffset + e.deltaY);
+        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY);
       }
     }
   }
