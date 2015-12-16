@@ -357,6 +357,7 @@ export default class ReactCalendarTimeline extends Component {
       selectedItem: this.state.selectedItem,
       dragSnap: this.props.dragSnap,
       minResizeWidth: this.props.minResizeWidth,
+      canChangeGroup: this.props.canChangeGroup,
       canMove: this.props.canMove,
       canResize: this.props.canResize,
       itemSelect: this.selectItem.bind(this),
@@ -445,6 +446,7 @@ ReactCalendarTimeline.propTypes = {
   controls: React.PropTypes.bool,
   fixedHeader: React.PropTypes.bool,
 
+  canChangeGroup: React.PropTypes.bool,
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
 
@@ -460,6 +462,7 @@ ReactCalendarTimeline.defaultProps = {
   fixedHeader: false,
   zIndexStart: 10,
 
+  canChangeGroup: true,
   canMove: true,
   canResize: true
 }

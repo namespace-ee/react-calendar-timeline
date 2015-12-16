@@ -43,6 +43,7 @@ export default class Items extends Component {
                                         selected={this.props.selectedItem === item.id}
                                         dragSnap={this.props.dragSnap}
                                         minResizeWidth={this.props.minResizeWidth}
+                                        canChangeGroup={item.canChangeGroup !== undefined ? item.canChangeGroup : this.props.canChangeGroup}
                                         canMove={item.canMove !== undefined ? item.canMove : this.props.canMove}
                                         canResize={item.canResize !== undefined ? item.canResize : this.props.canResize}
                                         onResizing={this.props.itemResizing}
@@ -68,6 +69,7 @@ Items.propTypes = {
   minResizeWidth: React.PropTypes.number,
   selectedItem: React.PropTypes.string,
 
+  canChangeGroup: React.PropTypes.bool.isRequired,
   canMove: React.PropTypes.bool.isRequired,
   canResize: React.PropTypes.bool.isRequired,
 

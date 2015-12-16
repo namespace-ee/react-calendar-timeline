@@ -49,6 +49,9 @@ export default class Item extends Component {
 
   dragGroupDelta(e) {
     if (this.state.dragging) {
+      if (!this.props.canChangeGroup) {
+        return 0;
+      }
       let deltaY = e.pageY - this.state.dragStart.y,
           groupDelta = Math.round(deltaY / this.props.lineHeight);
 
@@ -268,6 +271,7 @@ Item.propTypes = {
   minResizeWidth: React.PropTypes.number,
   selected: React.PropTypes.bool,
 
+  canChangeGroup: React.PropTypes.bool.isRequired,
   canMove: React.PropTypes.bool.isRequired,
   canResize: React.PropTypes.bool.isRequired,
 
