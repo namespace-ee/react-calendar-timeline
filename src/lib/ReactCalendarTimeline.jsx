@@ -317,9 +317,13 @@ export default class ReactCalendarTimeline extends Component {
       width: this.props.sidebarWidth,
       lineHeight: this.state.lineHeight,
 
+      fixedHeader: this.props.fixedHeader,
+      zIndex: this.props.zIndexStart + 2,
+
       sidebarColor: sidebarColor,
       sidebarBackgroundColor: sidebarBackgroundColor,
-      gradientBackground: gradientBackground
+      sidebarBorderRight: '1px solid #aaa',
+      gradientBackground: gradientBackground,
     };
 
     const headerProps = {
@@ -333,6 +337,8 @@ export default class ReactCalendarTimeline extends Component {
       lowerHeaderColor: lowerHeaderColor,
       lowerHeaderBackgroundColor: lowerHeaderBackgroundColor,
       borderColor: borderColor,
+      fixedHeader: this.props.fixedHeader,
+      zIndex: this.props.zIndexStart + 1,
       showPeriod: this.showPeriod.bind(this)
     };
 
@@ -380,7 +386,9 @@ ReactCalendarTimeline.propTypes = {
   sidebarWidth: React.PropTypes.number,
   dragSnap: React.PropTypes.number,
   minResizeWidth: React.PropTypes.number,
+  zIndexStart: React.PropTypes.number,
   controls: React.PropTypes.bool,
+  fixedHeader: React.PropTypes.bool,
 
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
@@ -394,6 +402,8 @@ ReactCalendarTimeline.defaultProps = {
   dragSnap: 1000 * 60 * 15, // 15min
   minResizeWidth: 20,
   controls: false,
+  fixedHeader: false,
+  zIndexStart: 10,
 
   canMove: true,
   canResize: true

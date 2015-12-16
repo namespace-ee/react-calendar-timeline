@@ -57,8 +57,9 @@ export default class Header extends Component {
           minUnitValue = time.get(minUnit == 'day' ? 'date' : minUnit),
           firstOfType = minUnitValue == (minUnit == 'day' ? 1 : 0),
           labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2),
-          width = firstOfType ? 2 : 1,
-          color = twoHeaders ? this.props.lowerHeaderColor : this.props.headerColor;
+          borderWidth = firstOfType ? 2 : 1,
+          color = twoHeaders ? this.props.lowerHeaderColor : this.props.headerColor,
+          leftCorrect = this.props.fixedHeader ? Math.round((this.props.originX - this.props.minTime) * ratio) - borderWidth + 1 : 0;
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
@@ -66,7 +67,7 @@ export default class Header extends Component {
              style={{
                position: 'absolute',
                top: `${minUnit == 'year' ? 0 : lineHeight}px`,
-               left: `${left}px`,
+               left: `${left + leftCorrect}px`,
                width: `${labelWidth}px`,
                height: `${(minUnit == 'year' ? 2 : 1) * lineHeight}px`,
                lineHeight: `${(minUnit == 'year' ? 2 : 1) * lineHeight}px`,
@@ -74,6 +75,7 @@ export default class Header extends Component {
                overflow: 'hidden',
                textAlign: 'center',
                cursor: 'pointer',
+               borderLeft: this.props.fixedHeader ? `${borderWidth}px solid ${this.props.borderColor}` : '',
                color: color}}>
           {this.subHeaderLabel(time, minUnit, labelWidth)}
         </div>
@@ -91,7 +93,8 @@ export default class Header extends Component {
             endTime = Math.min(maxTime, nextTime.valueOf()),
             left = Math.round((startTime.valueOf() - originX) * ratio, -2),
             right = Math.round((endTime.valueOf() - originX) * ratio, -2),
-            labelWidth = right - left;
+            labelWidth = right - left,
+            leftCorrect = this.props.fixedHeader ?  Math.round((this.props.originX - this.props.minTime) * ratio) - 1 : 0;
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
@@ -99,7 +102,7 @@ export default class Header extends Component {
                style={{
                  position: 'absolute',
                  top: 0,
-                 left: `${left}px`,
+                 left: `${left + leftCorrect}px`,
                  width: `${labelWidth}px`,
                  height: `${lineHeight-1}px`,
                  lineHeight: `${lineHeight-1}px`,
@@ -107,6 +110,7 @@ export default class Header extends Component {
                  overflow: 'hidden',
                  textAlign: 'center',
                  cursor: 'pointer',
+                 borderLeft: this.props.fixedHeader ? `2px solid ${this.props.borderColor}` : '',
                  color: this.props.headerColor}}>
             {this.headerLabel(time, nextUnit, labelWidth)}
           </div>
@@ -121,13 +125,22 @@ export default class Header extends Component {
             createGradientPattern(lineHeight, headerBackgroundColor, lowerHeaderBackgroundColor, this.props.borderColor) :
             createGradientPattern(lineHeight * 2, headerBackgroundColor, null, this.props.borderColor);
 
+    let headerStyle = {
+      height: `${lineHeight * 2}px`,
+      lineHeight: `${lineHeight}px`,
+      margin: '0',
+      background: headerBackground
+    }
+
+    if (this.props.fixedHeader) {
+      headerStyle.position = 'fixed';
+      headerStyle.width = '100%';
+      headerStyle.zIndex = this.props.zIndex;
+    }
+
     return (
-      <div key='timeLabels' style={{
-                              height: `${lineHeight * 2}px`,
-                              lineHeight: `${lineHeight}px`,
-                              margin: '0',
-                              background: headerBackground}}>
-                            {timeLabels}
+      <div key='timeLabels' style={headerStyle}>
+        {timeLabels}
       </div>
     );
   }
@@ -140,6 +153,10 @@ Header.propTypes = {
   // headerColor: React.PropTypes.string.isRequired,
   // headerBackgroundColor: React.PropTypes.string.isRequired,
   // gradientBackground: React.PropTypes.string.isRequired
+  fixedHeader: React.PropTypes.bool,
+  zIndex: React.PropTypes.number
 };
 Header.defaultProps = {
+  fixedHeader: false,
+  zIndex: 11
 };

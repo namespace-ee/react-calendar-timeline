@@ -11,28 +11,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.2.6/interact.js"></script>
   <script src="dist/react-calendar-timeline.js"></script>
   <script>
-    var groups = [
-      {
-        id: '1',
-        title: "First"
-      },
-      {
-        id: '2',
-        title: "Second"
-      },
-      {
-        id: '3',
-        title: "Third"
-      },
-      {
-        id: '4',
-        title: "Fourth"
-      },
-      {
-        id: '5',
-        title: "Fifth"
-      }
-    ];
+    var groups = [];
+    for (var i=0;i < 50; i++) {
+      groups.push({
+        id: (i+1)+'',
+        title: 'Group: #'+(i+1)
+      })
+    };
 
     var items = [
       {
@@ -64,6 +49,7 @@
     var props = {
       groups: groups,
       items: items,
+      fixedHeader: true,
       canMove: true, // defaults
       canResize: true,
       itemClick: function(item) {
