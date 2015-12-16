@@ -1,24 +1,10 @@
 import React, { Component } from 'react';
 
-import { iterateTimes, getNextUnit } from '../utils.js';
+import { iterateTimes, getNextUnit, createGradientPattern } from '../utils.js';
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
-  }
-
-  getMiddleLine(lineHeight, canvasWidth) {
-    return <div key='label-line'
-                style={{
-                  position: 'absolute',
-                  top: `${lineHeight}px`,
-                  left: 0,
-                  width: `${canvasWidth}px`,
-                  height: `1px`,
-                  lineHeight: `1px`,
-                  background: '#ccc',
-                  overflow: 'hidden'
-                }}/>
   }
 
   headerLabel(time, unit, width) {
@@ -62,15 +48,17 @@ export default class Header extends Component {
         minUnit = this.props.minUnit,
         width = this.props.width,
         zoom = this.props.zoom,
-        ratio = canvasWidth / (maxX - originX);
+        ratio = canvasWidth / (maxX - originX),
+        lowerHeaderColor = this.props.lowerHeaderColor || this.props.headerColor,
+        twoHeaders = minUnit != 'year';
 
     iterateTimes(originX, maxX, minUnit, (time, nextTime) => {
       let left = Math.round((time.valueOf() - originX) * ratio, -2),
           minUnitValue = time.get(minUnit == 'day' ? 'date' : minUnit),
           firstOfType = minUnitValue == (minUnit == 'day' ? 1 : 0),
           labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2),
-          color = firstOfType || labelWidth > 100 ? '#aaa' : '#ccc',
-          width = firstOfType ? 2 : 1;
+          width = firstOfType ? 2 : 1,
+          color = twoHeaders ? this.props.lowerHeaderColor : this.props.headerColor;
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
@@ -85,18 +73,18 @@ export default class Header extends Component {
                fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
                overflow: 'hidden',
                textAlign: 'center',
-               cursor: 'pointer'}}>
+               cursor: 'pointer',
+               color: color}}>
           {this.subHeaderLabel(time, minUnit, labelWidth)}
         </div>
       );
     });
 
-    if (minUnit != 'year') {
+    // add the top header
+    if (twoHeaders) {
       let minTime = this.props.minTime,
           maxTime = this.props.maxTime,
           nextUnit = getNextUnit(minUnit);
-
-      timeLabels.push(this.getMiddleLine(lineHeight, canvasWidth));
 
       iterateTimes(minTime, maxTime, nextUnit, (time, nextTime) => {
         let startTime = Math.max(minTime, time.valueOf()),
@@ -118,23 +106,27 @@ export default class Header extends Component {
                  fontSize: '14',
                  overflow: 'hidden',
                  textAlign: 'center',
-                 cursor: 'pointer'}}>
+                 cursor: 'pointer',
+                 color: this.props.headerColor}}>
             {this.headerLabel(time, nextUnit, labelWidth)}
           </div>
         );
       });
     }
 
-    let headerColor = this.props.headerColor,
-        headerBackgroundColor = this.props.headerBackgroundColor;
+    let headerBackgroundColor = this.props.headerBackgroundColor,
+        lowerHeaderBackgroundColor = this.props.lowerHeaderBackgroundColor;
+
+    let headerBackground = twoHeaders ?
+            createGradientPattern(lineHeight, headerBackgroundColor, lowerHeaderBackgroundColor, this.props.borderColor) :
+            createGradientPattern(lineHeight * 2, headerBackgroundColor, null, this.props.borderColor);
 
     return (
       <div key='timeLabels' style={{
                               height: `${lineHeight * 2}px`,
                               lineHeight: `${lineHeight}px`,
                               margin: '0',
-                              color: headerColor,
-                              background: headerBackgroundColor}}>
+                              background: headerBackground}}>
                             {timeLabels}
       </div>
     );

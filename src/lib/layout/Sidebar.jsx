@@ -17,15 +17,16 @@ export default class Sidebar extends Component {
       background: this.props.gradientBackground
     };
 
-    let header = <p key='sidebar-header'
-                    style={{
-                      height:`${this.props.lineHeight * 2}px`,
-                      lineHeight:`${this.props.lineHeight}px`,
-                      margin: '0',
-                      color: this.props.headerColor,
-                      background: this.props.headerBackgroundColor
-                    }}>
-                  </p>;
+    let header = <div key='sidebar-header'
+                      style={{
+                        height:`${this.props.lineHeight * 2}px`,
+                        lineHeight:`${this.props.lineHeight}px`,
+                        margin: '0',
+                        color: this.props.sidebarColor,
+                        background: this.props.sidebarBackgroundColor
+                      }}>
+                    {this.props.children}
+                  </div>;
 
     let elementStyle = {
       height: `${this.props.lineHeight}px`,
@@ -58,8 +59,8 @@ Sidebar.propTypes = {
   groups: React.PropTypes.array.isRequired,
   width: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
-  headerColor: React.PropTypes.string.isRequired,
-  headerBackgroundColor: React.PropTypes.string.isRequired,
+  sidebarColor: React.PropTypes.string.isRequired,
+  sidebarBackgroundColor: React.PropTypes.string.isRequired,
   gradientBackground: React.PropTypes.string.isRequired
 };
 Sidebar.defaultProps = {

@@ -24,7 +24,7 @@ export default class VerticalLines extends Component {
           minUnitValue = time.get(minUnit == 'day' ? 'date' : minUnit),
           firstOfType = minUnitValue == (minUnit == 'day' ? 1 : 0),
           labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2),
-          color = firstOfType || labelWidth > 100 ? '#aaa' : '#ccc',
+          color = this.props.borderColor || (firstOfType || labelWidth > 100 ? '#aaa' : '#ccc'),
           width = firstOfType ? 2 : 1;
 
       lines.push(
@@ -54,7 +54,8 @@ VerticalLines.propTypes = {
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
   lineCount: React.PropTypes.number.isRequired,
-  minUnit: React.PropTypes.string.isRequired
+  minUnit: React.PropTypes.string.isRequired,
+  borderColor: React.PropTypes.string
 };
 VerticalLines.defaultProps = {
 };

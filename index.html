@@ -3,7 +3,7 @@
   <title>react calendar timeline Demo</title>
   <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
-<body style='font-family: "Lato";margin: 0;'>
+<body style='font-family: "Lato";margin: 0;font-size: 13px;'>
   <div id="main"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
@@ -71,8 +71,10 @@
       }
     }
 
+    var filter = React.createElement("div", {}, "The filter");
+
     /* jshint undef:false */
-    ReactDOM.render(React.createElement(ReactCalendarTimeline['default'], props), document.getElementById('main'));
+    ReactDOM.render(React.createElement(ReactCalendarTimeline['default'], props, filter), document.getElementById('main'));
   </script>
 </body>
 </html>
