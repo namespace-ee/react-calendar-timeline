@@ -4,7 +4,8 @@ export default class Sidebar extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      scrollTop: 0
+      scrollTop: 0,
+      componentTop: 0
     }
   }
 
@@ -17,7 +18,15 @@ export default class Sidebar extends Component {
     }
   }
 
+  setComponentTop () {
+    const viewportOffset = this.refs.sidebar.getBoundingClientRect()
+    this.setState({
+      componentTop: viewportOffset.top
+    })
+  }
+
   componentDidMount () {
+    this.setComponentTop()
     this.scroll()
 
     this.scrollEventListener = {
@@ -31,6 +40,10 @@ export default class Sidebar extends Component {
 
   componentWillUnmount () {
     window.removeEventListener('scroll', this.scrollEventListener)
+  }
+
+  componentWillReceiveProps () {
+    this.setComponentTop()
   }
 
   render () {
@@ -51,7 +64,8 @@ export default class Sidebar extends Component {
       overflow: 'hidden',
       display: 'inline-block',
       verticalAlign: 'top',
-      background: gradientBackground
+      background: gradientBackground,
+      position: 'relative'
     }
 
     const headerStyle = {
@@ -84,18 +98,21 @@ export default class Sidebar extends Component {
       headerStyle.zIndex = zIndex
       groupsStyle.paddingTop = headerStyle.height
     } else if (fixedHeader === 'absolute') {
-      headerStyle.position = 'absolute'
-      headerStyle.top = `${scrollTop}px`
-      headerStyle.left = `0`
-      groupsStyle.paddingTop = headerStyle.height
+      let componentTop = this.state.componentTop
+      if (scrollTop >= componentTop) {
+        headerStyle.position = 'absolute'
+        headerStyle.top = `${scrollTop - componentTop}px`
+        headerStyle.left = `0`
+        groupsStyle.paddingTop = headerStyle.height
+      }
     }
 
-    const header = <div key='sidebar-header' style={headerStyle}>
+    const header = <div ref='sidebarHeader' style={headerStyle}>
                      {this.props.children}
                    </div>
 
     return (
-      <div style={containerStyle}>
+      <div ref='sidebar' style={containerStyle}>
         {header}
         <div style={groupsStyle}>
           {this.props.groups.map(group => <p key={group.id} style={elementStyle}>{group.title}</p>)}

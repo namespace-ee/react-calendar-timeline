@@ -6,7 +6,8 @@ export default class Header extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      scrollTop: 0
+      scrollTop: 0,
+      componentTop: 0
     }
   }
 
@@ -19,7 +20,15 @@ export default class Header extends Component {
     }
   }
 
+  setComponentTop () {
+    const viewportOffset = this.refs.header.getBoundingClientRect()
+    this.setState({
+      componentTop: viewportOffset.top
+    })
+  }
+
   componentDidMount () {
+    this.setComponentTop()
     this.scroll()
 
     this.scrollEventListener = {
@@ -33,6 +42,10 @@ export default class Header extends Component {
 
   componentWillUnmount () {
     window.removeEventListener('scroll', this.scrollEventListener)
+  }
+
+  componentWillReceiveProps () {
+    this.setComponentTop()
   }
 
   headerLabel (time, unit, width) {
@@ -163,14 +176,17 @@ export default class Header extends Component {
       headerStyle.width = '100%'
       headerStyle.zIndex = zIndex
     } else if (fixedHeader === 'absolute') {
-      headerStyle.position = 'absolute'
-      headerStyle.top = `${scrollTop}px`
-      headerStyle.width = `${canvasWidth}px`
-      headerStyle.left = `0`
+      let componentTop = this.state.componentTop
+      if (scrollTop >= componentTop) {
+        headerStyle.position = 'absolute'
+        headerStyle.top = `${scrollTop - componentTop}px`
+        headerStyle.width = `${canvasWidth}px`
+        headerStyle.left = `0`
+      }
     }
 
     return (
-      <div key='timeLabels' style={headerStyle}>
+      <div ref='header' key='header' style={headerStyle}>
         {timeLabels}
       </div>
     )
