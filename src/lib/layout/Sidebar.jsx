@@ -49,7 +49,7 @@ export default class Sidebar extends Component {
   render () {
     const {
       fixedHeader, width, lineHeight, zIndex, groups,
-      sidebarBorderRight, sidebarBackgroundColor, sidebarColor, gradientBackground
+      sidebarBorderRight, sidebarBorderBottom, sidebarBackgroundColor, sidebarColor, gradientBackground
     } = this.props
 
     const {
@@ -76,6 +76,8 @@ export default class Sidebar extends Component {
       background: sidebarBackgroundColor,
       borderRight: sidebarBorderRight,
       boxSizing: 'border-box',
+      borderBottom: sidebarBorderBottom,
+      overflow: 'hidden',
       width: `${width}px`
     }
 
@@ -131,10 +133,12 @@ Sidebar.propTypes = {
   gradientBackground: React.PropTypes.string.isRequired,
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  sidebarBorderRight: React.PropTypes.string
+  sidebarBorderRight: React.PropTypes.string,
+  sidebarBorderBottom: React.PropTypes.string
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',
   zIndex: 12,
-  sidebarBorderRight: '1px solid #aaa'
+  sidebarBorderRight: '1px solid #aaa',
+  sidebarBorderBottom: '1px solid #aaa'
 }

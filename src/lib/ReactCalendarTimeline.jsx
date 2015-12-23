@@ -335,7 +335,7 @@ export default class ReactCalendarTimeline extends Component {
 
     const minUnit = getMinUnit(zoom, this.state.width)
 
-    const colors = Object.assign({
+    const design = Object.assign({
       evenRowBackground: '#ffffff',
       oddRowBackground: '#f0f0f0',
       borderColor: '#bbb',
@@ -345,9 +345,9 @@ export default class ReactCalendarTimeline extends Component {
       headerBackgroundColor: '#c52020',
       lowerHeaderColor: '#333333',
       lowerHeaderBackgroundColor: '#f0f0f0'
-    }, this.props.colors)
+    }, this.props.design)
 
-    const gradientBackground = createGradientPattern(this.state.lineHeight, colors.evenRowBackground, colors.oddRowBackground, colors.borderColor)
+    const gradientBackground = createGradientPattern(this.state.lineHeight, design.evenRowBackground, design.oddRowBackground, design.borderColor)
 
     const staticProps = {
       originX: originX,
@@ -386,9 +386,10 @@ export default class ReactCalendarTimeline extends Component {
       fixedHeader: this.props.fixedHeader,
       zIndex: this.props.zIndexStart + 2,
 
-      sidebarColor: colors.sidebarColor,
-      sidebarBackgroundColor: colors.sidebarBackgroundColor,
+      sidebarColor: design.sidebarColor,
+      sidebarBackgroundColor: design.sidebarBackgroundColor,
       sidebarBorderRight: '1px solid #aaa',
+      sidebarBorderBottom: '1px solid #aaa',
       gradientBackground: gradientBackground
     }
 
@@ -398,11 +399,11 @@ export default class ReactCalendarTimeline extends Component {
       zoom: zoom,
       minTime: this.state.minTime,
       maxTime: this.state.maxTime,
-      headerColor: colors.headerColor,
-      headerBackgroundColor: colors.headerBackgroundColor,
-      lowerHeaderColor: colors.lowerHeaderColor,
-      lowerHeaderBackgroundColor: colors.lowerHeaderBackgroundColor,
-      borderColor: colors.borderColor,
+      headerColor: design.headerColor,
+      headerBackgroundColor: design.headerBackgroundColor,
+      lowerHeaderColor: design.lowerHeaderColor,
+      lowerHeaderBackgroundColor: design.lowerHeaderBackgroundColor,
+      borderColor: design.borderColor,
       fixedHeader: this.props.fixedHeader,
       zIndex: this.props.zIndexStart + 1,
       showPeriod: this.showPeriod.bind(this)
@@ -434,7 +435,7 @@ export default class ReactCalendarTimeline extends Component {
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
               <TodayLine {...staticProps} {...extraProps} />
-              <VerticalLines {...staticProps} {...extraProps} borderColor={colors.borderColor} />
+              <VerticalLines {...staticProps} {...extraProps} borderColor={design.borderColor} />
               <Items {...staticProps} {...itemProps} />
               {this.infoLabel() ? <InfoLabel label={this.infoLabel()} /> : ''}
               <Header {...staticProps} {...headerProps} />
@@ -464,7 +465,7 @@ ReactCalendarTimeline.propTypes = {
   resizeItem: React.PropTypes.func,
   itemClick: React.PropTypes.func,
   style: React.PropTypes.object,
-  colors: React.PropTypes.object,
+  design: React.PropTypes.object,
 
   children: React.PropTypes.node
 }
@@ -483,5 +484,5 @@ ReactCalendarTimeline.defaultProps = {
   children: null,
 
   style: {},
-  colors: {}
+  design: {}
 }
