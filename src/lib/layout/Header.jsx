@@ -57,7 +57,7 @@ export default class Header extends Component {
       const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
       const borderWidth = firstOfType ? 2 : 1
       const color = twoHeaders ? lowerHeaderColor : headerColor
-      const leftCorrect = fixedHeader ? Math.round((originX - minTime) * ratio) - borderWidth + 1 : 0
+      const leftCorrect = fixedHeader === 'fixed' ? Math.round((originX - minTime) * ratio) - borderWidth + 1 : 0
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
@@ -73,7 +73,7 @@ export default class Header extends Component {
                overflow: 'hidden',
                textAlign: 'center',
                cursor: 'pointer',
-               borderLeft: this.props.fixedHeader ? `${borderWidth}px solid ${borderColor}` : '',
+               borderLeft: `${borderWidth}px solid ${borderColor}`,
                color: color}}>
           {this.subHeaderLabel(time, minUnit, labelWidth)}
         </div>
@@ -90,7 +90,7 @@ export default class Header extends Component {
         const left = Math.round((startTime.valueOf() - originX) * ratio, -2)
         const right = Math.round((endTime.valueOf() - originX) * ratio, -2)
         const labelWidth = right - left
-        const leftCorrect = this.props.fixedHeader ? Math.round((originX - minTime) * ratio) - 1 : 0
+        const leftCorrect = fixedHeader === 'fixed' ? Math.round((originX - minTime) * ratio) - 1 : 0
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
@@ -106,7 +106,7 @@ export default class Header extends Component {
                  overflow: 'hidden',
                  textAlign: 'center',
                  cursor: 'pointer',
-                 borderLeft: fixedHeader ? `2px solid ${borderColor}` : '',
+                 borderLeft: `2px solid ${borderColor}`,
                  color: headerColor}}>
             {this.headerLabel(time, nextUnit, labelWidth)}
           </div>
@@ -127,7 +127,7 @@ export default class Header extends Component {
       background: headerBackground
     }
 
-    if (this.props.fixedHeader) {
+    if (this.props.fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.width = '100%'
       headerStyle.zIndex = this.props.zIndex
@@ -161,10 +161,10 @@ Header.propTypes = {
   headerBackgroundColor: React.PropTypes.string.isRequired,
   lowerHeaderBackgroundColor: React.PropTypes.string.isRequired,
   borderColor: React.PropTypes.string.isRequired,
-  fixedHeader: React.PropTypes.bool,
+  fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   zIndex: React.PropTypes.number
 }
 Header.defaultProps = {
-  fixedHeader: false,
+  fixedHeader: 'none',
   zIndex: 11
 }

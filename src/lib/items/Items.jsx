@@ -1,35 +1,35 @@
-import React, { Component } from 'react';
-import Item from './Item.jsx';
+import React, { Component } from 'react'
+import Item from './Item.jsx'
 
 export default class Items extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
   }
 
-  getGroupOrders() {
-    let groupOrders = {},
-        i = 0;
+  getGroupOrders () {
+    let groupOrders = {}
+    let i = 0
 
     this.props.groups.forEach(group => {
-      groupOrders[group.id] = i++;
-    });
+      groupOrders[group.id] = i++
+    })
 
-    return groupOrders;
+    return groupOrders
   }
 
-  getVisibleItems(originX, maxX, groupOrders) {
+  getVisibleItems (originX, maxX, groupOrders) {
     return this.props.items.filter(item => {
-      return groupOrders.hasOwnProperty(item.group);
+      return groupOrders.hasOwnProperty(item.group)
     }).filter(item => {
-      let x1 = item.start.getTime(),
-          x2 = item.end.getTime();
-      return (x1 >= originX && x1 <= maxX) || (x1 <= originX && x2 >= maxX) || (x2 >= originX && x2 <= maxX);
-    });
+      const x1 = item.start.getTime()
+      const x2 = item.end.getTime()
+      return (x1 >= originX && x1 <= maxX) || (x1 <= originX && x2 >= maxX) || (x2 >= originX && x2 <= maxX)
+    })
   }
 
-  render() {
-    let groupOrders = this.getGroupOrders(),
-        visibleItems = this.getVisibleItems(this.props.originX, this.props.maxX, groupOrders);
+  render () {
+    const groupOrders = this.getGroupOrders()
+    const visibleItems = this.getVisibleItems(this.props.originX, this.props.maxX, groupOrders)
 
     return (
       <div>
@@ -52,7 +52,7 @@ export default class Items extends Component {
                                         onDrop={this.props.itemDrop}
                                         onSelect={this.props.itemSelect}/>)}
       </div>
-    );
+    )
   }
 }
 
@@ -78,6 +78,6 @@ Items.propTypes = {
   itemDrop: React.PropTypes.func,
   itemResizing: React.PropTypes.func,
   itemResized: React.PropTypes.func
-};
+}
 Items.defaultProps = {
-};
+}

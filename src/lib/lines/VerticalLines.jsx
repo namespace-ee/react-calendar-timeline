@@ -31,11 +31,11 @@ export default class VerticalLines extends Component {
         <div key={`line-${time.valueOf()}`}
              style={{
                position: 'absolute',
-               top: `${firstOfType || minUnit == 'year' ? 0 : lineHeight}px`,
-               left: `${left - (width == 2 ? 1 : 0)}px`,
-               width: `${width}px`,
-               height: ((lineCount + (firstOfType || minUnit == 'year' ? 2 : 1)) * lineHeight)+'px',
-               borderLeft: `1px solid ${color}`
+               top: `${lineHeight * 2}px`,
+               left: `${left}px`,
+               width: `1px`,
+               height: (lineCount * lineHeight)+'px',
+               borderLeft: `${width}px solid ${color}`
              }} />);
 
     });

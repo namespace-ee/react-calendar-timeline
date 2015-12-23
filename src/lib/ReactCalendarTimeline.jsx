@@ -155,17 +155,19 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   onScroll () {
-    let scrollComponent = this.refs.scrollComponent
-    let originX = this.state.originX
-    let scrollX = scrollComponent.scrollLeft
-    let zoom = this.state.zoom
-    let width = this.state.width
-    let minTime = originX + (zoom * scrollX / width)
+    const scrollComponent = this.refs.scrollComponent
+    const originX = this.state.originX
+    const scrollX = scrollComponent.scrollLeft
+    const zoom = this.state.zoom
+    const width = this.state.width
+    const minTime = originX + (zoom * scrollX / width)
 
-    this.setState({
-      minTime: minTime,
-      maxTime: minTime + zoom
-    })
+    if (this.state.minTime !== minTime || this.state.maxTime !== minTime + zoom) {
+      this.setState({
+        minTime: minTime,
+        maxTime: minTime + zoom
+      })
+    }
 
     if (scrollX < this.state.width * 0.5) {
       this.setState({originX: this.state.originX - this.state.zoom})
@@ -186,12 +188,14 @@ export default class ReactCalendarTimeline extends Component {
 
       this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width)
     } else {
-      e.preventDefault()
-      if (e.deltaX !== 0) {
-        this.refs.scrollComponent.scrollLeft += e.deltaX
-      }
-      if (e.deltaY !== 0) {
-        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+      if (this.props.fixedHeader === 'fixed') {
+        e.preventDefault()
+        if (e.deltaX !== 0) {
+          this.refs.scrollComponent.scrollLeft += e.deltaX
+        }
+        if (e.deltaY !== 0) {
+          window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+        }
       }
     }
   }
@@ -449,7 +453,7 @@ ReactCalendarTimeline.propTypes = {
   minResizeWidth: React.PropTypes.number,
   zIndexStart: React.PropTypes.number,
   controls: React.PropTypes.bool,
-  fixedHeader: React.PropTypes.bool,
+  fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
 
   canChangeGroup: React.PropTypes.bool,
   canMove: React.PropTypes.bool,
@@ -465,7 +469,7 @@ ReactCalendarTimeline.defaultProps = {
   dragSnap: 1000 * 60 * 15, // 15min
   minResizeWidth: 20,
   controls: false,
-  fixedHeader: false,
+  fixedHeader: 'none', // fixed or absolute or none
   zIndexStart: 10,
 
   canChangeGroup: true,
