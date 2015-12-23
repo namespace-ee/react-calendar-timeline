@@ -1,32 +1,31 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
 
-// import './ReactCalendarTimeline.scss';
+// import './ReactCalendarTimeline.scss'
 
-import Items from './items/Items.jsx';
-import InfoLabel from './layout/InfoLabel.jsx';
-import Controls from './layout/Controls.jsx';
-import Sidebar from './layout/Sidebar.jsx';
-import Header from './layout/Header.jsx';
-import VerticalLines from './lines/VerticalLines.jsx';
-import TodayLine from './lines/TodayLine.jsx';
+import Items from './items/Items.jsx'
+import InfoLabel from './layout/InfoLabel.jsx'
+import Controls from './layout/Controls.jsx'
+import Sidebar from './layout/Sidebar.jsx'
+import Header from './layout/Header.jsx'
+import VerticalLines from './lines/VerticalLines.jsx'
+import TodayLine from './lines/TodayLine.jsx'
 
-import { iterateTimes, getMinUnit, getNextUnit, getParentPosition, createGradientPattern } from './utils.js';
+import { getMinUnit, getNextUnit, getParentPosition, createGradientPattern } from './utils.js'
 
-import _throttle from 'lodash/function/throttle';
-import _min from 'lodash/math/min';
-import _max from 'lodash/math/max';
+import _min from 'lodash/math/min'
+import _max from 'lodash/math/max'
 
 export default class ReactCalendarTimeline extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
-    let minTime = _min(this.props.items.map(item => item.start.getTime())),
-        maxTime = _max(this.props.items.map(item => item.end.getTime()));
+    let minTime = _min(this.props.items.map(item => item.start.getTime()))
+    let maxTime = _max(this.props.items.map(item => item.end.getTime()))
 
     if (!minTime || !maxTime) {
-      minTime = new Date().getTime() - 86400 * 7 * 1000;
-      maxTime = new Date().getTime() + 86400 * 7 * 1000;
+      minTime = new Date().getTime() - 86400 * 7 * 1000
+      maxTime = new Date().getTime() + 86400 * 7 * 1000
     }
 
     this.state = {
@@ -41,121 +40,120 @@ export default class ReactCalendarTimeline extends Component {
       dragTime: null,
       dragGroupTitle: null,
       resizeLength: null
-    };
-  }
-
-  componentDidMount() {
-    this.resize();
-    window.addEventListener('resize', this.resize);
-
-    this.lastTouchDistance = null;
-    this.refs.scrollComponent.addEventListener('touchstart', this.touchStart.bind(this));
-    this.refs.scrollComponent.addEventListener('touchmove', this.touchMove.bind(this));
-    this.refs.scrollComponent.addEventListener('touchend', this.touchEnd.bind(this));
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resize);
-    this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart.bind(this));
-    this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove.bind(this));
-    this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd.bind(this));
-  }
-
-  touchStart(e) {
-    if (e.touches.length == 2) {
-      e.preventDefault();
-
-      this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
-      this.singleTouchStart = null;
-      this.lastSingleTouch = null;
-    } else if(e.touches.length == 1) {
-      e.preventDefault();
-
-      let x = e.touches[0].clientX,
-          y = e.touches[0].clientY;
-
-      this.lastTouchDistance = null;
-      this.singleTouchStart = {x: x, y: y, screenY: window.pageYOffset};
-      this.lastSingleTouch = {x: x, y: y, screenY: window.pageYOffset};
     }
   }
 
-  touchMove(e) {
+  componentDidMount () {
+    this.resize()
+    window.addEventListener('resize', this.resize)
+
+    this.lastTouchDistance = null
+    this.refs.scrollComponent.addEventListener('touchstart', this.touchStart.bind(this))
+    this.refs.scrollComponent.addEventListener('touchmove', this.touchMove.bind(this))
+    this.refs.scrollComponent.addEventListener('touchend', this.touchEnd.bind(this))
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.resize)
+    this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart.bind(this))
+    this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove.bind(this))
+    this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd.bind(this))
+  }
+
+  touchStart (e) {
+    if (e.touches.length === 2) {
+      e.preventDefault()
+
+      this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
+      this.singleTouchStart = null
+      this.lastSingleTouch = null
+    } else if (e.touches.length === 1) {
+      e.preventDefault()
+
+      let x = e.touches[0].clientX
+      let y = e.touches[0].clientY
+
+      this.lastTouchDistance = null
+      this.singleTouchStart = {x: x, y: y, screenY: window.pageYOffset}
+      this.lastSingleTouch = {x: x, y: y, screenY: window.pageYOffset}
+    }
+  }
+
+  touchMove (e) {
     if (this.state.dragTime || this.state.resizeLength) {
-      e.preventDefault();
-      return;
+      e.preventDefault()
+      return
     }
-    if (this.lastTouchDistance && e.touches.length == 2) {
-      e.preventDefault();
+    if (this.lastTouchDistance && e.touches.length === 2) {
+      e.preventDefault()
 
-      let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
+      let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
 
-      let parentPosition = getParentPosition(e.currentTarget),
-          xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x;
+      let parentPosition = getParentPosition(e.currentTarget)
+      let xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
 
-      if (touchDistance != 0 && this.lastTouchDistance != 0) {
-        this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width);
-        this.lastTouchDistance = touchDistance;
+      if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
+        this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width)
+        this.lastTouchDistance = touchDistance
       }
-    } else if (this.lastSingleTouch && e.touches.length == 1) {
-      e.preventDefault();
+    } else if (this.lastSingleTouch && e.touches.length === 1) {
+      e.preventDefault()
 
-      let x = e.touches[0].clientX,
-          y = e.touches[0].clientY;
+      let x = e.touches[0].clientX
+      let y = e.touches[0].clientY
 
-      let deltaX = x - this.lastSingleTouch.x,
-          deltaY = y - this.lastSingleTouch.y;
+      let deltaX = x - this.lastSingleTouch.x
+      // let deltaY = y - this.lastSingleTouch.y
 
-      let deltaX0 = x - this.singleTouchStart.x,
-          deltaY0 = y - this.singleTouchStart.y;
+      let deltaX0 = x - this.singleTouchStart.x
+      let deltaY0 = y - this.singleTouchStart.y
 
-      this.lastSingleTouch = {x: x, y: y};
+      this.lastSingleTouch = {x: x, y: y}
 
-      let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0),
-          moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0);
+      let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
+      let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
 
-      if (deltaX != 0 && moveX) {
-        this.refs.scrollComponent.scrollLeft -= deltaX;
+      if (deltaX !== 0 && moveX) {
+        this.refs.scrollComponent.scrollLeft -= deltaX
       }
       if (moveY) {
-        window.scrollTo(window.pageXOffset, this.singleTouchStart.screenY - deltaY0);
+        window.scrollTo(window.pageXOffset, this.singleTouchStart.screenY - deltaY0)
       }
-
     }
   }
 
-  touchEnd(e) {
+  touchEnd (e) {
     if (this.lastTouchDistance) {
-      e.preventDefault();
-      console.log('end multi');
+      e.preventDefault()
+      console.log('end multi')
 
-      this.lastTouchDistance = null;
+      this.lastTouchDistance = null
     }
     if (this.lastSingleTouch) {
-      e.preventDefault();
+      e.preventDefault()
 
-      console.log('end');
-      this.lastSingleTouch = null;
-      this.singleTouchStart = null;
+      console.log('end')
+      this.lastSingleTouch = null
+      this.singleTouchStart = null
     }
   }
 
-  resize = _throttle(() => {
-    let width = this.refs.container.clientWidth - this.props.sidebarWidth;
+  resize () {
+    let width = this.refs.container.clientWidth - this.props.sidebarWidth
     this.setState({
       width: width,
       visible: true
-    });
-    this.refs.scrollComponent.scrollLeft = width;
-  }, 30)
+    })
+    this.refs.scrollComponent.scrollLeft = width
+  }
 
-  onScroll() {
-    let scrollComponent = this.refs.scrollComponent,
-        originX = this.state.originX,
-        scrollX = scrollComponent.scrollLeft,
-        zoom = this.state.zoom,
-        width = this.state.width,
-        minTime = originX + (zoom * scrollX / width);
+  onScroll () {
+    let scrollComponent = this.refs.scrollComponent
+    let originX = this.state.originX
+    let scrollX = scrollComponent.scrollLeft
+    let zoom = this.state.zoom
+    let width = this.state.width
+    let minTime = originX + (zoom * scrollX / width)
 
     this.setState({
       minTime: minTime,
@@ -163,55 +161,55 @@ export default class ReactCalendarTimeline extends Component {
     })
 
     if (scrollX < this.state.width * 0.5) {
-      this.setState({originX: this.state.originX - this.state.zoom});
-      scrollComponent.scrollLeft += this.state.width;
+      this.setState({originX: this.state.originX - this.state.zoom})
+      scrollComponent.scrollLeft += this.state.width
     }
     if (scrollX > this.state.width * 1.5) {
-      this.setState({originX: this.state.originX + this.state.zoom});
-      scrollComponent.scrollLeft -= this.state.width;
+      this.setState({originX: this.state.originX + this.state.zoom})
+      scrollComponent.scrollLeft -= this.state.width
     }
   }
 
-  onWheel(e) {
+  onWheel (e) {
     if (e.ctrlKey) {
-      e.preventDefault();
+      e.preventDefault()
 
-      let parentPosition = getParentPosition(e.currentTarget),
-          xPosition = e.clientX - parentPosition.x;
+      let parentPosition = getParentPosition(e.currentTarget)
+      let xPosition = e.clientX - parentPosition.x
 
-      this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width);
+      this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width)
     } else {
-      e.preventDefault();
-      if (e.deltaX != 0) {
-        this.refs.scrollComponent.scrollLeft += e.deltaX;
+      e.preventDefault()
+      if (e.deltaX !== 0) {
+        this.refs.scrollComponent.scrollLeft += e.deltaX
       }
-      if (e.deltaY != 0) {
-        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY);
+      if (e.deltaY !== 0) {
+        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
       }
     }
   }
 
-  zoomIn(e) {
-    e.preventDefault();
+  zoomIn (e) {
+    e.preventDefault()
 
-    this.changeZoom(0.75);
+    this.changeZoom(0.75)
   }
 
-  zoomOut(e) {
-    e.preventDefault();
+  zoomOut (e) {
+    e.preventDefault()
 
-    this.changeZoom(1.25);
+    this.changeZoom(1.25)
   }
 
-  changeZoom(scale, offset = 0.5) {
-    let oldZoom = this.state.zoom,
-        newZoom = Math.min(Math.max(Math.round(oldZoom * scale), 60*60*1000), 20*365.24*86400*1000), // min 1 min, max 20 years
-        realScale = newZoom / oldZoom,
-        middle = Math.round(this.state.minTime + oldZoom * offset),
-        oldBefore = middle - this.state.originX,
-        newBefore = Math.round(oldBefore * realScale),
-        newOriginX = this.state.originX + (oldBefore - newBefore),
-        newMinTime = Math.round(this.state.minTime + (oldZoom - newZoom) * offset);
+  changeZoom (scale, offset = 0.5) {
+    let oldZoom = this.state.zoom
+    let newZoom = Math.min(Math.max(Math.round(oldZoom * scale), 60 * 60 * 1000), 20 * 365.24 * 86400 * 1000) // min 1 min, max 20 years
+    let realScale = newZoom / oldZoom
+    let middle = Math.round(this.state.minTime + oldZoom * offset)
+    let oldBefore = middle - this.state.originX
+    let newBefore = Math.round(oldBefore * realScale)
+    let newOriginX = this.state.originX + (oldBefore - newBefore)
+    let newMinTime = Math.round(this.state.minTime + (oldZoom - newZoom) * offset)
 
     this.setState({
       zoom: newZoom,
@@ -221,23 +219,23 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  showPeriod(from, unit) {
-    let minTime = from.valueOf(),
-        maxTime = moment(from).add(1, unit),
-        zoom = maxTime - minTime;
+  showPeriod (from, unit) {
+    let minTime = from.valueOf()
+    let maxTime = moment(from).add(1, unit)
+    let zoom = maxTime - minTime
 
     // can't zoom in more than to show one hour
     if (zoom < 360000) {
-      return;
+      return
     }
 
     // clicked on the big header and already focused here, zoom out
-    if (unit != 'year' && this.state.minTime == minTime && this.state.maxTime == maxTime) {
-      let nextUnit = getNextUnit(unit);
+    if (unit !== 'year' && this.state.minTime === minTime && this.state.maxTime === maxTime) {
+      let nextUnit = getNextUnit(unit)
 
-      minTime = from.startOf(nextUnit).valueOf();
-      maxTime = moment(minTime).add(1, nextUnit);
-      zoom = maxTime - minTime;
+      minTime = from.startOf(nextUnit).valueOf()
+      maxTime = moment(minTime).add(1, nextUnit)
+      zoom = maxTime - minTime
     }
 
     this.setState({
@@ -245,111 +243,111 @@ export default class ReactCalendarTimeline extends Component {
       originX: minTime - zoom,
       minTime: minTime,
       maxTime: minTime + zoom
-    });
+    })
 
-    this.refs.scrollComponent.scrollLeft = this.state.width;
+    this.refs.scrollComponent.scrollLeft = this.state.width
   }
 
-  selectItem(item) {
+  selectItem (item) {
     if (this.state.selectedItem === item) {
       if (item && this.props.itemClick) {
-        this.props.itemClick(item);
+        this.props.itemClick(item)
       }
     } else {
-      this.setState({selectedItem: item});
+      this.setState({selectedItem: item})
     }
   }
 
-  canvasClick(e) {
+  canvasClick (e) {
     if (e.target.className !== 'timeline-item') {
-      this.selectItem(null);
+      this.selectItem(null)
     }
   }
 
-  dragItem(item, dragTime, newGroupOrder) {
-    let newGroup = this.props.groups[newGroupOrder];
+  dragItem (item, dragTime, newGroupOrder) {
+    let newGroup = this.props.groups[newGroupOrder]
     this.setState({
       dragTime: dragTime,
       dragGroupTitle: newGroup ? newGroup.title : ''
     })
   }
 
-  dropItem(item, dragTime, newGroupOrder) {
-    this.setState({dragTime: null, dragGroupTitle: null});
+  dropItem (item, dragTime, newGroupOrder) {
+    this.setState({dragTime: null, dragGroupTitle: null})
     if (this.props.moveItem) {
-      this.props.moveItem(item, dragTime, newGroupOrder);
+      this.props.moveItem(item, dragTime, newGroupOrder)
     }
   }
 
-  resizingItem(item, newLength) {
-    this.setState({resizeLength: newLength});
+  resizingItem (item, newLength) {
+    this.setState({resizeLength: newLength})
   }
 
-  resizedItem(item, newLength) {
-    this.setState({resizeLength: null});
+  resizedItem (item, newLength) {
+    this.setState({resizeLength: null})
     if (this.props.resizeItem) {
-      this.props.resizeItem(item, newLength);
+      this.props.resizeItem(item, newLength)
     }
   }
 
-  infoLabel() {
-    let label = null;
+  infoLabel () {
+    let label = null
 
     if (this.state.dragTime) {
-      label = `${moment(this.state.dragTime).format('LLL')}, ${this.state.dragGroupTitle}`;
+      label = `${moment(this.state.dragTime).format('LLL')}, ${this.state.dragGroupTitle}`
     } else if (this.state.resizeLength) {
-      let minutes = Math.floor(this.state.resizeLength / (60 * 1000)),
-          hours = Math.floor(minutes / 60),
-          days = Math.floor(hours / 24);
+      let minutes = Math.floor(this.state.resizeLength / (60 * 1000))
+      let hours = Math.floor(minutes / 60)
+      let days = Math.floor(hours / 24)
 
-      minutes = minutes % 60;
-      hours = hours % 24;
+      minutes = minutes % 60
+      hours = hours % 24
 
       let parts = []
       if (days > 0) {
-        parts.push(`${days} d`);
+        parts.push(`${days} d`)
       }
       if (hours > 0 || days > 0) {
-        parts.push(`${hours} h`);
+        parts.push(`${hours} h`)
       }
-      parts.push(`${minutes < 10 ? '0' : ''}${minutes} min`);
-      label = parts.join(', ');
+      parts.push(`${minutes < 10 ? '0' : ''}${minutes} min`)
+      label = parts.join(', ')
     }
-    return label;
+    return label
   }
 
-  render() {
-    let width = this.state.width,
-        height = (this.props.groups.length + 2) * this.state.lineHeight,
-        zoom = this.state.zoom,
-        canvasWidth = this.state.width * 3,
-        originX = this.state.originX,
-        maxX = originX + this.state.zoom * 3;
+  render () {
+    let width = this.state.width
+    let height = (this.props.groups.length + 2) * this.state.lineHeight
+    let zoom = this.state.zoom
+    let canvasWidth = this.state.width * 3
+    let originX = this.state.originX
+    let maxX = originX + this.state.zoom * 3
 
-    let minUnit = getMinUnit(zoom, this.state.width);
+    let minUnit = getMinUnit(zoom, this.state.width)
 
-    let evenRowBackground = '#ffffff',
-        oddRowBackground = '#f0f0f0',
-        headerColor = '#ffffff',
-        headerBackgroundColor = '#c52020',
-        sidebarColor = '#ffffff',
-        sidebarBackgroundColor = '#c52020',
-        lowerHeaderColor = '#333333',
-        lowerHeaderBackgroundColor = '#f0f0f0',
-        borderColor = '#bbb',
-        gradientBackground = createGradientPattern(this.state.lineHeight, evenRowBackground, oddRowBackground, borderColor);
+    let evenRowBackground = '#ffffff'
+    let oddRowBackground = '#f0f0f0'
+    let headerColor = '#ffffff'
+    let headerBackgroundColor = '#c52020'
+    let sidebarColor = '#ffffff'
+    let sidebarBackgroundColor = '#c52020'
+    let lowerHeaderColor = '#333333'
+    let lowerHeaderBackgroundColor = '#f0f0f0'
+    let borderColor = '#bbb'
+    let gradientBackground = createGradientPattern(this.state.lineHeight, evenRowBackground, oddRowBackground, borderColor)
 
     const staticProps = {
       originX: originX,
       maxX: maxX,
       canvasWidth: canvasWidth,
       lineHeight: this.state.lineHeight
-    };
+    }
 
     const extraProps = {
       lineCount: this.props.groups.length,
       minUnit: minUnit
-    };
+    }
 
     const itemProps = {
       items: this.props.items,
@@ -365,7 +363,7 @@ export default class ReactCalendarTimeline extends Component {
       itemDrop: this.dropItem.bind(this),
       itemResizing: this.resizingItem.bind(this),
       itemResized: this.resizedItem.bind(this)
-    };
+    }
 
     const sidebarProps = {
       groups: this.props.groups,
@@ -379,8 +377,8 @@ export default class ReactCalendarTimeline extends Component {
       sidebarColor: sidebarColor,
       sidebarBackgroundColor: sidebarBackgroundColor,
       sidebarBorderRight: '1px solid #aaa',
-      gradientBackground: gradientBackground,
-    };
+      gradientBackground: gradientBackground
+    }
 
     const headerProps = {
       minUnit: minUnit,
@@ -396,7 +394,7 @@ export default class ReactCalendarTimeline extends Component {
       fixedHeader: this.props.fixedHeader,
       zIndex: this.props.zIndexStart + 1,
       showPeriod: this.showPeriod.bind(this)
-    };
+    }
 
     const scrollComponentStyle = {
       display: 'inline-block',
@@ -405,17 +403,17 @@ export default class ReactCalendarTimeline extends Component {
       verticalAlign: 'top',
       overflowX: 'scroll',
       overflowY: 'hidden'
-    };
+    }
 
     const canvasComponentStyle = {
       position: 'relative',
-      width: canvasWidth+'px',
-      height: height+'px',
+      width: `${canvasWidth}px`,
+      height: `${height}px`,
       background: gradientBackground
-    };
+    }
 
     return (
-      <div style={this.props.style || {}} ref='container' className="react-calendar-timeline">
+      <div style={this.props.style || {}} ref='container' className='react-calendar-timeline'>
         {this.props.controls ? <Controls changeZoom={this.changeZoom.bind(this)} /> : ''}
         <div>
           <Sidebar {...sidebarProps}>
@@ -452,8 +450,9 @@ ReactCalendarTimeline.propTypes = {
 
   moveItem: React.PropTypes.func,
   resizeItem: React.PropTypes.func,
-  itemClick: React.PropTypes.func
-};
+  itemClick: React.PropTypes.func,
+  style: React.PropTypes.object
+}
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
   dragSnap: 1000 * 60 * 15, // 15min
@@ -464,5 +463,7 @@ ReactCalendarTimeline.defaultProps = {
 
   canChangeGroup: true,
   canMove: true,
-  canResize: true
+  canResize: true,
+
+  style: {}
 }
