@@ -344,7 +344,8 @@ export default class ReactCalendarTimeline extends Component {
       headerColor: '#ffffff',
       headerBackgroundColor: '#c52020',
       lowerHeaderColor: '#333333',
-      lowerHeaderBackgroundColor: '#f0f0f0'
+      lowerHeaderBackgroundColor: '#f0f0f0',
+      listItemPadding: '0 4px'
     }, this.props.design)
 
     const gradientBackground = createGradientPattern(this.state.lineHeight, design.evenRowBackground, design.oddRowBackground, design.borderColor)
@@ -390,6 +391,7 @@ export default class ReactCalendarTimeline extends Component {
       sidebarBackgroundColor: design.sidebarBackgroundColor,
       sidebarBorderRight: '1px solid #aaa',
       sidebarBorderBottom: '1px solid #aaa',
+      listItemPadding: design.listItemPadding,
       gradientBackground: gradientBackground
     }
 

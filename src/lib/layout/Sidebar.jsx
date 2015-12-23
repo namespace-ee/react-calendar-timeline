@@ -49,6 +49,7 @@ export default class Sidebar extends Component {
   render () {
     const {
       fixedHeader, width, lineHeight, zIndex, groups,
+      listItemPadding,
       sidebarBorderRight, sidebarBorderBottom, sidebarBackgroundColor, sidebarColor, gradientBackground
     } = this.props
 
@@ -88,7 +89,7 @@ export default class Sidebar extends Component {
     const elementStyle = {
       height: `${lineHeight}px`,
       lineHeight: `${lineHeight}px`,
-      padding: '0 4px',
+      padding: listItemPadding,
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
@@ -134,11 +135,13 @@ Sidebar.propTypes = {
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   sidebarBorderRight: React.PropTypes.string,
-  sidebarBorderBottom: React.PropTypes.string
+  sidebarBorderBottom: React.PropTypes.string,
+  listItemPadding: React.PropTypes.string
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',
   zIndex: 12,
+  listItemPadding: '0 4px',
   sidebarBorderRight: '1px solid #aaa',
   sidebarBorderBottom: '1px solid #aaa'
 }
