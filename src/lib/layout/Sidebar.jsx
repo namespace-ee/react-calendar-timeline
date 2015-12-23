@@ -87,6 +87,7 @@ export default class Sidebar extends Component {
       headerStyle.position = 'absolute'
       headerStyle.top = `${scrollTop}px`
       headerStyle.left = `0`
+      groupsStyle.paddingTop = headerStyle.height
     }
 
     const header = <div key='sidebar-header' style={headerStyle}>
