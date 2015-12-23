@@ -35,7 +35,7 @@ export default class VerticalLines extends Component {
                left: `${left - (width == 2 ? 1 : 0)}px`,
                width: `${width}px`,
                height: ((lineCount + (firstOfType || minUnit == 'year' ? 2 : 1)) * lineHeight)+'px',
-               background: color
+               borderLeft: `1px solid ${color}`
              }} />);
 
     });
