@@ -45,7 +45,14 @@ export default class ReactCalendarTimeline extends Component {
 
   componentDidMount () {
     this.resize()
-    window.addEventListener('resize', this.resize)
+
+    this.resizeEventListener = {
+        handleEvent: (event) => {
+          this.resize()
+        }
+    }
+
+    window.addEventListener('resize', this.resizeEventListener)
 
     this.lastTouchDistance = null
     this.refs.scrollComponent.addEventListener('touchstart', this.touchStart.bind(this))
@@ -54,7 +61,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentWillUnmount () {
-    window.removeEventListener('resize', this.resize)
+    window.removeEventListener('resize', this.resizeEventListener)
     this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart.bind(this))
     this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove.bind(this))
     this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd.bind(this))
