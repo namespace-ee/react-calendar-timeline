@@ -74,7 +74,7 @@ export default class ReactCalendarTimeline extends Component {
       this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
       this.singleTouchStart = null
       this.lastSingleTouch = null
-    } else if (e.touches.length === 1) {
+    } else if (e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
       e.preventDefault()
 
       let x = e.touches[0].clientX
@@ -103,7 +103,7 @@ export default class ReactCalendarTimeline extends Component {
         this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width)
         this.lastTouchDistance = touchDistance
       }
-    } else if (this.lastSingleTouch && e.touches.length === 1) {
+    } else if (this.lastSingleTouch && e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
       e.preventDefault()
 
       let x = e.touches[0].clientX
@@ -132,14 +132,12 @@ export default class ReactCalendarTimeline extends Component {
   touchEnd (e) {
     if (this.lastTouchDistance) {
       e.preventDefault()
-      console.log('end multi')
 
       this.lastTouchDistance = null
     }
     if (this.lastSingleTouch) {
       e.preventDefault()
 
-      console.log('end')
       this.lastSingleTouch = null
       this.singleTouchStart = null
     }

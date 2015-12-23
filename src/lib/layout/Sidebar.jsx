@@ -3,38 +3,75 @@ import React, { Component } from 'react'
 export default class Sidebar extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      scrollTop: 0
+    }
+  }
+
+  scroll (e) {
+    if (this.props.fixedHeader === 'absolute' && window && window.document) {
+      const scroll = window.document.body.scrollTop
+      this.setState({
+        scrollTop: scroll
+      })
+    }
+  }
+
+  componentDidMount () {
+    this.scroll()
+
+    this.scrollEventListener = {
+      handleEvent: (event) => {
+        this.scroll()
+      }
+    }
+
+    window.addEventListener('scroll', this.scrollEventListener)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('scroll', this.scrollEventListener)
   }
 
   render () {
+    const {
+      fixedHeader, width, lineHeight, zIndex, groups,
+      sidebarBorderRight, sidebarBackgroundColor, sidebarColor, gradientBackground
+    } = this.props
+
+    const {
+      scrollTop
+    } = this.state
+
     const containerStyle = {
-      width: `${this.props.width}px`,
-      height: `${this.props.lineHeight * (this.props.groups.length + 2)}px`,
+      width: `${width}px`,
+      height: `${lineHeight * (groups.length + 2)}px`,
       boxSizing: 'border-box',
-      borderRight: this.props.sidebarBorderRight,
+      borderRight: sidebarBorderRight,
       overflow: 'hidden',
       display: 'inline-block',
       verticalAlign: 'top',
-      background: this.props.gradientBackground
+      background: gradientBackground
     }
 
     const headerStyle = {
-      height: `${this.props.lineHeight * 2}px`,
-      lineHeight: `${this.props.lineHeight}px`,
+      height: `${lineHeight * 2}px`,
+      lineHeight: `${lineHeight}px`,
       margin: '0',
-      color: this.props.sidebarColor,
-      background: this.props.sidebarBackgroundColor,
-      borderRight: this.props.sidebarBorderRight,
+      color: sidebarColor,
+      background: sidebarBackgroundColor,
+      borderRight: sidebarBorderRight,
       boxSizing: 'border-box',
-      width: `${this.props.width}px`
+      width: `${width}px`
     }
 
     const groupsStyle = {
-      width: `${this.props.width}px`
+      width: `${width}px`
     }
 
     const elementStyle = {
-      height: `${this.props.lineHeight}px`,
-      lineHeight: `${this.props.lineHeight}px`,
+      height: `${lineHeight}px`,
+      lineHeight: `${lineHeight}px`,
       padding: '0 4px',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
@@ -42,29 +79,25 @@ export default class Sidebar extends Component {
       margin: '0'
     }
 
-    if (this.props.fixedHeader === 'fixed') {
+    if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
-      headerStyle.zIndex = this.props.zIndex
+      headerStyle.zIndex = zIndex
       groupsStyle.paddingTop = headerStyle.height
+    } else if (fixedHeader === 'absolute') {
+      headerStyle.position = 'absolute'
+      headerStyle.top = `${scrollTop}px`
+      headerStyle.left = `0`
     }
 
     const header = <div key='sidebar-header' style={headerStyle}>
                      {this.props.children}
                    </div>
 
-    const groups = this.props.groups.map(group => {
-      return (
-        <p key={group.id} style={elementStyle}>
-          {group.title}
-        </p>
-      )
-    })
-
     return (
       <div style={containerStyle}>
         {header}
         <div style={groupsStyle}>
-          {groups}
+          {this.props.groups.map(group => <p key={group.id} style={elementStyle}>{group.title}</p>)}
         </div>
       </div>
     )

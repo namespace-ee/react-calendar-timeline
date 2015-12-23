@@ -5,6 +5,34 @@ import { iterateTimes, getNextUnit, createGradientPattern } from '../utils.js'
 export default class Header extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      scrollTop: 0
+    }
+  }
+
+  scroll (e) {
+    if (this.props.fixedHeader === 'absolute' && window && window.document) {
+      const scroll = window.document.body.scrollTop
+      this.setState({
+        scrollTop: scroll
+      })
+    }
+  }
+
+  componentDidMount () {
+    this.scroll()
+
+    this.scrollEventListener = {
+      handleEvent: (event) => {
+        this.scroll()
+      }
+    }
+
+    window.addEventListener('scroll', this.scrollEventListener)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('scroll', this.scrollEventListener)
   }
 
   headerLabel (time, unit, width) {
@@ -46,6 +74,9 @@ export default class Header extends Component {
       minTime, maxTime, minUnit,
       headerColor, borderColor, fixedHeader
     } = this.props
+    const {
+      scrollTop
+    } = this.state
     const ratio = canvasWidth / (maxX - originX)
     const lowerHeaderColor = this.props.lowerHeaderColor || headerColor
     const twoHeaders = minUnit !== 'year'
@@ -114,7 +145,7 @@ export default class Header extends Component {
       })
     }
 
-    const { headerBackgroundColor, lowerHeaderBackgroundColor } = this.props
+    const { headerBackgroundColor, lowerHeaderBackgroundColor, zIndex } = this.props
 
     const headerBackground = twoHeaders
             ? createGradientPattern(lineHeight, headerBackgroundColor, lowerHeaderBackgroundColor, this.props.borderColor)
@@ -127,10 +158,15 @@ export default class Header extends Component {
       background: headerBackground
     }
 
-    if (this.props.fixedHeader === 'fixed') {
+    if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.width = '100%'
-      headerStyle.zIndex = this.props.zIndex
+      headerStyle.zIndex = zIndex
+    } else if (fixedHeader === 'absolute') {
+      headerStyle.position = 'absolute'
+      headerStyle.top = `${scrollTop}px`
+      headerStyle.width = `${canvasWidth}px`
+      headerStyle.left = `0`
     }
 
     return (
