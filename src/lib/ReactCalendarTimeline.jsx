@@ -435,7 +435,7 @@ export default class ReactCalendarTimeline extends Component {
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
               <TodayLine {...staticProps} {...extraProps} />
-              <VerticalLines {...staticProps} {...extraProps} borderColor={design.borderColor} />
+              <VerticalLines {...staticProps} {...extraProps} borderColor={design.borderColor} fixedHeader={this.props.fixedHeader} />
               <Items {...staticProps} {...itemProps} />
               {this.infoLabel() ? <InfoLabel label={this.infoLabel()} /> : ''}
               <Header {...staticProps} {...headerProps} />

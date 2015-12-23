@@ -25,14 +25,15 @@ export default class VerticalLines extends Component {
           firstOfType = minUnitValue == (minUnit == 'day' ? 1 : 0),
           labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2),
           color = this.props.borderColor || (firstOfType || labelWidth > 100 ? '#aaa' : '#ccc'),
-          width = firstOfType ? 2 : 1;
+          width = firstOfType ? 2 : 1,
+          leftPush = this.props.fixedHeader === 'fixed' && firstOfType ? -1 : 0;
 
       lines.push(
         <div key={`line-${time.valueOf()}`}
              style={{
                position: 'absolute',
                top: `${lineHeight * 2}px`,
-               left: `${left}px`,
+               left: `${left + leftPush}px`,
                width: `1px`,
                height: (lineCount * lineHeight)+'px',
                borderLeft: `${width}px solid ${color}`
@@ -55,7 +56,9 @@ VerticalLines.propTypes = {
   lineHeight: React.PropTypes.number.isRequired,
   lineCount: React.PropTypes.number.isRequired,
   minUnit: React.PropTypes.string.isRequired,
-  borderColor: React.PropTypes.string
+  borderColor: React.PropTypes.string,
+  fixedHeader: React.PropTypes.string.isRequired,
 };
 VerticalLines.defaultProps = {
+  fixedHeader: 'none'
 };
