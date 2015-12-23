@@ -326,25 +326,28 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   render () {
-    let width = this.state.width
-    let height = (this.props.groups.length + 2) * this.state.lineHeight
-    let zoom = this.state.zoom
-    let canvasWidth = this.state.width * 3
-    let originX = this.state.originX
-    let maxX = originX + this.state.zoom * 3
+    const width = this.state.width
+    const height = (this.props.groups.length + 2) * this.state.lineHeight
+    const zoom = this.state.zoom
+    const canvasWidth = this.state.width * 3
+    const originX = this.state.originX
+    const maxX = originX + this.state.zoom * 3
 
-    let minUnit = getMinUnit(zoom, this.state.width)
+    const minUnit = getMinUnit(zoom, this.state.width)
 
-    let evenRowBackground = '#ffffff'
-    let oddRowBackground = '#f0f0f0'
-    let headerColor = '#ffffff'
-    let headerBackgroundColor = '#c52020'
-    let sidebarColor = '#ffffff'
-    let sidebarBackgroundColor = '#c52020'
-    let lowerHeaderColor = '#333333'
-    let lowerHeaderBackgroundColor = '#f0f0f0'
-    let borderColor = '#bbb'
-    let gradientBackground = createGradientPattern(this.state.lineHeight, evenRowBackground, oddRowBackground, borderColor)
+    const colors = Object.assign({
+      evenRowBackground: '#ffffff',
+      oddRowBackground: '#f0f0f0',
+      borderColor: '#bbb',
+      sidebarColor: '#ffffff',
+      sidebarBackgroundColor: '#c52020',
+      headerColor: '#ffffff',
+      headerBackgroundColor: '#c52020',
+      lowerHeaderColor: '#333333',
+      lowerHeaderBackgroundColor: '#f0f0f0'
+    }, this.props.colors)
+
+    const gradientBackground = createGradientPattern(this.state.lineHeight, colors.evenRowBackground, colors.oddRowBackground, colors.borderColor)
 
     const staticProps = {
       originX: originX,
@@ -383,8 +386,8 @@ export default class ReactCalendarTimeline extends Component {
       fixedHeader: this.props.fixedHeader,
       zIndex: this.props.zIndexStart + 2,
 
-      sidebarColor: sidebarColor,
-      sidebarBackgroundColor: sidebarBackgroundColor,
+      sidebarColor: colors.sidebarColor,
+      sidebarBackgroundColor: colors.sidebarBackgroundColor,
       sidebarBorderRight: '1px solid #aaa',
       gradientBackground: gradientBackground
     }
@@ -395,11 +398,11 @@ export default class ReactCalendarTimeline extends Component {
       zoom: zoom,
       minTime: this.state.minTime,
       maxTime: this.state.maxTime,
-      headerColor: headerColor,
-      headerBackgroundColor: headerBackgroundColor,
-      lowerHeaderColor: lowerHeaderColor,
-      lowerHeaderBackgroundColor: lowerHeaderBackgroundColor,
-      borderColor: borderColor,
+      headerColor: colors.headerColor,
+      headerBackgroundColor: colors.headerBackgroundColor,
+      lowerHeaderColor: colors.lowerHeaderColor,
+      lowerHeaderBackgroundColor: colors.lowerHeaderBackgroundColor,
+      borderColor: colors.borderColor,
       fixedHeader: this.props.fixedHeader,
       zIndex: this.props.zIndexStart + 1,
       showPeriod: this.showPeriod.bind(this)
@@ -431,7 +434,7 @@ export default class ReactCalendarTimeline extends Component {
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
               <TodayLine {...staticProps} {...extraProps} />
-              <VerticalLines {...staticProps} {...extraProps} borderColor={borderColor} />
+              <VerticalLines {...staticProps} {...extraProps} borderColor={colors.borderColor} />
               <Items {...staticProps} {...itemProps} />
               {this.infoLabel() ? <InfoLabel label={this.infoLabel()} /> : ''}
               <Header {...staticProps} {...headerProps} />
@@ -460,7 +463,10 @@ ReactCalendarTimeline.propTypes = {
   moveItem: React.PropTypes.func,
   resizeItem: React.PropTypes.func,
   itemClick: React.PropTypes.func,
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  colors: React.PropTypes.object,
+
+  children: React.PropTypes.node
 }
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
@@ -474,5 +480,8 @@ ReactCalendarTimeline.defaultProps = {
   canMove: true,
   canResize: true,
 
-  style: {}
+  children: null,
+
+  style: {},
+  colors: {}
 }
