@@ -47,9 +47,9 @@ export default class ReactCalendarTimeline extends Component {
     this.resize()
 
     this.resizeEventListener = {
-        handleEvent: (event) => {
-          this.resize()
-        }
+      handleEvent: (event) => {
+        this.resize()
+      }
     }
 
     window.addEventListener('resize', this.resizeEventListener)
