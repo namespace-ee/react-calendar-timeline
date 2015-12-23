@@ -55,6 +55,11 @@
       canResize: true,
       itemClick: function(item) {
         console.log("Clicked: " + item);
+      },
+      dayBackground: function(unit, time) {
+        if (unit === 'day' && (time.day() == 6 || time.day() == 0)) {
+          return 'rgba(250, 246, 225, 0.5)'
+        }
       }
     }
 

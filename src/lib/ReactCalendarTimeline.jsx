@@ -435,7 +435,7 @@ export default class ReactCalendarTimeline extends Component {
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
               <TodayLine {...staticProps} {...extraProps} />
-              <VerticalLines {...staticProps} {...extraProps} borderColor={design.borderColor} fixedHeader={this.props.fixedHeader} />
+              <VerticalLines {...staticProps} {...extraProps} dayBackground={this.props.dayBackground} borderColor={design.borderColor} fixedHeader={this.props.fixedHeader} />
               <Items {...staticProps} {...itemProps} />
               {this.infoLabel() ? <InfoLabel label={this.infoLabel()} /> : ''}
               <Header {...staticProps} {...headerProps} />
@@ -464,6 +464,8 @@ ReactCalendarTimeline.propTypes = {
   moveItem: React.PropTypes.func,
   resizeItem: React.PropTypes.func,
   itemClick: React.PropTypes.func,
+  dayBackground: React.PropTypes.func,
+
   style: React.PropTypes.object,
   design: React.PropTypes.object,
 
@@ -481,8 +483,13 @@ ReactCalendarTimeline.defaultProps = {
   canMove: true,
   canResize: true,
 
-  children: null,
+  moveItem: null,
+  resizeItem: null,
+  itemClick: null,
+  dayBackground: null,
 
   style: {},
-  design: {}
+  design: {},
+
+  children: null
 }
