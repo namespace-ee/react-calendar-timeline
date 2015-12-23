@@ -228,7 +228,7 @@ export default class ReactCalendarTimeline extends Component {
 
   showPeriod (from, unit) {
     let minTime = from.valueOf()
-    let maxTime = moment(from).add(1, unit)
+    let maxTime = moment(from).add(1, unit).valueOf()
     let zoom = maxTime - minTime
 
     // can't zoom in more than to show one hour
