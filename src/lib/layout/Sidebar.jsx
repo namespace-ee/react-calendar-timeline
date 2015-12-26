@@ -94,6 +94,7 @@ export default class Sidebar extends Component {
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       borderBottom: `${borderWidth}px solid ${borderColor}`,
+      boxSizing: 'content-box',
       margin: '0'
     }
 

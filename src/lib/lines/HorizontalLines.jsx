@@ -27,6 +27,7 @@ export default class HorizontalLines extends Component {
                width: `${canvasWidth}px`,
                height: `${lineHeight - 1}px`,
                borderBottom: `${borderWidth}px solid ${borderColor}`,
+               boxSizing: 'content-box',
                background: background
              }} />)
     }
