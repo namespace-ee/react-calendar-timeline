@@ -50,7 +50,8 @@ export default class Sidebar extends Component {
     const {
       fixedHeader, width, lineHeight, zIndex, groups,
       listItemPadding,
-      sidebarBorderRight, sidebarBorderBottom, sidebarBackgroundColor, sidebarColor, gradientBackground
+      borderColor, borderWidth,
+      sidebarBackgroundColor, sidebarColor
     } = this.props
 
     const {
@@ -61,11 +62,10 @@ export default class Sidebar extends Component {
       width: `${width}px`,
       height: `${lineHeight * (groups.length + 2)}px`,
       boxSizing: 'border-box',
-      borderRight: sidebarBorderRight,
+      borderRight: `${borderWidth}px solid ${borderColor}`,
       overflow: 'hidden',
       display: 'inline-block',
       verticalAlign: 'top',
-      background: gradientBackground,
       position: 'relative'
     }
 
@@ -75,9 +75,9 @@ export default class Sidebar extends Component {
       margin: '0',
       color: sidebarColor,
       background: sidebarBackgroundColor,
-      borderRight: sidebarBorderRight,
+      borderRight: `${borderWidth}px solid ${borderColor}`,
       boxSizing: 'border-box',
-      borderBottom: sidebarBorderBottom,
+      borderBottom: `${borderWidth}px solid ${borderColor}`,
       overflow: 'hidden',
       width: `${width}px`
     }
@@ -87,12 +87,13 @@ export default class Sidebar extends Component {
     }
 
     const elementStyle = {
-      height: `${lineHeight}px`,
-      lineHeight: `${lineHeight}px`,
+      height: `${lineHeight - 1}px`,
+      lineHeight: `${lineHeight - 1}px`,
       padding: listItemPadding,
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
+      borderBottom: `${borderWidth}px solid ${borderColor}`,
       margin: '0'
     }
 
@@ -114,11 +115,31 @@ export default class Sidebar extends Component {
                      {this.props.children}
                    </div>
 
+    let groupLines = []
+    let i = 0
+
+    this.props.groups.forEach((group) => {
+      const background = typeof this.props.backgroundColor === 'function'
+                ? this.props.backgroundColor(i)
+                : (this.props.backgroundColor || null)
+
+      const style = background
+                ? Object.assign({}, elementStyle, {background: background})
+                : elementStyle
+
+      groupLines.push(
+        <div key={group.id} style={style}>
+          {group.title}
+        </div>
+      )
+      i += 1
+    })
+
     return (
       <div ref='sidebar' style={containerStyle}>
         {header}
         <div style={groupsStyle}>
-          {this.props.groups.map(group => <p key={group.id} style={elementStyle}>{group.title}</p>)}
+          {groupLines}
         </div>
       </div>
     )
@@ -131,17 +152,18 @@ Sidebar.propTypes = {
   lineHeight: React.PropTypes.number.isRequired,
   sidebarColor: React.PropTypes.string.isRequired,
   sidebarBackgroundColor: React.PropTypes.string.isRequired,
-  gradientBackground: React.PropTypes.string.isRequired,
+  backgroundColor: React.PropTypes.func,
+  borderColor: React.PropTypes.string,
+  borderWidth: React.PropTypes.number,
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  sidebarBorderRight: React.PropTypes.string,
-  sidebarBorderBottom: React.PropTypes.string,
   listItemPadding: React.PropTypes.string
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',
   zIndex: 12,
   listItemPadding: '0 4px',
-  sidebarBorderRight: '1px solid #aaa',
-  sidebarBorderBottom: '1px solid #aaa'
+  borderWidth: 1,
+  borderColor: '#aaa',
+  backgroundColor: null
 }

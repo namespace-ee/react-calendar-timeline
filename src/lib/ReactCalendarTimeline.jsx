@@ -9,12 +9,27 @@ import Controls from './layout/Controls.jsx'
 import Sidebar from './layout/Sidebar.jsx'
 import Header from './layout/Header.jsx'
 import VerticalLines from './lines/VerticalLines.jsx'
+import HorizontalLines from './lines/HorizontalLines.jsx'
 import TodayLine from './lines/TodayLine.jsx'
 
-import { getMinUnit, getNextUnit, getParentPosition, createGradientPattern } from './utils.js'
+import { getMinUnit, getNextUnit, getParentPosition } from './utils.js'
 
 import _min from 'lodash/math/min'
 import _max from 'lodash/math/max'
+
+const defaultDesign = {
+  evenRowBackground: 'transparent',
+  oddRowBackground: 'rgba(0,0,0,0.05)',
+  borderColor: '#bbb',
+  borderWidth: 1,
+  sidebarColor: '#ffffff',
+  sidebarBackgroundColor: '#c52020',
+  headerColor: '#ffffff',
+  headerBackgroundColor: '#c52020',
+  lowerHeaderColor: '#333333',
+  lowerHeaderBackgroundColor: '#f0f0f0',
+  listItemPadding: '0 4px'
+}
 
 export default class ReactCalendarTimeline extends Component {
   constructor (props) {
@@ -299,6 +314,87 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
+  design () {
+    return Object.assign({}, defaultDesign, this.props.design)
+  }
+
+  todayLine () {
+    const originX = this.state.originX
+    const maxX = originX + this.state.zoom * 3
+    const canvasWidth = this.state.width * 3
+
+    return (
+      <TodayLine originX={originX}
+                 maxX={maxX}
+                 canvasWidth={canvasWidth}
+                 lineHeight={this.state.lineHeight}
+                 lineCount={this.props.groups.length} />
+    )
+  }
+
+  verticalLines () {
+    const originX = this.state.originX
+    const maxX = originX + this.state.zoom * 3
+    const canvasWidth = this.state.width * 3
+    const minUnit = getMinUnit(this.state.zoom, this.state.width)
+    const design = this.design()
+
+    return (
+      <VerticalLines originX={originX}
+                     maxX={maxX}
+                     canvasWidth={canvasWidth}
+                     lineHeight={this.state.lineHeight}
+                     lineCount={this.props.groups.length}
+                     minUnit={minUnit}
+                     dayBackground={this.props.dayBackground}
+                     borderColor={design.borderColor}
+                     fixedHeader={this.props.fixedHeader} />
+    )
+  }
+
+  horizontalLines () {
+    const canvasWidth = this.state.width * 3
+    const design = this.design()
+
+    return (
+      <HorizontalLines canvasWidth={canvasWidth}
+                       lineHeight={this.state.lineHeight}
+                       lineCount={this.props.groups.length}
+                       backgroundColor={i => i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground}
+                       borderWidth={design.borderWidth}
+                       borderColor={design.borderColor} />
+    )
+  }
+
+  items () {
+    const minUnit = getMinUnit(this.state.zoom, this.state.width)
+    const originX = this.state.originX
+    const maxX = originX + this.state.zoom * 3
+    const canvasWidth = this.state.width * 3
+
+    return (
+      <Items originX={originX}
+             maxX={maxX}
+             canvasWidth={canvasWidth}
+             lineHeight={this.state.lineHeight}
+             lineCount={this.props.groups.length}
+             minUnit={minUnit}
+             items={this.props.items}
+             groups={this.props.groups}
+             selectedItem={this.state.selectedItem}
+             dragSnap={this.props.dragSnap}
+             minResizeWidth={this.props.minResizeWidth}
+             canChangeGroup={this.props.canChangeGroup}
+             canMove={this.props.canMove}
+             canResize={this.props.canResize}
+             itemSelect={this.selectItem.bind(this)}
+             itemDrag={this.dragItem.bind(this)}
+             itemDrop={this.dropItem.bind(this)}
+             itemResizing={this.resizingItem.bind(this)}
+             itemResized={this.resizedItem.bind(this)} />
+    )
+  }
+
   infoLabel () {
     let label = null
 
@@ -322,94 +418,65 @@ export default class ReactCalendarTimeline extends Component {
       parts.push(`${minutes < 10 ? '0' : ''}${minutes} min`)
       label = parts.join(', ')
     }
-    return label
+
+    return label ? <InfoLabel label={label} /> : ''
+  }
+
+  header () {
+    const originX = this.state.originX
+    const maxX = originX + this.state.zoom * 3
+    const canvasWidth = this.state.width * 3
+    const minUnit = getMinUnit(this.state.zoom, this.state.width)
+    const design = this.design()
+
+    return (
+      <Header originX={originX}
+              maxX={maxX}
+              canvasWidth={canvasWidth}
+              lineHeight={this.state.lineHeight}
+              minUnit={minUnit}
+              width={this.state.width}
+              zoom={this.state.zoom}
+              minTime={this.state.minTime}
+              maxTime={this.state.maxTime}
+              headerColor={design.headerColor}
+              headerBackgroundColor={design.headerBackgroundColor}
+              lowerHeaderColor={design.lowerHeaderColor}
+              lowerHeaderBackgroundColor={design.lowerHeaderBackgroundColor}
+              borderColor={design.borderColor}
+              fixedHeader={this.props.fixedHeader}
+              zIndex={this.props.zIndexStart + 1}
+              showPeriod={this.showPeriod.bind(this)} />
+    )
+  }
+
+  sidebar () {
+    const design = this.design()
+
+    return (
+      <Sidebar groups={this.props.groups}
+               width={this.props.sidebarWidth}
+               lineHeight={this.state.lineHeight}
+
+               fixedHeader={this.props.fixedHeader}
+               zIndex={this.props.zIndexStart + 2}
+
+               sidebarColor={design.sidebarColor}
+               sidebarBackgroundColor={design.sidebarBackgroundColor}
+               listItemPadding={design.listItemPadding}
+
+               backgroundColor={i => i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground}
+               borderWidth={design.borderWidth}
+               borderColor={design.borderColor}>
+        {this.props.children}
+      </Sidebar>
+    )
   }
 
   render () {
     const width = this.state.width
     const height = (this.props.groups.length + 2) * this.state.lineHeight
-    const zoom = this.state.zoom
     const canvasWidth = this.state.width * 3
-    const originX = this.state.originX
-    const maxX = originX + this.state.zoom * 3
-
-    const minUnit = getMinUnit(zoom, this.state.width)
-
-    const design = Object.assign({
-      evenRowBackground: '#ffffff',
-      oddRowBackground: '#f0f0f0',
-      borderColor: '#bbb',
-      sidebarColor: '#ffffff',
-      sidebarBackgroundColor: '#c52020',
-      headerColor: '#ffffff',
-      headerBackgroundColor: '#c52020',
-      lowerHeaderColor: '#333333',
-      lowerHeaderBackgroundColor: '#f0f0f0',
-      listItemPadding: '0 4px'
-    }, this.props.design)
-
-    const gradientBackground = createGradientPattern(this.state.lineHeight, design.evenRowBackground, design.oddRowBackground, design.borderColor)
-
-    const staticProps = {
-      originX: originX,
-      maxX: maxX,
-      canvasWidth: canvasWidth,
-      lineHeight: this.state.lineHeight
-    }
-
-    const extraProps = {
-      lineCount: this.props.groups.length,
-      minUnit: minUnit
-    }
-
-    const itemProps = {
-      items: this.props.items,
-      groups: this.props.groups,
-      selectedItem: this.state.selectedItem,
-      dragSnap: this.props.dragSnap,
-      minResizeWidth: this.props.minResizeWidth,
-      canChangeGroup: this.props.canChangeGroup,
-      canMove: this.props.canMove,
-      canResize: this.props.canResize,
-      itemSelect: this.selectItem.bind(this),
-      itemDrag: this.dragItem.bind(this),
-      itemDrop: this.dropItem.bind(this),
-      itemResizing: this.resizingItem.bind(this),
-      itemResized: this.resizedItem.bind(this)
-    }
-
-    const sidebarProps = {
-      groups: this.props.groups,
-
-      width: this.props.sidebarWidth,
-      lineHeight: this.state.lineHeight,
-
-      fixedHeader: this.props.fixedHeader,
-      zIndex: this.props.zIndexStart + 2,
-
-      sidebarColor: design.sidebarColor,
-      sidebarBackgroundColor: design.sidebarBackgroundColor,
-      sidebarBorderRight: '1px solid #aaa',
-      sidebarBorderBottom: '1px solid #aaa',
-      listItemPadding: design.listItemPadding,
-      gradientBackground: gradientBackground
-    }
-
-    const headerProps = {
-      minUnit: minUnit,
-      width: width,
-      zoom: zoom,
-      minTime: this.state.minTime,
-      maxTime: this.state.maxTime,
-      headerColor: design.headerColor,
-      headerBackgroundColor: design.headerBackgroundColor,
-      lowerHeaderColor: design.lowerHeaderColor,
-      lowerHeaderBackgroundColor: design.lowerHeaderBackgroundColor,
-      borderColor: design.borderColor,
-      fixedHeader: this.props.fixedHeader,
-      zIndex: this.props.zIndexStart + 1,
-      showPeriod: this.showPeriod.bind(this)
-    }
 
     const scrollComponentStyle = {
       display: 'inline-block',
@@ -423,24 +490,22 @@ export default class ReactCalendarTimeline extends Component {
     const canvasComponentStyle = {
       position: 'relative',
       width: `${canvasWidth}px`,
-      height: `${height}px`,
-      background: gradientBackground
+      height: `${height}px`
     }
 
     return (
       <div style={this.props.style || {}} ref='container' className='react-calendar-timeline'>
         {this.props.controls ? <Controls changeZoom={this.changeZoom.bind(this)} /> : ''}
         <div>
-          <Sidebar {...sidebarProps}>
-            {this.props.children}
-          </Sidebar>
+          {this.sidebar()}
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
-              <TodayLine {...staticProps} {...extraProps} />
-              <VerticalLines {...staticProps} {...extraProps} dayBackground={this.props.dayBackground} borderColor={design.borderColor} fixedHeader={this.props.fixedHeader} />
-              <Items {...staticProps} {...itemProps} />
-              {this.infoLabel() ? <InfoLabel label={this.infoLabel()} /> : ''}
-              <Header {...staticProps} {...headerProps} />
+              {this.todayLine()}
+              {this.verticalLines()}
+              {this.horizontalLines()}
+              {this.items()}
+              {this.infoLabel()}
+              {this.header()}
             </div>
           </div>
         </div>

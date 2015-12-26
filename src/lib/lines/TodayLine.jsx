@@ -34,8 +34,7 @@ TodayLine.propTypes = {
   maxX: React.PropTypes.number.isRequired,
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
-  lineCount: React.PropTypes.number.isRequired,
-  minUnit: React.PropTypes.string.isRequired
+  lineCount: React.PropTypes.number.isRequired
 }
 TodayLine.defaultProps = {
 }
