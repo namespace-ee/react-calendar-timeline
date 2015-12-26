@@ -281,8 +281,9 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   changeZoom (scale, offset = 0.5) {
+    const { minZoom, maxZoom } = this.props
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-    const newZoom = Math.min(Math.max(Math.round(oldZoom * scale), 60 * 60 * 1000), 20 * 365.24 * 86400 * 1000) // min 1 min, max 20 years
+    const newZoom = Math.min(Math.max(Math.round(oldZoom * scale), minZoom), maxZoom) // min 1 min, max 20 years
     const newVisibleTimeStart = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset)
 
     this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom)
@@ -565,6 +566,9 @@ ReactCalendarTimeline.propTypes = {
   zIndexStart: React.PropTypes.number,
   lineHeight: React.PropTypes.number,
 
+  minZoom: React.PropTypes.number,
+  maxZoom: React.PropTypes.number,
+
   canChangeGroup: React.PropTypes.bool,
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
@@ -591,6 +595,9 @@ ReactCalendarTimeline.defaultProps = {
   fixedHeader: 'none', // fixed or absolute or none
   zIndexStart: 10,
   lineHeight: 30,
+
+  minZoom: 60 * 60 * 1000, // 1 hour
+  maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
 
   canChangeGroup: true,
   canMove: true,
