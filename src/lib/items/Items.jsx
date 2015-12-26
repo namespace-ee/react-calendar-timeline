@@ -17,26 +17,26 @@ export default class Items extends Component {
     return groupOrders
   }
 
-  getVisibleItems (originX, maxX, groupOrders) {
+  getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
     return this.props.items.filter(item => {
       return groupOrders.hasOwnProperty(item.group)
     }).filter(item => {
       const x1 = item.start.getTime()
       const x2 = item.end.getTime()
-      return (x1 >= originX && x1 <= maxX) || (x1 <= originX && x2 >= maxX) || (x2 >= originX && x2 <= maxX)
+      return (x1 >= canvasTimeStart && x1 <= canvasTimeEnd) || (x1 <= canvasTimeStart && x2 >= canvasTimeEnd) || (x2 >= canvasTimeStart && x2 <= canvasTimeEnd)
     })
   }
 
   render () {
     const groupOrders = this.getGroupOrders()
-    const visibleItems = this.getVisibleItems(this.props.originX, this.props.maxX, groupOrders)
+    const visibleItems = this.getVisibleItems(this.props.canvasTimeStart, this.props.canvasTimeEnd, groupOrders)
 
     return (
       <div>
         {visibleItems.map(item => <Item key={item.id}
                                         item={item}
-                                        originX={this.props.originX}
-                                        maxX={this.props.maxX}
+                                        canvasTimeStart={this.props.canvasTimeStart}
+                                        canvasTimeEnd={this.props.canvasTimeEnd}
                                         canvasWidth={this.props.canvasWidth}
                                         lineHeight={this.props.lineHeight}
                                         order={groupOrders[item.group]}
@@ -60,8 +60,8 @@ Items.propTypes = {
   groups: React.PropTypes.array.isRequired,
   items: React.PropTypes.array.isRequired,
 
-  originX: React.PropTypes.number.isRequired,
-  maxX: React.PropTypes.number.isRequired,
+  canvasTimeStart: React.PropTypes.number.isRequired,
+  canvasTimeEnd: React.PropTypes.number.isRequired,
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
 

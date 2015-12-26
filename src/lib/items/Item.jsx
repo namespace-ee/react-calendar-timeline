@@ -23,7 +23,7 @@ export default class Item extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   coordinateToTimeRatio(props = this.props) {
-    return (props.maxX - props.originX) / props.canvasWidth;
+    return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth;
   }
 
   dragTimeSnap(dragTime) {
@@ -218,7 +218,7 @@ export default class Item extends Component {
         ratio = 1 / this.coordinateToTimeRatio(props);
 
     return {
-      left: `${(x - props.originX) * ratio}px`,
+      left: `${(x - props.canvasTimeStart) * ratio}px`,
       top: `${y}px`,
       width: `${Math.max(w * ratio, 3)}px`,
       height: `${h}px`
@@ -261,8 +261,8 @@ export default class Item extends Component {
 
 Item.propTypes = {
   item: React.PropTypes.object.isRequired,
-  originX: React.PropTypes.number.isRequired,
-  maxX: React.PropTypes.number.isRequired,
+  canvasTimeStart: React.PropTypes.number.isRequired,
+  canvasTimeEnd: React.PropTypes.number.isRequired,
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
   order: React.PropTypes.number.isRequired,

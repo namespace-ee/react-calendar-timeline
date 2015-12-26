@@ -9,9 +9,9 @@ export default class TodayLine extends Component {
   render () {
     let currentTime = new Date().getTime()
 
-    if (currentTime > this.props.originX && currentTime < this.props.maxX) {
-      const ratio = this.props.canvasWidth / (this.props.maxX - this.props.originX)
-      const left = Math.round((currentTime - this.props.originX) * ratio)
+    if (currentTime > this.props.canvasTimeStart && currentTime < this.props.canvasTimeEnd) {
+      const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
+      const left = Math.round((currentTime - this.props.canvasTimeStart) * ratio)
       const top = this.props.lineHeight * 2
       const height = this.props.lineCount * this.props.lineHeight
       const styles = {
@@ -30,8 +30,8 @@ export default class TodayLine extends Component {
   }
 }
 TodayLine.propTypes = {
-  originX: React.PropTypes.number.isRequired,
-  maxX: React.PropTypes.number.isRequired,
+  canvasTimeStart: React.PropTypes.number.isRequired,
+  canvasTimeEnd: React.PropTypes.number.isRequired,
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
   lineCount: React.PropTypes.number.isRequired

@@ -5,7 +5,6 @@ import moment from 'moment'
 
 import Items from './items/Items.jsx'
 import InfoLabel from './layout/InfoLabel.jsx'
-import Controls from './layout/Controls.jsx'
 import Sidebar from './layout/Sidebar.jsx'
 import Header from './layout/Header.jsx'
 import VerticalLines from './lines/VerticalLines.jsx'
@@ -35,22 +34,29 @@ export default class ReactCalendarTimeline extends Component {
   constructor (props) {
     super(props)
 
-    let minTime = _min(this.props.items.map(item => item.start.getTime()))
-    let maxTime = _max(this.props.items.map(item => item.end.getTime()))
+    let visibleTimeStart = null
+    let visibleTimeEnd = null
 
-    if (!minTime || !maxTime) {
-      minTime = new Date().getTime() - 86400 * 7 * 1000
-      maxTime = new Date().getTime() + 86400 * 7 * 1000
+    if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
+      visibleTimeStart = this.props.visibleTimeStart
+      visibleTimeEnd = this.props.visibleTimeEnd
+    } else {
+      visibleTimeStart = _min(this.props.items.map(item => item.start.getTime()))
+      visibleTimeEnd = _max(this.props.items.map(item => item.end.getTime()))
+
+      if (!visibleTimeStart || !visibleTimeEnd) {
+        visibleTimeStart = new Date().getTime() - 86400 * 7 * 1000
+        visibleTimeEnd = new Date().getTime() + 86400 * 7 * 1000
+      }
     }
 
     this.state = {
       width: 1000,
-      lineHeight: 30,
-      minTime: minTime,
-      maxTime: maxTime,
-      zoom: maxTime - minTime,
-      originX: minTime - (maxTime - minTime),
-      visible: false,
+
+      visibleTimeStart: visibleTimeStart,
+      visibleTimeEnd: visibleTimeEnd,
+      canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
+
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
@@ -161,33 +167,32 @@ export default class ReactCalendarTimeline extends Component {
   resize () {
     let width = this.refs.container.clientWidth - this.props.sidebarWidth
     this.setState({
-      width: width,
-      visible: true
+      width: width
     })
     this.refs.scrollComponent.scrollLeft = width
   }
 
   onScroll () {
     const scrollComponent = this.refs.scrollComponent
-    const originX = this.state.originX
+    const canvasTimeStart = this.state.canvasTimeStart
     const scrollX = scrollComponent.scrollLeft
-    const zoom = this.state.zoom
+    const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const width = this.state.width
-    const minTime = originX + (zoom * scrollX / width)
+    const visibleTimeStart = canvasTimeStart + (zoom * scrollX / width)
 
-    if (this.state.minTime !== minTime || this.state.maxTime !== minTime + zoom) {
+    if (this.state.visibleTimeStart !== visibleTimeStart || this.state.visibleTimeEnd !== visibleTimeStart + zoom) {
       this.setState({
-        minTime: minTime,
-        maxTime: minTime + zoom
+        visibleTimeStart: visibleTimeStart,
+        visibleTimeEnd: visibleTimeStart + zoom
       })
     }
 
     if (scrollX < this.state.width * 0.5) {
-      this.setState({originX: this.state.originX - this.state.zoom})
+      this.setState({canvasTimeStart: this.state.canvasTimeStart - zoom})
       scrollComponent.scrollLeft += this.state.width
     }
     if (scrollX > this.state.width * 1.5) {
-      this.setState({originX: this.state.originX + this.state.zoom})
+      this.setState({canvasTimeStart: this.state.canvasTimeStart + zoom})
       scrollComponent.scrollLeft -= this.state.width
     }
   }
@@ -226,27 +231,26 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   changeZoom (scale, offset = 0.5) {
-    let oldZoom = this.state.zoom
+    let oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     let newZoom = Math.min(Math.max(Math.round(oldZoom * scale), 60 * 60 * 1000), 20 * 365.24 * 86400 * 1000) // min 1 min, max 20 years
     let realScale = newZoom / oldZoom
-    let middle = Math.round(this.state.minTime + oldZoom * offset)
-    let oldBefore = middle - this.state.originX
+    let middle = Math.round(this.state.visibleTimeStart + oldZoom * offset)
+    let oldBefore = middle - this.state.canvasTimeStart
     let newBefore = Math.round(oldBefore * realScale)
-    let newOriginX = this.state.originX + (oldBefore - newBefore)
-    let newMinTime = Math.round(this.state.minTime + (oldZoom - newZoom) * offset)
+    let newOriginX = this.state.canvasTimeStart + (oldBefore - newBefore)
+    let newMinTime = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset)
 
     this.setState({
-      zoom: newZoom,
-      originX: newOriginX,
-      minTime: newMinTime,
-      maxTime: newMinTime + newZoom
+      canvasTimeStart: newOriginX,
+      visibleTimeStart: newMinTime,
+      visibleTimeEnd: newMinTime + newZoom
     })
   }
 
   showPeriod (from, unit) {
-    let minTime = from.valueOf()
-    let maxTime = moment(from).add(1, unit).valueOf()
-    let zoom = maxTime - minTime
+    let visibleTimeStart = from.valueOf()
+    let visibleTimeEnd = moment(from).add(1, unit).valueOf()
+    let zoom = visibleTimeEnd - visibleTimeStart
 
     // can't zoom in more than to show one hour
     if (zoom < 360000) {
@@ -254,19 +258,18 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     // clicked on the big header and already focused here, zoom out
-    if (unit !== 'year' && this.state.minTime === minTime && this.state.maxTime === maxTime) {
+    if (unit !== 'year' && this.state.visibleTimeStart === visibleTimeStart && this.state.visibleTimeEnd === visibleTimeEnd) {
       let nextUnit = getNextUnit(unit)
 
-      minTime = from.startOf(nextUnit).valueOf()
-      maxTime = moment(minTime).add(1, nextUnit)
-      zoom = maxTime - minTime
+      visibleTimeStart = from.startOf(nextUnit).valueOf()
+      visibleTimeEnd = moment(visibleTimeStart).add(1, nextUnit)
+      zoom = visibleTimeEnd - visibleTimeStart
     }
 
     this.setState({
-      zoom: zoom,
-      originX: minTime - zoom,
-      minTime: minTime,
-      maxTime: minTime + zoom
+      canvasTimeStart: visibleTimeStart - zoom,
+      visibleTimeStart: visibleTimeStart,
+      visibleTimeEnd: visibleTimeStart + zoom
     })
 
     this.refs.scrollComponent.scrollLeft = this.state.width
@@ -319,31 +322,33 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   todayLine () {
-    const originX = this.state.originX
-    const maxX = originX + this.state.zoom * 3
+    const canvasTimeStart = this.state.canvasTimeStart
+    const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = this.state.width * 3
 
     return (
-      <TodayLine originX={originX}
-                 maxX={maxX}
+      <TodayLine canvasTimeStart={canvasTimeStart}
+                 canvasTimeEnd={canvasTimeEnd}
                  canvasWidth={canvasWidth}
-                 lineHeight={this.state.lineHeight}
+                 lineHeight={this.props.lineHeight}
                  lineCount={this.props.groups.length} />
     )
   }
 
   verticalLines () {
-    const originX = this.state.originX
-    const maxX = originX + this.state.zoom * 3
+    const canvasTimeStart = this.state.canvasTimeStart
+    const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = this.state.width * 3
-    const minUnit = getMinUnit(this.state.zoom, this.state.width)
+    const minUnit = getMinUnit(zoom, this.state.width)
     const design = this.design()
 
     return (
-      <VerticalLines originX={originX}
-                     maxX={maxX}
+      <VerticalLines canvasTimeStart={canvasTimeStart}
+                     canvasTimeEnd={canvasTimeEnd}
                      canvasWidth={canvasWidth}
-                     lineHeight={this.state.lineHeight}
+                     lineHeight={this.props.lineHeight}
                      lineCount={this.props.groups.length}
                      minUnit={minUnit}
                      dayBackground={this.props.dayBackground}
@@ -358,7 +363,7 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <HorizontalLines canvasWidth={canvasWidth}
-                       lineHeight={this.state.lineHeight}
+                       lineHeight={this.props.lineHeight}
                        lineCount={this.props.groups.length}
                        backgroundColor={i => i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground}
                        borderWidth={design.borderWidth}
@@ -367,16 +372,17 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   items () {
-    const minUnit = getMinUnit(this.state.zoom, this.state.width)
-    const originX = this.state.originX
-    const maxX = originX + this.state.zoom * 3
+    const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const minUnit = getMinUnit(zoom, this.state.width)
+    const canvasTimeStart = this.state.canvasTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = this.state.width * 3
 
     return (
-      <Items originX={originX}
-             maxX={maxX}
+      <Items canvasTimeStart={canvasTimeStart}
+             canvasTimeEnd={canvasTimeEnd}
              canvasWidth={canvasWidth}
-             lineHeight={this.state.lineHeight}
+             lineHeight={this.props.lineHeight}
              lineCount={this.props.groups.length}
              minUnit={minUnit}
              items={this.props.items}
@@ -423,22 +429,23 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   header () {
-    const originX = this.state.originX
-    const maxX = originX + this.state.zoom * 3
+    const canvasTimeStart = this.state.canvasTimeStart
+    const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = this.state.width * 3
-    const minUnit = getMinUnit(this.state.zoom, this.state.width)
+    const minUnit = getMinUnit(zoom, this.state.width)
     const design = this.design()
 
     return (
-      <Header originX={originX}
-              maxX={maxX}
+      <Header canvasTimeStart={canvasTimeStart}
+              canvasTimeEnd={canvasTimeEnd}
               canvasWidth={canvasWidth}
-              lineHeight={this.state.lineHeight}
+              lineHeight={this.props.lineHeight}
               minUnit={minUnit}
               width={this.state.width}
-              zoom={this.state.zoom}
-              minTime={this.state.minTime}
-              maxTime={this.state.maxTime}
+              zoom={zoom}
+              visibleTimeStart={this.state.visibleTimeStart}
+              visibleTimeEnd={this.state.visibleTimeEnd}
               headerColor={design.headerColor}
               headerBackgroundColor={design.headerBackgroundColor}
               lowerHeaderColor={design.lowerHeaderColor}
@@ -456,7 +463,7 @@ export default class ReactCalendarTimeline extends Component {
     return (
       <Sidebar groups={this.props.groups}
                width={this.props.sidebarWidth}
-               lineHeight={this.state.lineHeight}
+               lineHeight={this.props.lineHeight}
 
                fixedHeader={this.props.fixedHeader}
                zIndex={this.props.zIndexStart + 2}
@@ -475,7 +482,7 @@ export default class ReactCalendarTimeline extends Component {
 
   render () {
     const width = this.state.width
-    const height = (this.props.groups.length + 2) * this.state.lineHeight
+    const height = (this.props.groups.length + 2) * this.props.lineHeight
     const canvasWidth = this.state.width * 3
 
     const scrollComponentStyle = {
@@ -495,7 +502,6 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <div style={this.props.style || {}} ref='container' className='react-calendar-timeline'>
-        {this.props.controls ? <Controls changeZoom={this.changeZoom.bind(this)} /> : ''}
         <div>
           {this.sidebar()}
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
@@ -520,9 +526,9 @@ ReactCalendarTimeline.propTypes = {
   sidebarWidth: React.PropTypes.number,
   dragSnap: React.PropTypes.number,
   minResizeWidth: React.PropTypes.number,
-  zIndexStart: React.PropTypes.number,
-  controls: React.PropTypes.bool,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+  zIndexStart: React.PropTypes.number,
+  lineHeight: React.PropTypes.number,
 
   canChangeGroup: React.PropTypes.bool,
   canMove: React.PropTypes.bool,
@@ -536,15 +542,19 @@ ReactCalendarTimeline.propTypes = {
   style: React.PropTypes.object,
   design: React.PropTypes.object,
 
+  visibleTimeStart: React.PropTypes.number,
+  visibleTimeEnd: React.PropTypes.number,
+  changeTime: React.PropTypes.func,
+
   children: React.PropTypes.node
 }
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
   dragSnap: 1000 * 60 * 15, // 15min
   minResizeWidth: 20,
-  controls: false,
   fixedHeader: 'none', // fixed or absolute or none
   zIndexStart: 10,
+  lineHeight: 30,
 
   canChangeGroup: true,
   canMove: true,
@@ -557,6 +567,10 @@ ReactCalendarTimeline.defaultProps = {
 
   style: {},
   design: {},
+
+  visibleTimeStart: null,
+  visibleTimeEnd: null,
+  changeTime: null, // called with (visibleTimeStart, visibleTimeEnd), expects to change the props to those
 
   children: null
 }

@@ -83,25 +83,25 @@ export default class Header extends Component {
   render () {
     let timeLabels = []
     const {
-      originX, maxX, canvasWidth, lineHeight,
-      minTime, maxTime, minUnit,
+      canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
+      visibleTimeStart, visibleTimeEnd, minUnit,
       headerColor, borderColor, fixedHeader
     } = this.props
     const {
       scrollTop
     } = this.state
-    const ratio = canvasWidth / (maxX - originX)
+    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const lowerHeaderColor = this.props.lowerHeaderColor || headerColor
     const twoHeaders = minUnit !== 'year'
 
-    iterateTimes(originX, maxX, minUnit, (time, nextTime) => {
-      const left = Math.round((time.valueOf() - originX) * ratio, -2)
+    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, (time, nextTime) => {
+      const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
       const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
       const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
       const borderWidth = firstOfType ? 2 : 1
       const color = twoHeaders ? lowerHeaderColor : headerColor
-      const leftCorrect = fixedHeader === 'fixed' ? Math.round((originX - minTime) * ratio) - borderWidth + 1 : 0
+      const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
@@ -128,13 +128,13 @@ export default class Header extends Component {
     if (twoHeaders) {
       const nextUnit = getNextUnit(minUnit)
 
-      iterateTimes(minTime, maxTime, nextUnit, (time, nextTime) => {
-        const startTime = Math.max(minTime, time.valueOf())
-        const endTime = Math.min(maxTime, nextTime.valueOf())
-        const left = Math.round((startTime.valueOf() - originX) * ratio, -2)
-        const right = Math.round((endTime.valueOf() - originX) * ratio, -2)
+      iterateTimes(visibleTimeStart, visibleTimeEnd, nextUnit, (time, nextTime) => {
+        const startTime = Math.max(visibleTimeStart, time.valueOf())
+        const endTime = Math.min(visibleTimeEnd, nextTime.valueOf())
+        const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2)
+        const right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2)
         const labelWidth = right - left
-        const leftCorrect = fixedHeader === 'fixed' ? Math.round((originX - minTime) * ratio) - 1 : 0
+        const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
@@ -199,13 +199,13 @@ Header.propTypes = {
   // lineHeight: React.PropTypes.number.isRequired,
   // headerBackgroundColor: React.PropTypes.string.isRequired,
   showPeriod: React.PropTypes.func.isRequired,
-  originX: React.PropTypes.number.isRequired,
-  maxX: React.PropTypes.number.isRequired,
+  canvasTimeStart: React.PropTypes.number.isRequired,
+  canvasTimeEnd: React.PropTypes.number.isRequired,
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
-  minTime: React.PropTypes.number.isRequired,
-  maxTime: React.PropTypes.number.isRequired,
-  // maxTime: React.PropTypes.number.isRequired,
+  visibleTimeStart: React.PropTypes.number.isRequired,
+  visibleTimeEnd: React.PropTypes.number.isRequired,
+  // visibleTimeEnd: React.PropTypes.number.isRequired,
   minUnit: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   headerColor: React.PropTypes.string.isRequired,

@@ -1,3 +1,3 @@
-import ReactCalendarTimeline from './lib/ReactCalendarTimeline.jsx';
+import ReactCalendarTimeline from './lib/ReactCalendarTimeline.jsx'
 
-export default ReactCalendarTimeline;
+export default ReactCalendarTimeline
