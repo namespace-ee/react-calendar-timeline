@@ -48,6 +48,10 @@ export default class ReactCalendarTimeline extends Component {
         visibleTimeStart = new Date().getTime() - 86400 * 7 * 1000
         visibleTimeEnd = new Date().getTime() + 86400 * 7 * 1000
       }
+
+      if (this.props.onTimeInit) {
+        this.props.onTimeInit(visibleTimeStart, visibleTimeEnd)
+      }
     }
 
     this.state = {
@@ -180,21 +184,67 @@ export default class ReactCalendarTimeline extends Component {
     const width = this.state.width
     const visibleTimeStart = canvasTimeStart + (zoom * scrollX / width)
 
-    if (this.state.visibleTimeStart !== visibleTimeStart || this.state.visibleTimeEnd !== visibleTimeStart + zoom) {
-      this.setState({
-        visibleTimeStart: visibleTimeStart,
-        visibleTimeEnd: visibleTimeStart + zoom
-      })
-    }
-
+    // move the virtual canvas if needed
     if (scrollX < this.state.width * 0.5) {
-      this.setState({canvasTimeStart: this.state.canvasTimeStart - zoom})
+      this.setState({
+        canvasTimeStart: this.state.canvasTimeStart - zoom
+      })
       scrollComponent.scrollLeft += this.state.width
     }
     if (scrollX > this.state.width * 1.5) {
-      this.setState({canvasTimeStart: this.state.canvasTimeStart + zoom})
+      this.setState({
+        canvasTimeStart: this.state.canvasTimeStart + zoom
+      })
       scrollComponent.scrollLeft -= this.state.width
     }
+
+    if (this.state.visibleTimeStart !== visibleTimeStart || this.state.visibleTimeEnd !== visibleTimeStart + zoom) {
+      this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom)
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { visibleTimeStart, visibleTimeEnd } = nextProps
+
+    if (visibleTimeStart && visibleTimeEnd) {
+      this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+    }
+  }
+
+  updateScrollCanvas (visibleTimeStart, visibleTimeEnd) {
+    const oldCanvasTimeStart = this.state.canvasTimeStart
+    const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const newZoom = visibleTimeEnd - visibleTimeStart
+
+    let newState = {
+      visibleTimeStart: visibleTimeStart,
+      visibleTimeEnd: visibleTimeEnd
+    }
+
+    let resetCanvas = false
+
+    const canKeepCanvas = visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
+                          visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
+                          visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
+                          visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
+
+    // if new visible time is in the right canvas area
+    if (canKeepCanvas) {
+      // but we need to update the scroll
+      const newScrollLeft = Math.round(this.state.width * (visibleTimeStart - oldCanvasTimeStart) / newZoom)
+      if (this.refs.scrollComponent.scrollLeft !== newScrollLeft) {
+        resetCanvas = true
+      }
+    } else {
+      resetCanvas = true
+    }
+
+    if (resetCanvas) {
+      newState.canvasTimeStart = visibleTimeStart - newZoom
+      this.refs.scrollComponent.scrollLeft = this.state.width
+    }
+
+    this.setState(newState)
   }
 
   onWheel (e) {
@@ -231,20 +281,11 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   changeZoom (scale, offset = 0.5) {
-    let oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-    let newZoom = Math.min(Math.max(Math.round(oldZoom * scale), 60 * 60 * 1000), 20 * 365.24 * 86400 * 1000) // min 1 min, max 20 years
-    let realScale = newZoom / oldZoom
-    let middle = Math.round(this.state.visibleTimeStart + oldZoom * offset)
-    let oldBefore = middle - this.state.canvasTimeStart
-    let newBefore = Math.round(oldBefore * realScale)
-    let newOriginX = this.state.canvasTimeStart + (oldBefore - newBefore)
-    let newMinTime = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset)
+    const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const newZoom = Math.min(Math.max(Math.round(oldZoom * scale), 60 * 60 * 1000), 20 * 365.24 * 86400 * 1000) // min 1 min, max 20 years
+    const newVisibleTimeStart = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset)
 
-    this.setState({
-      canvasTimeStart: newOriginX,
-      visibleTimeStart: newMinTime,
-      visibleTimeEnd: newMinTime + newZoom
-    })
+    this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom)
   }
 
   showPeriod (from, unit) {
@@ -266,13 +307,7 @@ export default class ReactCalendarTimeline extends Component {
       zoom = visibleTimeEnd - visibleTimeStart
     }
 
-    this.setState({
-      canvasTimeStart: visibleTimeStart - zoom,
-      visibleTimeStart: visibleTimeStart,
-      visibleTimeEnd: visibleTimeStart + zoom
-    })
-
-    this.refs.scrollComponent.scrollLeft = this.state.width
+    this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom)
   }
 
   selectItem (item) {
@@ -544,7 +579,8 @@ ReactCalendarTimeline.propTypes = {
 
   visibleTimeStart: React.PropTypes.number,
   visibleTimeEnd: React.PropTypes.number,
-  changeTime: React.PropTypes.func,
+  onTimeChange: React.PropTypes.func,
+  onTimeInit: React.PropTypes.func,
 
   children: React.PropTypes.node
 }
@@ -568,9 +604,15 @@ ReactCalendarTimeline.defaultProps = {
   style: {},
   design: {},
 
+  // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
+  // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
   visibleTimeStart: null,
   visibleTimeEnd: null,
-  changeTime: null, // called with (visibleTimeStart, visibleTimeEnd), expects to change the props to those
+  onTimeChange: function (visibleTimeStart, visibleTimeEnd) {
+    this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+  },
+  // called after the calendar loads and the visible time has been calculated
+  onTimeInit: null,
 
   children: null
 }
