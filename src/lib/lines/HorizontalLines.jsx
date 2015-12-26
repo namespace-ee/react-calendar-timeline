@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
-import shouldPureComponentUpdate from 'react-pure-render/function'
 
 export default class HorizontalLines extends Component {
   constructor (props) {
     super(props)
   }
 
-  shouldComponentUpdate = shouldPureComponentUpdate
+  shouldComponentUpdate (nextProps, nextState) {
+    return !(nextProps.canvasWidth === this.props.canvasWidth &&
+             nextProps.lineHeight === this.props.lineHeight &&
+             nextProps.lineCount === this.props.lineCount &&
+             nextProps.borderWidth === this.props.borderWidth &&
+             nextProps.borderColor === this.props.borderColor)
+  }
 
   render () {
     const { borderColor, lineCount, lineHeight, canvasWidth, borderWidth } = this.props

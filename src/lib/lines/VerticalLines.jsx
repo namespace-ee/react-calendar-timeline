@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import { iterateTimes } from '../utils.js'
 
@@ -8,7 +7,16 @@ export default class VerticalLines extends Component {
     super(props)
   }
 
-  shouldComponentUpdate = shouldPureComponentUpdate
+  shouldComponentUpdate (nextProps, nextState) {
+    return !(nextProps.canvasTimeStart === this.props.canvasTimeStart &&
+             nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
+             nextProps.canvasWidth === this.props.canvasWidth &&
+             nextProps.lineHeight === this.props.lineHeight &&
+             nextProps.lineCount === this.props.lineCount &&
+             nextProps.minUnit === this.props.minUnit &&
+             nextProps.fixedHeader === this.props.fixedHeader &&
+             nextProps.borderColor === this.props.borderColor)
+  }
 
   render () {
     const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, lineCount, lineHeight } = this.props
