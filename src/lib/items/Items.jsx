@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Item from './Item.jsx'
 
 import { _get } from '../utils'
+import moment from 'moment'
 
 export default class Items extends Component {
   constructor (props) {
@@ -9,7 +10,7 @@ export default class Items extends Component {
   }
 
   getGroupOrders () {
-    const { groupIdKey } = this.props
+    const { groupIdKey } = this.props.keys
 
     let groupOrders = {}
     let i = 0
@@ -22,30 +23,28 @@ export default class Items extends Component {
   }
 
   getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
-    const { itemTimeStartKey, itemTimeEndKey, itemGroupKey } = this.props
+    const { itemTimeStartKey, itemTimeEndKey, itemGroupKey } = this.props.keys
 
     return this.props.items.filter(item => {
       return groupOrders.hasOwnProperty(_get(item, itemGroupKey))
     }).filter(item => {
-      const x1 = _get(item, itemTimeStartKey).getTime()
-      const x2 = _get(item, itemTimeEndKey).getTime()
-      return (x1 >= canvasTimeStart && x1 <= canvasTimeEnd) || (x1 <= canvasTimeStart && x2 >= canvasTimeEnd) || (x2 >= canvasTimeStart && x2 <= canvasTimeEnd)
+      const x1 = moment(_get(item, itemTimeStartKey)).valueOf()
+      const x2 = moment(_get(item, itemTimeEndKey)).valueOf()
+      return x1 <= canvasTimeEnd && x2 >= canvasTimeStart
     })
   }
 
   render () {
     const groupOrders = this.getGroupOrders()
-    const visibleItems = this.getVisibleItems(this.props.canvasTimeStart, this.props.canvasTimeEnd, groupOrders)
+    const visibleItems = this.getVisibleItems(moment(this.props.canvasTimeStart).valueOf(), moment(this.props.canvasTimeEnd).valueOf(), groupOrders)
 
-    const { itemIdKey, itemGroupKey, itemTimeStartKey, itemTimeEndKey, itemTitleKey } = this.props
+    const { itemIdKey, itemGroupKey } = this.props.keys
 
     return (
       <div>
         {visibleItems.map(item => <Item key={_get(item, itemIdKey)}
-                                        itemId={_get(item, itemIdKey)}
-                                        itemTitle={_get(item, itemTitleKey)}
-                                        itemTimeStart={_get(item, itemTimeStartKey)}
-                                        itemTimeEnd={_get(item, itemTimeEndKey)}
+                                        item={item}
+                                        keys={this.props.keys}
                                         canvasTimeStart={this.props.canvasTimeStart}
                                         canvasTimeEnd={this.props.canvasTimeEnd}
                                         canvasWidth={this.props.canvasWidth}
@@ -84,12 +83,7 @@ Items.propTypes = {
   canMove: React.PropTypes.bool.isRequired,
   canResize: React.PropTypes.bool.isRequired,
 
-  groupIdKey: React.PropTypes.string.isRequired,
-  itemIdKey: React.PropTypes.string.isRequired,
-  itemTitleKey: React.PropTypes.string.isRequired,
-  itemGroupKey: React.PropTypes.string.isRequired,
-  itemTimeStartKey: React.PropTypes.string.isRequired,
-  itemTimeEndKey: React.PropTypes.string.isRequired,
+  keys: React.PropTypes.object.isRequired,
 
   itemSelect: React.PropTypes.func,
   itemDrag: React.PropTypes.func,

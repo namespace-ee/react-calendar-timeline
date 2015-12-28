@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+// import shouldPureComponentUpdate from 'react-pure-render/function'
 
-import { _get, _length } from '../utils'
+import { _get, _length, arraysEqual } from '../utils'
 
 export default class Sidebar extends Component {
   constructor (props) {
@@ -9,6 +10,24 @@ export default class Sidebar extends Component {
       scrollTop: 0,
       componentTop: 0
     }
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    if (nextProps.fixedHeader === 'absolute' && window && window.document && this.state.scrollTop !== nextState.scrollTop) {
+      return true
+    }
+
+    return !(arraysEqual(nextProps.groups, this.props.groups) &&
+             nextProps.keys === this.props.keys &&
+             nextProps.width === this.props.width &&
+             nextProps.lineHeight === this.props.lineHeight &&
+             nextProps.fixedHeader === this.props.fixedHeader &&
+             nextProps.zIndex === this.props.zIndex &&
+             nextProps.sidebarColor === this.props.sidebarColor &&
+             nextProps.sidebarBackgroundColor === this.props.sidebarBackgroundColor &&
+             nextProps.listItemPadding === this.props.listItemPadding &&
+             nextProps.borderWidth === this.props.borderWidth &&
+             nextProps.borderColor === this.props.borderColor)
   }
 
   scroll (e) {
@@ -53,9 +72,10 @@ export default class Sidebar extends Component {
       fixedHeader, width, lineHeight, zIndex, groups,
       listItemPadding,
       borderColor, borderWidth,
-      sidebarBackgroundColor, sidebarColor,
-      groupIdKey, groupTitleKey
+      sidebarBackgroundColor, sidebarColor
     } = this.props
+
+    const {groupIdKey, groupTitleKey} = this.props.keys
 
     const {
       scrollTop
@@ -162,9 +182,7 @@ Sidebar.propTypes = {
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   listItemPadding: React.PropTypes.string,
-
-  groupIdKey: React.PropTypes.string.isRequired,
-  groupTitleKey: React.PropTypes.string.isRequired
+  keys: React.PropTypes.object.isRequired
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',

@@ -26,6 +26,16 @@ const defaultDesign = {
   listItemPadding: '0 4px'
 }
 
+const defaultKeys = {
+  groupIdKey: 'id',
+  groupTitleKey: 'title',
+  itemIdKey: 'id',
+  itemTitleKey: 'title',
+  itemGroupKey: 'group',
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time'
+}
+
 export default class ReactCalendarTimeline extends Component {
   constructor (props) {
     super(props)
@@ -422,12 +432,7 @@ export default class ReactCalendarTimeline extends Component {
              minUnit={minUnit}
              items={this.props.items}
              groups={this.props.groups}
-             groupIdKey={this.props.groupIdKey}
-             itemIdKey={this.props.itemIdKey}
-             itemTitleKey={this.props.itemTitleKey}
-             itemGroupKey={this.props.itemGroupKey}
-             itemTimeStartKey={this.props.itemTimeStartKey}
-             itemTimeEndKey={this.props.itemTimeEndKey}
+             keys={this.props.keys}
              selectedItem={this.state.selectedItem}
              dragSnap={this.props.dragSnap}
              minResizeWidth={this.props.minResizeWidth}
@@ -503,13 +508,7 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <Sidebar groups={this.props.groups}
-               groupIdKey={this.props.groupIdKey}
-               groupTitleKey={this.props.groupTitleKey}
-               itemIdKey={this.props.itemIdKey}
-               itemTitleKey={this.props.itemTitleKey}
-               itemGroupKey={this.props.itemGroupKey}
-               itemTimeStartKey={this.props.itemTimeStartKey}
-               itemTimeEndKey={this.props.itemTimeEndKey}
+               keys={this.props.keys}
 
                width={this.props.sidebarWidth}
                lineHeight={this.props.lineHeight}
@@ -593,20 +592,13 @@ ReactCalendarTimeline.propTypes = {
 
   style: React.PropTypes.object,
   design: React.PropTypes.object,
+  keys: React.PropTypes.object,
 
   visibleTimeStart: React.PropTypes.number,
   visibleTimeEnd: React.PropTypes.number,
   onTimeChange: React.PropTypes.func,
   onTimeInit: React.PropTypes.func,
   onBoundsChange: React.PropTypes.func,
-
-  groupIdKey: React.PropTypes.string,
-  groupTitleKey: React.PropTypes.string,
-  itemIdKey: React.PropTypes.string,
-  itemTitleKey: React.PropTypes.string,
-  itemGroupKey: React.PropTypes.string,
-  itemTimeStartKey: React.PropTypes.string,
-  itemTimeEndKey: React.PropTypes.string,
 
   children: React.PropTypes.node
 }
@@ -632,6 +624,7 @@ ReactCalendarTimeline.defaultProps = {
 
   style: {},
   design: {},
+  keys: defaultKeys,
 
   // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
   // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
@@ -644,14 +637,5 @@ ReactCalendarTimeline.defaultProps = {
   onTimeInit: null,
   // called when the canvas area of the calendar changes
   onBoundsChange: null,
-
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time',
-
   children: null
 }
