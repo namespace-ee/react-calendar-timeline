@@ -10,7 +10,7 @@ import VerticalLines from './lines/VerticalLines.jsx'
 import HorizontalLines from './lines/HorizontalLines.jsx'
 import TodayLine from './lines/TodayLine.jsx'
 
-import { getMinUnit, getNextUnit, getParentPosition } from './utils.js'
+import { getMinUnit, getNextUnit, getParentPosition, _get, _length } from './utils.js'
 
 const defaultDesign = {
   evenRowBackground: 'transparent',
@@ -37,8 +37,8 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
     } else {
-      visibleTimeStart = Math.min(...this.props.items.map(item => item.start.getTime()))
-      visibleTimeEnd = Math.max(...this.props.items.map(item => item.end.getTime()))
+      visibleTimeStart = Math.min(...this.props.items.map(item => _get(item, 'start').getTime()))
+      visibleTimeEnd = Math.max(...this.props.items.map(item => _get(item, 'end').getTime()))
 
       if (!visibleTimeStart || !visibleTimeEnd) {
         visibleTimeStart = new Date().getTime() - 86400 * 7 * 1000
@@ -367,7 +367,7 @@ export default class ReactCalendarTimeline extends Component {
                  canvasTimeEnd={canvasTimeEnd}
                  canvasWidth={canvasWidth}
                  lineHeight={this.props.lineHeight}
-                 lineCount={this.props.groups.length} />
+                 lineCount={_length(this.props.groups)} />
     )
   }
 
@@ -384,7 +384,7 @@ export default class ReactCalendarTimeline extends Component {
                      canvasTimeEnd={canvasTimeEnd}
                      canvasWidth={canvasWidth}
                      lineHeight={this.props.lineHeight}
-                     lineCount={this.props.groups.length}
+                     lineCount={_length(this.props.groups)}
                      minUnit={minUnit}
                      dayBackground={this.props.dayBackground}
                      borderColor={design.borderColor}
@@ -399,7 +399,7 @@ export default class ReactCalendarTimeline extends Component {
     return (
       <HorizontalLines canvasWidth={canvasWidth}
                        lineHeight={this.props.lineHeight}
-                       lineCount={this.props.groups.length}
+                       lineCount={_length(this.props.groups)}
                        backgroundColor={i => i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground}
                        borderWidth={design.borderWidth}
                        borderColor={design.borderColor} />
@@ -418,7 +418,7 @@ export default class ReactCalendarTimeline extends Component {
              canvasTimeEnd={canvasTimeEnd}
              canvasWidth={canvasWidth}
              lineHeight={this.props.lineHeight}
-             lineCount={this.props.groups.length}
+             lineCount={_length(this.props.groups)}
              minUnit={minUnit}
              items={this.props.items}
              groups={this.props.groups}
@@ -517,7 +517,7 @@ export default class ReactCalendarTimeline extends Component {
 
   render () {
     const width = this.state.width
-    const height = (this.props.groups.length + 2) * this.props.lineHeight
+    const height = (_length(this.props.groups) + 2) * this.props.lineHeight
     const canvasWidth = this.state.width * 3
 
     const scrollComponentStyle = {
@@ -556,8 +556,8 @@ export default class ReactCalendarTimeline extends Component {
 }
 
 ReactCalendarTimeline.propTypes = {
-  groups: React.PropTypes.array.isRequired,
-  items: React.PropTypes.array.isRequired,
+  groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
+  items: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
   sidebarWidth: React.PropTypes.number,
   dragSnap: React.PropTypes.number,
   minResizeWidth: React.PropTypes.number,

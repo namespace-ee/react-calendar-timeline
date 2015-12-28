@@ -1,5 +1,14 @@
 import moment from 'moment'
 
+// so we could use both immutable.js objects and regular objects
+export function _get (object, key) {
+  return typeof object.get === 'function' ? object.get(key) : object[key]
+}
+
+export function _length (object) {
+  return typeof object.count === 'function' ? object.count() : object.length
+}
+
 export function iterateTimes (start, end, unit, callback) {
   let time = moment(start).startOf(unit)
 

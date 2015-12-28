@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.2.6/interact.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.7.6/immutable.js"></script>
   <script src="dist/react-calendar-timeline.js"></script>
   <script>
     var groups = [];
@@ -19,7 +20,9 @@
       })
     };
 
-    var items = [
+    groups = Immutable.fromJS(groups)
+
+    var items = Immutable.fromJS([
       {
         id: '1000',
         group: '1',
@@ -45,7 +48,7 @@
         end: moment("2014-09-25T04:00:00Z").toDate(),
         canChangeGroup: false
       }
-    ];
+    ]);
 
     var props = {
       groups: groups,

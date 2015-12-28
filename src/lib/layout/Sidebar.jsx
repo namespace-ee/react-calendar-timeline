@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { _get, _length } from '../utils'
+
 export default class Sidebar extends Component {
   constructor (props) {
     super(props)
@@ -60,7 +62,7 @@ export default class Sidebar extends Component {
 
     const containerStyle = {
       width: `${width}px`,
-      height: `${lineHeight * (groups.length + 2)}px`,
+      height: `${lineHeight * (_length(groups) + 2)}px`,
       boxSizing: 'border-box',
       borderRight: `${borderWidth}px solid ${borderColor}`,
       overflow: 'hidden',
@@ -129,8 +131,8 @@ export default class Sidebar extends Component {
                 : elementStyle
 
       groupLines.push(
-        <div key={group.id} style={style}>
-          {group.title}
+        <div key={_get(group, 'id')} style={style}>
+          {_get(group, 'title')}
         </div>
       )
       i += 1
@@ -148,7 +150,7 @@ export default class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  groups: React.PropTypes.array.isRequired,
+  groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
   width: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
   sidebarColor: React.PropTypes.string.isRequired,
