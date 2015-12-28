@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 import interact from 'interact.js'
 
-import { _get } from '../utils'
+import moment from 'moment'
 
 export default class Item extends Component {
   constructor (props) {
@@ -36,15 +36,15 @@ export default class Item extends Component {
   }
 
   dragTime (e) {
-    let item = this.props.item
+    const startTime = moment(this.props.itemTimeStart).valueOf()
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
       const timeDelta = deltaX * this.coordinateToTimeRatio()
 
-      return this.dragTimeSnap(_get(item, 'start').getTime() + timeDelta)
+      return this.dragTimeSnap(startTime + timeDelta)
     } else {
-      return _get(item, 'start').getTime()
+      return startTime
     }
   }
 
@@ -67,7 +67,7 @@ export default class Item extends Component {
   }
 
   resizeTimeDelta (e) {
-    const length = _get(this.props.item, 'end') - _get(this.props.item, 'start')
+    const length = moment(this.props.itemTimeEnd).valueOf() - moment(this.props.itemTimeStart).valueOf()
     const timeDelta = this.dragTimeSnap((e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio())
 
     if (length + timeDelta < (this.props.dragSnap || 1000)) {
@@ -92,7 +92,7 @@ export default class Item extends Component {
             dragging: true,
             dragStart: {x: e.pageX, y: e.pageY},
             preDragPosition: {x: e.target.offsetLeft, y: e.target.offsetTop},
-            dragTime: _get(this.props.item, 'start').getTime(),
+            dragTime: moment(this.props.itemTimeStart).valueOf(),
             dragGroupDelta: 0
           })
         } else {
@@ -105,7 +105,7 @@ export default class Item extends Component {
           const dragGroupDelta = this.dragGroupDelta(e)
 
           if (this.props.onDrag) {
-            this.props.onDrag(_get(this.props.item, 'id'), dragTime, this.props.order + dragGroupDelta)
+            this.props.onDrag(this.props.itemId, dragTime, this.props.order + dragGroupDelta)
           }
 
           this.setState({
@@ -117,7 +117,7 @@ export default class Item extends Component {
       .on('dragend', (e) => {
         if (this.state.dragging) {
           if (this.props.onDrop) {
-            this.props.onDrop(_get(this.props.item, 'id'), this.dragTime(e), this.props.order + this.dragGroupDelta(e))
+            this.props.onDrop(this.props.itemId, this.dragTime(e), this.props.order + this.dragGroupDelta(e))
           }
 
           this.setState({
@@ -142,9 +142,8 @@ export default class Item extends Component {
       })
       .on('resizemove', (e) => {
         if (this.state.resizing) {
-          const item = this.props.item
           if (this.props.onResizing) {
-            this.props.onResizing(_get(item, 'id'), _get(item, 'end') - _get(item, 'start') + this.resizeTimeDelta(e))
+            this.props.onResizing(this.props.itemId, moment(this.props.itemTimeEnd).valueOf() - moment(this.props.itemTimeStart).valueOf() + this.resizeTimeDelta(e))
           }
 
           this.setState({
@@ -154,9 +153,8 @@ export default class Item extends Component {
       })
       .on('resizeend', (e) => {
         if (this.state.resizing) {
-          const item = this.props.item
           if (this.props.onResized && this.resizeTimeDelta(e) !== 0) {
-            this.props.onResized(_get(item, 'id'), _get(item, 'end') - _get(item, 'start') + this.resizeTimeDelta(e))
+            this.props.onResized(this.props.itemId, moment(this.props.itemTimeEnd).valueOf() - moment(this.props.itemTimeStart).valueOf() + this.resizeTimeDelta(e))
           }
           this.setState({
             resizing: null,
@@ -197,7 +195,7 @@ export default class Item extends Component {
 
   onClick (e) {
     if (this.props.onSelect) {
-      this.props.onSelect(_get(this.props.item, 'id'))
+      this.props.onSelect(this.props.itemId)
     }
   }
 
@@ -213,9 +211,8 @@ export default class Item extends Component {
   }
 
   dimensions (props = this.props) {
-    const item = props.item
-    const x = this.state.dragging ? this.state.dragTime : _get(item, 'start').getTime()
-    const w = Math.max(_get(item, 'end').getTime() - _get(item, 'start').getTime() + (this.state.resizing ? this.state.resizeTimeDelta : 0), props.dragSnap)
+    const x = this.state.dragging ? this.state.dragTime : moment(this.props.itemTimeStart).valueOf()
+    const w = Math.max(moment(this.props.itemTimeEnd).valueOf() - moment(this.props.itemTimeStart).valueOf() + (this.state.resizing ? this.state.resizeTimeDelta : 0), props.dragSnap)
     const y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight // +2 for header
     const h = props.lineHeight * 0.65
     const ratio = 1 / this.coordinateToTimeRatio(props)
@@ -229,13 +226,12 @@ export default class Item extends Component {
   }
 
   render () {
-    const item = this.props.item
     const dimensions = this.dimensions()
 
     return (
-      <div key={_get(item, 'id')}
+      <div key={this.props.itemId}
            ref='item'
-           title={_get(item, 'title')}
+           title={this.props.itemTitle}
            onClick={this.onClick.bind(this)}
            onTouchStart={this.onTouchStart.bind(this)}
            onTouchEnd={this.onTouchEnd.bind(this)}
@@ -256,14 +252,13 @@ export default class Item extends Component {
              fontSize: '12px',
              color: 'white',
              textAlign: 'center'}}>
-        {_get(item, 'title')}
+        {this.props.itemTitle}
       </div>
     )
   }
 }
 
 Item.propTypes = {
-  item: React.PropTypes.object.isRequired,
   canvasTimeStart: React.PropTypes.number.isRequired,
   canvasTimeEnd: React.PropTypes.number.isRequired,
   canvasWidth: React.PropTypes.number.isRequired,
@@ -277,6 +272,11 @@ Item.propTypes = {
   canChangeGroup: React.PropTypes.bool.isRequired,
   canMove: React.PropTypes.bool.isRequired,
   canResize: React.PropTypes.bool.isRequired,
+
+  itemId: React.PropTypes.string.isRequired,
+  itemTitle: React.PropTypes.string.isRequired,
+  itemTimeStart: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object]).isRequired,
+  itemTimeEnd: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object]).isRequired,
 
   onSelect: React.PropTypes.func,
   onDrag: React.PropTypes.func,

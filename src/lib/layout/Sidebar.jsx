@@ -53,7 +53,8 @@ export default class Sidebar extends Component {
       fixedHeader, width, lineHeight, zIndex, groups,
       listItemPadding,
       borderColor, borderWidth,
-      sidebarBackgroundColor, sidebarColor
+      sidebarBackgroundColor, sidebarColor,
+      groupIdKey, groupTitleKey
     } = this.props
 
     const {
@@ -131,8 +132,8 @@ export default class Sidebar extends Component {
                 : elementStyle
 
       groupLines.push(
-        <div key={_get(group, 'id')} style={style}>
-          {_get(group, 'title')}
+        <div key={_get(group, groupIdKey)} style={style}>
+          {_get(group, groupTitleKey)}
         </div>
       )
       i += 1
@@ -160,7 +161,10 @@ Sidebar.propTypes = {
   borderWidth: React.PropTypes.number,
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  listItemPadding: React.PropTypes.string
+  listItemPadding: React.PropTypes.string,
+
+  groupIdKey: React.PropTypes.string.isRequired,
+  groupTitleKey: React.PropTypes.string.isRequired
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',

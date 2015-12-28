@@ -422,6 +422,12 @@ export default class ReactCalendarTimeline extends Component {
              minUnit={minUnit}
              items={this.props.items}
              groups={this.props.groups}
+             groupIdKey={this.props.groupIdKey}
+             itemIdKey={this.props.itemIdKey}
+             itemTitleKey={this.props.itemTitleKey}
+             itemGroupKey={this.props.itemGroupKey}
+             itemTimeStartKey={this.props.itemTimeStartKey}
+             itemTimeEndKey={this.props.itemTimeEndKey}
              selectedItem={this.state.selectedItem}
              dragSnap={this.props.dragSnap}
              minResizeWidth={this.props.minResizeWidth}
@@ -497,6 +503,14 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <Sidebar groups={this.props.groups}
+               groupIdKey={this.props.groupIdKey}
+               groupTitleKey={this.props.groupTitleKey}
+               itemIdKey={this.props.itemIdKey}
+               itemTitleKey={this.props.itemTitleKey}
+               itemGroupKey={this.props.itemGroupKey}
+               itemTimeStartKey={this.props.itemTimeStartKey}
+               itemTimeEndKey={this.props.itemTimeEndKey}
+
                width={this.props.sidebarWidth}
                lineHeight={this.props.lineHeight}
 
@@ -586,6 +600,14 @@ ReactCalendarTimeline.propTypes = {
   onTimeInit: React.PropTypes.func,
   onBoundsChange: React.PropTypes.func,
 
+  groupIdKey: React.PropTypes.string,
+  groupTitleKey: React.PropTypes.string,
+  itemIdKey: React.PropTypes.string,
+  itemTitleKey: React.PropTypes.string,
+  itemGroupKey: React.PropTypes.string,
+  itemTimeStartKey: React.PropTypes.string,
+  itemTimeEndKey: React.PropTypes.string,
+
   children: React.PropTypes.node
 }
 ReactCalendarTimeline.defaultProps = {
@@ -622,6 +644,14 @@ ReactCalendarTimeline.defaultProps = {
   onTimeInit: null,
   // called when the canvas area of the calendar changes
   onBoundsChange: null,
+
+  groupIdKey: 'id',
+  groupTitleKey: 'title',
+  itemIdKey: 'id',
+  itemTitleKey: 'title',
+  itemGroupKey: 'group',
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time',
 
   children: null
 }
