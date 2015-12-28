@@ -9,6 +9,12 @@ export function _length (object) {
   return typeof object.count === 'function' ? object.count() : object.length
 }
 
+export function arraysEqual (array1, array2) {
+  return (_length(array1) === _length(array2)) && array1.every((element, index) => {
+    return element === _get(array2, index)
+  })
+}
+
 export function iterateTimes (start, end, unit, callback) {
   let time = moment(start).startOf(unit)
 

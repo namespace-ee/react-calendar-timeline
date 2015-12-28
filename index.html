@@ -57,13 +57,15 @@
       canMove: true, // defaults
       canResize: true,
 
-      groupIdKey: 'id',
-      groupTitleKey: 'title',
-      itemIdKey: 'id',
-      itemTitleKey: 'title',
-      itemGroupKey: 'group',
-      itemTimeStartKey: 'start',
-      itemTimeEndKey: 'end',
+      keys: {
+        groupIdKey: 'id',
+        groupTitleKey: 'title',
+        itemIdKey: 'id',
+        itemTitleKey: 'title',
+        itemGroupKey: 'group',
+        itemTimeStartKey: 'start',
+        itemTimeEndKey: 'end'
+      },
 
       itemClick: function(item) {
         console.log("Clicked: " + item);
