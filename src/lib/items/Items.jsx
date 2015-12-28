@@ -49,17 +49,17 @@ export default class Items extends Component {
                                         itemTitle={_get(item, itemTitleKey)}
                                         itemTimeStart={_get(item, itemTimeStartKey)}
                                         itemTimeEnd={_get(item, itemTimeEndKey)}
+                                        order={groupOrders[_get(item, itemGroupKey)]}
+                                        selected={this.props.selectedItem === _get(item, itemIdKey)}
+                                        canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
+                                        canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
+                                        canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
                                         canvasTimeStart={this.props.canvasTimeStart}
                                         canvasTimeEnd={this.props.canvasTimeEnd}
                                         canvasWidth={this.props.canvasWidth}
                                         lineHeight={this.props.lineHeight}
-                                        order={groupOrders[_get(item, itemGroupKey)]}
-                                        selected={this.props.selectedItem === _get(item, itemIdKey)}
                                         dragSnap={this.props.dragSnap}
                                         minResizeWidth={this.props.minResizeWidth}
-                                        canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
-                                        canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
-                                        canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
                                         onResizing={this.props.itemResizing}
                                         onResized={this.props.itemResized}
                                         onDrag={this.props.itemDrag}
