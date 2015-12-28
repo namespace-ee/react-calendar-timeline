@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.1.5",
+  "version": "0.2.4",
   "description": "react calendar timeline",
   "main": "src/index.js",
   "scripts": {
@@ -30,7 +30,6 @@
   ],
   "dependencies": {
     "interact.js": "^1.2.6",
-    "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
@@ -38,8 +37,8 @@
   },
   "peerDependencies": {
     "react": "^0.14.0",
+    "react-dom": "^0.14.0",
     "moment": "*",
-    "lodash": "*",
     "interact.js": "*"
   },
   "devDependencies": {

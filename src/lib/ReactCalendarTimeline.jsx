@@ -12,9 +12,6 @@ import TodayLine from './lines/TodayLine.jsx'
 
 import { getMinUnit, getNextUnit, getParentPosition } from './utils.js'
 
-import _min from 'lodash/math/min'
-import _max from 'lodash/math/max'
-
 const defaultDesign = {
   evenRowBackground: 'transparent',
   oddRowBackground: 'rgba(0,0,0,0.05)',
@@ -40,8 +37,8 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
     } else {
-      visibleTimeStart = _min(this.props.items.map(item => item.start.getTime()))
-      visibleTimeEnd = _max(this.props.items.map(item => item.end.getTime()))
+      visibleTimeStart = Math.min(...this.props.items.map(item => item.start.getTime()))
+      visibleTimeEnd = Math.max(...this.props.items.map(item => item.end.getTime()))
 
       if (!visibleTimeStart || !visibleTimeEnd) {
         visibleTimeStart = new Date().getTime() - 86400 * 7 * 1000
