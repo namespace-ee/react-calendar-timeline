@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Item from './Item.jsx'
 
+import moment from 'moment'
+
 import { _get } from '../utils'
 
 export default class Items extends Component {
@@ -27,9 +29,10 @@ export default class Items extends Component {
     return this.props.items.filter(item => {
       return groupOrders.hasOwnProperty(_get(item, itemGroupKey))
     }).filter(item => {
-      const x1 = _get(item, itemTimeStartKey).getTime()
-      const x2 = _get(item, itemTimeEndKey).getTime()
-      return (x1 >= canvasTimeStart && x1 <= canvasTimeEnd) || (x1 <= canvasTimeStart && x2 >= canvasTimeEnd) || (x2 >= canvasTimeStart && x2 <= canvasTimeEnd)
+      const x1 = moment(_get(item, itemTimeStartKey)).valueOf()
+      const x2 = moment(_get(item, itemTimeEndKey)).valueOf()
+
+      return x1 <= canvasTimeEnd && x2 >= canvasTimeStart
     })
   }
 
