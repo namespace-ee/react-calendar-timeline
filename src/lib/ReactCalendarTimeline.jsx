@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-
 // import './ReactCalendarTimeline.scss'
 
 import Items from './items/Items.jsx'
@@ -242,6 +241,9 @@ export default class ReactCalendarTimeline extends Component {
     if (resetCanvas) {
       newState.canvasTimeStart = visibleTimeStart - newZoom
       this.refs.scrollComponent.scrollLeft = this.state.width
+      if (this.props.onBoundsChange) {
+        this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3)
+      }
     }
 
     this.setState(newState)
@@ -585,6 +587,7 @@ ReactCalendarTimeline.propTypes = {
   visibleTimeEnd: React.PropTypes.number,
   onTimeChange: React.PropTypes.func,
   onTimeInit: React.PropTypes.func,
+  onBoundsChange: React.PropTypes.func,
 
   children: React.PropTypes.node
 }
@@ -620,6 +623,8 @@ ReactCalendarTimeline.defaultProps = {
   },
   // called after the calendar loads and the visible time has been calculated
   onTimeInit: null,
+  // called when the canvas area of the calendar changes
+  onBoundsChange: null,
 
   children: null
 }
