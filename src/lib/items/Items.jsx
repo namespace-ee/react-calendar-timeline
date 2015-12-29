@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import Item from './Item.jsx'
 
 import moment from 'moment'
-
 import { _get } from '../utils'
-import moment from 'moment'
 
 export default class Items extends Component {
   constructor (props) {
