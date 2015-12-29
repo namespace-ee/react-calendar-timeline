@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import { _get, _length, arraysEqual } from '../utils'
 

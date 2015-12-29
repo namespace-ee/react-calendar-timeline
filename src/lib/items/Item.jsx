@@ -22,7 +22,12 @@ export default class Item extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return !(nextProps.keys === this.props.keys &&
+    return !(nextState.dragging !== this.state.dragging &&
+             nextState.dragTime !== this.state.dragTime &&
+             nextState.dragGroupDelta !== this.state.dragGroupDelta &&
+             nextState.resizing !== this.state.resizing &&
+             nextState.resizeTime !== this.state.resizeTime &&
+             nextProps.keys === this.props.keys &&
              nextProps.selected === this.props.selected &&
              nextProps.item === this.props.item &&
              nextProps.canvasTimeStart === this.props.canvasTimeStart &&

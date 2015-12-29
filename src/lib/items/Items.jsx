@@ -2,11 +2,27 @@ import React, { Component } from 'react'
 import Item from './Item.jsx'
 
 import moment from 'moment'
-import { _get } from '../utils'
+import { _get, arraysEqual } from '../utils'
 
 export default class Items extends Component {
   constructor (props) {
     super(props)
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return !(arraysEqual(nextProps.groups, this.props.groups) &&
+             arraysEqual(nextProps.items, this.props.items) &&
+             nextProps.keys === this.props.keys &&
+             nextProps.canvasTimeStart === this.props.canvasTimeStart &&
+             nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
+             nextProps.canvasWidth === this.props.canvasWidth &&
+             nextProps.selectedItem === this.props.selectedItem &&
+             nextProps.lineHeight === this.props.lineHeight &&
+             nextProps.dragSnap === this.props.dragSnap &&
+             nextProps.minResizeWidth === this.props.minResizeWidth &&
+             nextProps.canChangeGroup === this.props.canChangeGroup &&
+             nextProps.canMove === this.props.canMove &&
+             nextProps.canResize === this.props.canResize)
   }
 
   getGroupOrders () {
