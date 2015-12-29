@@ -8,6 +8,8 @@ export default class Item extends Component {
   constructor (props) {
     super(props)
 
+    this.cacheDataFromProps(props)
+
     this.state = {
       dragging: null,
       dragStart: null,
@@ -43,32 +45,11 @@ export default class Item extends Component {
              nextProps.canResize === this.props.canResize)
   }
 
-  itemId () {
-    if (!this.itemIdValue) {
-      this.itemIdValue = _get(this.props.item, this.props.keys.itemIdKey)
-    }
-    return this.itemIdValue
-  }
-
-  itemTitle () {
-    if (!this.itemTitleValue) {
-      this.itemTitleValue = _get(this.props.item, this.props.keys.itemTitleKey)
-    }
-    return this.itemTitleValue
-  }
-
-  itemTimeStart () {
-    if (!this.itemTimeStartValue) {
-      this.itemTimeStartValue = moment(_get(this.props.item, this.props.keys.itemTimeStartKey)).valueOf()
-    }
-    return this.itemTimeStartValue
-  }
-
-  itemTimeEnd () {
-    if (!this.itemTimeEndValue) {
-      this.itemTimeEndValue = moment(_get(this.props.item, this.props.keys.itemTimeEndKey)).valueOf()
-    }
-    return this.itemTimeEndValue
+  cacheDataFromProps (props) {
+    this.itemId = _get(props.item, props.keys.itemIdKey)
+    this.itemTitle = _get(props.item, props.keys.itemTitleKey)
+    this.itemTimeStart = moment(_get(props.item, props.keys.itemTimeStartKey)).valueOf()
+    this.itemTimeEnd = moment(_get(props.item, props.keys.itemTimeEndKey)).valueOf()
   }
 
   coordinateToTimeRatio (props = this.props) {
@@ -84,7 +65,7 @@ export default class Item extends Component {
   }
 
   dragTime (e) {
-    const startTime = this.itemTimeStart()
+    const startTime = this.itemTimeStart
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
@@ -115,7 +96,7 @@ export default class Item extends Component {
   }
 
   resizeTimeDelta (e) {
-    const length = this.itemTimeEnd() - this.itemTimeStart()
+    const length = this.itemTimeEnd - this.itemTimeStart
     const timeDelta = this.dragTimeSnap((e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio())
 
     if (length + timeDelta < (this.props.dragSnap || 1000)) {
@@ -140,7 +121,7 @@ export default class Item extends Component {
             dragging: true,
             dragStart: {x: e.pageX, y: e.pageY},
             preDragPosition: {x: e.target.offsetLeft, y: e.target.offsetTop},
-            dragTime: this.itemTimeStart(),
+            dragTime: this.itemTimeStart,
             dragGroupDelta: 0
           })
         } else {
@@ -153,7 +134,7 @@ export default class Item extends Component {
           const dragGroupDelta = this.dragGroupDelta(e)
 
           if (this.props.onDrag) {
-            this.props.onDrag(this.itemId(), dragTime, this.props.order + dragGroupDelta)
+            this.props.onDrag(this.itemId, dragTime, this.props.order + dragGroupDelta)
           }
 
           this.setState({
@@ -165,7 +146,7 @@ export default class Item extends Component {
       .on('dragend', (e) => {
         if (this.state.dragging) {
           if (this.props.onDrop) {
-            this.props.onDrop(this.itemId(), this.dragTime(e), this.props.order + this.dragGroupDelta(e))
+            this.props.onDrop(this.itemId, this.dragTime(e), this.props.order + this.dragGroupDelta(e))
           }
 
           this.setState({
@@ -191,7 +172,7 @@ export default class Item extends Component {
       .on('resizemove', (e) => {
         if (this.state.resizing) {
           if (this.props.onResizing) {
-            this.props.onResizing(this.itemId(), this.itemTimeEnd() - this.itemTimeStart() + this.resizeTimeDelta(e))
+            this.props.onResizing(this.itemId, this.itemTimeEnd - this.itemTimeStart + this.resizeTimeDelta(e))
           }
 
           this.setState({
@@ -202,7 +183,7 @@ export default class Item extends Component {
       .on('resizeend', (e) => {
         if (this.state.resizing) {
           if (this.props.onResized && this.resizeTimeDelta(e) !== 0) {
-            this.props.onResized(this.itemId(), this.itemTimeEnd() - this.itemTimeStart() + this.resizeTimeDelta(e))
+            this.props.onResized(this.itemId, this.itemTimeEnd - this.itemTimeStart + this.resizeTimeDelta(e))
           }
           this.setState({
             resizing: null,
@@ -226,6 +207,8 @@ export default class Item extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    this.cacheDataFromProps(nextProps)
+
     const couldDrag = this.props.selected && this.canMove(this.props)
     const couldResize = this.props.selected && this.canResize(this.props)
     const willBeAbleToDrag = nextProps.selected && this.canMove(nextProps)
@@ -243,7 +226,7 @@ export default class Item extends Component {
 
   onClick (e) {
     if (this.props.onSelect) {
-      this.props.onSelect(this.itemId())
+      this.props.onSelect(this.itemId)
     }
   }
 
@@ -259,8 +242,8 @@ export default class Item extends Component {
   }
 
   dimensions (props = this.props) {
-    const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart()
-    const w = Math.max(this.itemTimeEnd() - this.itemTimeStart() + (this.state.resizing ? this.state.resizeTimeDelta : 0), props.dragSnap)
+    const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart
+    const w = Math.max(this.itemTimeEnd - this.itemTimeStart + (this.state.resizing ? this.state.resizeTimeDelta : 0), props.dragSnap)
     const y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight // +2 for header
     const h = props.lineHeight * 0.65
     const ratio = 1 / this.coordinateToTimeRatio(props)
@@ -277,9 +260,9 @@ export default class Item extends Component {
     const dimensions = this.dimensions()
 
     return (
-      <div key={this.itemId()}
+      <div key={this.itemId}
            ref='item'
-           title={this.itemTitle()}
+           title={this.itemTitle}
            onClick={this.onClick.bind(this)}
            onTouchStart={this.onTouchStart.bind(this)}
            onTouchEnd={this.onTouchEnd.bind(this)}
@@ -300,7 +283,7 @@ export default class Item extends Component {
              fontSize: '12px',
              color: 'white',
              textAlign: 'center'}}>
-        {this.itemTitle()}
+        {this.itemTitle}
       </div>
     )
   }
