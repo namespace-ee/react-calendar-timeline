@@ -13,8 +13,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.0.1/faker.js"></script>
   <script src="dist/react-calendar-timeline.js"></script>
   <script>
+    GROUP_COUNT = 10
+    ITEM_COUNT = 100
+
     var groups = []
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < GROUP_COUNT; i++) {
       groups.push({
         id: (i+1)+'',
         title: faker.name.firstName()
@@ -22,7 +25,7 @@
     };
 
     var items = []
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < ITEM_COUNT; i++) {
       var startDate = faker.date.recent(4).valueOf() + 1 * 86400 * 1000
       items.push({
         id: i+'',
