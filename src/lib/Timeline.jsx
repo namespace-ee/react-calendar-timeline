@@ -44,8 +44,8 @@ export default class ReactCalendarTimeline extends Component {
     let visibleTimeEnd = null
 
     if (this.props.defaultTimeStart && this.props.defaultTimeEnd) {
-      visibleTimeStart = this.props.defaultTimeStart
-      visibleTimeEnd = this.props.defaultTimeEnd
+      visibleTimeStart = this.props.defaultTimeStart.valueOf()
+      visibleTimeEnd = this.props.defaultTimeEnd.valueOf()
     } else if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
@@ -603,8 +603,8 @@ ReactCalendarTimeline.propTypes = {
   design: React.PropTypes.object,
   keys: React.PropTypes.object,
 
-  defaultTimeStart: React.PropTypes.date,
-  defaultTimeEnd: React.PropTypes.date,
+  defaultTimeStart: React.PropTypes.object,
+  defaultTimeEnd: React.PropTypes.object,
 
   visibleTimeStart: React.PropTypes.number,
   visibleTimeEnd: React.PropTypes.number,
