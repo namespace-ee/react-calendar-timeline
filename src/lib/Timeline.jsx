@@ -262,10 +262,8 @@ export default class ReactCalendarTimeline extends Component {
   onWheel (e) {
     if (e.ctrlKey) {
       e.preventDefault()
-
-      let parentPosition = getParentPosition(e.currentTarget)
-      let xPosition = e.clientX - parentPosition.x
-
+      const parentPosition = getParentPosition(e.currentTarget)
+      const xPosition = e.clientX - parentPosition.x
       this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width)
     } else {
       if (this.props.fixedHeader === 'fixed') {
@@ -333,9 +331,32 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  canvasClick (e) {
+  rowAndTimeFromEvent (e) {
+    const { lineHeight } = this.props
+    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+
+    const parentPosition = getParentPosition(e.currentTarget)
+    const x = e.clientX - parentPosition.x
+    const y = e.clientY - parentPosition.y
+
+    const row = Math.floor((y - (lineHeight * 2)) / lineHeight)
+    const time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
+
+    return [row, time]
+  }
+
+  scrollAreaClick (e) {
+    // if not clicking on an item
     if (e.target.className !== 'timeline-item') {
+      // select nothing
       this.selectItem(null)
+
+      // send out the click if needed
+      if (this.props.canvasClick) {
+        const [row, time] = this.rowAndTimeFromEvent(e)
+        const groupId = _get(this.props.groups[row], this.props.keys.groupIdKey)
+        this.props.canvasClick(groupId, time)
+      }
     }
   }
 
@@ -561,8 +582,13 @@ export default class ReactCalendarTimeline extends Component {
       <div style={this.props.style || {}} ref='container' className='react-calendar-timeline'>
         <div style={outerComponentStyle}>
           {this.sidebar()}
-          <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
-            <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
+          <div ref='scrollComponent'
+               style={scrollComponentStyle}
+               onClick={this.scrollAreaClick.bind(this)}
+               onScroll={this.onScroll.bind(this)}
+               onWheel={this.onWheel.bind(this)}>
+            <div ref='canvasComponent'
+                 style={canvasComponentStyle}>
               {this.todayLine()}
               {this.verticalLines()}
               {this.horizontalLines()}
@@ -597,6 +623,7 @@ ReactCalendarTimeline.propTypes = {
   moveItem: React.PropTypes.func,
   resizeItem: React.PropTypes.func,
   itemClick: React.PropTypes.func,
+  canvasClick: React.PropTypes.func,
   dayBackground: React.PropTypes.func,
 
   style: React.PropTypes.object,
@@ -632,6 +659,7 @@ ReactCalendarTimeline.defaultProps = {
   moveItem: null,
   resizeItem: null,
   itemClick: null,
+  canvasClick: null,
   dayBackground: null,
 
   defaultTimeStart: null,
