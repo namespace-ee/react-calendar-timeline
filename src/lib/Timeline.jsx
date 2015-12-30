@@ -323,8 +323,8 @@ export default class ReactCalendarTimeline extends Component {
 
   selectItem (item) {
     if (this.state.selectedItem === item) {
-      if (item && this.props.itemClick) {
-        this.props.itemClick(item)
+      if (item && this.props.onItemClick) {
+        this.props.onItemClick(item)
       }
     } else {
       this.setState({selectedItem: item})
@@ -352,10 +352,10 @@ export default class ReactCalendarTimeline extends Component {
       this.selectItem(null)
 
       // send out the click if needed
-      if (this.props.canvasClick) {
+      if (this.props.onCanvasClick) {
         const [row, time] = this.rowAndTimeFromEvent(e)
         const groupId = _get(this.props.groups[row], this.props.keys.groupIdKey)
-        this.props.canvasClick(groupId, time, e)
+        this.props.onCanvasClick(groupId, time, e)
       }
     }
   }
@@ -370,8 +370,8 @@ export default class ReactCalendarTimeline extends Component {
 
   dropItem (item, dragTime, newGroupOrder) {
     this.setState({dragTime: null, dragGroupTitle: null})
-    if (this.props.moveItem) {
-      this.props.moveItem(item, dragTime, newGroupOrder)
+    if (this.props.onItemMove) {
+      this.props.onItemMove(item, dragTime, newGroupOrder)
     }
   }
 
@@ -381,8 +381,8 @@ export default class ReactCalendarTimeline extends Component {
 
   resizedItem (item, newLength) {
     this.setState({resizeLength: null})
-    if (this.props.resizeItem) {
-      this.props.resizeItem(item, newLength)
+    if (this.props.onItemResize) {
+      this.props.onItemResize(item, newLength)
     }
   }
 
@@ -620,10 +620,11 @@ ReactCalendarTimeline.propTypes = {
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
 
-  moveItem: React.PropTypes.func,
-  resizeItem: React.PropTypes.func,
-  itemClick: React.PropTypes.func,
-  canvasClick: React.PropTypes.func,
+  onItemMove: React.PropTypes.func,
+  onItemResize: React.PropTypes.func,
+  onItemClick: React.PropTypes.func,
+  onCanvasClick: React.PropTypes.func,
+
   dayBackground: React.PropTypes.func,
 
   style: React.PropTypes.object,
@@ -656,10 +657,11 @@ ReactCalendarTimeline.defaultProps = {
   canMove: true,
   canResize: true,
 
-  moveItem: null,
-  resizeItem: null,
-  itemClick: null,
-  canvasClick: null,
+  onItemMove: null,
+  onItemResize: null,
+  onItemClick: null,
+  onCanvasClick: null,
+
   dayBackground: null,
 
   defaultTimeStart: null,
