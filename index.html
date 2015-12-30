@@ -23,7 +23,7 @@
 
     var items = []
     for (var i = 0; i < 100; i++) {
-      var startDate = faker.date.recent(4).valueOf()
+      var startDate = faker.date.recent(4).valueOf() + 1 * 86400 * 1000
       items.push({
         id: i+'',
         group: faker.random.number({min: 1, max: groups.length + 1})+'',
