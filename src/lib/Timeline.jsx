@@ -332,7 +332,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   rowAndTimeFromEvent (e) {
-    const { lineHeight } = this.props
+    const { lineHeight, dragSnap } = this.props
     const { width, visibleTimeStart, visibleTimeEnd } = this.state
 
     const parentPosition = getParentPosition(e.currentTarget)
@@ -340,7 +340,8 @@ export default class ReactCalendarTimeline extends Component {
     const y = e.clientY - parentPosition.y
 
     const row = Math.floor((y - (lineHeight * 2)) / lineHeight)
-    const time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
+    let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
+    time = Math.floor(time / dragSnap) * dragSnap
 
     return [row, time]
   }
@@ -348,11 +349,9 @@ export default class ReactCalendarTimeline extends Component {
   scrollAreaClick (e) {
     // if not clicking on an item
     if (e.target.className !== 'timeline-item') {
-      // select nothing
-      this.selectItem(null)
-
-      // send out the click if needed
-      if (this.props.onCanvasClick) {
+      if (this.state.selectedItem) {
+        this.selectItem(null)
+      } else if (this.props.onCanvasClick) {
         const [row, time] = this.rowAndTimeFromEvent(e)
         const groupId = _get(this.props.groups[row], this.props.keys.groupIdKey)
         this.props.onCanvasClick(groupId, time, e)
