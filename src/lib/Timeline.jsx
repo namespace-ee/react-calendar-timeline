@@ -355,7 +355,7 @@ export default class ReactCalendarTimeline extends Component {
       if (this.props.canvasClick) {
         const [row, time] = this.rowAndTimeFromEvent(e)
         const groupId = _get(this.props.groups[row], this.props.keys.groupIdKey)
-        this.props.canvasClick(groupId, time)
+        this.props.canvasClick(groupId, time, e)
       }
     }
   }
