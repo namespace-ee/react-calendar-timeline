@@ -43,7 +43,10 @@ export default class ReactCalendarTimeline extends Component {
     let visibleTimeStart = null
     let visibleTimeEnd = null
 
-    if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
+    if (this.props.defaultTimeStart && this.props.defaultTimeEnd) {
+      visibleTimeStart = this.props.defaultTimeStart
+      visibleTimeEnd = this.props.defaultTimeEnd
+    } else if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
     } else {
@@ -533,10 +536,16 @@ export default class ReactCalendarTimeline extends Component {
     const height = (_length(this.props.groups) + 2) * this.props.lineHeight
     const canvasWidth = this.state.width * 3
 
+    const outerComponentStyle = {
+      display: 'block',
+      height: `${height}px`,
+      overflow: 'hidden'
+    }
+
     const scrollComponentStyle = {
       display: 'inline-block',
       width: `${width}px`,
-      height: `${height}px`,
+      height: `${height + 20}px`,
       verticalAlign: 'top',
       overflowX: 'scroll',
       overflowY: 'hidden'
@@ -550,7 +559,7 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <div style={this.props.style || {}} ref='container' className='react-calendar-timeline'>
-        <div>
+        <div style={outerComponentStyle}>
           {this.sidebar()}
           <div ref='scrollComponent' style={scrollComponentStyle} onScroll={this.onScroll.bind(this)} onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent' style={canvasComponentStyle} onClick={this.canvasClick.bind(this)}>
@@ -594,6 +603,9 @@ ReactCalendarTimeline.propTypes = {
   design: React.PropTypes.object,
   keys: React.PropTypes.object,
 
+  defaultTimeStart: React.PropTypes.date,
+  defaultTimeEnd: React.PropTypes.date,
+
   visibleTimeStart: React.PropTypes.number,
   visibleTimeEnd: React.PropTypes.number,
   onTimeChange: React.PropTypes.func,
@@ -621,6 +633,9 @@ ReactCalendarTimeline.defaultProps = {
   resizeItem: null,
   itemClick: null,
   dayBackground: null,
+
+  defaultTimeStart: null,
+  defaultTimeEnd: null,
 
   style: {},
   design: {},

@@ -14,7 +14,8 @@
   <script src="dist/react-calendar-timeline.js"></script>
   <script>
     GROUP_COUNT = 10
-    ITEM_COUNT = 100
+    ITEM_COUNT = 500
+    DAYS_IN_PAST = 40
 
     var groups = []
     for (var i = 0; i < GROUP_COUNT; i++) {
@@ -26,7 +27,7 @@
 
     var items = []
     for (var i = 0; i < ITEM_COUNT; i++) {
-      var startDate = faker.date.recent(4).valueOf() + 1 * 86400 * 1000
+      var startDate = faker.date.recent(DAYS_IN_PAST).valueOf() + (DAYS_IN_PAST * 0.3) * 86400 * 1000
       items.push({
         id: i+'',
         group: faker.random.number({min: 1, max: groups.length + 1})+'',
@@ -44,6 +45,9 @@
       fixedHeader: 'fixed',
       canMove: true, // defaults
       canResize: true,
+
+      defaultTimeStart: moment().startOf('day').toDate(),
+      defaultTimeEnd: moment().startOf('day').add(1, 'day').toDate(),
 
       keys: {
         groupIdKey: 'id',
