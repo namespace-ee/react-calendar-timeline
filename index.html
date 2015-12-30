@@ -10,45 +10,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.2.6/interact.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.7.6/immutable.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.0.1/faker.js"></script>
   <script src="dist/react-calendar-timeline.js"></script>
   <script>
-    var groups = [];
-    for (var i=0;i < 50; i++) {
+    var groups = []
+    for (var i = 0; i < 50; i++) {
       groups.push({
         id: (i+1)+'',
-        title: 'Group: #'+(i+1)
+        title: faker.name.firstName()
       })
     };
 
-    groups = Immutable.fromJS(groups)
-
-    var items = Immutable.fromJS([
-      {
-        id: '1000',
-        group: '1',
-        title: "First Item, can't move or resize",
-        start: moment("2014-09-24T10:00:00Z").toDate(),
-        end: moment("2014-09-25T10:00:00Z").toDate(),
-        canMove: false,
-        canResize: false
-      },
-      {
-        id: '1001',
-        group: '3',
-        title: "Second Item, can't resize",
-        start: moment("2014-09-24T12:00:00Z").toDate(),
-        end: moment("2014-09-24T16:00:00Z").toDate(),
-        canResize: false
-      },
-      {
-        id: '1002',
-        group: '4',
-        title: "Third Item",
-        start: moment("2014-09-25T02:00:00Z").toDate(),
-        end: moment("2014-09-25T04:00:00Z").toDate(),
-        canChangeGroup: false
-      }
-    ]);
+    var items = []
+    for (var i = 0; i < 100; i++) {
+      var startDate = faker.date.recent(4).valueOf()
+      items.push({
+        id: i+'',
+        group: faker.random.number({min: 1, max: groups.length + 1})+'',
+        title: faker.hacker.phrase(),
+        start: moment(startDate).toDate(),
+        end: moment(startDate + faker.random.number({min: 2, max: 20})*15*60*1000).toDate(),
+        canMove: faker.random.boolean(),
+        canResize: faker.random.boolean()
+      })
+    }
 
     var props = {
       groups: groups,
