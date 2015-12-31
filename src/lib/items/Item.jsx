@@ -285,6 +285,7 @@ export default class Item extends Component {
              borderRightWidth: this.props.selected && this.canResize(this.props) ? '3px' : '1px',
              fontSize: '12px',
              color: 'white',
+             zIndex: this.props.selected ? 2 : 1,
              textAlign: 'center'}}>
         {this.itemTitle}
       </div>
