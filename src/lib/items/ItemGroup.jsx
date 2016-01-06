@@ -3,7 +3,7 @@ import Item from './Item.jsx'
 
 import { _get, arraysEqual } from '../utils'
 
-export default class Items extends Component {
+export default class ItemGroup extends Component {
   constructor (props) {
     super(props)
   }
@@ -59,7 +59,7 @@ export default class Items extends Component {
 }
 
 // they were all checked in Items
-Items.propTypes = {
+ItemGroup.propTypes = {
   // groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
   // items: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
   // groupOrders: React.PropTypes.object.isRequired,
@@ -85,5 +85,5 @@ Items.propTypes = {
   // itemResizing: React.PropTypes.func,
   // itemResized: React.PropTypes.func
 }
-Items.defaultProps = {
+ItemGroup.defaultProps = {
 }
