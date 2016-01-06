@@ -29,24 +29,19 @@ export default class Items extends Component {
     const { groupIdKey } = this.props.keys
 
     let groupOrders = {}
-    let i = 0
 
-    this.props.groups.forEach(group => {
-      groupOrders[_get(group, groupIdKey)] = i++
-    })
+    for (let i = 0; i < this.props.groups.length; i++) {
+      groupOrders[_get(this.props.groups[i], groupIdKey)] = i
+    }
 
     return groupOrders
   }
 
   getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
-    const { itemTimeStartKey, itemTimeEndKey, itemGroupKey } = this.props.keys
+    const { itemTimeStartKey, itemTimeEndKey } = this.props.keys
 
     return this.props.items.filter(item => {
-      return groupOrders.hasOwnProperty(_get(item, itemGroupKey))
-    }).filter(item => {
-      const x1 = moment(_get(item, itemTimeStartKey)).valueOf()
-      const x2 = moment(_get(item, itemTimeEndKey)).valueOf()
-      return x1 <= canvasTimeEnd && x2 >= canvasTimeStart
+      return _get(item, itemTimeStartKey) <= canvasTimeEnd && _get(item, itemTimeEndKey) >= canvasTimeStart
     })
   }
 

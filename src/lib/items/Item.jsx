@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import interact from 'interact.js'
-import moment from 'moment'
 
 import { _get } from '../utils'
 
@@ -48,8 +47,8 @@ export default class Item extends Component {
   cacheDataFromProps (props) {
     this.itemId = _get(props.item, props.keys.itemIdKey)
     this.itemTitle = _get(props.item, props.keys.itemTitleKey)
-    this.itemTimeStart = moment(_get(props.item, props.keys.itemTimeStartKey)).valueOf()
-    this.itemTimeEnd = moment(_get(props.item, props.keys.itemTimeEndKey)).valueOf()
+    this.itemTimeStart = _get(props.item, props.keys.itemTimeStartKey)
+    this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
   }
 
   coordinateToTimeRatio (props = this.props) {
@@ -224,17 +223,17 @@ export default class Item extends Component {
     }
   }
 
-  onClick (e) {
+  onClick = (e) => {
     if (this.props.onSelect) {
       this.props.onSelect(this.itemId)
     }
   }
 
-  onTouchStart (e) {
+  onTouchStart = (e) => {
     this.startedTouching = true
   }
 
-  onTouchEnd (e) {
+  onTouchEnd = (e) => {
     if (this.startedTouching) {
       this.startedTouching = false
       this.onClick(e)
@@ -263,20 +262,18 @@ export default class Item extends Component {
       <div key={this.itemId}
            ref='item'
            title={this.itemTitle}
-           onClick={this.onClick.bind(this)}
-           onTouchStart={this.onTouchStart.bind(this)}
-           onTouchEnd={this.onTouchEnd.bind(this)}
+           onClick={this.onClick}
+           onTouchStart={this.onTouchStart}
+           onTouchEnd={this.onTouchEnd}
            className='timeline-item'
            style={{
              overflow: 'hidden',
              cursor: this.props.selected && this.canMove(this.props) ? 'move' : 'pointer',
              position: 'absolute',
              boxSizing: 'border-box',
-            //  left: 0,
-            //  top: 0,
-            //  left: dimensions.left,
-            //  top: dimensions.top,
-             transform: `translate(${dimensions.left}, ${dimensions.top})`,
+             // left + top is faster than transform
+             left: dimensions.left,
+             top: dimensions.top,
              width: dimensions.width,
              height: dimensions.height,
              lineHeight: dimensions.height,
@@ -293,29 +290,31 @@ export default class Item extends Component {
   }
 }
 
+// removed prop type check for SPEED!
+// they are coming from a trusted component anyway
 Item.propTypes = {
-  canvasTimeStart: React.PropTypes.number.isRequired,
-  canvasTimeEnd: React.PropTypes.number.isRequired,
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  order: React.PropTypes.number.isRequired,
-
-  dragSnap: React.PropTypes.number,
-  minResizeWidth: React.PropTypes.number,
-  selected: React.PropTypes.bool,
-
-  canChangeGroup: React.PropTypes.bool.isRequired,
-  canMove: React.PropTypes.bool.isRequired,
-  canResize: React.PropTypes.bool.isRequired,
-
-  keys: React.PropTypes.object.isRequired,
-  item: React.PropTypes.object.isRequired,
-
-  onSelect: React.PropTypes.func,
-  onDrag: React.PropTypes.func,
-  onDrop: React.PropTypes.func,
-  onResizing: React.PropTypes.func,
-  onResized: React.PropTypes.func
+  // canvasTimeStart: React.PropTypes.number.isRequired,
+  // canvasTimeEnd: React.PropTypes.number.isRequired,
+  // canvasWidth: React.PropTypes.number.isRequired,
+  // lineHeight: React.PropTypes.number.isRequired,
+  // order: React.PropTypes.number.isRequired,
+  //
+  // dragSnap: React.PropTypes.number,
+  // minResizeWidth: React.PropTypes.number,
+  // selected: React.PropTypes.bool,
+  //
+  // canChangeGroup: React.PropTypes.bool.isRequired,
+  // canMove: React.PropTypes.bool.isRequired,
+  // canResize: React.PropTypes.bool.isRequired,
+  //
+  // keys: React.PropTypes.object.isRequired,
+  // item: React.PropTypes.object.isRequired,
+  //
+  // onSelect: React.PropTypes.func,
+  // onDrag: React.PropTypes.func,
+  // onDrop: React.PropTypes.func,
+  // onResizing: React.PropTypes.func,
+  // onResized: React.PropTypes.func
 }
 Item.defaultProps = {
   selected: false
