@@ -204,7 +204,7 @@ export default class Item extends Component {
   }
 
   canResize (props = this.props) {
-    if (!this.props.canResize) {
+    if (!props.canResize) {
       return false
     }
     let width = parseInt(this.dimensions(props).width, 10)
@@ -212,7 +212,7 @@ export default class Item extends Component {
   }
 
   canMove (props = this.props) {
-    return !!this.props.canMove
+    return !!props.canMove
   }
 
   componentWillReceiveProps (nextProps) {
@@ -245,18 +245,18 @@ export default class Item extends Component {
     if (this.props.onSelect) {
       this.props.onSelect(this.itemId)
     }
-  }
+  };
 
   onTouchStart = (e) => {
     this.startedTouching = true
-  }
+  };
 
   onTouchEnd = (e) => {
     if (this.startedTouching) {
       this.startedTouching = false
       this.onClick(e)
     }
-  }
+  };
 
   dimensions (props = this.props) {
     const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart
