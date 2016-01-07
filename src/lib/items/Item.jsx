@@ -10,6 +10,8 @@ export default class Item extends Component {
     this.cacheDataFromProps(props)
 
     this.state = {
+      interactMounted: false,
+
       dragging: null,
       dragStart: null,
       preDragPosition: null,
@@ -106,6 +108,10 @@ export default class Item extends Component {
   }
 
   componentDidMount () {
+  }
+
+  mountInteract () {
+    console.log('mounting interact')
     interact(this.refs.item)
       .resizable({
         edges: {left: false, right: true, top: false, bottom: false},
@@ -191,6 +197,10 @@ export default class Item extends Component {
           })
         }
       })
+
+    this.setState({
+      interactMounted: true
+    })
   }
 
   canResize (props = this.props) {
@@ -208,16 +218,24 @@ export default class Item extends Component {
   componentWillReceiveProps (nextProps) {
     this.cacheDataFromProps(nextProps)
 
+    let { interactMounted } = this.state
     const couldDrag = this.props.selected && this.canMove(this.props)
     const couldResize = this.props.selected && this.canResize(this.props)
     const willBeAbleToDrag = nextProps.selected && this.canMove(nextProps)
     const willBeAbleToResize = nextProps.selected && this.canResize(nextProps)
 
-    if (couldResize !== willBeAbleToResize) {
+    if (nextProps.selected && !interactMounted) {
+      if (willBeAbleToResize || willBeAbleToDrag) {
+        this.mountInteract()
+        interactMounted = true
+      }
+    }
+
+    if (interactMounted && couldResize !== willBeAbleToResize) {
       interact(this.refs.item)
         .resizable({enabled: willBeAbleToResize})
     }
-    if (couldDrag !== willBeAbleToDrag) {
+    if (interactMounted && couldDrag !== willBeAbleToDrag) {
       interact(this.refs.item)
         .draggable({enabled: willBeAbleToDrag})
     }
