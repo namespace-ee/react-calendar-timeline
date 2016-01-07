@@ -120,6 +120,8 @@ export default class Item extends Component {
         enabled: this.props.selected
       })
       .on('dragstart', (e) => {
+        this.startedClicking = false
+        this.startedTouching = false
         if (this.props.selected) {
           this.setState({
             dragging: true,
@@ -163,6 +165,8 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', (e) => {
+        this.startedClicking = false
+        this.startedTouching = false
         if (this.props.selected) {
           this.setState({
             resizing: true,
@@ -240,8 +244,13 @@ export default class Item extends Component {
     }
   }
 
-  onClick = (e) => {
-    if (this.props.onSelect) {
+  onMouseDown = (e) => {
+    this.startedClicking = true
+  };
+
+  onMouseUp = (e) => {
+    if (this.startedClicking && this.props.onSelect) {
+      this.startedClicking = false
       this.props.onSelect(this.itemId)
     }
   };
@@ -253,7 +262,7 @@ export default class Item extends Component {
   onTouchEnd = (e) => {
     if (this.startedTouching) {
       this.startedTouching = false
-      this.onClick(e)
+      this.props.onSelect(this.itemId)
     }
   };
 
@@ -286,7 +295,8 @@ export default class Item extends Component {
            ref='item'
            className={classNames}
            title={this.itemTitle}
-           onClick={this.onClick}
+           onMouseDown={this.onMouseDown}
+           onMouseUp={this.onMouseUp}
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
            style={{
