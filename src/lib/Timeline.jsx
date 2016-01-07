@@ -12,20 +12,6 @@ import TodayLine from './lines/TodayLine.jsx'
 
 import { getMinUnit, getNextUnit, getParentPosition, _get, _length } from './utils.js'
 
-const defaultDesign = {
-  evenRowBackground: 'transparent',
-  oddRowBackground: 'rgba(0,0,0,0.05)',
-  borderColor: '#bbb',
-  borderWidth: 1,
-  sidebarColor: '#ffffff',
-  sidebarBackgroundColor: '#c52020',
-  headerColor: '#ffffff',
-  headerBackgroundColor: '#c52020',
-  lowerHeaderColor: '#333333',
-  lowerHeaderBackgroundColor: '#f0f0f0',
-  listItemPadding: '0 4px'
-}
-
 const defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
@@ -387,10 +373,6 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  design () {
-    return Object.assign({}, defaultDesign, this.props.design)
-  }
-
   todayLine () {
     const canvasTimeStart = this.state.canvasTimeStart
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
@@ -498,7 +480,6 @@ export default class ReactCalendarTimeline extends Component {
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = this.state.width * 3
     const minUnit = getMinUnit(zoom, this.state.width)
-    const design = this.design()
 
     return (
       <Header canvasTimeStart={canvasTimeStart}
@@ -510,11 +491,6 @@ export default class ReactCalendarTimeline extends Component {
               zoom={zoom}
               visibleTimeStart={this.state.visibleTimeStart}
               visibleTimeEnd={this.state.visibleTimeEnd}
-              headerColor={design.headerColor}
-              headerBackgroundColor={design.headerBackgroundColor}
-              lowerHeaderColor={design.lowerHeaderColor}
-              lowerHeaderBackgroundColor={design.lowerHeaderBackgroundColor}
-              borderColor={design.borderColor}
               fixedHeader={this.props.fixedHeader}
               zIndex={this.props.zIndexStart + 1}
               showPeriod={this.showPeriod.bind(this)} />
@@ -522,8 +498,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   sidebar () {
-    const design = this.design()
-
     return (
       <Sidebar groups={this.props.groups}
                keys={this.props.keys}
@@ -532,15 +506,7 @@ export default class ReactCalendarTimeline extends Component {
                lineHeight={this.props.lineHeight}
 
                fixedHeader={this.props.fixedHeader}
-               zIndex={this.props.zIndexStart + 2}
-
-               sidebarColor={design.sidebarColor}
-               sidebarBackgroundColor={design.sidebarBackgroundColor}
-               listItemPadding={design.listItemPadding}
-
-               backgroundColor={i => i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground}
-               borderWidth={design.borderWidth}
-               borderColor={design.borderColor}>
+               zIndex={this.props.zIndexStart + 2}>
         {this.props.children}
       </Sidebar>
     )
@@ -617,7 +583,6 @@ ReactCalendarTimeline.propTypes = {
   dayBackground: React.PropTypes.func,
 
   style: React.PropTypes.object,
-  design: React.PropTypes.object,
   keys: React.PropTypes.object,
 
   defaultTimeStart: React.PropTypes.object,
@@ -657,7 +622,6 @@ ReactCalendarTimeline.defaultProps = {
   defaultTimeEnd: null,
 
   style: {},
-  design: {},
   keys: defaultKeys,
 
   // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),

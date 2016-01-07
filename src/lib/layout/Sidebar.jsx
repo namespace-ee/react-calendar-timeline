@@ -21,12 +21,7 @@ export default class Sidebar extends Component {
              nextProps.width === this.props.width &&
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.fixedHeader === this.props.fixedHeader &&
-             nextProps.zIndex === this.props.zIndex &&
-             nextProps.sidebarColor === this.props.sidebarColor &&
-             nextProps.sidebarBackgroundColor === this.props.sidebarBackgroundColor &&
-             nextProps.listItemPadding === this.props.listItemPadding &&
-             nextProps.borderWidth === this.props.borderWidth &&
-             nextProps.borderColor === this.props.borderColor)
+             nextProps.zIndex === this.props.zIndex)
   }
 
   scroll (e) {
@@ -68,10 +63,7 @@ export default class Sidebar extends Component {
 
   render () {
     const {
-      fixedHeader, width, lineHeight, zIndex, groups,
-      listItemPadding,
-      borderColor, borderWidth,
-      sidebarBackgroundColor, sidebarColor
+      fixedHeader, width, lineHeight, zIndex, groups
     } = this.props
 
     const {groupIdKey, groupTitleKey} = this.props.keys
@@ -80,27 +72,14 @@ export default class Sidebar extends Component {
       scrollTop
     } = this.state
 
-    const containerStyle = {
+    const sidebarStyle = {
       width: `${width}px`,
-      height: `${lineHeight * (_length(groups) + 2)}px`,
-      boxSizing: 'border-box',
-      borderRight: `${borderWidth}px solid ${borderColor}`,
-      overflow: 'hidden',
-      display: 'inline-block',
-      verticalAlign: 'top',
-      position: 'relative'
+      height: `${lineHeight * (_length(groups) + 2)}px`
     }
 
     const headerStyle = {
       height: `${lineHeight * 2}px`,
       lineHeight: `${lineHeight}px`,
-      margin: '0',
-      color: sidebarColor,
-      background: sidebarBackgroundColor,
-      borderRight: `${borderWidth}px solid ${borderColor}`,
-      boxSizing: 'border-box',
-      borderBottom: `${borderWidth}px solid ${borderColor}`,
-      overflow: 'hidden',
       width: `${width}px`
     }
 
@@ -110,14 +89,7 @@ export default class Sidebar extends Component {
 
     const elementStyle = {
       height: `${lineHeight - 1}px`,
-      lineHeight: `${lineHeight - 1}px`,
-      padding: listItemPadding,
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      borderBottom: `${borderWidth}px solid ${borderColor}`,
-      boxSizing: 'content-box',
-      margin: '0'
+      lineHeight: `${lineHeight - 1}px`
     }
 
     if (fixedHeader === 'fixed') {
@@ -134,7 +106,7 @@ export default class Sidebar extends Component {
       }
     }
 
-    const header = <div ref='sidebarHeader' style={headerStyle}>
+    const header = <div ref='sidebarHeader' className='rct-sidebar-header' style={headerStyle}>
                      {this.props.children}
                    </div>
 
@@ -142,16 +114,8 @@ export default class Sidebar extends Component {
     let i = 0
 
     this.props.groups.forEach((group) => {
-      const background = typeof this.props.backgroundColor === 'function'
-                ? this.props.backgroundColor(i)
-                : (this.props.backgroundColor || null)
-
-      const style = background
-                ? Object.assign({}, elementStyle, {background: background})
-                : elementStyle
-
       groupLines.push(
-        <div key={_get(group, groupIdKey)} style={style}>
+        <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
           {_get(group, groupTitleKey)}
         </div>
       )
@@ -159,7 +123,7 @@ export default class Sidebar extends Component {
     })
 
     return (
-      <div ref='sidebar' style={containerStyle}>
+      <div ref='sidebar' className='rct-sidebar' style={sidebarStyle}>
         {header}
         <div style={groupsStyle}>
           {groupLines}
@@ -173,21 +137,13 @@ Sidebar.propTypes = {
   groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
   width: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
-  sidebarColor: React.PropTypes.string.isRequired,
-  sidebarBackgroundColor: React.PropTypes.string.isRequired,
-  backgroundColor: React.PropTypes.func,
-  borderColor: React.PropTypes.string,
-  borderWidth: React.PropTypes.number,
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  listItemPadding: React.PropTypes.string,
-  keys: React.PropTypes.object.isRequired
+  keys: React.PropTypes.object.isRequired,
+  children: React.PropTypes.node
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',
   zIndex: 12,
-  listItemPadding: '0 4px',
-  borderWidth: 1,
-  borderColor: '#aaa',
-  backgroundColor: null
+  children: null
 }

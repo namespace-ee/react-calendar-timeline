@@ -10,6 +10,7 @@ $row-background-odd: rgba(0,0,0,0.05);
 
 $border-color: #bbb;
 $border-width: 1px;
+$thick-border-width: 2px;
 $sidebar-color: #ffffff;
 $sidebar-background-color: #c52020;
 $header-color: #ffffff;
@@ -20,6 +21,10 @@ $list-item-padding: 0 4px;
 $weekend: rgba(250, 246, 225, 0.5);
 
 .react-calendar-timeline {
+  * {
+    box-sizing: border-box;
+  }
+
   .rct-outer {
     display: block;
     overflow: hidden;
@@ -66,11 +71,76 @@ $weekend: rgba(250, 246, 225, 0.5);
   }
 
   .rct-header {
+    margin: 0;
 
+    .rct-label-group {
+      position: absolute;
+      top: 0;
+      font-size: 14px;
+      overflow: hidden;
+      text-align: center;
+      cursor: pointer;
+      border-left: $thick-border-width solid $border-color;
+      color: $header-color;
+      background: $header-background-color;
+      border-bottom: $border-width solid $border-color;
+    }
+
+    .rct-label {
+      position: absolute;
+      overflow: hidden;
+      text-align: center;
+      cursor: pointer;
+      border-left: $border-width solid $border-color;
+      color: $lower-header-color;
+      background: $lower-header-background-color;
+      border-bottom: $border-width solid $border-color;
+
+      &.rct-label-only {
+        color: $header-color;
+        background: $header-background-color;
+      }
+
+      &.rct-first-of-type {
+        border-left: $thick-border-width solid $border-color;
+      }
+    }
   }
 
   .rct-sidebar {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    box-sizing: border-box;
+    border-right: $border-width solid $border-color;
 
+    .rct-sidebar-header {
+      margin: 0;
+      color: $sidebar-color;
+      background: $sidebar-background-color;
+      border-right: $border-width solid $border-color;
+      box-sizing: 'border-box';
+      border-bottom: $border-width solid $border-color;
+      overflow: 'hidden';
+    }
+
+    .rct-sidebar-row {
+      padding: $list-item-padding;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      box-sizing: content-box;
+      margin: 0;
+      border-bottom: $border-width solid $border-color;
+
+      &.rct-sidebar-row-odd {
+        background: $row-background-odd;
+      }
+      &.rct-sidebar-row-even {
+        background: $row-background-even;
+      }
+    }
   }
 
   .rct-horizontal-lines {
@@ -105,5 +175,17 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: absolute;
     width: 2px;
     background: red;
+  }
+
+  .rct-infolabel {
+    position: fixed;
+    left: 100px;
+    bottom: 50px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    z-index: 5;
   }
 }

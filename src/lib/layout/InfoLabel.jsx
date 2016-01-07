@@ -10,19 +10,8 @@ export default class InfoLabel extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let style = {
-      position: 'fixed',
-      left: '100px',
-      bottom: '50px',
-      background: 'rgba(0,0,0,0.5)',
-      color: 'white',
-      padding: '10px',
-      fontSize: '20px',
-      borderRadius: '5px'
-    }
-
     return (
-      <div style={style}>
+      <div className='rct-infolabel'>
         {this.props.label}
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { iterateTimes, getNextUnit, createGradientPattern } from '../utils.js'
+import { iterateTimes, getNextUnit } from '../utils.js'
 
 export default class Header extends Component {
   constructor (props) {
@@ -84,45 +84,13 @@ export default class Header extends Component {
     let timeLabels = []
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
-      visibleTimeStart, visibleTimeEnd, minUnit,
-      headerColor, borderColor, fixedHeader
+      visibleTimeStart, visibleTimeEnd, minUnit, fixedHeader
     } = this.props
     const {
       scrollTop
     } = this.state
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
-    const lowerHeaderColor = this.props.lowerHeaderColor || headerColor
     const twoHeaders = minUnit !== 'year'
-
-    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, (time, nextTime) => {
-      const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
-      const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
-      const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
-      const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
-      const borderWidth = firstOfType ? 2 : 1
-      const color = twoHeaders ? lowerHeaderColor : headerColor
-      const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
-
-      timeLabels.push(
-        <div key={`label-${time.valueOf()}`}
-             onClick={this.periodClick.bind(this, time, minUnit)}
-             style={{
-               position: 'absolute',
-               top: `${minUnit === 'year' ? 0 : lineHeight}px`,
-               left: `${left + leftCorrect}px`,
-               width: `${labelWidth}px`,
-               height: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
-               lineHeight: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
-               fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
-               overflow: 'hidden',
-               textAlign: 'center',
-               cursor: 'pointer',
-               borderLeft: `${borderWidth}px solid ${borderColor}`,
-               color: color}}>
-          {this.subHeaderLabel(time, minUnit, labelWidth)}
-        </div>
-      )
-    })
 
     // add the top header
     if (twoHeaders) {
@@ -139,36 +107,47 @@ export default class Header extends Component {
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
                onClick={this.periodClick.bind(this, time, nextUnit)}
+               className='rct-label-group'
                style={{
-                 position: 'absolute',
-                 top: 0,
                  left: `${left + leftCorrect}px`,
                  width: `${labelWidth}px`,
-                 height: `${lineHeight - 1}px`,
-                 lineHeight: `${lineHeight - 1}px`,
-                 fontSize: '14',
-                 overflow: 'hidden',
-                 textAlign: 'center',
-                 cursor: 'pointer',
-                 borderLeft: `2px solid ${borderColor}`,
-                 color: headerColor}}>
+                 height: `${lineHeight}px`,
+                 lineHeight: `${lineHeight}px`}}>
             {this.headerLabel(time, nextUnit, labelWidth)}
           </div>
         )
       })
     }
 
-    const { headerBackgroundColor, lowerHeaderBackgroundColor, zIndex } = this.props
+    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, (time, nextTime) => {
+      const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
+      const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
+      const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
+      const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
+      const borderWidth = firstOfType ? 2 : 1
+      const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
 
-    const headerBackground = twoHeaders
-            ? createGradientPattern(lineHeight, headerBackgroundColor, lowerHeaderBackgroundColor, this.props.borderColor)
-            : createGradientPattern(lineHeight * 2, headerBackgroundColor, null, this.props.borderColor)
+      timeLabels.push(
+        <div key={`label-${time.valueOf()}`}
+             onClick={this.periodClick.bind(this, time, minUnit)}
+             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${firstOfType ? 'rct-first-of-type' : ''} `}
+             style={{
+               top: `${minUnit === 'year' ? 0 : lineHeight}px`,
+               left: `${left + leftCorrect}px`,
+               width: `${labelWidth}px`,
+               height: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
+               lineHeight: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
+               fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'}}>
+          {this.subHeaderLabel(time, minUnit, labelWidth)}
+        </div>
+      )
+    })
+
+    const { zIndex } = this.props
 
     let headerStyle = {
       height: `${lineHeight * 2}px`,
-      lineHeight: `${lineHeight}px`,
-      margin: '0',
-      background: headerBackground
+      lineHeight: `${lineHeight}px`
     }
 
     if (fixedHeader === 'fixed') {
@@ -186,7 +165,7 @@ export default class Header extends Component {
     }
 
     return (
-      <div ref='header' key='header' style={headerStyle}>
+      <div ref='header' key='header' className='rct-header' style={headerStyle}>
         {timeLabels}
       </div>
     )
@@ -208,11 +187,6 @@ Header.propTypes = {
   // visibleTimeEnd: React.PropTypes.number.isRequired,
   minUnit: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
-  headerColor: React.PropTypes.string.isRequired,
-  lowerHeaderColor: React.PropTypes.string.isRequired,
-  headerBackgroundColor: React.PropTypes.string.isRequired,
-  lowerHeaderBackgroundColor: React.PropTypes.string.isRequired,
-  borderColor: React.PropTypes.string.isRequired,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   zIndex: React.PropTypes.number
 }

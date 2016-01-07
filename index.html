@@ -31,7 +31,7 @@
       var startDate = faker.date.recent(DAYS_IN_PAST).valueOf() + (DAYS_IN_PAST * 0.3) * 86400 * 1000
       items.push({
         id: i+'',
-        group: faker.random.number({min: 1, max: groups.length + 1})+'',
+        group: faker.random.number({min: 1, max: groups.length})+'',
         title: faker.hacker.phrase(),
         start: moment(startDate).valueOf(),
         end: moment(startDate + faker.random.number({min: 2, max: 20})*15*60*1000).valueOf(),
