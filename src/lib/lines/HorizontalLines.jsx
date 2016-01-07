@@ -8,37 +8,28 @@ export default class HorizontalLines extends Component {
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasWidth === this.props.canvasWidth &&
              nextProps.lineHeight === this.props.lineHeight &&
-             nextProps.lineCount === this.props.lineCount &&
-             nextProps.borderWidth === this.props.borderWidth &&
-             nextProps.borderColor === this.props.borderColor)
+             nextProps.lineCount === this.props.lineCount)
   }
 
   render () {
-    const { borderColor, lineCount, lineHeight, canvasWidth, borderWidth } = this.props
+    const { lineCount, lineHeight, canvasWidth } = this.props
 
     let lines = []
 
     for (let i = 0; i < lineCount; i++) {
-      const background = typeof this.props.backgroundColor === 'function'
-                ? this.props.backgroundColor(i)
-                : (this.props.backgroundColor || null)
-
       lines.push(
         <div key={`horizontal-line-${i}`}
+             className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
              style={{
-               position: 'absolute',
                top: `${(i + 2) * lineHeight}px`,
                left: `0px`,
                width: `${canvasWidth}px`,
-               height: `${lineHeight - 1}px`,
-               borderBottom: `${borderWidth}px solid ${borderColor}`,
-               boxSizing: 'content-box',
-               background: background
+               height: `${lineHeight - 1}px`
              }} />)
     }
 
     return (
-      <div>
+      <div className='rct-horizontal-lines'>
         {lines}
       </div>
     )
@@ -48,13 +39,8 @@ export default class HorizontalLines extends Component {
 HorizontalLines.propTypes = {
   canvasWidth: React.PropTypes.number.isRequired,
   lineHeight: React.PropTypes.number.isRequired,
-  lineCount: React.PropTypes.number.isRequired,
-  backgroundColor: React.PropTypes.func,
-  borderWidth: React.PropTypes.number,
-  borderColor: React.PropTypes.string
+  lineCount: React.PropTypes.number.isRequired
 }
 HorizontalLines.defaultProps = {
-  borderWidth: 1,
-  dayBackground: null,
-  borderColor: '#aaa'
+  borderWidth: 1
 }

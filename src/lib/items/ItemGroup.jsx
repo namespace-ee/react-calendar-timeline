@@ -33,7 +33,7 @@ export default class ItemGroup extends Component {
     const visibleItems = this.props.items
 
     return (
-      <div>
+      <div className='rct-item-group'>
         {visibleItems.map(item => <Item key={_get(item, itemIdKey)}
                                         item={item}
                                         keys={this.props.keys}

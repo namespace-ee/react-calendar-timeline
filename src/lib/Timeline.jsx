@@ -412,7 +412,6 @@ export default class ReactCalendarTimeline extends Component {
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = this.state.width * 3
     const minUnit = getMinUnit(zoom, this.state.width)
-    const design = this.design()
 
     return (
       <VerticalLines canvasTimeStart={canvasTimeStart}
@@ -421,23 +420,17 @@ export default class ReactCalendarTimeline extends Component {
                      lineHeight={this.props.lineHeight}
                      lineCount={_length(this.props.groups)}
                      minUnit={minUnit}
-                     dayBackground={this.props.dayBackground}
-                     borderColor={design.borderColor}
                      fixedHeader={this.props.fixedHeader} />
     )
   }
 
   horizontalLines () {
     const canvasWidth = this.state.width * 3
-    const design = this.design()
 
     return (
       <HorizontalLines canvasWidth={canvasWidth}
                        lineHeight={this.props.lineHeight}
-                       lineCount={_length(this.props.groups)}
-                       backgroundColor={i => i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground}
-                       borderWidth={design.borderWidth}
-                       borderColor={design.borderColor} />
+                       lineCount={_length(this.props.groups)} />
     )
   }
 
@@ -559,36 +552,31 @@ export default class ReactCalendarTimeline extends Component {
     const canvasWidth = this.state.width * 3
 
     const outerComponentStyle = {
-      display: 'block',
-      height: `${height}px`,
-      overflow: 'hidden'
+      height: `${height}px`
     }
 
     const scrollComponentStyle = {
-      display: 'inline-block',
       width: `${width}px`,
-      height: `${height + 20}px`,
-      verticalAlign: 'top',
-      overflowX: 'scroll',
-      overflowY: 'hidden'
+      height: `${height + 20}px`
     }
 
     const canvasComponentStyle = {
-      position: 'relative',
       width: `${canvasWidth}px`,
       height: `${height}px`
     }
 
     return (
-      <div style={this.props.style || {}} ref='container' className='react-calendar-timeline'>
-        <div style={outerComponentStyle}>
+      <div style={this.props.style} ref='container' className='react-calendar-timeline'>
+        <div style={outerComponentStyle} className='rct-outer'>
           {this.sidebar()}
           <div ref='scrollComponent'
+               className='rct-scroll'
                style={scrollComponentStyle}
                onClick={this.scrollAreaClick.bind(this)}
                onScroll={this.onScroll.bind(this)}
                onWheel={this.onWheel.bind(this)}>
             <div ref='canvasComponent'
+                 className='rct-canvas'
                  style={canvasComponentStyle}>
               {this.todayLine()}
               {this.verticalLines()}

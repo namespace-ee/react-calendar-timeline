@@ -276,32 +276,26 @@ export default class Item extends Component {
   render () {
     const dimensions = this.dimensions()
 
+    const classNames = 'rct-item' +
+                       (this.props.selected ? ' selected' : '') +
+                       (this.canMove(this.props) ? ' can-move' : '') +
+                       (this.canResize(this.props) ? ' can-resize' : '')
+
     return (
       <div key={this.itemId}
            ref='item'
+           className={classNames}
            title={this.itemTitle}
            onClick={this.onClick}
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
-           className='timeline-item'
            style={{
-             overflow: 'hidden',
-             cursor: this.props.selected && this.canMove(this.props) ? 'move' : 'pointer',
-             position: 'absolute',
-             boxSizing: 'border-box',
              // left + top is faster than transform
              left: dimensions.left,
              top: dimensions.top,
              width: dimensions.width,
              height: dimensions.height,
-             lineHeight: dimensions.height,
-             background: this.props.selected ? '#FFC107' : '#2196F3',
-             border: this.props.selected ? '1px solid #FF9800' : '1px solid #1A6FB3',
-             borderRightWidth: this.props.selected && this.canResize(this.props) ? '3px' : '1px',
-             fontSize: '12px',
-             color: 'white',
-             zIndex: this.props.selected ? 2 : 1,
-             textAlign: 'center'}}>
+             lineHeight: dimensions.height}}>
         {this.itemTitle}
       </div>
     )

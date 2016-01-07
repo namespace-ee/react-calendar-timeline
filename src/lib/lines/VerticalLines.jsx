@@ -14,8 +14,7 @@ export default class VerticalLines extends Component {
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.lineCount === this.props.lineCount &&
              nextProps.minUnit === this.props.minUnit &&
-             nextProps.fixedHeader === this.props.fixedHeader &&
-             nextProps.borderColor === this.props.borderColor)
+             nextProps.fixedHeader === this.props.fixedHeader)
   }
 
   render () {
@@ -30,25 +29,25 @@ export default class VerticalLines extends Component {
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
       const lineWidth = firstOfType ? 2 : 1
       const labelWidth = Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
-      const color = this.props.borderColor || (firstOfType || labelWidth > 100 ? '#aaa' : '#ccc')
       const leftPush = this.props.fixedHeader === 'fixed' && firstOfType ? -1 : 0
-      const background = typeof this.props.dayBackground === 'function' ? this.props.dayBackground(minUnit, time) : (this.props.dayBackground || null)
+
+      const classNames = 'rct-vl' +
+                         (firstOfType ? ' rct-vl-first' : '') +
+                         (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute' ? ` rct-day-${time.day()}` : '')
 
       lines.push(
         <div key={`line-${time.valueOf()}`}
+             className={classNames}
              style={{
-               position: 'absolute',
                top: `${lineHeight * 2}px`,
                left: `${left + leftPush}px`,
                width: `${labelWidth}px`,
-               height: `${lineCount * lineHeight}px`,
-               borderLeft: `${lineWidth}px solid ${color}`,
-               background: background
+               height: `${lineCount * lineHeight}px`
              }} />)
     })
 
     return (
-      <div>
+      <div className='rct-vertical-lines'>
         {lines}
       </div>
     )
@@ -62,9 +61,7 @@ VerticalLines.propTypes = {
   lineHeight: React.PropTypes.number.isRequired,
   lineCount: React.PropTypes.number.isRequired,
   minUnit: React.PropTypes.string.isRequired,
-  fixedHeader: React.PropTypes.string.isRequired,
-  dayBackground: React.PropTypes.func,
-  borderColor: React.PropTypes.string
+  fixedHeader: React.PropTypes.string.isRequired
 }
 VerticalLines.defaultProps = {
   fixedHeader: 'none',

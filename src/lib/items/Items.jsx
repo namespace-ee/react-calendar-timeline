@@ -72,7 +72,7 @@ export default class Items extends Component {
     // }
 
     return (
-      <div>
+      <div className='rct-items'>
         {visibleItems.map(item => <Item key={_get(item, itemIdKey)}
                                         item={item}
                                         keys={this.props.keys}

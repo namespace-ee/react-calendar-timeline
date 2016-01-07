@@ -15,15 +15,12 @@ export default class TodayLine extends Component {
       const top = this.props.lineHeight * 2
       const height = this.props.lineCount * this.props.lineHeight
       const styles = {
-        position: 'absolute',
         top: `${top}px`,
         left: `${left}px`,
-        width: '2px',
-        height: `${height}px`,
-        background: 'red'
+        height: `${height}px`
       }
 
-      return <div style={styles} />
+      return <div className='rct-today' style={styles} />
     } else {
       return <div />
     }
