@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-// import './Timeline.scss'
+import './Timeline.scss'
 
 import Items from './items/Items.jsx'
 import InfoLabel from './layout/InfoLabel.jsx'
