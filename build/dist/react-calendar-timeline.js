@@ -132,20 +132,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var defaultDesign = {
-	  evenRowBackground: 'transparent',
-	  oddRowBackground: 'rgba(0,0,0,0.05)',
-	  borderColor: '#bbb',
-	  borderWidth: 1,
-	  sidebarColor: '#ffffff',
-	  sidebarBackgroundColor: '#c52020',
-	  headerColor: '#ffffff',
-	  headerBackgroundColor: '#c52020',
-	  lowerHeaderColor: '#333333',
-	  lowerHeaderBackgroundColor: '#f0f0f0',
-	  listItemPadding: '0 4px'
-	};
-	
 	var defaultKeys = {
 	  groupIdKey: 'id',
 	  groupTitleKey: 'title',
@@ -555,11 +541,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
-	    key: 'design',
-	    value: function design() {
-	      return Object.assign({}, defaultDesign, this.props.design);
-	    }
-	  }, {
 	    key: 'todayLine',
 	    value: function todayLine() {
 	      var canvasTimeStart = this.state.canvasTimeStart;
@@ -581,7 +562,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
 	      var canvasWidth = this.state.width * 3;
 	      var minUnit = (0, _utils.getMinUnit)(zoom, this.state.width);
-	      var design = this.design();
 	
 	      return _react2.default.createElement(_VerticalLines2.default, { canvasTimeStart: canvasTimeStart,
 	        canvasTimeEnd: canvasTimeEnd,
@@ -589,24 +569,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        lineHeight: this.props.lineHeight,
 	        lineCount: (0, _utils._length)(this.props.groups),
 	        minUnit: minUnit,
-	        dayBackground: this.props.dayBackground,
-	        borderColor: design.borderColor,
 	        fixedHeader: this.props.fixedHeader });
 	    }
 	  }, {
 	    key: 'horizontalLines',
 	    value: function horizontalLines() {
 	      var canvasWidth = this.state.width * 3;
-	      var design = this.design();
 	
 	      return _react2.default.createElement(_HorizontalLines2.default, { canvasWidth: canvasWidth,
 	        lineHeight: this.props.lineHeight,
-	        lineCount: (0, _utils._length)(this.props.groups),
-	        backgroundColor: function backgroundColor(i) {
-	          return i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground;
-	        },
-	        borderWidth: design.borderWidth,
-	        borderColor: design.borderColor });
+	        lineCount: (0, _utils._length)(this.props.groups) });
 	    }
 	  }, {
 	    key: 'items',
@@ -674,7 +646,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
 	      var canvasWidth = this.state.width * 3;
 	      var minUnit = (0, _utils.getMinUnit)(zoom, this.state.width);
-	      var design = this.design();
 	
 	      return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
 	        canvasTimeEnd: canvasTimeEnd,
@@ -685,11 +656,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        zoom: zoom,
 	        visibleTimeStart: this.state.visibleTimeStart,
 	        visibleTimeEnd: this.state.visibleTimeEnd,
-	        headerColor: design.headerColor,
-	        headerBackgroundColor: design.headerBackgroundColor,
-	        lowerHeaderColor: design.lowerHeaderColor,
-	        lowerHeaderBackgroundColor: design.lowerHeaderBackgroundColor,
-	        borderColor: design.borderColor,
 	        fixedHeader: this.props.fixedHeader,
 	        zIndex: this.props.zIndexStart + 1,
 	        showPeriod: this.showPeriod.bind(this) });
@@ -697,8 +663,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'sidebar',
 	    value: function sidebar() {
-	      var design = this.design();
-	
 	      return _react2.default.createElement(
 	        _Sidebar2.default,
 	        { groups: this.props.groups,
@@ -708,17 +672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          lineHeight: this.props.lineHeight,
 	
 	          fixedHeader: this.props.fixedHeader,
-	          zIndex: this.props.zIndexStart + 2,
-	
-	          sidebarColor: design.sidebarColor,
-	          sidebarBackgroundColor: design.sidebarBackgroundColor,
-	          listItemPadding: design.listItemPadding,
-	
-	          backgroundColor: function backgroundColor(i) {
-	            return i % 2 === 0 ? design.evenRowBackground : design.oddRowBackground;
-	          },
-	          borderWidth: design.borderWidth,
-	          borderColor: design.borderColor },
+	          zIndex: this.props.zIndexStart + 2 },
 	        this.props.children
 	      );
 	    }
@@ -730,36 +684,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var canvasWidth = this.state.width * 3;
 	
 	      var outerComponentStyle = {
-	        display: 'block',
-	        height: height + 'px',
-	        overflow: 'hidden'
+	        height: height + 'px'
 	      };
 	
 	      var scrollComponentStyle = {
-	        display: 'inline-block',
 	        width: width + 'px',
-	        height: height + 20 + 'px',
-	        verticalAlign: 'top',
-	        overflowX: 'scroll',
-	        overflowY: 'hidden'
+	        height: height + 20 + 'px'
 	      };
 	
 	      var canvasComponentStyle = {
-	        position: 'relative',
 	        width: canvasWidth + 'px',
 	        height: height + 'px'
 	      };
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { style: this.props.style || {}, ref: 'container', className: 'react-calendar-timeline' },
+	        { style: this.props.style, ref: 'container', className: 'react-calendar-timeline' },
 	        _react2.default.createElement(
 	          'div',
-	          { style: outerComponentStyle },
+	          { style: outerComponentStyle, className: 'rct-outer' },
 	          this.sidebar(),
 	          _react2.default.createElement(
 	            'div',
 	            { ref: 'scrollComponent',
+	              className: 'rct-scroll',
 	              style: scrollComponentStyle,
 	              onClick: this.scrollAreaClick.bind(this),
 	              onScroll: this.onScroll.bind(this),
@@ -767,10 +715,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _react2.default.createElement(
 	              'div',
 	              { ref: 'canvasComponent',
+	                className: 'rct-canvas',
 	                style: canvasComponentStyle },
-	              this.todayLine(),
 	              this.verticalLines(),
 	              this.horizontalLines(),
+	              this.todayLine(),
 	              this.items(),
 	              this.infoLabel(),
 	              this.header()
@@ -811,7 +760,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dayBackground: _react2.default.PropTypes.func,
 	
 	  style: _react2.default.PropTypes.object,
-	  design: _react2.default.PropTypes.object,
 	  keys: _react2.default.PropTypes.object,
 	
 	  defaultTimeStart: _react2.default.PropTypes.object,
@@ -851,7 +799,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  defaultTimeEnd: null,
 	
 	  style: {},
-	  design: {},
 	  keys: defaultKeys,
 	
 	  // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
@@ -994,7 +941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'rct-items' },
 	        visibleItems.map(function (item) {
 	          return _react2.default.createElement(_Item2.default, { key: (0, _utils._get)(item, itemIdKey),
 	            item: item,
@@ -1219,7 +1166,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function mountInteract() {
 	      var _this2 = this;
 	
-	      console.log('mounting interact');
 	      (0, _interact2.default)(this.refs.item).resizable({
 	        edges: { left: false, right: true, top: false, bottom: false },
 	        enabled: this.props.selected && this.canResize()
@@ -1369,33 +1315,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var dimensions = this.dimensions();
 	
+	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { key: this.itemId,
 	          ref: 'item',
+	          className: classNames,
 	          title: this.itemTitle,
 	          onClick: this.onClick,
 	          onTouchStart: this.onTouchStart,
 	          onTouchEnd: this.onTouchEnd,
-	          className: 'timeline-item',
 	          style: {
-	            overflow: 'hidden',
-	            cursor: this.props.selected && this.canMove(this.props) ? 'move' : 'pointer',
-	            position: 'absolute',
-	            boxSizing: 'border-box',
 	            // left + top is faster than transform
 	            left: dimensions.left,
 	            top: dimensions.top,
 	            width: dimensions.width,
 	            height: dimensions.height,
-	            lineHeight: dimensions.height,
-	            background: this.props.selected ? '#FFC107' : '#2196F3',
-	            border: this.props.selected ? '1px solid #FF9800' : '1px solid #1A6FB3',
-	            borderRightWidth: this.props.selected && this.canResize(this.props) ? '3px' : '1px',
-	            fontSize: '12px',
-	            color: 'white',
-	            zIndex: this.props.selected ? 2 : 1,
-	            textAlign: 'center' } },
+	            lineHeight: dimensions.height } },
 	        this.itemTitle
 	      );
 	    }
@@ -1605,20 +1542,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(InfoLabel, [{
 	    key: 'render',
 	    value: function render() {
-	      var style = {
-	        position: 'fixed',
-	        left: '100px',
-	        bottom: '50px',
-	        background: 'rgba(0,0,0,0.5)',
-	        color: 'white',
-	        padding: '10px',
-	        fontSize: '20px',
-	        borderRadius: '5px'
-	      };
-	
 	      return _react2.default.createElement(
 	        'div',
-	        { style: style },
+	        { className: 'rct-infolabel' },
 	        this.props.label
 	      );
 	    }
@@ -1743,7 +1669,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return true;
 	      }
 	
-	      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && nextProps.keys === this.props.keys && nextProps.width === this.props.width && nextProps.lineHeight === this.props.lineHeight && nextProps.fixedHeader === this.props.fixedHeader && nextProps.zIndex === this.props.zIndex && nextProps.sidebarColor === this.props.sidebarColor && nextProps.sidebarBackgroundColor === this.props.sidebarBackgroundColor && nextProps.listItemPadding === this.props.listItemPadding && nextProps.borderWidth === this.props.borderWidth && nextProps.borderColor === this.props.borderColor);
+	      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && nextProps.keys === this.props.keys && nextProps.width === this.props.width && nextProps.lineHeight === this.props.lineHeight && nextProps.fixedHeader === this.props.fixedHeader && nextProps.zIndex === this.props.zIndex);
 	    }
 	  }, {
 	    key: 'scroll',
@@ -1792,45 +1718,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this3 = this;
-	
 	      var _props = this.props;
 	      var fixedHeader = _props.fixedHeader;
 	      var width = _props.width;
 	      var lineHeight = _props.lineHeight;
 	      var zIndex = _props.zIndex;
 	      var groups = _props.groups;
-	      var listItemPadding = _props.listItemPadding;
-	      var borderColor = _props.borderColor;
-	      var borderWidth = _props.borderWidth;
-	      var sidebarBackgroundColor = _props.sidebarBackgroundColor;
-	      var sidebarColor = _props.sidebarColor;
 	      var _props$keys = this.props.keys;
 	      var groupIdKey = _props$keys.groupIdKey;
 	      var groupTitleKey = _props$keys.groupTitleKey;
 	      var scrollTop = this.state.scrollTop;
 	
-	      var containerStyle = {
+	      var sidebarStyle = {
 	        width: width + 'px',
-	        height: lineHeight * ((0, _utils._length)(groups) + 2) + 'px',
-	        boxSizing: 'border-box',
-	        borderRight: borderWidth + 'px solid ' + borderColor,
-	        overflow: 'hidden',
-	        display: 'inline-block',
-	        verticalAlign: 'top',
-	        position: 'relative'
+	        height: lineHeight * ((0, _utils._length)(groups) + 2) + 'px'
 	      };
 	
 	      var headerStyle = {
 	        height: lineHeight * 2 + 'px',
 	        lineHeight: lineHeight + 'px',
-	        margin: '0',
-	        color: sidebarColor,
-	        background: sidebarBackgroundColor,
-	        borderRight: borderWidth + 'px solid ' + borderColor,
-	        boxSizing: 'border-box',
-	        borderBottom: borderWidth + 'px solid ' + borderColor,
-	        overflow: 'hidden',
 	        width: width + 'px'
 	      };
 	
@@ -1840,14 +1746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var elementStyle = {
 	        height: lineHeight - 1 + 'px',
-	        lineHeight: lineHeight - 1 + 'px',
-	        padding: listItemPadding,
-	        overflow: 'hidden',
-	        whiteSpace: 'nowrap',
-	        textOverflow: 'ellipsis',
-	        borderBottom: borderWidth + 'px solid ' + borderColor,
-	        boxSizing: 'content-box',
-	        margin: '0'
+	        lineHeight: lineHeight - 1 + 'px'
 	      };
 	
 	      if (fixedHeader === 'fixed') {
@@ -1866,7 +1765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var header = _react2.default.createElement(
 	        'div',
-	        { ref: 'sidebarHeader', style: headerStyle },
+	        { ref: 'sidebarHeader', className: 'rct-sidebar-header', style: headerStyle },
 	        this.props.children
 	      );
 	
@@ -1874,13 +1773,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var i = 0;
 	
 	      this.props.groups.forEach(function (group) {
-	        var background = typeof _this3.props.backgroundColor === 'function' ? _this3.props.backgroundColor(i) : _this3.props.backgroundColor || null;
-	
-	        var style = background ? Object.assign({}, elementStyle, { background: background }) : elementStyle;
-	
 	        groupLines.push(_react2.default.createElement(
 	          'div',
-	          { key: (0, _utils._get)(group, groupIdKey), style: style },
+	          { key: (0, _utils._get)(group, groupIdKey), className: 'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd'), style: elementStyle },
 	          (0, _utils._get)(group, groupTitleKey)
 	        ));
 	        i += 1;
@@ -1888,7 +1783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { ref: 'sidebar', style: containerStyle },
+	        { ref: 'sidebar', className: 'rct-sidebar', style: sidebarStyle },
 	        header,
 	        _react2.default.createElement(
 	          'div',
@@ -1908,23 +1803,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
 	  width: _react2.default.PropTypes.number.isRequired,
 	  lineHeight: _react2.default.PropTypes.number.isRequired,
-	  sidebarColor: _react2.default.PropTypes.string.isRequired,
-	  sidebarBackgroundColor: _react2.default.PropTypes.string.isRequired,
-	  backgroundColor: _react2.default.PropTypes.func,
-	  borderColor: _react2.default.PropTypes.string,
-	  borderWidth: _react2.default.PropTypes.number,
 	  zIndex: _react2.default.PropTypes.number,
 	  fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-	  listItemPadding: _react2.default.PropTypes.string,
-	  keys: _react2.default.PropTypes.object.isRequired
+	  keys: _react2.default.PropTypes.object.isRequired,
+	  children: _react2.default.PropTypes.node
 	};
 	Sidebar.defaultProps = {
 	  fixedHeader: 'none',
 	  zIndex: 12,
-	  listItemPadding: '0 4px',
-	  borderWidth: 1,
-	  borderColor: '#aaa',
-	  backgroundColor: null
+	  children: null
 	};
 
 /***/ },
@@ -2061,44 +1948,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var visibleTimeStart = _props.visibleTimeStart;
 	      var visibleTimeEnd = _props.visibleTimeEnd;
 	      var minUnit = _props.minUnit;
-	      var headerColor = _props.headerColor;
-	      var borderColor = _props.borderColor;
 	      var fixedHeader = _props.fixedHeader;
 	      var scrollTop = this.state.scrollTop;
 	
 	      var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
-	      var lowerHeaderColor = this.props.lowerHeaderColor || headerColor;
 	      var twoHeaders = minUnit !== 'year';
-	
-	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, function (time, nextTime) {
-	        var left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2);
-	        var minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit);
-	        var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
-	        var labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2);
-	        var borderWidth = firstOfType ? 2 : 1;
-	        var color = twoHeaders ? lowerHeaderColor : headerColor;
-	        var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0;
-	
-	        timeLabels.push(_react2.default.createElement(
-	          'div',
-	          { key: 'label-' + time.valueOf(),
-	            onClick: _this3.periodClick.bind(_this3, time, minUnit),
-	            style: {
-	              position: 'absolute',
-	              top: (minUnit === 'year' ? 0 : lineHeight) + 'px',
-	              left: left + leftCorrect + 'px',
-	              width: labelWidth + 'px',
-	              height: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
-	              lineHeight: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
-	              fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
-	              overflow: 'hidden',
-	              textAlign: 'center',
-	              cursor: 'pointer',
-	              borderLeft: borderWidth + 'px solid ' + borderColor,
-	              color: color } },
-	          _this3.subHeaderLabel(time, minUnit, labelWidth)
-	        ));
-	      });
 	
 	      // add the top header
 	      if (twoHeaders) {
@@ -2117,37 +1971,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	              'div',
 	              { key: 'top-label-' + time.valueOf(),
 	                onClick: _this3.periodClick.bind(_this3, time, nextUnit),
+	                className: 'rct-label-group',
 	                style: {
-	                  position: 'absolute',
-	                  top: 0,
 	                  left: left + leftCorrect + 'px',
 	                  width: labelWidth + 'px',
-	                  height: lineHeight - 1 + 'px',
-	                  lineHeight: lineHeight - 1 + 'px',
-	                  fontSize: '14',
-	                  overflow: 'hidden',
-	                  textAlign: 'center',
-	                  cursor: 'pointer',
-	                  borderLeft: '2px solid ' + borderColor,
-	                  color: headerColor } },
+	                  height: lineHeight + 'px',
+	                  lineHeight: lineHeight + 'px' } },
 	              _this3.headerLabel(time, nextUnit, labelWidth)
 	            ));
 	          });
 	        })();
 	      }
 	
-	      var _props2 = this.props;
-	      var headerBackgroundColor = _props2.headerBackgroundColor;
-	      var lowerHeaderBackgroundColor = _props2.lowerHeaderBackgroundColor;
-	      var zIndex = _props2.zIndex;
+	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, function (time, nextTime) {
+	        var left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2);
+	        var minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit);
+	        var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
+	        var labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2);
+	        var borderWidth = firstOfType ? 2 : 1;
+	        var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0;
 	
-	      var headerBackground = twoHeaders ? (0, _utils.createGradientPattern)(lineHeight, headerBackgroundColor, lowerHeaderBackgroundColor, this.props.borderColor) : (0, _utils.createGradientPattern)(lineHeight * 2, headerBackgroundColor, null, this.props.borderColor);
+	        timeLabels.push(_react2.default.createElement(
+	          'div',
+	          { key: 'label-' + time.valueOf(),
+	            onClick: _this3.periodClick.bind(_this3, time, minUnit),
+	            className: 'rct-label ' + (twoHeaders ? '' : 'rct-label-only') + ' ' + (firstOfType ? 'rct-first-of-type' : '') + ' ',
+	            style: {
+	              top: (minUnit === 'year' ? 0 : lineHeight) + 'px',
+	              left: left + leftCorrect + 'px',
+	              width: labelWidth + 'px',
+	              height: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
+	              lineHeight: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
+	              fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10' } },
+	          _this3.subHeaderLabel(time, minUnit, labelWidth)
+	        ));
+	      });
+	
+	      var zIndex = this.props.zIndex;
 	
 	      var headerStyle = {
 	        height: lineHeight * 2 + 'px',
-	        lineHeight: lineHeight + 'px',
-	        margin: '0',
-	        background: headerBackground
+	        lineHeight: lineHeight + 'px'
 	      };
 	
 	      if (fixedHeader === 'fixed') {
@@ -2166,7 +2030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { ref: 'header', key: 'header', style: headerStyle },
+	        { ref: 'header', key: 'header', className: 'rct-header', style: headerStyle },
 	        timeLabels
 	      );
 	    }
@@ -2192,11 +2056,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // visibleTimeEnd: React.PropTypes.number.isRequired,
 	  minUnit: _react2.default.PropTypes.string.isRequired,
 	  width: _react2.default.PropTypes.number.isRequired,
-	  headerColor: _react2.default.PropTypes.string.isRequired,
-	  lowerHeaderColor: _react2.default.PropTypes.string.isRequired,
-	  headerBackgroundColor: _react2.default.PropTypes.string.isRequired,
-	  lowerHeaderBackgroundColor: _react2.default.PropTypes.string.isRequired,
-	  borderColor: _react2.default.PropTypes.string.isRequired,
 	  fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
 	  zIndex: _react2.default.PropTypes.number
 	};
@@ -2243,7 +2102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(VerticalLines, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.fixedHeader === this.props.fixedHeader && nextProps.borderColor === this.props.borderColor);
+	      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.fixedHeader === this.props.fixedHeader);
 	    }
 	  }, {
 	    key: 'render',
@@ -2268,25 +2127,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
 	        var lineWidth = firstOfType ? 2 : 1;
 	        var labelWidth = Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth;
-	        var color = _this2.props.borderColor || (firstOfType || labelWidth > 100 ? '#aaa' : '#ccc');
 	        var leftPush = _this2.props.fixedHeader === 'fixed' && firstOfType ? -1 : 0;
-	        var background = typeof _this2.props.dayBackground === 'function' ? _this2.props.dayBackground(minUnit, time) : _this2.props.dayBackground || null;
+	
+	        var classNames = 'rct-vl' + (firstOfType ? ' rct-vl-first' : '') + (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute' ? ' rct-day-' + time.day() : '');
 	
 	        lines.push(_react2.default.createElement('div', { key: 'line-' + time.valueOf(),
+	          className: classNames,
 	          style: {
-	            position: 'absolute',
 	            top: lineHeight * 2 + 'px',
 	            left: left + leftPush + 'px',
 	            width: labelWidth + 'px',
-	            height: lineCount * lineHeight + 'px',
-	            borderLeft: lineWidth + 'px solid ' + color,
-	            background: background
+	            height: lineCount * lineHeight + 'px'
 	          } }));
 	      });
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'rct-vertical-lines' },
 	        lines
 	      );
 	    }
@@ -2304,9 +2161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  lineHeight: _react2.default.PropTypes.number.isRequired,
 	  lineCount: _react2.default.PropTypes.number.isRequired,
 	  minUnit: _react2.default.PropTypes.string.isRequired,
-	  fixedHeader: _react2.default.PropTypes.string.isRequired,
-	  dayBackground: _react2.default.PropTypes.func,
-	  borderColor: _react2.default.PropTypes.string
+	  fixedHeader: _react2.default.PropTypes.string.isRequired
 	};
 	VerticalLines.defaultProps = {
 	  fixedHeader: 'none',
@@ -2349,39 +2204,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(HorizontalLines, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return !(nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.borderWidth === this.props.borderWidth && nextProps.borderColor === this.props.borderColor);
+	      return !(nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
-	      var borderColor = _props.borderColor;
 	      var lineCount = _props.lineCount;
 	      var lineHeight = _props.lineHeight;
 	      var canvasWidth = _props.canvasWidth;
-	      var borderWidth = _props.borderWidth;
 	
 	      var lines = [];
 	
 	      for (var i = 0; i < lineCount; i++) {
-	        var background = typeof this.props.backgroundColor === 'function' ? this.props.backgroundColor(i) : this.props.backgroundColor || null;
-	
 	        lines.push(_react2.default.createElement('div', { key: 'horizontal-line-' + i,
+	          className: i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd',
 	          style: {
-	            position: 'absolute',
 	            top: (i + 2) * lineHeight + 'px',
 	            left: '0px',
 	            width: canvasWidth + 'px',
-	            height: lineHeight - 1 + 'px',
-	            borderBottom: borderWidth + 'px solid ' + borderColor,
-	            boxSizing: 'content-box',
-	            background: background
+	            height: lineHeight - 1 + 'px'
 	          } }));
 	      }
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'rct-horizontal-lines' },
 	        lines
 	      );
 	    }
@@ -2395,15 +2243,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	HorizontalLines.propTypes = {
 	  canvasWidth: _react2.default.PropTypes.number.isRequired,
 	  lineHeight: _react2.default.PropTypes.number.isRequired,
-	  lineCount: _react2.default.PropTypes.number.isRequired,
-	  backgroundColor: _react2.default.PropTypes.func,
-	  borderWidth: _react2.default.PropTypes.number,
-	  borderColor: _react2.default.PropTypes.string
+	  lineCount: _react2.default.PropTypes.number.isRequired
 	};
 	HorizontalLines.defaultProps = {
-	  borderWidth: 1,
-	  dayBackground: null,
-	  borderColor: '#aaa'
+	  borderWidth: 1
 	};
 
 /***/ },
@@ -2452,15 +2295,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var top = this.props.lineHeight * 2;
 	        var height = this.props.lineCount * this.props.lineHeight;
 	        var styles = {
-	          position: 'absolute',
 	          top: top + 'px',
 	          left: left + 'px',
-	          width: '2px',
-	          height: height + 'px',
-	          background: 'red'
+	          height: height + 'px'
 	        };
 	
-	        return _react2.default.createElement('div', { style: styles });
+	        return _react2.default.createElement('div', { className: 'rct-today', style: styles });
 	      } else {
 	        return _react2.default.createElement('div', null);
 	      }
