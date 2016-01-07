@@ -111,7 +111,6 @@ export default class Item extends Component {
   }
 
   mountInteract () {
-    console.log('mounting interact')
     interact(this.refs.item)
       .resizable({
         edges: {left: false, right: true, top: false, bottom: false},
