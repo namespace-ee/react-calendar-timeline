@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-// import Item from './Item.jsx'
-import ItemGroup from './ItemGroup.jsx'
+import Item from './Item.jsx'
+// import ItemGroup from './ItemGroup.jsx'
 
 import { _get, arraysEqual } from '../utils'
 
@@ -46,39 +46,66 @@ export default class Items extends Component {
   }
 
   render () {
-    const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
+    const { canvasTimeStart, canvasTimeEnd } = this.props
+    const { itemIdKey, itemGroupKey } = this.props.keys
 
     const groupOrders = this.getGroupOrders()
     const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders)
 
-    const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
+    // const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
 
-    const start = Math.floor(canvasTimeStart / timeDiff) * timeDiff
-    const end = Math.floor(canvasTimeEnd / timeDiff) * timeDiff
+    // const start = Math.floor(canvasTimeStart / timeDiff) * timeDiff
+    // const end = Math.floor(canvasTimeEnd / timeDiff) * timeDiff
 
-    const canvasTimeLength = (canvasTimeEnd - canvasTimeStart)
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
-
-    let itemGroups = []
-
-    for (let i = start; i < end + timeDiff; i += timeDiff) {
-      itemGroups.push({
-        start: i,
-        end: i + timeDiff,
-        left: Math.round((i - canvasTimeStart) * ratio, 2),
-        items: visibleItems.filter(item => item.start >= i && item.start < i + timeDiff)
-      })
-    }
+    // const canvasTimeLength = (canvasTimeEnd - canvasTimeStart)
+    // const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
+    //
+    // let itemGroups = []
+    //
+    // for (let i = start; i < end + timeDiff; i += timeDiff) {
+    //   itemGroups.push({
+    //     start: i,
+    //     end: i + timeDiff,
+    //     left: Math.round((i - canvasTimeStart) * ratio, 2),
+    //     items: visibleItems.filter(item => item.start >= i && item.start < i + timeDiff)
+    //   })
+    // }
 
     return (
       <div>
-        {itemGroups.map(group => (
-          <div key={`timegroup-${group.start}-${group.end}`} style={{position: 'absolute', top: '0', left: `${group.left}px`}}>
-            <ItemGroup {...this.props} items={group.items} canvasTimeStart={group.start} canvasTimeEnd={group.start + canvasTimeLength} groupOrders={groupOrders} />
-          </div>
-        ))}
+        {visibleItems.map(item => <Item key={_get(item, itemIdKey)}
+                                        item={item}
+                                        keys={this.props.keys}
+                                        order={groupOrders[_get(item, itemGroupKey)]}
+                                        selected={this.props.selectedItem === _get(item, itemIdKey)}
+                                        canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
+                                        canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
+                                        canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
+                                        canvasTimeStart={this.props.canvasTimeStart}
+                                        canvasTimeEnd={this.props.canvasTimeEnd}
+                                        canvasWidth={this.props.canvasWidth}
+                                        lineHeight={this.props.lineHeight}
+                                        dragSnap={this.props.dragSnap}
+                                        minResizeWidth={this.props.minResizeWidth}
+                                        onResizing={this.props.itemResizing}
+                                        onResized={this.props.itemResized}
+                                        onDrag={this.props.itemDrag}
+                                        onDrop={this.props.itemDrop}
+                                        onSelect={this.props.itemSelect}/>)}
       </div>
     )
+
+    // NB: itemgroups commented out for now as they made performacne horrible when zooming in/out
+    //
+    // return (
+    //   <div>
+    //     {itemGroups.map(group => (
+    //       <div key={`timegroup-${group.start}-${group.end}`} style={{position: 'absolute', top: '0', left: `${group.left}px`}}>
+    //         <ItemGroup {...this.props} items={group.items} canvasTimeStart={group.start} canvasTimeEnd={group.start + canvasTimeLength} groupOrders={groupOrders} />
+    //       </div>
+    //     ))}
+    //   </div>
+    // )
   }
 }
 
