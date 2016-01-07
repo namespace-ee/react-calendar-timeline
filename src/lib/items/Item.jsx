@@ -245,6 +245,7 @@ export default class Item extends Component {
   }
 
   onMouseDown = (e) => {
+    e.preventDefault()
     this.startedClicking = true
   };
 
@@ -256,6 +257,7 @@ export default class Item extends Component {
   };
 
   onTouchStart = (e) => {
+    e.preventDefault()
     this.startedTouching = true
   };
 
