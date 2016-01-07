@@ -279,7 +279,8 @@ export default class Item extends Component {
     const classNames = 'rct-item' +
                        (this.props.selected ? ' selected' : '') +
                        (this.canMove(this.props) ? ' can-move' : '') +
-                       (this.canResize(this.props) ? ' can-resize' : '')
+                       (this.canResize(this.props) ? ' can-resize' : '') +
+                       (this.props.item.className ? ` ${this.props.item.className}` : '')
 
     return (
       <div key={this.itemId}

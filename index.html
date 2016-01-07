@@ -13,6 +13,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.0.1/faker.js"></script>
   <link href='dist/react-calendar-timeline.css' rel='stylesheet' type='text/css'>
   <script src="dist/react-calendar-timeline.js"></script>
+  <style>
+    .react-calendar-timeline .rct-item.item-weekend {
+      background: #21F32C;
+      border-color: #29B31A;
+    }
+  </style>
   <script>
     GROUP_COUNT = 30
     ITEM_COUNT = 1000
@@ -36,7 +42,8 @@
         start: moment(startDate).valueOf(),
         end: moment(startDate + faker.random.number({min: 2, max: 20})*15*60*1000).valueOf(),
         canMove: faker.random.boolean(),
-        canResize: faker.random.boolean()
+        canResize: faker.random.boolean(),
+        className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : ''
       })
     }
 
