@@ -544,9 +544,9 @@ export default class ReactCalendarTimeline extends Component {
             <div ref='canvasComponent'
                  className='rct-canvas'
                  style={canvasComponentStyle}>
-              {this.todayLine()}
               {this.verticalLines()}
               {this.horizontalLines()}
+              {this.todayLine()}
               {this.items()}
               {this.infoLabel()}
               {this.header()}
