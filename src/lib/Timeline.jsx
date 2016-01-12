@@ -59,7 +59,7 @@ export default class ReactCalendarTimeline extends Component {
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
-      resizeLength: null
+      resizeEnd: null
     }
   }
 
@@ -107,7 +107,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   touchMove (e) {
-    if (this.state.dragTime || this.state.resizeLength) {
+    if (this.state.dragTime || this.state.resizeEnd) {
       e.preventDefault()
       return
     }
@@ -362,14 +362,14 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  resizingItem (item, newLength) {
-    this.setState({resizeLength: newLength})
+  resizingItem (item, newResizeEnd) {
+    this.setState({resizeEnd: newResizeEnd})
   }
 
-  resizedItem (item, newLength) {
-    this.setState({resizeLength: null})
+  resizedItem (item, newResizeEnd) {
+    this.setState({resizeEnd: null})
     if (this.props.onItemResize) {
-      this.props.onItemResize(item, newLength)
+      this.props.onItemResize(item, newResizeEnd)
     }
   }
 
@@ -439,6 +439,7 @@ export default class ReactCalendarTimeline extends Component {
              canChangeGroup={this.props.canChangeGroup}
              canMove={this.props.canMove}
              canResize={this.props.canResize}
+             moveResizeValidator={this.props.moveResizeValidator}
              itemSelect={this.selectItem.bind(this)}
              itemDrag={this.dragItem.bind(this)}
              itemDrop={this.dropItem.bind(this)}
@@ -452,23 +453,8 @@ export default class ReactCalendarTimeline extends Component {
 
     if (this.state.dragTime) {
       label = `${moment(this.state.dragTime).format('LLL')}, ${this.state.dragGroupTitle}`
-    } else if (this.state.resizeLength) {
-      let minutes = Math.floor(this.state.resizeLength / (60 * 1000))
-      let hours = Math.floor(minutes / 60)
-      let days = Math.floor(hours / 24)
-
-      minutes = minutes % 60
-      hours = hours % 24
-
-      let parts = []
-      if (days > 0) {
-        parts.push(`${days} d`)
-      }
-      if (hours > 0 || days > 0) {
-        parts.push(`${hours} h`)
-      }
-      parts.push(`${minutes < 10 ? '0' : ''}${minutes} min`)
-      label = parts.join(', ')
+    } else if (this.state.resizeEnd) {
+      label = moment(this.state.resizeEnd).format('LLL')
     }
 
     return label ? <InfoLabel label={label} /> : ''
@@ -580,6 +566,8 @@ ReactCalendarTimeline.propTypes = {
   onItemClick: React.PropTypes.func,
   onCanvasClick: React.PropTypes.func,
 
+  moveResizeValidator: React.PropTypes.func,
+
   dayBackground: React.PropTypes.func,
 
   style: React.PropTypes.object,
@@ -615,6 +603,8 @@ ReactCalendarTimeline.defaultProps = {
   onItemResize: null,
   onItemClick: null,
   onCanvasClick: null,
+
+  moveResizeValidator: null,
 
   dayBackground: null,
 

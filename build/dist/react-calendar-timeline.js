@@ -189,7 +189,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      selectedItem: null,
 	      dragTime: null,
 	      dragGroupTitle: null,
-	      resizeLength: null
+	      resizeEnd: null
 	    };
 	    return _this;
 	  }
@@ -245,7 +245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'touchMove',
 	    value: function touchMove(e) {
-	      if (this.state.dragTime || this.state.resizeLength) {
+	      if (this.state.dragTime || this.state.resizeEnd) {
 	        e.preventDefault();
 	        return;
 	      }
@@ -492,7 +492,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'scrollAreaClick',
 	    value: function scrollAreaClick(e) {
 	      // if not clicking on an item
-	      if (e.target.className !== 'timeline-item') {
+	      if (e.target.className.indexOf('rct-item') === -1) {
 	        if (this.state.selectedItem) {
 	          this.selectItem(null);
 	        } else if (this.props.onCanvasClick) {
@@ -529,15 +529,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'resizingItem',
-	    value: function resizingItem(item, newLength) {
-	      this.setState({ resizeLength: newLength });
+	    value: function resizingItem(item, newResizeEnd) {
+	      this.setState({ resizeEnd: newResizeEnd });
 	    }
 	  }, {
 	    key: 'resizedItem',
-	    value: function resizedItem(item, newLength) {
-	      this.setState({ resizeLength: null });
+	    value: function resizedItem(item, newResizeEnd) {
+	      this.setState({ resizeEnd: null });
 	      if (this.props.onItemResize) {
-	        this.props.onItemResize(item, newLength);
+	        this.props.onItemResize(item, newResizeEnd);
 	      }
 	    }
 	  }, {
@@ -604,6 +604,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        canChangeGroup: this.props.canChangeGroup,
 	        canMove: this.props.canMove,
 	        canResize: this.props.canResize,
+	        moveResizeValidator: this.props.moveResizeValidator,
 	        itemSelect: this.selectItem.bind(this),
 	        itemDrag: this.dragItem.bind(this),
 	        itemDrop: this.dropItem.bind(this),
@@ -617,23 +618,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (this.state.dragTime) {
 	        label = (0, _moment2.default)(this.state.dragTime).format('LLL') + ', ' + this.state.dragGroupTitle;
-	      } else if (this.state.resizeLength) {
-	        var minutes = Math.floor(this.state.resizeLength / (60 * 1000));
-	        var hours = Math.floor(minutes / 60);
-	        var days = Math.floor(hours / 24);
-	
-	        minutes = minutes % 60;
-	        hours = hours % 24;
-	
-	        var parts = [];
-	        if (days > 0) {
-	          parts.push(days + ' d');
-	        }
-	        if (hours > 0 || days > 0) {
-	          parts.push(hours + ' h');
-	        }
-	        parts.push('' + (minutes < 10 ? '0' : '') + minutes + ' min');
-	        label = parts.join(', ');
+	      } else if (this.state.resizeEnd) {
+	        label = (0, _moment2.default)(this.state.resizeEnd).format('LLL');
 	      }
 	
 	      return label ? _react2.default.createElement(_InfoLabel2.default, { label: label }) : '';
@@ -757,6 +743,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemClick: _react2.default.PropTypes.func,
 	  onCanvasClick: _react2.default.PropTypes.func,
 	
+	  moveResizeValidator: _react2.default.PropTypes.func,
+	
 	  dayBackground: _react2.default.PropTypes.func,
 	
 	  style: _react2.default.PropTypes.object,
@@ -792,6 +780,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemResize: null,
 	  onItemClick: null,
 	  onCanvasClick: null,
+	
+	  moveResizeValidator: null,
 	
 	  dayBackground: null,
 	
@@ -959,6 +949,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            minResizeWidth: _this2.props.minResizeWidth,
 	            onResizing: _this2.props.itemResizing,
 	            onResized: _this2.props.itemResized,
+	            moveResizeValidator: _this2.props.moveResizeValidator,
 	            onDrag: _this2.props.itemDrag,
 	            onDrop: _this2.props.itemDrop,
 	            onSelect: _this2.props.itemSelect });
@@ -1003,6 +994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  keys: _react2.default.PropTypes.object.isRequired,
 	
+	  moveResizeValidator: _react2.default.PropTypes.func,
 	  itemSelect: _react2.default.PropTypes.func,
 	  itemDrag: _react2.default.PropTypes.func,
 	  itemDrop: _react2.default.PropTypes.func,
@@ -1049,20 +1041,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Item).call(this, props));
 	
-	    _this.onClick = function (e) {
-	      if (_this.props.onSelect) {
+	    _this.onMouseDown = function (e) {
+	      e.preventDefault();
+	      _this.startedClicking = true;
+	    };
+	
+	    _this.onMouseUp = function (e) {
+	      if (_this.startedClicking && _this.props.onSelect) {
+	        _this.startedClicking = false;
 	        _this.props.onSelect(_this.itemId);
 	      }
 	    };
 	
 	    _this.onTouchStart = function (e) {
+	      e.preventDefault();
 	      _this.startedTouching = true;
 	    };
 	
 	    _this.onTouchEnd = function (e) {
 	      if (_this.startedTouching) {
 	        _this.startedTouching = false;
-	        _this.onClick(e);
+	        _this.props.onSelect(_this.itemId);
 	      }
 	    };
 	
@@ -1172,6 +1171,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }).draggable({
 	        enabled: this.props.selected
 	      }).on('dragstart', function (e) {
+	        _this2.startedClicking = false;
+	        _this2.startedTouching = false;
 	        if (_this2.props.selected) {
 	          _this2.setState({
 	            dragging: true,
@@ -1188,6 +1189,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var dragTime = _this2.dragTime(e);
 	          var dragGroupDelta = _this2.dragGroupDelta(e);
 	
+	          if (_this2.props.moveResizeValidator) {
+	            dragTime = _this2.props.moveResizeValidator('move', _this2.state.item, dragTime);
+	          }
+	
 	          if (_this2.props.onDrag) {
 	            _this2.props.onDrag(_this2.itemId, dragTime, _this2.props.order + dragGroupDelta);
 	          }
@@ -1200,7 +1205,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }).on('dragend', function (e) {
 	        if (_this2.state.dragging) {
 	          if (_this2.props.onDrop) {
-	            _this2.props.onDrop(_this2.itemId, _this2.dragTime(e), _this2.props.order + _this2.dragGroupDelta(e));
+	            var dragTime = _this2.dragTime(e);
+	
+	            if (_this2.props.moveResizeValidator) {
+	              dragTime = _this2.props.moveResizeValidator('move', _this2.state.item, dragTime);
+	            }
+	
+	            _this2.props.onDrop(_this2.itemId, dragTime, _this2.props.order + _this2.dragGroupDelta(e));
 	          }
 	
 	          _this2.setState({
@@ -1212,34 +1223,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        }
 	      }).on('resizestart', function (e) {
+	        _this2.startedClicking = false;
+	        _this2.startedTouching = false;
 	        if (_this2.props.selected) {
 	          _this2.setState({
 	            resizing: true,
 	            resizeStart: e.pageX,
-	            resizeTimeDelta: 0
+	            newResizeEnd: 0
 	          });
 	        } else {
 	          return false;
 	        }
 	      }).on('resizemove', function (e) {
 	        if (_this2.state.resizing) {
+	          var newResizeEnd = _this2.dragTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+	
+	          if (_this2.props.moveResizeValidator) {
+	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.state.item, newResizeEnd);
+	          }
+	
 	          if (_this2.props.onResizing) {
-	            _this2.props.onResizing(_this2.itemId, _this2.itemTimeEnd - _this2.itemTimeStart + _this2.resizeTimeDelta(e));
+	            _this2.props.onResizing(_this2.itemId, newResizeEnd);
 	          }
 	
 	          _this2.setState({
-	            resizeTimeDelta: _this2.resizeTimeDelta(e)
+	            newResizeEnd: newResizeEnd
 	          });
 	        }
 	      }).on('resizeend', function (e) {
 	        if (_this2.state.resizing) {
+	          var newResizeEnd = _this2.dragTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+	
+	          if (_this2.props.moveResizeValidator) {
+	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.state.item, newResizeEnd);
+	          }
+	
 	          if (_this2.props.onResized && _this2.resizeTimeDelta(e) !== 0) {
-	            _this2.props.onResized(_this2.itemId, _this2.itemTimeEnd - _this2.itemTimeStart + _this2.resizeTimeDelta(e));
+	            _this2.props.onResized(_this2.itemId, newResizeEnd);
 	          }
 	          _this2.setState({
 	            resizing: null,
 	            resizeStart: null,
-	            resizeTimeDelta: null
+	            newResizeEnd: null
 	          });
 	        }
 	      });
@@ -1298,7 +1323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
 	
 	      var x = this.state.dragging ? this.state.dragTime : this.itemTimeStart;
-	      var w = Math.max(this.itemTimeEnd - this.itemTimeStart + (this.state.resizing ? this.state.resizeTimeDelta : 0), props.dragSnap);
+	      var w = Math.max((this.state.resizing ? this.state.newResizeEnd : this.itemTimeEnd) - this.itemTimeStart, props.dragSnap);
 	      var y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight; // +2 for header
 	      var h = props.lineHeight * 0.65;
 	      var ratio = 1 / this.coordinateToTimeRatio(props);
@@ -1323,7 +1348,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ref: 'item',
 	          className: classNames,
 	          title: this.itemTitle,
-	          onClick: this.onClick,
+	          onMouseDown: this.onMouseDown,
+	          onMouseUp: this.onMouseUp,
 	          onTouchStart: this.onTouchStart,
 	          onTouchEnd: this.onTouchEnd,
 	          style: {

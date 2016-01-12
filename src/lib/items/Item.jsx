@@ -136,8 +136,12 @@ export default class Item extends Component {
       })
       .on('dragmove', (e) => {
         if (this.state.dragging) {
-          const dragTime = this.dragTime(e)
-          const dragGroupDelta = this.dragGroupDelta(e)
+          let dragTime = this.dragTime(e)
+          let dragGroupDelta = this.dragGroupDelta(e)
+
+          if (this.props.moveResizeValidator) {
+            dragTime = this.props.moveResizeValidator('move', this.state.item, dragTime)
+          }
 
           if (this.props.onDrag) {
             this.props.onDrag(this.itemId, dragTime, this.props.order + dragGroupDelta)
@@ -152,7 +156,13 @@ export default class Item extends Component {
       .on('dragend', (e) => {
         if (this.state.dragging) {
           if (this.props.onDrop) {
-            this.props.onDrop(this.itemId, this.dragTime(e), this.props.order + this.dragGroupDelta(e))
+            let dragTime = this.dragTime(e)
+
+            if (this.props.moveResizeValidator) {
+              dragTime = this.props.moveResizeValidator('move', this.state.item, dragTime)
+            }
+
+            this.props.onDrop(this.itemId, dragTime, this.props.order + this.dragGroupDelta(e))
           }
 
           this.setState({
@@ -171,7 +181,7 @@ export default class Item extends Component {
           this.setState({
             resizing: true,
             resizeStart: e.pageX,
-            resizeTimeDelta: 0
+            newResizeEnd: 0
           })
         } else {
           return false
@@ -179,24 +189,36 @@ export default class Item extends Component {
       })
       .on('resizemove', (e) => {
         if (this.state.resizing) {
+          let newResizeEnd = this.dragTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
+
+          if (this.props.moveResizeValidator) {
+            newResizeEnd = this.props.moveResizeValidator('resize', this.state.item, newResizeEnd)
+          }
+
           if (this.props.onResizing) {
-            this.props.onResizing(this.itemId, this.itemTimeEnd - this.itemTimeStart + this.resizeTimeDelta(e))
+            this.props.onResizing(this.itemId, newResizeEnd)
           }
 
           this.setState({
-            resizeTimeDelta: this.resizeTimeDelta(e)
+            newResizeEnd: newResizeEnd
           })
         }
       })
       .on('resizeend', (e) => {
         if (this.state.resizing) {
+          let newResizeEnd = this.dragTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
+
+          if (this.props.moveResizeValidator) {
+            newResizeEnd = this.props.moveResizeValidator('resize', this.state.item, newResizeEnd)
+          }
+
           if (this.props.onResized && this.resizeTimeDelta(e) !== 0) {
-            this.props.onResized(this.itemId, this.itemTimeEnd - this.itemTimeStart + this.resizeTimeDelta(e))
+            this.props.onResized(this.itemId, newResizeEnd)
           }
           this.setState({
             resizing: null,
             resizeStart: null,
-            resizeTimeDelta: null
+            newResizeEnd: null
           })
         }
       })
@@ -270,7 +292,7 @@ export default class Item extends Component {
 
   dimensions (props = this.props) {
     const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart
-    const w = Math.max(this.itemTimeEnd - this.itemTimeStart + (this.state.resizing ? this.state.resizeTimeDelta : 0), props.dragSnap)
+    const w = Math.max((this.state.resizing ? this.state.newResizeEnd : this.itemTimeEnd) - this.itemTimeStart, props.dragSnap)
     const y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight // +2 for header
     const h = props.lineHeight * 0.65
     const ratio = 1 / this.coordinateToTimeRatio(props)

@@ -89,6 +89,7 @@ export default class Items extends Component {
                                         minResizeWidth={this.props.minResizeWidth}
                                         onResizing={this.props.itemResizing}
                                         onResized={this.props.itemResized}
+                                        moveResizeValidator={this.props.moveResizeValidator}
                                         onDrag={this.props.itemDrag}
                                         onDrop={this.props.itemDrop}
                                         onSelect={this.props.itemSelect}/>)}
@@ -128,6 +129,7 @@ Items.propTypes = {
 
   keys: React.PropTypes.object.isRequired,
 
+  moveResizeValidator: React.PropTypes.func,
   itemSelect: React.PropTypes.func,
   itemDrag: React.PropTypes.func,
   itemDrop: React.PropTypes.func,
