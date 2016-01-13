@@ -1190,7 +1190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var dragGroupDelta = _this2.dragGroupDelta(e);
 	
 	          if (_this2.props.moveResizeValidator) {
-	            dragTime = _this2.props.moveResizeValidator('move', _this2.state.item, dragTime);
+	            dragTime = _this2.props.moveResizeValidator('move', _this2.props.item, dragTime);
 	          }
 	
 	          if (_this2.props.onDrag) {
@@ -1208,7 +1208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var dragTime = _this2.dragTime(e);
 	
 	            if (_this2.props.moveResizeValidator) {
-	              dragTime = _this2.props.moveResizeValidator('move', _this2.state.item, dragTime);
+	              dragTime = _this2.props.moveResizeValidator('move', _this2.props.item, dragTime);
 	            }
 	
 	            _this2.props.onDrop(_this2.itemId, dragTime, _this2.props.order + _this2.dragGroupDelta(e));
@@ -1239,7 +1239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var newResizeEnd = _this2.dragTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
 	
 	          if (_this2.props.moveResizeValidator) {
-	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.state.item, newResizeEnd);
+	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
 	          }
 	
 	          if (_this2.props.onResizing) {
@@ -1255,7 +1255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var newResizeEnd = _this2.dragTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
 	
 	          if (_this2.props.moveResizeValidator) {
-	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.state.item, newResizeEnd);
+	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
 	          }
 	
 	          if (_this2.props.onResized && _this2.resizeTimeDelta(e) !== 0) {

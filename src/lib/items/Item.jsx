@@ -140,7 +140,7 @@ export default class Item extends Component {
           let dragGroupDelta = this.dragGroupDelta(e)
 
           if (this.props.moveResizeValidator) {
-            dragTime = this.props.moveResizeValidator('move', this.state.item, dragTime)
+            dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
           }
 
           if (this.props.onDrag) {
@@ -159,7 +159,7 @@ export default class Item extends Component {
             let dragTime = this.dragTime(e)
 
             if (this.props.moveResizeValidator) {
-              dragTime = this.props.moveResizeValidator('move', this.state.item, dragTime)
+              dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
             }
 
             this.props.onDrop(this.itemId, dragTime, this.props.order + this.dragGroupDelta(e))
@@ -192,7 +192,7 @@ export default class Item extends Component {
           let newResizeEnd = this.dragTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
 
           if (this.props.moveResizeValidator) {
-            newResizeEnd = this.props.moveResizeValidator('resize', this.state.item, newResizeEnd)
+            newResizeEnd = this.props.moveResizeValidator('resize', this.props.item, newResizeEnd)
           }
 
           if (this.props.onResizing) {
@@ -209,7 +209,7 @@ export default class Item extends Component {
           let newResizeEnd = this.dragTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
 
           if (this.props.moveResizeValidator) {
-            newResizeEnd = this.props.moveResizeValidator('resize', this.state.item, newResizeEnd)
+            newResizeEnd = this.props.moveResizeValidator('resize', this.props.item, newResizeEnd)
           }
 
           if (this.props.onResized && this.resizeTimeDelta(e) !== 0) {
