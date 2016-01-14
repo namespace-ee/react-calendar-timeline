@@ -120,8 +120,6 @@ export default class Item extends Component {
         enabled: this.props.selected
       })
       .on('dragstart', (e) => {
-        this.startedClicking = false
-        this.startedTouching = false
         if (this.props.selected) {
           this.setState({
             dragging: true,
@@ -175,8 +173,6 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', (e) => {
-        this.startedClicking = false
-        this.startedTouching = false
         if (this.props.selected) {
           this.setState({
             resizing: true,
@@ -222,6 +218,9 @@ export default class Item extends Component {
           })
         }
       })
+      .on('tap', (e) => {
+        this.actualClick(e)
+      })
 
     this.setState({
       interactMounted: true
@@ -250,10 +249,8 @@ export default class Item extends Component {
     const willBeAbleToResize = nextProps.selected && this.canResize(nextProps)
 
     if (nextProps.selected && !interactMounted) {
-      if (willBeAbleToResize || willBeAbleToDrag) {
-        this.mountInteract()
-        interactMounted = true
-      }
+      this.mountInteract()
+      interactMounted = true
     }
 
     if (interactMounted && couldResize !== willBeAbleToResize) {
@@ -267,28 +264,38 @@ export default class Item extends Component {
   }
 
   onMouseDown = (e) => {
-    e.preventDefault()
-    this.startedClicking = true
+    if (!this.state.interactMounted) {
+      e.preventDefault()
+      this.startedClicking = true
+    }
   };
 
   onMouseUp = (e) => {
-    if (this.startedClicking && this.props.onSelect) {
+    if (!this.state.interactMounted && this.startedClicking) {
       this.startedClicking = false
-      this.props.onSelect(this.itemId)
+      this.actualClick(e)
     }
   };
 
   onTouchStart = (e) => {
-    e.preventDefault()
-    this.startedTouching = true
+    if (!this.state.interactMounted) {
+      e.preventDefault()
+      this.startedTouching = true
+    }
   };
 
   onTouchEnd = (e) => {
-    if (this.startedTouching) {
+    if (!this.state.interactMounted && this.startedTouching) {
       this.startedTouching = false
-      this.props.onSelect(this.itemId)
+      this.actualClick(e)
     }
   };
+
+  actualClick (e) {
+    if (this.props.onSelect) {
+      this.props.onSelect(this.itemId)
+    }
+  }
 
   dimensions (props = this.props) {
     const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart
