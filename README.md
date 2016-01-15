@@ -1,27 +1,7 @@
-# react calendar timeline
+# React Calendar Timeline
 
-Get the AMD module located at `react-calendar-timeline.js` and include it in your project.
+![calendar demo](https://raw.githubusercontent.com/namespace-ee/react-calendar-timeline/master/doc/demo.gif)
 
-Here is a sample integration:
+Check the index.html file to see how to use the component.
 
-```js
-require.config({
-  paths: {
-    'react': 'vendor/bower_components/react/react',
-    'ReactCalendarTimeline': 'react-calendar-timeline'
-  }
-});
-
-require(['react', 'ReactCalendarTimeline'], function(React, ReactCalendarTimeline) {
-
-  React.render(React.createElement(ReactCalendarTimeline), document.getElementById('widget-container'));
-
-});
-```
-
-## Development
-
-* Development server `npm start`.
-* Continuously run tests on file changes `npm run watch-test`;
-* Run tests: `npm test`;
-* Build `npm run build`;
+Proper documentation coming later.
