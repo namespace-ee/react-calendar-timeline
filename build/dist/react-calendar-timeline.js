@@ -393,6 +393,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
 	        var xPosition = e.clientX - parentPosition.x;
 	        this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width);
+	      } else if (e.shiftKey) {
+	        e.preventDefault();
+	        var scrollComponent = this.refs.scrollComponent;
+	        scrollComponent.scrollLeft += e.deltaY;
 	      } else {
 	        if (this.props.fixedHeader === 'fixed') {
 	          e.preventDefault();
@@ -1042,26 +1046,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Item).call(this, props));
 	
 	    _this.onMouseDown = function (e) {
-	      e.preventDefault();
-	      _this.startedClicking = true;
+	      if (!_this.state.interactMounted) {
+	        e.preventDefault();
+	        _this.startedClicking = true;
+	      }
 	    };
 	
 	    _this.onMouseUp = function (e) {
-	      if (_this.startedClicking && _this.props.onSelect) {
+	      if (!_this.state.interactMounted && _this.startedClicking) {
 	        _this.startedClicking = false;
-	        _this.props.onSelect(_this.itemId);
+	        _this.actualClick(e);
 	      }
 	    };
 	
 	    _this.onTouchStart = function (e) {
-	      e.preventDefault();
-	      _this.startedTouching = true;
+	      if (!_this.state.interactMounted) {
+	        e.preventDefault();
+	        _this.startedTouching = true;
+	      }
 	    };
 	
 	    _this.onTouchEnd = function (e) {
-	      if (_this.startedTouching) {
+	      if (!_this.state.interactMounted && _this.startedTouching) {
 	        _this.startedTouching = false;
-	        _this.props.onSelect(_this.itemId);
+	        _this.actualClick(e);
 	      }
 	    };
 	
@@ -1171,8 +1179,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }).draggable({
 	        enabled: this.props.selected
 	      }).on('dragstart', function (e) {
-	        _this2.startedClicking = false;
-	        _this2.startedTouching = false;
 	        if (_this2.props.selected) {
 	          _this2.setState({
 	            dragging: true,
@@ -1223,8 +1229,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        }
 	      }).on('resizestart', function (e) {
-	        _this2.startedClicking = false;
-	        _this2.startedTouching = false;
 	        if (_this2.props.selected) {
 	          _this2.setState({
 	            resizing: true,
@@ -1267,6 +1271,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            newResizeEnd: null
 	          });
 	        }
+	      }).on('tap', function (e) {
+	        _this2.actualClick(e);
 	      });
 	
 	      this.setState({
@@ -1304,10 +1310,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var willBeAbleToResize = nextProps.selected && this.canResize(nextProps);
 	
 	      if (nextProps.selected && !interactMounted) {
-	        if (willBeAbleToResize || willBeAbleToDrag) {
-	          this.mountInteract();
-	          interactMounted = true;
-	        }
+	        this.mountInteract();
+	        interactMounted = true;
 	      }
 	
 	      if (interactMounted && couldResize !== willBeAbleToResize) {
@@ -1315,6 +1319,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      if (interactMounted && couldDrag !== willBeAbleToDrag) {
 	        (0, _interact2.default)(this.refs.item).draggable({ enabled: willBeAbleToDrag });
+	      }
+	    }
+	  }, {
+	    key: 'actualClick',
+	    value: function actualClick(e) {
+	      if (this.props.onSelect) {
+	        this.props.onSelect(this.itemId);
 	      }
 	    }
 	  }, {
