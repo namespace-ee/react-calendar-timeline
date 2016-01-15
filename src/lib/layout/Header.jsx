@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 
 import { iterateTimes, getNextUnit } from '../utils.js'
 
@@ -7,8 +8,14 @@ export default class Header extends Component {
     super(props)
     this.state = {
       scrollTop: 0,
-      componentTop: 0
+      componentTop: 0,
+      touchTarget: null,
+      touchActive: false
     }
+
+    this.periodClick = this.periodClick.bind(this)
+    this.touchStart = this.touchStart.bind(this)
+    this.touchEnd = this.touchEnd.bind(this)
   }
 
   scroll (e) {
@@ -76,8 +83,42 @@ export default class Header extends Component {
     }
   }
 
-  periodClick (time, unit) {
-    this.props.showPeriod(time, unit)
+  periodClick (e) {
+    const {time, unit} = e.target.dataset
+    this.props.showPeriod(moment(time - 0), unit)
+  }
+
+  touchStart (e) {
+    if (e.touches.length === 1) {
+      this.setState({
+        touchTarget: e.target || e.touchTarget,
+        touchActive: true
+      })
+    }
+  }
+
+  touchEnd (e) {
+    if (!this.state.touchActive) {
+      return this.resetTouchState()
+    }
+
+    var changedTouches = e.changedTouches[0]
+    if (changedTouches) {
+      var elem = document.elementFromPoint(changedTouches.pageX, changedTouches.pageY)
+      if (elem !== this.state.touchTarget) {
+        return this.resetTouchState()
+      }
+    }
+
+    this.resetTouchState()
+    this.periodClick(e)
+  }
+
+  resetTouchState () {
+    this.setState({
+      touchTarget: null,
+      touchActive: false
+    })
   }
 
   render () {
@@ -106,13 +147,17 @@ export default class Header extends Component {
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
-               onClick={this.periodClick.bind(this, time, nextUnit)}
+               href='#'
                className='rct-label-group'
+               data-time={time}
+               data-unit={nextUnit}
                style={{
                  left: `${left + leftCorrect}px`,
                  width: `${labelWidth}px`,
                  height: `${lineHeight}px`,
-                 lineHeight: `${lineHeight}px`}}>
+                 lineHeight: `${lineHeight}px`,
+                 cursor: 'pointer'
+               }}>
             {this.headerLabel(time, nextUnit, labelWidth)}
           </div>
         )
@@ -129,15 +174,19 @@ export default class Header extends Component {
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
-             onClick={this.periodClick.bind(this, time, minUnit)}
+             href='#'
              className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${firstOfType ? 'rct-first-of-type' : ''} `}
+             data-time={time}
+             data-unit={minUnit}
              style={{
                top: `${minUnit === 'year' ? 0 : lineHeight}px`,
                left: `${left + leftCorrect}px`,
                width: `${labelWidth}px`,
                height: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
                lineHeight: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
-               fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'}}>
+               fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
+               cursor: 'pointer'
+             }}>
           {this.subHeaderLabel(time, minUnit, labelWidth)}
         </div>
       )
@@ -165,7 +214,7 @@ export default class Header extends Component {
     }
 
     return (
-      <div ref='header' key='header' className='rct-header' style={headerStyle}>
+      <div ref='header' key='header' className='rct-header' onTouchStart={this.touchStart} onTouchEnd={this.touchEnd} onClick={this.periodClick} style={headerStyle}>
         {timeLabels}
       </div>
     )
