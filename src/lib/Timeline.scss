@@ -84,6 +84,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       color: $header-color;
       background: $header-background-color;
       border-bottom: $border-width solid $border-color;
+      cursor: pointer;
     }
 
     .rct-label {
@@ -95,6 +96,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       color: $lower-header-color;
       background: $lower-header-background-color;
       border-bottom: $border-width solid $border-color;
+      cursor: pointer;
 
       &.rct-label-only {
         color: $header-color;

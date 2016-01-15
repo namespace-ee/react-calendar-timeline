@@ -46,7 +46,8 @@
     border-left: 2px solid #bbb;
     color: #ffffff;
     background: #c52020;
-    border-bottom: 1px solid #bbb; }
+    border-bottom: 1px solid #bbb;
+    cursor: pointer; }
   .react-calendar-timeline .rct-header .rct-label {
     position: absolute;
     overflow: hidden;
@@ -55,7 +56,8 @@
     border-left: 1px solid #bbb;
     color: #333333;
     background: #f0f0f0;
-    border-bottom: 1px solid #bbb; }
+    border-bottom: 1px solid #bbb;
+    cursor: pointer; }
     .react-calendar-timeline .rct-header .rct-label.rct-label-only {
       color: #ffffff;
       background: #c52020; }
