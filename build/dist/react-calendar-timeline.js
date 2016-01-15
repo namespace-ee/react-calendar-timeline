@@ -1867,6 +1867,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _moment = __webpack_require__(3);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
 	var _utils = __webpack_require__(11);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1887,8 +1891,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _this.state = {
 	      scrollTop: 0,
-	      componentTop: 0
+	      componentTop: 0,
+	      touchTarget: null,
+	      touchActive: false
 	    };
+	
+	    _this.periodClick = _this.periodClick.bind(_this);
+	    _this.touchStart = _this.touchStart.bind(_this);
+	    _this.touchEnd = _this.touchEnd.bind(_this);
 	    return _this;
 	  }
 	
@@ -1968,8 +1978,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'periodClick',
-	    value: function periodClick(time, unit) {
-	      this.props.showPeriod(time, unit);
+	    value: function periodClick(e) {
+	      var _e$target$dataset = e.target.dataset;
+	      var time = _e$target$dataset.time;
+	      var unit = _e$target$dataset.unit;
+	
+	      this.props.showPeriod((0, _moment2.default)(time - 0), unit);
+	    }
+	  }, {
+	    key: 'touchStart',
+	    value: function touchStart(e) {
+	      if (e.touches.length === 1) {
+	        this.setState({
+	          touchTarget: e.target || e.touchTarget,
+	          touchActive: true
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'touchEnd',
+	    value: function touchEnd(e) {
+	      if (!this.state.touchActive) {
+	        return this.resetTouchState();
+	      }
+	
+	      var changedTouches = e.changedTouches[0];
+	      if (changedTouches) {
+	        var elem = document.elementFromPoint(changedTouches.pageX, changedTouches.pageY);
+	        if (elem !== this.state.touchTarget) {
+	          return this.resetTouchState();
+	        }
+	      }
+	
+	      this.resetTouchState();
+	      this.periodClick(e);
+	    }
+	  }, {
+	    key: 'resetTouchState',
+	    value: function resetTouchState() {
+	      this.setState({
+	        touchTarget: null,
+	        touchActive: false
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -2007,13 +2057,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            timeLabels.push(_react2.default.createElement(
 	              'div',
 	              { key: 'top-label-' + time.valueOf(),
-	                onClick: _this3.periodClick.bind(_this3, time, nextUnit),
+	                href: '#',
 	                className: 'rct-label-group',
+	                'data-time': time,
+	                'data-unit': nextUnit,
 	                style: {
 	                  left: left + leftCorrect + 'px',
 	                  width: labelWidth + 'px',
 	                  height: lineHeight + 'px',
-	                  lineHeight: lineHeight + 'px' } },
+	                  lineHeight: lineHeight + 'px',
+	                  cursor: 'pointer'
+	                } },
 	              _this3.headerLabel(time, nextUnit, labelWidth)
 	            ));
 	          });
@@ -2031,15 +2085,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        timeLabels.push(_react2.default.createElement(
 	          'div',
 	          { key: 'label-' + time.valueOf(),
-	            onClick: _this3.periodClick.bind(_this3, time, minUnit),
+	            href: '#',
 	            className: 'rct-label ' + (twoHeaders ? '' : 'rct-label-only') + ' ' + (firstOfType ? 'rct-first-of-type' : '') + ' ',
+	            'data-time': time,
+	            'data-unit': minUnit,
 	            style: {
 	              top: (minUnit === 'year' ? 0 : lineHeight) + 'px',
 	              left: left + leftCorrect + 'px',
 	              width: labelWidth + 'px',
 	              height: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
 	              lineHeight: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
-	              fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10' } },
+	              fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
+	              cursor: 'pointer'
+	            } },
 	          _this3.subHeaderLabel(time, minUnit, labelWidth)
 	        ));
 	      });
@@ -2067,7 +2125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { ref: 'header', key: 'header', className: 'rct-header', style: headerStyle },
+	        { ref: 'header', key: 'header', className: 'rct-header', onTouchStart: this.touchStart, onTouchEnd: this.touchEnd, onClick: this.periodClick, style: headerStyle },
 	        timeLabels
 	      );
 	    }
