@@ -219,7 +219,7 @@ export default class Item extends Component {
         }
       })
       .on('tap', (e) => {
-        this.actualClick(e)
+        this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
       })
 
     this.setState({
@@ -273,7 +273,7 @@ export default class Item extends Component {
   onMouseUp = (e) => {
     if (!this.state.interactMounted && this.startedClicking) {
       this.startedClicking = false
-      this.actualClick(e)
+      this.actualClick(e, 'click')
     }
   };
 
@@ -287,13 +287,13 @@ export default class Item extends Component {
   onTouchEnd = (e) => {
     if (!this.state.interactMounted && this.startedTouching) {
       this.startedTouching = false
-      this.actualClick(e)
+      this.actualClick(e, 'touch')
     }
   };
 
-  actualClick (e) {
+  actualClick (e, clickType) {
     if (this.props.onSelect) {
-      this.props.onSelect(this.itemId)
+      this.props.onSelect(this.itemId, clickType)
     }
   }
 

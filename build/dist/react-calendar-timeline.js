@@ -1055,7 +1055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.onMouseUp = function (e) {
 	      if (!_this.state.interactMounted && _this.startedClicking) {
 	        _this.startedClicking = false;
-	        _this.actualClick(e);
+	        _this.actualClick(e, 'click');
 	      }
 	    };
 	
@@ -1069,7 +1069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.onTouchEnd = function (e) {
 	      if (!_this.state.interactMounted && _this.startedTouching) {
 	        _this.startedTouching = false;
-	        _this.actualClick(e);
+	        _this.actualClick(e, 'touch');
 	      }
 	    };
 	
@@ -1272,7 +1272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        }
 	      }).on('tap', function (e) {
-	        _this2.actualClick(e);
+	        _this2.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch');
 	      });
 	
 	      this.setState({
@@ -1323,9 +1323,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'actualClick',
-	    value: function actualClick(e) {
+	    value: function actualClick(e, clickType) {
 	      if (this.props.onSelect) {
-	        this.props.onSelect(this.itemId);
+	        this.props.onSelect(this.itemId, clickType);
 	      }
 	    }
 	  }, {
