@@ -311,8 +311,8 @@ export default class ReactCalendarTimeline extends Component {
     this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom)
   }
 
-  selectItem (item) {
-    if (this.state.selectedItem === item) {
+  selectItem (item, clickType) {
+    if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
         this.props.onItemClick(item)
       }
@@ -565,6 +565,8 @@ ReactCalendarTimeline.propTypes = {
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
 
+  itemTouchSendsClick: React.PropTypes.bool,
+
   onItemMove: React.PropTypes.func,
   onItemResize: React.PropTypes.func,
   onItemClick: React.PropTypes.func,
@@ -614,6 +616,8 @@ ReactCalendarTimeline.defaultProps = {
 
   defaultTimeStart: null,
   defaultTimeEnd: null,
+
+  itemTouchSendsClick: false,
 
   style: {},
   keys: defaultKeys,

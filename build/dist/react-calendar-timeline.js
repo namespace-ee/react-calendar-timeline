@@ -462,8 +462,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'selectItem',
-	    value: function selectItem(item) {
-	      if (this.state.selectedItem === item) {
+	    value: function selectItem(item, clickType) {
+	      if (this.state.selectedItem === item || this.props.itemTouchSendsClick && clickType === 'touch') {
 	        if (item && this.props.onItemClick) {
 	          this.props.onItemClick(item);
 	        }
@@ -742,6 +742,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  canMove: _react2.default.PropTypes.bool,
 	  canResize: _react2.default.PropTypes.bool,
 	
+	  itemTouchSendsClick: _react2.default.PropTypes.bool,
+	
 	  onItemMove: _react2.default.PropTypes.func,
 	  onItemResize: _react2.default.PropTypes.func,
 	  onItemClick: _react2.default.PropTypes.func,
@@ -791,6 +793,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  defaultTimeStart: null,
 	  defaultTimeEnd: null,
+	
+	  itemTouchSendsClick: false,
 	
 	  style: {},
 	  keys: defaultKeys,
