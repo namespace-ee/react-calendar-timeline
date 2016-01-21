@@ -1954,9 +1954,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else if (unit === 'month') {
 	        return time.format(width < 65 ? 'MM/YY' : width < 75 ? 'MM/YYYY' : width < 120 ? 'MMM YYYY' : 'MMMM YYYY');
 	      } else if (unit === 'day') {
-	        return time.format(width < 150 ? 'L' : 'LL');
+	        return time.format(width < 150 ? 'L' : 'dddd, LL');
 	      } else if (unit === 'hour') {
-	        return time.format(width < 50 ? 'HH' : width < 130 ? 'HH:00' : width < 150 ? 'L, HH:00' : 'LL, HH:00');
+	        return time.format(width < 50 ? 'HH' : width < 130 ? 'HH:00' : width < 150 ? 'L, HH:00' : 'dddd, LL, HH:00');
 	      } else {
 	        return time.format('LLL');
 	      }
@@ -1969,7 +1969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else if (unit === 'month') {
 	        return time.format(width < 37 ? 'MM' : width < 85 ? 'MMM' : 'MMMM');
 	      } else if (unit === 'day') {
-	        return time.format(width < 42 ? 'D' : 'Do');
+	        return time.format(width < 42 ? 'D' : width < 80 ? 'Do' : width < 120 ? 'ddd, Do' : 'dddd, Do');
 	      } else if (unit === 'hour') {
 	        return time.format(width < 50 ? 'HH' : 'HH:00');
 	      } else {
