@@ -75,7 +75,7 @@ export default class Header extends Component {
     } else if (unit === 'month') {
       return time.format(width < 37 ? 'MM' : width < 85 ? 'MMM' : 'MMMM')
     } else if (unit === 'day') {
-      return time.format(width < 42 ? 'D' : width < 80 ? 'Do' : width < 120 ? 'ddd, Do' : 'dddd, Do')
+      return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do')
     } else if (unit === 'hour') {
       return time.format(width < 50 ? 'HH' : 'HH:00')
     } else {
