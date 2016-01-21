@@ -17,7 +17,7 @@
     "postversion": "git push origin `git rev-parse --abbrev-ref HEAD` && git push origin `git describe`",
     "npm:publish:next": "npm run release && cd build && npm publish --tag next",
     "npm:publish:latest": "npm run release && cd build && npm publish",
-    "info": "npm info react-stockcharts",
+    "info": "npm info react-calendar-timeline",
     "start": "webpack-dev-server --inline --hot --host 0.0.0.0"
   },
   "author": "Marius Andra <marius.andra@gmail.com>",
