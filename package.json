@@ -20,6 +20,11 @@
     "info": "npm info react-calendar-timeline",
     "start": "webpack-dev-server --inline --hot --host 0.0.0.0"
   },
+  "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/namespace-ee/react-calendar-timeline.git"
+  },
   "author": "Marius Andra <marius.andra@gmail.com>",
   "license": "MIT",
   "keywords": [
