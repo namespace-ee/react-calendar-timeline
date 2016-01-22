@@ -54,6 +54,9 @@
 
     items = items.sort(function(a, b) { return b - a; })
 
+    var minTime = moment().add(-6, 'months').valueOf()
+    var maxTime = moment().add(6, 'months').valueOf()
+
     var props = {
       groups: groups,
       items: items,
@@ -87,6 +90,19 @@
         }
 
         return time
+      },
+
+      // this limits the timeline to -6 months ... +6 months
+      onTimeChange: function (visibleTimeStart, visibleTimeEnd) {
+        if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
+          this.updateScrollCanvas(minTime, maxTime)
+        } else if (visibleTimeStart < minTime) {
+          this.updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+        } else if (visibleTimeEnd > maxTime) {
+          this.updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+        } else {
+          this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+        }
       }
     }
 
