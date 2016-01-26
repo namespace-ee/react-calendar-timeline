@@ -10,7 +10,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Item = require('./Item.jsx');
+var _Item = require('./Item');
 
 var _Item2 = _interopRequireDefault(_Item);
 

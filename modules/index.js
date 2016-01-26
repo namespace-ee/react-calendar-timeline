@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Timeline = require('./lib/Timeline.jsx');
+var _Timeline = require('./lib/Timeline');
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 

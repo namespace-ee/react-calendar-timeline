@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Item from './Item.jsx'
-// import ItemGroup from './ItemGroup.jsx'
+import Item from './Item'
+// import ItemGroup from './ItemGroup'
 
 import { _get, arraysEqual } from '../utils'
 

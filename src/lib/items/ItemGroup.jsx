@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Item from './Item.jsx'
+import Item from './Item'
 
 import { _get, arraysEqual } from '../utils'
 

@@ -18,31 +18,31 @@ var _moment2 = _interopRequireDefault(_moment);
 
 require('./Timeline.scss');
 
-var _Items = require('./items/Items.jsx');
+var _Items = require('./items/Items');
 
 var _Items2 = _interopRequireDefault(_Items);
 
-var _InfoLabel = require('./layout/InfoLabel.jsx');
+var _InfoLabel = require('./layout/InfoLabel');
 
 var _InfoLabel2 = _interopRequireDefault(_InfoLabel);
 
-var _Sidebar = require('./layout/Sidebar.jsx');
+var _Sidebar = require('./layout/Sidebar');
 
 var _Sidebar2 = _interopRequireDefault(_Sidebar);
 
-var _Header = require('./layout/Header.jsx');
+var _Header = require('./layout/Header');
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _VerticalLines = require('./lines/VerticalLines.jsx');
+var _VerticalLines = require('./lines/VerticalLines');
 
 var _VerticalLines2 = _interopRequireDefault(_VerticalLines);
 
-var _HorizontalLines = require('./lines/HorizontalLines.jsx');
+var _HorizontalLines = require('./lines/HorizontalLines');
 
 var _HorizontalLines2 = _interopRequireDefault(_HorizontalLines);
 
-var _TodayLine = require('./lines/TodayLine.jsx');
+var _TodayLine = require('./lines/TodayLine');
 
 var _TodayLine2 = _interopRequireDefault(_TodayLine);
 
