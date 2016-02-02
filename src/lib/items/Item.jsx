@@ -313,6 +313,10 @@ export default class Item extends Component {
   }
 
   render () {
+    if (typeof this.props.order === 'undefined' || this.props.order === null) {
+      return null
+    }
+
     const dimensions = this.dimensions()
 
     const classNames = 'rct-item' +
