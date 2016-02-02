@@ -125,7 +125,8 @@ export default class Header extends Component {
     let timeLabels = []
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
-      visibleTimeStart, visibleTimeEnd, minUnit, fixedHeader
+      visibleTimeStart, visibleTimeEnd, minUnit, fixedHeader,
+      headerLabelGroupHeight, headerLabelHeight
     } = this.props
     const {
       scrollTop
@@ -154,8 +155,8 @@ export default class Header extends Component {
                style={{
                  left: `${left + leftCorrect}px`,
                  width: `${labelWidth}px`,
-                 height: `${lineHeight}px`,
-                 lineHeight: `${lineHeight}px`,
+                 height: `${headerLabelGroupHeight}px`,
+                 lineHeight: `${headerLabelGroupHeight}px`,
                  cursor: 'pointer'
                }}>
             {this.headerLabel(time, nextUnit, labelWidth)}
@@ -179,11 +180,11 @@ export default class Header extends Component {
              data-time={time}
              data-unit={minUnit}
              style={{
-               top: `${minUnit === 'year' ? 0 : lineHeight}px`,
+               top: `${minUnit === 'year' ? 0 : headerLabelGroupHeight}px`,
                left: `${left + leftCorrect}px`,
                width: `${labelWidth}px`,
-               height: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
-               lineHeight: `${(minUnit === 'year' ? 2 : 1) * lineHeight}px`,
+               height: `${(minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight)}px`,
+               lineHeight: `${(minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight)}px`,
                fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
                cursor: 'pointer'
              }}>
@@ -195,7 +196,7 @@ export default class Header extends Component {
     const { zIndex } = this.props
 
     let headerStyle = {
-      height: `${lineHeight * 2}px`,
+      height: `${headerLabelGroupHeight + headerLabelHeight}px`,
       lineHeight: `${lineHeight}px`
     }
 

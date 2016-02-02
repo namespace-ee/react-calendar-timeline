@@ -42,7 +42,7 @@ var Sidebar = function (_Component) {
         return true;
       }
 
-      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && nextProps.keys === this.props.keys && nextProps.width === this.props.width && nextProps.lineHeight === this.props.lineHeight && nextProps.fixedHeader === this.props.fixedHeader && nextProps.zIndex === this.props.zIndex);
+      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && nextProps.keys === this.props.keys && nextProps.width === this.props.width && nextProps.lineHeight === this.props.lineHeight && nextProps.fixedHeader === this.props.fixedHeader && nextProps.zIndex === this.props.zIndex && nextProps.groupHeights === this.props.groupHeights && nextProps.height === this.props.height);
     }
   }, {
     key: 'scroll',
@@ -97,6 +97,9 @@ var Sidebar = function (_Component) {
       var lineHeight = _props.lineHeight;
       var zIndex = _props.zIndex;
       var groups = _props.groups;
+      var groupHeights = _props.groupHeights;
+      var height = _props.height;
+      var headerHeight = _props.headerHeight;
       var _props$keys = this.props.keys;
       var groupIdKey = _props$keys.groupIdKey;
       var groupTitleKey = _props$keys.groupTitleKey;
@@ -104,22 +107,17 @@ var Sidebar = function (_Component) {
 
       var sidebarStyle = {
         width: width + 'px',
-        height: lineHeight * ((0, _utils._length)(groups) + 2) + 'px'
+        height: height + 'px'
       };
 
       var headerStyle = {
-        height: lineHeight * 2 + 'px',
+        height: headerHeight + 'px',
         lineHeight: lineHeight + 'px',
         width: width + 'px'
       };
 
       var groupsStyle = {
         width: width + 'px'
-      };
-
-      var elementStyle = {
-        height: lineHeight - 1 + 'px',
-        lineHeight: lineHeight - 1 + 'px'
       };
 
       if (fixedHeader === 'fixed') {
@@ -145,7 +143,12 @@ var Sidebar = function (_Component) {
       var groupLines = [];
       var i = 0;
 
-      this.props.groups.forEach(function (group) {
+      this.props.groups.forEach(function (group, index) {
+        var elementStyle = {
+          height: groupHeights[index] - 1 + 'px',
+          lineHeight: groupHeights[index] - 1 + 'px'
+        };
+
         groupLines.push(_react2.default.createElement(
           'div',
           { key: (0, _utils._get)(group, groupIdKey), className: 'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd'), style: elementStyle },

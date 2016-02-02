@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Item from './Item'
+import {keyBy} from 'lodash'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual } from '../utils'
+import { _get, arraysEqual, stack } from '../utils'
 
 export default class Items extends Component {
   constructor (props) {
@@ -22,7 +23,8 @@ export default class Items extends Component {
              nextProps.minResizeWidth === this.props.minResizeWidth &&
              nextProps.canChangeGroup === this.props.canChangeGroup &&
              nextProps.canMove === this.props.canMove &&
-             nextProps.canResize === this.props.canResize)
+             nextProps.canResize === this.props.canResize &&
+             nextProps.dimensionItems === this.props.dimensionItems)
   }
 
   getGroupOrders () {
@@ -46,7 +48,7 @@ export default class Items extends Component {
   }
 
   render () {
-    const { canvasTimeStart, canvasTimeEnd } = this.props
+    const { canvasTimeStart, canvasTimeEnd, dimensionItems } = this.props
     const { itemIdKey, itemGroupKey } = this.props.keys
 
     const groupOrders = this.getGroupOrders()
@@ -77,10 +79,13 @@ export default class Items extends Component {
                                         item={item}
                                         keys={this.props.keys}
                                         order={groupOrders[_get(item, itemGroupKey)]}
+                                        dimensions={dimensionItems[_get(item, itemIdKey)].dimensions}
                                         selected={this.props.selectedItem === _get(item, itemIdKey)}
                                         canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
                                         canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
                                         canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
+                                        groupHeights={this.props.groupHeights}
+                                        groupTops={this.props.groupTops}
                                         canvasTimeStart={this.props.canvasTimeStart}
                                         canvasTimeEnd={this.props.canvasTimeEnd}
                                         canvasWidth={this.props.canvasWidth}

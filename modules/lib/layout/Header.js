@@ -179,6 +179,8 @@ var Header = function (_Component) {
       var visibleTimeEnd = _props.visibleTimeEnd;
       var minUnit = _props.minUnit;
       var fixedHeader = _props.fixedHeader;
+      var headerLabelGroupHeight = _props.headerLabelGroupHeight;
+      var headerLabelHeight = _props.headerLabelHeight;
       var scrollTop = this.state.scrollTop;
 
       var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
@@ -207,8 +209,8 @@ var Header = function (_Component) {
                 style: {
                   left: left + leftCorrect + 'px',
                   width: labelWidth + 'px',
-                  height: lineHeight + 'px',
-                  lineHeight: lineHeight + 'px',
+                  height: headerLabelGroupHeight + 'px',
+                  lineHeight: headerLabelGroupHeight + 'px',
                   cursor: 'pointer'
                 } },
               _this3.headerLabel(time, nextUnit, labelWidth)
@@ -233,11 +235,11 @@ var Header = function (_Component) {
             'data-time': time,
             'data-unit': minUnit,
             style: {
-              top: (minUnit === 'year' ? 0 : lineHeight) + 'px',
+              top: (minUnit === 'year' ? 0 : headerLabelGroupHeight) + 'px',
               left: left + leftCorrect + 'px',
               width: labelWidth + 'px',
-              height: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
-              lineHeight: (minUnit === 'year' ? 2 : 1) * lineHeight + 'px',
+              height: (minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight) + 'px',
+              lineHeight: (minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight) + 'px',
               fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
               cursor: 'pointer'
             } },
@@ -248,7 +250,7 @@ var Header = function (_Component) {
       var zIndex = this.props.zIndex;
 
       var headerStyle = {
-        height: lineHeight * 2 + 'px',
+        height: headerLabelGroupHeight + headerLabelHeight + 'px',
         lineHeight: lineHeight + 'px'
       };
 

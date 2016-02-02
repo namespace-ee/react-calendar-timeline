@@ -14,6 +14,8 @@ var _Item = require('./Item');
 
 var _Item2 = _interopRequireDefault(_Item);
 
+var _lodash = require('lodash');
+
 var _utils = require('../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -37,7 +39,7 @@ var Items = function (_Component) {
   _createClass(Items, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && (0, _utils.arraysEqual)(nextProps.items, this.props.items) && nextProps.keys === this.props.keys && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.selectedItem === this.props.selectedItem && nextProps.lineHeight === this.props.lineHeight && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize);
+      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && (0, _utils.arraysEqual)(nextProps.items, this.props.items) && nextProps.keys === this.props.keys && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.selectedItem === this.props.selectedItem && nextProps.lineHeight === this.props.lineHeight && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.dimensionItems === this.props.dimensionItems);
     }
   }, {
     key: 'getGroupOrders',
@@ -71,6 +73,7 @@ var Items = function (_Component) {
       var _props = this.props;
       var canvasTimeStart = _props.canvasTimeStart;
       var canvasTimeEnd = _props.canvasTimeEnd;
+      var dimensionItems = _props.dimensionItems;
       var _props$keys2 = this.props.keys;
       var itemIdKey = _props$keys2.itemIdKey;
       var itemGroupKey = _props$keys2.itemGroupKey;
@@ -105,10 +108,13 @@ var Items = function (_Component) {
             item: item,
             keys: _this2.props.keys,
             order: groupOrders[(0, _utils._get)(item, itemGroupKey)],
+            dimensions: dimensionItems[(0, _utils._get)(item, itemIdKey)].dimensions,
             selected: _this2.props.selectedItem === (0, _utils._get)(item, itemIdKey),
             canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
             canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,
             canResize: (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : _this2.props.canResize,
+            groupHeights: _this2.props.groupHeights,
+            groupTops: _this2.props.groupTops,
             canvasTimeStart: _this2.props.canvasTimeStart,
             canvasTimeEnd: _this2.props.canvasTimeEnd,
             canvasWidth: _this2.props.canvasWidth,

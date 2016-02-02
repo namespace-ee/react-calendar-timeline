@@ -14,11 +14,12 @@ export default class VerticalLines extends Component {
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.lineCount === this.props.lineCount &&
              nextProps.minUnit === this.props.minUnit &&
-             nextProps.fixedHeader === this.props.fixedHeader)
+             nextProps.fixedHeader === this.props.fixedHeader &&
+             nextProps.height === this.props.height)
   }
 
   render () {
-    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, lineCount, lineHeight } = this.props
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, lineCount, lineHeight, height } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
@@ -42,7 +43,7 @@ export default class VerticalLines extends Component {
                top: `${lineHeight * 2}px`,
                left: `${left + leftPush}px`,
                width: `${labelWidth}px`,
-               height: `${lineCount * lineHeight}px`
+               height: `${height}px`
              }} />)
     })
 

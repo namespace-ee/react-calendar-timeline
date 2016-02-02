@@ -14,6 +14,8 @@ var _interact = require('interact.js');
 
 var _interact2 = _interopRequireDefault(_interact);
 
+var _lodash = require('lodash');
+
 var _utils = require('../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -81,7 +83,8 @@ var Item = function (_Component) {
   _createClass(Item, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !(nextState.dragging !== this.state.dragging && nextState.dragTime !== this.state.dragTime && nextState.dragGroupDelta !== this.state.dragGroupDelta && nextState.resizing !== this.state.resizing && nextState.resizeTime !== this.state.resizeTime && nextProps.keys === this.props.keys && nextProps.selected === this.props.selected && nextProps.item === this.props.item && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.order === this.props.order && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.selected === this.props.selected && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize);
+      var shouldUpdate = !(nextState.dragging !== this.state.dragging && nextState.dragTime !== this.state.dragTime && nextState.dragGroupDelta !== this.state.dragGroupDelta && nextState.resizing !== this.state.resizing && nextState.resizeTime !== this.state.resizeTime && nextProps.keys === this.props.keys && nextProps.selected === this.props.selected && nextProps.item === this.props.item && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.order === this.props.order && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.selected === this.props.selected && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.dimensions === this.props.dimensions);
+      return shouldUpdate;
     }
   }, {
     key: 'cacheDataFromProps',
@@ -124,12 +127,24 @@ var Item = function (_Component) {
   }, {
     key: 'dragGroupDelta',
     value: function dragGroupDelta(e) {
+      var _props = this.props;
+      var groupTops = _props.groupTops;
+      var order = _props.order;
+
       if (this.state.dragging) {
         if (!this.props.canChangeGroup) {
           return 0;
         }
         var deltaY = e.pageY - this.state.dragStart.y;
-        var groupDelta = Math.round(deltaY / this.props.lineHeight);
+        var groupDelta = 0;
+
+        (0, _lodash.forEach)(groupTops, function (item, key) {
+          if (e.pageY > item) {
+            groupDelta = parseInt(key, 10) - order;
+          } else {
+            return false;
+          }
+        });
 
         if (this.props.order + groupDelta < 0) {
           return 0 - this.props.order;
@@ -325,20 +340,29 @@ var Item = function (_Component) {
       var y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight; // +2 for header
       var h = props.lineHeight * 0.65;
       var ratio = 1 / this.coordinateToTimeRatio(props);
-
-      return {
+      var dimensions = {
         left: (x - props.canvasTimeStart) * ratio + 'px',
         top: y + 'px',
         width: Math.max(w * ratio, 3) + 'px',
         height: h + 'px'
       };
+
+      return dimensions;
     }
   }, {
     key: 'render',
     value: function render() {
-      var dimensions = this.dimensions();
+      var dimensions = this.props.dimensions;
 
       var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
+
+      var style = {
+        left: dimensions.left + 'px',
+        top: dimensions.top + 'px',
+        width: dimensions.width + 'px',
+        height: dimensions.height + 'px',
+        lineHeight: dimensions.height + 'px'
+      };
 
       return _react2.default.createElement(
         'div',
@@ -350,13 +374,7 @@ var Item = function (_Component) {
           onMouseUp: this.onMouseUp,
           onTouchStart: this.onTouchStart,
           onTouchEnd: this.onTouchEnd,
-          style: {
-            // left + top is faster than transform
-            left: dimensions.left,
-            top: dimensions.top,
-            width: dimensions.width,
-            height: dimensions.height,
-            lineHeight: dimensions.height } },
+          style: style },
         this.itemTitle
       );
     }

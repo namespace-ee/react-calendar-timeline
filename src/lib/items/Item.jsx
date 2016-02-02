@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import interact from 'interact.js'
+import {forEach} from 'lodash'
 
 import { _get } from '../utils'
 
@@ -25,7 +26,7 @@ export default class Item extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return !(nextState.dragging !== this.state.dragging &&
+    var shouldUpdate = !(nextState.dragging !== this.state.dragging &&
              nextState.dragTime !== this.state.dragTime &&
              nextState.dragGroupDelta !== this.state.dragGroupDelta &&
              nextState.resizing !== this.state.resizing &&
@@ -43,7 +44,9 @@ export default class Item extends Component {
              nextProps.selected === this.props.selected &&
              nextProps.canChangeGroup === this.props.canChangeGroup &&
              nextProps.canMove === this.props.canMove &&
-             nextProps.canResize === this.props.canResize)
+             nextProps.canResize === this.props.canResize &&
+             nextProps.dimensions === this.props.dimensions)
+    return shouldUpdate;
   }
 
   cacheDataFromProps (props) {
@@ -79,12 +82,21 @@ export default class Item extends Component {
   }
 
   dragGroupDelta (e) {
+    const {groupTops, order} = this.props;
     if (this.state.dragging) {
       if (!this.props.canChangeGroup) {
         return 0
       }
       const deltaY = e.pageY - this.state.dragStart.y
-      const groupDelta = Math.round(deltaY / this.props.lineHeight)
+      let groupDelta = 0;
+
+      forEach(groupTops, function(item, key){
+        if(e.pageY > item) {
+          groupDelta = parseInt(key, 10) - order;
+        }else {
+          return false;
+        }
+      });
 
       if (this.props.order + groupDelta < 0) {
         return 0 - this.props.order
@@ -303,23 +315,32 @@ export default class Item extends Component {
     const y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight // +2 for header
     const h = props.lineHeight * 0.65
     const ratio = 1 / this.coordinateToTimeRatio(props)
-
-    return {
+    const dimensions = {
       left: `${(x - props.canvasTimeStart) * ratio}px`,
       top: `${y}px`,
       width: `${Math.max(w * ratio, 3)}px`,
       height: `${h}px`
-    }
+    };
+
+    return dimensions;
   }
 
   render () {
-    const dimensions = this.dimensions()
+    const dimensions = this.props.dimensions;
 
     const classNames = 'rct-item' +
                        (this.props.selected ? ' selected' : '') +
                        (this.canMove(this.props) ? ' can-move' : '') +
                        (this.canResize(this.props) ? ' can-resize' : '') +
                        (this.props.item.className ? ` ${this.props.item.className}` : '')
+
+    const style = {
+      left: `${dimensions.left}px`,
+      top: `${dimensions.top}px`,
+      width: `${dimensions.width}px`,
+      height: `${dimensions.height}px`,
+      lineHeight: `${dimensions.height}px`
+    };
 
     return (
       <div key={this.itemId}
@@ -330,13 +351,7 @@ export default class Item extends Component {
            onMouseUp={this.onMouseUp}
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
-           style={{
-             // left + top is faster than transform
-             left: dimensions.left,
-             top: dimensions.top,
-             width: dimensions.width,
-             height: dimensions.height,
-             lineHeight: dimensions.height}}>
+           style={style}>
         {this.itemTitle}
       </div>
     )

@@ -8,24 +8,26 @@ export default class HorizontalLines extends Component {
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasWidth === this.props.canvasWidth &&
              nextProps.lineHeight === this.props.lineHeight &&
-             nextProps.lineCount === this.props.lineCount)
+             nextProps.lineCount === this.props.lineCount &&
+             nextProps.groupHeights === this.props.groupHeights)
   }
 
   render () {
-    const { lineCount, lineHeight, canvasWidth } = this.props
-
+    const { lineCount, lineHeight, canvasWidth, groups, groupHeights, headerHeight } = this.props;
     let lines = []
 
+    var totalHeight = headerHeight;
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <div key={`horizontal-line-${i}`}
              className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
              style={{
-               top: `${(i + 2) * lineHeight}px`,
+               top: `${totalHeight}px`,
                left: `0px`,
                width: `${canvasWidth}px`,
-               height: `${lineHeight - 1}px`
+               height: `${groupHeights[i] - 1}px`
              }} />)
+      totalHeight += groupHeights[i];
     }
 
     return (

@@ -30,7 +30,7 @@ var HorizontalLines = function (_Component) {
   _createClass(HorizontalLines, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !(nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount);
+      return !(nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.groupHeights === this.props.groupHeights);
     }
   }, {
     key: 'render',
@@ -39,18 +39,23 @@ var HorizontalLines = function (_Component) {
       var lineCount = _props.lineCount;
       var lineHeight = _props.lineHeight;
       var canvasWidth = _props.canvasWidth;
+      var groups = _props.groups;
+      var groupHeights = _props.groupHeights;
+      var headerHeight = _props.headerHeight;
 
       var lines = [];
 
+      var totalHeight = headerHeight;
       for (var i = 0; i < lineCount; i++) {
         lines.push(_react2.default.createElement('div', { key: 'horizontal-line-' + i,
           className: i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd',
           style: {
-            top: (i + 2) * lineHeight + 'px',
+            top: totalHeight + 'px',
             left: '0px',
             width: canvasWidth + 'px',
-            height: lineHeight - 1 + 'px'
+            height: groupHeights[i] - 1 + 'px'
           } }));
+        totalHeight += groupHeights[i];
       }
 
       return _react2.default.createElement(
