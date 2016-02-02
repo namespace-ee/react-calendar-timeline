@@ -1353,6 +1353,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      if (typeof this.props.order === 'undefined' || this.props.order === null) {
+	        return null;
+	      }
+	
 	      var dimensions = this.dimensions();
 	
 	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
