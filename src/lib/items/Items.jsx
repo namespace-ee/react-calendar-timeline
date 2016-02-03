@@ -24,7 +24,9 @@ export default class Items extends Component {
              nextProps.canChangeGroup === this.props.canChangeGroup &&
              nextProps.canMove === this.props.canMove &&
              nextProps.canResize === this.props.canResize &&
-             nextProps.dimensionItems === this.props.dimensionItems)
+             nextProps.dimensionItems === this.props.dimensionItems &&
+             nextProps.topOffset === this.props.topOffset
+    )
   }
 
   getGroupOrders () {
@@ -84,6 +86,7 @@ export default class Items extends Component {
                                         canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
                                         canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
                                         canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
+                                        topOffset={this.props.topOffset}
                                         groupHeights={this.props.groupHeights}
                                         groupTops={this.props.groupTops}
                                         canvasTimeStart={this.props.canvasTimeStart}

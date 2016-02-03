@@ -120,7 +120,8 @@ var ReactCalendarTimeline = function (_Component) {
       dragTime: null,
       dragGroupTitle: null,
       resizeEnd: null,
-      isDragging: false
+      isDragging: false,
+      topOffset: 0
     };
     return _this;
   }
@@ -238,7 +239,8 @@ var ReactCalendarTimeline = function (_Component) {
       //FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
       var width = this.refs.container.clientWidth - this.props.sidebarWidth;
       this.setState({
-        width: width
+        width: width,
+        topOffset: this.refs.container.getBoundingClientRect().top
       });
       this.refs.scrollComponent.scrollLeft = width;
     }
@@ -571,6 +573,7 @@ var ReactCalendarTimeline = function (_Component) {
         canMove: this.props.canMove,
         canResize: this.props.canResize,
         moveResizeValidator: this.props.moveResizeValidator,
+        topOffset: this.state.topOffset,
         itemSelect: this.selectItem.bind(this),
         itemDrag: this.dragItem.bind(this),
         itemDrop: this.dropItem.bind(this),

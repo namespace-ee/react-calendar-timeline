@@ -43,6 +43,7 @@ export default class Item extends Component {
              nextProps.minResizeWidth === this.props.minResizeWidth &&
              nextProps.selected === this.props.selected &&
              nextProps.canChangeGroup === this.props.canChangeGroup &&
+             nextProps.topOffset === this.props.topOffset &&
              nextProps.canMove === this.props.canMove &&
              nextProps.canResize === this.props.canResize &&
              nextProps.dimensions === this.props.dimensions)
@@ -82,16 +83,16 @@ export default class Item extends Component {
   }
 
   dragGroupDelta (e) {
-    const {groupTops, order} = this.props;
+    const {groupTops, order, topOffset} = this.props;
     if (this.state.dragging) {
       if (!this.props.canChangeGroup) {
         return 0
       }
-      const deltaY = e.pageY - this.state.dragStart.y
+      const deltaY = e.pageY - this.state.dragStart.y - topOffset
       let groupDelta = 0;
 
       forEach(groupTops, function(item, key){
-        if(e.pageY > item) {
+        if(e.pageY - topOffset > item) {
           groupDelta = parseInt(key, 10) - order;
         }else {
           return false;

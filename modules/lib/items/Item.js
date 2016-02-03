@@ -83,7 +83,7 @@ var Item = function (_Component) {
   _createClass(Item, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      var shouldUpdate = !(nextState.dragging !== this.state.dragging && nextState.dragTime !== this.state.dragTime && nextState.dragGroupDelta !== this.state.dragGroupDelta && nextState.resizing !== this.state.resizing && nextState.resizeTime !== this.state.resizeTime && nextProps.keys === this.props.keys && nextProps.selected === this.props.selected && nextProps.item === this.props.item && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.order === this.props.order && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.selected === this.props.selected && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.dimensions === this.props.dimensions);
+      var shouldUpdate = !(nextState.dragging !== this.state.dragging && nextState.dragTime !== this.state.dragTime && nextState.dragGroupDelta !== this.state.dragGroupDelta && nextState.resizing !== this.state.resizing && nextState.resizeTime !== this.state.resizeTime && nextProps.keys === this.props.keys && nextProps.selected === this.props.selected && nextProps.item === this.props.item && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.order === this.props.order && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.selected === this.props.selected && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.topOffset === this.props.topOffset && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.dimensions === this.props.dimensions);
       return shouldUpdate;
     }
   }, {
@@ -130,16 +130,17 @@ var Item = function (_Component) {
       var _props = this.props;
       var groupTops = _props.groupTops;
       var order = _props.order;
+      var topOffset = _props.topOffset;
 
       if (this.state.dragging) {
         if (!this.props.canChangeGroup) {
           return 0;
         }
-        var deltaY = e.pageY - this.state.dragStart.y;
+        var deltaY = e.pageY - this.state.dragStart.y - topOffset;
         var groupDelta = 0;
 
         (0, _lodash.forEach)(groupTops, function (item, key) {
-          if (e.pageY > item) {
+          if (e.pageY - topOffset > item) {
             groupDelta = parseInt(key, 10) - order;
           } else {
             return false;
