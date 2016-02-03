@@ -518,18 +518,19 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'todayLine',
-    value: function todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height) {
+    value: function todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
       return _react2.default.createElement(_TodayLine2.default, { canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
         lineHeight: this.props.lineHeight,
         lineCount: (0, _utils._length)(this.props.groups),
-        height: height
+        height: height,
+        headerHeight: headerHeight
       });
     }
   }, {
     key: 'verticalLines',
-    value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height) {
+    value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
       return _react2.default.createElement(_VerticalLines2.default, { canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
@@ -537,7 +538,8 @@ var ReactCalendarTimeline = function (_Component) {
         lineCount: (0, _utils._length)(this.props.groups),
         minUnit: minUnit,
         fixedHeader: this.props.fixedHeader,
-        height: height
+        height: height,
+        headerHeight: headerHeight
       });
     }
   }, {
@@ -725,9 +727,9 @@ var ReactCalendarTimeline = function (_Component) {
                 className: 'rct-canvas',
                 style: canvasComponentStyle },
               this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, (0, _lodash.keyBy)(dimensionItems, 'id'), groupHeights, groupTops),
-              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height),
+              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
               this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
-              this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height),
+              this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
               this.infoLabel(),
               this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight)
             )
@@ -797,8 +799,8 @@ ReactCalendarTimeline.defaultProps = {
   fixedHeader: 'none', // fixed or absolute or none
   zIndexStart: 10,
   lineHeight: 30,
-  headerLabelGroupHeight: 40,
-  headerLabelHeight: 40,
+  headerLabelGroupHeight: 30,
+  headerLabelHeight: 30,
 
   minZoom: 60 * 60 * 1000, // 1 hour
   maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years

@@ -37,8 +37,8 @@ var TodayLine = function (_Component) {
       if (currentTime > this.props.canvasTimeStart && currentTime < this.props.canvasTimeEnd) {
         var ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart);
         var left = Math.round((currentTime - this.props.canvasTimeStart) * ratio);
-        var top = this.props.lineHeight * 2;
-        var height = this.props.lineCount * this.props.lineHeight;
+        var top = this.props.headerHeight;
+        var height = this.props.height - this.props.headerHeight;
         var styles = {
           top: top + 'px',
           left: left + 'px',

@@ -12,8 +12,8 @@ export default class TodayLine extends Component {
     if (currentTime > this.props.canvasTimeStart && currentTime < this.props.canvasTimeEnd) {
       const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
       const left = Math.round((currentTime - this.props.canvasTimeStart) * ratio)
-      const top = this.props.lineHeight * 2
-      const height = this.props.lineCount * this.props.lineHeight
+      const top = this.props.headerHeight
+      const height = this.props.height - this.props.headerHeight
       const styles = {
         top: `${top}px`,
         left: `${left}px`,

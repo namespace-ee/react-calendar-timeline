@@ -32,7 +32,7 @@ var VerticalLines = function (_Component) {
   _createClass(VerticalLines, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.fixedHeader === this.props.fixedHeader && nextProps.height === this.props.height);
+      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.fixedHeader === this.props.fixedHeader && nextProps.height === this.props.height && nextProps.headerHeight === this.props.headerHeight);
     }
   }, {
     key: 'render',
@@ -47,6 +47,7 @@ var VerticalLines = function (_Component) {
       var lineCount = _props.lineCount;
       var lineHeight = _props.lineHeight;
       var height = _props.height;
+      var headerHeight = _props.headerHeight;
 
       var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
 
@@ -68,7 +69,7 @@ var VerticalLines = function (_Component) {
             top: lineHeight * 2 + 'px',
             left: left + leftPush + 'px',
             width: labelWidth + 'px',
-            height: height + 'px'
+            height: height - headerHeight + 'px'
           } }));
       });
 
