@@ -121,7 +121,8 @@ var ReactCalendarTimeline = function (_Component) {
       dragGroupTitle: null,
       resizeEnd: null,
       isDragging: false,
-      topOffset: 0
+      topOffset: 0,
+      resizingItem: null
     };
     return _this;
   }
@@ -506,7 +507,7 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'handleMouseMove',
     value: function handleMouseMove(e) {
-      if (this.state.isDragging && !this.state.draggingItem) {
+      if (this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
         this.refs.scrollComponent.scrollLeft += this.state.dragStartPosition - e.pageX;
         this.setState({ dragStartPosition: e.pageX });
       }

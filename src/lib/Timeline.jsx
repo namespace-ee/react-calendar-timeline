@@ -63,7 +63,8 @@ export default class ReactCalendarTimeline extends Component {
       dragGroupTitle: null,
       resizeEnd: null,
       isDragging: false,
-      topOffset: 0
+      topOffset: 0,
+      resizingItem: null
     }
   }
 
@@ -408,7 +409,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   handleMouseMove (e) {
-    if(this.state.isDragging && !this.state.draggingItem) {
+    if(this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
       this.refs.scrollComponent.scrollLeft +=  this.state.dragStartPosition - e.pageX;
       this.setState({dragStartPosition: e.pageX});
     }
