@@ -353,8 +353,10 @@ export default class Item extends Component {
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
            style={style}>
-        <div className="rct-item-content">
-          {this.itemTitle}
+        <div className="rct-item-overflow">
+          <div className="rct-item-content">
+            {this.itemTitle}
+          </div>
         </div>
       </div>
     )

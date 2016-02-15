@@ -378,8 +378,12 @@ var Item = function (_Component) {
           style: style },
         _react2.default.createElement(
           'div',
-          { className: 'rct-item-content' },
-          this.itemTitle
+          { className: 'rct-item-overflow' },
+          _react2.default.createElement(
+            'div',
+            { className: 'rct-item-content' },
+            this.itemTitle
+          )
         )
       );
     }
