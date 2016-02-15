@@ -376,7 +376,11 @@ var Item = function (_Component) {
           onTouchStart: this.onTouchStart,
           onTouchEnd: this.onTouchEnd,
           style: style },
-        this.itemTitle
+        _react2.default.createElement(
+          'div',
+          { className: 'rct-item-content' },
+          this.itemTitle
+        )
       );
     }
   }]);
