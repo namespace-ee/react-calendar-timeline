@@ -186,7 +186,6 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', (e) => {
-        console.log('resizestart');
         if (this.props.selected) {
           this.setState({
             resizing: true,

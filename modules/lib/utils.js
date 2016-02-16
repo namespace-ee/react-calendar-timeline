@@ -17,6 +17,7 @@ exports.getVisibleItems = getVisibleItems;
 exports.collision = collision;
 exports.stack = stack;
 exports.nostack = nostack;
+exports.hasSomeParentTheClass = hasSomeParentTheClass;
 exports.createGradientPattern = createGradientPattern;
 
 var _moment = require('moment');
@@ -270,6 +271,11 @@ function nostack(items, groupOrders, lineHeight, headerHeight, force) {
     groupHeights: groupHeights,
     groupTops: groupTops
   };
+}
+
+function hasSomeParentTheClass(element, classname) {
+  if (element.className && element.className.split(' ').indexOf(classname) >= 0) return true;
+  return element.parentNode && hasSomeParentTheClass(element.parentNode, classname);
 }
 
 function createGradientPattern(lineHeight, color1, color2, borderColor) {

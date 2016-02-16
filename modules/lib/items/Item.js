@@ -232,7 +232,6 @@ var Item = function (_Component) {
           });
         }
       }).on('resizestart', function (e) {
-        console.log('resizestart');
         if (_this2.props.selected) {
           _this2.setState({
             resizing: true,

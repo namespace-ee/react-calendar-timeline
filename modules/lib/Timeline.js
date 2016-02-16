@@ -444,7 +444,8 @@ var ReactCalendarTimeline = function (_Component) {
     key: 'scrollAreaClick',
     value: function scrollAreaClick(e) {
       // if not clicking on an item
-      if (e.target.className.indexOf('rct-item') === -1) {
+
+      if (!(0, _utils.hasSomeParentTheClass)(e.target, 'rct-item')) {
         if (this.state.selectedItem) {
           this.selectItem(null);
         } else if (this.props.onCanvasClick) {

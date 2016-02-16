@@ -12,7 +12,7 @@ import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 
-import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, dimensions, getGroupOrders, getVisibleItems } from './utils.js'
+import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, dimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
 
 const defaultKeys = {
   groupIdKey: 'id',
@@ -358,7 +358,8 @@ export default class ReactCalendarTimeline extends Component {
 
   scrollAreaClick (e) {
     // if not clicking on an item
-    if (e.target.className.indexOf('rct-item') === -1) {
+
+    if (!hasSomeParentTheClass(e.target, 'rct-item')) {
       if (this.state.selectedItem) {
         this.selectItem(null)
       } else if (this.props.onCanvasClick) {

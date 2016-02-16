@@ -249,6 +249,11 @@ export function nostack(items, groupOrders, lineHeight, headerHeight, force) {
   };
 }
 
+export function hasSomeParentTheClass(element, classname) {
+  if (element.className && element.className.split(' ').indexOf(classname)>=0) return true;
+  return element.parentNode && hasSomeParentTheClass(element.parentNode, classname);
+}
+
 export function createGradientPattern (lineHeight, color1, color2, borderColor) {
   if (borderColor) {
     if (!color2 || color1 === color2) {
