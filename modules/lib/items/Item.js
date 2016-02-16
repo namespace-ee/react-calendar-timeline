@@ -384,7 +384,8 @@ var Item = function (_Component) {
             { className: 'rct-item-content' },
             this.itemTitle
           )
-        )
+        ),
+        _react2.default.createElement('div', { className: 'rct-drag-right' })
       );
     }
   }]);

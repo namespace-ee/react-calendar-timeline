@@ -358,6 +358,7 @@ export default class Item extends Component {
             {this.itemTitle}
           </div>
         </div>
+        <div className="rct-drag-right"></div>
       </div>
     )
   }
