@@ -10,6 +10,7 @@
     "build:dev": "echo 'DEV - BUILD' && webpack --config webpack.config.js",
     "build:prod": "echo 'PROD - BUILD' && webpack --config webpack.config.prod.js",
     "release": "npm run build && babel src --out-dir build && cp README.md build/ && node scripts/release.js",
+    "module": "./node_modules/.bin/babel src --out-dir modules",
     "lint": "eslint --ext .js,.jsx src --fix",
     "upgrade:patch": "npm version patch",
     "preversion": "npm run lint",
