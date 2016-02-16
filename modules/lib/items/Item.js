@@ -176,10 +176,7 @@ var Item = function (_Component) {
     value: function mountInteract() {
       var _this2 = this;
 
-      (0, _interact2.default)(this.refs.item).resizable({
-        edges: { left: false, right: true, top: false, bottom: false },
-        enabled: this.props.selected && this.canResize()
-      }).draggable({
+      (0, _interact2.default)(this.refs.item).draggable({
         enabled: this.props.selected
       }).on('dragstart', function (e) {
         if (_this2.props.selected) {
@@ -231,6 +228,12 @@ var Item = function (_Component) {
             dragGroupDelta: null
           });
         }
+      }).on('tap', function (e) {
+        _this2.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch');
+      });
+      (0, _interact2.default)(this.refs.dragRight).resizable({
+        edges: { left: false, right: true, top: false, bottom: false },
+        enabled: this.props.selected && this.canResize()
       }).on('resizestart', function (e) {
         if (_this2.props.selected) {
           _this2.setState({
@@ -274,8 +277,6 @@ var Item = function (_Component) {
             newResizeEnd: null
           });
         }
-      }).on('tap', function (e) {
-        _this2.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch');
       });
 
       this.setState({
@@ -385,7 +386,7 @@ var Item = function (_Component) {
             this.itemTitle
           )
         ),
-        _react2.default.createElement('div', { className: 'rct-drag-right' })
+        _react2.default.createElement('div', { ref: 'dragRight', className: 'rct-drag-right' })
       );
     }
   }]);

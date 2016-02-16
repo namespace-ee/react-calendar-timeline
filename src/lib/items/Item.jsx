@@ -125,10 +125,6 @@ export default class Item extends Component {
 
   mountInteract () {
     interact(this.refs.item)
-      .resizable({
-        edges: {left: false, right: true, top: false, bottom: false},
-        enabled: this.props.selected && this.canResize()
-      })
       .draggable({
         enabled: this.props.selected
       })
@@ -185,6 +181,15 @@ export default class Item extends Component {
           })
         }
       })
+      .on('tap', (e) => {
+        this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
+      })
+    ;
+    interact(this.refs.dragRight)
+      .resizable({
+        edges: {left: false, right: true, top: false, bottom: false},
+        enabled: this.props.selected && this.canResize()
+      })
       .on('resizestart', (e) => {
         if (this.props.selected) {
           this.setState({
@@ -230,10 +235,8 @@ export default class Item extends Component {
             newResizeEnd: null
           })
         }
-      })
-      .on('tap', (e) => {
-        this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
-      })
+      });
+
 
     this.setState({
       interactMounted: true
@@ -358,7 +361,7 @@ export default class Item extends Component {
             {this.itemTitle}
           </div>
         </div>
-        <div className="rct-drag-right"></div>
+        <div ref="dragRight" className="rct-drag-right"></div>
       </div>
     )
   }
