@@ -313,6 +313,9 @@ export default class Item extends Component {
 
   render () {
     const dimensions = this.props.dimensions;
+    if (typeof this.props.order === 'undefined' || this.props.order === null) {
+      return null
+    }
 
     const classNames = 'rct-item' +
                        (this.props.selected ? ' selected' : '') +

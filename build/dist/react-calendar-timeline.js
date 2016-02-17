@@ -518,7 +518,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'scrollAreaClick',
 	    value: function scrollAreaClick(e) {
 	      // if not clicking on an item
-	      if (e.target.className.indexOf('rct-item') === -1) {
+	
+	      if (!(0, _utils.hasSomeParentTheClass)(e.target, 'rct-item')) {
 	        if (this.state.selectedItem) {
 	          this.selectItem(null);
 	        } else if (this.props.onCanvasClick) {
@@ -649,6 +650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        canChangeGroup: this.props.canChangeGroup,
 	        canMove: this.props.canMove,
 	        canResize: this.props.canResize,
+	        useResizeHandle: this.props.useResizeHandle,
 	        moveResizeValidator: this.props.moveResizeValidator,
 	        topOffset: this.state.topOffset,
 	        itemSelect: this.selectItem.bind(this),
@@ -673,11 +675,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'header',
 	    value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
-	      //const canvasTimeStart = this.state.canvasTimeStart
-	      //const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-	      //const canvasTimeEnd = canvasTimeStart + zoom * 3
-	      //const canvasWidth = this.state.width * 3
-	      //const minUnit = getMinUnit(zoom, this.state.width)
 	
 	      return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
 	        canvasTimeEnd: canvasTimeEnd,
@@ -750,7 +747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var dimensionItems = visibleItems.map(function (item) {
 	        return {
 	          id: (0, _utils._get)(item, keys.itemIdKey),
-	          dimensions: (0, _utils.dimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder)
+	          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder)
 	        };
 	      });
 	
@@ -837,6 +834,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  canChangeGroup: _react2.default.PropTypes.bool,
 	  canMove: _react2.default.PropTypes.bool,
 	  canResize: _react2.default.PropTypes.bool,
+	  useResizeHandle: _react2.default.PropTypes.bool,
 	
 	  stackItems: _react2.default.PropTypes.bool,
 	
@@ -883,6 +881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  canChangeGroup: true,
 	  canMove: true,
 	  canResize: true,
+	  useResizeHandle: false,
 	
 	  stackItems: false,
 	
@@ -15512,6 +15511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
 	            canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,
 	            canResize: (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : _this2.props.canResize,
+	            useResizeHandle: _this2.props.useResizeHandle,
 	            topOffset: _this2.props.topOffset,
 	            groupHeights: _this2.props.groupHeights,
 	            groupTops: _this2.props.groupTops,
@@ -15759,8 +15759,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function mountInteract() {
 	      var _this2 = this;
 	
+	      var rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
 	      (0, _interact2.default)(this.refs.item).resizable({
-	        edges: { left: false, right: this.refs.dragRight, top: false, bottom: false },
+	        edges: { left: false, right: rightResize, top: false, bottom: false },
 	        enabled: this.props.selected && this.canResize()
 	      }).draggable({
 	        enabled: this.props.selected
@@ -15815,7 +15816,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        }
 	      }).on('resizestart', function (e) {
-	        console.log('resizestart');
 	        if (_this2.props.selected) {
 	          _this2.setState({
 	            resizing: true,
@@ -15874,7 +15874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!props.canResize) {
 	        return false;
 	      }
-	      var width = parseInt(this.dimensions(props).width, 10);
+	      var width = parseInt(this.props.dimensions.width, 10);
 	      return width >= props.minResizeWidth;
 	    }
 	  }, {
@@ -15916,28 +15916,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
-	    key: 'dimensions',
-	    value: function dimensions() {
-	      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
-	
-	      var x = this.state.dragging ? this.state.dragTime : this.itemTimeStart;
-	      var w = Math.max((this.state.resizing ? this.state.newResizeEnd : this.itemTimeEnd) - this.itemTimeStart, props.dragSnap);
-	      var y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight; // +2 for header
-	      var h = props.lineHeight * 0.65;
-	      var ratio = 1 / this.coordinateToTimeRatio(props);
-	      var dimensions = {
-	        left: (x - props.canvasTimeStart) * ratio + 'px',
-	        top: y + 'px',
-	        width: Math.max(w * ratio, 3) + 'px',
-	        height: h + 'px'
-	      };
-	
-	      return dimensions;
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var dimensions = this.props.dimensions;
+	      if (typeof this.props.order === 'undefined' || this.props.order === null) {
+	        return null;
+	      }
 	
 	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
 	
@@ -15969,7 +15953,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.itemTitle
 	          )
 	        ),
-	        _react2.default.createElement('div', { ref: 'dragRight', className: 'rct-drag-right' })
+	        this.props.useResizeHandle ? _react2.default.createElement('div', { ref: 'dragRight', className: 'rct-drag-right' }) : ''
 	      );
 	    }
 	  }]);
@@ -16032,12 +16016,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getNextUnit = getNextUnit;
 	exports.getParentPosition = getParentPosition;
 	exports.coordinateToTimeRatio = coordinateToTimeRatio;
-	exports.dimensions = dimensions;
+	exports.calculateDimensions = calculateDimensions;
 	exports.getGroupOrders = getGroupOrders;
 	exports.getVisibleItems = getVisibleItems;
 	exports.collision = collision;
 	exports.stack = stack;
 	exports.nostack = nostack;
+	exports.hasSomeParentTheClass = hasSomeParentTheClass;
 	exports.createGradientPattern = createGradientPattern;
 	
 	var _moment = __webpack_require__(3);
@@ -16130,9 +16115,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 	}
 	
-	function dimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder) {
+	function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder) {
 	  var itemId = _get(item, keys.itemIdKey);
-	  var itemTitle = _get(item, keys.itemTitleKey);
 	  var itemTimeStart = _get(item, keys.itemTimeStartKey);
 	  var itemTimeEnd = _get(item, keys.itemTimeEndKey);
 	
@@ -16142,7 +16126,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var x = isDragging ? dragTime : itemTimeStart;
 	
 	  var w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
-	  var y = (order + 0.15 + 2) * lineHeight; // +2 for header
 	  var h = lineHeight * 0.65;
 	  var ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
 	
@@ -16291,6 +16274,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    groupHeights: groupHeights,
 	    groupTops: groupTops
 	  };
+	}
+	
+	function hasSomeParentTheClass(element, classname) {
+	  if (element.className && element.className.split(' ').indexOf(classname) >= 0) return true;
+	  return element.parentNode && hasSomeParentTheClass(element.parentNode, classname);
 	}
 	
 	function createGradientPattern(lineHeight, color1, color2, borderColor) {
@@ -16991,7 +16979,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var canvasTimeEnd = _props.canvasTimeEnd;
 	      var canvasWidth = _props.canvasWidth;
 	      var minUnit = _props.minUnit;
-	      var lineCount = _props.lineCount;
 	      var lineHeight = _props.lineHeight;
 	      var height = _props.height;
 	      var headerHeight = _props.headerHeight;
@@ -17090,9 +17077,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _props = this.props;
 	      var lineCount = _props.lineCount;
-	      var lineHeight = _props.lineHeight;
 	      var canvasWidth = _props.canvasWidth;
-	      var groups = _props.groups;
 	      var groupHeights = _props.groupHeights;
 	      var headerHeight = _props.headerHeight;
 	

@@ -33,6 +33,8 @@
       cursor: move; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-resize {
       border-right-width: 3px; }
+      .react-calendar-timeline .rct-items .rct-item.selected.can-resize .rct-drag-right {
+        cursor: e-resize; }
   .react-calendar-timeline .rct-items .rct-item .rct-drag-right {
     position: absolute;
     width: 24px;
@@ -40,8 +42,8 @@
     min-width: 2px;
     height: 100%;
     top: 0;
-    right: -4px;
-    cursor: e-resize;
+    right: 0;
+    cursor: pointer;
     z-index: 10; }
   .react-calendar-timeline .rct-items .rct-item:hover {
     z-index: 10; }
