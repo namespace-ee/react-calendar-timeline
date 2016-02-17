@@ -37,9 +37,7 @@ var HorizontalLines = function (_Component) {
     value: function render() {
       var _props = this.props;
       var lineCount = _props.lineCount;
-      var lineHeight = _props.lineHeight;
       var canvasWidth = _props.canvasWidth;
-      var groups = _props.groups;
       var groupHeights = _props.groupHeights;
       var headerHeight = _props.headerHeight;
 

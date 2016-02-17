@@ -12,7 +12,7 @@ import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 
-import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, dimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
+import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
 
 const defaultKeys = {
   groupIdKey: 'id',
@@ -480,6 +480,7 @@ export default class ReactCalendarTimeline extends Component {
              canChangeGroup={this.props.canChangeGroup}
              canMove={this.props.canMove}
              canResize={this.props.canResize}
+             useResizeHandle={this.props.useResizeHandle}
              moveResizeValidator={this.props.moveResizeValidator}
              topOffset={this.state.topOffset}
              itemSelect={this.selectItem.bind(this)}
@@ -503,11 +504,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   header (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
-    //const canvasTimeStart = this.state.canvasTimeStart
-    //const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-    //const canvasTimeEnd = canvasTimeStart + zoom * 3
-    //const canvasWidth = this.state.width * 3
-    //const minUnit = getMinUnit(zoom, this.state.width)
 
     return (
       <Header canvasTimeStart={canvasTimeStart}
@@ -562,7 +558,7 @@ export default class ReactCalendarTimeline extends Component {
     let dimensionItems = visibleItems.map(item => {
       return {
         id:_get(item, keys.itemIdKey),
-        dimensions: dimensions(
+        dimensions: calculateDimensions(
           item,
           groupOrders[_get(item, keys.itemGroupKey)],
           keys,
@@ -662,6 +658,7 @@ ReactCalendarTimeline.propTypes = {
   canChangeGroup: React.PropTypes.bool,
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
+  useResizeHandle: React.PropTypes.bool,
 
   stackItems: React.PropTypes.bool,
 
@@ -708,6 +705,7 @@ ReactCalendarTimeline.defaultProps = {
   canChangeGroup: true,
   canMove: true,
   canResize: true,
+  useResizeHandle: false,
 
   stackItems: false,
 

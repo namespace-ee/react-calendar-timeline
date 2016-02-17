@@ -113,6 +113,7 @@ var Items = function (_Component) {
             canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
             canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,
             canResize: (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : _this2.props.canResize,
+            useResizeHandle: _this2.props.useResizeHandle,
             topOffset: _this2.props.topOffset,
             groupHeights: _this2.props.groupHeights,
             groupTops: _this2.props.groupTops,

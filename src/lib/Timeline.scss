@@ -64,7 +64,11 @@ $weekend: rgba(250, 246, 225, 0.5);
           cursor: move;
         }
         &.can-resize {
-          border-right-width: 3px
+          border-right-width: 3px;
+
+          .rct-drag-right {
+            cursor: e-resize;
+          }
         }
       }
 
@@ -77,7 +81,7 @@ $weekend: rgba(250, 246, 225, 0.5);
         height: 100%;
         top: 0;
         right: 0;
-        cursor: e-resize;
+        cursor: pointer;
         z-index: 10;
       }
 

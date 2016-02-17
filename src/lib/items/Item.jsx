@@ -124,9 +124,10 @@ export default class Item extends Component {
   }
 
   mountInteract () {
+    const rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
     interact(this.refs.item)
       .resizable({
-        edges: {left: false, right: this.refs.dragRight, top: false, bottom: false},
+        edges: {left: false, right: rightResize, top: false, bottom: false},
         enabled: this.props.selected && this.canResize()
       })
       .draggable({
@@ -244,7 +245,7 @@ export default class Item extends Component {
     if (!props.canResize) {
       return false
     }
-    let width = parseInt(this.dimensions(props).width, 10)
+    let width = parseInt(this.props.dimensions.width, 10)
     return width >= props.minResizeWidth
   }
 
@@ -310,22 +311,6 @@ export default class Item extends Component {
     }
   }
 
-  dimensions (props = this.props) {
-    const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart
-    const w = Math.max((this.state.resizing ? this.state.newResizeEnd : this.itemTimeEnd) - this.itemTimeStart, props.dragSnap)
-    const y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight // +2 for header
-    const h = props.lineHeight * 0.65
-    const ratio = 1 / this.coordinateToTimeRatio(props)
-    const dimensions = {
-      left: `${(x - props.canvasTimeStart) * ratio}px`,
-      top: `${y}px`,
-      width: `${Math.max(w * ratio, 3)}px`,
-      height: `${h}px`
-    };
-
-    return dimensions;
-  }
-
   render () {
     const dimensions = this.props.dimensions;
 
@@ -358,7 +343,7 @@ export default class Item extends Component {
             {this.itemTitle}
           </div>
         </div>
-        <div ref="dragRight" className="rct-drag-right"></div>
+        { this.props.useResizeHandle ? <div ref="dragRight" className="rct-drag-right"></div> : '' }
       </div>
     )
   }

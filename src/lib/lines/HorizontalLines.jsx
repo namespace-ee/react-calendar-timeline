@@ -13,7 +13,7 @@ export default class HorizontalLines extends Component {
   }
 
   render () {
-    const { lineCount, lineHeight, canvasWidth, groups, groupHeights, headerHeight } = this.props;
+    const { lineCount, canvasWidth, groupHeights, headerHeight } = this.props;
     let lines = []
 
     var totalHeight = headerHeight;

@@ -176,8 +176,9 @@ var Item = function (_Component) {
     value: function mountInteract() {
       var _this2 = this;
 
+      var rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
       (0, _interact2.default)(this.refs.item).resizable({
-        edges: { left: false, right: this.refs.dragRight, top: false, bottom: false },
+        edges: { left: false, right: rightResize, top: false, bottom: false },
         enabled: this.props.selected && this.canResize()
       }).draggable({
         enabled: this.props.selected
@@ -290,7 +291,7 @@ var Item = function (_Component) {
       if (!props.canResize) {
         return false;
       }
-      var width = parseInt(this.dimensions(props).width, 10);
+      var width = parseInt(this.props.dimensions.width, 10);
       return width >= props.minResizeWidth;
     }
   }, {
@@ -332,25 +333,6 @@ var Item = function (_Component) {
       }
     }
   }, {
-    key: 'dimensions',
-    value: function dimensions() {
-      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
-
-      var x = this.state.dragging ? this.state.dragTime : this.itemTimeStart;
-      var w = Math.max((this.state.resizing ? this.state.newResizeEnd : this.itemTimeEnd) - this.itemTimeStart, props.dragSnap);
-      var y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight; // +2 for header
-      var h = props.lineHeight * 0.65;
-      var ratio = 1 / this.coordinateToTimeRatio(props);
-      var dimensions = {
-        left: (x - props.canvasTimeStart) * ratio + 'px',
-        top: y + 'px',
-        width: Math.max(w * ratio, 3) + 'px',
-        height: h + 'px'
-      };
-
-      return dimensions;
-    }
-  }, {
     key: 'render',
     value: function render() {
       var dimensions = this.props.dimensions;
@@ -385,7 +367,7 @@ var Item = function (_Component) {
             this.itemTitle
           )
         ),
-        _react2.default.createElement('div', { ref: 'dragRight', className: 'rct-drag-right' })
+        this.props.useResizeHandle ? _react2.default.createElement('div', { ref: 'dragRight', className: 'rct-drag-right' }) : ''
       );
     }
   }]);

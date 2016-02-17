@@ -576,6 +576,7 @@ var ReactCalendarTimeline = function (_Component) {
         canChangeGroup: this.props.canChangeGroup,
         canMove: this.props.canMove,
         canResize: this.props.canResize,
+        useResizeHandle: this.props.useResizeHandle,
         moveResizeValidator: this.props.moveResizeValidator,
         topOffset: this.state.topOffset,
         itemSelect: this.selectItem.bind(this),
@@ -600,11 +601,6 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'header',
     value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
-      //const canvasTimeStart = this.state.canvasTimeStart
-      //const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-      //const canvasTimeEnd = canvasTimeStart + zoom * 3
-      //const canvasWidth = this.state.width * 3
-      //const minUnit = getMinUnit(zoom, this.state.width)
 
       return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
@@ -677,7 +673,7 @@ var ReactCalendarTimeline = function (_Component) {
       var dimensionItems = visibleItems.map(function (item) {
         return {
           id: (0, _utils._get)(item, keys.itemIdKey),
-          dimensions: (0, _utils.dimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder)
+          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder)
         };
       });
 
@@ -764,6 +760,7 @@ ReactCalendarTimeline.propTypes = {
   canChangeGroup: _react2.default.PropTypes.bool,
   canMove: _react2.default.PropTypes.bool,
   canResize: _react2.default.PropTypes.bool,
+  useResizeHandle: _react2.default.PropTypes.bool,
 
   stackItems: _react2.default.PropTypes.bool,
 
@@ -810,6 +807,7 @@ ReactCalendarTimeline.defaultProps = {
   canChangeGroup: true,
   canMove: true,
   canResize: true,
+  useResizeHandle: false,
 
   stackItems: false,
 

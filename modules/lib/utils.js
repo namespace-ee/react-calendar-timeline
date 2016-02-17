@@ -11,7 +11,7 @@ exports.getMinUnit = getMinUnit;
 exports.getNextUnit = getNextUnit;
 exports.getParentPosition = getParentPosition;
 exports.coordinateToTimeRatio = coordinateToTimeRatio;
-exports.dimensions = dimensions;
+exports.calculateDimensions = calculateDimensions;
 exports.getGroupOrders = getGroupOrders;
 exports.getVisibleItems = getVisibleItems;
 exports.collision = collision;
@@ -110,9 +110,8 @@ function coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth) {
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 }
 
-function dimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder) {
+function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder) {
   var itemId = _get(item, keys.itemIdKey);
-  var itemTitle = _get(item, keys.itemTitleKey);
   var itemTimeStart = _get(item, keys.itemTimeStartKey);
   var itemTimeEnd = _get(item, keys.itemTimeEndKey);
 
@@ -122,7 +121,6 @@ function dimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWid
   var x = isDragging ? dragTime : itemTimeStart;
 
   var w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
-  var y = (order + 0.15 + 2) * lineHeight; // +2 for header
   var h = lineHeight * 0.65;
   var ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
 
