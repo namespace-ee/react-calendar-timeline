@@ -82,7 +82,7 @@ export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWid
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
-export function calculateDimensions (item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder) {
+export function calculateDimensions (item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio) {
   var itemId = _get(item, keys.itemIdKey);
   var itemTimeStart = _get(item, keys.itemTimeStartKey);
   var itemTimeEnd = _get(item, keys.itemTimeEndKey);
@@ -93,7 +93,7 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
   const x = isDragging ? dragTime : itemTimeStart;
 
   const w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
-  const h = lineHeight * 0.65;
+  const h = lineHeight * itemHeightRatio;
   const ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
 
   const dimensions = {
@@ -130,7 +130,8 @@ export function getVisibleItems (items, canvasTimeStart, canvasTimeEnd, keys) {
 }
 
 export function collision(a, b, lineHeight) {
-  var verticalMargin = (lineHeight - a.height)/2;
+  //var verticalMargin = (lineHeight - a.height)/2;
+  var verticalMargin = 0;
   return ((a.left + EPSILON)       < (b.left + b.width) &&
   (a.left + a.width - EPSILON) > b.left &&
   (a.top - verticalMargin + EPSILON)              < (b.top + b.height) &&
@@ -166,7 +167,7 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
     var groupHeight = 0;
     for (i = 0, iMax = group.length; i < iMax; i++) {
       var item = group[i];
-      var verticalMargin = (item.dimensions.lineHeight - item.dimensions.height)/2;
+      var verticalMargin = (item.dimensions.lineHeight - item.dimensions.height);
 
       if (item.dimensions.stack && item.dimensions.top === null) {
         item.dimensions.top = totalHeight + verticalMargin;
@@ -185,14 +186,14 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
 
           if (collidingItem != null) {
             // There is a collision. Reposition the items above the colliding element
-            item.dimensions.top = collidingItem.dimensions.top + collidingItem.dimensions.lineHeight + verticalMargin;
-            groupHeight = Math.max(groupHeight, item.dimensions.top + item.dimensions.height + verticalMargin - totalHeight);
+            item.dimensions.top = collidingItem.dimensions.top + collidingItem.dimensions.lineHeight;
+            groupHeight = Math.max(groupHeight, item.dimensions.top + item.dimensions.height - totalHeight);
           }
         } while (collidingItem);
       }
     }
-    groupHeights[key] = Math.max(groupHeight, lineHeight);
-    totalHeight += Math.max(groupHeight, lineHeight);
+    groupHeights[key] = Math.max(groupHeight + verticalMargin, lineHeight);
+    totalHeight += Math.max(groupHeight + verticalMargin, lineHeight);
   }
   return {
     height: totalHeight,

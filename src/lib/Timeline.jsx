@@ -540,7 +540,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   render () {
-    const {items, groups, keys, dragSnap, lineHeight, headerLabelGroupHeight, headerLabelHeight, stackItems, ...otherProps} = this.props;
+    const {items, groups, keys, dragSnap, lineHeight, headerLabelGroupHeight, headerLabelHeight, stackItems, itemHeightRatio, ...otherProps} = this.props;
     const { draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, isDragging } = this.state;
     const canvasTimeStart = this.state.canvasTimeStart;
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
@@ -569,7 +569,8 @@ export default class ReactCalendarTimeline extends Component {
           dragTime,
           resizingItem,
           resizeEnd,
-          newGroupOrder
+          newGroupOrder,
+          itemHeightRatio
         )
       };
     });
@@ -696,6 +697,7 @@ ReactCalendarTimeline.defaultProps = {
   lineHeight: 30,
   headerLabelGroupHeight: 30,
   headerLabelHeight: 30,
+  itemHeightRatio: 0.65,
 
   minZoom: 60 * 60 * 1000, // 1 hour
   maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
