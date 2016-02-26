@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import interact from 'interact.js'
-import {forEach} from 'lodash'
 
 import { _get } from '../utils'
 
@@ -88,16 +87,19 @@ export default class Item extends Component {
       if (!this.props.canChangeGroup) {
         return 0
       }
-      const deltaY = e.pageY - this.state.dragStart.y - topOffset
       let groupDelta = 0;
 
-      forEach(groupTops, function(item, key){
-        if(e.pageY - topOffset > item) {
+      //TODO: figure out if topOffset is necessary
+      for (var key of Object.keys(groupTops)) {
+        var item = groupTops[key];
+        //if(e.pageY - topOffset > item) {
+        if(e.pageY > item) {
           groupDelta = parseInt(key, 10) - order;
         }else {
-          return false;
+          break;
         }
-      });
+      }
+
 
       if (this.props.order + groupDelta < 0) {
         return 0 - this.props.order

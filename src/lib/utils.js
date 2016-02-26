@@ -1,7 +1,5 @@
 import moment from 'moment'
 
-import {forEach, groupBy} from 'lodash';
-
 const EPSILON = 0.001;
 
 // so we could use both immutable.js objects and regular objects
@@ -158,7 +156,8 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  forEach(groupOrders, function(key, url) {
+  for (var url of Object.keys(groupOrders)) {
+    var key = groupOrders[url];
     // calculate new, non-overlapping positions
     var group = groupedItems[key] || [];
 
@@ -194,7 +193,7 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
     }
     groupHeights[key] = Math.max(groupHeight, lineHeight);
     totalHeight += Math.max(groupHeight, lineHeight);
-  });
+  }
   return {
     height: totalHeight,
     groupHeights,
@@ -221,7 +220,8 @@ export function nostack(items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  forEach(groupOrders, function(key, url) {
+  for (var url of Object.keys(groupOrders)) {
+    var key = groupOrders[url];
     // calculate new, non-overlapping positions
     var group = groupedItems[key] || [];
 
@@ -239,12 +239,37 @@ export function nostack(items, groupOrders, lineHeight, headerHeight, force) {
     }
     groupHeights[key] = Math.max(groupHeight, lineHeight);
     totalHeight += Math.max(groupHeight, lineHeight);
-  });
+  }
   return {
     height: totalHeight,
     groupHeights,
     groupTops
   };
+}
+
+export function keyBy(value, key) {
+  let obj = {};
+
+  value.forEach(function(element, index, array){
+    obj[element[key]] = element;
+  });
+
+  return obj;
+}
+
+export function groupBy(collection, groupFunction){
+
+  let obj = {};
+
+  collection.forEach(function(element, index, array){
+    const key = groupFunction(element);
+    if(!obj[key]) {
+      obj[key] = [];
+    }
+    obj[key].push(element);
+  });
+
+  return obj;
 }
 
 export function hasSomeParentTheClass(element, classname) {

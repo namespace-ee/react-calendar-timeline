@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import './Timeline.scss'
 
-import {keyBy} from 'lodash';
-
 import Items from './items/Items'
 import InfoLabel from './layout/InfoLabel'
 import Sidebar from './layout/Sidebar'
@@ -12,7 +10,7 @@ import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 
-import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
+import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass, keyBy } from './utils.js'
 
 const defaultKeys = {
   groupIdKey: 'id',

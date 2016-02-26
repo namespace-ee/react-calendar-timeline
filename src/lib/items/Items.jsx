@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import Item from './Item'
-import {keyBy} from 'lodash'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual, stack } from '../utils'
+import { _get, arraysEqual, stack, keyBy } from '../utils'
 
 export default class Items extends Component {
   constructor (props) {
