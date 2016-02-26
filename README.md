@@ -5,3 +5,5 @@
 Check the index.html file to see how to use the component.
 
 Proper documentation coming later.
+
+Demo here: http://namespace.ee/react-calendar-timeline/

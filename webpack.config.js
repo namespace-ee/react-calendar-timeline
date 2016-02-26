@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'build/dist/'),
     filename: '[name].js',
-    publicPath: 'dist/',
+    publicPath: 'build/dist/',
     library: 'ReactCalendarTimeline',
     libraryTarget: 'umd'
   },
