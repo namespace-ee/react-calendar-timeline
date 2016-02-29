@@ -93,6 +93,18 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
   const x = isDragging ? dragTime : itemTimeStart;
 
   const w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
+  let collisionX = itemTimeStart;
+  let collisionW = w;
+
+  if(isDragging) {
+    if(itemTimeStart >= dragTime){
+      collisionX = dragTime;
+      collisionW = Math.max(itemTimeEnd - dragTime, dragSnap);
+    }else {
+      collisionW = Math.max(dragTime - itemTimeStart + w, dragSnap);
+    }
+  }
+
   const h = lineHeight * itemHeightRatio;
   const ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
 
@@ -103,7 +115,11 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
     height: h,
     order: isDragging ? newGroupOrder : order,
     stack: true,
-    lineHeight: lineHeight
+    lineHeight: lineHeight,
+    collisionLeft: collisionX,
+    originalLeft: itemTimeStart,
+    collisionWidth: collisionW,
+    isDragging: isDragging
   };
 
   return dimensions;
@@ -132,8 +148,8 @@ export function getVisibleItems (items, canvasTimeStart, canvasTimeEnd, keys) {
 export function collision(a, b, lineHeight) {
   //var verticalMargin = (lineHeight - a.height)/2;
   var verticalMargin = 0;
-  return ((a.left + EPSILON)       < (b.left + b.width) &&
-  (a.left + a.width - EPSILON) > b.left &&
+  return ((a.collisionLeft + EPSILON)       < (b.collisionLeft + b.collisionWidth) &&
+  (a.collisionLeft + a.collisionWidth - EPSILON) > b.collisionLeft &&
   (a.top - verticalMargin + EPSILON)              < (b.top + b.height) &&
   (a.top + a.height + verticalMargin - EPSILON)   > b.top);
 }
