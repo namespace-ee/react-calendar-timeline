@@ -304,7 +304,7 @@ var ReactCalendarTimeline = function (_Component) {
       var groups = nextProps.groups;
 
       if (visibleTimeStart && visibleTimeEnd) {
-        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items != this.props.items || groups != this.props.groups);
+        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items != this.props.items || groups != this.props.groups, items, groups);
       }
     }
   }, {
