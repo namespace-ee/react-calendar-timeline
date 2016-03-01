@@ -300,9 +300,15 @@ var ReactCalendarTimeline = function (_Component) {
     value: function componentWillReceiveProps(nextProps) {
       var visibleTimeStart = nextProps.visibleTimeStart;
       var visibleTimeEnd = nextProps.visibleTimeEnd;
+      var items = nextProps.items;
+      var groups = nextProps.groups;
 
       if (visibleTimeStart && visibleTimeEnd) {
         this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
+      }
+
+      if (items != this.props.items) {
+        console.log('items dont match');
       }
     }
   }, {

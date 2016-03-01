@@ -218,10 +218,14 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { visibleTimeStart, visibleTimeEnd } = nextProps
+    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
 
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+    }
+
+    if(items != this.props.items) {
+      console.log('items dont match');
     }
   }
 
