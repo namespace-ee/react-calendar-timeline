@@ -123,7 +123,7 @@ var ReactCalendarTimeline = function (_Component) {
       resizingItem: null
     };
 
-    var _this$stackItems = _this.stackItems(_this.state.canvasTimeStart, _this.state.visibleTimeStart, _this.state.visibleTimeEnd, _this.state.width);
+    var _this$stackItems = _this.stackItems(props.items, props.groups, _this.state.canvasTimeStart, _this.state.visibleTimeStart, _this.state.visibleTimeEnd, _this.state.width);
 
     var dimensionItems = _this$stackItems.dimensionItems;
     var height = _this$stackItems.height;
@@ -250,7 +250,7 @@ var ReactCalendarTimeline = function (_Component) {
       //FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
       var width = this.refs.container.clientWidth - this.props.sidebarWidth;
 
-      var _stackItems = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
+      var _stackItems = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
 
       var dimensionItems = _stackItems.dimensionItems;
       var height = _stackItems.height;
@@ -309,10 +309,12 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'updateScrollCanvas',
-    value: function updateScrollCanvas(visibleTimeStart, visibleTimeEnd, forceUpdateDimensions) {
+    value: function updateScrollCanvas(visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
       var oldCanvasTimeStart = this.state.canvasTimeStart;
       var oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
       var newZoom = visibleTimeEnd - visibleTimeStart;
+      var items = updatedItems ? updatedItems : this.props.items;
+      var groups = updatedGroups ? updatedGroups : this.props.groups;
 
       var newState = {
         visibleTimeStart: visibleTimeStart,
@@ -347,7 +349,7 @@ var ReactCalendarTimeline = function (_Component) {
       if (resetCanvas || forceUpdateDimensions) {
         var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
 
-        var _stackItems2 = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+        var _stackItems2 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 
         var dimensionItems = _stackItems2.dimensionItems;
         var height = _stackItems2.height;
@@ -680,10 +682,8 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'stackItems',
-    value: function stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
+    value: function stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
       var _props3 = this.props;
-      var items = _props3.items;
-      var groups = _props3.groups;
       var keys = _props3.keys;
       var dragSnap = _props3.dragSnap;
       var lineHeight = _props3.lineHeight;
@@ -763,7 +763,7 @@ var ReactCalendarTimeline = function (_Component) {
       var headerHeight = headerLabelGroupHeight + headerLabelHeight;
 
       if (draggingItem || resizingItem) {
-        var stackResults = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, width);
+        var stackResults = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width);
         dimensionItems = stackResults.dimensionItems;
         height = stackResults.height;
         groupHeights = stackResults.groupHeights;
