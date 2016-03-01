@@ -181,7 +181,7 @@ export default class ReactCalendarTimeline extends Component {
 
     this.setState({
       width: width,
-      topOffset: this.refs.container.getBoundingClientRect().top,
+      topOffset: this.refs.container.getBoundingClientRect().top + window.pageYOffset,
       dimensionItems: dimensionItems,
       height: height,
       groupHeights: groupHeights,

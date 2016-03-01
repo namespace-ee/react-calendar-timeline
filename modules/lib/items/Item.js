@@ -128,6 +128,7 @@ var Item = function (_Component) {
       var _props = this.props;
       var groupTops = _props.groupTops;
       var order = _props.order;
+      var topOffset = _props.topOffset;
 
       if (this.state.dragging) {
         if (!this.props.canChangeGroup) {
@@ -135,7 +136,6 @@ var Item = function (_Component) {
         }
         var groupDelta = 0;
 
-        // TODO: figure out if topOffset is necessary
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -145,8 +145,7 @@ var Item = function (_Component) {
             var key = _step.value;
 
             var item = groupTops[key];
-            // if(e.pageY - topOffset > item) {
-            if (e.pageY > item) {
+            if (e.pageY - topOffset > item) {
               groupDelta = parseInt(key, 10) - order;
             } else {
               break;

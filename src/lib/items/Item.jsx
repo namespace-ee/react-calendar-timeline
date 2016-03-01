@@ -82,18 +82,16 @@ export default class Item extends Component {
   }
 
   dragGroupDelta (e) {
-    const {groupTops, order} = this.props
+    const {groupTops, order, topOffset} = this.props
     if (this.state.dragging) {
       if (!this.props.canChangeGroup) {
         return 0
       }
       let groupDelta = 0
 
-      // TODO: figure out if topOffset is necessary
       for (var key of Object.keys(groupTops)) {
         var item = groupTops[key]
-        // if(e.pageY - topOffset > item) {
-        if (e.pageY > item) {
+        if (e.pageY - topOffset > item) {
           groupDelta = parseInt(key, 10) - order
         } else {
           break
