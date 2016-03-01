@@ -181,9 +181,10 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
     groupTops[key] = totalHeight;
 
     var groupHeight = 0;
+    var verticalMargin = 0
     for (i = 0, iMax = group.length; i < iMax; i++) {
       var item = group[i];
-      var verticalMargin = (item.dimensions.lineHeight - item.dimensions.height);
+      verticalMargin = (item.dimensions.lineHeight - item.dimensions.height);
 
       if (item.dimensions.stack && item.dimensions.top === null) {
         item.dimensions.top = totalHeight + verticalMargin;
