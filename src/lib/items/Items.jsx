@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual } from '../utils'
+import { _get, arraysEqual, keyBy } from '../utils'
 
 export default class Items extends Component {
   shouldComponentUpdate (nextProps, nextState) {
@@ -50,6 +50,7 @@ export default class Items extends Component {
 
     const groupOrders = this.getGroupOrders()
     const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders)
+    const sortedDimensionItems = keyBy(dimensionItems, 'id')
 
     // const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
 
@@ -76,7 +77,7 @@ export default class Items extends Component {
                                         item={item}
                                         keys={this.props.keys}
                                         order={groupOrders[_get(item, itemGroupKey)]}
-                                        dimensions={dimensionItems[_get(item, itemIdKey)].dimensions}
+                                        dimensions={sortedDimensionItems[_get(item, itemIdKey)].dimensions}
                                         selected={this.props.selectedItem === _get(item, itemIdKey)}
                                         canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
                                         canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}

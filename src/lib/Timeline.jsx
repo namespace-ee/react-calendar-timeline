@@ -10,7 +10,7 @@ import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 
-import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass, keyBy } from './utils.js'
+import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
 
 const defaultKeys = {
   groupIdKey: 'id',
@@ -659,7 +659,7 @@ export default class ReactCalendarTimeline extends Component {
             <div ref='canvasComponent'
                  className='rct-canvas'
                  style={canvasComponentStyle}>
-              {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, keyBy(dimensionItems, 'id'), groupHeights, groupTops)}
+              {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops)}
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)}
               {this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight)}
               {this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)}

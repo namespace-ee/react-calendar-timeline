@@ -81,6 +81,7 @@ var Items = function (_Component) {
 
       var groupOrders = this.getGroupOrders();
       var visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders);
+      var sortedDimensionItems = (0, _utils.keyBy)(dimensionItems, 'id');
 
       // const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
 
@@ -109,7 +110,7 @@ var Items = function (_Component) {
             item: item,
             keys: _this2.props.keys,
             order: groupOrders[(0, _utils._get)(item, itemGroupKey)],
-            dimensions: dimensionItems[(0, _utils._get)(item, itemIdKey)].dimensions,
+            dimensions: sortedDimensionItems[(0, _utils._get)(item, itemIdKey)].dimensions,
             selected: _this2.props.selectedItem === (0, _utils._get)(item, itemIdKey),
             canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
             canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,

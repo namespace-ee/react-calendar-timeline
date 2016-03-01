@@ -800,7 +800,7 @@ var ReactCalendarTimeline = function (_Component) {
               { ref: 'canvasComponent',
                 className: 'rct-canvas',
                 style: canvasComponentStyle },
-              this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, (0, _utils.keyBy)(dimensionItems, 'id'), groupHeights, groupTops),
+              this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops),
               this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
               this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
               this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
