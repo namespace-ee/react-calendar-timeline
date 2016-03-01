@@ -115,8 +115,8 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
   var itemTimeStart = _get(item, keys.itemTimeStartKey);
   var itemTimeEnd = _get(item, keys.itemTimeEndKey);
 
-  var isDragging = itemId == draggingItem;
-  var isResizing = itemId == resizingItem;
+  var isDragging = itemId === draggingItem;
+  var isResizing = itemId === resizingItem;
 
   var x = isDragging ? dragTime : itemTimeStart;
 
@@ -156,6 +156,7 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
 function getGroupOrders(groups, keys) {
   var groupIdKey = keys.groupIdKey;
 
+
   var groupOrders = {};
 
   for (var i = 0; i < groups.length; i++) {
@@ -169,13 +170,14 @@ function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
   var itemTimeStartKey = keys.itemTimeStartKey;
   var itemTimeEndKey = keys.itemTimeEndKey;
 
+
   return items.filter(function (item) {
     return _get(item, itemTimeStartKey) <= canvasTimeEnd && _get(item, itemTimeEndKey) >= canvasTimeStart;
   });
 }
 
 function collision(a, b, lineHeight) {
-  //var verticalMargin = (lineHeight - a.height)/2;
+  // var verticalMargin = (lineHeight - a.height)/2;
   var verticalMargin = 0;
   return a.collisionLeft + EPSILON < b.collisionLeft + b.collisionWidth && a.collisionLeft + a.collisionWidth - EPSILON > b.collisionLeft && a.top - verticalMargin + EPSILON < b.top + b.height && a.top + a.height + verticalMargin - EPSILON > b.top;
 }
@@ -230,7 +232,7 @@ function stack(items, groupOrders, lineHeight, headerHeight, force) {
                 collidingItem = other;
                 break;
               } else {
-                //console.log('dont test', other.top !== null, other !== item, other.stack);
+                // console.log('dont test', other.top !== null, other !== item, other.stack);
               }
             }
 
@@ -346,7 +348,6 @@ function keyBy(value, key) {
 }
 
 function groupBy(collection, groupFunction) {
-
   var obj = {};
 
   collection.forEach(function (element, index, array) {

@@ -2,13 +2,9 @@ import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual, stack, keyBy } from '../utils'
+import { _get, arraysEqual } from '../utils'
 
 export default class Items extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
              arraysEqual(nextProps.items, this.props.items) &&

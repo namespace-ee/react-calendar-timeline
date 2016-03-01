@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 
 export default class TodayLine extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   // TODO: should currentTime come from a prop? probably...?
   render () {
     let currentTime = new Date().getTime()

@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -96,7 +96,6 @@ var Sidebar = function (_Component) {
       var width = _props.width;
       var lineHeight = _props.lineHeight;
       var zIndex = _props.zIndex;
-      var groups = _props.groups;
       var groupHeights = _props.groupHeights;
       var height = _props.height;
       var headerHeight = _props.headerHeight;
@@ -104,6 +103,7 @@ var Sidebar = function (_Component) {
       var groupIdKey = _props$keys.groupIdKey;
       var groupTitleKey = _props$keys.groupTitleKey;
       var scrollTop = this.state.scrollTop;
+
 
       var sidebarStyle = {
         width: width + 'px',
@@ -174,6 +174,7 @@ var Sidebar = function (_Component) {
 }(_react.Component);
 
 exports.default = Sidebar;
+
 
 Sidebar.propTypes = {
   groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,

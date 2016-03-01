@@ -46,7 +46,7 @@ export default class Item extends Component {
              nextProps.canMove === this.props.canMove &&
              nextProps.canResize === this.props.canResize &&
              nextProps.dimensions === this.props.dimensions)
-    return shouldUpdate;
+    return shouldUpdate
   }
 
   cacheDataFromProps (props) {
@@ -82,24 +82,23 @@ export default class Item extends Component {
   }
 
   dragGroupDelta (e) {
-    const {groupTops, order, topOffset} = this.props;
+    const {groupTops, order} = this.props
     if (this.state.dragging) {
       if (!this.props.canChangeGroup) {
         return 0
       }
-      let groupDelta = 0;
+      let groupDelta = 0
 
-      //TODO: figure out if topOffset is necessary
+      // TODO: figure out if topOffset is necessary
       for (var key of Object.keys(groupTops)) {
-        var item = groupTops[key];
-        //if(e.pageY - topOffset > item) {
-        if(e.pageY > item) {
-          groupDelta = parseInt(key, 10) - order;
-        }else {
-          break;
+        var item = groupTops[key]
+        // if(e.pageY - topOffset > item) {
+        if (e.pageY > item) {
+          groupDelta = parseInt(key, 10) - order
+        } else {
+          break
         }
       }
-
 
       if (this.props.order + groupDelta < 0) {
         return 0 - this.props.order
@@ -126,7 +125,7 @@ export default class Item extends Component {
   }
 
   mountInteract () {
-    const rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
+    const rightResize = this.props.useResizeHandle ? this.refs.dragRight : true
     interact(this.refs.item)
       .resizable({
         edges: {left: false, right: rightResize, top: false, bottom: false},
@@ -236,7 +235,7 @@ export default class Item extends Component {
       })
       .on('tap', (e) => {
         this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
-      });
+      })
 
     this.setState({
       interactMounted: true
@@ -314,7 +313,7 @@ export default class Item extends Component {
   }
 
   render () {
-    const dimensions = this.props.dimensions;
+    const dimensions = this.props.dimensions
     if (typeof this.props.order === 'undefined' || this.props.order === null) {
       return null
     }
@@ -331,7 +330,7 @@ export default class Item extends Component {
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`
-    };
+    }
 
     return (
       <div key={this.itemId}
@@ -343,12 +342,12 @@ export default class Item extends Component {
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
            style={style}>
-        <div className="rct-item-overflow">
-          <div className="rct-item-content">
+        <div className='rct-item-overflow'>
+          <div className='rct-item-content'>
             {this.itemTitle}
           </div>
         </div>
-        { this.props.useResizeHandle ? <div ref="dragRight" className="rct-drag-right"></div> : '' }
+        { this.props.useResizeHandle ? <div ref='dragRight' className='rct-drag-right'></div> : '' }
       </div>
     )
   }

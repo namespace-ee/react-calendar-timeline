@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -28,10 +28,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Items = function (_Component) {
   _inherits(Items, _Component);
 
-  function Items(props) {
+  function Items() {
     _classCallCheck(this, Items);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Items).call(this, props));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Items).apply(this, arguments));
   }
 
   _createClass(Items, [{
@@ -43,6 +43,7 @@ var Items = function (_Component) {
     key: 'getGroupOrders',
     value: function getGroupOrders() {
       var groupIdKey = this.props.keys.groupIdKey;
+
 
       var groupOrders = {};
 
@@ -58,6 +59,7 @@ var Items = function (_Component) {
       var _props$keys = this.props.keys;
       var itemTimeStartKey = _props$keys.itemTimeStartKey;
       var itemTimeEndKey = _props$keys.itemTimeEndKey;
+
 
       return this.props.items.filter(function (item) {
         return (0, _utils._get)(item, itemTimeStartKey) <= canvasTimeEnd && (0, _utils._get)(item, itemTimeEndKey) >= canvasTimeStart;
@@ -75,6 +77,7 @@ var Items = function (_Component) {
       var _props$keys2 = this.props.keys;
       var itemIdKey = _props$keys2.itemIdKey;
       var itemGroupKey = _props$keys2.itemGroupKey;
+
 
       var groupOrders = this.getGroupOrders();
       var visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders);
@@ -148,6 +151,7 @@ var Items = function (_Component) {
 }(_react.Component);
 
 exports.default = Items;
+
 
 Items.propTypes = {
   groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,

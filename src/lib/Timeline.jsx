@@ -65,7 +65,7 @@ export default class ReactCalendarTimeline extends Component {
       resizingItem: null
     }
 
-    const {dimensionItems, height, groupHeights, groupTops} =  this.stackItems(props.items, props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width);
+    const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(props.items, props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width)
 
     this.state.dimensionItems = dimensionItems
     this.state.height = height
@@ -174,10 +174,10 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resize () {
-    //FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
+    // FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
     let width = this.refs.container.clientWidth - this.props.sidebarWidth
 
-    const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
+    const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width)
 
     this.setState({
       width: width,
@@ -185,7 +185,7 @@ export default class ReactCalendarTimeline extends Component {
       dimensionItems: dimensionItems,
       height: height,
       groupHeights: groupHeights,
-      groupTops: groupTops,
+      groupTops: groupTops
     })
     this.refs.scrollComponent.scrollLeft = width
   }
@@ -221,7 +221,7 @@ export default class ReactCalendarTimeline extends Component {
     const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
 
     if (visibleTimeStart && visibleTimeEnd) {
-      this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items != this.props.items || groups != this.props.groups, items, groups)
+      this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups)
     }
   }
 
@@ -229,8 +229,8 @@ export default class ReactCalendarTimeline extends Component {
     const oldCanvasTimeStart = this.state.canvasTimeStart
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = visibleTimeEnd - visibleTimeStart
-    const items = updatedItems ? updatedItems : this.props.items
-    const groups = updatedGroups ? updatedGroups : this.props.groups
+    const items = updatedItems || this.props.items
+    const groups = updatedGroups || this.props.groups
 
     let newState = {
       visibleTimeStart: visibleTimeStart,
@@ -265,9 +265,9 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    if(resetCanvas || forceUpdateDimensions) {
+    if (resetCanvas || forceUpdateDimensions) {
       const canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart
-      const {dimensionItems, height, groupHeights, groupTops} =  this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
+      const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
       newState.dimensionItems = dimensionItems
       newState.height = height
       newState.groupHeights = groupHeights
@@ -278,7 +278,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   onWheel (e) {
-    const {traditionalZoom} = this.props;
+    const {traditionalZoom} = this.props
     if (e.ctrlKey) {
       e.preventDefault()
       const parentPosition = getParentPosition(e.currentTarget)
@@ -288,8 +288,7 @@ export default class ReactCalendarTimeline extends Component {
       e.preventDefault()
       const scrollComponent = this.refs.scrollComponent
       scrollComponent.scrollLeft += e.deltaY
-    }
-    else if (e.altKey) {
+    } else if (e.altKey) {
       const parentPosition = getParentPosition(e.currentTarget)
       const xPosition = e.clientX - parentPosition.x
       this.changeZoom(1.0 + e.deltaY / 500, xPosition / this.state.width)
@@ -297,13 +296,13 @@ export default class ReactCalendarTimeline extends Component {
       if (this.props.fixedHeader === 'fixed') {
         e.preventDefault()
         if (e.deltaX !== 0) {
-          if(!traditionalZoom) {
+          if (!traditionalZoom) {
             this.refs.scrollComponent.scrollLeft += e.deltaX
           }
         }
         if (e.deltaY !== 0) {
           window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
-          if(traditionalZoom) {
+          if (traditionalZoom) {
             const parentPosition = getParentPosition(e.currentTarget)
             const xPosition = e.clientX - parentPosition.x
             this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width)
@@ -399,7 +398,7 @@ export default class ReactCalendarTimeline extends Component {
 
   dragItem (item, dragTime, newGroupOrder) {
     let newGroup = this.props.groups[newGroupOrder]
-    const keys = this.props.keys;
+    const keys = this.props.keys
 
     this.setState({
       draggingItem: item,
@@ -410,7 +409,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   dropItem (item, dragTime, newGroupOrder) {
-    this.setState({draggingItem:null, dragTime: null, dragGroupTitle: null})
+    this.setState({draggingItem: null, dragTime: null, dragGroupTitle: null})
     if (this.props.onItemMove) {
       this.props.onItemMove(item, dragTime, newGroupOrder)
     }
@@ -431,18 +430,18 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   handleMouseDown (e) {
-    this.setState({isDragging: true, dragStartPosition: e.pageX});
+    this.setState({isDragging: true, dragStartPosition: e.pageX})
   }
 
   handleMouseMove (e) {
-    if(this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
-      this.refs.scrollComponent.scrollLeft +=  this.state.dragStartPosition - e.pageX;
-      this.setState({dragStartPosition: e.pageX});
+    if (this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
+      this.refs.scrollComponent.scrollLeft += this.state.dragStartPosition - e.pageX
+      this.setState({dragStartPosition: e.pageX})
     }
   }
 
   handleMouseUp (e) {
-    this.setState({isDragging: false, dragStartPosition: null});
+    this.setState({isDragging: false, dragStartPosition: null})
   }
 
   todayLine (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
@@ -529,7 +528,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   header (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
-
     return (
       <Header canvasTimeStart={canvasTimeStart}
               canvasTimeEnd={canvasTimeEnd}
@@ -566,20 +564,20 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
-    const {keys, dragSnap, lineHeight, headerLabelGroupHeight, headerLabelHeight, stackItems, itemHeightRatio} = this.props;
-    const { draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder } = this.state;
-    const zoom = visibleTimeEnd - visibleTimeStart;
-    const canvasTimeEnd = canvasTimeStart + zoom * 3;
-    const canvasWidth = width * 3;
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight;
+  stackItems (items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
+    const {keys, dragSnap, lineHeight, headerLabelGroupHeight, headerLabelHeight, stackItems, itemHeightRatio} = this.props
+    const { draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder } = this.state
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
+    const canvasWidth = width * 3
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
-    const visibleItems = getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys);
-    const groupOrders = getGroupOrders(groups, keys);
+    const visibleItems = getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
+    const groupOrders = getGroupOrders(groups, keys)
 
     let dimensionItems = visibleItems.map(item => {
       return {
-        id:_get(item, keys.itemIdKey),
+        id: _get(item, keys.itemIdKey),
         dimensions: calculateDimensions(
           item,
           groupOrders[_get(item, keys.itemGroupKey)],
@@ -596,32 +594,32 @@ export default class ReactCalendarTimeline extends Component {
           newGroupOrder,
           itemHeightRatio
         )
-      };
-    });
+      }
+    })
 
-    const stackingMethod = stackItems ? stack : nostack;
+    const stackingMethod = stackItems ? stack : nostack
 
     const {height, groupHeights, groupTops} = stackingMethod(
       dimensionItems,
       groupOrders,
       lineHeight,
       headerHeight
-    );
+    )
 
-    return {dimensionItems, height, groupHeights, groupTops};
+    return {dimensionItems, height, groupHeights, groupTops}
   }
 
   render () {
-    const {items, groups, keys, dragSnap, lineHeight, headerLabelGroupHeight, headerLabelHeight, stackItems, itemHeightRatio, ...otherProps} = this.props;
-    const { draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart } = this.state;
-    let { dimensionItems, height, groupHeights, groupTops } = this.state;
-    const zoom = visibleTimeEnd - visibleTimeStart;
-    const canvasTimeEnd = canvasTimeStart + zoom * 3;
-    const canvasWidth = width * 3;
-    const minUnit = getMinUnit(zoom, width);
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight;
+    const {items, groups, headerLabelGroupHeight, headerLabelHeight} = this.props
+    const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart } = this.state
+    let { dimensionItems, height, groupHeights, groupTops } = this.state
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
+    const canvasWidth = width * 3
+    const minUnit = getMinUnit(zoom, width)
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
-    if(draggingItem || resizingItem) {
+    if (draggingItem || resizingItem) {
       const stackResults = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width)
       dimensionItems = stackResults.dimensionItems
       height = stackResults.height

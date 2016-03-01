@@ -210,7 +210,7 @@ export default class Header extends Component {
         headerStyle.position = 'absolute'
         headerStyle.top = `${scrollTop - componentTop}px`
         headerStyle.width = `${canvasWidth}px`
-        headerStyle.left = `0`
+        headerStyle.left = '0'
       }
     }
 

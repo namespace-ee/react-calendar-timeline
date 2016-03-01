@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -128,7 +128,6 @@ var Item = function (_Component) {
       var _props = this.props;
       var groupTops = _props.groupTops;
       var order = _props.order;
-      var topOffset = _props.topOffset;
 
       if (this.state.dragging) {
         if (!this.props.canChangeGroup) {
@@ -136,7 +135,7 @@ var Item = function (_Component) {
         }
         var groupDelta = 0;
 
-        //TODO: figure out if topOffset is necessary
+        // TODO: figure out if topOffset is necessary
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -146,7 +145,7 @@ var Item = function (_Component) {
             var key = _step.value;
 
             var item = groupTops[key];
-            //if(e.pageY - topOffset > item) {
+            // if(e.pageY - topOffset > item) {
             if (e.pageY > item) {
               groupDelta = parseInt(key, 10) - order;
             } else {
@@ -401,6 +400,7 @@ var Item = function (_Component) {
 
 // removed prop type check for SPEED!
 // they are coming from a trusted component anyway
+
 
 exports.default = Item;
 Item.propTypes = {

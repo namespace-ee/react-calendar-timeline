@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -21,10 +21,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var HorizontalLines = function (_Component) {
   _inherits(HorizontalLines, _Component);
 
-  function HorizontalLines(props) {
+  function HorizontalLines() {
     _classCallCheck(this, HorizontalLines);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(HorizontalLines).call(this, props));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(HorizontalLines).apply(this, arguments));
   }
 
   _createClass(HorizontalLines, [{
@@ -68,6 +68,7 @@ var HorizontalLines = function (_Component) {
 }(_react.Component);
 
 exports.default = HorizontalLines;
+
 
 HorizontalLines.propTypes = {
   canvasWidth: _react2.default.PropTypes.number.isRequired,

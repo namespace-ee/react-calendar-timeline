@@ -3,10 +3,6 @@ import React, { Component } from 'react'
 import { iterateTimes } from '../utils.js'
 
 export default class VerticalLines extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasTimeStart === this.props.canvasTimeStart &&
              nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&

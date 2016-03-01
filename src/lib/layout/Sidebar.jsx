@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { _get, _length, arraysEqual } from '../utils'
+import { _get, arraysEqual } from '../utils'
 
 export default class Sidebar extends Component {
   constructor (props) {
@@ -65,7 +65,7 @@ export default class Sidebar extends Component {
 
   render () {
     const {
-      fixedHeader, width, lineHeight, zIndex, groups, groupHeights, height, headerHeight
+      fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight
     } = this.props
 
     const {groupIdKey, groupTitleKey} = this.props.keys
@@ -89,8 +89,6 @@ export default class Sidebar extends Component {
       width: `${width}px`
     }
 
-
-
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.zIndex = zIndex
@@ -100,7 +98,7 @@ export default class Sidebar extends Component {
       if (scrollTop >= componentTop) {
         headerStyle.position = 'absolute'
         headerStyle.top = `${scrollTop - componentTop}px`
-        headerStyle.left = `0`
+        headerStyle.left = '0'
         groupsStyle.paddingTop = headerStyle.height
       }
     }
@@ -116,15 +114,15 @@ export default class Sidebar extends Component {
       const elementStyle = {
         height: `${groupHeights[index] - 1}px`,
         lineHeight: `${groupHeights[index] - 1}px`
-      };
+      }
 
       groupLines.push(
         <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
           {_get(group, groupTitleKey)}
         </div>
-      );
+      )
       i += 1
-    });
+    })
 
     return (
       <div ref='sidebar' className='rct-sidebar' style={sidebarStyle}>

@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 
 export default class HorizontalLines extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasWidth === this.props.canvasWidth &&
              nextProps.lineHeight === this.props.lineHeight &&
@@ -13,21 +9,21 @@ export default class HorizontalLines extends Component {
   }
 
   render () {
-    const { lineCount, canvasWidth, groupHeights, headerHeight } = this.props;
+    const { lineCount, canvasWidth, groupHeights, headerHeight } = this.props
     let lines = []
 
-    var totalHeight = headerHeight;
+    var totalHeight = headerHeight
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <div key={`horizontal-line-${i}`}
              className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
              style={{
                top: `${totalHeight}px`,
-               left: `0px`,
+               left: '0px',
                width: `${canvasWidth}px`,
                height: `${groupHeights[i] - 1}px`
              }} />)
-      totalHeight += groupHeights[i];
+      totalHeight += groupHeights[i]
     }
 
     return (

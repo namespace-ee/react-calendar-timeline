@@ -4,10 +4,6 @@ import Item from './Item'
 import { _get, arraysEqual } from '../utils'
 
 export default class ItemGroup extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
              arraysEqual(nextProps.items, this.props.items) &&

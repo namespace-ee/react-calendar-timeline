@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -13,10 +13,6 @@ var _react2 = _interopRequireDefault(_react);
 var _function = require('react-pure-render/function');
 
 var _function2 = _interopRequireDefault(_function);
-
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,13 +25,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var InfoLabel = function (_Component) {
   _inherits(InfoLabel, _Component);
 
-  function InfoLabel(props) {
+  function InfoLabel() {
+    var _Object$getPrototypeO;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, InfoLabel);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InfoLabel).call(this, props));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
-    _this.shouldComponentUpdate = _function2.default;
-    return _this;
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(InfoLabel)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.shouldComponentUpdate = _function2.default, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(InfoLabel, [{
@@ -53,6 +54,7 @@ var InfoLabel = function (_Component) {
 }(_react.Component);
 
 exports.default = InfoLabel;
+
 
 InfoLabel.propTypes = {
   label: _react2.default.PropTypes.string.isRequired

@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -21,16 +21,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TodayLine = function (_Component) {
   _inherits(TodayLine, _Component);
 
-  function TodayLine(props) {
+  function TodayLine() {
     _classCallCheck(this, TodayLine);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(TodayLine).call(this, props));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(TodayLine).apply(this, arguments));
   }
-
-  // TODO: should currentTime come from a prop? probably...?
 
   _createClass(TodayLine, [{
     key: 'render',
+
+    // TODO: should currentTime come from a prop? probably...?
     value: function render() {
       var currentTime = new Date().getTime();
 

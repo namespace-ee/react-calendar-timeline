@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -27,10 +27,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ItemGroup = function (_Component) {
   _inherits(ItemGroup, _Component);
 
-  function ItemGroup(props) {
+  function ItemGroup() {
     _classCallCheck(this, ItemGroup);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemGroup).call(this, props));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemGroup).apply(this, arguments));
   }
 
   _createClass(ItemGroup, [{
@@ -47,6 +47,7 @@ var ItemGroup = function (_Component) {
       var _props$keys = this.props.keys;
       var itemIdKey = _props$keys.itemIdKey;
       var itemGroupKey = _props$keys.itemGroupKey;
+
 
       var groupOrders = this.props.groupOrders;
       var visibleItems = this.props.items;
@@ -83,6 +84,7 @@ var ItemGroup = function (_Component) {
 }(_react.Component);
 
 // they were all checked in Items
+
 
 exports.default = ItemGroup;
 ItemGroup.propTypes = {

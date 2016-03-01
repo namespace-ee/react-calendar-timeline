@@ -1,12 +1,12 @@
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -49,8 +49,6 @@ var _TodayLine2 = _interopRequireDefault(_TodayLine);
 var _utils = require('./utils.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -129,6 +127,7 @@ var ReactCalendarTimeline = function (_Component) {
     var height = _this$stackItems.height;
     var groupHeights = _this$stackItems.groupHeights;
     var groupTops = _this$stackItems.groupTops;
+
 
     _this.state.dimensionItems = dimensionItems;
     _this.state.height = height;
@@ -247,7 +246,7 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'resize',
     value: function resize() {
-      //FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
+      // FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
       var width = this.refs.container.clientWidth - this.props.sidebarWidth;
 
       var _stackItems = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
@@ -256,6 +255,7 @@ var ReactCalendarTimeline = function (_Component) {
       var height = _stackItems.height;
       var groupHeights = _stackItems.groupHeights;
       var groupTops = _stackItems.groupTops;
+
 
       this.setState({
         width: width,
@@ -303,8 +303,9 @@ var ReactCalendarTimeline = function (_Component) {
       var items = nextProps.items;
       var groups = nextProps.groups;
 
+
       if (visibleTimeStart && visibleTimeEnd) {
-        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items != this.props.items || groups != this.props.groups, items, groups);
+        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups);
       }
     }
   }, {
@@ -313,8 +314,8 @@ var ReactCalendarTimeline = function (_Component) {
       var oldCanvasTimeStart = this.state.canvasTimeStart;
       var oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
       var newZoom = visibleTimeEnd - visibleTimeStart;
-      var items = updatedItems ? updatedItems : this.props.items;
-      var groups = updatedGroups ? updatedGroups : this.props.groups;
+      var items = updatedItems || this.props.items;
+      var groups = updatedGroups || this.props.groups;
 
       var newState = {
         visibleTimeStart: visibleTimeStart,
@@ -473,6 +474,7 @@ var ReactCalendarTimeline = function (_Component) {
       var width = _state.width;
       var visibleTimeStart = _state.visibleTimeStart;
       var visibleTimeEnd = _state.visibleTimeEnd;
+
 
       var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
       var x = e.clientX - parentPosition.x;
@@ -645,7 +647,6 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'header',
     value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
-
       return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
@@ -721,6 +722,7 @@ var ReactCalendarTimeline = function (_Component) {
       var groupHeights = _stackingMethod.groupHeights;
       var groupTops = _stackingMethod.groupTops;
 
+
       return { dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops };
     }
   }, {
@@ -729,22 +731,11 @@ var ReactCalendarTimeline = function (_Component) {
       var _props4 = this.props;
       var items = _props4.items;
       var groups = _props4.groups;
-      var keys = _props4.keys;
-      var dragSnap = _props4.dragSnap;
-      var lineHeight = _props4.lineHeight;
       var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
       var headerLabelHeight = _props4.headerLabelHeight;
-      var stackItems = _props4.stackItems;
-      var itemHeightRatio = _props4.itemHeightRatio;
-
-      var otherProps = _objectWithoutProperties(_props4, ['items', 'groups', 'keys', 'dragSnap', 'lineHeight', 'headerLabelGroupHeight', 'headerLabelHeight', 'stackItems', 'itemHeightRatio']);
-
       var _state3 = this.state;
       var draggingItem = _state3.draggingItem;
-      var dragTime = _state3.dragTime;
       var resizingItem = _state3.resizingItem;
-      var resizeEnd = _state3.resizeEnd;
-      var newGroupOrder = _state3.newGroupOrder;
       var isDragging = _state3.isDragging;
       var width = _state3.width;
       var visibleTimeStart = _state3.visibleTimeStart;
@@ -826,6 +817,7 @@ var ReactCalendarTimeline = function (_Component) {
 }(_react.Component);
 
 exports.default = ReactCalendarTimeline;
+
 
 ReactCalendarTimeline.propTypes = {
   groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
