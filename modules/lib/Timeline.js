@@ -304,24 +304,7 @@ var ReactCalendarTimeline = function (_Component) {
       var groups = nextProps.groups;
 
       if (visibleTimeStart && visibleTimeEnd) {
-        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
-      }
-
-      if (items != this.props.items || groups != this.props.groups) {
-        var _stackItems2 = this.stackItems(this.state.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
-
-        var dimensionItems = _stackItems2.dimensionItems;
-        var height = _stackItems2.height;
-        var groupHeights = _stackItems2.groupHeights;
-        var groupTops = _stackItems2.groupTops;
-
-        console.log('canvas time start2', this.state.canvasTimeStart);
-        this.setState({
-          dimensionItems: dimensionItems,
-          height: height,
-          groupHeights: groupHeights,
-          groupTops: groupTops
-        });
+        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items != this.props.items || groups != this.props.groups);
       }
     }
   }, {
@@ -361,15 +344,15 @@ var ReactCalendarTimeline = function (_Component) {
         }
       }
 
-      if (resetCanvas) {
-        var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : this.state.canvasTimeStart;
+      if (resetCanvas || forceUpdateDimensions) {
+        var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
 
-        var _stackItems3 = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+        var _stackItems2 = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 
-        var dimensionItems = _stackItems3.dimensionItems;
-        var height = _stackItems3.height;
-        var groupHeights = _stackItems3.groupHeights;
-        var groupTops = _stackItems3.groupTops;
+        var dimensionItems = _stackItems2.dimensionItems;
+        var height = _stackItems2.height;
+        var groupHeights = _stackItems2.groupHeights;
+        var groupTops = _stackItems2.groupTops;
 
         newState.dimensionItems = dimensionItems;
         newState.height = height;
@@ -377,7 +360,6 @@ var ReactCalendarTimeline = function (_Component) {
         newState.groupTops = groupTops;
       }
 
-      console.log('canvas time start', newState.canvasTimeStart);
       this.setState(newState);
     }
   }, {

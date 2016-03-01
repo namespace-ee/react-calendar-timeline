@@ -221,18 +221,7 @@ export default class ReactCalendarTimeline extends Component {
     const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
 
     if (visibleTimeStart && visibleTimeEnd) {
-      this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
-    }
-
-    if(items != this.props.items || groups != this.props.groups) {
-      const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.state.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
-      console.log('canvas time start2', this.state.canvasTimeStart)
-      this.setState({
-        dimensionItems: dimensionItems,
-        height: height,
-        groupHeights: groupHeights,
-        groupTops: groupTops,
-      })
+      this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items != this.props.items || groups != this.props.groups)
     }
   }
 
@@ -274,8 +263,8 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    if(resetCanvas) {
-      const canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : this.state.canvasTimeStart
+    if(resetCanvas || forceUpdateDimensions) {
+      const canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart
       const {dimensionItems, height, groupHeights, groupTops} =  this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
       newState.dimensionItems = dimensionItems
       newState.height = height
@@ -283,7 +272,6 @@ export default class ReactCalendarTimeline extends Component {
       newState.groupTops = groupTops
     }
 
-    console.log('canvas time start', newState.canvasTimeStart)
     this.setState(newState)
   }
 
