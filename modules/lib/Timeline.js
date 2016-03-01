@@ -308,13 +308,14 @@ var ReactCalendarTimeline = function (_Component) {
       }
 
       if (items != this.props.items || groups != this.props.groups) {
-        var _stackItems2 = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width);
+        var _stackItems2 = this.stackItems(this.state.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 
         var dimensionItems = _stackItems2.dimensionItems;
         var height = _stackItems2.height;
         var groupHeights = _stackItems2.groupHeights;
         var groupTops = _stackItems2.groupTops;
 
+        console.log('canvas time start2', this.state.canvasTimeStart);
         this.setState({
           dimensionItems: dimensionItems,
           height: height,
@@ -325,7 +326,7 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'updateScrollCanvas',
-    value: function updateScrollCanvas(visibleTimeStart, visibleTimeEnd) {
+    value: function updateScrollCanvas(visibleTimeStart, visibleTimeEnd, forceUpdateDimensions) {
       var oldCanvasTimeStart = this.state.canvasTimeStart;
       var oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
       var newZoom = visibleTimeEnd - visibleTimeStart;
@@ -355,7 +356,15 @@ var ReactCalendarTimeline = function (_Component) {
         newState.canvasTimeStart = visibleTimeStart - newZoom;
         this.refs.scrollComponent.scrollLeft = this.state.width;
 
-        var _stackItems3 = this.stackItems(newState.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+        if (this.props.onBoundsChange) {
+          this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
+        }
+      }
+
+      if (resetCanvas) {
+        var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : this.state.canvasTimeStart;
+
+        var _stackItems3 = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 
         var dimensionItems = _stackItems3.dimensionItems;
         var height = _stackItems3.height;
@@ -366,12 +375,9 @@ var ReactCalendarTimeline = function (_Component) {
         newState.height = height;
         newState.groupHeights = groupHeights;
         newState.groupTops = groupTops;
-
-        if (this.props.onBoundsChange) {
-          this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
-        }
       }
 
+      console.log('canvas time start', newState.canvasTimeStart);
       this.setState(newState);
     }
   }, {

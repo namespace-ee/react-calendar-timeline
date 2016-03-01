@@ -225,7 +225,8 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if(items != this.props.items || groups != this.props.groups) {
-      const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width)
+      const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.state.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
+      console.log('canvas time start2', this.state.canvasTimeStart)
       this.setState({
         dimensionItems: dimensionItems,
         height: height,
@@ -235,7 +236,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  updateScrollCanvas (visibleTimeStart, visibleTimeEnd) {
+  updateScrollCanvas (visibleTimeStart, visibleTimeEnd, forceUpdateDimensions) {
     const oldCanvasTimeStart = this.state.canvasTimeStart
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = visibleTimeEnd - visibleTimeStart
@@ -268,17 +269,21 @@ export default class ReactCalendarTimeline extends Component {
       newState.canvasTimeStart = visibleTimeStart - newZoom
       this.refs.scrollComponent.scrollLeft = this.state.width
 
-      const {dimensionItems, height, groupHeights, groupTops} =  this.stackItems(newState.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
-      newState.dimensionItems = dimensionItems
-      newState.height = height
-      newState.groupHeights = groupHeights
-      newState.groupTops = groupTops
-
       if (this.props.onBoundsChange) {
         this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3)
       }
     }
 
+    if(resetCanvas) {
+      const canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : this.state.canvasTimeStart
+      const {dimensionItems, height, groupHeights, groupTops} =  this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width)
+      newState.dimensionItems = dimensionItems
+      newState.height = height
+      newState.groupHeights = groupHeights
+      newState.groupTops = groupTops
+    }
+
+    console.log('canvas time start', newState.canvasTimeStart)
     this.setState(newState)
   }
 
