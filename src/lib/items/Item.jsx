@@ -25,7 +25,7 @@ export default class Item extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return !(nextState.dragging !== this.state.dragging &&
+    var shouldUpdate = !(nextState.dragging !== this.state.dragging &&
              nextState.dragTime !== this.state.dragTime &&
              nextState.dragGroupDelta !== this.state.dragGroupDelta &&
              nextState.resizing !== this.state.resizing &&
@@ -42,8 +42,11 @@ export default class Item extends Component {
              nextProps.minResizeWidth === this.props.minResizeWidth &&
              nextProps.selected === this.props.selected &&
              nextProps.canChangeGroup === this.props.canChangeGroup &&
+             nextProps.topOffset === this.props.topOffset &&
              nextProps.canMove === this.props.canMove &&
-             nextProps.canResize === this.props.canResize)
+             nextProps.canResize === this.props.canResize &&
+             nextProps.dimensions === this.props.dimensions)
+    return shouldUpdate
   }
 
   cacheDataFromProps (props) {
@@ -79,12 +82,23 @@ export default class Item extends Component {
   }
 
   dragGroupDelta (e) {
+    const {groupTops, order} = this.props
     if (this.state.dragging) {
       if (!this.props.canChangeGroup) {
         return 0
       }
-      const deltaY = e.pageY - this.state.dragStart.y
-      const groupDelta = Math.round(deltaY / this.props.lineHeight)
+      let groupDelta = 0
+
+      // TODO: figure out if topOffset is necessary
+      for (var key of Object.keys(groupTops)) {
+        var item = groupTops[key]
+        // if(e.pageY - topOffset > item) {
+        if (e.pageY > item) {
+          groupDelta = parseInt(key, 10) - order
+        } else {
+          break
+        }
+      }
 
       if (this.props.order + groupDelta < 0) {
         return 0 - this.props.order
@@ -111,9 +125,10 @@ export default class Item extends Component {
   }
 
   mountInteract () {
+    const rightResize = this.props.useResizeHandle ? this.refs.dragRight : true
     interact(this.refs.item)
       .resizable({
-        edges: {left: false, right: true, top: false, bottom: false},
+        edges: {left: false, right: rightResize, top: false, bottom: false},
         enabled: this.props.selected && this.canResize()
       })
       .draggable({
@@ -231,7 +246,7 @@ export default class Item extends Component {
     if (!props.canResize) {
       return false
     }
-    let width = parseInt(this.dimensions(props).width, 10)
+    let width = parseInt(this.props.dimensions.width, 10)
     return width >= props.minResizeWidth
   }
 
@@ -297,33 +312,25 @@ export default class Item extends Component {
     }
   }
 
-  dimensions (props = this.props) {
-    const x = this.state.dragging ? this.state.dragTime : this.itemTimeStart
-    const w = Math.max((this.state.resizing ? this.state.newResizeEnd : this.itemTimeEnd) - this.itemTimeStart, props.dragSnap)
-    const y = (props.order + (this.state.dragging ? this.state.dragGroupDelta : 0) + 0.15 + 2) * props.lineHeight // +2 for header
-    const h = props.lineHeight * 0.65
-    const ratio = 1 / this.coordinateToTimeRatio(props)
-
-    return {
-      left: `${(x - props.canvasTimeStart) * ratio}px`,
-      top: `${y}px`,
-      width: `${Math.max(w * ratio, 3)}px`,
-      height: `${h}px`
-    }
-  }
-
   render () {
+    const dimensions = this.props.dimensions
     if (typeof this.props.order === 'undefined' || this.props.order === null) {
       return null
     }
-
-    const dimensions = this.dimensions()
 
     const classNames = 'rct-item' +
                        (this.props.selected ? ' selected' : '') +
                        (this.canMove(this.props) ? ' can-move' : '') +
                        (this.canResize(this.props) ? ' can-resize' : '') +
                        (this.props.item.className ? ` ${this.props.item.className}` : '')
+
+    const style = {
+      left: `${dimensions.left}px`,
+      top: `${dimensions.top}px`,
+      width: `${dimensions.width}px`,
+      height: `${dimensions.height}px`,
+      lineHeight: `${dimensions.height}px`
+    }
 
     return (
       <div key={this.itemId}
@@ -334,14 +341,13 @@ export default class Item extends Component {
            onMouseUp={this.onMouseUp}
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
-           style={{
-             // left + top is faster than transform
-             left: dimensions.left,
-             top: dimensions.top,
-             width: dimensions.width,
-             height: dimensions.height,
-             lineHeight: dimensions.height}}>
-        {this.itemTitle}
+           style={style}>
+        <div className='rct-item-overflow'>
+          <div className='rct-item-content'>
+            {this.itemTitle}
+          </div>
+        </div>
+        { this.props.useResizeHandle ? <div ref='dragRight' className='rct-drag-right'></div> : '' }
       </div>
     )
   }

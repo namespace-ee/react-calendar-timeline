@@ -33,6 +33,38 @@
       cursor: move; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-resize {
       border-right-width: 3px; }
+      .react-calendar-timeline .rct-items .rct-item.selected.can-resize .rct-drag-right {
+        cursor: e-resize; }
+  .react-calendar-timeline .rct-items .rct-item .rct-drag-right {
+    position: absolute;
+    width: 24px;
+    max-width: 20%;
+    min-width: 2px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    z-index: 10; }
+  .react-calendar-timeline .rct-items .rct-item:hover {
+    z-index: 10; }
+  .react-calendar-timeline .rct-items .rct-item .rct-item-overflow {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden; }
+    .react-calendar-timeline .rct-items .rct-item .rct-item-overflow:hover {
+      overflow: visible;
+      z-index: 10; }
+    .react-calendar-timeline .rct-items .rct-item .rct-item-overflow .rct-item-content {
+      white-space: nowrap;
+      position: relative;
+      display: inline-block;
+      border-radius: 2px;
+      left: 0;
+      padding: 0 6px;
+      height: 100%; }
 
 .react-calendar-timeline .rct-header {
   margin: 0; }

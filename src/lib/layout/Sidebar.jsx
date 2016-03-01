@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { _get, _length, arraysEqual } from '../utils'
+import { _get, arraysEqual } from '../utils'
 
 export default class Sidebar extends Component {
   constructor (props) {
@@ -21,7 +21,9 @@ export default class Sidebar extends Component {
              nextProps.width === this.props.width &&
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.fixedHeader === this.props.fixedHeader &&
-             nextProps.zIndex === this.props.zIndex)
+             nextProps.zIndex === this.props.zIndex &&
+             nextProps.groupHeights === this.props.groupHeights &&
+             nextProps.height === this.props.height)
   }
 
   scroll (e) {
@@ -63,7 +65,7 @@ export default class Sidebar extends Component {
 
   render () {
     const {
-      fixedHeader, width, lineHeight, zIndex, groups
+      fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight
     } = this.props
 
     const {groupIdKey, groupTitleKey} = this.props.keys
@@ -74,22 +76,17 @@ export default class Sidebar extends Component {
 
     const sidebarStyle = {
       width: `${width}px`,
-      height: `${lineHeight * (_length(groups) + 2)}px`
+      height: `${height}px`
     }
 
     const headerStyle = {
-      height: `${lineHeight * 2}px`,
+      height: `${headerHeight}px`,
       lineHeight: `${lineHeight}px`,
       width: `${width}px`
     }
 
     const groupsStyle = {
       width: `${width}px`
-    }
-
-    const elementStyle = {
-      height: `${lineHeight - 1}px`,
-      lineHeight: `${lineHeight - 1}px`
     }
 
     if (fixedHeader === 'fixed') {
@@ -101,7 +98,7 @@ export default class Sidebar extends Component {
       if (scrollTop >= componentTop) {
         headerStyle.position = 'absolute'
         headerStyle.top = `${scrollTop - componentTop}px`
-        headerStyle.left = `0`
+        headerStyle.left = '0'
         groupsStyle.paddingTop = headerStyle.height
       }
     }
@@ -113,7 +110,12 @@ export default class Sidebar extends Component {
     let groupLines = []
     let i = 0
 
-    this.props.groups.forEach((group) => {
+    this.props.groups.forEach((group, index) => {
+      const elementStyle = {
+        height: `${groupHeights[index] - 1}px`,
+        lineHeight: `${groupHeights[index] - 1}px`
+      }
+
       groupLines.push(
         <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
           {_get(group, groupTitleKey)}

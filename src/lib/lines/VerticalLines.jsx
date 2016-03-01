@@ -3,10 +3,6 @@ import React, { Component } from 'react'
 import { iterateTimes } from '../utils.js'
 
 export default class VerticalLines extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasTimeStart === this.props.canvasTimeStart &&
              nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
@@ -14,11 +10,14 @@ export default class VerticalLines extends Component {
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.lineCount === this.props.lineCount &&
              nextProps.minUnit === this.props.minUnit &&
-             nextProps.fixedHeader === this.props.fixedHeader)
+             nextProps.fixedHeader === this.props.fixedHeader &&
+             nextProps.height === this.props.height &&
+             nextProps.headerHeight === this.props.headerHeight
+    )
   }
 
   render () {
-    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, lineCount, lineHeight } = this.props
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, lineHeight, height, headerHeight } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
@@ -42,7 +41,7 @@ export default class VerticalLines extends Component {
                top: `${lineHeight * 2}px`,
                left: `${left + leftPush}px`,
                width: `${labelWidth}px`,
-               height: `${lineCount * lineHeight}px`
+               height: `${height - headerHeight}px`
              }} />)
     })
 

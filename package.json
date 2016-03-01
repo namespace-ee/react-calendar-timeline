@@ -2,7 +2,7 @@
   "name": "react-calendar-timeline",
   "version": "0.6.11",
   "description": "react calendar timeline",
-  "main": "src/index.js",
+  "main": "modules/index.js",
   "scripts": {
     "clean": "rimraf -rf ./build",
     "watch": "npm run clean && node scripts/watch.js",
@@ -10,6 +10,7 @@
     "build:dev": "echo 'DEV - BUILD' && webpack --config webpack.config.js",
     "build:prod": "echo 'PROD - BUILD' && webpack --config webpack.config.prod.js",
     "release": "npm run build && babel src --out-dir build && cp README.md build/ && node scripts/release.js",
+    "module": "./node_modules/.bin/babel src --out-dir modules",
     "lint": "eslint --ext .js,.jsx src",
     "lintfix": "eslint --ext .js,.jsx src --fix",
     "upgrade:patch": "npm version patch",
@@ -51,6 +52,7 @@
     "interact.js": "*"
   },
   "devDependencies": {
+    "babel-cli": "^6.4.5",
     "babel-core": "~6.4.5",
     "babel-eslint": "^5.0.0",
     "babel-loader": "~6.2.1",
