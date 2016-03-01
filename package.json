@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.6.11",
+  "version": "0.7.0",
   "description": "react calendar timeline",
   "main": "modules/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "npm:publish:next": "npm run release && cd build && npm publish --tag next",
     "npm:publish:latest": "npm run release && cd build && npm publish",
     "info": "npm info react-calendar-timeline",
-    "start": "webpack-dev-server --inline --hot --host 0.0.0.0"
+    "start": "./node_modules/.bin/webpack-dev-server --inline --hot --host 0.0.0.0"
   },
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
