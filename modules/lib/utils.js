@@ -17,14 +17,14 @@ exports.getVisibleItems = getVisibleItems;
 exports.collision = collision;
 exports.stack = stack;
 exports.nostack = nostack;
+exports.keyBy = keyBy;
+exports.groupBy = groupBy;
 exports.hasSomeParentTheClass = hasSomeParentTheClass;
 exports.createGradientPattern = createGradientPattern;
 
 var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
-
-var _lodash = require('lodash');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -110,7 +110,7 @@ function coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth) {
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 }
 
-function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder) {
+function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio) {
   var itemId = _get(item, keys.itemIdKey);
   var itemTimeStart = _get(item, keys.itemTimeStartKey);
   var itemTimeEnd = _get(item, keys.itemTimeEndKey);
@@ -121,7 +121,19 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
   var x = isDragging ? dragTime : itemTimeStart;
 
   var w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
-  var h = lineHeight * 0.65;
+  var collisionX = itemTimeStart;
+  var collisionW = w;
+
+  if (isDragging) {
+    if (itemTimeStart >= dragTime) {
+      collisionX = dragTime;
+      collisionW = Math.max(itemTimeEnd - dragTime, dragSnap);
+    } else {
+      collisionW = Math.max(dragTime - itemTimeStart + w, dragSnap);
+    }
+  }
+
+  var h = lineHeight * itemHeightRatio;
   var ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
 
   var dimensions = {
@@ -131,7 +143,11 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
     height: h,
     order: isDragging ? newGroupOrder : order,
     stack: true,
-    lineHeight: lineHeight
+    lineHeight: lineHeight,
+    collisionLeft: collisionX,
+    originalLeft: itemTimeStart,
+    collisionWidth: collisionW,
+    isDragging: isDragging
   };
 
   return dimensions;
@@ -159,8 +175,9 @@ function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
 }
 
 function collision(a, b, lineHeight) {
-  var verticalMargin = (lineHeight - a.height) / 2;
-  return a.left + EPSILON < b.left + b.width && a.left + a.width - EPSILON > b.left && a.top - verticalMargin + EPSILON < b.top + b.height && a.top + a.height + verticalMargin - EPSILON > b.top;
+  //var verticalMargin = (lineHeight - a.height)/2;
+  var verticalMargin = 0;
+  return a.collisionLeft + EPSILON < b.collisionLeft + b.collisionWidth && a.collisionLeft + a.collisionWidth - EPSILON > b.collisionLeft && a.top - verticalMargin + EPSILON < b.top + b.height && a.top + a.height + verticalMargin - EPSILON > b.top;
 }
 
 function stack(items, groupOrders, lineHeight, headerHeight, force) {
@@ -171,7 +188,7 @@ function stack(items, groupOrders, lineHeight, headerHeight, force) {
   var groupHeights = {};
   var groupTops = {};
 
-  var groupedItems = (0, _lodash.groupBy)(items, function (item) {
+  var groupedItems = groupBy(items, function (item) {
     return item.dimensions.order;
   });
 
@@ -182,43 +199,67 @@ function stack(items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  (0, _lodash.forEach)(groupOrders, function (key, url) {
-    // calculate new, non-overlapping positions
-    var group = groupedItems[key] || [];
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
 
-    groupTops[key] = totalHeight;
+  try {
+    for (var _iterator = Object.keys(groupOrders)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var url = _step.value;
 
-    var groupHeight = 0;
-    for (i = 0, iMax = group.length; i < iMax; i++) {
-      var item = group[i];
-      var verticalMargin = (item.dimensions.lineHeight - item.dimensions.height) / 2;
+      var key = groupOrders[url];
+      // calculate new, non-overlapping positions
+      var group = groupedItems[key] || [];
 
-      if (item.dimensions.stack && item.dimensions.top === null) {
-        item.dimensions.top = totalHeight + verticalMargin;
-        groupHeight = Math.max(groupHeight, item.dimensions.lineHeight);
-        do {
-          var collidingItem = null;
-          for (var j = 0, jj = group.length; j < jj; j++) {
-            var other = group[j];
-            if (other.top !== null && other !== item && other.dimensions.stack && collision(item.dimensions, other.dimensions, item.dimensions.lineHeight)) {
-              collidingItem = other;
-              break;
-            } else {
-              //console.log('dont test', other.top !== null, other !== item, other.stack);
+      groupTops[key] = totalHeight;
+
+      var groupHeight = 0;
+      var verticalMargin = 0;
+      for (i = 0, iMax = group.length; i < iMax; i++) {
+        var item = group[i];
+        verticalMargin = item.dimensions.lineHeight - item.dimensions.height;
+
+        if (item.dimensions.stack && item.dimensions.top === null) {
+          item.dimensions.top = totalHeight + verticalMargin;
+          groupHeight = Math.max(groupHeight, item.dimensions.lineHeight);
+          do {
+            var collidingItem = null;
+            for (var j = 0, jj = group.length; j < jj; j++) {
+              var other = group[j];
+              if (other.top !== null && other !== item && other.dimensions.stack && collision(item.dimensions, other.dimensions, item.dimensions.lineHeight)) {
+                collidingItem = other;
+                break;
+              } else {
+                //console.log('dont test', other.top !== null, other !== item, other.stack);
+              }
             }
-          }
 
-          if (collidingItem != null) {
-            // There is a collision. Reposition the items above the colliding element
-            item.dimensions.top = collidingItem.dimensions.top + collidingItem.dimensions.lineHeight + verticalMargin;
-            groupHeight = Math.max(groupHeight, item.dimensions.top + item.dimensions.height + verticalMargin - totalHeight);
-          }
-        } while (collidingItem);
+            if (collidingItem != null) {
+              // There is a collision. Reposition the items above the colliding element
+              item.dimensions.top = collidingItem.dimensions.top + collidingItem.dimensions.lineHeight;
+              groupHeight = Math.max(groupHeight, item.dimensions.top + item.dimensions.height - totalHeight);
+            }
+          } while (collidingItem);
+        }
+      }
+      groupHeights[key] = Math.max(groupHeight + verticalMargin, lineHeight);
+      totalHeight += Math.max(groupHeight + verticalMargin, lineHeight);
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
       }
     }
-    groupHeights[key] = Math.max(groupHeight, lineHeight);
-    totalHeight += Math.max(groupHeight, lineHeight);
-  });
+  }
+
   return {
     height: totalHeight,
     groupHeights: groupHeights,
@@ -234,7 +275,7 @@ function nostack(items, groupOrders, lineHeight, headerHeight, force) {
   var groupHeights = {};
   var groupTops = {};
 
-  var groupedItems = (0, _lodash.groupBy)(items, function (item) {
+  var groupedItems = groupBy(items, function (item) {
     return item.dimensions.order;
   });
 
@@ -245,30 +286,78 @@ function nostack(items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  (0, _lodash.forEach)(groupOrders, function (key, url) {
-    // calculate new, non-overlapping positions
-    var group = groupedItems[key] || [];
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
 
-    groupTops[key] = totalHeight;
+  try {
+    for (var _iterator2 = Object.keys(groupOrders)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var url = _step2.value;
 
-    var groupHeight = 0;
-    for (i = 0, iMax = group.length; i < iMax; i++) {
-      var item = group[i];
-      var verticalMargin = (item.dimensions.lineHeight - item.dimensions.height) / 2;
+      var key = groupOrders[url];
+      // calculate new, non-overlapping positions
+      var group = groupedItems[key] || [];
 
-      if (item.dimensions.top === null) {
-        item.dimensions.top = totalHeight + verticalMargin;
-        groupHeight = Math.max(groupHeight, item.dimensions.lineHeight);
+      groupTops[key] = totalHeight;
+
+      var groupHeight = 0;
+      for (i = 0, iMax = group.length; i < iMax; i++) {
+        var item = group[i];
+        var verticalMargin = (item.dimensions.lineHeight - item.dimensions.height) / 2;
+
+        if (item.dimensions.top === null) {
+          item.dimensions.top = totalHeight + verticalMargin;
+          groupHeight = Math.max(groupHeight, item.dimensions.lineHeight);
+        }
+      }
+      groupHeights[key] = Math.max(groupHeight, lineHeight);
+      totalHeight += Math.max(groupHeight, lineHeight);
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
       }
     }
-    groupHeights[key] = Math.max(groupHeight, lineHeight);
-    totalHeight += Math.max(groupHeight, lineHeight);
-  });
+  }
+
   return {
     height: totalHeight,
     groupHeights: groupHeights,
     groupTops: groupTops
   };
+}
+
+function keyBy(value, key) {
+  var obj = {};
+
+  value.forEach(function (element, index, array) {
+    obj[element[key]] = element;
+  });
+
+  return obj;
+}
+
+function groupBy(collection, groupFunction) {
+
+  var obj = {};
+
+  collection.forEach(function (element, index, array) {
+    var key = groupFunction(element);
+    if (!obj[key]) {
+      obj[key] = [];
+    }
+    obj[key].push(element);
+  });
+
+  return obj;
 }
 
 function hasSomeParentTheClass(element, classname) {

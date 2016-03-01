@@ -616,7 +616,7 @@ export default class ReactCalendarTimeline extends Component {
     const minUnit = getMinUnit(zoom, width);
     const headerHeight = headerLabelGroupHeight + headerLabelHeight;
 
-    if(true) {
+    if(draggingItem || resizingItem) {
       const stackResults = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, width)
       dimensionItems = stackResults.dimensionItems
       height = stackResults.height

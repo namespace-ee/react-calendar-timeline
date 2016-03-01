@@ -14,8 +14,6 @@ var _Item = require('./Item');
 
 var _Item2 = _interopRequireDefault(_Item);
 
-var _lodash = require('lodash');
-
 var _utils = require('../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

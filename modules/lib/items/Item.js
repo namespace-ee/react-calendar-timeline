@@ -14,8 +14,6 @@ var _interact = require('interact.js');
 
 var _interact2 = _interopRequireDefault(_interact);
 
-var _lodash = require('lodash');
-
 var _utils = require('../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -136,16 +134,39 @@ var Item = function (_Component) {
         if (!this.props.canChangeGroup) {
           return 0;
         }
-        var deltaY = e.pageY - this.state.dragStart.y - topOffset;
         var groupDelta = 0;
 
-        (0, _lodash.forEach)(groupTops, function (item, key) {
-          if (e.pageY - topOffset > item) {
-            groupDelta = parseInt(key, 10) - order;
-          } else {
-            return false;
+        //TODO: figure out if topOffset is necessary
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = Object.keys(groupTops)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var key = _step.value;
+
+            var item = groupTops[key];
+            //if(e.pageY - topOffset > item) {
+            if (e.pageY > item) {
+              groupDelta = parseInt(key, 10) - order;
+            } else {
+              break;
+            }
           }
-        });
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
 
         if (this.props.order + groupDelta < 0) {
           return 0 - this.props.order;
@@ -336,6 +357,9 @@ var Item = function (_Component) {
     key: 'render',
     value: function render() {
       var dimensions = this.props.dimensions;
+      if (typeof this.props.order === 'undefined' || this.props.order === null) {
+        return null;
+      }
 
       var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
 

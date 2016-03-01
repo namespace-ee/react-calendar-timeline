@@ -18,8 +18,6 @@ var _moment2 = _interopRequireDefault(_moment);
 
 require('./Timeline.scss');
 
-var _lodash = require('lodash');
-
 var _Items = require('./items/Items');
 
 var _Items2 = _interopRequireDefault(_Items);
@@ -124,6 +122,18 @@ var ReactCalendarTimeline = function (_Component) {
       topOffset: 0,
       resizingItem: null
     };
+
+    var _this$stackItems = _this.stackItems(_this.state.canvasTimeStart, _this.state.visibleTimeStart, _this.state.visibleTimeEnd, _this.state.width);
+
+    var dimensionItems = _this$stackItems.dimensionItems;
+    var height = _this$stackItems.height;
+    var groupHeights = _this$stackItems.groupHeights;
+    var groupTops = _this$stackItems.groupTops;
+
+    _this.state.dimensionItems = dimensionItems;
+    _this.state.height = height;
+    _this.state.groupHeights = groupHeights;
+    _this.state.groupTops = groupTops;
     return _this;
   }
 
@@ -239,9 +249,21 @@ var ReactCalendarTimeline = function (_Component) {
     value: function resize() {
       //FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
       var width = this.refs.container.clientWidth - this.props.sidebarWidth;
+
+      var _stackItems = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
+
+      var dimensionItems = _stackItems.dimensionItems;
+      var height = _stackItems.height;
+      var groupHeights = _stackItems.groupHeights;
+      var groupTops = _stackItems.groupTops;
+
       this.setState({
         width: width,
-        topOffset: this.refs.container.getBoundingClientRect().top
+        topOffset: this.refs.container.getBoundingClientRect().top,
+        dimensionItems: dimensionItems,
+        height: height,
+        groupHeights: groupHeights,
+        groupTops: groupTops
       });
       this.refs.scrollComponent.scrollLeft = width;
     }
@@ -311,8 +333,22 @@ var ReactCalendarTimeline = function (_Component) {
       }
 
       if (resetCanvas) {
+        // Todo: need to calculate new dimensions
         newState.canvasTimeStart = visibleTimeStart - newZoom;
         this.refs.scrollComponent.scrollLeft = this.state.width;
+
+        var _stackItems2 = this.stackItems(newState.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+
+        var dimensionItems = _stackItems2.dimensionItems;
+        var height = _stackItems2.height;
+        var groupHeights = _stackItems2.groupHeights;
+        var groupTops = _stackItems2.groupTops;
+
+        newState.dimensionItems = dimensionItems;
+        newState.height = height;
+        newState.groupHeights = groupHeights;
+        newState.groupTops = groupTops;
+
         if (this.props.onBoundsChange) {
           this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
         }
@@ -637,8 +673,8 @@ var ReactCalendarTimeline = function (_Component) {
       );
     }
   }, {
-    key: 'render',
-    value: function render() {
+    key: 'stackItems',
+    value: function stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
       var _props3 = this.props;
       var items = _props3.items;
       var groups = _props3.groups;
@@ -648,32 +684,26 @@ var ReactCalendarTimeline = function (_Component) {
       var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
       var headerLabelHeight = _props3.headerLabelHeight;
       var stackItems = _props3.stackItems;
-
-      var otherProps = _objectWithoutProperties(_props3, ['items', 'groups', 'keys', 'dragSnap', 'lineHeight', 'headerLabelGroupHeight', 'headerLabelHeight', 'stackItems']);
-
+      var itemHeightRatio = _props3.itemHeightRatio;
       var _state2 = this.state;
       var draggingItem = _state2.draggingItem;
       var dragTime = _state2.dragTime;
       var resizingItem = _state2.resizingItem;
       var resizeEnd = _state2.resizeEnd;
       var newGroupOrder = _state2.newGroupOrder;
-      var isDragging = _state2.isDragging;
 
-      var canvasTimeStart = this.state.canvasTimeStart;
-      var zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
+      var zoom = visibleTimeEnd - visibleTimeStart;
       var canvasTimeEnd = canvasTimeStart + zoom * 3;
-      var canvasWidth = this.state.width * 3;
-      var minUnit = (0, _utils.getMinUnit)(zoom, this.state.width);
+      var canvasWidth = width * 3;
       var headerHeight = headerLabelGroupHeight + headerLabelHeight;
-
-      var width = this.state.width;
 
       var visibleItems = (0, _utils.getVisibleItems)(items, canvasTimeStart, canvasTimeEnd, keys);
       var groupOrders = (0, _utils.getGroupOrders)(groups, keys);
+
       var dimensionItems = visibleItems.map(function (item) {
         return {
           id: (0, _utils._get)(item, keys.itemIdKey),
-          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder)
+          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio)
         };
       });
 
@@ -684,6 +714,55 @@ var ReactCalendarTimeline = function (_Component) {
       var height = _stackingMethod.height;
       var groupHeights = _stackingMethod.groupHeights;
       var groupTops = _stackingMethod.groupTops;
+
+      return { dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props4 = this.props;
+      var items = _props4.items;
+      var groups = _props4.groups;
+      var keys = _props4.keys;
+      var dragSnap = _props4.dragSnap;
+      var lineHeight = _props4.lineHeight;
+      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
+      var headerLabelHeight = _props4.headerLabelHeight;
+      var stackItems = _props4.stackItems;
+      var itemHeightRatio = _props4.itemHeightRatio;
+
+      var otherProps = _objectWithoutProperties(_props4, ['items', 'groups', 'keys', 'dragSnap', 'lineHeight', 'headerLabelGroupHeight', 'headerLabelHeight', 'stackItems', 'itemHeightRatio']);
+
+      var _state3 = this.state;
+      var draggingItem = _state3.draggingItem;
+      var dragTime = _state3.dragTime;
+      var resizingItem = _state3.resizingItem;
+      var resizeEnd = _state3.resizeEnd;
+      var newGroupOrder = _state3.newGroupOrder;
+      var isDragging = _state3.isDragging;
+      var width = _state3.width;
+      var visibleTimeStart = _state3.visibleTimeStart;
+      var visibleTimeEnd = _state3.visibleTimeEnd;
+      var canvasTimeStart = _state3.canvasTimeStart;
+      var _state4 = this.state;
+      var dimensionItems = _state4.dimensionItems;
+      var height = _state4.height;
+      var groupHeights = _state4.groupHeights;
+      var groupTops = _state4.groupTops;
+
+      var zoom = visibleTimeEnd - visibleTimeStart;
+      var canvasTimeEnd = canvasTimeStart + zoom * 3;
+      var canvasWidth = width * 3;
+      var minUnit = (0, _utils.getMinUnit)(zoom, width);
+      var headerHeight = headerLabelGroupHeight + headerLabelHeight;
+
+      if (draggingItem || resizingItem) {
+        var stackResults = this.stackItems(canvasTimeStart, visibleTimeStart, visibleTimeEnd, width);
+        dimensionItems = stackResults.dimensionItems;
+        height = stackResults.height;
+        groupHeights = stackResults.groupHeights;
+        groupTops = stackResults.groupTops;
+      }
 
       var outerComponentStyle = {
         height: height + 'px'
@@ -724,7 +803,7 @@ var ReactCalendarTimeline = function (_Component) {
               { ref: 'canvasComponent',
                 className: 'rct-canvas',
                 style: canvasComponentStyle },
-              this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, (0, _lodash.keyBy)(dimensionItems, 'id'), groupHeights, groupTops),
+              this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, (0, _utils.keyBy)(dimensionItems, 'id'), groupHeights, groupTops),
               this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
               this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
               this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
@@ -800,6 +879,7 @@ ReactCalendarTimeline.defaultProps = {
   lineHeight: 30,
   headerLabelGroupHeight: 30,
   headerLabelHeight: 30,
+  itemHeightRatio: 0.65,
 
   minZoom: 60 * 60 * 1000, // 1 hour
   maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
