@@ -307,8 +307,20 @@ var ReactCalendarTimeline = function (_Component) {
         this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
       }
 
-      if (items != this.props.items) {
-        console.log('items dont match');
+      if (items != this.props.items || groups != this.props.groups) {
+        var _stackItems2 = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width);
+
+        var dimensionItems = _stackItems2.dimensionItems;
+        var height = _stackItems2.height;
+        var groupHeights = _stackItems2.groupHeights;
+        var groupTops = _stackItems2.groupTops;
+
+        this.setState({
+          dimensionItems: dimensionItems,
+          height: height,
+          groupHeights: groupHeights,
+          groupTops: groupTops
+        });
       }
     }
   }, {
@@ -343,12 +355,12 @@ var ReactCalendarTimeline = function (_Component) {
         newState.canvasTimeStart = visibleTimeStart - newZoom;
         this.refs.scrollComponent.scrollLeft = this.state.width;
 
-        var _stackItems2 = this.stackItems(newState.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+        var _stackItems3 = this.stackItems(newState.canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 
-        var dimensionItems = _stackItems2.dimensionItems;
-        var height = _stackItems2.height;
-        var groupHeights = _stackItems2.groupHeights;
-        var groupTops = _stackItems2.groupTops;
+        var dimensionItems = _stackItems3.dimensionItems;
+        var height = _stackItems3.height;
+        var groupHeights = _stackItems3.groupHeights;
+        var groupTops = _stackItems3.groupTops;
 
         newState.dimensionItems = dimensionItems;
         newState.height = height;

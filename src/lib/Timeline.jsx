@@ -177,7 +177,7 @@ export default class ReactCalendarTimeline extends Component {
     //FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
     let width = this.refs.container.clientWidth - this.props.sidebarWidth
 
-    const {dimensionItems, height, groupHeights, groupTops} =  this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
+    const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width);
 
     this.setState({
       width: width,
@@ -224,8 +224,14 @@ export default class ReactCalendarTimeline extends Component {
       this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     }
 
-    if(items != this.props.items) {
-      console.log('items dont match');
+    if(items != this.props.items || groups != this.props.groups) {
+      const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width)
+      this.setState({
+        dimensionItems: dimensionItems,
+        height: height,
+        groupHeights: groupHeights,
+        groupTops: groupTops,
+      })
     }
   }
 
