@@ -62,7 +62,7 @@ var Item = function (_Component) {
 
     _this.handleDoubleClick = function (e) {
       if (_this.props.onItemDoubleClick) {
-        _this.props.onItemDoubleClick(e);
+        _this.props.onItemDoubleClick(_this.itemId);
       }
     };
 

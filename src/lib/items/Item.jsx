@@ -306,7 +306,7 @@ export default class Item extends Component {
 
   handleDoubleClick = (e) => {
     if (this.props.onItemDoubleClick) {
-      this.props.onItemDoubleClick(e)
+      this.props.onItemDoubleClick(this.itemId)
     }
   };
 
