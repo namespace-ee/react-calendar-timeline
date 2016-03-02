@@ -304,6 +304,12 @@ export default class Item extends Component {
     }
   };
 
+  handleDoubleClick = (e) => {
+    if (this.props.onItemDoubleClick) {
+      this.props.onItemDoubleClick(e)
+    }
+  };
+
   actualClick (e, clickType) {
     if (this.props.onSelect) {
       this.props.onSelect(this.itemId, clickType)
@@ -339,6 +345,7 @@ export default class Item extends Component {
            onMouseUp={this.onMouseUp}
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
+           onDoubleClick={this.handleDoubleClick}
            style={style}>
         <div className='rct-item-overflow'>
           <div className='rct-item-content'>

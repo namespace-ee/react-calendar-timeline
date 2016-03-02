@@ -130,6 +130,7 @@ var Items = function (_Component) {
             moveResizeValidator: _this2.props.moveResizeValidator,
             onDrag: _this2.props.itemDrag,
             onDrop: _this2.props.itemDrop,
+            onItemDoubleClick: _this2.props.onItemDoubleClick,
             onSelect: _this2.props.itemSelect });
         })
       );

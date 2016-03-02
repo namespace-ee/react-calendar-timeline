@@ -97,6 +97,7 @@ export default class Items extends Component {
                                         moveResizeValidator={this.props.moveResizeValidator}
                                         onDrag={this.props.itemDrag}
                                         onDrop={this.props.itemDrop}
+                                        onItemDoubleClick={this.props.onItemDoubleClick}
                                         onSelect={this.props.itemSelect}/>)}
       </div>
     )

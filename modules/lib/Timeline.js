@@ -628,6 +628,7 @@ var ReactCalendarTimeline = function (_Component) {
         itemSelect: this.selectItem.bind(this),
         itemDrag: this.dragItem.bind(this),
         itemDrop: this.dropItem.bind(this),
+        onItemDoubleClick: this.props.onItemDoubleClick,
         itemResizing: this.resizingItem.bind(this),
         itemResized: this.resizedItem.bind(this) });
     }
@@ -849,6 +850,7 @@ ReactCalendarTimeline.propTypes = {
   onItemResize: _react2.default.PropTypes.func,
   onItemClick: _react2.default.PropTypes.func,
   onCanvasClick: _react2.default.PropTypes.func,
+  onItemDoubleClick: _react2.default.PropTypes.func,
 
   moveResizeValidator: _react2.default.PropTypes.func,
 
@@ -895,6 +897,7 @@ ReactCalendarTimeline.defaultProps = {
   onItemResize: null,
   onItemClick: null,
   onCanvasClick: null,
+  onItemDoubleClick: null,
 
   moveResizeValidator: null,
 

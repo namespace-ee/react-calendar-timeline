@@ -510,6 +510,7 @@ export default class ReactCalendarTimeline extends Component {
              itemSelect={this.selectItem.bind(this)}
              itemDrag={this.dragItem.bind(this)}
              itemDrop={this.dropItem.bind(this)}
+             onItemDoubleClick={this.props.onItemDoubleClick}
              itemResizing={this.resizingItem.bind(this)}
              itemResized={this.resizedItem.bind(this)} />
     )
@@ -712,6 +713,7 @@ ReactCalendarTimeline.propTypes = {
   onItemResize: React.PropTypes.func,
   onItemClick: React.PropTypes.func,
   onCanvasClick: React.PropTypes.func,
+  onItemDoubleClick: React.PropTypes.func,
 
   moveResizeValidator: React.PropTypes.func,
 
@@ -758,6 +760,7 @@ ReactCalendarTimeline.defaultProps = {
   onItemResize: null,
   onItemClick: null,
   onCanvasClick: null,
+  onItemDoubleClick: null,
 
   moveResizeValidator: null,
 

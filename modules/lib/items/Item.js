@@ -60,6 +60,12 @@ var Item = function (_Component) {
       }
     };
 
+    _this.handleDoubleClick = function (e) {
+      if (_this.props.onItemDoubleClick) {
+        _this.props.onItemDoubleClick(e);
+      }
+    };
+
     _this.cacheDataFromProps(props);
 
     _this.state = {
@@ -379,6 +385,7 @@ var Item = function (_Component) {
           onMouseUp: this.onMouseUp,
           onTouchStart: this.onTouchStart,
           onTouchEnd: this.onTouchEnd,
+          onDoubleClick: this.handleDoubleClick,
           style: style },
         _react2.default.createElement(
           'div',
