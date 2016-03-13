@@ -694,6 +694,7 @@ ReactCalendarTimeline.propTypes = {
   lineHeight: React.PropTypes.number,
   headerLabelGroupHeight: React.PropTypes.number,
   headerLabelHeight: React.PropTypes.number,
+  itemHeightRatio: React.PropTypes.number,
 
   minZoom: React.PropTypes.number,
   maxZoom: React.PropTypes.number,

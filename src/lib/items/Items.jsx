@@ -127,7 +127,7 @@ Items.propTypes = {
 
   dragSnap: React.PropTypes.number,
   minResizeWidth: React.PropTypes.number,
-  selectedItem: React.PropTypes.string,
+  selectedItem: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
 
   canChangeGroup: React.PropTypes.bool.isRequired,
   canMove: React.PropTypes.bool.isRequired,

@@ -702,6 +702,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        itemSelect: this.selectItem.bind(this),
 	        itemDrag: this.dragItem.bind(this),
 	        itemDrop: this.dropItem.bind(this),
+	        onItemDoubleClick: this.props.onItemDoubleClick,
 	        itemResizing: this.resizingItem.bind(this),
 	        itemResized: this.resizedItem.bind(this) });
 	    }
@@ -904,6 +905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  lineHeight: _react2.default.PropTypes.number,
 	  headerLabelGroupHeight: _react2.default.PropTypes.number,
 	  headerLabelHeight: _react2.default.PropTypes.number,
+	  itemHeightRatio: _react2.default.PropTypes.number,
 	
 	  minZoom: _react2.default.PropTypes.number,
 	  maxZoom: _react2.default.PropTypes.number,
@@ -923,6 +925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemResize: _react2.default.PropTypes.func,
 	  onItemClick: _react2.default.PropTypes.func,
 	  onCanvasClick: _react2.default.PropTypes.func,
+	  onItemDoubleClick: _react2.default.PropTypes.func,
 	
 	  moveResizeValidator: _react2.default.PropTypes.func,
 	
@@ -969,6 +972,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemResize: null,
 	  onItemClick: null,
 	  onCanvasClick: null,
+	  onItemDoubleClick: null,
 	
 	  moveResizeValidator: null,
 	
@@ -1153,6 +1157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            moveResizeValidator: _this2.props.moveResizeValidator,
 	            onDrag: _this2.props.itemDrag,
 	            onDrop: _this2.props.itemDrop,
+	            onItemDoubleClick: _this2.props.onItemDoubleClick,
 	            onSelect: _this2.props.itemSelect });
 	        })
 	      );
@@ -1188,7 +1193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  dragSnap: _react2.default.PropTypes.number,
 	  minResizeWidth: _react2.default.PropTypes.number,
-	  selectedItem: _react2.default.PropTypes.string,
+	  selectedItem: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
 	
 	  canChangeGroup: _react2.default.PropTypes.bool.isRequired,
 	  canMove: _react2.default.PropTypes.bool.isRequired,
@@ -1268,6 +1273,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!_this.state.interactMounted && _this.startedTouching) {
 	        _this.startedTouching = false;
 	        _this.actualClick(e, 'touch');
+	      }
+	    };
+	
+	    _this.handleDoubleClick = function (e) {
+	      if (_this.props.onItemDoubleClick) {
+	        _this.props.onItemDoubleClick(_this.itemId);
 	      }
 	    };
 	
@@ -1590,6 +1601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          onMouseUp: this.onMouseUp,
 	          onTouchStart: this.onTouchStart,
 	          onTouchEnd: this.onTouchEnd,
+	          onDoubleClick: this.handleDoubleClick,
 	          style: style },
 	        _react2.default.createElement(
 	          'div',

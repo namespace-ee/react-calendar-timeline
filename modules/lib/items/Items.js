@@ -166,7 +166,7 @@ Items.propTypes = {
 
   dragSnap: _react2.default.PropTypes.number,
   minResizeWidth: _react2.default.PropTypes.number,
-  selectedItem: _react2.default.PropTypes.string,
+  selectedItem: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
 
   canChangeGroup: _react2.default.PropTypes.bool.isRequired,
   canMove: _react2.default.PropTypes.bool.isRequired,
