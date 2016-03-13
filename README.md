@@ -76,6 +76,7 @@ Expects either a vanilla JS array or an immutable JS array, consisting of object
   end_time: 1457902922261 + 86400000,
   canMove: true,
   canResize: false,
+  canChangeGroup: false,
   className: 'weekend'
 }
 ```
@@ -132,38 +133,99 @@ Smallest time the calendar can zoom to in milliseconds. Default `60 * 60 * 1000`
 ### maxZoom
 Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 86400 * 1000` (5 years)
 
+### canMove
+Can items be dragged around? Can be overridden in the `items` array. Defaults to `true`
+
+### canChangeGroup
+Can items be moved between groups? Can be overridden in the `items` array. Defaults to `true`
+
+### canResize
+Can items be resized? Can be overridden in the `items` array. Defaults to `true`
+
+### useResizeHandle
+Append a special `.rct-drag-right` handle to the elements and only resize if dragged from there. Defaults to `false`
+
+### stackItems
+Stack items under each other, so there is no visual overlap when times collide. Defaults to `false`.
+
+### traditionalZoom
+Zoom in when scrolling the mouse up/down. Defaults to `false`
+
+### itemTouchSendsClick
+Normally tapping (touching) an item selects it. If this is set to true, a tap will have the same effect, as selecting with the first click and then clicking again to open and send the onItemClick event. Defaults to `false`.
+
+### onItemMove(itemId, dragTime, newGroupOrder)
+Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
+
+### onItemResize(itemId, newResizeEnd)
+Callback when an item is resized. Returns 1) the item's ID, 2) the new end time of the item
+
+### onItemClick(itemId)
+Called when an item is clicked. Note: the item must be selected before it's clicked
+
+### onCanvasClick(groupId, time, e)
+Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
+
+### onItemDoubleClick(itemId)
+Called when an item was double clicked
+
+### moveResizeValidator(action, itemId, time)
+This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
+
+The argument `action` is one of `move` or `resize`.
+
+The argument `time` describes the proposed new time for either the start time of the item (for move) or the end time (for resize).
+
+The function must return a new unix timestamp in milliseconds... or just `time` if the proposed new time doesn't interfere with business logic.
+
+For example, to prevent moving of items into the past, but to keep them at 15min intervals, use this code:
+
+```js
+function(action, item, time) {
+  if (time < new Date().getTime()) {
+    var newTime = Math.ceil(new Date().getTime() / (15*60*1000)) * (15*60*1000);
+    return newTime;
+  }
+
+  return time
+}
 ```
-canChangeGroup: React.PropTypes.bool,
-canMove: React.PropTypes.bool,
-canResize: React.PropTypes.bool,
-useResizeHandle: React.PropTypes.bool,
 
-stackItems: React.PropTypes.bool,
+### defaultTimeStart and defaultTimeEnd
+Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
 
-traditionalZoom: React.PropTypes.bool,
+### visibleTimeStart and visibleTimeEnd
+The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.
 
-itemTouchSendsClick: React.PropTypes.bool,
+### onTimeChange(visibleTimeStart, visibleTimeEnd)
+A function called when the user tries to scroll. If you control `visibleTimeStart` and `visibleTimeEnd` yourself, use the parameters to this function to change them.
+Otherwise use it as a filter for what the user can see. The function is bound to the calendar component, so for uncontrolled, and yet bound usage, you must call `this.updateScrollCanvas` with the updated visibleTimeStart and visibleTimeEnd.
 
-onItemMove: React.PropTypes.func,
-onItemResize: React.PropTypes.func,
-onItemClick: React.PropTypes.func,
-onCanvasClick: React.PropTypes.func,
-onItemDoubleClick: React.PropTypes.func,
+Here is an example that limits the timeline to only show dates starting 6 months from now and ending in 6 months.
 
-moveResizeValidator: React.PropTypes.func,
+```js
+// this limits the timeline to -6 months ... +6 months
+var minTime = moment().add(-6, 'months').valueOf()
+var maxTime = moment().add(6, 'months').valueOf()
 
-dayBackground: React.PropTypes.func,
-
-style: React.PropTypes.object,
-
-defaultTimeStart: React.PropTypes.object,
-defaultTimeEnd: React.PropTypes.object,
-
-visibleTimeStart: React.PropTypes.number,
-visibleTimeEnd: React.PropTypes.number,
-onTimeChange: React.PropTypes.func,
-onTimeInit: React.PropTypes.func,
-onBoundsChange: React.PropTypes.func,
-
-children: React.PropTypes.node
+function (visibleTimeStart, visibleTimeEnd) {
+  if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
+    this.updateScrollCanvas(minTime, maxTime)
+  } else if (visibleTimeStart < minTime) {
+    this.updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+  } else if (visibleTimeEnd > maxTime) {
+    this.updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+  } else {
+    this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+  }
+}
 ```
+
+### onTimeInit(visibleTimeStart, visibleTimeEnd)
+Called when the calendar is first initialised
+
+### onBoundsChange
+Called when the bounds in the calendar's canvas change.
+
+### children
+All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
