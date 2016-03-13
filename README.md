@@ -224,8 +224,8 @@ function (visibleTimeStart, visibleTimeEnd) {
 ### onTimeInit(visibleTimeStart, visibleTimeEnd)
 Called when the calendar is first initialised
 
-### onBoundsChange
-Called when the bounds in the calendar's canvas change. (see "Behind the scenes" below)
+### onBoundsChange(canvasTimeStart, canvasTimeEnd)
+Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below)
 
 ### children
 All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
