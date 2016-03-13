@@ -54,21 +54,85 @@ ReactDOM.render(
 ```
 
 ## API
+The component can take many parameters.
+
+### groups
+Expects either a vanilla JS array or an immutable JS array, consisting of objects with the following attributes:
 ```
-groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
-items: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
-sidebarWidth: React.PropTypes.number,
-dragSnap: React.PropTypes.number,
-minResizeWidth: React.PropTypes.number,
-fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-zIndexStart: React.PropTypes.number,
-lineHeight: React.PropTypes.number,
-headerLabelGroupHeight: React.PropTypes.number,
-headerLabelHeight: React.PropTypes.number,
+{
+  id: 1,
+  title: 'group 1'
+}
+```
 
-minZoom: React.PropTypes.number,
-maxZoom: React.PropTypes.number,
+### items
+Expects either a vanilla JS array or an immutable JS array, consisting of objects with the following attributes:
+```
+{
+  id: 1,
+  group: 1,
+  title: 'Random title',
+  start_time: 1457902922261,
+  end_time: 1457902922261 + 86400000,
+  canMove: true,
+  canResize: false,
+  className: 'weekend'
+}
+```
 
+The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (java Date or moment()) will also work, but will be a lot slower.
+
+### keys
+An array specifying keys in the `items` and `groups` objects. Defaults to
+```
+{
+  groupIdKey: 'id',
+  groupTitleKey: 'title',
+  itemIdKey: 'id',
+  itemTitleKey: 'title',
+  itemGroupKey: 'group',
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time'
+}
+```
+
+### sidebarWidth
+Width of the sidebar in pixels. Defaults to `150`.
+
+### dragSnap
+Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When so, the items will snap to 15min intervals when dragging.
+
+### minResizeWidth
+The minimum width, in pixels, of a timeline entry when it's possible to resize. If not reached, you must zoom in to resize more. Default to `20`.
+
+### fixedHeader
+How does the header (the scrolling part with dates) behave if not all of the groups fit on the page, resulting in a vertical scrollbar.
+
+* `fixed` - the header is always on the screen
+* `none` (default) - the header is always at the top of the component
+
+### zIndexStart
+What z-index value do the header and the sidebar have. Default `10`
+
+### lineHeight
+Height of one line in the calendar in pizels. Default `30`
+
+### headerLabelGroupHeight
+Height of the top header line. Default `30`
+
+### headerLabelHeight
+Height of the bottom header line. Default `30`
+
+### itemHeightRatio
+What percentage of the height of the line is taken by the item? Default `0.65`
+
+### minZoom
+Smallest time the calendar can zoom to in milliseconds. Default `60 * 60 * 1000` (1 hour)
+
+### maxZoom
+Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 86400 * 1000` (5 years)
+
+```
 canChangeGroup: React.PropTypes.bool,
 canMove: React.PropTypes.bool,
 canResize: React.PropTypes.bool,
@@ -91,7 +155,6 @@ moveResizeValidator: React.PropTypes.func,
 dayBackground: React.PropTypes.func,
 
 style: React.PropTypes.object,
-keys: React.PropTypes.object,
 
 defaultTimeStart: React.PropTypes.object,
 defaultTimeEnd: React.PropTypes.object,
