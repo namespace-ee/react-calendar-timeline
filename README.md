@@ -25,7 +25,7 @@ npm install --save moment interact.js
 
 At the very minimum:
 
-```
+```jsx
 import Timeline from 'react-calendar-timeline'
 import moment from 'moment'
 
