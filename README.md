@@ -225,7 +225,17 @@ function (visibleTimeStart, visibleTimeEnd) {
 Called when the calendar is first initialised
 
 ### onBoundsChange
-Called when the bounds in the calendar's canvas change.
+Called when the bounds in the calendar's canvas change. (see "Behind the scenes" below)
 
 ### children
 All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
+
+
+## Behind the scenes
+The timeline is built with speed, usability and extensibility in mind.
+
+Speed: The calendar itself is actually a 3x wide scrolling canvas of the screen. All scroll events left and right happen naturally, like scrolling any website. When the timeline has scrolled enough (50% of the invisible surface on one side), we change the "position:absolute;left:{num}px;" variables of each of the visible items and scroll the canvas back. When this happens, the `onBoundsChange` prop is called.
+
+This results in a visually endless scrolling canvas with optimal performance.
+
+Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
