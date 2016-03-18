@@ -610,6 +610,34 @@ export default class ReactCalendarTimeline extends Component {
     return {dimensionItems, height, groupHeights, groupTops}
   }
 
+  handleDoubleClick (e) {
+    const { canvasTimeStart, width, visibleTimeStart, visibleTimeEnd, groupTops, topOffset } = this.state
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
+    const canvasWidth = width * 3
+    const { pageX, pageY } = e
+    const ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
+    const boundingRect = this.refs.scrollComponent.getBoundingClientRect()
+    let timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left)
+    if (this.props.dragSnap) {
+      timePosition = Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap
+    }
+
+    let groupIndex = 0
+    for (var key of Object.keys(groupTops)) {
+      var item = groupTops[key]
+      if (pageY - topOffset > item) {
+        groupIndex = parseInt(key, 10)
+      } else {
+        break
+      }
+    }
+
+    if (this.props.onCanvasDoubleClick) {
+      this.props.onCanvasDoubleClick(timePosition, this.props.groups[groupIndex])
+    }
+  }
+
   render () {
     const {items, groups, headerLabelGroupHeight, headerLabelHeight} = this.props
     const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart } = this.state
@@ -659,7 +687,9 @@ export default class ReactCalendarTimeline extends Component {
           >
             <div ref='canvasComponent'
                  className='rct-canvas'
-                 style={canvasComponentStyle}>
+                 style={canvasComponentStyle}
+                 onDoubleClick={ this.handleDoubleClick.bind(this) }
+            >
               {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops)}
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)}
               {this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight)}
@@ -715,6 +745,7 @@ ReactCalendarTimeline.propTypes = {
   onItemClick: React.PropTypes.func,
   onCanvasClick: React.PropTypes.func,
   onItemDoubleClick: React.PropTypes.func,
+  onCanvasDoubleClick: React.PropTypes.func,
 
   moveResizeValidator: React.PropTypes.func,
 
