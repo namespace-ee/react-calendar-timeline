@@ -549,7 +549,17 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'handleMouseDown',
     value: function handleMouseDown(e) {
-      this.setState({ isDragging: true, dragStartPosition: e.pageX });
+      var topOffset = this.state.topOffset;
+      var pageY = e.pageY;
+      var _props3 = this.props;
+      var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
+      var headerLabelHeight = _props3.headerLabelHeight;
+
+      var headerHeight = headerLabelGroupHeight + headerLabelHeight;
+
+      if (pageY - topOffset > headerHeight) {
+        this.setState({ isDragging: true, dragStartPosition: e.pageX });
+      }
     }
   }, {
     key: 'handleMouseMove',
@@ -685,14 +695,14 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'stackItems',
     value: function stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
-      var _props3 = this.props;
-      var keys = _props3.keys;
-      var dragSnap = _props3.dragSnap;
-      var lineHeight = _props3.lineHeight;
-      var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
-      var headerLabelHeight = _props3.headerLabelHeight;
-      var stackItems = _props3.stackItems;
-      var itemHeightRatio = _props3.itemHeightRatio;
+      var _props4 = this.props;
+      var keys = _props4.keys;
+      var dragSnap = _props4.dragSnap;
+      var lineHeight = _props4.lineHeight;
+      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
+      var headerLabelHeight = _props4.headerLabelHeight;
+      var stackItems = _props4.stackItems;
+      var itemHeightRatio = _props4.itemHeightRatio;
       var _state2 = this.state;
       var draggingItem = _state2.draggingItem;
       var dragTime = _state2.dragTime;
@@ -788,11 +798,11 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props4 = this.props;
-      var items = _props4.items;
-      var groups = _props4.groups;
-      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
-      var headerLabelHeight = _props4.headerLabelHeight;
+      var _props5 = this.props;
+      var items = _props5.items;
+      var groups = _props5.groups;
+      var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
+      var headerLabelHeight = _props5.headerLabelHeight;
       var _state4 = this.state;
       var draggingItem = _state4.draggingItem;
       var resizingItem = _state4.resizingItem;

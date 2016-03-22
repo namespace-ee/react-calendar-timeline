@@ -623,7 +623,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'handleMouseDown',
 	    value: function handleMouseDown(e) {
-	      this.setState({ isDragging: true, dragStartPosition: e.pageX });
+	      var topOffset = this.state.topOffset;
+	      var pageY = e.pageY;
+	      var _props3 = this.props;
+	      var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
+	      var headerLabelHeight = _props3.headerLabelHeight;
+	
+	      var headerHeight = headerLabelGroupHeight + headerLabelHeight;
+	
+	      if (pageY - topOffset > headerHeight) {
+	        this.setState({ isDragging: true, dragStartPosition: e.pageX });
+	      }
 	    }
 	  }, {
 	    key: 'handleMouseMove',
@@ -759,14 +769,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'stackItems',
 	    value: function stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
-	      var _props3 = this.props;
-	      var keys = _props3.keys;
-	      var dragSnap = _props3.dragSnap;
-	      var lineHeight = _props3.lineHeight;
-	      var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
-	      var headerLabelHeight = _props3.headerLabelHeight;
-	      var stackItems = _props3.stackItems;
-	      var itemHeightRatio = _props3.itemHeightRatio;
+	      var _props4 = this.props;
+	      var keys = _props4.keys;
+	      var dragSnap = _props4.dragSnap;
+	      var lineHeight = _props4.lineHeight;
+	      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
+	      var headerLabelHeight = _props4.headerLabelHeight;
+	      var stackItems = _props4.stackItems;
+	      var itemHeightRatio = _props4.itemHeightRatio;
 	      var _state2 = this.state;
 	      var draggingItem = _state2.draggingItem;
 	      var dragTime = _state2.dragTime;
@@ -801,26 +811,85 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return { dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops };
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props4 = this.props;
-	      var items = _props4.items;
-	      var groups = _props4.groups;
-	      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
-	      var headerLabelHeight = _props4.headerLabelHeight;
+	    key: 'handleDoubleClick',
+	    value: function handleDoubleClick(e) {
 	      var _state3 = this.state;
-	      var draggingItem = _state3.draggingItem;
-	      var resizingItem = _state3.resizingItem;
-	      var isDragging = _state3.isDragging;
+	      var canvasTimeStart = _state3.canvasTimeStart;
 	      var width = _state3.width;
 	      var visibleTimeStart = _state3.visibleTimeStart;
 	      var visibleTimeEnd = _state3.visibleTimeEnd;
-	      var canvasTimeStart = _state3.canvasTimeStart;
+	      var groupTops = _state3.groupTops;
+	      var topOffset = _state3.topOffset;
+	
+	      var zoom = visibleTimeEnd - visibleTimeStart;
+	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
+	      var canvasWidth = width * 3;
+	      var pageX = e.pageX;
+	      var pageY = e.pageY;
+	
+	      var ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth;
+	      var boundingRect = this.refs.scrollComponent.getBoundingClientRect();
+	      var timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left);
+	      if (this.props.dragSnap) {
+	        timePosition = Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap;
+	      }
+	
+	      var groupIndex = 0;
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+	
+	      try {
+	        for (var _iterator = Object.keys(groupTops)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var key = _step.value;
+	
+	          var item = groupTops[key];
+	          if (pageY - topOffset > item) {
+	            groupIndex = parseInt(key, 10);
+	          } else {
+	            break;
+	          }
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	
+	      if (this.props.onCanvasDoubleClick) {
+	        this.props.onCanvasDoubleClick(timePosition, this.props.groups[groupIndex]);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props5 = this.props;
+	      var items = _props5.items;
+	      var groups = _props5.groups;
+	      var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
+	      var headerLabelHeight = _props5.headerLabelHeight;
 	      var _state4 = this.state;
-	      var dimensionItems = _state4.dimensionItems;
-	      var height = _state4.height;
-	      var groupHeights = _state4.groupHeights;
-	      var groupTops = _state4.groupTops;
+	      var draggingItem = _state4.draggingItem;
+	      var resizingItem = _state4.resizingItem;
+	      var isDragging = _state4.isDragging;
+	      var width = _state4.width;
+	      var visibleTimeStart = _state4.visibleTimeStart;
+	      var visibleTimeEnd = _state4.visibleTimeEnd;
+	      var canvasTimeStart = _state4.canvasTimeStart;
+	      var _state5 = this.state;
+	      var dimensionItems = _state5.dimensionItems;
+	      var height = _state5.height;
+	      var groupHeights = _state5.groupHeights;
+	      var groupTops = _state5.groupTops;
 	
 	      var zoom = visibleTimeEnd - visibleTimeStart;
 	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
@@ -874,7 +943,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	              'div',
 	              { ref: 'canvasComponent',
 	                className: 'rct-canvas',
-	                style: canvasComponentStyle },
+	                style: canvasComponentStyle,
+	                onDoubleClick: this.handleDoubleClick.bind(this)
+	              },
 	              this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops),
 	              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
 	              this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
@@ -926,6 +997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemClick: _react2.default.PropTypes.func,
 	  onCanvasClick: _react2.default.PropTypes.func,
 	  onItemDoubleClick: _react2.default.PropTypes.func,
+	  onCanvasDoubleClick: _react2.default.PropTypes.func,
 	
 	  moveResizeValidator: _react2.default.PropTypes.func,
 	
@@ -1277,6 +1349,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    _this.handleDoubleClick = function (e) {
+	      e.preventDefault();
+	      e.stopPropagation();
 	      if (_this.props.onItemDoubleClick) {
 	        _this.props.onItemDoubleClick(_this.itemId);
 	      }
@@ -2504,7 +2578,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var time = _e$target$dataset.time;
 	      var unit = _e$target$dataset.unit;
 	
-	      this.props.showPeriod((0, _moment2.default)(time - 0), unit);
+	      if (time && unit) {
+	        this.props.showPeriod((0, _moment2.default)(time - 0), unit);
+	      }
 	    }
 	  }, {
 	    key: 'touchStart',

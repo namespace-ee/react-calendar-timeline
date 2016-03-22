@@ -126,7 +126,9 @@ var Header = function (_Component) {
       var time = _e$target$dataset.time;
       var unit = _e$target$dataset.unit;
 
-      this.props.showPeriod((0, _moment2.default)(time - 0), unit);
+      if (time && unit) {
+        this.props.showPeriod((0, _moment2.default)(time - 0), unit);
+      }
     }
   }, {
     key: 'touchStart',

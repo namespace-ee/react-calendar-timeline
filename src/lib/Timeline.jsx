@@ -430,7 +430,14 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   handleMouseDown (e) {
-    this.setState({isDragging: true, dragStartPosition: e.pageX})
+    const { topOffset } = this.state
+    const { pageY } = e
+    const { headerLabelGroupHeight, headerLabelHeight } = this.props
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
+
+    if (pageY - topOffset > headerHeight) {
+      this.setState({isDragging: true, dragStartPosition: e.pageX})
+    }
   }
 
   handleMouseMove (e) {
