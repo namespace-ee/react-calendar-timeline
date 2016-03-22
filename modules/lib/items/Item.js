@@ -61,6 +61,8 @@ var Item = function (_Component) {
     };
 
     _this.handleDoubleClick = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
       if (_this.props.onItemDoubleClick) {
         _this.props.onItemDoubleClick(_this.itemId);
       }
