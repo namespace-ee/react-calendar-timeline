@@ -38,7 +38,7 @@ export default class VerticalLines extends Component {
         <div key={`line-${time.valueOf()}`}
              className={classNames}
              style={{
-               top: `${lineHeight * 2}px`,
+               top: `${headerHeight}px`,
                left: `${left + leftPush}px`,
                width: `${labelWidth}px`,
                height: `${height - headerHeight}px`
