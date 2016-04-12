@@ -187,7 +187,7 @@ export default class Header extends Component {
                width: `${labelWidth}px`,
                height: `${(minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight)}px`,
                lineHeight: `${(minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight)}px`,
-               fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
+               fontSize: `${(labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10')}px`,
                cursor: 'pointer'
              }}>
           {this.subHeaderLabel(time, minUnit, labelWidth)}
