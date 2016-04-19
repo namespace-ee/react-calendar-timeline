@@ -86,12 +86,10 @@ var ReactCalendarTimeline = function (_Component) {
       visibleTimeStart = _this.props.visibleTimeStart;
       visibleTimeEnd = _this.props.visibleTimeEnd;
     } else {
-      var _Math, _Math2;
-
-      visibleTimeStart = (_Math = Math).min.apply(_Math, _toConsumableArray(_this.props.items.map(function (item) {
+      visibleTimeStart = Math.min.apply(Math, _toConsumableArray(_this.props.items.map(function (item) {
         return (0, _utils._get)(item, 'start').getTime();
       })));
-      visibleTimeEnd = (_Math2 = Math).max.apply(_Math2, _toConsumableArray(_this.props.items.map(function (item) {
+      visibleTimeEnd = Math.max.apply(Math, _toConsumableArray(_this.props.items.map(function (item) {
         return (0, _utils._get)(item, 'end').getTime();
       })));
 
@@ -380,9 +378,9 @@ var ReactCalendarTimeline = function (_Component) {
         var scrollComponent = this.refs.scrollComponent;
         scrollComponent.scrollLeft += e.deltaY;
       } else if (e.altKey) {
-        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-        var xPosition = e.clientX - parentPosition.x;
-        this.changeZoom(1.0 + e.deltaY / 500, xPosition / this.state.width);
+        var _parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
+        var _xPosition = e.clientX - _parentPosition.x;
+        this.changeZoom(1.0 + e.deltaY / 500, _xPosition / this.state.width);
       } else {
         if (this.props.fixedHeader === 'fixed') {
           e.preventDefault();
@@ -394,9 +392,9 @@ var ReactCalendarTimeline = function (_Component) {
           if (e.deltaY !== 0) {
             window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY);
             if (traditionalZoom) {
-              var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-              var xPosition = e.clientX - parentPosition.x;
-              this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width);
+              var _parentPosition2 = (0, _utils.getParentPosition)(e.currentTarget);
+              var _xPosition2 = e.clientX - _parentPosition2.x;
+              this.changeZoom(1.0 + e.deltaY / 50, _xPosition2 / this.state.width);
             }
           }
         }

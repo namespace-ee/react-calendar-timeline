@@ -65,7 +65,7 @@ var VerticalLines = function (_Component) {
         lines.push(_react2.default.createElement('div', { key: 'line-' + time.valueOf(),
           className: classNames,
           style: {
-            top: lineHeight * 2 + 'px',
+            top: headerHeight + 'px',
             left: left + leftPush + 'px',
             width: labelWidth + 'px',
             height: height - headerHeight + 'px'
