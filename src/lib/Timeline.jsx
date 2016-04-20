@@ -223,6 +223,17 @@ export default class ReactCalendarTimeline extends Component {
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups)
     }
+
+    if (items !== this.props.items || groups !== this.props.groups) {
+      this.updateDimensions(items, groups);
+    }
+  }
+
+  updateDimensions(items, groups) {
+    const { canvasTimeStart, visibleTimeStart, visibleTimeEnd, width } = this.state;
+    const {dimensionItems, height, groupHeights, groupTops} = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width);
+
+    this.setState({ dimensionItems, height, groupHeights, groupTops });
   }
 
   updateScrollCanvas (visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
