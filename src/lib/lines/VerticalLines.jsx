@@ -17,7 +17,7 @@ export default class VerticalLines extends Component {
   }
 
   render () {
-    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, lineHeight, height, headerHeight } = this.props
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
