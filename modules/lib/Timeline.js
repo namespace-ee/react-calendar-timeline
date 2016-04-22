@@ -305,6 +305,29 @@ var ReactCalendarTimeline = function (_Component) {
       if (visibleTimeStart && visibleTimeEnd) {
         this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups);
       }
+
+      if (items !== this.props.items || groups !== this.props.groups) {
+        this.updateDimensions(items, groups);
+      }
+    }
+  }, {
+    key: 'updateDimensions',
+    value: function updateDimensions(items, groups) {
+      var _state = this.state;
+      var canvasTimeStart = _state.canvasTimeStart;
+      var visibleTimeStart = _state.visibleTimeStart;
+      var visibleTimeEnd = _state.visibleTimeEnd;
+      var width = _state.width;
+
+      var _stackItems2 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width);
+
+      var dimensionItems = _stackItems2.dimensionItems;
+      var height = _stackItems2.height;
+      var groupHeights = _stackItems2.groupHeights;
+      var groupTops = _stackItems2.groupTops;
+
+
+      this.setState({ dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops });
     }
   }, {
     key: 'updateScrollCanvas',
@@ -348,12 +371,12 @@ var ReactCalendarTimeline = function (_Component) {
       if (resetCanvas || forceUpdateDimensions) {
         var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
 
-        var _stackItems2 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+        var _stackItems3 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 
-        var dimensionItems = _stackItems2.dimensionItems;
-        var height = _stackItems2.height;
-        var groupHeights = _stackItems2.groupHeights;
-        var groupTops = _stackItems2.groupTops;
+        var dimensionItems = _stackItems3.dimensionItems;
+        var height = _stackItems3.height;
+        var groupHeights = _stackItems3.groupHeights;
+        var groupTops = _stackItems3.groupTops;
 
         newState.dimensionItems = dimensionItems;
         newState.height = height;
@@ -471,10 +494,10 @@ var ReactCalendarTimeline = function (_Component) {
       var _props2 = this.props;
       var lineHeight = _props2.lineHeight;
       var dragSnap = _props2.dragSnap;
-      var _state = this.state;
-      var width = _state.width;
-      var visibleTimeStart = _state.visibleTimeStart;
-      var visibleTimeEnd = _state.visibleTimeEnd;
+      var _state2 = this.state;
+      var width = _state2.width;
+      var visibleTimeStart = _state2.visibleTimeStart;
+      var visibleTimeEnd = _state2.visibleTimeEnd;
 
 
       var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
@@ -704,12 +727,12 @@ var ReactCalendarTimeline = function (_Component) {
       var headerLabelHeight = _props4.headerLabelHeight;
       var stackItems = _props4.stackItems;
       var itemHeightRatio = _props4.itemHeightRatio;
-      var _state2 = this.state;
-      var draggingItem = _state2.draggingItem;
-      var dragTime = _state2.dragTime;
-      var resizingItem = _state2.resizingItem;
-      var resizeEnd = _state2.resizeEnd;
-      var newGroupOrder = _state2.newGroupOrder;
+      var _state3 = this.state;
+      var draggingItem = _state3.draggingItem;
+      var dragTime = _state3.dragTime;
+      var resizingItem = _state3.resizingItem;
+      var resizeEnd = _state3.resizeEnd;
+      var newGroupOrder = _state3.newGroupOrder;
 
       var zoom = visibleTimeEnd - visibleTimeStart;
       var canvasTimeEnd = canvasTimeStart + zoom * 3;
@@ -740,13 +763,13 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'handleDoubleClick',
     value: function handleDoubleClick(e) {
-      var _state3 = this.state;
-      var canvasTimeStart = _state3.canvasTimeStart;
-      var width = _state3.width;
-      var visibleTimeStart = _state3.visibleTimeStart;
-      var visibleTimeEnd = _state3.visibleTimeEnd;
-      var groupTops = _state3.groupTops;
-      var topOffset = _state3.topOffset;
+      var _state4 = this.state;
+      var canvasTimeStart = _state4.canvasTimeStart;
+      var width = _state4.width;
+      var visibleTimeStart = _state4.visibleTimeStart;
+      var visibleTimeEnd = _state4.visibleTimeEnd;
+      var groupTops = _state4.groupTops;
+      var topOffset = _state4.topOffset;
 
       var zoom = visibleTimeEnd - visibleTimeStart;
       var canvasTimeEnd = canvasTimeStart + zoom * 3;
@@ -804,19 +827,19 @@ var ReactCalendarTimeline = function (_Component) {
       var groups = _props5.groups;
       var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
       var headerLabelHeight = _props5.headerLabelHeight;
-      var _state4 = this.state;
-      var draggingItem = _state4.draggingItem;
-      var resizingItem = _state4.resizingItem;
-      var isDragging = _state4.isDragging;
-      var width = _state4.width;
-      var visibleTimeStart = _state4.visibleTimeStart;
-      var visibleTimeEnd = _state4.visibleTimeEnd;
-      var canvasTimeStart = _state4.canvasTimeStart;
       var _state5 = this.state;
-      var dimensionItems = _state5.dimensionItems;
-      var height = _state5.height;
-      var groupHeights = _state5.groupHeights;
-      var groupTops = _state5.groupTops;
+      var draggingItem = _state5.draggingItem;
+      var resizingItem = _state5.resizingItem;
+      var isDragging = _state5.isDragging;
+      var width = _state5.width;
+      var visibleTimeStart = _state5.visibleTimeStart;
+      var visibleTimeEnd = _state5.visibleTimeEnd;
+      var canvasTimeStart = _state5.canvasTimeStart;
+      var _state6 = this.state;
+      var dimensionItems = _state6.dimensionItems;
+      var height = _state6.height;
+      var groupHeights = _state6.groupHeights;
+      var groupTops = _state6.groupTops;
 
       var zoom = visibleTimeEnd - visibleTimeStart;
       var canvasTimeEnd = canvasTimeStart + zoom * 3;
