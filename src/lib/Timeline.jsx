@@ -362,6 +362,9 @@ export default class ReactCalendarTimeline extends Component {
       }
     } else {
       this.setState({selectedItem: item})
+      if (item && this.props.onItemSelect) {
+        this.props.onItemSelect(item)
+      }
     }
   }
 
@@ -750,6 +753,7 @@ ReactCalendarTimeline.propTypes = {
   onItemMove: React.PropTypes.func,
   onItemResize: React.PropTypes.func,
   onItemClick: React.PropTypes.func,
+  onItemSelect: React.PropTypes.func,
   onCanvasClick: React.PropTypes.func,
   onItemDoubleClick: React.PropTypes.func,
   onCanvasDoubleClick: React.PropTypes.func,
@@ -798,6 +802,7 @@ ReactCalendarTimeline.defaultProps = {
   onItemMove: null,
   onItemResize: null,
   onItemClick: null,
+  onItemSelect: null,
   onCanvasClick: null,
   onItemDoubleClick: null,
 

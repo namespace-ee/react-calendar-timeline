@@ -81,8 +81,12 @@
         itemTimeEndKey: 'end'
       },
 
-      itemClick: function(item) {
+      onItemClick: function(item) {
         console.log("Clicked: " + item);
+      },
+
+      onItemSelect: function(item) {
+        console.log("Selected: " + item);
       },
 
       moveResizeValidator: function(action, item, time) {
