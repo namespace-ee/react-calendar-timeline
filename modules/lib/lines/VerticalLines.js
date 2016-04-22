@@ -44,7 +44,6 @@ var VerticalLines = function (_Component) {
       var canvasTimeEnd = _props.canvasTimeEnd;
       var canvasWidth = _props.canvasWidth;
       var minUnit = _props.minUnit;
-      var lineHeight = _props.lineHeight;
       var height = _props.height;
       var headerHeight = _props.headerHeight;
 
