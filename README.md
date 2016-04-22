@@ -233,6 +233,20 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 ### children
 All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
 
+## FAQ
+
+### How can I have items with different colors?
+
+[Items](https://github.com/namespace-ee/react-calendar-timeline#items) have a "className" parameter. For example if you have "standard" items and "analysis" items, then you can just add an "analysis" class for your analysis items and then change the css backgroundColor property for them.
+
+You will then need to override the default CSS rule:
+
+```
+.react-calendar-timeline .rct-items .rct-item.analysis {
+  backgroundColor: #68efad;
+}
+```
+
 
 ## Behind the scenes
 The timeline is built with speed, usability and extensibility in mind.
