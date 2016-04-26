@@ -668,7 +668,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   render () {
-    const { items, groups, headerLabelGroupHeight, headerLabelHeight } = this.props
+    const { items, groups, headerLabelGroupHeight, headerLabelHeight, sidebarWidth } = this.props
     const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
     const zoom = visibleTimeEnd - visibleTimeStart
@@ -703,7 +703,7 @@ export default class ReactCalendarTimeline extends Component {
     return (
       <div style={this.props.style} ref='container' className='react-calendar-timeline'>
         <div style={outerComponentStyle} className='rct-outer'>
-          {this.sidebar(height, groupHeights, headerHeight)}
+          {sidebarWidth > 0 ? this.sidebar(height, groupHeights, headerHeight) : null}
           <div ref='scrollComponent'
                className='rct-scroll'
                style={scrollComponentStyle}

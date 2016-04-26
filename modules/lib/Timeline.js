@@ -827,6 +827,7 @@ var ReactCalendarTimeline = function (_Component) {
       var groups = _props5.groups;
       var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
       var headerLabelHeight = _props5.headerLabelHeight;
+      var sidebarWidth = _props5.sidebarWidth;
       var _state5 = this.state;
       var draggingItem = _state5.draggingItem;
       var resizingItem = _state5.resizingItem;
@@ -876,7 +877,7 @@ var ReactCalendarTimeline = function (_Component) {
         _react2.default.createElement(
           'div',
           { style: outerComponentStyle, className: 'rct-outer' },
-          this.sidebar(height, groupHeights, headerHeight),
+          sidebarWidth > 0 ? this.sidebar(height, groupHeights, headerHeight) : null,
           _react2.default.createElement(
             'div',
             { ref: 'scrollComponent',
