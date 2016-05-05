@@ -32,7 +32,7 @@ var VerticalLines = function (_Component) {
   _createClass(VerticalLines, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.fixedHeader === this.props.fixedHeader && nextProps.height === this.props.height && nextProps.headerHeight === this.props.headerHeight);
+      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.timeSteps === this.props.timeSteps && nextProps.fixedHeader === this.props.fixedHeader && nextProps.height === this.props.height && nextProps.headerHeight === this.props.headerHeight);
     }
   }, {
     key: 'render',
@@ -44,6 +44,7 @@ var VerticalLines = function (_Component) {
       var canvasTimeEnd = _props.canvasTimeEnd;
       var canvasWidth = _props.canvasWidth;
       var minUnit = _props.minUnit;
+      var timeSteps = _props.timeSteps;
       var height = _props.height;
       var headerHeight = _props.headerHeight;
 
@@ -51,7 +52,7 @@ var VerticalLines = function (_Component) {
 
       var lines = [];
 
-      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, function (time, nextTime) {
+      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, function (time, nextTime) {
         var left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2);
         var minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit);
         var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
@@ -92,6 +93,7 @@ VerticalLines.propTypes = {
   lineHeight: _react2.default.PropTypes.number.isRequired,
   lineCount: _react2.default.PropTypes.number.isRequired,
   minUnit: _react2.default.PropTypes.string.isRequired,
+  timeSteps: _react2.default.PropTypes.object.isRequired,
   fixedHeader: _react2.default.PropTypes.string.isRequired
 };
 VerticalLines.defaultProps = {

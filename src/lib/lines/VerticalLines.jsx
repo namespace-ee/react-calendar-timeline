@@ -10,6 +10,7 @@ export default class VerticalLines extends Component {
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.lineCount === this.props.lineCount &&
              nextProps.minUnit === this.props.minUnit &&
+             nextProps.timeSteps === this.props.timeSteps &&
              nextProps.fixedHeader === this.props.fixedHeader &&
              nextProps.height === this.props.height &&
              nextProps.headerHeight === this.props.headerHeight
@@ -17,12 +18,12 @@ export default class VerticalLines extends Component {
   }
 
   render () {
-    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight } = this.props
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
 
-    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, (time, nextTime) => {
+    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, (time, nextTime) => {
       const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
       const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
@@ -60,6 +61,7 @@ VerticalLines.propTypes = {
   lineHeight: React.PropTypes.number.isRequired,
   lineCount: React.PropTypes.number.isRequired,
   minUnit: React.PropTypes.string.isRequired,
+  timeSteps: React.PropTypes.object.isRequired,
   fixedHeader: React.PropTypes.string.isRequired
 }
 VerticalLines.defaultProps = {

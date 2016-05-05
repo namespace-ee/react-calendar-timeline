@@ -78,8 +78,10 @@ export default class Header extends Component {
       return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do')
     } else if (unit === 'hour') {
       return time.format(width < 50 ? 'HH' : 'HH:00')
+    } else if (unit === 'minute') {
+      return time.format(width < 60 ? 'mm' : 'HH:mm')
     } else {
-      return time.get(unit === 'day' ? 'date' : unit)
+      return time.get(unit)
     }
   }
 
@@ -127,7 +129,7 @@ export default class Header extends Component {
     let timeLabels = []
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
-      visibleTimeStart, visibleTimeEnd, minUnit, fixedHeader,
+      visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, fixedHeader,
       headerLabelGroupHeight, headerLabelHeight
     } = this.props
     const {
@@ -140,7 +142,7 @@ export default class Header extends Component {
     if (twoHeaders) {
       const nextUnit = getNextUnit(minUnit)
 
-      iterateTimes(visibleTimeStart, visibleTimeEnd, nextUnit, (time, nextTime) => {
+      iterateTimes(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, (time, nextTime) => {
         const startTime = Math.max(visibleTimeStart, time.valueOf())
         const endTime = Math.min(visibleTimeEnd, nextTime.valueOf())
         const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2)
@@ -167,7 +169,7 @@ export default class Header extends Component {
       })
     }
 
-    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, (time, nextTime) => {
+    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, (time, nextTime) => {
       const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
       const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
@@ -238,6 +240,7 @@ Header.propTypes = {
   visibleTimeEnd: React.PropTypes.number.isRequired,
   // visibleTimeEnd: React.PropTypes.number.isRequired,
   minUnit: React.PropTypes.string.isRequired,
+  timeSteps: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   zIndex: React.PropTypes.number

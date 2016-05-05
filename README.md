@@ -154,6 +154,21 @@ Zoom in when scrolling the mouse up/down. Defaults to `false`
 ### itemTouchSendsClick
 Normally tapping (touching) an item selects it. If this is set to true, a tap will have the same effect, as selecting with the first click and then clicking again to open and send the onItemClick event. Defaults to `false`.
 
+### timeSteps
+With what step to display different units. E.g. `15` for `minute` means only minutes 0, 15, 30 and 45 will be shown.
+
+Default:
+```js
+{
+  second: 1,
+  minute: 1,
+  hour: 1,
+  day: 1,
+  month: 1,
+  year: 1
+}
+```
+
 ### onItemMove(itemId, dragTime, newGroupOrder)
 Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
 

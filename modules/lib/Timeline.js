@@ -68,6 +68,15 @@ var defaultKeys = {
   itemTimeEndKey: 'end_time'
 };
 
+var defaultTimeSteps = {
+  second: 1,
+  minute: 1,
+  hour: 1,
+  day: 1,
+  month: 1,
+  year: 1
+};
+
 var ReactCalendarTimeline = function (_Component) {
   _inherits(ReactCalendarTimeline, _Component);
 
@@ -612,13 +621,14 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'verticalLines',
-    value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
+    value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight) {
       return _react2.default.createElement(_VerticalLines2.default, { canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
         lineHeight: this.props.lineHeight,
         lineCount: (0, _utils._length)(this.props.groups),
         minUnit: minUnit,
+        timeSteps: timeSteps,
         fixedHeader: this.props.fixedHeader,
         height: height,
         headerHeight: headerHeight
@@ -681,12 +691,13 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'header',
-    value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
+    value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
       return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
         lineHeight: this.props.lineHeight,
         minUnit: minUnit,
+        timeSteps: timeSteps,
         headerLabelGroupHeight: headerLabelGroupHeight,
         headerLabelHeight: headerLabelHeight,
         width: this.state.width,
@@ -828,6 +839,7 @@ var ReactCalendarTimeline = function (_Component) {
       var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
       var headerLabelHeight = _props5.headerLabelHeight;
       var sidebarWidth = _props5.sidebarWidth;
+      var timeSteps = _props5.timeSteps;
       var _state5 = this.state;
       var draggingItem = _state5.draggingItem;
       var resizingItem = _state5.resizingItem;
@@ -845,7 +857,7 @@ var ReactCalendarTimeline = function (_Component) {
       var zoom = visibleTimeEnd - visibleTimeStart;
       var canvasTimeEnd = canvasTimeStart + zoom * 3;
       var canvasWidth = width * 3;
-      var minUnit = (0, _utils.getMinUnit)(zoom, width);
+      var minUnit = (0, _utils.getMinUnit)(zoom, width, timeSteps);
       var headerHeight = headerLabelGroupHeight + headerLabelHeight;
 
       if (draggingItem || resizingItem) {
@@ -898,11 +910,11 @@ var ReactCalendarTimeline = function (_Component) {
                 onDoubleClick: this.handleDoubleClick.bind(this)
               },
               this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops),
-              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
+              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight),
               this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
               this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
               this.infoLabel(),
-              this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight)
+              this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight)
             )
           )
         )
@@ -958,6 +970,8 @@ ReactCalendarTimeline.propTypes = {
   style: _react2.default.PropTypes.object,
   keys: _react2.default.PropTypes.object,
 
+  timeSteps: _react2.default.PropTypes.object,
+
   defaultTimeStart: _react2.default.PropTypes.object,
   defaultTimeEnd: _react2.default.PropTypes.object,
 
@@ -1010,6 +1024,7 @@ ReactCalendarTimeline.defaultProps = {
 
   style: {},
   keys: defaultKeys,
+  timeSteps: defaultTimeSteps,
 
   // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
   // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed

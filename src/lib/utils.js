@@ -17,17 +17,22 @@ export function arraysEqual (array1, array2) {
   })
 }
 
-export function iterateTimes (start, end, unit, callback) {
+export function iterateTimes (start, end, unit, timeSteps, callback) {
   let time = moment(start).startOf(unit)
 
+  if (timeSteps[unit] && timeSteps[unit] > 1) {
+    let value = time.get(unit)
+    time.set(unit, value - (value % timeSteps[unit]))
+  }
+
   while (time.valueOf() < end) {
-    let nextTime = moment(time).add(1, `${unit}s`)
+    let nextTime = moment(time).add(timeSteps[unit] || 1, `${unit}s`)
     callback(time, nextTime)
     time = nextTime
   }
 }
 
-export function getMinUnit (zoom, width) {
+export function getMinUnit (zoom, width, timeSteps) {
   let timeDividers = {
     second: 1000,
     minute: 60,
@@ -43,7 +48,10 @@ export function getMinUnit (zoom, width) {
 
   Object.keys(timeDividers).some(unit => {
     breakCount = breakCount / timeDividers[unit]
-    if (breakCount < width / minCellWidth) {
+    const cellCount = breakCount / timeSteps[unit]
+    const countNeeded = width / (timeSteps[unit] && timeSteps[unit] > 1 ? 3 * minCellWidth : minCellWidth)
+
+    if (cellCount < countNeeded) {
       minUnit = unit
       return true
     }

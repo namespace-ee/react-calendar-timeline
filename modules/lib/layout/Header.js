@@ -115,8 +115,10 @@ var Header = function (_Component) {
         return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do');
       } else if (unit === 'hour') {
         return time.format(width < 50 ? 'HH' : 'HH:00');
+      } else if (unit === 'minute') {
+        return time.format(width < 60 ? 'mm' : 'HH:mm');
       } else {
-        return time.get(unit === 'day' ? 'date' : unit);
+        return time.get(unit);
       }
     }
   }, {
@@ -180,6 +182,7 @@ var Header = function (_Component) {
       var visibleTimeStart = _props.visibleTimeStart;
       var visibleTimeEnd = _props.visibleTimeEnd;
       var minUnit = _props.minUnit;
+      var timeSteps = _props.timeSteps;
       var fixedHeader = _props.fixedHeader;
       var headerLabelGroupHeight = _props.headerLabelGroupHeight;
       var headerLabelHeight = _props.headerLabelHeight;
@@ -193,7 +196,7 @@ var Header = function (_Component) {
         (function () {
           var nextUnit = (0, _utils.getNextUnit)(minUnit);
 
-          (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, function (time, nextTime) {
+          (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, function (time, nextTime) {
             var startTime = Math.max(visibleTimeStart, time.valueOf());
             var endTime = Math.min(visibleTimeEnd, nextTime.valueOf());
             var left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2);
@@ -221,7 +224,7 @@ var Header = function (_Component) {
         })();
       }
 
-      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, function (time, nextTime) {
+      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, function (time, nextTime) {
         var left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2);
         var minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit);
         var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
@@ -299,6 +302,7 @@ Header.propTypes = {
   visibleTimeEnd: _react2.default.PropTypes.number.isRequired,
   // visibleTimeEnd: React.PropTypes.number.isRequired,
   minUnit: _react2.default.PropTypes.string.isRequired,
+  timeSteps: _react2.default.PropTypes.object.isRequired,
   width: _react2.default.PropTypes.number.isRequired,
   fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   zIndex: _react2.default.PropTypes.number

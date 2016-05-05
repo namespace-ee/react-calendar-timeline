@@ -45,17 +45,22 @@ function arraysEqual(array1, array2) {
   });
 }
 
-function iterateTimes(start, end, unit, callback) {
+function iterateTimes(start, end, unit, timeSteps, callback) {
   var time = (0, _moment2.default)(start).startOf(unit);
 
+  if (timeSteps[unit] && timeSteps[unit] > 1) {
+    var value = time.get(unit);
+    time.set(unit, value - value % timeSteps[unit]);
+  }
+
   while (time.valueOf() < end) {
-    var nextTime = (0, _moment2.default)(time).add(1, unit + 's');
+    var nextTime = (0, _moment2.default)(time).add(timeSteps[unit] || 1, unit + 's');
     callback(time, nextTime);
     time = nextTime;
   }
 }
 
-function getMinUnit(zoom, width) {
+function getMinUnit(zoom, width, timeSteps) {
   var timeDividers = {
     second: 1000,
     minute: 60,
@@ -71,7 +76,10 @@ function getMinUnit(zoom, width) {
 
   Object.keys(timeDividers).some(function (unit) {
     breakCount = breakCount / timeDividers[unit];
-    if (breakCount < width / minCellWidth) {
+    var cellCount = breakCount / timeSteps[unit];
+    var countNeeded = width / (timeSteps[unit] && timeSteps[unit] > 1 ? 3 * minCellWidth : minCellWidth);
+
+    if (cellCount < countNeeded) {
       minUnit = unit;
       return true;
     }
