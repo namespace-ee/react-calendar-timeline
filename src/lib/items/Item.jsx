@@ -312,6 +312,14 @@ export default class Item extends Component {
     }
   };
 
+  handleContextMenu = (e) => {
+    if (this.props.onContextMenu) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.onContextMenu(this.itemId);
+    }
+  };
+
   actualClick (e, clickType) {
     if (this.props.onSelect) {
       this.props.onSelect(this.itemId, clickType)
@@ -348,6 +356,7 @@ export default class Item extends Component {
            onTouchStart={this.onTouchStart}
            onTouchEnd={this.onTouchEnd}
            onDoubleClick={this.handleDoubleClick}
+           onContextMenu={this.handleContextMenu}
            style={style}>
         <div className='rct-item-overflow'>
           <div className='rct-item-content'>
@@ -384,7 +393,8 @@ Item.propTypes = {
   // onDrag: React.PropTypes.func,
   // onDrop: React.PropTypes.func,
   // onResizing: React.PropTypes.func,
-  // onResized: React.PropTypes.func
+  // onResized: React.PropTypes.func,
+  // onContextMenu: React.PropTypes.func
 }
 Item.defaultProps = {
   selected: false

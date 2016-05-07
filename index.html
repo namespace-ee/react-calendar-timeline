@@ -89,6 +89,10 @@
         console.log("Selected: " + item);
       },
 
+      onItemContextMenu: function (item) {
+        console.log("Context Menu: " + item);
+      },
+
       moveResizeValidator: function(action, item, time) {
         if (time < new Date().getTime()) {
           var newTime = Math.ceil(new Date().getTime() / (15*60*1000)) * (15*60*1000);

@@ -187,6 +187,9 @@ Called when an empty spot on the canvas was clicked. Get the group ID and the ti
 ### onItemDoubleClick(itemId)
 Called when an item was double clicked
 
+### onItemContextMenu(itemId)
+Called when the item is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
+
 ### moveResizeValidator(action, itemId, time)
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
 
