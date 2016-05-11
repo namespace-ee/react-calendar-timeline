@@ -175,19 +175,19 @@ Callback when an item is moved. Returns 1) the item's ID, 2) the new start time 
 ### onItemResize(itemId, newResizeEnd)
 Callback when an item is resized. Returns 1) the item's ID, 2) the new end time of the item
 
-### onItemSelect(itemId)
+### onItemSelect(itemId, e)
 Called when an item is selected. This is sent on the first click on an item.
 
-### onItemClick(itemId)
+### onItemClick(itemId, e)
 Called when an item is clicked. Note: the item must be selected before it's clicked... except if it's a touch event and `itemTouchSendsClick` is enabled.
 
 ### onCanvasClick(groupId, time, e)
 Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
 
-### onItemDoubleClick(itemId)
+### onItemDoubleClick(itemId, e)
 Called when an item was double clicked
 
-### onItemContextMenu(itemId)
+### onItemContextMenu(itemId, e)
 Called when the item is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
 ### moveResizeValidator(action, itemId, time)
