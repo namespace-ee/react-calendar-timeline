@@ -143,6 +143,7 @@ Items.propTypes = {
   itemResizing: React.PropTypes.func,
   itemResized: React.PropTypes.func,
 
+  onItemDoubleClick: React.PropTypes.func,
   onItemContextMenu: React.PropTypes.func
 }
 Items.defaultProps = {
