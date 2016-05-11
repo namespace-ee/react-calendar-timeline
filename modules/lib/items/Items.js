@@ -131,6 +131,7 @@ var Items = function (_Component) {
             onDrag: _this2.props.itemDrag,
             onDrop: _this2.props.itemDrop,
             onItemDoubleClick: _this2.props.onItemDoubleClick,
+            onContextMenu: _this2.props.onItemContextMenu,
             onSelect: _this2.props.itemSelect });
         })
       );
@@ -179,6 +180,9 @@ Items.propTypes = {
   itemDrag: _react2.default.PropTypes.func,
   itemDrop: _react2.default.PropTypes.func,
   itemResizing: _react2.default.PropTypes.func,
-  itemResized: _react2.default.PropTypes.func
+  itemResized: _react2.default.PropTypes.func,
+
+  onItemDoubleClick: _react2.default.PropTypes.func,
+  onItemContextMenu: _react2.default.PropTypes.func
 };
 Items.defaultProps = {};

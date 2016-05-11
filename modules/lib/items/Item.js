@@ -68,6 +68,14 @@ var Item = function (_Component) {
       }
     };
 
+    _this.handleContextMenu = function (e) {
+      if (_this.props.onContextMenu) {
+        e.preventDefault();
+        e.stopPropagation();
+        _this.props.onContextMenu(_this.itemId);
+      }
+    };
+
     _this.cacheDataFromProps(props);
 
     _this.state = {
@@ -388,6 +396,7 @@ var Item = function (_Component) {
           onTouchStart: this.onTouchStart,
           onTouchEnd: this.onTouchEnd,
           onDoubleClick: this.handleDoubleClick,
+          onContextMenu: this.handleContextMenu,
           style: style },
         _react2.default.createElement(
           'div',
@@ -433,7 +442,8 @@ Item.propTypes = {
   // onDrag: React.PropTypes.func,
   // onDrop: React.PropTypes.func,
   // onResizing: React.PropTypes.func,
-  // onResized: React.PropTypes.func
+  // onResized: React.PropTypes.func,
+  // onContextMenu: React.PropTypes.func
 };
 Item.defaultProps = {
   selected: false
