@@ -98,6 +98,7 @@ export default class Items extends Component {
                                         onDrag={this.props.itemDrag}
                                         onDrop={this.props.itemDrop}
                                         onItemDoubleClick={this.props.onItemDoubleClick}
+                                        onContextMenu={this.props.onItemContextMenu}
                                         onSelect={this.props.itemSelect}/>)}
       </div>
     )
@@ -140,7 +141,9 @@ Items.propTypes = {
   itemDrag: React.PropTypes.func,
   itemDrop: React.PropTypes.func,
   itemResizing: React.PropTypes.func,
-  itemResized: React.PropTypes.func
+  itemResized: React.PropTypes.func,
+
+  onItemContextMenu: React.PropTypes.func
 }
 Items.defaultProps = {
 }
