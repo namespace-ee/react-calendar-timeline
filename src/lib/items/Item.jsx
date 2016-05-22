@@ -60,11 +60,23 @@ export default class Item extends Component {
     return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth
   }
 
-  dragTimeSnap (dragTime) {
-    if (this.props.dragSnap) {
-      return Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap
+  dragTimeSnap (dragTime, considerOffset) {
+    const { dragSnap } = this.props;
+    if (dragSnap) {
+      const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0;
+      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap;
     } else {
       return dragTime
+    }
+  }
+
+  resizeTimeSnap (dragTime) {
+    const { dragSnap } = this.props;
+    if (dragSnap) {
+      const endTime = this.itemTimeEnd % dragSnap;
+      return Math.round((dragTime - endTime) / dragSnap) * dragSnap + endTime;
+    } else {
+      return dragTime;
     }
   }
 
@@ -75,7 +87,7 @@ export default class Item extends Component {
       const deltaX = e.pageX - this.state.dragStart.x
       const timeDelta = deltaX * this.coordinateToTimeRatio()
 
-      return this.dragTimeSnap(startTime + timeDelta)
+      return this.dragTimeSnap(startTime + timeDelta, true)
     } else {
       return startTime
     }
@@ -198,7 +210,7 @@ export default class Item extends Component {
       })
       .on('resizemove', (e) => {
         if (this.state.resizing) {
-          let newResizeEnd = this.dragTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
+          let newResizeEnd = this.resizeTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
 
           if (this.props.moveResizeValidator) {
             newResizeEnd = this.props.moveResizeValidator('resize', this.props.item, newResizeEnd)
@@ -215,7 +227,7 @@ export default class Item extends Component {
       })
       .on('resizeend', (e) => {
         if (this.state.resizing) {
-          let newResizeEnd = this.dragTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
+          let newResizeEnd = this.resizeTimeSnap(this.itemTimeEnd + this.resizeTimeDelta(e))
 
           if (this.props.moveResizeValidator) {
             newResizeEnd = this.props.moveResizeValidator('resize', this.props.item, newResizeEnd)
