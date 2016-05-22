@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import interact from 'interact.js'
+import moment from 'moment'
 
 import { _get } from '../utils'
 
