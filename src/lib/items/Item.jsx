@@ -62,22 +62,22 @@ export default class Item extends Component {
   }
 
   dragTimeSnap (dragTime, considerOffset) {
-    const { dragSnap } = this.props;
+    const { dragSnap } = this.props
     if (dragSnap) {
-      const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0;
-      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap;
+      const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0
+      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap
     } else {
       return dragTime
     }
   }
 
   resizeTimeSnap (dragTime) {
-    const { dragSnap } = this.props;
+    const { dragSnap } = this.props
     if (dragSnap) {
-      const endTime = this.itemTimeEnd % dragSnap;
-      return Math.round((dragTime - endTime) / dragSnap) * dragSnap + endTime;
+      const endTime = this.itemTimeEnd % dragSnap
+      return Math.round((dragTime - endTime) / dragSnap) * dragSnap + endTime
     } else {
-      return dragTime;
+      return dragTime
     }
   }
 
