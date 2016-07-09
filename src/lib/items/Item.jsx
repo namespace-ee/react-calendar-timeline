@@ -308,7 +308,7 @@ export default class Item extends Component {
     e.preventDefault()
     e.stopPropagation()
     if (this.props.onItemDoubleClick) {
-      this.props.onItemDoubleClick(this.itemId)
+      this.props.onItemDoubleClick(this.itemId, e)
     }
   };
 
@@ -316,13 +316,13 @@ export default class Item extends Component {
     if (this.props.onContextMenu) {
       e.preventDefault()
       e.stopPropagation()
-      this.props.onContextMenu(this.itemId)
+      this.props.onContextMenu(this.itemId, e)
     }
   };
 
   actualClick (e, clickType) {
     if (this.props.onSelect) {
-      this.props.onSelect(this.itemId, clickType)
+      this.props.onSelect(this.itemId, clickType, e)
     }
   }
 
