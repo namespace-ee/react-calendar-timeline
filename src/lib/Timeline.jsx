@@ -96,19 +96,20 @@ export default class ReactCalendarTimeline extends Component {
     window.addEventListener('resize', this.resizeEventListener)
 
     this.lastTouchDistance = null
-    this.refs.scrollComponent.addEventListener('touchstart', this.touchStart.bind(this))
-    this.refs.scrollComponent.addEventListener('touchmove', this.touchMove.bind(this))
-    this.refs.scrollComponent.addEventListener('touchend', this.touchEnd.bind(this))
+
+    this.refs.scrollComponent.addEventListener('touchstart', this.touchStart)
+    this.refs.scrollComponent.addEventListener('touchmove', this.touchMove)
+    this.refs.scrollComponent.addEventListener('touchend', this.touchEnd)
   }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.resizeEventListener)
-    this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart.bind(this))
-    this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove.bind(this))
-    this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd.bind(this))
+    this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart)
+    this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove)
+    this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd)
   }
 
-  touchStart (e) {
+  touchStart = (e) => {
     if (e.touches.length === 2) {
       e.preventDefault()
 
@@ -127,7 +128,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  touchMove (e) {
+  touchMove = (e) => {
     if (this.state.dragTime || this.state.resizeEnd) {
       e.preventDefault()
       return
@@ -170,7 +171,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  touchEnd (e) {
+  touchEnd = (e) => {
     if (this.lastTouchDistance) {
       e.preventDefault()
 
