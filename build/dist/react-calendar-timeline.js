@@ -55,13 +55,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
+	
 	var _Timeline = __webpack_require__(1);
-
+	
 	var _Timeline2 = _interopRequireDefault(_Timeline);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -137,9 +137,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  groupTitleKey: 'title',
 	  itemIdKey: 'id',
 	  itemTitleKey: 'title',
+	  itemDivTitleKey: 'title',
 	  itemGroupKey: 'group',
 	  itemTimeStartKey: 'start_time',
 	  itemTimeEndKey: 'end_time'
+	};
+	
+	var defaultTimeSteps = {
+	  second: 1,
+	  minute: 1,
+	  hour: 1,
+	  day: 1,
+	  month: 1,
+	  year: 1
 	};
 	
 	var ReactCalendarTimeline = function (_Component) {
@@ -149,6 +159,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, ReactCalendarTimeline);
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactCalendarTimeline).call(this, props));
+	
+	    _initialiseProps.call(_this);
 	
 	    var visibleTimeStart = null;
 	    var visibleTimeEnd = null;
@@ -160,12 +172,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      visibleTimeStart = _this.props.visibleTimeStart;
 	      visibleTimeEnd = _this.props.visibleTimeEnd;
 	    } else {
-	      var _Math, _Math2;
-	
-	      visibleTimeStart = (_Math = Math).min.apply(_Math, _toConsumableArray(_this.props.items.map(function (item) {
+	      visibleTimeStart = Math.min.apply(Math, _toConsumableArray(_this.props.items.map(function (item) {
 	        return (0, _utils._get)(item, 'start').getTime();
 	      })));
-	      visibleTimeEnd = (_Math2 = Math).max.apply(_Math2, _toConsumableArray(_this.props.items.map(function (item) {
+	      visibleTimeEnd = Math.max.apply(Math, _toConsumableArray(_this.props.items.map(function (item) {
 	        return (0, _utils._get)(item, 'end').getTime();
 	      })));
 	
@@ -226,96 +236,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      window.addEventListener('resize', this.resizeEventListener);
 	
 	      this.lastTouchDistance = null;
-	      this.refs.scrollComponent.addEventListener('touchstart', this.touchStart.bind(this));
-	      this.refs.scrollComponent.addEventListener('touchmove', this.touchMove.bind(this));
-	      this.refs.scrollComponent.addEventListener('touchend', this.touchEnd.bind(this));
+	
+	      this.refs.scrollComponent.addEventListener('touchstart', this.touchStart);
+	      this.refs.scrollComponent.addEventListener('touchmove', this.touchMove);
+	      this.refs.scrollComponent.addEventListener('touchend', this.touchEnd);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
 	      window.removeEventListener('resize', this.resizeEventListener);
-	      this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart.bind(this));
-	      this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove.bind(this));
-	      this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd.bind(this));
-	    }
-	  }, {
-	    key: 'touchStart',
-	    value: function touchStart(e) {
-	      if (e.touches.length === 2) {
-	        e.preventDefault();
-	
-	        this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
-	        this.singleTouchStart = null;
-	        this.lastSingleTouch = null;
-	      } else if (e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
-	        e.preventDefault();
-	
-	        var x = e.touches[0].clientX;
-	        var y = e.touches[0].clientY;
-	
-	        this.lastTouchDistance = null;
-	        this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset };
-	        this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset };
-	      }
-	    }
-	  }, {
-	    key: 'touchMove',
-	    value: function touchMove(e) {
-	      if (this.state.dragTime || this.state.resizeEnd) {
-	        e.preventDefault();
-	        return;
-	      }
-	      if (this.lastTouchDistance && e.touches.length === 2) {
-	        e.preventDefault();
-	
-	        var touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
-	
-	        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-	        var xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x;
-	
-	        if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
-	          this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width);
-	          this.lastTouchDistance = touchDistance;
-	        }
-	      } else if (this.lastSingleTouch && e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
-	        e.preventDefault();
-	
-	        var x = e.touches[0].clientX;
-	        var y = e.touches[0].clientY;
-	
-	        var deltaX = x - this.lastSingleTouch.x;
-	        // let deltaY = y - this.lastSingleTouch.y
-	
-	        var deltaX0 = x - this.singleTouchStart.x;
-	        var deltaY0 = y - this.singleTouchStart.y;
-	
-	        this.lastSingleTouch = { x: x, y: y };
-	
-	        var moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0);
-	        var moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0);
-	
-	        if (deltaX !== 0 && moveX) {
-	          this.refs.scrollComponent.scrollLeft -= deltaX;
-	        }
-	        if (moveY) {
-	          window.scrollTo(window.pageXOffset, this.singleTouchStart.screenY - deltaY0);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'touchEnd',
-	    value: function touchEnd(e) {
-	      if (this.lastTouchDistance) {
-	        e.preventDefault();
-	
-	        this.lastTouchDistance = null;
-	      }
-	      if (this.lastSingleTouch) {
-	        e.preventDefault();
-	
-	        this.lastSingleTouch = null;
-	        this.singleTouchStart = null;
-	      }
+	      this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart);
+	      this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove);
+	      this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd);
 	    }
 	  }, {
 	    key: 'resize',
@@ -342,34 +274,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.refs.scrollComponent.scrollLeft = width;
 	    }
 	  }, {
-	    key: 'onScroll',
-	    value: function onScroll() {
-	      var scrollComponent = this.refs.scrollComponent;
-	      var canvasTimeStart = this.state.canvasTimeStart;
-	      var scrollX = scrollComponent.scrollLeft;
-	      var zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
-	      var width = this.state.width;
-	      var visibleTimeStart = canvasTimeStart + zoom * scrollX / width;
-	
-	      // move the virtual canvas if needed
-	      if (scrollX < this.state.width * 0.5) {
-	        this.setState({
-	          canvasTimeStart: this.state.canvasTimeStart - zoom
-	        });
-	        scrollComponent.scrollLeft += this.state.width;
-	      }
-	      if (scrollX > this.state.width * 1.5) {
-	        this.setState({
-	          canvasTimeStart: this.state.canvasTimeStart + zoom
-	        });
-	        scrollComponent.scrollLeft -= this.state.width;
-	      }
-	
-	      if (this.state.visibleTimeStart !== visibleTimeStart || this.state.visibleTimeEnd !== visibleTimeStart + zoom) {
-	        this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom);
-	      }
-	    }
-	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      var visibleTimeStart = nextProps.visibleTimeStart;
@@ -381,6 +285,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (visibleTimeStart && visibleTimeEnd) {
 	        this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups);
 	      }
+	
+	      if (items !== this.props.items || groups !== this.props.groups) {
+	        this.updateDimensions(items, groups);
+	      }
+	    }
+	  }, {
+	    key: 'updateDimensions',
+	    value: function updateDimensions(items, groups) {
+	      var _state = this.state;
+	      var canvasTimeStart = _state.canvasTimeStart;
+	      var visibleTimeStart = _state.visibleTimeStart;
+	      var visibleTimeEnd = _state.visibleTimeEnd;
+	      var width = _state.width;
+	
+	      var _stackItems2 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width);
+	
+	      var dimensionItems = _stackItems2.dimensionItems;
+	      var height = _stackItems2.height;
+	      var groupHeights = _stackItems2.groupHeights;
+	      var groupTops = _stackItems2.groupTops;
+	
+	
+	      this.setState({ dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops });
 	    }
 	  }, {
 	    key: 'updateScrollCanvas',
@@ -424,12 +351,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (resetCanvas || forceUpdateDimensions) {
 	        var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
 	
-	        var _stackItems2 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
+	        var _stackItems3 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width);
 	
-	        var dimensionItems = _stackItems2.dimensionItems;
-	        var height = _stackItems2.height;
-	        var groupHeights = _stackItems2.groupHeights;
-	        var groupTops = _stackItems2.groupTops;
+	        var dimensionItems = _stackItems3.dimensionItems;
+	        var height = _stackItems3.height;
+	        var groupHeights = _stackItems3.groupHeights;
+	        var groupTops = _stackItems3.groupTops;
 	
 	        newState.dimensionItems = dimensionItems;
 	        newState.height = height;
@@ -438,43 +365,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      this.setState(newState);
-	    }
-	  }, {
-	    key: 'onWheel',
-	    value: function onWheel(e) {
-	      var traditionalZoom = this.props.traditionalZoom;
-	
-	      if (e.ctrlKey) {
-	        e.preventDefault();
-	        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-	        var xPosition = e.clientX - parentPosition.x;
-	        this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width);
-	      } else if (e.shiftKey) {
-	        e.preventDefault();
-	        var scrollComponent = this.refs.scrollComponent;
-	        scrollComponent.scrollLeft += e.deltaY;
-	      } else if (e.altKey) {
-	        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-	        var xPosition = e.clientX - parentPosition.x;
-	        this.changeZoom(1.0 + e.deltaY / 500, xPosition / this.state.width);
-	      } else {
-	        if (this.props.fixedHeader === 'fixed') {
-	          e.preventDefault();
-	          if (e.deltaX !== 0) {
-	            if (!traditionalZoom) {
-	              this.refs.scrollComponent.scrollLeft += e.deltaX;
-	            }
-	          }
-	          if (e.deltaY !== 0) {
-	            window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY);
-	            if (traditionalZoom) {
-	              var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-	              var xPosition = e.clientX - parentPosition.x;
-	              this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width);
-	            }
-	          }
-	        }
-	      }
 	    }
 	  }, {
 	    key: 'zoomIn',
@@ -505,49 +395,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom);
 	    }
 	  }, {
-	    key: 'showPeriod',
-	    value: function showPeriod(from, unit) {
-	      var visibleTimeStart = from.valueOf();
-	      var visibleTimeEnd = (0, _moment2.default)(from).add(1, unit).valueOf();
-	      var zoom = visibleTimeEnd - visibleTimeStart;
-	
-	      // can't zoom in more than to show one hour
-	      if (zoom < 360000) {
-	        return;
-	      }
-	
-	      // clicked on the big header and already focused here, zoom out
-	      if (unit !== 'year' && this.state.visibleTimeStart === visibleTimeStart && this.state.visibleTimeEnd === visibleTimeEnd) {
-	        var nextUnit = (0, _utils.getNextUnit)(unit);
-	
-	        visibleTimeStart = from.startOf(nextUnit).valueOf();
-	        visibleTimeEnd = (0, _moment2.default)(visibleTimeStart).add(1, nextUnit);
-	        zoom = visibleTimeEnd - visibleTimeStart;
-	      }
-	
-	      this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom);
-	    }
-	  }, {
-	    key: 'selectItem',
-	    value: function selectItem(item, clickType) {
-	      if (this.state.selectedItem === item || this.props.itemTouchSendsClick && clickType === 'touch') {
-	        if (item && this.props.onItemClick) {
-	          this.props.onItemClick(item);
-	        }
-	      } else {
-	        this.setState({ selectedItem: item });
-	      }
-	    }
-	  }, {
 	    key: 'rowAndTimeFromEvent',
 	    value: function rowAndTimeFromEvent(e) {
 	      var _props2 = this.props;
 	      var lineHeight = _props2.lineHeight;
 	      var dragSnap = _props2.dragSnap;
-	      var _state = this.state;
-	      var width = _state.width;
-	      var visibleTimeStart = _state.visibleTimeStart;
-	      var visibleTimeEnd = _state.visibleTimeEnd;
+	      var _state2 = this.state;
+	      var width = _state2.width;
+	      var visibleTimeStart = _state2.visibleTimeStart;
+	      var visibleTimeEnd = _state2.visibleTimeEnd;
 	
 	
 	      var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
@@ -559,94 +415,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      time = Math.floor(time / dragSnap) * dragSnap;
 	
 	      return [row, time];
-	    }
-	  }, {
-	    key: 'scrollAreaClick',
-	    value: function scrollAreaClick(e) {
-	      // if not clicking on an item
-	
-	      if (!(0, _utils.hasSomeParentTheClass)(e.target, 'rct-item')) {
-	        if (this.state.selectedItem) {
-	          this.selectItem(null);
-	        } else if (this.props.onCanvasClick) {
-	          var _rowAndTimeFromEvent = this.rowAndTimeFromEvent(e);
-	
-	          var _rowAndTimeFromEvent2 = _slicedToArray(_rowAndTimeFromEvent, 2);
-	
-	          var row = _rowAndTimeFromEvent2[0];
-	          var time = _rowAndTimeFromEvent2[1];
-	
-	          if (row >= 0 && row < this.props.groups.length) {
-	            var groupId = (0, _utils._get)(this.props.groups[row], this.props.keys.groupIdKey);
-	            this.props.onCanvasClick(groupId, time, e);
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'dragItem',
-	    value: function dragItem(item, dragTime, newGroupOrder) {
-	      var newGroup = this.props.groups[newGroupOrder];
-	      var keys = this.props.keys;
-	
-	      this.setState({
-	        draggingItem: item,
-	        dragTime: dragTime,
-	        newGroupOrder: newGroupOrder,
-	        dragGroupTitle: newGroup ? (0, _utils._get)(newGroup, keys.groupTitleKey) : ''
-	      });
-	    }
-	  }, {
-	    key: 'dropItem',
-	    value: function dropItem(item, dragTime, newGroupOrder) {
-	      this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null });
-	      if (this.props.onItemMove) {
-	        this.props.onItemMove(item, dragTime, newGroupOrder);
-	      }
-	    }
-	  }, {
-	    key: 'resizingItem',
-	    value: function resizingItem(item, newResizeEnd) {
-	      this.setState({
-	        resizingItem: item,
-	        resizeEnd: newResizeEnd
-	      });
-	    }
-	  }, {
-	    key: 'resizedItem',
-	    value: function resizedItem(item, newResizeEnd) {
-	      this.setState({ resizingItem: null, resizeEnd: null });
-	      if (this.props.onItemResize) {
-	        this.props.onItemResize(item, newResizeEnd);
-	      }
-	    }
-	  }, {
-	    key: 'handleMouseDown',
-	    value: function handleMouseDown(e) {
-	      var topOffset = this.state.topOffset;
-	      var pageY = e.pageY;
-	      var _props3 = this.props;
-	      var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
-	      var headerLabelHeight = _props3.headerLabelHeight;
-	
-	      var headerHeight = headerLabelGroupHeight + headerLabelHeight;
-	
-	      if (pageY - topOffset > headerHeight) {
-	        this.setState({ isDragging: true, dragStartPosition: e.pageX });
-	      }
-	    }
-	  }, {
-	    key: 'handleMouseMove',
-	    value: function handleMouseMove(e) {
-	      if (this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
-	        this.refs.scrollComponent.scrollLeft += this.state.dragStartPosition - e.pageX;
-	        this.setState({ dragStartPosition: e.pageX });
-	      }
-	    }
-	  }, {
-	    key: 'handleMouseUp',
-	    value: function handleMouseUp(e) {
-	      this.setState({ isDragging: false, dragStartPosition: null });
 	    }
 	  }, {
 	    key: 'todayLine',
@@ -662,13 +430,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'verticalLines',
-	    value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
+	    value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight) {
 	      return _react2.default.createElement(_VerticalLines2.default, { canvasTimeStart: canvasTimeStart,
 	        canvasTimeEnd: canvasTimeEnd,
 	        canvasWidth: canvasWidth,
 	        lineHeight: this.props.lineHeight,
 	        lineCount: (0, _utils._length)(this.props.groups),
 	        minUnit: minUnit,
+	        timeSteps: timeSteps,
 	        fixedHeader: this.props.fixedHeader,
 	        height: height,
 	        headerHeight: headerHeight
@@ -709,12 +478,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        useResizeHandle: this.props.useResizeHandle,
 	        moveResizeValidator: this.props.moveResizeValidator,
 	        topOffset: this.state.topOffset,
-	        itemSelect: this.selectItem.bind(this),
-	        itemDrag: this.dragItem.bind(this),
-	        itemDrop: this.dropItem.bind(this),
+	        itemSelect: this.selectItem,
+	        itemDrag: this.dragItem,
+	        itemDrop: this.dropItem,
 	        onItemDoubleClick: this.props.onItemDoubleClick,
-	        itemResizing: this.resizingItem.bind(this),
-	        itemResized: this.resizedItem.bind(this) });
+	        onItemContextMenu: this.props.onItemContextMenu,
+	        itemResizing: this.resizingItem,
+	        itemResized: this.resizedItem });
 	    }
 	  }, {
 	    key: 'infoLabel',
@@ -731,12 +501,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'header',
-	    value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight) {
+	    value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
 	      return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
 	        canvasTimeEnd: canvasTimeEnd,
 	        canvasWidth: canvasWidth,
 	        lineHeight: this.props.lineHeight,
 	        minUnit: minUnit,
+	        timeSteps: timeSteps,
 	        headerLabelGroupHeight: headerLabelGroupHeight,
 	        headerLabelHeight: headerLabelHeight,
 	        width: this.state.width,
@@ -745,7 +516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        visibleTimeEnd: this.state.visibleTimeEnd,
 	        fixedHeader: this.props.fixedHeader,
 	        zIndex: this.props.zIndexStart + 1,
-	        showPeriod: this.showPeriod.bind(this) });
+	        showPeriod: this.showPeriod });
 	    }
 	  }, {
 	    key: 'sidebar',
@@ -769,20 +540,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'stackItems',
 	    value: function stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
-	      var _props4 = this.props;
-	      var keys = _props4.keys;
-	      var dragSnap = _props4.dragSnap;
-	      var lineHeight = _props4.lineHeight;
-	      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
-	      var headerLabelHeight = _props4.headerLabelHeight;
-	      var stackItems = _props4.stackItems;
-	      var itemHeightRatio = _props4.itemHeightRatio;
-	      var _state2 = this.state;
-	      var draggingItem = _state2.draggingItem;
-	      var dragTime = _state2.dragTime;
-	      var resizingItem = _state2.resizingItem;
-	      var resizeEnd = _state2.resizeEnd;
-	      var newGroupOrder = _state2.newGroupOrder;
+	      var _props3 = this.props;
+	      var keys = _props3.keys;
+	      var dragSnap = _props3.dragSnap;
+	      var lineHeight = _props3.lineHeight;
+	      var headerLabelGroupHeight = _props3.headerLabelGroupHeight;
+	      var headerLabelHeight = _props3.headerLabelHeight;
+	      var stackItems = _props3.stackItems;
+	      var itemHeightRatio = _props3.itemHeightRatio;
+	      var _state3 = this.state;
+	      var draggingItem = _state3.draggingItem;
+	      var dragTime = _state3.dragTime;
+	      var resizingItem = _state3.resizingItem;
+	      var resizeEnd = _state3.resizeEnd;
+	      var newGroupOrder = _state3.newGroupOrder;
 	
 	      var zoom = visibleTimeEnd - visibleTimeStart;
 	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
@@ -811,72 +582,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return { dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops };
 	    }
 	  }, {
-	    key: 'handleDoubleClick',
-	    value: function handleDoubleClick(e) {
-	      var _state3 = this.state;
-	      var canvasTimeStart = _state3.canvasTimeStart;
-	      var width = _state3.width;
-	      var visibleTimeStart = _state3.visibleTimeStart;
-	      var visibleTimeEnd = _state3.visibleTimeEnd;
-	      var groupTops = _state3.groupTops;
-	      var topOffset = _state3.topOffset;
-	
-	      var zoom = visibleTimeEnd - visibleTimeStart;
-	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
-	      var canvasWidth = width * 3;
-	      var pageX = e.pageX;
-	      var pageY = e.pageY;
-	
-	      var ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth;
-	      var boundingRect = this.refs.scrollComponent.getBoundingClientRect();
-	      var timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left);
-	      if (this.props.dragSnap) {
-	        timePosition = Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap;
-	      }
-	
-	      var groupIndex = 0;
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-	
-	      try {
-	        for (var _iterator = Object.keys(groupTops)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var key = _step.value;
-	
-	          var item = groupTops[key];
-	          if (pageY - topOffset > item) {
-	            groupIndex = parseInt(key, 10);
-	          } else {
-	            break;
-	          }
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
-	      }
-	
-	      if (this.props.onCanvasDoubleClick) {
-	        this.props.onCanvasDoubleClick(timePosition, this.props.groups[groupIndex]);
-	      }
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props5 = this.props;
-	      var items = _props5.items;
-	      var groups = _props5.groups;
-	      var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
-	      var headerLabelHeight = _props5.headerLabelHeight;
+	      var _props4 = this.props;
+	      var items = _props4.items;
+	      var groups = _props4.groups;
+	      var headerLabelGroupHeight = _props4.headerLabelGroupHeight;
+	      var headerLabelHeight = _props4.headerLabelHeight;
+	      var sidebarWidth = _props4.sidebarWidth;
+	      var timeSteps = _props4.timeSteps;
 	      var _state4 = this.state;
 	      var draggingItem = _state4.draggingItem;
 	      var resizingItem = _state4.resizingItem;
@@ -894,7 +608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var zoom = visibleTimeEnd - visibleTimeStart;
 	      var canvasTimeEnd = canvasTimeStart + zoom * 3;
 	      var canvasWidth = width * 3;
-	      var minUnit = (0, _utils.getMinUnit)(zoom, width);
+	      var minUnit = (0, _utils.getMinUnit)(zoom, width, timeSteps);
 	      var headerHeight = headerLabelGroupHeight + headerLabelHeight;
 	
 	      if (draggingItem || resizingItem) {
@@ -926,32 +640,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(
 	          'div',
 	          { style: outerComponentStyle, className: 'rct-outer' },
-	          this.sidebar(height, groupHeights, headerHeight),
+	          sidebarWidth > 0 ? this.sidebar(height, groupHeights, headerHeight) : null,
 	          _react2.default.createElement(
 	            'div',
 	            { ref: 'scrollComponent',
 	              className: 'rct-scroll',
 	              style: scrollComponentStyle,
-	              onClick: this.scrollAreaClick.bind(this),
-	              onScroll: this.onScroll.bind(this),
-	              onWheel: this.onWheel.bind(this),
-	              onMouseDown: this.handleMouseDown.bind(this),
-	              onMouseMove: this.handleMouseMove.bind(this),
-	              onMouseUp: this.handleMouseUp.bind(this)
+	              onClick: this.scrollAreaClick,
+	              onScroll: this.onScroll,
+	              onWheel: this.onWheel,
+	              onMouseDown: this.handleMouseDown,
+	              onMouseMove: this.handleMouseMove,
+	              onMouseUp: this.handleMouseUp
 	            },
 	            _react2.default.createElement(
 	              'div',
 	              { ref: 'canvasComponent',
 	                className: 'rct-canvas',
 	                style: canvasComponentStyle,
-	                onDoubleClick: this.handleDoubleClick.bind(this)
+	                onDoubleClick: this.handleDoubleClick
 	              },
 	              this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops),
-	              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
+	              this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight),
 	              this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
 	              this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
 	              this.infoLabel(),
-	              this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, headerLabelGroupHeight, headerLabelHeight)
+	              this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight)
 	            )
 	          )
 	        )
@@ -961,6 +675,322 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  return ReactCalendarTimeline;
 	}(_react.Component);
+	
+	var _initialiseProps = function _initialiseProps() {
+	  var _this3 = this;
+	
+	  this.touchStart = function (e) {
+	    if (e.touches.length === 2) {
+	      e.preventDefault();
+	
+	      _this3.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
+	      _this3.singleTouchStart = null;
+	      _this3.lastSingleTouch = null;
+	    } else if (e.touches.length === 1 && _this3.props.fixedHeader === 'fixed') {
+	      e.preventDefault();
+	
+	      var x = e.touches[0].clientX;
+	      var y = e.touches[0].clientY;
+	
+	      _this3.lastTouchDistance = null;
+	      _this3.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset };
+	      _this3.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset };
+	    }
+	  };
+	
+	  this.touchMove = function (e) {
+	    if (_this3.state.dragTime || _this3.state.resizeEnd) {
+	      e.preventDefault();
+	      return;
+	    }
+	    if (_this3.lastTouchDistance && e.touches.length === 2) {
+	      e.preventDefault();
+	
+	      var touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
+	
+	      var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
+	      var xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x;
+	
+	      if (touchDistance !== 0 && _this3.lastTouchDistance !== 0) {
+	        _this3.changeZoom(_this3.lastTouchDistance / touchDistance, xPosition / _this3.state.width);
+	        _this3.lastTouchDistance = touchDistance;
+	      }
+	    } else if (_this3.lastSingleTouch && e.touches.length === 1 && _this3.props.fixedHeader === 'fixed') {
+	      e.preventDefault();
+	
+	      var x = e.touches[0].clientX;
+	      var y = e.touches[0].clientY;
+	
+	      var deltaX = x - _this3.lastSingleTouch.x;
+	      // let deltaY = y - this.lastSingleTouch.y
+	
+	      var deltaX0 = x - _this3.singleTouchStart.x;
+	      var deltaY0 = y - _this3.singleTouchStart.y;
+	
+	      _this3.lastSingleTouch = { x: x, y: y };
+	
+	      var moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0);
+	      var moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0);
+	
+	      if (deltaX !== 0 && moveX) {
+	        _this3.refs.scrollComponent.scrollLeft -= deltaX;
+	      }
+	      if (moveY) {
+	        window.scrollTo(window.pageXOffset, _this3.singleTouchStart.screenY - deltaY0);
+	      }
+	    }
+	  };
+	
+	  this.touchEnd = function (e) {
+	    if (_this3.lastTouchDistance) {
+	      e.preventDefault();
+	
+	      _this3.lastTouchDistance = null;
+	    }
+	    if (_this3.lastSingleTouch) {
+	      e.preventDefault();
+	
+	      _this3.lastSingleTouch = null;
+	      _this3.singleTouchStart = null;
+	    }
+	  };
+	
+	  this.onScroll = function () {
+	    var scrollComponent = _this3.refs.scrollComponent;
+	    var canvasTimeStart = _this3.state.canvasTimeStart;
+	    var scrollX = scrollComponent.scrollLeft;
+	    var zoom = _this3.state.visibleTimeEnd - _this3.state.visibleTimeStart;
+	    var width = _this3.state.width;
+	    var visibleTimeStart = canvasTimeStart + zoom * scrollX / width;
+	
+	    // move the virtual canvas if needed
+	    if (scrollX < _this3.state.width * 0.5) {
+	      _this3.setState({
+	        canvasTimeStart: _this3.state.canvasTimeStart - zoom
+	      });
+	      scrollComponent.scrollLeft += _this3.state.width;
+	    }
+	    if (scrollX > _this3.state.width * 1.5) {
+	      _this3.setState({
+	        canvasTimeStart: _this3.state.canvasTimeStart + zoom
+	      });
+	      scrollComponent.scrollLeft -= _this3.state.width;
+	    }
+	
+	    if (_this3.state.visibleTimeStart !== visibleTimeStart || _this3.state.visibleTimeEnd !== visibleTimeStart + zoom) {
+	      _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom);
+	    }
+	  };
+	
+	  this.onWheel = function (e) {
+	    var traditionalZoom = _this3.props.traditionalZoom;
+	
+	    if (e.ctrlKey) {
+	      e.preventDefault();
+	      var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
+	      var xPosition = e.clientX - parentPosition.x;
+	      _this3.changeZoom(1.0 + e.deltaY / 50, xPosition / _this3.state.width);
+	    } else if (e.shiftKey) {
+	      e.preventDefault();
+	      var scrollComponent = _this3.refs.scrollComponent;
+	      scrollComponent.scrollLeft += e.deltaY;
+	    } else if (e.altKey) {
+	      var _parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
+	      var _xPosition = e.clientX - _parentPosition.x;
+	      _this3.changeZoom(1.0 + e.deltaY / 500, _xPosition / _this3.state.width);
+	    } else {
+	      if (_this3.props.fixedHeader === 'fixed') {
+	        e.preventDefault();
+	        if (e.deltaX !== 0) {
+	          if (!traditionalZoom) {
+	            _this3.refs.scrollComponent.scrollLeft += e.deltaX;
+	          }
+	        }
+	        if (e.deltaY !== 0) {
+	          window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY);
+	          if (traditionalZoom) {
+	            var _parentPosition2 = (0, _utils.getParentPosition)(e.currentTarget);
+	            var _xPosition2 = e.clientX - _parentPosition2.x;
+	            _this3.changeZoom(1.0 + e.deltaY / 50, _xPosition2 / _this3.state.width);
+	          }
+	        }
+	      }
+	    }
+	  };
+	
+	  this.showPeriod = function (from, unit) {
+	    var visibleTimeStart = from.valueOf();
+	    var visibleTimeEnd = (0, _moment2.default)(from).add(1, unit).valueOf();
+	    var zoom = visibleTimeEnd - visibleTimeStart;
+	
+	    // can't zoom in more than to show one hour
+	    if (zoom < 360000) {
+	      return;
+	    }
+	
+	    // clicked on the big header and already focused here, zoom out
+	    if (unit !== 'year' && _this3.state.visibleTimeStart === visibleTimeStart && _this3.state.visibleTimeEnd === visibleTimeEnd) {
+	      var nextUnit = (0, _utils.getNextUnit)(unit);
+	
+	      visibleTimeStart = from.startOf(nextUnit).valueOf();
+	      visibleTimeEnd = (0, _moment2.default)(visibleTimeStart).add(1, nextUnit);
+	      zoom = visibleTimeEnd - visibleTimeStart;
+	    }
+	
+	    _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom);
+	  };
+	
+	  this.selectItem = function (item, clickType, e) {
+	    if (_this3.state.selectedItem === item || _this3.props.itemTouchSendsClick && clickType === 'touch') {
+	      if (item && _this3.props.onItemClick) {
+	        _this3.props.onItemClick(item, e);
+	      }
+	    } else {
+	      _this3.setState({ selectedItem: item });
+	      if (item && _this3.props.onItemSelect) {
+	        _this3.props.onItemSelect(item, e);
+	      }
+	    }
+	  };
+	
+	  this.scrollAreaClick = function (e) {
+	    // if not clicking on an item
+	
+	    if (!(0, _utils.hasSomeParentTheClass)(e.target, 'rct-item')) {
+	      if (_this3.state.selectedItem) {
+	        _this3.selectItem(null);
+	      } else if (_this3.props.onCanvasClick) {
+	        var _rowAndTimeFromEvent = _this3.rowAndTimeFromEvent(e);
+	
+	        var _rowAndTimeFromEvent2 = _slicedToArray(_rowAndTimeFromEvent, 2);
+	
+	        var row = _rowAndTimeFromEvent2[0];
+	        var time = _rowAndTimeFromEvent2[1];
+	
+	        if (row >= 0 && row < _this3.props.groups.length) {
+	          var groupId = (0, _utils._get)(_this3.props.groups[row], _this3.props.keys.groupIdKey);
+	          _this3.props.onCanvasClick(groupId, time, e);
+	        }
+	      }
+	    }
+	  };
+	
+	  this.dragItem = function (item, dragTime, newGroupOrder) {
+	    var newGroup = _this3.props.groups[newGroupOrder];
+	    var keys = _this3.props.keys;
+	
+	    _this3.setState({
+	      draggingItem: item,
+	      dragTime: dragTime,
+	      newGroupOrder: newGroupOrder,
+	      dragGroupTitle: newGroup ? (0, _utils._get)(newGroup, keys.groupTitleKey) : ''
+	    });
+	  };
+	
+	  this.dropItem = function (item, dragTime, newGroupOrder) {
+	    _this3.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null });
+	    if (_this3.props.onItemMove) {
+	      _this3.props.onItemMove(item, dragTime, newGroupOrder);
+	    }
+	  };
+	
+	  this.resizingItem = function (item, newResizeEnd) {
+	    _this3.setState({
+	      resizingItem: item,
+	      resizeEnd: newResizeEnd
+	    });
+	  };
+	
+	  this.resizedItem = function (item, newResizeEnd) {
+	    _this3.setState({ resizingItem: null, resizeEnd: null });
+	    if (_this3.props.onItemResize) {
+	      _this3.props.onItemResize(item, newResizeEnd);
+	    }
+	  };
+	
+	  this.handleMouseDown = function (e) {
+	    var topOffset = _this3.state.topOffset;
+	    var pageY = e.pageY;
+	    var _props5 = _this3.props;
+	    var headerLabelGroupHeight = _props5.headerLabelGroupHeight;
+	    var headerLabelHeight = _props5.headerLabelHeight;
+	
+	    var headerHeight = headerLabelGroupHeight + headerLabelHeight;
+	
+	    if (pageY - topOffset > headerHeight) {
+	      _this3.setState({ isDragging: true, dragStartPosition: e.pageX });
+	    }
+	  };
+	
+	  this.handleMouseMove = function (e) {
+	    if (_this3.state.isDragging && !_this3.state.draggingItem && !_this3.state.resizingItem) {
+	      _this3.refs.scrollComponent.scrollLeft += _this3.state.dragStartPosition - e.pageX;
+	      _this3.setState({ dragStartPosition: e.pageX });
+	    }
+	  };
+	
+	  this.handleMouseUp = function (e) {
+	    _this3.setState({ isDragging: false, dragStartPosition: null });
+	  };
+	
+	  this.handleDoubleClick = function (e) {
+	    var _state6 = _this3.state;
+	    var canvasTimeStart = _state6.canvasTimeStart;
+	    var width = _state6.width;
+	    var visibleTimeStart = _state6.visibleTimeStart;
+	    var visibleTimeEnd = _state6.visibleTimeEnd;
+	    var groupTops = _state6.groupTops;
+	    var topOffset = _state6.topOffset;
+	
+	    var zoom = visibleTimeEnd - visibleTimeStart;
+	    var canvasTimeEnd = canvasTimeStart + zoom * 3;
+	    var canvasWidth = width * 3;
+	    var pageX = e.pageX;
+	    var pageY = e.pageY;
+	
+	    var ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth;
+	    var boundingRect = _this3.refs.scrollComponent.getBoundingClientRect();
+	    var timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left);
+	    if (_this3.props.dragSnap) {
+	      timePosition = Math.round(timePosition / _this3.props.dragSnap) * _this3.props.dragSnap;
+	    }
+	
+	    var groupIndex = 0;
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = Object.keys(groupTops)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var key = _step.value;
+	
+	        var item = groupTops[key];
+	        if (pageY - topOffset > item) {
+	          groupIndex = parseInt(key, 10);
+	        } else {
+	          break;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	
+	    if (_this3.props.onCanvasDoubleClick) {
+	      _this3.props.onCanvasDoubleClick(timePosition, _this3.props.groups[groupIndex]);
+	    }
+	  };
+	};
 	
 	exports.default = ReactCalendarTimeline;
 	
@@ -995,8 +1025,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemMove: _react2.default.PropTypes.func,
 	  onItemResize: _react2.default.PropTypes.func,
 	  onItemClick: _react2.default.PropTypes.func,
+	  onItemSelect: _react2.default.PropTypes.func,
 	  onCanvasClick: _react2.default.PropTypes.func,
 	  onItemDoubleClick: _react2.default.PropTypes.func,
+	  onItemContextMenu: _react2.default.PropTypes.func,
 	  onCanvasDoubleClick: _react2.default.PropTypes.func,
 	
 	  moveResizeValidator: _react2.default.PropTypes.func,
@@ -1005,6 +1037,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  style: _react2.default.PropTypes.object,
 	  keys: _react2.default.PropTypes.object,
+	
+	  timeSteps: _react2.default.PropTypes.object,
 	
 	  defaultTimeStart: _react2.default.PropTypes.object,
 	  defaultTimeEnd: _react2.default.PropTypes.object,
@@ -1043,8 +1077,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onItemMove: null,
 	  onItemResize: null,
 	  onItemClick: null,
+	  onItemSelect: null,
 	  onCanvasClick: null,
 	  onItemDoubleClick: null,
+	  onItemContextMenu: null,
 	
 	  moveResizeValidator: null,
 	
@@ -1057,6 +1093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  style: {},
 	  keys: defaultKeys,
+	  timeSteps: defaultTimeSteps,
 	
 	  // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
 	  // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
@@ -1230,6 +1267,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            onDrag: _this2.props.itemDrag,
 	            onDrop: _this2.props.itemDrop,
 	            onItemDoubleClick: _this2.props.onItemDoubleClick,
+	            onContextMenu: _this2.props.onItemContextMenu,
 	            onSelect: _this2.props.itemSelect });
 	        })
 	      );
@@ -1278,7 +1316,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  itemDrag: _react2.default.PropTypes.func,
 	  itemDrop: _react2.default.PropTypes.func,
 	  itemResizing: _react2.default.PropTypes.func,
-	  itemResized: _react2.default.PropTypes.func
+	  itemResized: _react2.default.PropTypes.func,
+	
+	  onItemDoubleClick: _react2.default.PropTypes.func,
+	  onItemContextMenu: _react2.default.PropTypes.func
 	};
 	Items.defaultProps = {};
 
@@ -1301,6 +1342,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _interact = __webpack_require__(10);
 	
 	var _interact2 = _interopRequireDefault(_interact);
+	
+	var _moment = __webpack_require__(3);
+	
+	var _moment2 = _interopRequireDefault(_moment);
 	
 	var _utils = __webpack_require__(11);
 	
@@ -1352,7 +1397,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      e.preventDefault();
 	      e.stopPropagation();
 	      if (_this.props.onItemDoubleClick) {
-	        _this.props.onItemDoubleClick(_this.itemId);
+	        _this.props.onItemDoubleClick(_this.itemId, e);
+	      }
+	    };
+	
+	    _this.handleContextMenu = function (e) {
+	      if (_this.props.onContextMenu) {
+	        e.preventDefault();
+	        e.stopPropagation();
+	        _this.props.onContextMenu(_this.itemId, e);
 	      }
 	    };
 	
@@ -1377,7 +1430,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Item, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      var shouldUpdate = !(nextState.dragging !== this.state.dragging && nextState.dragTime !== this.state.dragTime && nextState.dragGroupDelta !== this.state.dragGroupDelta && nextState.resizing !== this.state.resizing && nextState.resizeTime !== this.state.resizeTime && nextProps.keys === this.props.keys && nextProps.selected === this.props.selected && nextProps.item === this.props.item && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.order === this.props.order && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.selected === this.props.selected && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.topOffset === this.props.topOffset && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.dimensions === this.props.dimensions);
+	      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
 	      return shouldUpdate;
 	    }
 	  }, {
@@ -1385,6 +1438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function cacheDataFromProps(props) {
 	      this.itemId = (0, _utils._get)(props.item, props.keys.itemIdKey);
 	      this.itemTitle = (0, _utils._get)(props.item, props.keys.itemTitleKey);
+	      this.itemDivTitle = props.keys.itemDivTitleKey ? (0, _utils._get)(props.item, props.keys.itemDivTitleKey) : this.itemTitle;
 	      this.itemTimeStart = (0, _utils._get)(props.item, props.keys.itemTimeStartKey);
 	      this.itemTimeEnd = (0, _utils._get)(props.item, props.keys.itemTimeEndKey);
 	    }
@@ -1397,9 +1451,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'dragTimeSnap',
-	    value: function dragTimeSnap(dragTime) {
-	      if (this.props.dragSnap) {
-	        return Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap;
+	    value: function dragTimeSnap(dragTime, considerOffset) {
+	      var dragSnap = this.props.dragSnap;
+	
+	      if (dragSnap) {
+	        var offset = considerOffset ? (0, _moment2.default)().utcOffset() * 60 * 1000 : 0;
+	        return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap;
+	      } else {
+	        return dragTime;
+	      }
+	    }
+	  }, {
+	    key: 'resizeTimeSnap',
+	    value: function resizeTimeSnap(dragTime) {
+	      var dragSnap = this.props.dragSnap;
+	
+	      if (dragSnap) {
+	        var endTime = this.itemTimeEnd % dragSnap;
+	        return Math.round((dragTime - endTime) / dragSnap) * dragSnap + endTime;
 	      } else {
 	        return dragTime;
 	      }
@@ -1413,7 +1482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var deltaX = e.pageX - this.state.dragStart.x;
 	        var timeDelta = deltaX * this.coordinateToTimeRatio();
 	
-	        return this.dragTimeSnap(startTime + timeDelta);
+	        return this.dragTimeSnap(startTime + timeDelta, true);
 	      } else {
 	        return startTime;
 	      }
@@ -1559,7 +1628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }).on('resizemove', function (e) {
 	        if (_this2.state.resizing) {
-	          var newResizeEnd = _this2.dragTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+	          var newResizeEnd = _this2.resizeTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
 	
 	          if (_this2.props.moveResizeValidator) {
 	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
@@ -1575,7 +1644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }).on('resizeend', function (e) {
 	        if (_this2.state.resizing) {
-	          var newResizeEnd = _this2.dragTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+	          var newResizeEnd = _this2.resizeTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
 	
 	          if (_this2.props.moveResizeValidator) {
 	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
@@ -1644,7 +1713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'actualClick',
 	    value: function actualClick(e, clickType) {
 	      if (this.props.onSelect) {
-	        this.props.onSelect(this.itemId, clickType);
+	        this.props.onSelect(this.itemId, clickType, e);
 	      }
 	    }
 	  }, {
@@ -1670,12 +1739,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { key: this.itemId,
 	          ref: 'item',
 	          className: classNames,
-	          title: this.itemTitle,
+	          title: this.itemDivTitle,
 	          onMouseDown: this.onMouseDown,
 	          onMouseUp: this.onMouseUp,
 	          onTouchStart: this.onTouchStart,
 	          onTouchEnd: this.onTouchEnd,
 	          onDoubleClick: this.handleDoubleClick,
+	          onContextMenu: this.handleContextMenu,
 	          style: style },
 	        _react2.default.createElement(
 	          'div',
@@ -1721,7 +1791,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // onDrag: React.PropTypes.func,
 	  // onDrop: React.PropTypes.func,
 	  // onResizing: React.PropTypes.func,
-	  // onResized: React.PropTypes.func
+	  // onResized: React.PropTypes.func,
+	  // onContextMenu: React.PropTypes.func
 	};
 	Item.defaultProps = {
 	  selected: false
@@ -1784,17 +1855,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	}
 	
-	function iterateTimes(start, end, unit, callback) {
+	function iterateTimes(start, end, unit, timeSteps, callback) {
 	  var time = (0, _moment2.default)(start).startOf(unit);
 	
+	  if (timeSteps[unit] && timeSteps[unit] > 1) {
+	    var value = time.get(unit);
+	    time.set(unit, value - value % timeSteps[unit]);
+	  }
+	
 	  while (time.valueOf() < end) {
-	    var nextTime = (0, _moment2.default)(time).add(1, unit + 's');
+	    var nextTime = (0, _moment2.default)(time).add(timeSteps[unit] || 1, unit + 's');
 	    callback(time, nextTime);
 	    time = nextTime;
 	  }
 	}
 	
-	function getMinUnit(zoom, width) {
+	function getMinUnit(zoom, width, timeSteps) {
 	  var timeDividers = {
 	    second: 1000,
 	    minute: 60,
@@ -1810,7 +1886,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  Object.keys(timeDividers).some(function (unit) {
 	    breakCount = breakCount / timeDividers[unit];
-	    if (breakCount < width / minCellWidth) {
+	    var cellCount = breakCount / timeSteps[unit];
+	    var countNeeded = width / (timeSteps[unit] && timeSteps[unit] > 1 ? 3 * minCellWidth : minCellWidth);
+	
+	    if (cellCount < countNeeded) {
 	      minUnit = unit;
 	      return true;
 	    }
@@ -2484,16 +2563,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Header).call(this, props));
 	
+	    _this.periodClick = function (e) {
+	      var _e$target$dataset = e.target.dataset;
+	      var time = _e$target$dataset.time;
+	      var unit = _e$target$dataset.unit;
+	
+	      if (time && unit) {
+	        _this.props.showPeriod((0, _moment2.default)(time - 0), unit);
+	      }
+	    };
+	
+	    _this.touchStart = function (e) {
+	      if (e.touches.length === 1) {
+	        _this.setState({
+	          touchTarget: e.target || e.touchTarget,
+	          touchActive: true
+	        });
+	      }
+	    };
+	
+	    _this.touchEnd = function (e) {
+	      if (!_this.state.touchActive) {
+	        return _this.resetTouchState();
+	      }
+	
+	      var changedTouches = e.changedTouches[0];
+	      if (changedTouches) {
+	        var elem = document.elementFromPoint(changedTouches.pageX, changedTouches.pageY);
+	        if (elem !== _this.state.touchTarget) {
+	          return _this.resetTouchState();
+	        }
+	      }
+	
+	      _this.resetTouchState();
+	      _this.periodClick(e);
+	    };
+	
 	    _this.state = {
 	      scrollTop: 0,
 	      componentTop: 0,
 	      touchTarget: null,
 	      touchActive: false
 	    };
-	
-	    _this.periodClick = _this.periodClick.bind(_this);
-	    _this.touchStart = _this.touchStart.bind(_this);
-	    _this.touchEnd = _this.touchEnd.bind(_this);
 	    return _this;
 	  }
 	
@@ -2567,48 +2678,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do');
 	      } else if (unit === 'hour') {
 	        return time.format(width < 50 ? 'HH' : 'HH:00');
+	      } else if (unit === 'minute') {
+	        return time.format(width < 60 ? 'mm' : 'HH:mm');
 	      } else {
-	        return time.get(unit === 'day' ? 'date' : unit);
+	        return time.get(unit);
 	      }
-	    }
-	  }, {
-	    key: 'periodClick',
-	    value: function periodClick(e) {
-	      var _e$target$dataset = e.target.dataset;
-	      var time = _e$target$dataset.time;
-	      var unit = _e$target$dataset.unit;
-	
-	      if (time && unit) {
-	        this.props.showPeriod((0, _moment2.default)(time - 0), unit);
-	      }
-	    }
-	  }, {
-	    key: 'touchStart',
-	    value: function touchStart(e) {
-	      if (e.touches.length === 1) {
-	        this.setState({
-	          touchTarget: e.target || e.touchTarget,
-	          touchActive: true
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'touchEnd',
-	    value: function touchEnd(e) {
-	      if (!this.state.touchActive) {
-	        return this.resetTouchState();
-	      }
-	
-	      var changedTouches = e.changedTouches[0];
-	      if (changedTouches) {
-	        var elem = document.elementFromPoint(changedTouches.pageX, changedTouches.pageY);
-	        if (elem !== this.state.touchTarget) {
-	          return this.resetTouchState();
-	        }
-	      }
-	
-	      this.resetTouchState();
-	      this.periodClick(e);
 	    }
 	  }, {
 	    key: 'resetTouchState',
@@ -2632,6 +2706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var visibleTimeStart = _props.visibleTimeStart;
 	      var visibleTimeEnd = _props.visibleTimeEnd;
 	      var minUnit = _props.minUnit;
+	      var timeSteps = _props.timeSteps;
 	      var fixedHeader = _props.fixedHeader;
 	      var headerLabelGroupHeight = _props.headerLabelGroupHeight;
 	      var headerLabelHeight = _props.headerLabelHeight;
@@ -2645,7 +2720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        (function () {
 	          var nextUnit = (0, _utils.getNextUnit)(minUnit);
 	
-	          (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, function (time, nextTime) {
+	          (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, function (time, nextTime) {
 	            var startTime = Math.max(visibleTimeStart, time.valueOf());
 	            var endTime = Math.min(visibleTimeEnd, nextTime.valueOf());
 	            var left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2);
@@ -2673,7 +2748,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        })();
 	      }
 	
-	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, function (time, nextTime) {
+	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, function (time, nextTime) {
 	        var left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2);
 	        var minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit);
 	        var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
@@ -2694,7 +2769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              width: labelWidth + 'px',
 	              height: (minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight) + 'px',
 	              lineHeight: (minUnit === 'year' ? headerLabelGroupHeight + headerLabelHeight : headerLabelHeight) + 'px',
-	              fontSize: labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10',
+	              fontSize: (labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10') + 'px',
 	              cursor: 'pointer'
 	            } },
 	          _this3.subHeaderLabel(time, minUnit, labelWidth)
@@ -2751,6 +2826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  visibleTimeEnd: _react2.default.PropTypes.number.isRequired,
 	  // visibleTimeEnd: React.PropTypes.number.isRequired,
 	  minUnit: _react2.default.PropTypes.string.isRequired,
+	  timeSteps: _react2.default.PropTypes.object.isRequired,
 	  width: _react2.default.PropTypes.number.isRequired,
 	  fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
 	  zIndex: _react2.default.PropTypes.number
@@ -2798,7 +2874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(VerticalLines, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.fixedHeader === this.props.fixedHeader && nextProps.height === this.props.height && nextProps.headerHeight === this.props.headerHeight);
+	      return !(nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.lineHeight === this.props.lineHeight && nextProps.lineCount === this.props.lineCount && nextProps.minUnit === this.props.minUnit && nextProps.timeSteps === this.props.timeSteps && nextProps.fixedHeader === this.props.fixedHeader && nextProps.height === this.props.height && nextProps.headerHeight === this.props.headerHeight);
 	    }
 	  }, {
 	    key: 'render',
@@ -2810,7 +2886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var canvasTimeEnd = _props.canvasTimeEnd;
 	      var canvasWidth = _props.canvasWidth;
 	      var minUnit = _props.minUnit;
-	      var lineHeight = _props.lineHeight;
+	      var timeSteps = _props.timeSteps;
 	      var height = _props.height;
 	      var headerHeight = _props.headerHeight;
 	
@@ -2818,7 +2894,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var lines = [];
 	
-	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, function (time, nextTime) {
+	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, function (time, nextTime) {
 	        var left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2);
 	        var minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit);
 	        var firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0);
@@ -2831,7 +2907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        lines.push(_react2.default.createElement('div', { key: 'line-' + time.valueOf(),
 	          className: classNames,
 	          style: {
-	            top: lineHeight * 2 + 'px',
+	            top: headerHeight + 'px',
 	            left: left + leftPush + 'px',
 	            width: labelWidth + 'px',
 	            height: height - headerHeight + 'px'
@@ -2859,6 +2935,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  lineHeight: _react2.default.PropTypes.number.isRequired,
 	  lineCount: _react2.default.PropTypes.number.isRequired,
 	  minUnit: _react2.default.PropTypes.string.isRequired,
+	  timeSteps: _react2.default.PropTypes.object.isRequired,
 	  fixedHeader: _react2.default.PropTypes.string.isRequired
 	};
 	VerticalLines.defaultProps = {
