@@ -26,27 +26,27 @@ export default class Item extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    var shouldUpdate = !(nextState.dragging !== this.state.dragging &&
-             nextState.dragTime !== this.state.dragTime &&
-             nextState.dragGroupDelta !== this.state.dragGroupDelta &&
-             nextState.resizing !== this.state.resizing &&
-             nextState.resizeTime !== this.state.resizeTime &&
-             nextProps.keys === this.props.keys &&
-             nextProps.selected === this.props.selected &&
-             nextProps.item === this.props.item &&
-             nextProps.canvasTimeStart === this.props.canvasTimeStart &&
-             nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
-             nextProps.canvasWidth === this.props.canvasWidth &&
-             nextProps.lineHeight === this.props.lineHeight &&
-             nextProps.order === this.props.order &&
-             nextProps.dragSnap === this.props.dragSnap &&
-             nextProps.minResizeWidth === this.props.minResizeWidth &&
-             nextProps.selected === this.props.selected &&
-             nextProps.canChangeGroup === this.props.canChangeGroup &&
-             nextProps.topOffset === this.props.topOffset &&
-             nextProps.canMove === this.props.canMove &&
-             nextProps.canResize === this.props.canResize &&
-             nextProps.dimensions === this.props.dimensions)
+    var shouldUpdate = nextState.dragging !== this.state.dragging ||
+                       nextState.dragTime !== this.state.dragTime ||
+                       nextState.dragGroupDelta !== this.state.dragGroupDelta ||
+                       nextState.resizing !== this.state.resizing ||
+                       nextState.resizeTime !== this.state.resizeTime ||
+                       nextProps.keys !== this.props.keys ||
+                       nextProps.selected !== this.props.selected ||
+                       nextProps.item !== this.props.item ||
+                       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
+                       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+                       nextProps.canvasWidth !== this.props.canvasWidth ||
+                       nextProps.lineHeight !== this.props.lineHeight ||
+                       nextProps.order !== this.props.order ||
+                       nextProps.dragSnap !== this.props.dragSnap ||
+                       nextProps.minResizeWidth !== this.props.minResizeWidth ||
+                       nextProps.selected !== this.props.selected ||
+                       nextProps.canChangeGroup !== this.props.canChangeGroup ||
+                       nextProps.topOffset !== this.props.topOffset ||
+                       nextProps.canMove !== this.props.canMove ||
+                       nextProps.canResize !== this.props.canResize ||
+                       nextProps.dimensions !== this.props.dimensions
     return shouldUpdate
   }
 
