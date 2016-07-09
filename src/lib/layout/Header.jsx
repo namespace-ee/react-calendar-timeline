@@ -12,10 +12,6 @@ export default class Header extends Component {
       touchTarget: null,
       touchActive: false
     }
-
-    this.periodClick = this.periodClick.bind(this)
-    this.touchStart = this.touchStart.bind(this)
-    this.touchEnd = this.touchEnd.bind(this)
   }
 
   scroll (e) {
@@ -85,14 +81,14 @@ export default class Header extends Component {
     }
   }
 
-  periodClick (e) {
+  periodClick = (e) => {
     const {time, unit} = e.target.dataset
     if (time && unit) {
       this.props.showPeriod(moment(time - 0), unit)
     }
   }
 
-  touchStart (e) {
+  touchStart = (e) => {
     if (e.touches.length === 1) {
       this.setState({
         touchTarget: e.target || e.touchTarget,
@@ -101,7 +97,7 @@ export default class Header extends Component {
     }
   }
 
-  touchEnd (e) {
+  touchEnd = (e) => {
     if (!this.state.touchActive) {
       return this.resetTouchState()
     }

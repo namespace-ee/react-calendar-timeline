@@ -204,7 +204,7 @@ export default class ReactCalendarTimeline extends Component {
     this.refs.scrollComponent.scrollLeft = width
   }
 
-  onScroll () {
+  onScroll = () => {
     const scrollComponent = this.refs.scrollComponent
     const canvasTimeStart = this.state.canvasTimeStart
     const scrollX = scrollComponent.scrollLeft
@@ -306,7 +306,7 @@ export default class ReactCalendarTimeline extends Component {
     this.setState(newState)
   }
 
-  onWheel (e) {
+  onWheel = (e) => {
     const { traditionalZoom } = this.props
     if (e.ctrlKey) {
       e.preventDefault()
@@ -362,7 +362,7 @@ export default class ReactCalendarTimeline extends Component {
     this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom)
   }
 
-  showPeriod (from, unit) {
+  showPeriod = (from, unit) => {
     let visibleTimeStart = from.valueOf()
     let visibleTimeEnd = moment(from).add(1, unit).valueOf()
     let zoom = visibleTimeEnd - visibleTimeStart
@@ -384,7 +384,7 @@ export default class ReactCalendarTimeline extends Component {
     this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom)
   }
 
-  selectItem (item, clickType, e) {
+  selectItem = (item, clickType, e) => {
     if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
         this.props.onItemClick(item, e)
@@ -412,7 +412,7 @@ export default class ReactCalendarTimeline extends Component {
     return [row, time]
   }
 
-  scrollAreaClick (e) {
+  scrollAreaClick = (e) => {
     // if not clicking on an item
 
     if (!hasSomeParentTheClass(e.target, 'rct-item')) {
@@ -428,7 +428,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  dragItem (item, dragTime, newGroupOrder) {
+  dragItem = (item, dragTime, newGroupOrder) => {
     let newGroup = this.props.groups[newGroupOrder]
     const keys = this.props.keys
 
@@ -440,28 +440,28 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  dropItem (item, dragTime, newGroupOrder) {
+  dropItem = (item, dragTime, newGroupOrder) => {
     this.setState({draggingItem: null, dragTime: null, dragGroupTitle: null})
     if (this.props.onItemMove) {
       this.props.onItemMove(item, dragTime, newGroupOrder)
     }
   }
 
-  resizingItem (item, newResizeEnd) {
+  resizingItem = (item, newResizeEnd) => {
     this.setState({
       resizingItem: item,
       resizeEnd: newResizeEnd
     })
   }
 
-  resizedItem (item, newResizeEnd) {
+  resizedItem = (item, newResizeEnd) => {
     this.setState({resizingItem: null, resizeEnd: null})
     if (this.props.onItemResize) {
       this.props.onItemResize(item, newResizeEnd)
     }
   }
 
-  handleMouseDown (e) {
+  handleMouseDown = (e) => {
     const { topOffset } = this.state
     const { pageY } = e
     const { headerLabelGroupHeight, headerLabelHeight } = this.props
@@ -472,14 +472,14 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleMouseMove (e) {
+  handleMouseMove = (e) => {
     if (this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
       this.refs.scrollComponent.scrollLeft += this.state.dragStartPosition - e.pageX
       this.setState({dragStartPosition: e.pageX})
     }
   }
 
-  handleMouseUp (e) {
+  handleMouseUp = (e) => {
     this.setState({isDragging: false, dragStartPosition: null})
   }
 
@@ -547,13 +547,13 @@ export default class ReactCalendarTimeline extends Component {
              useResizeHandle={this.props.useResizeHandle}
              moveResizeValidator={this.props.moveResizeValidator}
              topOffset={this.state.topOffset}
-             itemSelect={this.selectItem.bind(this)}
-             itemDrag={this.dragItem.bind(this)}
-             itemDrop={this.dropItem.bind(this)}
+             itemSelect={this.selectItem}
+             itemDrag={this.dragItem}
+             itemDrop={this.dropItem}
              onItemDoubleClick={this.props.onItemDoubleClick}
              onItemContextMenu={this.props.onItemContextMenu}
-             itemResizing={this.resizingItem.bind(this)}
-             itemResized={this.resizedItem.bind(this)} />
+             itemResizing={this.resizingItem}
+             itemResized={this.resizedItem} />
     )
   }
 
@@ -585,7 +585,7 @@ export default class ReactCalendarTimeline extends Component {
               visibleTimeEnd={this.state.visibleTimeEnd}
               fixedHeader={this.props.fixedHeader}
               zIndex={this.props.zIndexStart + 1}
-              showPeriod={this.showPeriod.bind(this)} />
+              showPeriod={this.showPeriod} />
     )
   }
 
@@ -652,7 +652,7 @@ export default class ReactCalendarTimeline extends Component {
     return {dimensionItems, height, groupHeights, groupTops}
   }
 
-  handleDoubleClick (e) {
+  handleDoubleClick = (e) => {
     const { canvasTimeStart, width, visibleTimeStart, visibleTimeEnd, groupTops, topOffset } = this.state
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
@@ -720,17 +720,17 @@ export default class ReactCalendarTimeline extends Component {
           <div ref='scrollComponent'
                className='rct-scroll'
                style={scrollComponentStyle}
-               onClick={this.scrollAreaClick.bind(this)}
-               onScroll={this.onScroll.bind(this)}
-               onWheel={this.onWheel.bind(this)}
-               onMouseDown={this.handleMouseDown.bind(this)}
-               onMouseMove={this.handleMouseMove.bind(this)}
-               onMouseUp={this.handleMouseUp.bind(this)}
+               onClick={this.scrollAreaClick}
+               onScroll={this.onScroll}
+               onWheel={this.onWheel}
+               onMouseDown={this.handleMouseDown}
+               onMouseMove={this.handleMouseMove}
+               onMouseUp={this.handleMouseUp}
           >
             <div ref='canvasComponent'
                  className='rct-canvas'
                  style={canvasComponentStyle}
-                 onDoubleClick={ this.handleDoubleClick.bind(this) }
+                 onDoubleClick={ this.handleDoubleClick }
             >
               {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops)}
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight)}
