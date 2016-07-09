@@ -90,7 +90,8 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
   groupIdKey: 'id',
   groupTitleKey: 'title',
   itemIdKey: 'id',
-  itemTitleKey: 'title',
+  itemTitleKey: 'title',    // key for item div content
+  itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
   itemGroupKey: 'group',
   itemTimeStartKey: 'start_time',
   itemTimeEndKey: 'end_time'

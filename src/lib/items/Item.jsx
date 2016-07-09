@@ -53,6 +53,7 @@ export default class Item extends Component {
   cacheDataFromProps (props) {
     this.itemId = _get(props.item, props.keys.itemIdKey)
     this.itemTitle = _get(props.item, props.keys.itemTitleKey)
+    this.itemDivTitle = props.keys.itemDivTitleKey ? _get(props.item, props.keys.itemDivTitleKey) : this.itemTitle
     this.itemTimeStart = _get(props.item, props.keys.itemTimeStartKey)
     this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
   }
@@ -363,7 +364,7 @@ export default class Item extends Component {
       <div key={this.itemId}
            ref='item'
            className={classNames}
-           title={this.itemTitle}
+           title={this.itemDivTitle}
            onMouseDown={this.onMouseDown}
            onMouseUp={this.onMouseUp}
            onTouchStart={this.onTouchStart}
