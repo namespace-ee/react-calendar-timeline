@@ -85,6 +85,82 @@ var ReactCalendarTimeline = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactCalendarTimeline).call(this, props));
 
+    _this.touchStart = function (e) {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+
+        _this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
+        _this.singleTouchStart = null;
+        _this.lastSingleTouch = null;
+      } else if (e.touches.length === 1 && _this.props.fixedHeader === 'fixed') {
+        e.preventDefault();
+
+        var x = e.touches[0].clientX;
+        var y = e.touches[0].clientY;
+
+        _this.lastTouchDistance = null;
+        _this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset };
+        _this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset };
+      }
+    };
+
+    _this.touchMove = function (e) {
+      if (_this.state.dragTime || _this.state.resizeEnd) {
+        e.preventDefault();
+        return;
+      }
+      if (_this.lastTouchDistance && e.touches.length === 2) {
+        e.preventDefault();
+
+        var touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
+
+        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
+        var xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x;
+
+        if (touchDistance !== 0 && _this.lastTouchDistance !== 0) {
+          _this.changeZoom(_this.lastTouchDistance / touchDistance, xPosition / _this.state.width);
+          _this.lastTouchDistance = touchDistance;
+        }
+      } else if (_this.lastSingleTouch && e.touches.length === 1 && _this.props.fixedHeader === 'fixed') {
+        e.preventDefault();
+
+        var x = e.touches[0].clientX;
+        var y = e.touches[0].clientY;
+
+        var deltaX = x - _this.lastSingleTouch.x;
+        // let deltaY = y - this.lastSingleTouch.y
+
+        var deltaX0 = x - _this.singleTouchStart.x;
+        var deltaY0 = y - _this.singleTouchStart.y;
+
+        _this.lastSingleTouch = { x: x, y: y };
+
+        var moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0);
+        var moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0);
+
+        if (deltaX !== 0 && moveX) {
+          _this.refs.scrollComponent.scrollLeft -= deltaX;
+        }
+        if (moveY) {
+          window.scrollTo(window.pageXOffset, _this.singleTouchStart.screenY - deltaY0);
+        }
+      }
+    };
+
+    _this.touchEnd = function (e) {
+      if (_this.lastTouchDistance) {
+        e.preventDefault();
+
+        _this.lastTouchDistance = null;
+      }
+      if (_this.lastSingleTouch) {
+        e.preventDefault();
+
+        _this.lastSingleTouch = null;
+        _this.singleTouchStart = null;
+      }
+    };
+
     var visibleTimeStart = null;
     var visibleTimeEnd = null;
 
@@ -159,96 +235,18 @@ var ReactCalendarTimeline = function (_Component) {
       window.addEventListener('resize', this.resizeEventListener);
 
       this.lastTouchDistance = null;
-      this.refs.scrollComponent.addEventListener('touchstart', this.touchStart.bind(this));
-      this.refs.scrollComponent.addEventListener('touchmove', this.touchMove.bind(this));
-      this.refs.scrollComponent.addEventListener('touchend', this.touchEnd.bind(this));
+
+      this.refs.scrollComponent.addEventListener('touchstart', this.touchStart);
+      this.refs.scrollComponent.addEventListener('touchmove', this.touchMove);
+      this.refs.scrollComponent.addEventListener('touchend', this.touchEnd);
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       window.removeEventListener('resize', this.resizeEventListener);
-      this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart.bind(this));
-      this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove.bind(this));
-      this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd.bind(this));
-    }
-  }, {
-    key: 'touchStart',
-    value: function touchStart(e) {
-      if (e.touches.length === 2) {
-        e.preventDefault();
-
-        this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
-        this.singleTouchStart = null;
-        this.lastSingleTouch = null;
-      } else if (e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
-        e.preventDefault();
-
-        var x = e.touches[0].clientX;
-        var y = e.touches[0].clientY;
-
-        this.lastTouchDistance = null;
-        this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset };
-        this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset };
-      }
-    }
-  }, {
-    key: 'touchMove',
-    value: function touchMove(e) {
-      if (this.state.dragTime || this.state.resizeEnd) {
-        e.preventDefault();
-        return;
-      }
-      if (this.lastTouchDistance && e.touches.length === 2) {
-        e.preventDefault();
-
-        var touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX);
-
-        var parentPosition = (0, _utils.getParentPosition)(e.currentTarget);
-        var xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x;
-
-        if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
-          this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width);
-          this.lastTouchDistance = touchDistance;
-        }
-      } else if (this.lastSingleTouch && e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
-        e.preventDefault();
-
-        var x = e.touches[0].clientX;
-        var y = e.touches[0].clientY;
-
-        var deltaX = x - this.lastSingleTouch.x;
-        // let deltaY = y - this.lastSingleTouch.y
-
-        var deltaX0 = x - this.singleTouchStart.x;
-        var deltaY0 = y - this.singleTouchStart.y;
-
-        this.lastSingleTouch = { x: x, y: y };
-
-        var moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0);
-        var moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0);
-
-        if (deltaX !== 0 && moveX) {
-          this.refs.scrollComponent.scrollLeft -= deltaX;
-        }
-        if (moveY) {
-          window.scrollTo(window.pageXOffset, this.singleTouchStart.screenY - deltaY0);
-        }
-      }
-    }
-  }, {
-    key: 'touchEnd',
-    value: function touchEnd(e) {
-      if (this.lastTouchDistance) {
-        e.preventDefault();
-
-        this.lastTouchDistance = null;
-      }
-      if (this.lastSingleTouch) {
-        e.preventDefault();
-
-        this.lastSingleTouch = null;
-        this.singleTouchStart = null;
-      }
+      this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart);
+      this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove);
+      this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd);
     }
   }, {
     key: 'resize',
@@ -485,15 +483,15 @@ var ReactCalendarTimeline = function (_Component) {
     }
   }, {
     key: 'selectItem',
-    value: function selectItem(item, clickType) {
+    value: function selectItem(item, clickType, e) {
       if (this.state.selectedItem === item || this.props.itemTouchSendsClick && clickType === 'touch') {
         if (item && this.props.onItemClick) {
-          this.props.onItemClick(item);
+          this.props.onItemClick(item, e);
         }
       } else {
         this.setState({ selectedItem: item });
         if (item && this.props.onItemSelect) {
-          this.props.onItemSelect(item);
+          this.props.onItemSelect(item, e);
         }
       }
     }
