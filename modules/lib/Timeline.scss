@@ -35,6 +35,8 @@ $weekend: rgba(250, 246, 225, 0.5);
     vertical-align: top;
     overflow-x: scroll;
     overflow-y: hidden;
+    -ms-touch-action: none;
+    touch-action: none;
   }
 
   .rct-canvas {
