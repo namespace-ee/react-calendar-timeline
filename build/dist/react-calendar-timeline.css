@@ -9,7 +9,9 @@
   display: inline-block;
   vertical-align: top;
   overflow-x: scroll;
-  overflow-y: hidden; }
+  overflow-y: hidden;
+  -ms-touch-action: none;
+  touch-action: none; }
 
 .react-calendar-timeline .rct-canvas {
   position: relative; }
