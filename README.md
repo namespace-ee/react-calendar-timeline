@@ -185,6 +185,9 @@ Called when an item is clicked. Note: the item must be selected before it's clic
 ### onCanvasClick(groupId, time, e)
 Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
 
+### onCanvasDoubleClick(groupId, time,e )
+Called when an empty spot on the canvas was double clicked. Get the group ID and the time as arguments. 
+
 ### onItemDoubleClick(itemId, e)
 Called when an item was double clicked
 
