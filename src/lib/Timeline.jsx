@@ -677,7 +677,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (this.props.onCanvasDoubleClick) {
-      this.props.onCanvasDoubleClick(timePosition, this.props.groups[groupIndex])
+      this.props.onCanvasDoubleClick(this.props.groups[groupIndex], timePosition, e)
     }
   }
 
