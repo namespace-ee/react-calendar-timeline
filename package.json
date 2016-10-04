@@ -37,12 +37,15 @@
   "standard": {
     "parser": "babel-eslint"
   },
+  "dependencies": {
+    "interact.js": "^1.2.6",
+    "react-pure-render": "^1.0.2"
+  },
   "peerDependencies": {
     "react": "^0.14.8 || ^15.0.1",
     "react-dom": "^0.14.8 || ^15.0.1",
     "moment": "*",
-    "interact.js": "*",
-    "react-pure-render": "^1.0.2"
+    "interact.js": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
