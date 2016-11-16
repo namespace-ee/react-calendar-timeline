@@ -26,7 +26,7 @@ var Sidebar = function (_Component) {
   function Sidebar(props) {
     _classCallCheck(this, Sidebar);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Sidebar).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Sidebar.__proto__ || Object.getPrototypeOf(Sidebar)).call(this, props));
 
     _this.state = {
       scrollTop: 0,
@@ -91,17 +91,17 @@ var Sidebar = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props = this.props;
-      var fixedHeader = _props.fixedHeader;
-      var width = _props.width;
-      var lineHeight = _props.lineHeight;
-      var zIndex = _props.zIndex;
-      var groupHeights = _props.groupHeights;
-      var height = _props.height;
-      var headerHeight = _props.headerHeight;
-      var _props$keys = this.props.keys;
-      var groupIdKey = _props$keys.groupIdKey;
-      var groupTitleKey = _props$keys.groupTitleKey;
+      var _props = this.props,
+          fixedHeader = _props.fixedHeader,
+          width = _props.width,
+          lineHeight = _props.lineHeight,
+          zIndex = _props.zIndex,
+          groupHeights = _props.groupHeights,
+          height = _props.height,
+          headerHeight = _props.headerHeight;
+      var _props$keys = this.props.keys,
+          groupIdKey = _props$keys.groupIdKey,
+          groupTitleKey = _props$keys.groupTitleKey;
       var scrollTop = this.state.scrollTop;
 
 

@@ -48,7 +48,10 @@
         end: endValue,
         canMove: startValue > new Date().getTime(),
         canResize: endValue > new Date().getTime(),
-        className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : ''
+        className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : '',
+        itemProps: {
+          'data-tip': faker.hacker.phrase()
+        }
       })
     }
 

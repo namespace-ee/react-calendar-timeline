@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 exports._get = _get;
 exports._length = _length;
 exports.arraysEqual = arraysEqual;
@@ -21,6 +24,7 @@ exports.keyBy = keyBy;
 exports.groupBy = groupBy;
 exports.hasSomeParentTheClass = hasSomeParentTheClass;
 exports.createGradientPattern = createGradientPattern;
+exports.deepObjectCompare = deepObjectCompare;
 
 var _moment = require('moment');
 
@@ -175,8 +179,8 @@ function getGroupOrders(groups, keys) {
 }
 
 function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
-  var itemTimeStartKey = keys.itemTimeStartKey;
-  var itemTimeEndKey = keys.itemTimeEndKey;
+  var itemTimeStartKey = keys.itemTimeStartKey,
+      itemTimeEndKey = keys.itemTimeEndKey;
 
 
   return items.filter(function (item) {
@@ -389,3 +393,25 @@ function createGradientPattern(lineHeight, color1, color2, borderColor) {
     }
   }
 }
+
+function deepObjectCompare(obj1, obj2) {
+  for (var p in obj1) {
+    if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
+
+    switch (_typeof(obj1[p])) {
+      case 'object':
+        if (!Object.compare(obj1[p], obj2[p])) return false;
+        break;
+      case 'function':
+        if (typeof obj2[p] === 'undefined' || p !== 'compare' && obj1[p].toString() !== obj2[p].toString()) return false;
+        break;
+      default:
+        if (obj1[p] !== obj2[p]) return false;
+    }
+  }
+
+  for (var r in obj2) {
+    if (typeof obj1[r] === 'undefined') return false;
+  }
+  return true;
+};

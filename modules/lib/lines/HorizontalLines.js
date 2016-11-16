@@ -24,7 +24,7 @@ var HorizontalLines = function (_Component) {
   function HorizontalLines() {
     _classCallCheck(this, HorizontalLines);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(HorizontalLines).apply(this, arguments));
+    return _possibleConstructorReturn(this, (HorizontalLines.__proto__ || Object.getPrototypeOf(HorizontalLines)).apply(this, arguments));
   }
 
   _createClass(HorizontalLines, [{
@@ -35,11 +35,11 @@ var HorizontalLines = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props = this.props;
-      var lineCount = _props.lineCount;
-      var canvasWidth = _props.canvasWidth;
-      var groupHeights = _props.groupHeights;
-      var headerHeight = _props.headerHeight;
+      var _props = this.props,
+          lineCount = _props.lineCount,
+          canvasWidth = _props.canvasWidth,
+          groupHeights = _props.groupHeights,
+          headerHeight = _props.headerHeight;
 
       var lines = [];
 

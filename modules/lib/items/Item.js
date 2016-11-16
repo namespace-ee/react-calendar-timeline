@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -34,7 +36,7 @@ var Item = function (_Component) {
   function Item(props) {
     _classCallCheck(this, Item);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Item).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Item.__proto__ || Object.getPrototypeOf(Item)).call(this, props));
 
     _this.onMouseDown = function (e) {
       if (!_this.state.interactMounted) {
@@ -101,7 +103,7 @@ var Item = function (_Component) {
   _createClass(Item, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
+      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
       return shouldUpdate;
     }
   }, {
@@ -116,7 +118,7 @@ var Item = function (_Component) {
   }, {
     key: 'coordinateToTimeRatio',
     value: function coordinateToTimeRatio() {
-      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
+      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
       return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth;
     }
@@ -161,10 +163,10 @@ var Item = function (_Component) {
   }, {
     key: 'dragGroupDelta',
     value: function dragGroupDelta(e) {
-      var _props = this.props;
-      var groupTops = _props.groupTops;
-      var order = _props.order;
-      var topOffset = _props.topOffset;
+      var _props = this.props,
+          groupTops = _props.groupTops,
+          order = _props.order,
+          topOffset = _props.topOffset;
 
       if (this.state.dragging) {
         if (!this.props.canChangeGroup) {
@@ -341,7 +343,7 @@ var Item = function (_Component) {
   }, {
     key: 'canResize',
     value: function canResize() {
-      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
+      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
       if (!props.canResize) {
         return false;
@@ -352,7 +354,7 @@ var Item = function (_Component) {
   }, {
     key: 'canMove',
     value: function canMove() {
-      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
+      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
       return !!props.canMove;
     }
@@ -383,7 +385,7 @@ var Item = function (_Component) {
   }, {
     key: 'actualClick',
     value: function actualClick(e, clickType) {
-      if (this.props.onSelect) {
+      if (this.props.canSelect && this.props.onSelect) {
         this.props.onSelect(this.itemId, clickType, e);
       }
     }
@@ -407,7 +409,8 @@ var Item = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { key: this.itemId,
+        _extends({}, this.props.item.itemProps, {
+          key: this.itemId,
           ref: 'item',
           className: classNames,
           title: this.itemDivTitle,
@@ -417,7 +420,7 @@ var Item = function (_Component) {
           onTouchEnd: this.onTouchEnd,
           onDoubleClick: this.handleDoubleClick,
           onContextMenu: this.handleContextMenu,
-          style: style },
+          style: style }),
         _react2.default.createElement(
           'div',
           { className: 'rct-item-overflow' },
