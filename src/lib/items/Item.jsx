@@ -335,7 +335,7 @@ export default class Item extends Component {
   };
 
   actualClick (e, clickType) {
-    if (this.props.onSelect) {
+    if (this.props.canSelect && this.props.onSelect) {
       this.props.onSelect(this.itemId, clickType, e)
     }
   }

@@ -82,6 +82,7 @@ export default class Items extends Component {
                                         canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
                                         canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
                                         canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
+                                        canSelect={_get(item, 'canSelect') !== undefined ? _get(item, 'canSelect') : this.props.canSelect}
                                         useResizeHandle={this.props.useResizeHandle}
                                         topOffset={this.props.topOffset}
                                         groupHeights={this.props.groupHeights}
@@ -133,6 +134,7 @@ Items.propTypes = {
   canChangeGroup: React.PropTypes.bool.isRequired,
   canMove: React.PropTypes.bool.isRequired,
   canResize: React.PropTypes.bool.isRequired,
+  canSelect: React.PropTypes.bool,
 
   keys: React.PropTypes.object.isRequired,
 
