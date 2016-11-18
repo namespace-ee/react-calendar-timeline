@@ -109,15 +109,15 @@
       },
 
       // this limits the timeline to -6 months ... +6 months
-      onTimeChange: function (visibleTimeStart, visibleTimeEnd) {
+      onTimeChange: function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
         if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-          this.updateScrollCanvas(minTime, maxTime)
+          updateScrollCanvas(minTime, maxTime)
         } else if (visibleTimeStart < minTime) {
-          this.updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+          updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
         } else if (visibleTimeEnd > maxTime) {
-          this.updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+          updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
         } else {
-          this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+          updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
         }
       }
     }

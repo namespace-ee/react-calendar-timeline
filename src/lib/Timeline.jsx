@@ -229,7 +229,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (this.state.visibleTimeStart !== visibleTimeStart || this.state.visibleTimeEnd !== visibleTimeStart + zoom) {
-      this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom)
+      this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom, this.updateScrollCanvas)
     }
   }
 
@@ -254,7 +254,7 @@ export default class ReactCalendarTimeline extends Component {
     this.setState({ dimensionItems, height, groupHeights, groupTops })
   }
 
-  updateScrollCanvas (visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
+  updateScrollCanvas = (visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) => {
     const oldCanvasTimeStart = this.state.canvasTimeStart
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = visibleTimeEnd - visibleTimeStart
@@ -361,7 +361,7 @@ export default class ReactCalendarTimeline extends Component {
     const newZoom = Math.min(Math.max(Math.round(oldZoom * scale), minZoom), maxZoom) // min 1 min, max 20 years
     const newVisibleTimeStart = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset)
 
-    this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom)
+    this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom, this.updateScrollCanvas)
   }
 
   showPeriod = (from, unit) => {
@@ -383,7 +383,7 @@ export default class ReactCalendarTimeline extends Component {
       zoom = visibleTimeEnd - visibleTimeStart
     }
 
-    this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom)
+    this.props.onTimeChange.bind(this)(visibleTimeStart, visibleTimeStart + zoom, this.updateScrollCanvas)
   }
 
   selectItem = (item, clickType, e) => {
@@ -865,8 +865,8 @@ ReactCalendarTimeline.defaultProps = {
   // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
   visibleTimeStart: null,
   visibleTimeEnd: null,
-  onTimeChange: function (visibleTimeStart, visibleTimeEnd) {
-    this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+  onTimeChange: function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
+    updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
   },
   // called after the calendar loads and the visible time has been calculated
   onTimeInit: null,

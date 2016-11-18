@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - [BREAKING] Same arguments order (groupId, time, e) for onCanvasDoubleClick and onCanvasClick #52 by @signalwerk
+- [Deprecated] `onTimeChange` now gets `updateScrollCanvas` as the third argument. Doing `this.updateScrollCanvas` is no longer needed and will be removed soon.
 - Moved React & Moment from dependencies to peerDependencies #53 by @meikoudras
 - Fix resizing when inside DIV #47 by @semargal
 - Fix demo for IE11 #44 by @lucidlemon

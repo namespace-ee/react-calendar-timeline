@@ -189,7 +189,7 @@ Called when an item is clicked. Note: the item must be selected before it's clic
 Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
 
 ### onCanvasDoubleClick(groupId, time,e )
-Called when an empty spot on the canvas was double clicked. Get the group ID and the time as arguments. 
+Called when an empty spot on the canvas was double clicked. Get the group ID and the time as arguments.
 
 ### onItemDoubleClick(itemId, e)
 Called when an item was double clicked
@@ -225,9 +225,8 @@ Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the 
 ### visibleTimeStart and visibleTimeEnd
 The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.
 
-### onTimeChange(visibleTimeStart, visibleTimeEnd)
-A function called when the user tries to scroll. If you control `visibleTimeStart` and `visibleTimeEnd` yourself, use the parameters to this function to change them.
-Otherwise use it as a filter for what the user can see. The function is bound to the calendar component, so for uncontrolled, and yet bound usage, you must call `this.updateScrollCanvas` with the updated visibleTimeStart and visibleTimeEnd.
+### onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
+A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd to change the scroll behavior, for example to limit scrolling.
 
 Here is an example that limits the timeline to only show dates starting 6 months from now and ending in 6 months.
 
@@ -236,15 +235,15 @@ Here is an example that limits the timeline to only show dates starting 6 months
 var minTime = moment().add(-6, 'months').valueOf()
 var maxTime = moment().add(6, 'months').valueOf()
 
-function (visibleTimeStart, visibleTimeEnd) {
+function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
   if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-    this.updateScrollCanvas(minTime, maxTime)
+    updateScrollCanvas(minTime, maxTime)
   } else if (visibleTimeStart < minTime) {
-    this.updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+    updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
   } else if (visibleTimeEnd > maxTime) {
-    this.updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+    updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
   } else {
-    this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+    updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
   }
 }
 ```
