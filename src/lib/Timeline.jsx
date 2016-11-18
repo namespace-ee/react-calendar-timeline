@@ -547,6 +547,7 @@ export default class ReactCalendarTimeline extends Component {
              canMove={this.props.canMove}
              canResize={this.props.canResize}
              useResizeHandle={this.props.useResizeHandle}
+             canSelect={this.props.canSelect}
              moveResizeValidator={this.props.moveResizeValidator}
              topOffset={this.state.topOffset}
              itemSelect={this.selectItem}
@@ -778,6 +779,7 @@ ReactCalendarTimeline.propTypes = {
   canMove: React.PropTypes.bool,
   canResize: React.PropTypes.bool,
   useResizeHandle: React.PropTypes.bool,
+  canSelect: React.PropTypes.bool,
 
   stackItems: React.PropTypes.bool,
 
@@ -832,6 +834,7 @@ ReactCalendarTimeline.defaultProps = {
   canMove: true,
   canResize: true,
   useResizeHandle: false,
+  canSelect: true,
 
   stackItems: false,
 

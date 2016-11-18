@@ -31,7 +31,7 @@ var Items = function (_Component) {
   function Items() {
     _classCallCheck(this, Items);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Items).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Items.__proto__ || Object.getPrototypeOf(Items)).apply(this, arguments));
   }
 
   _createClass(Items, [{
@@ -56,9 +56,9 @@ var Items = function (_Component) {
   }, {
     key: 'getVisibleItems',
     value: function getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders) {
-      var _props$keys = this.props.keys;
-      var itemTimeStartKey = _props$keys.itemTimeStartKey;
-      var itemTimeEndKey = _props$keys.itemTimeEndKey;
+      var _props$keys = this.props.keys,
+          itemTimeStartKey = _props$keys.itemTimeStartKey,
+          itemTimeEndKey = _props$keys.itemTimeEndKey;
 
 
       return this.props.items.filter(function (item) {
@@ -70,13 +70,13 @@ var Items = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props;
-      var canvasTimeStart = _props.canvasTimeStart;
-      var canvasTimeEnd = _props.canvasTimeEnd;
-      var dimensionItems = _props.dimensionItems;
-      var _props$keys2 = this.props.keys;
-      var itemIdKey = _props$keys2.itemIdKey;
-      var itemGroupKey = _props$keys2.itemGroupKey;
+      var _props = this.props,
+          canvasTimeStart = _props.canvasTimeStart,
+          canvasTimeEnd = _props.canvasTimeEnd,
+          dimensionItems = _props.dimensionItems;
+      var _props$keys2 = this.props.keys,
+          itemIdKey = _props$keys2.itemIdKey,
+          itemGroupKey = _props$keys2.itemGroupKey;
 
 
       var groupOrders = this.getGroupOrders();
@@ -115,6 +115,7 @@ var Items = function (_Component) {
             canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
             canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,
             canResize: (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : _this2.props.canResize,
+            canSelect: (0, _utils._get)(item, 'canSelect') !== undefined ? (0, _utils._get)(item, 'canSelect') : _this2.props.canSelect,
             useResizeHandle: _this2.props.useResizeHandle,
             topOffset: _this2.props.topOffset,
             groupHeights: _this2.props.groupHeights,
@@ -172,6 +173,7 @@ Items.propTypes = {
   canChangeGroup: _react2.default.PropTypes.bool.isRequired,
   canMove: _react2.default.PropTypes.bool.isRequired,
   canResize: _react2.default.PropTypes.bool.isRequired,
+  canSelect: _react2.default.PropTypes.bool,
 
   keys: _react2.default.PropTypes.object.isRequired,
 

@@ -30,12 +30,12 @@ var Header = function (_Component) {
   function Header(props) {
     _classCallCheck(this, Header);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Header).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
 
     _this.periodClick = function (e) {
-      var _e$target$dataset = e.target.dataset;
-      var time = _e$target$dataset.time;
-      var unit = _e$target$dataset.unit;
+      var _e$target$dataset = e.target.dataset,
+          time = _e$target$dataset.time,
+          unit = _e$target$dataset.unit;
 
       if (time && unit) {
         _this.props.showPeriod((0, _moment2.default)(time - 0), unit);
@@ -167,18 +167,18 @@ var Header = function (_Component) {
       var _this3 = this;
 
       var timeLabels = [];
-      var _props = this.props;
-      var canvasTimeStart = _props.canvasTimeStart;
-      var canvasTimeEnd = _props.canvasTimeEnd;
-      var canvasWidth = _props.canvasWidth;
-      var lineHeight = _props.lineHeight;
-      var visibleTimeStart = _props.visibleTimeStart;
-      var visibleTimeEnd = _props.visibleTimeEnd;
-      var minUnit = _props.minUnit;
-      var timeSteps = _props.timeSteps;
-      var fixedHeader = _props.fixedHeader;
-      var headerLabelGroupHeight = _props.headerLabelGroupHeight;
-      var headerLabelHeight = _props.headerLabelHeight;
+      var _props = this.props,
+          canvasTimeStart = _props.canvasTimeStart,
+          canvasTimeEnd = _props.canvasTimeEnd,
+          canvasWidth = _props.canvasWidth,
+          lineHeight = _props.lineHeight,
+          visibleTimeStart = _props.visibleTimeStart,
+          visibleTimeEnd = _props.visibleTimeEnd,
+          minUnit = _props.minUnit,
+          timeSteps = _props.timeSteps,
+          fixedHeader = _props.fixedHeader,
+          headerLabelGroupHeight = _props.headerLabelGroupHeight,
+          headerLabelHeight = _props.headerLabelHeight;
       var scrollTop = this.state.scrollTop;
 
       var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);

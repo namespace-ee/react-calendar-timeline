@@ -30,7 +30,7 @@ var ItemGroup = function (_Component) {
   function ItemGroup() {
     _classCallCheck(this, ItemGroup);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemGroup).apply(this, arguments));
+    return _possibleConstructorReturn(this, (ItemGroup.__proto__ || Object.getPrototypeOf(ItemGroup)).apply(this, arguments));
   }
 
   _createClass(ItemGroup, [{
@@ -44,9 +44,9 @@ var ItemGroup = function (_Component) {
       var _this2 = this;
 
       // const { canvasTimeStart, canvasTimeEnd } = this.props
-      var _props$keys = this.props.keys;
-      var itemIdKey = _props$keys.itemIdKey;
-      var itemGroupKey = _props$keys.itemGroupKey;
+      var _props$keys = this.props.keys,
+          itemIdKey = _props$keys.itemIdKey,
+          itemGroupKey = _props$keys.itemGroupKey;
 
 
       var groupOrders = this.props.groupOrders;

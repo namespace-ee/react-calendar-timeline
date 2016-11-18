@@ -24,7 +24,7 @@ var TodayLine = function (_Component) {
   function TodayLine() {
     _classCallCheck(this, TodayLine);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(TodayLine).apply(this, arguments));
+    return _possibleConstructorReturn(this, (TodayLine.__proto__ || Object.getPrototypeOf(TodayLine)).apply(this, arguments));
   }
 
   _createClass(TodayLine, [{

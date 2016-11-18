@@ -77,7 +77,10 @@ Expects either a vanilla JS array or an immutable JS array, consisting of object
   canMove: true,
   canResize: false,
   canChangeGroup: false,
-  className: 'weekend'
+  className: 'weekend',
+  itemProps: {
+    'data-custom-attribute': 'Random content'
+  }
 }
 ```
 
