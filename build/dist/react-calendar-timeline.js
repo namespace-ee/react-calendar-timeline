@@ -251,7 +251,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'resize',
 	    value: function resize() {
 	      // FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
-	      var width = this.refs.container.clientWidth - this.props.sidebarWidth;
+	      var _refs$container$getBo = this.refs.container.getBoundingClientRect(),
+	          containerWidth = _refs$container$getBo.width,
+	          containerTop = _refs$container$getBo.top;
+	
+	      var width = containerWidth - this.props.sidebarWidth;
 	
 	      var _stackItems = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width),
 	          dimensionItems = _stackItems.dimensionItems,
@@ -261,7 +265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.setState({
 	        width: width,
-	        topOffset: this.refs.container.getBoundingClientRect().top + window.pageYOffset,
+	        topOffset: containerTop + window.pageYOffset,
 	        dimensionItems: dimensionItems,
 	        height: height,
 	        groupHeights: groupHeights,
@@ -304,62 +308,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState({ dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops });
 	    }
 	  }, {
-	    key: 'updateScrollCanvas',
-	    value: function updateScrollCanvas(visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
-	      var oldCanvasTimeStart = this.state.canvasTimeStart;
-	      var oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
-	      var newZoom = visibleTimeEnd - visibleTimeStart;
-	      var items = updatedItems || this.props.items;
-	      var groups = updatedGroups || this.props.groups;
-	
-	      var newState = {
-	        visibleTimeStart: visibleTimeStart,
-	        visibleTimeEnd: visibleTimeEnd
-	      };
-	
-	      var resetCanvas = false;
-	
-	      var canKeepCanvas = visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 && visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5;
-	
-	      // if new visible time is in the right canvas area
-	      if (canKeepCanvas) {
-	        // but we need to update the scroll
-	        var newScrollLeft = Math.round(this.state.width * (visibleTimeStart - oldCanvasTimeStart) / newZoom);
-	        if (this.refs.scrollComponent.scrollLeft !== newScrollLeft) {
-	          resetCanvas = true;
-	        }
-	      } else {
-	        resetCanvas = true;
-	      }
-	
-	      if (resetCanvas) {
-	        // Todo: need to calculate new dimensions
-	        newState.canvasTimeStart = visibleTimeStart - newZoom;
-	        this.refs.scrollComponent.scrollLeft = this.state.width;
-	
-	        if (this.props.onBoundsChange) {
-	          this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
-	        }
-	      }
-	
-	      if (resetCanvas || forceUpdateDimensions) {
-	        var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
-	
-	        var _stackItems3 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width),
-	            dimensionItems = _stackItems3.dimensionItems,
-	            height = _stackItems3.height,
-	            groupHeights = _stackItems3.groupHeights,
-	            groupTops = _stackItems3.groupTops;
-	
-	        newState.dimensionItems = dimensionItems;
-	        newState.height = height;
-	        newState.groupHeights = groupHeights;
-	        newState.groupTops = groupTops;
-	      }
-	
-	      this.setState(newState);
-	    }
-	  }, {
 	    key: 'zoomIn',
 	    value: function zoomIn(e) {
 	      e.preventDefault();
@@ -385,7 +333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var newZoom = Math.min(Math.max(Math.round(oldZoom * scale), minZoom), maxZoom); // min 1 min, max 20 years
 	      var newVisibleTimeStart = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset);
 	
-	      this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom);
+	      this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom, this.updateScrollCanvas);
 	    }
 	  }, {
 	    key: 'rowAndTimeFromEvent',
@@ -638,7 +586,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            { ref: 'scrollComponent',
 	              className: 'rct-scroll',
 	              style: scrollComponentStyle,
-	              onClick: this.scrollAreaClick,
 	              onScroll: this.onScroll,
 	              onWheel: this.onWheel,
 	              onMouseDown: this.handleMouseDown,
@@ -770,8 +717,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    if (_this3.state.visibleTimeStart !== visibleTimeStart || _this3.state.visibleTimeEnd !== visibleTimeStart + zoom) {
-	      _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom);
+	      _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom, _this3.updateScrollCanvas);
 	    }
+	  };
+	
+	  this.updateScrollCanvas = function (visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
+	    var oldCanvasTimeStart = _this3.state.canvasTimeStart;
+	    var oldZoom = _this3.state.visibleTimeEnd - _this3.state.visibleTimeStart;
+	    var newZoom = visibleTimeEnd - visibleTimeStart;
+	    var items = updatedItems || _this3.props.items;
+	    var groups = updatedGroups || _this3.props.groups;
+	
+	    var newState = {
+	      visibleTimeStart: visibleTimeStart,
+	      visibleTimeEnd: visibleTimeEnd
+	    };
+	
+	    var resetCanvas = false;
+	
+	    var canKeepCanvas = visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 && visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5;
+	
+	    // if new visible time is in the right canvas area
+	    if (canKeepCanvas) {
+	      // but we need to update the scroll
+	      var newScrollLeft = Math.round(_this3.state.width * (visibleTimeStart - oldCanvasTimeStart) / newZoom);
+	      if (_this3.refs.scrollComponent.scrollLeft !== newScrollLeft) {
+	        resetCanvas = true;
+	      }
+	    } else {
+	      resetCanvas = true;
+	    }
+	
+	    if (resetCanvas) {
+	      // Todo: need to calculate new dimensions
+	      newState.canvasTimeStart = visibleTimeStart - newZoom;
+	      _this3.refs.scrollComponent.scrollLeft = _this3.state.width;
+	
+	      if (_this3.props.onBoundsChange) {
+	        _this3.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
+	      }
+	    }
+	
+	    if (resetCanvas || forceUpdateDimensions) {
+	      var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
+	
+	      var _stackItems3 = _this3.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, _this3.state.width),
+	          dimensionItems = _stackItems3.dimensionItems,
+	          height = _stackItems3.height,
+	          groupHeights = _stackItems3.groupHeights,
+	          groupTops = _stackItems3.groupTops;
+	
+	      newState.dimensionItems = dimensionItems;
+	      newState.height = height;
+	      newState.groupHeights = groupHeights;
+	      newState.groupTops = groupTops;
+	    }
+	
+	    _this3.setState(newState);
 	  };
 	
 	  this.onWheel = function (e) {
@@ -829,7 +831,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      zoom = visibleTimeEnd - visibleTimeStart;
 	    }
 	
-	    _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom);
+	    _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom, _this3.updateScrollCanvas);
 	  };
 	
 	  this.selectItem = function (item, clickType, e) {
@@ -908,19 +910,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var headerHeight = headerLabelGroupHeight + headerLabelHeight;
 	
 	    if (pageY - topOffset > headerHeight) {
-	      _this3.setState({ isDragging: true, dragStartPosition: e.pageX });
+	      _this3.setState({ isDragging: true, dragStartPosition: e.pageX, dragLastPosition: e.pageX });
 	    }
 	  };
 	
 	  this.handleMouseMove = function (e) {
 	    if (_this3.state.isDragging && !_this3.state.draggingItem && !_this3.state.resizingItem) {
-	      _this3.refs.scrollComponent.scrollLeft += _this3.state.dragStartPosition - e.pageX;
-	      _this3.setState({ dragStartPosition: e.pageX });
+	      _this3.refs.scrollComponent.scrollLeft += _this3.state.dragLastPosition - e.pageX;
+	      _this3.setState({ dragLastPosition: e.pageX });
 	    }
 	  };
 	
 	  this.handleMouseUp = function (e) {
-	    _this3.setState({ isDragging: false, dragStartPosition: null });
+	    var dragStartPosition = _this3.state.dragStartPosition;
+	
+	
+	    if (Math.abs(dragStartPosition - e.pageX) <= _this3.props.clickTolerance) {
+	      _this3.scrollAreaClick(e);
+	    }
+	
+	    _this3.setState({ isDragging: false, dragStartPosition: null, dragLastPosition: null });
 	  };
 	
 	  this.handleDoubleClick = function (e) {
@@ -977,7 +986,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    if (_this3.props.onCanvasDoubleClick) {
-	      _this3.props.onCanvasDoubleClick(timePosition, _this3.props.groups[groupIndex]);
+	      _this3.props.onCanvasDoubleClick(_this3.props.groups[groupIndex], timePosition, e);
 	    }
 	  };
 	};
@@ -1000,6 +1009,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  minZoom: _react2.default.PropTypes.number,
 	  maxZoom: _react2.default.PropTypes.number,
+	
+	  clickTolerance: _react2.default.PropTypes.number,
 	
 	  canChangeGroup: _react2.default.PropTypes.bool,
 	  canMove: _react2.default.PropTypes.bool,
@@ -1056,6 +1067,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  minZoom: 60 * 60 * 1000, // 1 hour
 	  maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
 	
+	  clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
+	
 	  canChangeGroup: true,
 	  canMove: true,
 	  canResize: true,
@@ -1091,8 +1104,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
 	  visibleTimeStart: null,
 	  visibleTimeEnd: null,
-	  onTimeChange: function onTimeChange(visibleTimeStart, visibleTimeEnd) {
-	    this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
+	  onTimeChange: function onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
+	    updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
 	  },
 	  // called after the calendar loads and the visible time has been calculated
 	  onTimeInit: null,
@@ -1165,7 +1178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Items, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && (0, _utils.arraysEqual)(nextProps.items, this.props.items) && nextProps.keys === this.props.keys && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.selectedItem === this.props.selectedItem && nextProps.lineHeight === this.props.lineHeight && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.dimensionItems === this.props.dimensionItems && nextProps.topOffset === this.props.topOffset);
+	      return !((0, _utils.arraysEqual)(nextProps.groups, this.props.groups) && (0, _utils.arraysEqual)(nextProps.items, this.props.items) && nextProps.keys === this.props.keys && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.selectedItem === this.props.selectedItem && nextProps.lineHeight === this.props.lineHeight && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.canSelect === this.props.canSelect && nextProps.dimensionItems === this.props.dimensionItems && nextProps.topOffset === this.props.topOffset);
 	    }
 	  }, {
 	    key: 'getGroupOrders',
@@ -1426,7 +1439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Item, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
+	      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.canSelect !== this.props.canSelect || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
 	      return shouldUpdate;
 	    }
 	  }, {

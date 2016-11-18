@@ -234,62 +234,6 @@ var ReactCalendarTimeline = function (_Component) {
       this.setState({ dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops });
     }
   }, {
-    key: 'updateScrollCanvas',
-    value: function updateScrollCanvas(visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
-      var oldCanvasTimeStart = this.state.canvasTimeStart;
-      var oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart;
-      var newZoom = visibleTimeEnd - visibleTimeStart;
-      var items = updatedItems || this.props.items;
-      var groups = updatedGroups || this.props.groups;
-
-      var newState = {
-        visibleTimeStart: visibleTimeStart,
-        visibleTimeEnd: visibleTimeEnd
-      };
-
-      var resetCanvas = false;
-
-      var canKeepCanvas = visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 && visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5;
-
-      // if new visible time is in the right canvas area
-      if (canKeepCanvas) {
-        // but we need to update the scroll
-        var newScrollLeft = Math.round(this.state.width * (visibleTimeStart - oldCanvasTimeStart) / newZoom);
-        if (this.refs.scrollComponent.scrollLeft !== newScrollLeft) {
-          resetCanvas = true;
-        }
-      } else {
-        resetCanvas = true;
-      }
-
-      if (resetCanvas) {
-        // Todo: need to calculate new dimensions
-        newState.canvasTimeStart = visibleTimeStart - newZoom;
-        this.refs.scrollComponent.scrollLeft = this.state.width;
-
-        if (this.props.onBoundsChange) {
-          this.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
-        }
-      }
-
-      if (resetCanvas || forceUpdateDimensions) {
-        var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
-
-        var _stackItems3 = this.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, this.state.width),
-            dimensionItems = _stackItems3.dimensionItems,
-            height = _stackItems3.height,
-            groupHeights = _stackItems3.groupHeights,
-            groupTops = _stackItems3.groupTops;
-
-        newState.dimensionItems = dimensionItems;
-        newState.height = height;
-        newState.groupHeights = groupHeights;
-        newState.groupTops = groupTops;
-      }
-
-      this.setState(newState);
-    }
-  }, {
     key: 'zoomIn',
     value: function zoomIn(e) {
       e.preventDefault();
@@ -315,7 +259,7 @@ var ReactCalendarTimeline = function (_Component) {
       var newZoom = Math.min(Math.max(Math.round(oldZoom * scale), minZoom), maxZoom); // min 1 min, max 20 years
       var newVisibleTimeStart = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset);
 
-      this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom);
+      this.props.onTimeChange.bind(this)(newVisibleTimeStart, newVisibleTimeStart + newZoom, this.updateScrollCanvas);
     }
   }, {
     key: 'rowAndTimeFromEvent',
@@ -568,7 +512,6 @@ var ReactCalendarTimeline = function (_Component) {
             { ref: 'scrollComponent',
               className: 'rct-scroll',
               style: scrollComponentStyle,
-              onClick: this.scrollAreaClick,
               onScroll: this.onScroll,
               onWheel: this.onWheel,
               onMouseDown: this.handleMouseDown,
@@ -700,8 +643,63 @@ var _initialiseProps = function _initialiseProps() {
     }
 
     if (_this3.state.visibleTimeStart !== visibleTimeStart || _this3.state.visibleTimeEnd !== visibleTimeStart + zoom) {
-      _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom);
+      _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom, _this3.updateScrollCanvas);
     }
+  };
+
+  this.updateScrollCanvas = function (visibleTimeStart, visibleTimeEnd, forceUpdateDimensions, updatedItems, updatedGroups) {
+    var oldCanvasTimeStart = _this3.state.canvasTimeStart;
+    var oldZoom = _this3.state.visibleTimeEnd - _this3.state.visibleTimeStart;
+    var newZoom = visibleTimeEnd - visibleTimeStart;
+    var items = updatedItems || _this3.props.items;
+    var groups = updatedGroups || _this3.props.groups;
+
+    var newState = {
+      visibleTimeStart: visibleTimeStart,
+      visibleTimeEnd: visibleTimeEnd
+    };
+
+    var resetCanvas = false;
+
+    var canKeepCanvas = visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 && visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 && visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5;
+
+    // if new visible time is in the right canvas area
+    if (canKeepCanvas) {
+      // but we need to update the scroll
+      var newScrollLeft = Math.round(_this3.state.width * (visibleTimeStart - oldCanvasTimeStart) / newZoom);
+      if (_this3.refs.scrollComponent.scrollLeft !== newScrollLeft) {
+        resetCanvas = true;
+      }
+    } else {
+      resetCanvas = true;
+    }
+
+    if (resetCanvas) {
+      // Todo: need to calculate new dimensions
+      newState.canvasTimeStart = visibleTimeStart - newZoom;
+      _this3.refs.scrollComponent.scrollLeft = _this3.state.width;
+
+      if (_this3.props.onBoundsChange) {
+        _this3.props.onBoundsChange(newState.canvasTimeStart, newState.canvasTimeStart + newZoom * 3);
+      }
+    }
+
+    if (resetCanvas || forceUpdateDimensions) {
+      var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
+
+      var _stackItems3 = _this3.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, _this3.state.width),
+          dimensionItems = _stackItems3.dimensionItems,
+          height = _stackItems3.height,
+          groupHeights = _stackItems3.groupHeights,
+          groupTops = _stackItems3.groupTops;
+
+      newState.dimensionItems = dimensionItems;
+      newState.height = height;
+      newState.groupHeights = groupHeights;
+      newState.groupTops = groupTops;
+    }
+
+    _this3.setState(newState);
   };
 
   this.onWheel = function (e) {
@@ -759,7 +757,7 @@ var _initialiseProps = function _initialiseProps() {
       zoom = visibleTimeEnd - visibleTimeStart;
     }
 
-    _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom);
+    _this3.props.onTimeChange.bind(_this3)(visibleTimeStart, visibleTimeStart + zoom, _this3.updateScrollCanvas);
   };
 
   this.selectItem = function (item, clickType, e) {
@@ -838,19 +836,26 @@ var _initialiseProps = function _initialiseProps() {
     var headerHeight = headerLabelGroupHeight + headerLabelHeight;
 
     if (pageY - topOffset > headerHeight) {
-      _this3.setState({ isDragging: true, dragStartPosition: e.pageX });
+      _this3.setState({ isDragging: true, dragStartPosition: e.pageX, dragLastPosition: e.pageX });
     }
   };
 
   this.handleMouseMove = function (e) {
     if (_this3.state.isDragging && !_this3.state.draggingItem && !_this3.state.resizingItem) {
-      _this3.refs.scrollComponent.scrollLeft += _this3.state.dragStartPosition - e.pageX;
-      _this3.setState({ dragStartPosition: e.pageX });
+      _this3.refs.scrollComponent.scrollLeft += _this3.state.dragLastPosition - e.pageX;
+      _this3.setState({ dragLastPosition: e.pageX });
     }
   };
 
   this.handleMouseUp = function (e) {
-    _this3.setState({ isDragging: false, dragStartPosition: null });
+    var dragStartPosition = _this3.state.dragStartPosition;
+
+
+    if (Math.abs(dragStartPosition - e.pageX) <= _this3.props.clickTolerance) {
+      _this3.scrollAreaClick(e);
+    }
+
+    _this3.setState({ isDragging: false, dragStartPosition: null, dragLastPosition: null });
   };
 
   this.handleDoubleClick = function (e) {
@@ -931,6 +936,8 @@ ReactCalendarTimeline.propTypes = {
   minZoom: _react2.default.PropTypes.number,
   maxZoom: _react2.default.PropTypes.number,
 
+  clickTolerance: _react2.default.PropTypes.number,
+
   canChangeGroup: _react2.default.PropTypes.bool,
   canMove: _react2.default.PropTypes.bool,
   canResize: _react2.default.PropTypes.bool,
@@ -986,6 +993,8 @@ ReactCalendarTimeline.defaultProps = {
   minZoom: 60 * 60 * 1000, // 1 hour
   maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
 
+  clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
+
   canChangeGroup: true,
   canMove: true,
   canResize: true,
@@ -1021,8 +1030,8 @@ ReactCalendarTimeline.defaultProps = {
   // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
   visibleTimeStart: null,
   visibleTimeEnd: null,
-  onTimeChange: function onTimeChange(visibleTimeStart, visibleTimeEnd) {
-    this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
+  onTimeChange: function onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
+    updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
   },
   // called after the calendar loads and the visible time has been calculated
   onTimeInit: null,
