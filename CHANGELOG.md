@@ -14,3 +14,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Moved React & Moment from dependencies to peerDependencies #53 by @meikoudras
 - Fix resizing when inside DIV #47 by @semargal
 - Fix demo for IE11 #44 by @lucidlemon
+- Package a .css file, not a .scss file as previously done. @mariusandra
