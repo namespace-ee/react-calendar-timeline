@@ -137,6 +137,9 @@ Smallest time the calendar can zoom to in milliseconds. Default `60 * 60 * 1000`
 ### maxZoom
 Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 86400 * 1000` (5 years)
 
+### clickTolerance
+How many pixels we can drag the background for it to be counted as a click on the background. Defualt: `3`
+
 ### canMove
 Can items be dragged around? Can be overridden in the `items` array. Defaults to `true`
 

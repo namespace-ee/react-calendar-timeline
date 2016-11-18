@@ -470,19 +470,25 @@ export default class ReactCalendarTimeline extends Component {
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     if (pageY - topOffset > headerHeight) {
-      this.setState({isDragging: true, dragStartPosition: e.pageX})
+      this.setState({isDragging: true, dragStartPosition: e.pageX, dragLastPosition: e.pageX})
     }
   }
 
   handleMouseMove = (e) => {
     if (this.state.isDragging && !this.state.draggingItem && !this.state.resizingItem) {
-      this.refs.scrollComponent.scrollLeft += this.state.dragStartPosition - e.pageX
-      this.setState({dragStartPosition: e.pageX})
+      this.refs.scrollComponent.scrollLeft += this.state.dragLastPosition - e.pageX
+      this.setState({dragLastPosition: e.pageX})
     }
   }
 
   handleMouseUp = (e) => {
-    this.setState({isDragging: false, dragStartPosition: null})
+    const { dragStartPosition } = this.state
+
+    if (Math.abs(dragStartPosition - e.pageX) <= this.props.clickTolerance) {
+      this.scrollAreaClick(e)
+    }
+
+    this.setState({isDragging: false, dragStartPosition: null, dragLastPosition: null})
   }
 
   todayLine (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
@@ -723,7 +729,6 @@ export default class ReactCalendarTimeline extends Component {
           <div ref='scrollComponent'
                className='rct-scroll'
                style={scrollComponentStyle}
-               onClick={this.scrollAreaClick}
                onScroll={this.onScroll}
                onWheel={this.onWheel}
                onMouseDown={this.handleMouseDown}
@@ -774,6 +779,8 @@ ReactCalendarTimeline.propTypes = {
 
   minZoom: React.PropTypes.number,
   maxZoom: React.PropTypes.number,
+
+  clickTolerance: React.PropTypes.number,
 
   canChangeGroup: React.PropTypes.bool,
   canMove: React.PropTypes.bool,
@@ -829,6 +836,8 @@ ReactCalendarTimeline.defaultProps = {
 
   minZoom: 60 * 60 * 1000, // 1 hour
   maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
+
+  clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
 
   canChangeGroup: true,
   canMove: true,

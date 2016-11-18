@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Allow disabling selection clicks on items #58 by @sjchmiela
-- Allow passing additional props to Item <div/> #58 by @sjchmiela
+- Allow passing additional props to `Item`'s `<div/>` #58 by @sjchmiela
+- Add `clickTolerance` so dragging more than 3 pixels is no longer a click
 
 ### Changed
 - [BREAKING] Same arguments order (groupId, time, e) for onCanvasDoubleClick and onCanvasClick #52 by @signalwerk
@@ -15,4 +16,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Moved React & Moment from dependencies to peerDependencies #53 by @meikoudras
 - Fix resizing when inside DIV #47 by @semargal
 - Fix demo for IE11 #44 by @lucidlemon
-- Package a .css file, not a .scss file as previously done. @mariusandra
+- Package a .css file, not a .scss file as previously done.
