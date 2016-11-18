@@ -39,7 +39,7 @@
     var items = []
     for (var i = 0; i < ITEM_COUNT; i++) {
       var startDate = faker.date.recent(DAYS_IN_PAST).valueOf() + (DAYS_IN_PAST * 0.3) * 86400 * 1000;
-      var startValue = moment(startDate).valueOf();
+      var startValue = Math.floor(moment(startDate).valueOf() / 10000000) * 10000000;
       var endValue = moment(startDate + faker.random.number({min: 2, max: 20})*15*60*1000).valueOf();
       items.push({
         id: i+'',
