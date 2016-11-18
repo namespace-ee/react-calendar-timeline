@@ -54,10 +54,12 @@ ReactDOM.render(
 ```
 
 ## API
-The component can take many parameters.
+*NB!* All props need to be immutable. For example, this means if you wish to change the title of one of your items, please pass in a whole new items array instead of changing the title in the old array. [Here's more info.](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+
+The component can take many props:
 
 ### groups
-Expects either a vanilla JS array or an immutable JS array, consisting of objects with the following attributes:
+Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
 ```
 {
   id: 1,
@@ -66,7 +68,7 @@ Expects either a vanilla JS array or an immutable JS array, consisting of object
 ```
 
 ### items
-Expects either a vanilla JS array or an immutable JS array, consisting of objects with the following attributes:
+Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
 ```
 {
   id: 1,
