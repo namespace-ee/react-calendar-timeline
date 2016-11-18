@@ -120,7 +120,7 @@ How does the header (the scrolling part with dates) behave if not all of the gro
 What z-index value do the header and the sidebar have. Default `10`
 
 ### lineHeight
-Height of one line in the calendar in pizels. Default `30`
+Height of one line in the calendar in pixels. Default `30`
 
 ### headerLabelGroupHeight
 Height of the top header line. Default `30`
