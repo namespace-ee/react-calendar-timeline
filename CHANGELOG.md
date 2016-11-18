@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 When you submit a PR, add your changes here!
