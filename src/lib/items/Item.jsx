@@ -44,6 +44,7 @@ export default class Item extends Component {
                        nextProps.minResizeWidth !== this.props.minResizeWidth ||
                        nextProps.selected !== this.props.selected ||
                        nextProps.canChangeGroup !== this.props.canChangeGroup ||
+                       nextProps.canSelect !== this.props.canSelect ||
                        nextProps.topOffset !== this.props.topOffset ||
                        nextProps.canMove !== this.props.canMove ||
                        nextProps.canResize !== this.props.canResize ||

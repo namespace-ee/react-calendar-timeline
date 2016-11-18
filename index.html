@@ -65,8 +65,11 @@
       groups: groups,
       items: items,
       fixedHeader: 'fixed',
+
       canMove: true, // defaults
       canResize: true,
+      canSelect: true,
+
       itemsSorted: true,
       itemTouchSendsClick: false,
       stackItems: true,
@@ -74,7 +77,6 @@
 
       defaultTimeStart: moment().startOf('day').toDate(),
       defaultTimeEnd: moment().startOf('day').add(1, 'day').toDate(),
-      canSelect: false,
 
       keys: {
         groupIdKey: 'id',
