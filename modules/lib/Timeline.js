@@ -16,7 +16,7 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-require('./Timeline.scss');
+require('./Timeline.css');
 
 var _Items = require('./items/Items');
 
@@ -177,7 +177,11 @@ var ReactCalendarTimeline = function (_Component) {
     key: 'resize',
     value: function resize() {
       // FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
-      var width = this.refs.container.clientWidth - this.props.sidebarWidth;
+      var _refs$container$getBo = this.refs.container.getBoundingClientRect(),
+          containerWidth = _refs$container$getBo.width,
+          containerTop = _refs$container$getBo.top;
+
+      var width = containerWidth - this.props.sidebarWidth;
 
       var _stackItems = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width),
           dimensionItems = _stackItems.dimensionItems,
@@ -187,7 +191,7 @@ var ReactCalendarTimeline = function (_Component) {
 
       this.setState({
         width: width,
-        topOffset: this.refs.container.getBoundingClientRect().top + window.pageYOffset,
+        topOffset: containerTop + window.pageYOffset,
         dimensionItems: dimensionItems,
         height: height,
         groupHeights: groupHeights,
@@ -903,7 +907,7 @@ var _initialiseProps = function _initialiseProps() {
     }
 
     if (_this3.props.onCanvasDoubleClick) {
-      _this3.props.onCanvasDoubleClick(timePosition, _this3.props.groups[groupIndex]);
+      _this3.props.onCanvasDoubleClick(_this3.props.groups[groupIndex], timePosition, e);
     }
   };
 };
