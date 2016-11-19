@@ -158,7 +158,7 @@ Can items be dragged around? Can be overridden in the `items` array. Defaults to
 Can items be moved between groups? Can be overridden in the `items` array. Defaults to `true`
 
 ### canResize
-Can items be resized? Can be overridden in the `items` array. Defaults to `true`
+Can items be resized? Can be overridden in the `items` array. Accepted values: `false`, `"left"`, `"right"`, `"both"`. Defaults to `"right"`. If you pass `true`, it will be treated as `"right"` to not break compatibility with versions 0.9 and below.
 
 ### useResizeHandle
 Append a special `.rct-drag-right` handle to the elements and only resize if dragged from there. Defaults to `false`
