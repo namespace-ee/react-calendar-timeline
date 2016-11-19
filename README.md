@@ -9,6 +9,10 @@ Demo here: http://namespace.ee/react-calendar-timeline/
 ## Getting started
 
 ```
+# via yarn
+yarn add react-calendar-timeline
+
+# via npm
 npm install --save react-calendar-timeline
 ```
 
@@ -17,6 +21,11 @@ npm install --save react-calendar-timeline
 You need to install them separately:
 
 ```
+# via yarn
+yarn add react react-dom # you probably already have these
+yarn add moment interact.js
+
+# via npm
 npm install --save react react-dom # you probably already have these
 npm install --save moment interact.js
 ```
