@@ -190,8 +190,8 @@ Default:
 ### onItemMove(itemId, dragTime, newGroupOrder)
 Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
 
-### onItemResize(itemId, newResizeEnd)
-Callback when an item is resized. Returns 1) the item's ID, 2) the new end time of the item
+### onItemResize(itemId, time, edge)
+Callback when an item is resized. Returns 1) the item's ID, 2) the new start or end time of the item 3) The edge that was dragged (`left` or `right`)
 
 ### onItemSelect(itemId, e)
 Called when an item is selected. This is sent on the first click on an item.
@@ -211,19 +211,21 @@ Called when an item was double clicked
 ### onItemContextMenu(itemId, e)
 Called when the item is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
-### moveResizeValidator(action, itemId, time)
+### moveResizeValidator(action, itemId, time, resizeEdge)
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
 
 The argument `action` is one of `move` or `resize`.
 
-The argument `time` describes the proposed new time for either the start time of the item (for move) or the end time (for resize).
+The argument `resizeEdge` is when resizing one of `left` or `right`.
+
+The argument `time` describes the proposed new time for either the start time of the item (for move) or the start or end time (for resize).
 
 The function must return a new unix timestamp in milliseconds... or just `time` if the proposed new time doesn't interfere with business logic.
 
 For example, to prevent moving of items into the past, but to keep them at 15min intervals, use this code:
 
 ```js
-function(action, item, time) {
+function (action, item, time, resizeEdge) {
   if (time < new Date().getTime()) {
     var newTime = Math.ceil(new Date().getTime() / (15*60*1000)) * (15*60*1000);
     return newTime;

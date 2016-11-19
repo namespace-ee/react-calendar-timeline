@@ -65,7 +65,14 @@ $weekend: rgba(250, 246, 225, 0.5);
         &.can-move {
           cursor: move;
         }
-        &.can-resize {
+        &.can-resize-left {
+          border-left-width: 3px;
+
+          .rct-drag-left {
+            cursor: e-resize;
+          }
+        }
+        &.can-resize-right {
           border-right-width: 3px;
 
           .rct-drag-right {
@@ -74,6 +81,17 @@ $weekend: rgba(250, 246, 225, 0.5);
         }
       }
 
+      .rct-drag-left {
+        position: absolute;
+        width: 24px;
+        max-width: 20%;
+        min-width: 2px;
+        height: 100%;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+        z-index: 10;
+      }
 
       .rct-drag-right {
         position: absolute;

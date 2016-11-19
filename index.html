@@ -48,7 +48,7 @@
         start: startValue,
         end: endValue,
         canMove: startValue > new Date().getTime(),
-        canResize: endValue > new Date().getTime(),
+        canResize: startValue > new Date().getTime() ? (endValue > new Date().getTime() ? 'both' : 'left') : (endValue > new Date().getTime() ? 'right' : false),
         className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : '',
         itemProps: {
           'data-tip': faker.hacker.phrase()
@@ -67,7 +67,7 @@
       fixedHeader: 'fixed',
 
       canMove: true, // defaults
-      canResize: true,
+      canResize: 'right',
       canSelect: true,
 
       itemsSorted: true,
@@ -105,7 +105,15 @@
         console.log("Context Menu: " + item);
       },
 
-      moveResizeValidator: function(action, item, time) {
+      onItemMove: function (item, time) {
+        console.log("Moved", item, time);
+      },
+
+      onItemResize: function (item, time, edge) {
+        console.log("Resized", item, time, edge);
+      },
+
+      moveResizeValidator: function(action, item, time, resizeEdge) {
         if (time < new Date().getTime()) {
           var newTime = Math.ceil(new Date().getTime() / (15*60*1000)) * (15*60*1000);
           return newTime;

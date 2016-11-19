@@ -90,7 +90,7 @@ export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWid
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
-export function calculateDimensions (item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio) {
+export function calculateDimensions (item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio) {
   var itemId = _get(item, keys.itemIdKey)
   var itemTimeStart = _get(item, keys.itemTimeStartKey)
   var itemTimeEnd = _get(item, keys.itemTimeEndKey)
@@ -98,10 +98,14 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
   var isDragging = itemId === draggingItem
   var isResizing = itemId === resizingItem
 
-  const x = isDragging ? dragTime : itemTimeStart
+  const itemStart = (isResizing && resizingEdge === 'left' ? resizeTime : itemTimeStart)
+  const itemEnd = (isResizing && resizingEdge === 'right' ? resizeTime : itemTimeEnd)
 
-  const w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap)
-  let collisionX = itemTimeStart
+  const x = isDragging ? dragTime : itemStart
+
+  const w = Math.max(itemEnd - itemStart, dragSnap)
+
+  let collisionX = itemStart
   let collisionW = w
 
   if (isDragging) {

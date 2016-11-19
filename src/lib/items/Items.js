@@ -1,10 +1,54 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
 import { _get, arraysEqual, keyBy } from '../utils'
 
+const canResizeLeft = (item, canResize) => {
+  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize
+  return value === 'left' || value === 'both'
+}
+
+const canResizeRight = (item, canResize) => {
+  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize
+  return value === 'right' || value === 'both' || value === true
+}
+
 export default class Items extends Component {
+  static propTypes = {
+    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+    items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+
+    dragSnap: PropTypes.number,
+    minResizeWidth: PropTypes.number,
+    selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    canChangeGroup: PropTypes.bool.isRequired,
+    canMove: PropTypes.bool.isRequired,
+    canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+    canSelect: PropTypes.bool,
+
+    keys: PropTypes.object.isRequired,
+
+    moveResizeValidator: PropTypes.func,
+    itemSelect: PropTypes.func,
+    itemDrag: PropTypes.func,
+    itemDrop: PropTypes.func,
+    itemResizing: PropTypes.func,
+    itemResized: PropTypes.func,
+
+    onItemDoubleClick: PropTypes.func,
+    onItemContextMenu: PropTypes.func
+  }
+
+  static defaultProps = {
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
              arraysEqual(nextProps.items, this.props.items) &&
@@ -53,25 +97,6 @@ export default class Items extends Component {
     const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders)
     const sortedDimensionItems = keyBy(dimensionItems, 'id')
 
-    // const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
-
-    // const start = Math.floor(canvasTimeStart / timeDiff) * timeDiff
-    // const end = Math.floor(canvasTimeEnd / timeDiff) * timeDiff
-
-    // const canvasTimeLength = (canvasTimeEnd - canvasTimeStart)
-    // const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
-    //
-    // let itemGroups = []
-    //
-    // for (let i = start; i < end + timeDiff; i += timeDiff) {
-    //   itemGroups.push({
-    //     start: i,
-    //     end: i + timeDiff,
-    //     left: Math.round((i - canvasTimeStart) * ratio, 2),
-    //     items: visibleItems.filter(item => item.start >= i && item.start < i + timeDiff)
-    //   })
-    // }
-
     return (
       <div className='rct-items'>
         {visibleItems.map(item => <Item key={_get(item, itemIdKey)}
@@ -82,7 +107,8 @@ export default class Items extends Component {
                                         selected={this.props.selectedItem === _get(item, itemIdKey)}
                                         canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
                                         canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
-                                        canResize={_get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize}
+                                        canResizeLeft={canResizeLeft(item, this.props.canResize)}
+                                        canResizeRight={canResizeRight(item, this.props.canResize)}
                                         canSelect={_get(item, 'canSelect') !== undefined ? _get(item, 'canSelect') : this.props.canSelect}
                                         useResizeHandle={this.props.useResizeHandle}
                                         topOffset={this.props.topOffset}
@@ -104,50 +130,5 @@ export default class Items extends Component {
                                         onSelect={this.props.itemSelect}/>)}
       </div>
     )
-
-    // NB: itemgroups commented out for now as they made performacne horrible when zooming in/out
-    //
-    // return (
-    //   <div>
-    //     {itemGroups.map(group => (
-    //       <div key={`timegroup-${group.start}-${group.end}`} style={{position: 'absolute', top: '0', left: `${group.left}px`}}>
-    //         <ItemGroup {...this.props} items={group.items} canvasTimeStart={group.start} canvasTimeEnd={group.start + canvasTimeLength} groupOrders={groupOrders} />
-    //       </div>
-    //     ))}
-    //   </div>
-    // )
   }
-}
-
-Items.propTypes = {
-  groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
-  items: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
-
-  canvasTimeStart: React.PropTypes.number.isRequired,
-  canvasTimeEnd: React.PropTypes.number.isRequired,
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-
-  dragSnap: React.PropTypes.number,
-  minResizeWidth: React.PropTypes.number,
-  selectedItem: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-
-  canChangeGroup: React.PropTypes.bool.isRequired,
-  canMove: React.PropTypes.bool.isRequired,
-  canResize: React.PropTypes.bool.isRequired,
-  canSelect: React.PropTypes.bool,
-
-  keys: React.PropTypes.object.isRequired,
-
-  moveResizeValidator: React.PropTypes.func,
-  itemSelect: React.PropTypes.func,
-  itemDrag: React.PropTypes.func,
-  itemDrop: React.PropTypes.func,
-  itemResizing: React.PropTypes.func,
-  itemResized: React.PropTypes.func,
-
-  onItemDoubleClick: React.PropTypes.func,
-  onItemContextMenu: React.PropTypes.func
-}
-Items.defaultProps = {
 }

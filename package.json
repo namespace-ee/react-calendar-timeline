@@ -45,10 +45,10 @@
     "react-pure-render": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "^0.14.8 || ^15.0.1",
-    "react-dom": "^0.14.8 || ^15.0.1",
+    "interact.js": "*",
     "moment": "*",
-    "interact.js": "*"
+    "react": "^0.14.8 || ^15.0.1",
+    "react-dom": "^0.14.8 || ^15.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
