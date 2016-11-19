@@ -33,6 +33,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Item = function (_Component) {
   _inherits(Item, _Component);
 
+  // removed prop type check for SPEED!
+  // they are coming from a trusted component anyway
+  // (this complicates performance debugging otherwise)
   function Item(props) {
     _classCallCheck(this, Item);
 
@@ -94,6 +97,7 @@ var Item = function (_Component) {
       dragGroupDelta: null,
 
       resizing: null,
+      resizeEdge: null,
       resizeStart: null,
       resizeTime: null
     };
@@ -103,7 +107,7 @@ var Item = function (_Component) {
   _createClass(Item, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.canSelect !== this.props.canSelect || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
+      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.canSelect !== this.props.canSelect || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResizeLeft !== this.props.canResizeLeft || nextProps.canResizeRight !== this.props.canResizeRight || nextProps.dimensions !== this.props.dimensions;
       return shouldUpdate;
     }
   }, {
@@ -215,12 +219,16 @@ var Item = function (_Component) {
     }
   }, {
     key: 'resizeTimeDelta',
-    value: function resizeTimeDelta(e) {
+    value: function resizeTimeDelta(e, resizeEdge) {
       var length = this.itemTimeEnd - this.itemTimeStart;
       var timeDelta = this.dragTimeSnap((e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio());
 
-      if (length + timeDelta < (this.props.dragSnap || 1000)) {
-        return (this.props.dragSnap || 1000) - length;
+      if (length + (resizeEdge === 'left' ? -timeDelta : timeDelta) < (this.props.dragSnap || 1000)) {
+        if (resizeEdge === 'left') {
+          return length - (this.props.dragSnap || 1000);
+        } else {
+          return (this.props.dragSnap || 1000) - length;
+        }
       } else {
         return timeDelta;
       }
@@ -233,10 +241,17 @@ var Item = function (_Component) {
     value: function mountInteract() {
       var _this2 = this;
 
+      var leftResize = this.props.useResizeHandle ? this.refs.dragLeft : true;
       var rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
+
       (0, _interact2.default)(this.refs.item).resizable({
-        edges: { left: false, right: rightResize, top: false, bottom: false },
-        enabled: this.props.selected && this.canResize()
+        edges: {
+          left: this.canResizeLeft() && leftResize,
+          right: this.canResizeRight() && rightResize,
+          top: false,
+          bottom: false
+        },
+        enabled: this.props.selected && (this.canResizeLeft() || this.canResizeRight())
       }).draggable({
         enabled: this.props.selected
       }).on('dragstart', function (e) {
@@ -293,43 +308,56 @@ var Item = function (_Component) {
         if (_this2.props.selected) {
           _this2.setState({
             resizing: true,
+            resizeEdge: null, // we don't know yet
             resizeStart: e.pageX,
-            newResizeEnd: 0
+            resizeTime: 0
           });
         } else {
           return false;
         }
       }).on('resizemove', function (e) {
         if (_this2.state.resizing) {
-          var newResizeEnd = _this2.resizeTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+          var resizeEdge = _this2.state.resizeEdge;
+
+          if (!resizeEdge) {
+            resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right';
+            _this2.setState({ resizeEdge: resizeEdge });
+          }
+          var time = resizeEdge === 'left' ? _this2.itemTimeStart : _this2.itemTimeEnd;
+
+          var resizeTime = _this2.resizeTimeSnap(time + _this2.resizeTimeDelta(e, resizeEdge));
 
           if (_this2.props.moveResizeValidator) {
-            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
+            resizeTime = _this2.props.moveResizeValidator('resize', _this2.props.item, resizeTime, resizeEdge);
           }
 
           if (_this2.props.onResizing) {
-            _this2.props.onResizing(_this2.itemId, newResizeEnd);
+            _this2.props.onResizing(_this2.itemId, resizeTime, resizeEdge);
           }
 
           _this2.setState({
-            newResizeEnd: newResizeEnd
+            resizeTime: resizeTime
           });
         }
       }).on('resizeend', function (e) {
         if (_this2.state.resizing) {
-          var newResizeEnd = _this2.resizeTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+          var resizeEdge = _this2.state.resizeEdge;
+
+          var time = resizeEdge === 'left' ? _this2.itemTimeStart : _this2.itemTimeEnd;
+          var resizeTime = _this2.resizeTimeSnap(time + _this2.resizeTimeDelta(e, resizeEdge));
 
           if (_this2.props.moveResizeValidator) {
-            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
+            resizeTime = _this2.props.moveResizeValidator('resize', _this2.props.item, resizeTime, resizeEdge);
           }
 
-          if (_this2.props.onResized && _this2.resizeTimeDelta(e) !== 0) {
-            _this2.props.onResized(_this2.itemId, newResizeEnd);
+          if (_this2.props.onResized && _this2.resizeTimeDelta(e, resizeEdge) !== 0) {
+            _this2.props.onResized(_this2.itemId, resizeTime, resizeEdge);
           }
           _this2.setState({
             resizing: null,
             resizeStart: null,
-            newResizeEnd: null
+            resizeEdge: null,
+            resizeTime: null
           });
         }
       }).on('tap', function (e) {
@@ -341,11 +369,22 @@ var Item = function (_Component) {
       });
     }
   }, {
-    key: 'canResize',
-    value: function canResize() {
+    key: 'canResizeLeft',
+    value: function canResizeLeft() {
       var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
-      if (!props.canResize) {
+      if (!props.canResizeLeft) {
+        return false;
+      }
+      var width = parseInt(this.props.dimensions.width, 10);
+      return width >= props.minResizeWidth;
+    }
+  }, {
+    key: 'canResizeRight',
+    value: function canResizeRight() {
+      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
+
+      if (!props.canResizeRight) {
         return false;
       }
       var width = parseInt(this.props.dimensions.width, 10);
@@ -366,17 +405,30 @@ var Item = function (_Component) {
       var interactMounted = this.state.interactMounted;
 
       var couldDrag = this.props.selected && this.canMove(this.props);
-      var couldResize = this.props.selected && this.canResize(this.props);
+      var couldResizeLeft = this.props.selected && this.canResizeLeft(this.props);
+      var couldResizeRight = this.props.selected && this.canResizeRight(this.props);
       var willBeAbleToDrag = nextProps.selected && this.canMove(nextProps);
-      var willBeAbleToResize = nextProps.selected && this.canResize(nextProps);
+      var willBeAbleToResizeLeft = nextProps.selected && this.canResizeLeft(nextProps);
+      var willBeAbleToResizeRight = nextProps.selected && this.canResizeRight(nextProps);
 
       if (nextProps.selected && !interactMounted) {
         this.mountInteract();
         interactMounted = true;
       }
 
-      if (interactMounted && couldResize !== willBeAbleToResize) {
-        (0, _interact2.default)(this.refs.item).resizable({ enabled: willBeAbleToResize });
+      if (interactMounted && (couldResizeLeft !== willBeAbleToResizeLeft || couldResizeRight !== willBeAbleToResizeRight)) {
+        var leftResize = this.props.useResizeHandle ? this.refs.dragLeft : true;
+        var rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
+
+        (0, _interact2.default)(this.refs.item).resizable({
+          enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
+          edges: {
+            top: false,
+            bottom: false,
+            left: willBeAbleToResizeLeft && leftResize,
+            right: willBeAbleToResizeRight && rightResize
+          }
+        });
       }
       if (interactMounted && couldDrag !== willBeAbleToDrag) {
         (0, _interact2.default)(this.refs.item).draggable({ enabled: willBeAbleToDrag });
@@ -397,7 +449,7 @@ var Item = function (_Component) {
         return null;
       }
 
-      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
+      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResizeLeft(this.props) || this.canResizeRight(this.props) ? ' can-resize' : '') + (this.canResizeLeft(this.props) ? ' can-resize-left' : '') + (this.canResizeRight(this.props) ? ' can-resize-right' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
 
       var style = {
         left: dimensions.left + 'px',
@@ -421,6 +473,7 @@ var Item = function (_Component) {
           onDoubleClick: this.handleDoubleClick,
           onContextMenu: this.handleContextMenu,
           style: style }),
+        this.props.useResizeHandle ? _react2.default.createElement('div', { ref: 'dragLeft', className: 'rct-drag-left' }) : '',
         _react2.default.createElement(
           'div',
           { className: 'rct-item-overflow' },
@@ -438,11 +491,6 @@ var Item = function (_Component) {
   return Item;
 }(_react.Component);
 
-// removed prop type check for SPEED!
-// they are coming from a trusted component anyway
-
-
-exports.default = Item;
 Item.propTypes = {
   // canvasTimeStart: React.PropTypes.number.isRequired,
   // canvasTimeEnd: React.PropTypes.number.isRequired,
@@ -456,7 +504,8 @@ Item.propTypes = {
   //
   // canChangeGroup: React.PropTypes.bool.isRequired,
   // canMove: React.PropTypes.bool.isRequired,
-  // canResize: React.PropTypes.bool.isRequired,
+  // canResizeLeft: React.PropTypes.bool.isRequired,
+  // canResizeRight: React.PropTypes.bool.isRequired,
   //
   // keys: React.PropTypes.object.isRequired,
   // item: React.PropTypes.object.isRequired,
@@ -471,3 +520,4 @@ Item.propTypes = {
 Item.defaultProps = {
   selected: false
 };
+exports.default = Item;

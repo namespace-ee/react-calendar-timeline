@@ -122,7 +122,7 @@ function coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth) {
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 }
 
-function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio) {
+function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio) {
   var itemId = _get(item, keys.itemIdKey);
   var itemTimeStart = _get(item, keys.itemTimeStartKey);
   var itemTimeEnd = _get(item, keys.itemTimeEndKey);
@@ -130,10 +130,14 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
   var isDragging = itemId === draggingItem;
   var isResizing = itemId === resizingItem;
 
-  var x = isDragging ? dragTime : itemTimeStart;
+  var itemStart = isResizing && resizingEdge === 'left' ? resizeTime : itemTimeStart;
+  var itemEnd = isResizing && resizingEdge === 'right' ? resizeTime : itemTimeEnd;
 
-  var w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
-  var collisionX = itemTimeStart;
+  var x = isDragging ? dragTime : itemStart;
+
+  var w = Math.max(itemEnd - itemStart, dragSnap);
+
+  var collisionX = itemStart;
   var collisionW = w;
 
   if (isDragging) {

@@ -199,10 +199,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      selectedItem: null,
 	      dragTime: null,
 	      dragGroupTitle: null,
-	      resizeEnd: null,
+	      resizeTime: null,
 	      isDragging: false,
 	      topOffset: 0,
-	      resizingItem: null
+	      resizingItem: null,
+	      resizingEdge: null
 	    };
 	
 	    var _this$stackItems = _this.stackItems(props.items, props.groups, _this.state.canvasTimeStart, _this.state.visibleTimeStart, _this.state.visibleTimeEnd, _this.state.width),
@@ -435,8 +436,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (this.state.dragTime) {
 	        label = (0, _moment2.default)(this.state.dragTime).format('LLL') + ', ' + this.state.dragGroupTitle;
-	      } else if (this.state.resizeEnd) {
-	        label = (0, _moment2.default)(this.state.resizeEnd).format('LLL');
+	      } else if (this.state.resizeTime) {
+	        label = (0, _moment2.default)(this.state.resizeTime).format('LLL');
 	      }
 	
 	      return label ? _react2.default.createElement(_InfoLabel2.default, { label: label }) : '';
@@ -494,7 +495,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          draggingItem = _state3.draggingItem,
 	          dragTime = _state3.dragTime,
 	          resizingItem = _state3.resizingItem,
-	          resizeEnd = _state3.resizeEnd,
+	          resizingEdge = _state3.resizingEdge,
+	          resizeTime = _state3.resizeTime,
 	          newGroupOrder = _state3.newGroupOrder;
 	
 	      var zoom = visibleTimeEnd - visibleTimeStart;
@@ -508,7 +510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var dimensionItems = visibleItems.map(function (item) {
 	        return {
 	          id: (0, _utils._get)(item, keys.itemIdKey),
-	          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio)
+	          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio)
 	        };
 	      });
 	
@@ -615,6 +617,126 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return ReactCalendarTimeline;
 	}(_react.Component);
 	
+	ReactCalendarTimeline.propTypes = {
+	  groups: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
+	  items: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
+	  sidebarWidth: _react.PropTypes.number,
+	  dragSnap: _react.PropTypes.number,
+	  minResizeWidth: _react.PropTypes.number,
+	  fixedHeader: _react.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+	  zIndexStart: _react.PropTypes.number,
+	  lineHeight: _react.PropTypes.number,
+	  headerLabelGroupHeight: _react.PropTypes.number,
+	  headerLabelHeight: _react.PropTypes.number,
+	  itemHeightRatio: _react.PropTypes.number,
+	
+	  minZoom: _react.PropTypes.number,
+	  maxZoom: _react.PropTypes.number,
+	
+	  clickTolerance: _react.PropTypes.number,
+	
+	  canChangeGroup: _react.PropTypes.bool,
+	  canMove: _react.PropTypes.bool,
+	  canResize: _react.PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+	  useResizeHandle: _react.PropTypes.bool,
+	  canSelect: _react.PropTypes.bool,
+	
+	  stackItems: _react.PropTypes.bool,
+	
+	  traditionalZoom: _react.PropTypes.bool,
+	
+	  itemTouchSendsClick: _react.PropTypes.bool,
+	
+	  onItemMove: _react.PropTypes.func,
+	  onItemResize: _react.PropTypes.func,
+	  onItemClick: _react.PropTypes.func,
+	  onItemSelect: _react.PropTypes.func,
+	  onCanvasClick: _react.PropTypes.func,
+	  onItemDoubleClick: _react.PropTypes.func,
+	  onItemContextMenu: _react.PropTypes.func,
+	  onCanvasDoubleClick: _react.PropTypes.func,
+	
+	  moveResizeValidator: _react.PropTypes.func,
+	
+	  dayBackground: _react.PropTypes.func,
+	
+	  style: _react.PropTypes.object,
+	  keys: _react.PropTypes.object,
+	
+	  timeSteps: _react.PropTypes.object,
+	
+	  defaultTimeStart: _react.PropTypes.object,
+	  defaultTimeEnd: _react.PropTypes.object,
+	
+	  visibleTimeStart: _react.PropTypes.number,
+	  visibleTimeEnd: _react.PropTypes.number,
+	  onTimeChange: _react.PropTypes.func,
+	  onTimeInit: _react.PropTypes.func,
+	  onBoundsChange: _react.PropTypes.func,
+	
+	  children: _react.PropTypes.node
+	};
+	ReactCalendarTimeline.defaultProps = {
+	  sidebarWidth: 150,
+	  dragSnap: 1000 * 60 * 15, // 15min
+	  minResizeWidth: 20,
+	  fixedHeader: 'none', // fixed or absolute or none
+	  zIndexStart: 10,
+	  lineHeight: 30,
+	  headerLabelGroupHeight: 30,
+	  headerLabelHeight: 30,
+	  itemHeightRatio: 0.65,
+	
+	  minZoom: 60 * 60 * 1000, // 1 hour
+	  maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
+	
+	  clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
+	
+	  canChangeGroup: true,
+	  canMove: true,
+	  canResize: 'right',
+	  useResizeHandle: false,
+	  canSelect: true,
+	
+	  stackItems: false,
+	
+	  traditionalZoom: false,
+	
+	  onItemMove: null,
+	  onItemResize: null,
+	  onItemClick: null,
+	  onItemSelect: null,
+	  onCanvasClick: null,
+	  onItemDoubleClick: null,
+	  onItemContextMenu: null,
+	
+	  moveResizeValidator: null,
+	
+	  dayBackground: null,
+	
+	  defaultTimeStart: null,
+	  defaultTimeEnd: null,
+	
+	  itemTouchSendsClick: false,
+	
+	  style: {},
+	  keys: defaultKeys,
+	  timeSteps: defaultTimeSteps,
+	
+	  // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
+	  // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
+	  visibleTimeStart: null,
+	  visibleTimeEnd: null,
+	  onTimeChange: function onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
+	    updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
+	  },
+	  // called after the calendar loads and the visible time has been calculated
+	  onTimeInit: null,
+	  // called when the canvas area of the calendar changes
+	  onBoundsChange: null,
+	  children: null
+	};
+	
 	var _initialiseProps = function _initialiseProps() {
 	  var _this3 = this;
 	
@@ -638,7 +760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	
 	  this.touchMove = function (e) {
-	    if (_this3.state.dragTime || _this3.state.resizeEnd) {
+	    if (_this3.state.dragTime || _this3.state.resizeTime) {
 	      e.preventDefault();
 	      return;
 	    }
@@ -886,17 +1008,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 	
-	  this.resizingItem = function (item, newResizeEnd) {
+	  this.resizingItem = function (item, resizeTime, edge) {
 	    _this3.setState({
 	      resizingItem: item,
-	      resizeEnd: newResizeEnd
+	      resizingEdge: edge,
+	      resizeTime: resizeTime
 	    });
 	  };
 	
-	  this.resizedItem = function (item, newResizeEnd) {
-	    _this3.setState({ resizingItem: null, resizeEnd: null });
+	  this.resizedItem = function (item, resizeTime, edge) {
+	    _this3.setState({ resizingItem: null, resizingEdge: null, resizeTime: null });
 	    if (_this3.props.onItemResize) {
-	      _this3.props.onItemResize(item, newResizeEnd);
+	      _this3.props.onItemResize(item, resizeTime, edge);
 	    }
 	  };
 	
@@ -992,127 +1115,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	exports.default = ReactCalendarTimeline;
-	
-	
-	ReactCalendarTimeline.propTypes = {
-	  groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
-	  items: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
-	  sidebarWidth: _react2.default.PropTypes.number,
-	  dragSnap: _react2.default.PropTypes.number,
-	  minResizeWidth: _react2.default.PropTypes.number,
-	  fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-	  zIndexStart: _react2.default.PropTypes.number,
-	  lineHeight: _react2.default.PropTypes.number,
-	  headerLabelGroupHeight: _react2.default.PropTypes.number,
-	  headerLabelHeight: _react2.default.PropTypes.number,
-	  itemHeightRatio: _react2.default.PropTypes.number,
-	
-	  minZoom: _react2.default.PropTypes.number,
-	  maxZoom: _react2.default.PropTypes.number,
-	
-	  clickTolerance: _react2.default.PropTypes.number,
-	
-	  canChangeGroup: _react2.default.PropTypes.bool,
-	  canMove: _react2.default.PropTypes.bool,
-	  canResize: _react2.default.PropTypes.bool,
-	  useResizeHandle: _react2.default.PropTypes.bool,
-	  canSelect: _react2.default.PropTypes.bool,
-	
-	  stackItems: _react2.default.PropTypes.bool,
-	
-	  traditionalZoom: _react2.default.PropTypes.bool,
-	
-	  itemTouchSendsClick: _react2.default.PropTypes.bool,
-	
-	  onItemMove: _react2.default.PropTypes.func,
-	  onItemResize: _react2.default.PropTypes.func,
-	  onItemClick: _react2.default.PropTypes.func,
-	  onItemSelect: _react2.default.PropTypes.func,
-	  onCanvasClick: _react2.default.PropTypes.func,
-	  onItemDoubleClick: _react2.default.PropTypes.func,
-	  onItemContextMenu: _react2.default.PropTypes.func,
-	  onCanvasDoubleClick: _react2.default.PropTypes.func,
-	
-	  moveResizeValidator: _react2.default.PropTypes.func,
-	
-	  dayBackground: _react2.default.PropTypes.func,
-	
-	  style: _react2.default.PropTypes.object,
-	  keys: _react2.default.PropTypes.object,
-	
-	  timeSteps: _react2.default.PropTypes.object,
-	
-	  defaultTimeStart: _react2.default.PropTypes.object,
-	  defaultTimeEnd: _react2.default.PropTypes.object,
-	
-	  visibleTimeStart: _react2.default.PropTypes.number,
-	  visibleTimeEnd: _react2.default.PropTypes.number,
-	  onTimeChange: _react2.default.PropTypes.func,
-	  onTimeInit: _react2.default.PropTypes.func,
-	  onBoundsChange: _react2.default.PropTypes.func,
-	
-	  children: _react2.default.PropTypes.node
-	};
-	ReactCalendarTimeline.defaultProps = {
-	  sidebarWidth: 150,
-	  dragSnap: 1000 * 60 * 15, // 15min
-	  minResizeWidth: 20,
-	  fixedHeader: 'none', // fixed or absolute or none
-	  zIndexStart: 10,
-	  lineHeight: 30,
-	  headerLabelGroupHeight: 30,
-	  headerLabelHeight: 30,
-	  itemHeightRatio: 0.65,
-	
-	  minZoom: 60 * 60 * 1000, // 1 hour
-	  maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
-	
-	  clickTolerance: 3, // how many pixels can we drag for it to be still considered a click?
-	
-	  canChangeGroup: true,
-	  canMove: true,
-	  canResize: true,
-	  useResizeHandle: false,
-	  canSelect: true,
-	
-	  stackItems: false,
-	
-	  traditionalZoom: false,
-	
-	  onItemMove: null,
-	  onItemResize: null,
-	  onItemClick: null,
-	  onItemSelect: null,
-	  onCanvasClick: null,
-	  onItemDoubleClick: null,
-	  onItemContextMenu: null,
-	
-	  moveResizeValidator: null,
-	
-	  dayBackground: null,
-	
-	  defaultTimeStart: null,
-	  defaultTimeEnd: null,
-	
-	  itemTouchSendsClick: false,
-	
-	  style: {},
-	  keys: defaultKeys,
-	  timeSteps: defaultTimeSteps,
-	
-	  // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
-	  // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
-	  visibleTimeStart: null,
-	  visibleTimeEnd: null,
-	  onTimeChange: function onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
-	    updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
-	  },
-	  // called after the calendar loads and the visible time has been calculated
-	  onTimeInit: null,
-	  // called when the canvas area of the calendar changes
-	  onBoundsChange: null,
-	  children: null
-	};
 
 /***/ },
 /* 2 */
@@ -1165,6 +1167,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	// import ItemGroup from './ItemGroup'
+	
+	var canResizeLeft = function canResizeLeft(item, canResize) {
+	  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+	  return value === 'left' || value === 'both';
+	};
+	
+	var canResizeRight = function canResizeRight(item, canResize) {
+	  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+	  return value === 'right' || value === 'both' || value === true;
+	};
 	
 	var Items = function (_Component) {
 	  _inherits(Items, _Component);
@@ -1224,25 +1236,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders);
 	      var sortedDimensionItems = (0, _utils.keyBy)(dimensionItems, 'id');
 	
-	      // const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
-	
-	      // const start = Math.floor(canvasTimeStart / timeDiff) * timeDiff
-	      // const end = Math.floor(canvasTimeEnd / timeDiff) * timeDiff
-	
-	      // const canvasTimeLength = (canvasTimeEnd - canvasTimeStart)
-	      // const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
-	      //
-	      // let itemGroups = []
-	      //
-	      // for (let i = start; i < end + timeDiff; i += timeDiff) {
-	      //   itemGroups.push({
-	      //     start: i,
-	      //     end: i + timeDiff,
-	      //     left: Math.round((i - canvasTimeStart) * ratio, 2),
-	      //     items: visibleItems.filter(item => item.start >= i && item.start < i + timeDiff)
-	      //   })
-	      // }
-	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'rct-items' },
@@ -1255,7 +1248,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            selected: _this2.props.selectedItem === (0, _utils._get)(item, itemIdKey),
 	            canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
 	            canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,
-	            canResize: (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : _this2.props.canResize,
+	            canResizeLeft: canResizeLeft(item, _this2.props.canResize),
+	            canResizeRight: canResizeRight(item, _this2.props.canResize),
 	            canSelect: (0, _utils._get)(item, 'canSelect') !== undefined ? (0, _utils._get)(item, 'canSelect') : _this2.props.canSelect,
 	            useResizeHandle: _this2.props.useResizeHandle,
 	            topOffset: _this2.props.topOffset,
@@ -1277,58 +1271,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	            onSelect: _this2.props.itemSelect });
 	        })
 	      );
-	
-	      // NB: itemgroups commented out for now as they made performacne horrible when zooming in/out
-	      //
-	      // return (
-	      //   <div>
-	      //     {itemGroups.map(group => (
-	      //       <div key={`timegroup-${group.start}-${group.end}`} style={{position: 'absolute', top: '0', left: `${group.left}px`}}>
-	      //         <ItemGroup {...this.props} items={group.items} canvasTimeStart={group.start} canvasTimeEnd={group.start + canvasTimeLength} groupOrders={groupOrders} />
-	      //       </div>
-	      //     ))}
-	      //   </div>
-	      // )
 	    }
 	  }]);
 	
 	  return Items;
 	}(_react.Component);
 	
-	exports.default = Items;
-	
-	
 	Items.propTypes = {
-	  groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
-	  items: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
+	  groups: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
+	  items: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
 	
-	  canvasTimeStart: _react2.default.PropTypes.number.isRequired,
-	  canvasTimeEnd: _react2.default.PropTypes.number.isRequired,
-	  canvasWidth: _react2.default.PropTypes.number.isRequired,
-	  lineHeight: _react2.default.PropTypes.number.isRequired,
+	  canvasTimeStart: _react.PropTypes.number.isRequired,
+	  canvasTimeEnd: _react.PropTypes.number.isRequired,
+	  canvasWidth: _react.PropTypes.number.isRequired,
+	  lineHeight: _react.PropTypes.number.isRequired,
 	
-	  dragSnap: _react2.default.PropTypes.number,
-	  minResizeWidth: _react2.default.PropTypes.number,
-	  selectedItem: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
+	  dragSnap: _react.PropTypes.number,
+	  minResizeWidth: _react.PropTypes.number,
+	  selectedItem: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
 	
-	  canChangeGroup: _react2.default.PropTypes.bool.isRequired,
-	  canMove: _react2.default.PropTypes.bool.isRequired,
-	  canResize: _react2.default.PropTypes.bool.isRequired,
-	  canSelect: _react2.default.PropTypes.bool,
+	  canChangeGroup: _react.PropTypes.bool.isRequired,
+	  canMove: _react.PropTypes.bool.isRequired,
+	  canResize: _react.PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+	  canSelect: _react.PropTypes.bool,
 	
-	  keys: _react2.default.PropTypes.object.isRequired,
+	  keys: _react.PropTypes.object.isRequired,
 	
-	  moveResizeValidator: _react2.default.PropTypes.func,
-	  itemSelect: _react2.default.PropTypes.func,
-	  itemDrag: _react2.default.PropTypes.func,
-	  itemDrop: _react2.default.PropTypes.func,
-	  itemResizing: _react2.default.PropTypes.func,
-	  itemResized: _react2.default.PropTypes.func,
+	  moveResizeValidator: _react.PropTypes.func,
+	  itemSelect: _react.PropTypes.func,
+	  itemDrag: _react.PropTypes.func,
+	  itemDrop: _react.PropTypes.func,
+	  itemResizing: _react.PropTypes.func,
+	  itemResized: _react.PropTypes.func,
 	
-	  onItemDoubleClick: _react2.default.PropTypes.func,
-	  onItemContextMenu: _react2.default.PropTypes.func
+	  onItemDoubleClick: _react.PropTypes.func,
+	  onItemContextMenu: _react.PropTypes.func
 	};
 	Items.defaultProps = {};
+	exports.default = Items;
 
 /***/ },
 /* 9 */
@@ -1369,6 +1349,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Item = function (_Component) {
 	  _inherits(Item, _Component);
 	
+	  // removed prop type check for SPEED!
+	  // they are coming from a trusted component anyway
+	  // (this complicates performance debugging otherwise)
 	  function Item(props) {
 	    _classCallCheck(this, Item);
 	
@@ -1430,6 +1413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      dragGroupDelta: null,
 	
 	      resizing: null,
+	      resizeEdge: null,
 	      resizeStart: null,
 	      resizeTime: null
 	    };
@@ -1439,7 +1423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Item, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.canSelect !== this.props.canSelect || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResize !== this.props.canResize || nextProps.dimensions !== this.props.dimensions;
+	      var shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !(0, _utils.deepObjectCompare)(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.lineHeight !== this.props.lineHeight || nextProps.order !== this.props.order || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.selected !== this.props.selected || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.canSelect !== this.props.canSelect || nextProps.topOffset !== this.props.topOffset || nextProps.canMove !== this.props.canMove || nextProps.canResizeLeft !== this.props.canResizeLeft || nextProps.canResizeRight !== this.props.canResizeRight || nextProps.dimensions !== this.props.dimensions;
 	      return shouldUpdate;
 	    }
 	  }, {
@@ -1551,12 +1535,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'resizeTimeDelta',
-	    value: function resizeTimeDelta(e) {
+	    value: function resizeTimeDelta(e, resizeEdge) {
 	      var length = this.itemTimeEnd - this.itemTimeStart;
 	      var timeDelta = this.dragTimeSnap((e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio());
 	
-	      if (length + timeDelta < (this.props.dragSnap || 1000)) {
-	        return (this.props.dragSnap || 1000) - length;
+	      if (length + (resizeEdge === 'left' ? -timeDelta : timeDelta) < (this.props.dragSnap || 1000)) {
+	        if (resizeEdge === 'left') {
+	          return length - (this.props.dragSnap || 1000);
+	        } else {
+	          return (this.props.dragSnap || 1000) - length;
+	        }
 	      } else {
 	        return timeDelta;
 	      }
@@ -1569,10 +1557,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function mountInteract() {
 	      var _this2 = this;
 	
+	      var leftResize = this.props.useResizeHandle ? this.refs.dragLeft : true;
 	      var rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
+	
 	      (0, _interact2.default)(this.refs.item).resizable({
-	        edges: { left: false, right: rightResize, top: false, bottom: false },
-	        enabled: this.props.selected && this.canResize()
+	        edges: {
+	          left: this.canResizeLeft() && leftResize,
+	          right: this.canResizeRight() && rightResize,
+	          top: false,
+	          bottom: false
+	        },
+	        enabled: this.props.selected && (this.canResizeLeft() || this.canResizeRight())
 	      }).draggable({
 	        enabled: this.props.selected
 	      }).on('dragstart', function (e) {
@@ -1629,43 +1624,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (_this2.props.selected) {
 	          _this2.setState({
 	            resizing: true,
+	            resizeEdge: null, // we don't know yet
 	            resizeStart: e.pageX,
-	            newResizeEnd: 0
+	            resizeTime: 0
 	          });
 	        } else {
 	          return false;
 	        }
 	      }).on('resizemove', function (e) {
 	        if (_this2.state.resizing) {
-	          var newResizeEnd = _this2.resizeTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+	          var resizeEdge = _this2.state.resizeEdge;
+	
+	          if (!resizeEdge) {
+	            resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right';
+	            _this2.setState({ resizeEdge: resizeEdge });
+	          }
+	          var time = resizeEdge === 'left' ? _this2.itemTimeStart : _this2.itemTimeEnd;
+	
+	          var resizeTime = _this2.resizeTimeSnap(time + _this2.resizeTimeDelta(e, resizeEdge));
 	
 	          if (_this2.props.moveResizeValidator) {
-	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
+	            resizeTime = _this2.props.moveResizeValidator('resize', _this2.props.item, resizeTime, resizeEdge);
 	          }
 	
 	          if (_this2.props.onResizing) {
-	            _this2.props.onResizing(_this2.itemId, newResizeEnd);
+	            _this2.props.onResizing(_this2.itemId, resizeTime, resizeEdge);
 	          }
 	
 	          _this2.setState({
-	            newResizeEnd: newResizeEnd
+	            resizeTime: resizeTime
 	          });
 	        }
 	      }).on('resizeend', function (e) {
 	        if (_this2.state.resizing) {
-	          var newResizeEnd = _this2.resizeTimeSnap(_this2.itemTimeEnd + _this2.resizeTimeDelta(e));
+	          var resizeEdge = _this2.state.resizeEdge;
+	
+	          var time = resizeEdge === 'left' ? _this2.itemTimeStart : _this2.itemTimeEnd;
+	          var resizeTime = _this2.resizeTimeSnap(time + _this2.resizeTimeDelta(e, resizeEdge));
 	
 	          if (_this2.props.moveResizeValidator) {
-	            newResizeEnd = _this2.props.moveResizeValidator('resize', _this2.props.item, newResizeEnd);
+	            resizeTime = _this2.props.moveResizeValidator('resize', _this2.props.item, resizeTime, resizeEdge);
 	          }
 	
-	          if (_this2.props.onResized && _this2.resizeTimeDelta(e) !== 0) {
-	            _this2.props.onResized(_this2.itemId, newResizeEnd);
+	          if (_this2.props.onResized && _this2.resizeTimeDelta(e, resizeEdge) !== 0) {
+	            _this2.props.onResized(_this2.itemId, resizeTime, resizeEdge);
 	          }
 	          _this2.setState({
 	            resizing: null,
 	            resizeStart: null,
-	            newResizeEnd: null
+	            resizeEdge: null,
+	            resizeTime: null
 	          });
 	        }
 	      }).on('tap', function (e) {
@@ -1677,11 +1685,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	    }
 	  }, {
-	    key: 'canResize',
-	    value: function canResize() {
+	    key: 'canResizeLeft',
+	    value: function canResizeLeft() {
 	      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 	
-	      if (!props.canResize) {
+	      if (!props.canResizeLeft) {
+	        return false;
+	      }
+	      var width = parseInt(this.props.dimensions.width, 10);
+	      return width >= props.minResizeWidth;
+	    }
+	  }, {
+	    key: 'canResizeRight',
+	    value: function canResizeRight() {
+	      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
+	
+	      if (!props.canResizeRight) {
 	        return false;
 	      }
 	      var width = parseInt(this.props.dimensions.width, 10);
@@ -1702,17 +1721,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var interactMounted = this.state.interactMounted;
 	
 	      var couldDrag = this.props.selected && this.canMove(this.props);
-	      var couldResize = this.props.selected && this.canResize(this.props);
+	      var couldResizeLeft = this.props.selected && this.canResizeLeft(this.props);
+	      var couldResizeRight = this.props.selected && this.canResizeRight(this.props);
 	      var willBeAbleToDrag = nextProps.selected && this.canMove(nextProps);
-	      var willBeAbleToResize = nextProps.selected && this.canResize(nextProps);
+	      var willBeAbleToResizeLeft = nextProps.selected && this.canResizeLeft(nextProps);
+	      var willBeAbleToResizeRight = nextProps.selected && this.canResizeRight(nextProps);
 	
 	      if (nextProps.selected && !interactMounted) {
 	        this.mountInteract();
 	        interactMounted = true;
 	      }
 	
-	      if (interactMounted && couldResize !== willBeAbleToResize) {
-	        (0, _interact2.default)(this.refs.item).resizable({ enabled: willBeAbleToResize });
+	      if (interactMounted && (couldResizeLeft !== willBeAbleToResizeLeft || couldResizeRight !== willBeAbleToResizeRight)) {
+	        var leftResize = this.props.useResizeHandle ? this.refs.dragLeft : true;
+	        var rightResize = this.props.useResizeHandle ? this.refs.dragRight : true;
+	
+	        (0, _interact2.default)(this.refs.item).resizable({
+	          enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
+	          edges: {
+	            top: false,
+	            bottom: false,
+	            left: willBeAbleToResizeLeft && leftResize,
+	            right: willBeAbleToResizeRight && rightResize
+	          }
+	        });
 	      }
 	      if (interactMounted && couldDrag !== willBeAbleToDrag) {
 	        (0, _interact2.default)(this.refs.item).draggable({ enabled: willBeAbleToDrag });
@@ -1733,7 +1765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	      }
 	
-	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResize(this.props) ? ' can-resize' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
+	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResizeLeft(this.props) || this.canResizeRight(this.props) ? ' can-resize' : '') + (this.canResizeLeft(this.props) ? ' can-resize-left' : '') + (this.canResizeRight(this.props) ? ' can-resize-right' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
 	
 	      var style = {
 	        left: dimensions.left + 'px',
@@ -1757,6 +1789,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          onDoubleClick: this.handleDoubleClick,
 	          onContextMenu: this.handleContextMenu,
 	          style: style }),
+	        this.props.useResizeHandle ? _react2.default.createElement('div', { ref: 'dragLeft', className: 'rct-drag-left' }) : '',
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'rct-item-overflow' },
@@ -1774,11 +1807,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Item;
 	}(_react.Component);
 	
-	// removed prop type check for SPEED!
-	// they are coming from a trusted component anyway
-	
-	
-	exports.default = Item;
 	Item.propTypes = {
 	  // canvasTimeStart: React.PropTypes.number.isRequired,
 	  // canvasTimeEnd: React.PropTypes.number.isRequired,
@@ -1792,7 +1820,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //
 	  // canChangeGroup: React.PropTypes.bool.isRequired,
 	  // canMove: React.PropTypes.bool.isRequired,
-	  // canResize: React.PropTypes.bool.isRequired,
+	  // canResizeLeft: React.PropTypes.bool.isRequired,
+	  // canResizeRight: React.PropTypes.bool.isRequired,
 	  //
 	  // keys: React.PropTypes.object.isRequired,
 	  // item: React.PropTypes.object.isRequired,
@@ -1807,6 +1836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Item.defaultProps = {
 	  selected: false
 	};
+	exports.default = Item;
 
 /***/ },
 /* 10 */
@@ -1942,7 +1972,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 	}
 	
-	function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizeEnd, newGroupOrder, itemHeightRatio) {
+	function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio) {
 	  var itemId = _get(item, keys.itemIdKey);
 	  var itemTimeStart = _get(item, keys.itemTimeStartKey);
 	  var itemTimeEnd = _get(item, keys.itemTimeEndKey);
@@ -1950,10 +1980,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var isDragging = itemId === draggingItem;
 	  var isResizing = itemId === resizingItem;
 	
-	  var x = isDragging ? dragTime : itemTimeStart;
+	  var itemStart = isResizing && resizingEdge === 'left' ? resizeTime : itemTimeStart;
+	  var itemEnd = isResizing && resizingEdge === 'right' ? resizeTime : itemTimeEnd;
 	
-	  var w = Math.max((isResizing ? resizeEnd : itemTimeEnd) - itemTimeStart, dragSnap);
-	  var collisionX = itemTimeStart;
+	  var x = isDragging ? dragTime : itemStart;
+	
+	  var w = Math.max(itemEnd - itemStart, dragSnap);
+	
+	  var collisionX = itemStart;
 	  var collisionW = w;
 	
 	  if (isDragging) {

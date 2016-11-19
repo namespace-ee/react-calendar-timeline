@@ -29,10 +29,24 @@
     z-index: 2; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-move {
       cursor: move; }
-    .react-calendar-timeline .rct-items .rct-item.selected.can-resize {
-      border-right-width: 3px; }
-      .react-calendar-timeline .rct-items .rct-item.selected.can-resize .rct-drag-right {
+    .react-calendar-timeline .rct-items .rct-item.selected.can-resize-left {
+      border-left-width: 3px; }
+      .react-calendar-timeline .rct-items .rct-item.selected.can-resize-left .rct-drag-left {
         cursor: e-resize; }
+    .react-calendar-timeline .rct-items .rct-item.selected.can-resize-right {
+      border-right-width: 3px; }
+      .react-calendar-timeline .rct-items .rct-item.selected.can-resize-right .rct-drag-right {
+        cursor: e-resize; }
+  .react-calendar-timeline .rct-items .rct-item .rct-drag-left {
+    position: absolute;
+    width: 24px;
+    max-width: 20%;
+    min-width: 2px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 10; }
   .react-calendar-timeline .rct-items .rct-item .rct-drag-right {
     position: absolute;
     width: 24px;

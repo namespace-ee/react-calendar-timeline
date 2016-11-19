@@ -25,6 +25,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 // import ItemGroup from './ItemGroup'
 
+var canResizeLeft = function canResizeLeft(item, canResize) {
+  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+  return value === 'left' || value === 'both';
+};
+
+var canResizeRight = function canResizeRight(item, canResize) {
+  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+  return value === 'right' || value === 'both' || value === true;
+};
+
 var Items = function (_Component) {
   _inherits(Items, _Component);
 
@@ -83,25 +93,6 @@ var Items = function (_Component) {
       var visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders);
       var sortedDimensionItems = (0, _utils.keyBy)(dimensionItems, 'id');
 
-      // const timeDiff = Math.floor((canvasTimeEnd - canvasTimeStart) / 24)
-
-      // const start = Math.floor(canvasTimeStart / timeDiff) * timeDiff
-      // const end = Math.floor(canvasTimeEnd / timeDiff) * timeDiff
-
-      // const canvasTimeLength = (canvasTimeEnd - canvasTimeStart)
-      // const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
-      //
-      // let itemGroups = []
-      //
-      // for (let i = start; i < end + timeDiff; i += timeDiff) {
-      //   itemGroups.push({
-      //     start: i,
-      //     end: i + timeDiff,
-      //     left: Math.round((i - canvasTimeStart) * ratio, 2),
-      //     items: visibleItems.filter(item => item.start >= i && item.start < i + timeDiff)
-      //   })
-      // }
-
       return _react2.default.createElement(
         'div',
         { className: 'rct-items' },
@@ -114,7 +105,8 @@ var Items = function (_Component) {
             selected: _this2.props.selectedItem === (0, _utils._get)(item, itemIdKey),
             canChangeGroup: (0, _utils._get)(item, 'canChangeGroup') !== undefined ? (0, _utils._get)(item, 'canChangeGroup') : _this2.props.canChangeGroup,
             canMove: (0, _utils._get)(item, 'canMove') !== undefined ? (0, _utils._get)(item, 'canMove') : _this2.props.canMove,
-            canResize: (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : _this2.props.canResize,
+            canResizeLeft: canResizeLeft(item, _this2.props.canResize),
+            canResizeRight: canResizeRight(item, _this2.props.canResize),
             canSelect: (0, _utils._get)(item, 'canSelect') !== undefined ? (0, _utils._get)(item, 'canSelect') : _this2.props.canSelect,
             useResizeHandle: _this2.props.useResizeHandle,
             topOffset: _this2.props.topOffset,
@@ -136,55 +128,41 @@ var Items = function (_Component) {
             onSelect: _this2.props.itemSelect });
         })
       );
-
-      // NB: itemgroups commented out for now as they made performacne horrible when zooming in/out
-      //
-      // return (
-      //   <div>
-      //     {itemGroups.map(group => (
-      //       <div key={`timegroup-${group.start}-${group.end}`} style={{position: 'absolute', top: '0', left: `${group.left}px`}}>
-      //         <ItemGroup {...this.props} items={group.items} canvasTimeStart={group.start} canvasTimeEnd={group.start + canvasTimeLength} groupOrders={groupOrders} />
-      //       </div>
-      //     ))}
-      //   </div>
-      // )
     }
   }]);
 
   return Items;
 }(_react.Component);
 
-exports.default = Items;
-
-
 Items.propTypes = {
-  groups: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
-  items: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.object]).isRequired,
+  groups: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
+  items: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
 
-  canvasTimeStart: _react2.default.PropTypes.number.isRequired,
-  canvasTimeEnd: _react2.default.PropTypes.number.isRequired,
-  canvasWidth: _react2.default.PropTypes.number.isRequired,
-  lineHeight: _react2.default.PropTypes.number.isRequired,
+  canvasTimeStart: _react.PropTypes.number.isRequired,
+  canvasTimeEnd: _react.PropTypes.number.isRequired,
+  canvasWidth: _react.PropTypes.number.isRequired,
+  lineHeight: _react.PropTypes.number.isRequired,
 
-  dragSnap: _react2.default.PropTypes.number,
-  minResizeWidth: _react2.default.PropTypes.number,
-  selectedItem: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
+  dragSnap: _react.PropTypes.number,
+  minResizeWidth: _react.PropTypes.number,
+  selectedItem: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
 
-  canChangeGroup: _react2.default.PropTypes.bool.isRequired,
-  canMove: _react2.default.PropTypes.bool.isRequired,
-  canResize: _react2.default.PropTypes.bool.isRequired,
-  canSelect: _react2.default.PropTypes.bool,
+  canChangeGroup: _react.PropTypes.bool.isRequired,
+  canMove: _react.PropTypes.bool.isRequired,
+  canResize: _react.PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+  canSelect: _react.PropTypes.bool,
 
-  keys: _react2.default.PropTypes.object.isRequired,
+  keys: _react.PropTypes.object.isRequired,
 
-  moveResizeValidator: _react2.default.PropTypes.func,
-  itemSelect: _react2.default.PropTypes.func,
-  itemDrag: _react2.default.PropTypes.func,
-  itemDrop: _react2.default.PropTypes.func,
-  itemResizing: _react2.default.PropTypes.func,
-  itemResized: _react2.default.PropTypes.func,
+  moveResizeValidator: _react.PropTypes.func,
+  itemSelect: _react.PropTypes.func,
+  itemDrag: _react.PropTypes.func,
+  itemDrop: _react.PropTypes.func,
+  itemResizing: _react.PropTypes.func,
+  itemResized: _react.PropTypes.func,
 
-  onItemDoubleClick: _react2.default.PropTypes.func,
-  onItemContextMenu: _react2.default.PropTypes.func
+  onItemDoubleClick: _react.PropTypes.func,
+  onItemContextMenu: _react.PropTypes.func
 };
 Items.defaultProps = {};
+exports.default = Items;
