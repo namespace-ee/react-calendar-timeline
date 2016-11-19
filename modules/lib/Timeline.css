@@ -32,7 +32,7 @@
     .react-calendar-timeline .rct-items .rct-item.selected.can-resize-left {
       border-left-width: 3px; }
       .react-calendar-timeline .rct-items .rct-item.selected.can-resize-left .rct-drag-left {
-        cursor: e-resize; }
+        cursor: w-resize; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-resize-right {
       border-right-width: 3px; }
       .react-calendar-timeline .rct-items .rct-item.selected.can-resize-right .rct-drag-right {

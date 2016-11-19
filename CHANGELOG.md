@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## [0.10.1]
+### Changed
+- The left resize edge mouse cursor is now a left arrow
+
 ## [0.10.0]
 ### Added
 - You can also resize items from the left now by @mariusandra
@@ -27,3 +31,4 @@ When you submit a PR, add your changes here!
 
 [0.9.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.8.6...v0.9.0
 [0.10.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.9.0...v0.10.0
+[0.10.1]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.10.0...v0.10.1
