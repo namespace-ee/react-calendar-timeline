@@ -57,11 +57,25 @@ $weekend: rgba(250, 246, 225, 0.5);
       border: $item-border;
       z-index: 1;
 
+      &.clipped-left {
+        border-left: 0;
+      }
+
+      &.clipped-right {
+        border-right: 0;
+      }
+
       &.selected {
         background: $item-selected-background;
         border: $item-selected-border;
         z-index: 2;
 
+        &.clipped-left {
+          border-left: 0;
+        }
+        &.clipped-right {
+          border-right: 0;
+        }
         &.can-move {
           cursor: move;
         }

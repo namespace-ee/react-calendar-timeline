@@ -90,7 +90,7 @@ export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWid
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
-export function calculateDimensions (item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio) {
+export function calculateDimensions ({ item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio, fullUpdate, visibleTimeStart, visibleTimeEnd }) {
   var itemId = _get(item, keys.itemIdKey)
   var itemTimeStart = _get(item, keys.itemTimeStartKey)
   var itemTimeEnd = _get(item, keys.itemTimeEndKey)
@@ -101,9 +101,9 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
   const itemStart = (isResizing && resizingEdge === 'left' ? resizeTime : itemTimeStart)
   const itemEnd = (isResizing && resizingEdge === 'right' ? resizeTime : itemTimeEnd)
 
-  const x = isDragging ? dragTime : itemStart
+  let x = isDragging ? dragTime : itemStart
 
-  const w = Math.max(itemEnd - itemStart, dragSnap)
+  let w = Math.max(itemEnd - itemStart, dragSnap)
 
   let collisionX = itemStart
   let collisionW = w
@@ -117,8 +117,31 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
     }
   }
 
-  const h = lineHeight * itemHeightRatio
+  let clippedLeft = false
+  let clippedRight = false
+
+  if (fullUpdate) {
+    if (!isDragging && (visibleTimeStart > x + w || visibleTimeEnd < x)) {
+      return null
+    }
+
+    if (visibleTimeStart > x) {
+      w -= (visibleTimeStart - x)
+      x = visibleTimeStart
+      if (isDragging && w < 0) {
+        x += w
+        w = 0
+      }
+      clippedLeft = true
+    }
+    if (x + w > visibleTimeEnd) {
+      w -= ((x + w) - visibleTimeEnd)
+      clippedRight = true
+    }
+  }
+
   const ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
+  const h = lineHeight * itemHeightRatio
 
   const dimensions = {
     left: (x - canvasTimeStart) * ratio,
@@ -127,11 +150,13 @@ export function calculateDimensions (item, order, keys, canvasTimeStart, canvasT
     height: h,
     order: isDragging ? newGroupOrder : order,
     stack: true,
-    lineHeight: lineHeight,
     collisionLeft: collisionX,
     originalLeft: itemTimeStart,
     collisionWidth: collisionW,
-    isDragging: isDragging
+    lineHeight,
+    isDragging,
+    clippedLeft,
+    clippedRight
   }
 
   return dimensions
