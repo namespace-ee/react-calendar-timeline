@@ -122,7 +122,26 @@ function coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth) {
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 }
 
-function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio) {
+function calculateDimensions(_ref) {
+  var item = _ref.item,
+      order = _ref.order,
+      keys = _ref.keys,
+      canvasTimeStart = _ref.canvasTimeStart,
+      canvasTimeEnd = _ref.canvasTimeEnd,
+      canvasWidth = _ref.canvasWidth,
+      dragSnap = _ref.dragSnap,
+      lineHeight = _ref.lineHeight,
+      draggingItem = _ref.draggingItem,
+      dragTime = _ref.dragTime,
+      resizingItem = _ref.resizingItem,
+      resizingEdge = _ref.resizingEdge,
+      resizeTime = _ref.resizeTime,
+      newGroupOrder = _ref.newGroupOrder,
+      itemHeightRatio = _ref.itemHeightRatio,
+      fullUpdate = _ref.fullUpdate,
+      visibleTimeStart = _ref.visibleTimeStart,
+      visibleTimeEnd = _ref.visibleTimeEnd;
+
   var itemId = _get(item, keys.itemIdKey);
   var itemTimeStart = _get(item, keys.itemTimeStartKey);
   var itemTimeEnd = _get(item, keys.itemTimeEndKey);
@@ -149,8 +168,31 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
     }
   }
 
-  var h = lineHeight * itemHeightRatio;
+  var clippedLeft = false;
+  var clippedRight = false;
+
+  if (fullUpdate) {
+    if (!isDragging && (visibleTimeStart > x + w || visibleTimeEnd < x)) {
+      return null;
+    }
+
+    if (visibleTimeStart > x) {
+      w -= visibleTimeStart - x;
+      x = visibleTimeStart;
+      if (isDragging && w < 0) {
+        x += w;
+        w = 0;
+      }
+      clippedLeft = true;
+    }
+    if (x + w > visibleTimeEnd) {
+      w -= x + w - visibleTimeEnd;
+      clippedRight = true;
+    }
+  }
+
   var ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
+  var h = lineHeight * itemHeightRatio;
 
   var dimensions = {
     left: (x - canvasTimeStart) * ratio,
@@ -159,11 +201,13 @@ function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, 
     height: h,
     order: isDragging ? newGroupOrder : order,
     stack: true,
-    lineHeight: lineHeight,
     collisionLeft: collisionX,
     originalLeft: itemTimeStart,
     collisionWidth: collisionW,
-    isDragging: isDragging
+    lineHeight: lineHeight,
+    isDragging: isDragging,
+    clippedLeft: clippedLeft,
+    clippedRight: clippedRight
   };
 
   return dimensions;

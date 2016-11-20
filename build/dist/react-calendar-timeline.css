@@ -27,16 +27,24 @@
   background: #2196F3;
   border: 1px solid #1A6FB3;
   z-index: 1; }
+  .react-calendar-timeline .rct-items .rct-item.clipped-left {
+    border-left: 0; }
+  .react-calendar-timeline .rct-items .rct-item.clipped-right {
+    border-right: 0; }
   .react-calendar-timeline .rct-items .rct-item.selected {
     background: #FFC107;
     border: 1px solid #FF9800;
     z-index: 2; }
+    .react-calendar-timeline .rct-items .rct-item.selected.clipped-left {
+      border-left: 0; }
+    .react-calendar-timeline .rct-items .rct-item.selected.clipped-right {
+      border-right: 0; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-move {
       cursor: move; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-resize-left {
       border-left-width: 3px; }
       .react-calendar-timeline .rct-items .rct-item.selected.can-resize-left .rct-drag-left {
-        cursor: e-resize; }
+        cursor: w-resize; }
     .react-calendar-timeline .rct-items .rct-item.selected.can-resize-right {
       border-right-width: 3px; }
       .react-calendar-timeline .rct-items .rct-item.selected.can-resize-right .rct-drag-right {

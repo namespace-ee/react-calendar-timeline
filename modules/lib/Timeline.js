@@ -234,6 +234,9 @@ var ReactCalendarTimeline = function (_Component) {
 
       this.setState({ dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops });
     }
+
+    // called when the visible time changes
+
   }, {
     key: 'zoomIn',
     value: function zoomIn(e) {
@@ -416,6 +419,7 @@ var ReactCalendarTimeline = function (_Component) {
           headerLabelGroupHeight = _props3.headerLabelGroupHeight,
           headerLabelHeight = _props3.headerLabelHeight,
           stackItems = _props3.stackItems,
+          fullUpdate = _props3.fullUpdate,
           itemHeightRatio = _props3.itemHeightRatio;
       var _state3 = this.state,
           draggingItem = _state3.draggingItem,
@@ -436,8 +440,29 @@ var ReactCalendarTimeline = function (_Component) {
       var dimensionItems = visibleItems.map(function (item) {
         return {
           id: (0, _utils._get)(item, keys.itemIdKey),
-          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio)
+          dimensions: (0, _utils.calculateDimensions)({
+            item: item,
+            order: groupOrders[(0, _utils._get)(item, keys.itemGroupKey)],
+            keys: keys,
+            canvasTimeStart: canvasTimeStart,
+            canvasTimeEnd: canvasTimeEnd,
+            canvasWidth: canvasWidth,
+            dragSnap: dragSnap,
+            lineHeight: lineHeight,
+            draggingItem: draggingItem,
+            dragTime: dragTime,
+            resizingItem: resizingItem,
+            resizingEdge: resizingEdge,
+            resizeTime: resizeTime,
+            newGroupOrder: newGroupOrder,
+            itemHeightRatio: itemHeightRatio,
+            fullUpdate: fullUpdate,
+            visibleTimeStart: visibleTimeStart,
+            visibleTimeEnd: visibleTimeEnd
+          })
         };
+      }).filter(function (i) {
+        return i.dimensions;
       });
 
       var stackingMethod = stackItems ? _utils.stack : _utils.nostack;
@@ -550,6 +575,7 @@ ReactCalendarTimeline.propTypes = {
   dragSnap: _react.PropTypes.number,
   minResizeWidth: _react.PropTypes.number,
   fixedHeader: _react.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+  fullUpdate: _react.PropTypes.bool,
   zIndexStart: _react.PropTypes.number,
   lineHeight: _react.PropTypes.number,
   headerLabelGroupHeight: _react.PropTypes.number,
@@ -607,6 +633,7 @@ ReactCalendarTimeline.defaultProps = {
   dragSnap: 1000 * 60 * 15, // 15min
   minResizeWidth: 20,
   fixedHeader: 'none', // fixed or absolute or none
+  fullUpdate: true,
   zIndexStart: 10,
   lineHeight: 30,
   headerLabelGroupHeight: 30,
@@ -775,6 +802,8 @@ var _initialiseProps = function _initialiseProps() {
     var newZoom = visibleTimeEnd - visibleTimeStart;
     var items = updatedItems || _this3.props.items;
     var groups = updatedGroups || _this3.props.groups;
+    var fullUpdate = _this3.props.fullUpdate;
+
 
     var newState = {
       visibleTimeStart: visibleTimeStart,
@@ -806,10 +835,10 @@ var _initialiseProps = function _initialiseProps() {
       }
     }
 
-    if (resetCanvas || forceUpdateDimensions) {
+    if (resetCanvas || forceUpdateDimensions || fullUpdate) {
       var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
 
-      var _stackItems3 = _this3.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, _this3.state.width),
+      var _stackItems3 = _this3.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, _this3.state.width, fullUpdate),
           dimensionItems = _stackItems3.dimensionItems,
           height = _stackItems3.height,
           groupHeights = _stackItems3.groupHeights,

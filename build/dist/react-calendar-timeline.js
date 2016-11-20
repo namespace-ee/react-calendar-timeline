@@ -308,6 +308,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.setState({ dimensionItems: dimensionItems, height: height, groupHeights: groupHeights, groupTops: groupTops });
 	    }
+	
+	    // called when the visible time changes
+	
 	  }, {
 	    key: 'zoomIn',
 	    value: function zoomIn(e) {
@@ -490,6 +493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          headerLabelGroupHeight = _props3.headerLabelGroupHeight,
 	          headerLabelHeight = _props3.headerLabelHeight,
 	          stackItems = _props3.stackItems,
+	          fullUpdate = _props3.fullUpdate,
 	          itemHeightRatio = _props3.itemHeightRatio;
 	      var _state3 = this.state,
 	          draggingItem = _state3.draggingItem,
@@ -510,8 +514,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var dimensionItems = visibleItems.map(function (item) {
 	        return {
 	          id: (0, _utils._get)(item, keys.itemIdKey),
-	          dimensions: (0, _utils.calculateDimensions)(item, groupOrders[(0, _utils._get)(item, keys.itemGroupKey)], keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio)
+	          dimensions: (0, _utils.calculateDimensions)({
+	            item: item,
+	            order: groupOrders[(0, _utils._get)(item, keys.itemGroupKey)],
+	            keys: keys,
+	            canvasTimeStart: canvasTimeStart,
+	            canvasTimeEnd: canvasTimeEnd,
+	            canvasWidth: canvasWidth,
+	            dragSnap: dragSnap,
+	            lineHeight: lineHeight,
+	            draggingItem: draggingItem,
+	            dragTime: dragTime,
+	            resizingItem: resizingItem,
+	            resizingEdge: resizingEdge,
+	            resizeTime: resizeTime,
+	            newGroupOrder: newGroupOrder,
+	            itemHeightRatio: itemHeightRatio,
+	            fullUpdate: fullUpdate,
+	            visibleTimeStart: visibleTimeStart,
+	            visibleTimeEnd: visibleTimeEnd
+	          })
 	        };
+	      }).filter(function (i) {
+	        return i.dimensions;
 	      });
 	
 	      var stackingMethod = stackItems ? _utils.stack : _utils.nostack;
@@ -624,6 +649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dragSnap: _react.PropTypes.number,
 	  minResizeWidth: _react.PropTypes.number,
 	  fixedHeader: _react.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+	  fullUpdate: _react.PropTypes.bool,
 	  zIndexStart: _react.PropTypes.number,
 	  lineHeight: _react.PropTypes.number,
 	  headerLabelGroupHeight: _react.PropTypes.number,
@@ -681,6 +707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dragSnap: 1000 * 60 * 15, // 15min
 	  minResizeWidth: 20,
 	  fixedHeader: 'none', // fixed or absolute or none
+	  fullUpdate: true,
 	  zIndexStart: 10,
 	  lineHeight: 30,
 	  headerLabelGroupHeight: 30,
@@ -849,6 +876,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var newZoom = visibleTimeEnd - visibleTimeStart;
 	    var items = updatedItems || _this3.props.items;
 	    var groups = updatedGroups || _this3.props.groups;
+	    var fullUpdate = _this3.props.fullUpdate;
+	
 	
 	    var newState = {
 	      visibleTimeStart: visibleTimeStart,
@@ -880,10 +909,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	
-	    if (resetCanvas || forceUpdateDimensions) {
+	    if (resetCanvas || forceUpdateDimensions || fullUpdate) {
 	      var canvasTimeStart = newState.canvasTimeStart ? newState.canvasTimeStart : oldCanvasTimeStart;
 	
-	      var _stackItems3 = _this3.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, _this3.state.width),
+	      var _stackItems3 = _this3.stackItems(items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, _this3.state.width, fullUpdate),
 	          dimensionItems = _stackItems3.dimensionItems,
 	          height = _stackItems3.height,
 	          groupHeights = _stackItems3.groupHeights,
@@ -1239,7 +1268,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'rct-items' },
-	        visibleItems.map(function (item) {
+	        visibleItems.filter(function (item) {
+	          return sortedDimensionItems[(0, _utils._get)(item, itemIdKey)];
+	        }).map(function (item) {
 	          return _react2.default.createElement(_Item2.default, { key: (0, _utils._get)(item, itemIdKey),
 	            item: item,
 	            keys: _this2.props.keys,
@@ -1689,10 +1720,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function canResizeLeft() {
 	      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 	
-	      if (!props.canResizeLeft) {
+	      if (!props.canResizeLeft || props.dimensions.clippedLeft) {
 	        return false;
 	      }
-	      var width = parseInt(this.props.dimensions.width, 10);
+	      var width = parseInt(props.dimensions.width, 10);
 	      return width >= props.minResizeWidth;
 	    }
 	  }, {
@@ -1700,10 +1731,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function canResizeRight() {
 	      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 	
-	      if (!props.canResizeRight) {
+	      if (!props.canResizeRight || props.dimensions.clippedRight) {
 	        return false;
 	      }
-	      var width = parseInt(this.props.dimensions.width, 10);
+	      var width = parseInt(props.dimensions.width, 10);
 	      return width >= props.minResizeWidth;
 	    }
 	  }, {
@@ -1765,7 +1796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	      }
 	
-	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResizeLeft(this.props) || this.canResizeRight(this.props) ? ' can-resize' : '') + (this.canResizeLeft(this.props) ? ' can-resize-left' : '') + (this.canResizeRight(this.props) ? ' can-resize-right' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
+	      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResizeLeft(this.props) || this.canResizeRight(this.props) ? ' can-resize' : '') + (this.canResizeLeft(this.props) ? ' can-resize-left' : '') + (this.canResizeRight(this.props) ? ' can-resize-right' : '') + (this.props.item.className ? ' ' + this.props.item.className : '') + (dimensions.clippedLeft ? ' clipped-left' : '') + (dimensions.clippedRight ? ' clipped-right' : '');
 	
 	      var style = {
 	        left: dimensions.left + 'px',
@@ -1972,7 +2003,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 	}
 	
-	function calculateDimensions(item, order, keys, canvasTimeStart, canvasTimeEnd, canvasWidth, dragSnap, lineHeight, draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder, itemHeightRatio) {
+	function calculateDimensions(_ref) {
+	  var item = _ref.item,
+	      order = _ref.order,
+	      keys = _ref.keys,
+	      canvasTimeStart = _ref.canvasTimeStart,
+	      canvasTimeEnd = _ref.canvasTimeEnd,
+	      canvasWidth = _ref.canvasWidth,
+	      dragSnap = _ref.dragSnap,
+	      lineHeight = _ref.lineHeight,
+	      draggingItem = _ref.draggingItem,
+	      dragTime = _ref.dragTime,
+	      resizingItem = _ref.resizingItem,
+	      resizingEdge = _ref.resizingEdge,
+	      resizeTime = _ref.resizeTime,
+	      newGroupOrder = _ref.newGroupOrder,
+	      itemHeightRatio = _ref.itemHeightRatio,
+	      fullUpdate = _ref.fullUpdate,
+	      visibleTimeStart = _ref.visibleTimeStart,
+	      visibleTimeEnd = _ref.visibleTimeEnd;
+	
 	  var itemId = _get(item, keys.itemIdKey);
 	  var itemTimeStart = _get(item, keys.itemTimeStartKey);
 	  var itemTimeEnd = _get(item, keys.itemTimeEndKey);
@@ -1999,8 +2049,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	
-	  var h = lineHeight * itemHeightRatio;
+	  var clippedLeft = false;
+	  var clippedRight = false;
+	
+	  if (fullUpdate) {
+	    if (!isDragging && (visibleTimeStart > x + w || visibleTimeEnd < x)) {
+	      return null;
+	    }
+	
+	    if (visibleTimeStart > x) {
+	      w -= visibleTimeStart - x;
+	      x = visibleTimeStart;
+	      if (isDragging && w < 0) {
+	        x += w;
+	        w = 0;
+	      }
+	      clippedLeft = true;
+	    }
+	    if (x + w > visibleTimeEnd) {
+	      w -= x + w - visibleTimeEnd;
+	      clippedRight = true;
+	    }
+	  }
+	
 	  var ratio = 1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth);
+	  var h = lineHeight * itemHeightRatio;
 	
 	  var dimensions = {
 	    left: (x - canvasTimeStart) * ratio,
@@ -2009,11 +2082,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    height: h,
 	    order: isDragging ? newGroupOrder : order,
 	    stack: true,
-	    lineHeight: lineHeight,
 	    collisionLeft: collisionX,
 	    originalLeft: itemTimeStart,
 	    collisionWidth: collisionW,
-	    isDragging: isDragging
+	    lineHeight: lineHeight,
+	    isDragging: isDragging,
+	    clippedLeft: clippedLeft,
+	    clippedRight: clippedRight
 	  };
 	
 	  return dimensions;

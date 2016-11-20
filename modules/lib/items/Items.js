@@ -96,7 +96,9 @@ var Items = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'rct-items' },
-        visibleItems.map(function (item) {
+        visibleItems.filter(function (item) {
+          return sortedDimensionItems[(0, _utils._get)(item, itemIdKey)];
+        }).map(function (item) {
           return _react2.default.createElement(_Item2.default, { key: (0, _utils._get)(item, itemIdKey),
             item: item,
             keys: _this2.props.keys,

@@ -373,10 +373,10 @@ var Item = function (_Component) {
     value: function canResizeLeft() {
       var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
-      if (!props.canResizeLeft) {
+      if (!props.canResizeLeft || props.dimensions.clippedLeft) {
         return false;
       }
-      var width = parseInt(this.props.dimensions.width, 10);
+      var width = parseInt(props.dimensions.width, 10);
       return width >= props.minResizeWidth;
     }
   }, {
@@ -384,10 +384,10 @@ var Item = function (_Component) {
     value: function canResizeRight() {
       var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
 
-      if (!props.canResizeRight) {
+      if (!props.canResizeRight || props.dimensions.clippedRight) {
         return false;
       }
-      var width = parseInt(this.props.dimensions.width, 10);
+      var width = parseInt(props.dimensions.width, 10);
       return width >= props.minResizeWidth;
     }
   }, {
@@ -449,7 +449,7 @@ var Item = function (_Component) {
         return null;
       }
 
-      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResizeLeft(this.props) || this.canResizeRight(this.props) ? ' can-resize' : '') + (this.canResizeLeft(this.props) ? ' can-resize-left' : '') + (this.canResizeRight(this.props) ? ' can-resize-right' : '') + (this.props.item.className ? ' ' + this.props.item.className : '');
+      var classNames = 'rct-item' + (this.props.selected ? ' selected' : '') + (this.canMove(this.props) ? ' can-move' : '') + (this.canResizeLeft(this.props) || this.canResizeRight(this.props) ? ' can-resize' : '') + (this.canResizeLeft(this.props) ? ' can-resize-left' : '') + (this.canResizeRight(this.props) ? ' can-resize-right' : '') + (this.props.item.className ? ' ' + this.props.item.className : '') + (dimensions.clippedLeft ? ' clipped-left' : '') + (dimensions.clippedRight ? ' clipped-right' : '');
 
       var style = {
         left: dimensions.left + 'px',
