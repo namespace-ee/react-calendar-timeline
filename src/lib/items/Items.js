@@ -5,12 +5,12 @@ import Item from './Item'
 import { _get, arraysEqual, keyBy } from '../utils'
 
 const canResizeLeft = (item, canResize) => {
-  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize
+  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'left' || value === 'both'
 }
 
 const canResizeRight = (item, canResize) => {
-  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : this.props.canResize
+  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'right' || value === 'both' || value === true
 }
 
