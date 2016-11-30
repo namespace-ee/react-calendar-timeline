@@ -26,12 +26,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import ItemGroup from './ItemGroup'
 
 var canResizeLeft = function canResizeLeft(item, canResize) {
-  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : canResize;
   return value === 'left' || value === 'both';
 };
 
 var canResizeRight = function canResizeRight(item, canResize) {
-  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : canResize;
   return value === 'right' || value === 'both' || value === true;
 };
 
