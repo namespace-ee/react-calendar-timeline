@@ -43,10 +43,13 @@ export default class Items extends Component {
     itemResized: PropTypes.func,
 
     onItemDoubleClick: PropTypes.func,
-    onItemContextMenu: PropTypes.func
+    onItemContextMenu: PropTypes.func,
+
+    selected: PropTypes.array
   }
 
   static defaultProps = {
+    selected: []
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -57,6 +60,7 @@ export default class Items extends Component {
              nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
              nextProps.canvasWidth === this.props.canvasWidth &&
              nextProps.selectedItem === this.props.selectedItem &&
+             nextProps.selected === this.props.selected &&
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.dragSnap === this.props.dragSnap &&
              nextProps.minResizeWidth === this.props.minResizeWidth &&
@@ -79,6 +83,15 @@ export default class Items extends Component {
     }
 
     return groupOrders
+  }
+
+  isSelected (item, itemIdKey) {
+    if (!this.props.selected) {
+      return this.props.selectedItem === _get(item, itemIdKey)
+    } else {
+      let target = _get(item, itemIdKey)
+      return this.props.selected.find((value) => value === target)
+    }
   }
 
   getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
@@ -105,7 +118,7 @@ export default class Items extends Component {
                                         keys={this.props.keys}
                                         order={groupOrders[_get(item, itemGroupKey)]}
                                         dimensions={sortedDimensionItems[_get(item, itemIdKey)].dimensions}
-                                        selected={this.props.selectedItem === _get(item, itemIdKey)}
+                                        selected={this.isSelected(item, itemIdKey)}
                                         canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
                                         canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
                                         canResizeLeft={canResizeLeft(item, this.props.canResize)}
