@@ -126,7 +126,7 @@ export default class Header extends Component {
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
       visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, fixedHeader,
-      headerLabelGroupHeight, headerLabelHeight
+      headerLabelGroupHeight, headerLabelHeight, width
     } = this.props
     const {
       scrollTop
@@ -202,7 +202,7 @@ export default class Header extends Component {
 
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
-      headerStyle.width = '100%'
+      headerStyle.width = `${width}px`
       headerStyle.zIndex = zIndex
     } else if (fixedHeader === 'absolute') {
       let componentTop = this.state.componentTop

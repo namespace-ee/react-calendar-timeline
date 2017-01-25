@@ -178,7 +178,8 @@ var Header = function (_Component) {
           timeSteps = _props.timeSteps,
           fixedHeader = _props.fixedHeader,
           headerLabelGroupHeight = _props.headerLabelGroupHeight,
-          headerLabelHeight = _props.headerLabelHeight;
+          headerLabelHeight = _props.headerLabelHeight,
+          width = _props.width;
       var scrollTop = this.state.scrollTop;
 
       var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
@@ -255,7 +256,7 @@ var Header = function (_Component) {
 
       if (fixedHeader === 'fixed') {
         headerStyle.position = 'fixed';
-        headerStyle.width = '100%';
+        headerStyle.width = width + 'px';
         headerStyle.zIndex = zIndex;
       } else if (fixedHeader === 'absolute') {
         var componentTop = this.state.componentTop;
