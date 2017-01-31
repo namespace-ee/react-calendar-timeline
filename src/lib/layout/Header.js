@@ -176,7 +176,7 @@ export default class Header extends Component {
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
              href='#'
-             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${firstOfType ? 'rct-first-of-type' : ''} `}
+             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${firstOfType ? 'rct-first-of-type' : ''} ${(minUnit !== 'month' ? `rct-day-${time.day()}` : '')} `}
              data-time={time}
              data-unit={minUnit}
              style={{
