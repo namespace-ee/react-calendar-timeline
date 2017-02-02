@@ -125,13 +125,33 @@ var Header = function (_Component) {
     key: 'headerLabel',
     value: function headerLabel(time, unit, width) {
       if (unit === 'year') {
-        return time.format(width < 46 ? 'YY' : 'YYYY');
+        var _props = this.props,
+            headerLabelYearFormatShort = _props.headerLabelYearFormatShort,
+            headerLabelYearFormatLong = _props.headerLabelYearFormatLong;
+
+        return time.format(width < 46 ? headerLabelYearFormatShort : headerLabelYearFormatLong);
       } else if (unit === 'month') {
-        return time.format(width < 65 ? 'MM/YY' : width < 75 ? 'MM/YYYY' : width < 120 ? 'MMM YYYY' : 'MMMM YYYY');
+        var _props2 = this.props,
+            headerLabelMonthFormatShort = _props2.headerLabelMonthFormatShort,
+            headerLabelMonthFormatMedium = _props2.headerLabelMonthFormatMedium,
+            headerLabelMonthFormatMediumLong = _props2.headerLabelMonthFormatMediumLong,
+            headerLabelMonthFormatLong = _props2.headerLabelMonthFormatLong;
+
+        return time.format(width < 65 ? headerLabelMonthFormatShort : width < 75 ? headerLabelMonthFormatMedium : width < 120 ? headerLabelMonthFormatMediumLong : headerLabelMonthFormatLong);
       } else if (unit === 'day') {
-        return time.format(width < 150 ? 'L' : 'dddd, LL');
+        var _props3 = this.props,
+            headerLabelDayFormatShort = _props3.headerLabelDayFormatShort,
+            headerLabelDayFormatLong = _props3.headerLabelDayFormatLong;
+
+        return time.format(width < 150 ? headerLabelDayFormatShort : headerLabelDayFormatLong);
       } else if (unit === 'hour') {
-        return time.format(width < 50 ? 'HH' : width < 130 ? 'HH:00' : width < 150 ? 'L, HH:00' : 'dddd, LL, HH:00');
+        var _props4 = this.props,
+            headerLabelHourFormatShort = _props4.headerLabelHourFormatShort,
+            headerLabelHourFormatMedium = _props4.headerLabelHourFormatMedium,
+            headerLabelHourFormatMediumLong = _props4.headerLabelHourFormatMediumLong,
+            headerLabelHourFormatLong = _props4.headerLabelHourFormatLong;
+
+        return time.format(width < 50 ? headerLabelHourFormatShort : width < 130 ? headerLabelHourFormatMedium : width < 150 ? headerLabelHourFormatMediumLong : headerLabelHourFormatLong);
       } else {
         return time.format('LLL');
       }
@@ -140,15 +160,38 @@ var Header = function (_Component) {
     key: 'subHeaderLabel',
     value: function subHeaderLabel(time, unit, width) {
       if (unit === 'year') {
-        return time.format(width < 46 ? 'YY' : 'YYYY');
+        var _props5 = this.props,
+            subHeaderLabelYearFormatShort = _props5.subHeaderLabelYearFormatShort,
+            subHeaderLabelYearFormatLong = _props5.subHeaderLabelYearFormatLong;
+
+        return time.format(width < 46 ? subHeaderLabelYearFormatShort : subHeaderLabelYearFormatLong);
       } else if (unit === 'month') {
-        return time.format(width < 37 ? 'MM' : width < 85 ? 'MMM' : 'MMMM');
+        var _props6 = this.props,
+            subHeaderLabelMonthFormatShort = _props6.subHeaderLabelMonthFormatShort,
+            subHeaderLabelMonthFormatMedium = _props6.subHeaderLabelMonthFormatMedium,
+            subHeaderLabelMonthFormatLong = _props6.subHeaderLabelMonthFormatLong;
+
+        return time.format(width < 37 ? subHeaderLabelMonthFormatShort : width < 85 ? subHeaderLabelMonthFormatMedium : subHeaderLabelMonthFormatLong);
       } else if (unit === 'day') {
-        return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do');
+        var _props7 = this.props,
+            subHeaderLabelDayFormatShort = _props7.subHeaderLabelDayFormatShort,
+            subHeaderLabelDayFormatMedium = _props7.subHeaderLabelDayFormatMedium,
+            subHeaderLabelDayFormatMediumLong = _props7.subHeaderLabelDayFormatMediumLong,
+            subHeaderLabelDayFormatLong = _props7.subHeaderLabelDayFormatLong;
+
+        return time.format(width < 47 ? subHeaderLabelDayFormatShort : width < 80 ? subHeaderLabelDayFormatMedium : width < 120 ? subHeaderLabelDayFormatMediumLong : subHeaderLabelDayFormatLong);
       } else if (unit === 'hour') {
-        return time.format(width < 50 ? 'HH' : 'HH:00');
+        var _props8 = this.props,
+            subHeaderLabelHourFormatShort = _props8.subHeaderLabelHourFormatShort,
+            subHeaderLabelHourFormatLong = _props8.subHeaderLabelHourFormatLong;
+
+        return time.format(width < 50 ? subHeaderLabelHourFormatShort : subHeaderLabelHourFormatLong);
       } else if (unit === 'minute') {
-        return time.format(width < 60 ? 'mm' : 'HH:mm');
+        var _props9 = this.props,
+            subHeaderLabelMinuteFormatShort = _props9.subHeaderLabelMinuteFormatShort,
+            subHeaderLabelMinuteFormatLong = _props9.subHeaderLabelMinuteFormatLong;
+
+        return time.format(width < 60 ? subHeaderLabelMinuteFormatShort : subHeaderLabelMinuteFormatLong);
       } else {
         return time.get(unit);
       }
@@ -167,18 +210,18 @@ var Header = function (_Component) {
       var _this3 = this;
 
       var timeLabels = [];
-      var _props = this.props,
-          canvasTimeStart = _props.canvasTimeStart,
-          canvasTimeEnd = _props.canvasTimeEnd,
-          canvasWidth = _props.canvasWidth,
-          lineHeight = _props.lineHeight,
-          visibleTimeStart = _props.visibleTimeStart,
-          visibleTimeEnd = _props.visibleTimeEnd,
-          minUnit = _props.minUnit,
-          timeSteps = _props.timeSteps,
-          fixedHeader = _props.fixedHeader,
-          headerLabelGroupHeight = _props.headerLabelGroupHeight,
-          headerLabelHeight = _props.headerLabelHeight;
+      var _props10 = this.props,
+          canvasTimeStart = _props10.canvasTimeStart,
+          canvasTimeEnd = _props10.canvasTimeEnd,
+          canvasWidth = _props10.canvasWidth,
+          lineHeight = _props10.lineHeight,
+          visibleTimeStart = _props10.visibleTimeStart,
+          visibleTimeEnd = _props10.visibleTimeEnd,
+          minUnit = _props10.minUnit,
+          timeSteps = _props10.timeSteps,
+          fixedHeader = _props10.fixedHeader,
+          headerLabelGroupHeight = _props10.headerLabelGroupHeight,
+          headerLabelHeight = _props10.headerLabelHeight;
       var scrollTop = this.state.scrollTop;
 
       var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
@@ -224,12 +267,13 @@ var Header = function (_Component) {
         var labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2);
         var borderWidth = firstOfType ? 2 : 1;
         var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0;
+        var rctLabelClasses = _this3.props.rctLabelClass + ' rct-label ' + (twoHeaders ? '' : 'rct-label-only') + ' ' + (firstOfType ? 'rct-first-of-type' : '') + ' ';
 
         timeLabels.push(_react2.default.createElement(
           'div',
           { key: 'label-' + time.valueOf(),
             href: '#',
-            className: 'rct-label ' + (twoHeaders ? '' : 'rct-label-only') + ' ' + (firstOfType ? 'rct-first-of-type' : '') + ' ',
+            className: rctLabelClasses,
             'data-time': time,
             'data-unit': minUnit,
             style: {
@@ -278,9 +322,6 @@ var Header = function (_Component) {
   return Header;
 }(_react.Component);
 
-exports.default = Header;
-
-
 Header.propTypes = {
   // groups: React.PropTypes.array.isRequired,
   // width: React.PropTypes.number.isRequired,
@@ -298,9 +339,39 @@ Header.propTypes = {
   timeSteps: _react2.default.PropTypes.object.isRequired,
   width: _react2.default.PropTypes.number.isRequired,
   fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  zIndex: _react2.default.PropTypes.number
+  zIndex: _react2.default.PropTypes.number,
+  rctLabelClass: _react.PropTypes.string,
+
+  subHeaderLabelYearFormatShort: _react.PropTypes.string.isRequired,
+  subHeaderLabelYearFormatLong: _react.PropTypes.string.isRequired,
+  subHeaderLabelMonthFormatShort: _react.PropTypes.string.isRequired,
+  subHeaderLabelMonthFormatMedium: _react.PropTypes.string.isRequired,
+  subHeaderLabelMonthFormatLong: _react.PropTypes.string.isRequired,
+  subHeaderLabelDayFormatShort: _react.PropTypes.string.isRequired,
+  subHeaderLabelDayFormatMedium: _react.PropTypes.string.isRequired,
+  subHeaderLabelDayFormatMediumLong: _react.PropTypes.string.isRequired,
+  subHeaderLabelDayFormatLong: _react.PropTypes.string.isRequired,
+  subHeaderLabelHourFormatShort: _react.PropTypes.string.isRequired,
+  subHeaderLabelHourFormatLong: _react.PropTypes.string.isRequired,
+  subHeaderLabelMinuteFormatShort: _react.PropTypes.string.isRequired,
+  subHeaderLabelMinuteFormatLong: _react.PropTypes.string.isRequired,
+
+  headerLabelYearFormatShort: _react.PropTypes.string.isRequired,
+  headerLabelYearFormatLong: _react.PropTypes.string.isRequired,
+  headerLabelMonthFormatShort: _react.PropTypes.string.isRequired,
+  headerLabelMonthFormatMedium: _react.PropTypes.string.isRequired,
+  headerLabelMonthFormatMediumLong: _react.PropTypes.string.isRequired,
+  headerLabelMonthFormatLong: _react.PropTypes.string.isRequired,
+  headerLabelDayFormatShort: _react.PropTypes.string.isRequired,
+  headerLabelDayFormatLong: _react.PropTypes.string.isRequired,
+  headerLabelHourFormatShort: _react.PropTypes.string.isRequired,
+  headerLabelHourFormatMedium: _react.PropTypes.string.isRequired,
+  headerLabelHourFormatMediumLong: _react.PropTypes.string.isRequired,
+  headerLabelHourFormatLong: _react.PropTypes.string.isRequired
 };
 Header.defaultProps = {
   fixedHeader: 'none',
-  zIndex: 11
+  zIndex: 11,
+  rctLabelClass: ''
 };
+exports.default = Header;
