@@ -1,9 +1,64 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
 
 import { iterateTimes, getNextUnit } from '../utils.js'
 
 export default class Header extends Component {
+
+  static propTypes = {
+    // groups: React.PropTypes.array.isRequired,
+    // width: React.PropTypes.number.isRequired,
+    // lineHeight: React.PropTypes.number.isRequired,
+    // headerBackgroundColor: React.PropTypes.string.isRequired,
+    showPeriod: React.PropTypes.func.isRequired,
+    canvasTimeStart: React.PropTypes.number.isRequired,
+    canvasTimeEnd: React.PropTypes.number.isRequired,
+    canvasWidth: React.PropTypes.number.isRequired,
+    lineHeight: React.PropTypes.number.isRequired,
+    visibleTimeStart: React.PropTypes.number.isRequired,
+    visibleTimeEnd: React.PropTypes.number.isRequired,
+    // visibleTimeEnd: React.PropTypes.number.isRequired,
+    minUnit: React.PropTypes.string.isRequired,
+    timeSteps: React.PropTypes.object.isRequired,
+    width: React.PropTypes.number.isRequired,
+    fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+    zIndex: React.PropTypes.number,
+    rctLabelClass: PropTypes.string,
+
+    subHeaderLabelYearFormatShort: PropTypes.string.isRequired,
+    subHeaderLabelYearFormatLong: PropTypes.string.isRequired,
+    subHeaderLabelMonthFormatShort: PropTypes.string.isRequired,
+    subHeaderLabelMonthFormatMedium: PropTypes.string.isRequired,
+    subHeaderLabelMonthFormatLong: PropTypes.string.isRequired,
+    subHeaderLabelDayFormatShort: PropTypes.string.isRequired,
+    subHeaderLabelDayFormatMedium: PropTypes.string.isRequired,
+    subHeaderLabelDayFormatMediumLong: PropTypes.string.isRequired,
+    subHeaderLabelDayFormatLong: PropTypes.string.isRequired,
+    subHeaderLabelHourFormatShort: PropTypes.string.isRequired,
+    subHeaderLabelHourFormatLong: PropTypes.string.isRequired,
+    subHeaderLabelMinuteFormatShort: PropTypes.string.isRequired,
+    subHeaderLabelMinuteFormatLong: PropTypes.string.isRequired,
+
+    headerLabelYearFormatShort: PropTypes.string.isRequired,
+    headerLabelYearFormatLong: PropTypes.string.isRequired,
+    headerLabelMonthFormatShort: PropTypes.string.isRequired,
+    headerLabelMonthFormatMedium: PropTypes.string.isRequired,
+    headerLabelMonthFormatMediumLong: PropTypes.string.isRequired,
+    headerLabelMonthFormatLong: PropTypes.string.isRequired,
+    headerLabelDayFormatShort: PropTypes.string.isRequired,
+    headerLabelDayFormatLong: PropTypes.string.isRequired,
+    headerLabelHourFormatShort: PropTypes.string.isRequired,
+    headerLabelHourFormatMedium: PropTypes.string.isRequired,
+    headerLabelHourFormatMediumLong: PropTypes.string.isRequired,
+    headerLabelHourFormatLong: PropTypes.string.isRequired,
+  }
+
+  static defaultProps = {
+    fixedHeader: 'none',
+    zIndex: 11,
+    rctLabelClass: '',
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -53,13 +108,57 @@ export default class Header extends Component {
 
   headerLabel (time, unit, width) {
     if (unit === 'year') {
-      return time.format(width < 46 ? 'YY' : 'YYYY')
+      const {
+        headerLabelYearFormatShort,
+        headerLabelYearFormatLong,
+      } = this.props;
+      return time.format(
+        width < 46
+          ? headerLabelYearFormatShort
+          : headerLabelYearFormatLong
+      )
     } else if (unit === 'month') {
-      return time.format(width < 65 ? 'MM/YY' : width < 75 ? 'MM/YYYY' : width < 120 ? 'MMM YYYY' : 'MMMM YYYY')
+      const {
+        headerLabelMonthFormatShort,
+        headerLabelMonthFormatMedium,
+        headerLabelMonthFormatMediumLong,
+        headerLabelMonthFormatLong,
+      } = this.props;
+      return time.format(
+        width < 65
+          ? headerLabelMonthFormatShort
+          : width < 75
+            ? headerLabelMonthFormatMedium
+            : width < 120
+              ? headerLabelMonthFormatMediumLong
+              : headerLabelMonthFormatLong
+      );
     } else if (unit === 'day') {
-      return time.format(width < 150 ? 'L' : 'dddd, LL')
+      const {
+        headerLabelDayFormatShort,
+        headerLabelDayFormatLong,
+      } = this.props;
+      return time.format(
+        width < 150
+          ? headerLabelDayFormatShort
+          : headerLabelDayFormatLong
+      );
     } else if (unit === 'hour') {
-      return time.format(width < 50 ? 'HH' : width < 130 ? 'HH:00' : width < 150 ? 'L, HH:00' : 'dddd, LL, HH:00')
+      const {
+        headerLabelHourFormatShort,
+        headerLabelHourFormatMedium,
+        headerLabelHourFormatMediumLong,
+        headerLabelHourFormatLong,
+      } = this.props;
+      return time.format(
+        width < 50
+          ? headerLabelHourFormatShort
+          : width < 130
+            ? headerLabelHourFormatMedium
+            : width < 150
+              ? headerLabelHourFormatMediumLong
+              : headerLabelHourFormatLong
+      )
     } else {
       return time.format('LLL')
     }
@@ -67,15 +166,64 @@ export default class Header extends Component {
 
   subHeaderLabel (time, unit, width) {
     if (unit === 'year') {
-      return time.format(width < 46 ? 'YY' : 'YYYY')
+      const {
+        subHeaderLabelYearFormatShort,
+        subHeaderLabelYearFormatLong,
+      } = this.props;
+      return time.format(
+        width < 46
+          ? subHeaderLabelYearFormatShort
+          : subHeaderLabelYearFormatLong
+      )
     } else if (unit === 'month') {
-      return time.format(width < 37 ? 'MM' : width < 85 ? 'MMM' : 'MMMM')
+      const {
+        subHeaderLabelMonthFormatShort,
+        subHeaderLabelMonthFormatMedium,
+        subHeaderLabelMonthFormatLong,
+      } = this.props;
+      return time.format(
+        width < 37
+          ? subHeaderLabelMonthFormatShort
+          : width < 85
+            ? subHeaderLabelMonthFormatMedium
+            : subHeaderLabelMonthFormatLong
+      )
     } else if (unit === 'day') {
-      return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do')
+      const {
+        subHeaderLabelDayFormatShort,
+        subHeaderLabelDayFormatMedium,
+        subHeaderLabelDayFormatMediumLong,
+        subHeaderLabelDayFormatLong,
+      } = this.props;
+      return time.format(
+        width < 47
+          ? subHeaderLabelDayFormatShort
+          : width < 80
+            ? subHeaderLabelDayFormatMedium
+            : width < 120
+              ? subHeaderLabelDayFormatMediumLong
+              : subHeaderLabelDayFormatLong
+      )
     } else if (unit === 'hour') {
-      return time.format(width < 50 ? 'HH' : 'HH:00')
+      const {
+        subHeaderLabelHourFormatShort,
+        subHeaderLabelHourFormatLong,
+      } = this.props;
+      return time.format(
+        width < 50
+          ? subHeaderLabelHourFormatShort
+          : subHeaderLabelHourFormatLong
+      )
     } else if (unit === 'minute') {
-      return time.format(width < 60 ? 'mm' : 'HH:mm')
+      const {
+        subHeaderLabelMinuteFormatShort,
+        subHeaderLabelMinuteFormatLong,
+      } = this.props;
+      return time.format(
+        width < 60
+          ? subHeaderLabelMinuteFormatShort
+          : subHeaderLabelMinuteFormatLong
+      )
     } else {
       return time.get(unit)
     }
@@ -172,11 +320,12 @@ export default class Header extends Component {
       const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
       const borderWidth = firstOfType ? 2 : 1
       const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
+      const rctLabelClasses = `${this.props.rctLabelClass} rct-label ${twoHeaders ? '' : 'rct-label-only'} ${firstOfType ? 'rct-first-of-type' : ''} `;
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
              href='#'
-             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${firstOfType ? 'rct-first-of-type' : ''} `}
+             className={rctLabelClasses}
              data-time={time}
              data-unit={minUnit}
              style={{
@@ -222,26 +371,3 @@ export default class Header extends Component {
   }
 }
 
-Header.propTypes = {
-  // groups: React.PropTypes.array.isRequired,
-  // width: React.PropTypes.number.isRequired,
-  // lineHeight: React.PropTypes.number.isRequired,
-  // headerBackgroundColor: React.PropTypes.string.isRequired,
-  showPeriod: React.PropTypes.func.isRequired,
-  canvasTimeStart: React.PropTypes.number.isRequired,
-  canvasTimeEnd: React.PropTypes.number.isRequired,
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  visibleTimeStart: React.PropTypes.number.isRequired,
-  visibleTimeEnd: React.PropTypes.number.isRequired,
-  // visibleTimeEnd: React.PropTypes.number.isRequired,
-  minUnit: React.PropTypes.string.isRequired,
-  timeSteps: React.PropTypes.object.isRequired,
-  width: React.PropTypes.number.isRequired,
-  fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  zIndex: React.PropTypes.number
-}
-Header.defaultProps = {
-  fixedHeader: 'none',
-  zIndex: 11
-}
