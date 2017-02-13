@@ -97,6 +97,9 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 
 The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (java Date or moment()) will also work, but will be a lot slower.
 
+### selected
+An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click. 
+
 ### keys
 An array specifying keys in the `items` and `groups` objects. Defaults to
 ```
