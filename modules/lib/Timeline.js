@@ -603,6 +603,7 @@ ReactCalendarTimeline.propTypes = {
   onItemResize: _react.PropTypes.func,
   onItemClick: _react.PropTypes.func,
   onItemSelect: _react.PropTypes.func,
+  onItemDeselect: _react.PropTypes.func,
   onCanvasClick: _react.PropTypes.func,
   onItemDoubleClick: _react.PropTypes.func,
   onItemContextMenu: _react.PropTypes.func,
@@ -659,6 +660,7 @@ ReactCalendarTimeline.defaultProps = {
   onItemResize: null,
   onItemClick: null,
   onItemSelect: null,
+  onItemDeselect: null,
   onCanvasClick: null,
   onItemDoubleClick: null,
   onItemContextMenu: null,
@@ -920,6 +922,8 @@ var _initialiseProps = function _initialiseProps() {
       _this3.setState({ selectedItem: item });
       if (item && _this3.props.onItemSelect) {
         _this3.props.onItemSelect(item, e);
+      } else if (item === null && _this3.props.onItemDeselect) {
+        _this3.props.onItemDeselect(e);
       }
     }
   };

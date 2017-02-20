@@ -68,6 +68,7 @@ export default class ReactCalendarTimeline extends Component {
     onItemResize: PropTypes.func,
     onItemClick: PropTypes.func,
     onItemSelect: PropTypes.func,
+    onItemDeselect: PropTypes.func,
     onCanvasClick: PropTypes.func,
     onItemDoubleClick: PropTypes.func,
     onItemContextMenu: PropTypes.func,
@@ -125,6 +126,7 @@ export default class ReactCalendarTimeline extends Component {
     onItemResize: null,
     onItemClick: null,
     onItemSelect: null,
+    onItemDeselect: null,
     onCanvasClick: null,
     onItemDoubleClick: null,
     onItemContextMenu: null,
@@ -521,6 +523,8 @@ export default class ReactCalendarTimeline extends Component {
       this.setState({selectedItem: item})
       if (item && this.props.onItemSelect) {
         this.props.onItemSelect(item, e)
+      } else if (item === null && this.props.onItemDeselect) {
+        this.props.onItemDeselect(e)
       }
     }
   }
