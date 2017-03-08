@@ -210,11 +210,11 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentDidMount () {
-    this.resize()
+    this.resize(this.props)
 
     this.resizeEventListener = {
       handleEvent: (event) => {
-        this.resize()
+        this.resize(this.props)
       }
     }
 
@@ -310,14 +310,13 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  resize () {
-    // FIXME currently when the component creates a scroll the scrollbar is not used in the initial width calculation, resizing fixes this
+  resize (props) {
     const {width: containerWidth, top: containerTop} = this.refs.container.getBoundingClientRect()
-    let width = containerWidth - this.props.sidebarWidth
+    let width = containerWidth - props.sidebarWidth
 
     const {
       dimensionItems, height, groupHeights, groupTops
-    } = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width)
+    } = this.stackItems(props.items, props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width)
 
     this.setState({
       width: width,
@@ -360,16 +359,6 @@ export default class ReactCalendarTimeline extends Component {
   componentWillReceiveProps (nextProps) {
     const { visibleTimeStart, visibleTimeEnd, items, groups, sidebarWidth } = nextProps
 
-    if(sidebarWidth) {
-      const {width: containerWidth, top: containerTop} = this.refs.container.getBoundingClientRect()
-      let width = containerWidth - sidebarWidth
-      this.setState({
-        width: width,
-        topOffset: containerTop + window.pageYOffset,
-      })
-      this.refs.scrollComponent.scrollLeft = width
-    }
-
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups)
     }
@@ -377,6 +366,10 @@ export default class ReactCalendarTimeline extends Component {
     if (items !== this.props.items || groups !== this.props.groups) {
       this.updateDimensions(items, groups)
     }
+    
+    if (sidebarWidth && items && groups) {
+      this.resize(nextProps)
+    } 
   }
 
   updateDimensions (items, groups) {
