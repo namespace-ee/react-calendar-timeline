@@ -358,7 +358,17 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
+    const { visibleTimeStart, visibleTimeEnd, items, groups, sidebarWidth } = nextProps
+
+    if(sidebarWidth) {
+      const {width: containerWidth, top: containerTop} = this.refs.container.getBoundingClientRect()
+      let width = containerWidth - sidebarWidth
+      this.setState({
+        width: width,
+        topOffset: containerTop + window.pageYOffset,
+      })
+      this.refs.scrollComponent.scrollLeft = width
+    }
 
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups)
