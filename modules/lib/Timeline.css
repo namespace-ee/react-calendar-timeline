@@ -161,6 +161,10 @@
   position: absolute;
   width: 2px;
   background: red; }
+.react-calendar-timeline .rct-cursor-line {
+  position: absolute;
+  width: 2px;
+  background: #2196F3; }
 .react-calendar-timeline .rct-infolabel {
   position: fixed;
   left: 100px;

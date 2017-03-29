@@ -46,6 +46,10 @@ var _TodayLine = require('./lines/TodayLine');
 
 var _TodayLine2 = _interopRequireDefault(_TodayLine);
 
+var _CursorLine = require('./lines/CursorLine');
+
+var _CursorLine2 = _interopRequireDefault(_CursorLine);
+
 var _utils = require('./utils.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -300,6 +304,20 @@ var ReactCalendarTimeline = function (_Component) {
       });
     }
   }, {
+    key: 'cursorLine',
+    value: function cursorLine(cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
+      return _react2.default.createElement(_CursorLine2.default, {
+        cursorTime: cursorTime,
+        canvasTimeStart: canvasTimeStart,
+        canvasTimeEnd: canvasTimeEnd,
+        canvasWidth: canvasWidth,
+        lineHeight: this.props.lineHeight,
+        lineCount: (0, _utils._length)(this.props.groups),
+        height: height,
+        headerHeight: headerHeight
+      });
+    }
+  }, {
     key: 'verticalLines',
     value: function verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight) {
       return _react2.default.createElement(_VerticalLines2.default, { canvasTimeStart: canvasTimeStart,
@@ -483,7 +501,8 @@ var ReactCalendarTimeline = function (_Component) {
           headerLabelGroupHeight = _props4.headerLabelGroupHeight,
           headerLabelHeight = _props4.headerLabelHeight,
           sidebarWidth = _props4.sidebarWidth,
-          timeSteps = _props4.timeSteps;
+          timeSteps = _props4.timeSteps,
+          showCursorLine = _props4.showCursorLine;
       var _state4 = this.state,
           draggingItem = _state4.draggingItem,
           resizingItem = _state4.resizingItem,
@@ -491,7 +510,9 @@ var ReactCalendarTimeline = function (_Component) {
           width = _state4.width,
           visibleTimeStart = _state4.visibleTimeStart,
           visibleTimeEnd = _state4.visibleTimeEnd,
-          canvasTimeStart = _state4.canvasTimeStart;
+          canvasTimeStart = _state4.canvasTimeStart,
+          mouseOverCanvas = _state4.mouseOverCanvas,
+          cursorTime = _state4.cursorTime;
       var _state5 = this.state,
           dimensionItems = _state5.dimensionItems,
           height = _state5.height,
@@ -550,12 +571,16 @@ var ReactCalendarTimeline = function (_Component) {
               { ref: 'canvasComponent',
                 className: 'rct-canvas',
                 style: canvasComponentStyle,
-                onDoubleClick: this.handleDoubleClick
+                onDoubleClick: this.handleDoubleClick,
+                onMouseEnter: this.handleCanvasMouseEnter,
+                onMouseLeave: this.handleCanvasMouseLeave,
+                onMouseMove: this.handleCanvasMouseMove
               },
               this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops),
               this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight),
               this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight),
               this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight),
+              mouseOverCanvas && showCursorLine ? this.cursorLine(cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) : null,
               this.infoLabel(),
               this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight)
             )
@@ -596,6 +621,7 @@ ReactCalendarTimeline.propTypes = {
   stackItems: _react.PropTypes.bool,
 
   traditionalZoom: _react.PropTypes.bool,
+  showCursorLine: _react.PropTypes.bool,
 
   itemTouchSendsClick: _react.PropTypes.bool,
 
@@ -608,6 +634,9 @@ ReactCalendarTimeline.propTypes = {
   onItemDoubleClick: _react.PropTypes.func,
   onItemContextMenu: _react.PropTypes.func,
   onCanvasDoubleClick: _react.PropTypes.func,
+  onCanvasMouseEnter: _react.PropTypes.func,
+  onCanvasMouseLeave: _react.PropTypes.func,
+  onCanvasMouseMove: _react.PropTypes.func,
 
   moveResizeValidator: _react.PropTypes.func,
 
@@ -655,6 +684,7 @@ ReactCalendarTimeline.defaultProps = {
   stackItems: false,
 
   traditionalZoom: false,
+  showCursorLine: false,
 
   onItemMove: null,
   onItemResize: null,
@@ -664,6 +694,9 @@ ReactCalendarTimeline.defaultProps = {
   onCanvasClick: null,
   onItemDoubleClick: null,
   onItemContextMenu: null,
+  onCanvasMouseEnter: null,
+  onCanvasMouseLeave: null,
+  onCanvasMouseMove: null,
 
   moveResizeValidator: null,
 
@@ -1014,14 +1047,69 @@ var _initialiseProps = function _initialiseProps() {
     _this3.setState({ isDragging: false, dragStartPosition: null, dragLastPosition: null });
   };
 
-  this.handleDoubleClick = function (e) {
+  this.handleCanvasMouseEnter = function (e) {
+    var showCursorLine = _this3.props.showCursorLine;
+
+    if (showCursorLine) {
+      _this3.setState({ mouseOverCanvas: true });
+    }
+
+    if (_this3.props.onCanvasMouseEnter) {
+      _this3.props.onCanvasMouseEnter(e);
+    }
+  };
+
+  this.handleCanvasMouseLeave = function (e) {
+    var showCursorLine = _this3.props.showCursorLine;
+
+    if (showCursorLine) {
+      _this3.setState({ mouseOverCanvas: false });
+    }
+
+    if (_this3.props.onCanvasMouseLeave) {
+      _this3.props.onCanvasMouseLeave(e);
+    }
+  };
+
+  this.handleCanvasMouseMove = function (e) {
+    var showCursorLine = _this3.props.showCursorLine;
     var _state6 = _this3.state,
         canvasTimeStart = _state6.canvasTimeStart,
         width = _state6.width,
         visibleTimeStart = _state6.visibleTimeStart,
         visibleTimeEnd = _state6.visibleTimeEnd,
-        groupTops = _state6.groupTops,
-        topOffset = _state6.topOffset;
+        cursorTime = _state6.cursorTime;
+
+    var zoom = visibleTimeEnd - visibleTimeStart;
+    var canvasTimeEnd = canvasTimeStart + zoom * 3;
+    var canvasWidth = width * 3;
+    var pageX = e.pageX;
+
+    var ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth;
+    var boundingRect = _this3.refs.scrollComponent.getBoundingClientRect();
+    var timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left);
+
+    if (_this3.props.dragSnap) {
+      timePosition = Math.round(timePosition / _this3.props.dragSnap) * _this3.props.dragSnap;
+    }
+
+    if (_this3.props.onCanvasMouseMove) {
+      _this3.props.onCanvasMouseMove(e);
+    }
+
+    if (cursorTime !== timePosition && showCursorLine) {
+      _this3.setState({ cursorTime: timePosition });
+    }
+  };
+
+  this.handleDoubleClick = function (e) {
+    var _state7 = _this3.state,
+        canvasTimeStart = _state7.canvasTimeStart,
+        width = _state7.width,
+        visibleTimeStart = _state7.visibleTimeStart,
+        visibleTimeEnd = _state7.visibleTimeEnd,
+        groupTops = _state7.groupTops,
+        topOffset = _state7.topOffset;
 
     var zoom = visibleTimeEnd - visibleTimeStart;
     var canvasTimeEnd = canvasTimeStart + zoom * 3;
