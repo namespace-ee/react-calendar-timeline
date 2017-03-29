@@ -574,7 +574,8 @@ var ReactCalendarTimeline = function (_Component) {
                 onDoubleClick: this.handleDoubleClick,
                 onMouseEnter: this.handleCanvasMouseEnter,
                 onMouseLeave: this.handleCanvasMouseLeave,
-                onMouseMove: this.handleCanvasMouseMove
+                onMouseMove: this.handleCanvasMouseMove,
+                onContextMenu: this.handleCanvasContextMenu
               },
               this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops),
               this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight),
@@ -634,6 +635,7 @@ ReactCalendarTimeline.propTypes = {
   onItemDoubleClick: _react.PropTypes.func,
   onItemContextMenu: _react.PropTypes.func,
   onCanvasDoubleClick: _react.PropTypes.func,
+  onCanvasContextMenu: _react.PropTypes.func,
   onCanvasMouseEnter: _react.PropTypes.func,
   onCanvasMouseLeave: _react.PropTypes.func,
   onCanvasMouseMove: _react.PropTypes.func,
@@ -1024,7 +1026,7 @@ var _initialiseProps = function _initialiseProps() {
 
     var headerHeight = headerLabelGroupHeight + headerLabelHeight;
 
-    if (pageY - topOffset > headerHeight) {
+    if (pageY - topOffset > headerHeight && e.button === 0) {
       _this3.setState({ isDragging: true, dragStartPosition: e.pageX, dragLastPosition: e.pageX });
     }
   };
@@ -1098,7 +1100,7 @@ var _initialiseProps = function _initialiseProps() {
     }
 
     if (cursorTime !== timePosition && showCursorLine) {
-      _this3.setState({ cursorTime: timePosition });
+      _this3.setState({ cursorTime: timePosition, mouseOverCanvas: true });
     }
   };
 
@@ -1157,6 +1159,64 @@ var _initialiseProps = function _initialiseProps() {
 
     if (_this3.props.onCanvasDoubleClick) {
       _this3.props.onCanvasDoubleClick(_this3.props.groups[groupIndex], timePosition, e);
+    }
+  };
+
+  this.handleCanvasContextMenu = function (e) {
+    var _state8 = _this3.state,
+        canvasTimeStart = _state8.canvasTimeStart,
+        width = _state8.width,
+        visibleTimeStart = _state8.visibleTimeStart,
+        visibleTimeEnd = _state8.visibleTimeEnd,
+        groupTops = _state8.groupTops,
+        topOffset = _state8.topOffset;
+
+    var zoom = visibleTimeEnd - visibleTimeStart;
+    var canvasTimeEnd = canvasTimeStart + zoom * 3;
+    var canvasWidth = width * 3;
+    var pageX = e.pageX,
+        pageY = e.pageY;
+
+    var ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth;
+    var boundingRect = _this3.refs.scrollComponent.getBoundingClientRect();
+    var timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left);
+    if (_this3.props.dragSnap) {
+      timePosition = Math.round(timePosition / _this3.props.dragSnap) * _this3.props.dragSnap;
+    }
+
+    var groupIndex = 0;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = Object.keys(groupTops)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var key = _step2.value;
+
+        var item = groupTops[key];
+        if (pageY - topOffset > item) {
+          groupIndex = parseInt(key, 10);
+        } else {
+          break;
+        }
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+
+    if (_this3.props.onCanvasContextMenu) {
+      _this3.props.onCanvasContextMenu(_this3.props.groups[groupIndex], timePosition, e);
     }
   };
 };

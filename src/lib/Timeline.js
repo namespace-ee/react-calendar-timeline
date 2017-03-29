@@ -75,6 +75,7 @@ export default class ReactCalendarTimeline extends Component {
     onItemDoubleClick: PropTypes.func,
     onItemContextMenu: PropTypes.func,
     onCanvasDoubleClick: PropTypes.func,
+    onCanvasContextMenu: PropTypes.func,
     onCanvasMouseEnter: PropTypes.func,
     onCanvasMouseLeave: PropTypes.func,
     onCanvasMouseMove: PropTypes.func,
@@ -609,7 +610,7 @@ export default class ReactCalendarTimeline extends Component {
     const { headerLabelGroupHeight, headerLabelHeight } = this.props
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
-    if (pageY - topOffset > headerHeight) {
+    if (pageY - topOffset > headerHeight && e.button === 0) {
       this.setState({isDragging: true, dragStartPosition: e.pageX, dragLastPosition: e.pageX})
     }
   }
@@ -645,7 +646,7 @@ export default class ReactCalendarTimeline extends Component {
   handleCanvasMouseLeave = (e) => {
     const { showCursorLine } = this.props
     if(showCursorLine) {
-      this.setState({mouseOverCanvas: false});
+      this.setState({mouseOverCanvas: false})
     }
 
     if (this.props.onCanvasMouseLeave) {
@@ -673,7 +674,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (cursorTime !== timePosition && showCursorLine) {
-      this.setState({cursorTime: timePosition});
+      this.setState({cursorTime: timePosition, mouseOverCanvas: true})
     }
   }
 
@@ -894,6 +895,34 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
+  handleCanvasContextMenu = (e) => {
+    const { canvasTimeStart, width, visibleTimeStart, visibleTimeEnd, groupTops, topOffset } = this.state
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
+    const canvasWidth = width * 3
+    const { pageX, pageY } = e
+    const ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
+    const boundingRect = this.refs.scrollComponent.getBoundingClientRect()
+    let timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left)
+    if (this.props.dragSnap) {
+      timePosition = Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap
+    }
+
+    let groupIndex = 0
+    for (var key of Object.keys(groupTops)) {
+      var item = groupTops[key]
+      if (pageY - topOffset > item) {
+        groupIndex = parseInt(key, 10)
+      } else {
+        break
+      }
+    }
+
+    if (this.props.onCanvasContextMenu) {
+      this.props.onCanvasContextMenu(this.props.groups[groupIndex], timePosition, e)
+    }
+  }
+
   render () {
     const { items, groups, headerLabelGroupHeight, headerLabelHeight, sidebarWidth, timeSteps, showCursorLine } = this.props
     const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, mouseOverCanvas, cursorTime } = this.state
@@ -947,6 +976,7 @@ export default class ReactCalendarTimeline extends Component {
                  onMouseEnter={ this.handleCanvasMouseEnter }
                  onMouseLeave={ this.handleCanvasMouseLeave }
                  onMouseMove={ this.handleCanvasMouseMove }
+                 onContextMenu={ this.handleCanvasContextMenu }
             >
               {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops)}
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight)}
