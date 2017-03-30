@@ -68,7 +68,7 @@ export default class Sidebar extends Component {
       fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight, isRightSidebar
     } = this.props
 
-    const {groupIdKey, groupTitleKey} = this.props.keys
+    const {groupIdKey, groupTitleKey, groupRightSidebarKey} = this.props.keys
 
     const {
       scrollTop
@@ -118,7 +118,7 @@ export default class Sidebar extends Component {
 
       groupLines.push(
         <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
-          {_get(group, groupTitleKey)}
+          {_get(group, (isRightSidebar ? groupRightSidebarKey : groupTitleKey))}
         </div>
       )
       i += 1

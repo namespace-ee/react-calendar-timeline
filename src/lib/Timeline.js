@@ -15,6 +15,7 @@ import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nosta
 const defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
+  groupRightSidebarKey: 'right_sidebar',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
