@@ -748,7 +748,7 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  rightSidebar(height, groupHeights, headerHeight) {
+  rightSidebar (height, groupHeights, headerHeight) {
     return (
       <Sidebar groups={this.props.groups}
                keys={this.props.keys}
