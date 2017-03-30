@@ -178,7 +178,8 @@ var Header = function (_Component) {
           timeSteps = _props.timeSteps,
           fixedHeader = _props.fixedHeader,
           headerLabelGroupHeight = _props.headerLabelGroupHeight,
-          headerLabelHeight = _props.headerLabelHeight;
+          headerLabelHeight = _props.headerLabelHeight,
+          hasRightSidebar = _props.hasRightSidebar;
       var scrollTop = this.state.scrollTop;
 
       var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
@@ -186,35 +187,33 @@ var Header = function (_Component) {
 
       // add the top header
       if (twoHeaders) {
-        (function () {
-          var nextUnit = (0, _utils.getNextUnit)(minUnit);
+        var nextUnit = (0, _utils.getNextUnit)(minUnit);
 
-          (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, function (time, nextTime) {
-            var startTime = Math.max(visibleTimeStart, time.valueOf());
-            var endTime = Math.min(visibleTimeEnd, nextTime.valueOf());
-            var left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2);
-            var right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2);
-            var labelWidth = right - left;
-            var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0;
+        (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, function (time, nextTime) {
+          var startTime = Math.max(visibleTimeStart, time.valueOf());
+          var endTime = Math.min(visibleTimeEnd, nextTime.valueOf());
+          var left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2);
+          var right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2);
+          var labelWidth = right - left;
+          var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0;
 
-            timeLabels.push(_react2.default.createElement(
-              'div',
-              { key: 'top-label-' + time.valueOf(),
-                href: '#',
-                className: 'rct-label-group',
-                'data-time': time,
-                'data-unit': nextUnit,
-                style: {
-                  left: left + leftCorrect + 'px',
-                  width: labelWidth + 'px',
-                  height: headerLabelGroupHeight + 'px',
-                  lineHeight: headerLabelGroupHeight + 'px',
-                  cursor: 'pointer'
-                } },
-              _this3.headerLabel(time, nextUnit, labelWidth)
-            ));
-          });
-        })();
+          timeLabels.push(_react2.default.createElement(
+            'div',
+            { key: 'top-label-' + time.valueOf(),
+              href: '#',
+              className: 'rct-label-group ' + (hasRightSidebar ? 'rct-has-right-sidebar' : ''),
+              'data-time': time,
+              'data-unit': nextUnit,
+              style: {
+                left: left + leftCorrect + 'px',
+                width: labelWidth + 'px',
+                height: headerLabelGroupHeight + 'px',
+                lineHeight: headerLabelGroupHeight + 'px',
+                cursor: 'pointer'
+              } },
+            _this3.headerLabel(time, nextUnit, labelWidth)
+          ));
+        });
       }
 
       (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, function (time, nextTime) {
@@ -286,6 +285,7 @@ Header.propTypes = {
   // width: React.PropTypes.number.isRequired,
   // lineHeight: React.PropTypes.number.isRequired,
   // headerBackgroundColor: React.PropTypes.string.isRequired,
+  hasRightSidebar: _react2.default.PropTypes.bool.isRequired,
   showPeriod: _react2.default.PropTypes.func.isRequired,
   canvasTimeStart: _react2.default.PropTypes.number.isRequired,
   canvasTimeEnd: _react2.default.PropTypes.number.isRequired,

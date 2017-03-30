@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## [0.12.0]
+### Added
+- An option to add another sidebar to the right of the Timeline. @goooseman
+
 ## [0.11.1]
 ### Fixed
 - Without canResize prop in items it gave a Uncaught TypeError. @tgosp
