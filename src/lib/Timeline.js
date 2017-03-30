@@ -711,6 +711,7 @@ export default class ReactCalendarTimeline extends Component {
   header (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
     return (
       <Header canvasTimeStart={canvasTimeStart}
+              hasRightSidebar={this.props.rightSidebarWidth > 0}
               canvasTimeEnd={canvasTimeEnd}
               canvasWidth={canvasWidth}
               lineHeight={this.props.lineHeight}
@@ -750,6 +751,7 @@ export default class ReactCalendarTimeline extends Component {
     return (
       <Sidebar groups={this.props.groups}
                keys={this.props.keys}
+               isRightSidebar
 
                width={this.props.rightSidebarWidth}
                lineHeight={this.props.lineHeight}

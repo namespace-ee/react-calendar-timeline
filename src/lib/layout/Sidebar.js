@@ -65,7 +65,7 @@ export default class Sidebar extends Component {
 
   render () {
     const {
-      fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight
+      fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight, isRightSidebar
     } = this.props
 
     const {groupIdKey, groupTitleKey} = this.props.keys
@@ -125,7 +125,7 @@ export default class Sidebar extends Component {
     })
 
     return (
-      <div ref='sidebar' className='rct-sidebar' style={sidebarStyle}>
+      <div ref='sidebar' className={'rct-sidebar' + (isRightSidebar ? ' rct-sidebar-right' : '')} style={sidebarStyle}>
         {header}
         <div style={groupsStyle}>
           {groupLines}
@@ -142,10 +142,12 @@ Sidebar.propTypes = {
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   keys: React.PropTypes.object.isRequired,
-  children: React.PropTypes.node
+  children: React.PropTypes.node,
+  isRightSidebar: React.PropTypes.bool
 }
 Sidebar.defaultProps = {
   fixedHeader: 'none',
   zIndex: 12,
-  children: null
+  children: null,
+  isRightSidebar: false
 }
