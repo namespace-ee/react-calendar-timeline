@@ -306,6 +306,26 @@ You will then need to override the default CSS rule:
 }
 ```
 
+### How can I add one more sidebar on the right?
+
+The library supports right sidebar.
+![right sidebar demo](doc/right-sidebar.png)
+
+To use it, you need to add two props to the `<Timeline />` component:
+```
+      rightSidebarWidth={150}
+      rightSidebarContent={<p>Second filter</p>}
+```
+
+And add `right_sidebar` prop to the groups objects:
+```
+{
+  id: 1,
+  title: 'group 1',
+  right_sidebar: 'additional info about group 1'
+}
+```
+
 
 ## Behind the scenes
 The timeline is built with speed, usability and extensibility in mind.
