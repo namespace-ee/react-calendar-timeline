@@ -164,6 +164,10 @@ $weekend: rgba(250, 246, 225, 0.5);
       background: $header-background-color;
       border-bottom: $border-width solid $border-color;
       cursor: pointer;
+      &.rct-has-right-sidebar {
+        border-right: ($thick-border-width / 2) solid $border-color;
+        border-left: ($thick-border-width / 2) solid $border-color;
+      }
     }
 
     .rct-label {
@@ -195,6 +199,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: relative;
     box-sizing: border-box;
     border-right: $border-width solid $border-color;
+
+    &.rct-sidebar-right {
+      border-right: 0;
+      border-left: $border-width solid $border-color;
+    }
 
     .rct-sidebar-header {
       margin: 0;

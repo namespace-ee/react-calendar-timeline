@@ -98,10 +98,12 @@ var Sidebar = function (_Component) {
           zIndex = _props.zIndex,
           groupHeights = _props.groupHeights,
           height = _props.height,
-          headerHeight = _props.headerHeight;
+          headerHeight = _props.headerHeight,
+          isRightSidebar = _props.isRightSidebar;
       var _props$keys = this.props.keys,
           groupIdKey = _props$keys.groupIdKey,
-          groupTitleKey = _props$keys.groupTitleKey;
+          groupTitleKey = _props$keys.groupTitleKey,
+          groupRightSidebarKey = _props$keys.groupRightSidebarKey;
       var scrollTop = this.state.scrollTop;
 
 
@@ -152,14 +154,14 @@ var Sidebar = function (_Component) {
         groupLines.push(_react2.default.createElement(
           'div',
           { key: (0, _utils._get)(group, groupIdKey), className: 'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd'), style: elementStyle },
-          (0, _utils._get)(group, groupTitleKey)
+          (0, _utils._get)(group, isRightSidebar ? groupRightSidebarKey : groupTitleKey)
         ));
         i += 1;
       });
 
       return _react2.default.createElement(
         'div',
-        { ref: 'sidebar', className: 'rct-sidebar', style: sidebarStyle },
+        { ref: 'sidebar', className: 'rct-sidebar' + (isRightSidebar ? ' rct-sidebar-right' : ''), style: sidebarStyle },
         header,
         _react2.default.createElement(
           'div',
@@ -183,10 +185,12 @@ Sidebar.propTypes = {
   zIndex: _react2.default.PropTypes.number,
   fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   keys: _react2.default.PropTypes.object.isRequired,
-  children: _react2.default.PropTypes.node
+  children: _react2.default.PropTypes.node,
+  isRightSidebar: _react2.default.PropTypes.bool
 };
 Sidebar.defaultProps = {
   fixedHeader: 'none',
   zIndex: 12,
-  children: null
+  children: null,
+  isRightSidebar: false
 };

@@ -61,6 +61,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
+  groupRightSidebarKey: 'right_sidebar',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
@@ -182,7 +183,7 @@ var ReactCalendarTimeline = function (_Component) {
           containerWidth = _refs$container$getBo.width,
           containerTop = _refs$container$getBo.top;
 
-      var width = containerWidth - this.props.sidebarWidth;
+      var width = containerWidth - this.props.sidebarWidth - this.props.rightSidebarWidth;
 
       var _stackItems = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width),
           dimensionItems = _stackItems.dimensionItems,
@@ -375,6 +376,7 @@ var ReactCalendarTimeline = function (_Component) {
     key: 'header',
     value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
       return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
+        hasRightSidebar: this.props.rightSidebarWidth > 0,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
         lineHeight: this.props.lineHeight,
@@ -407,6 +409,26 @@ var ReactCalendarTimeline = function (_Component) {
           fixedHeader: this.props.fixedHeader,
           zIndex: this.props.zIndexStart + 2 },
         this.props.children
+      );
+    }
+  }, {
+    key: 'rightSidebar',
+    value: function rightSidebar(height, groupHeights, headerHeight) {
+      return _react2.default.createElement(
+        _Sidebar2.default,
+        { groups: this.props.groups,
+          keys: this.props.keys,
+          isRightSidebar: true,
+
+          width: this.props.rightSidebarWidth,
+          lineHeight: this.props.lineHeight,
+          groupHeights: groupHeights,
+          height: height,
+          headerHeight: headerHeight,
+
+          fixedHeader: this.props.fixedHeader,
+          zIndex: this.props.zIndexStart + 2 },
+        this.props.rightSidebarContent
       );
     }
   }, {
@@ -483,6 +505,7 @@ var ReactCalendarTimeline = function (_Component) {
           headerLabelGroupHeight = _props4.headerLabelGroupHeight,
           headerLabelHeight = _props4.headerLabelHeight,
           sidebarWidth = _props4.sidebarWidth,
+          rightSidebarWidth = _props4.rightSidebarWidth,
           timeSteps = _props4.timeSteps;
       var _state4 = this.state,
           draggingItem = _state4.draggingItem,
@@ -559,7 +582,8 @@ var ReactCalendarTimeline = function (_Component) {
               this.infoLabel(),
               this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight)
             )
-          )
+          ),
+          rightSidebarWidth > 0 ? this.rightSidebar(height, groupHeights, headerHeight) : null
         )
       );
     }
@@ -572,6 +596,8 @@ ReactCalendarTimeline.propTypes = {
   groups: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
   items: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
   sidebarWidth: _react.PropTypes.number,
+  rightSidebarWidth: _react.PropTypes.number,
+  rightSidebarContent: _react.PropTypes.node,
   dragSnap: _react.PropTypes.number,
   minResizeWidth: _react.PropTypes.number,
   fixedHeader: _react.PropTypes.oneOf(['fixed', 'absolute', 'none']),
@@ -630,6 +656,7 @@ ReactCalendarTimeline.propTypes = {
 };
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
+  rightSidebarWidth: 0,
   dragSnap: 1000 * 60 * 15, // 15min
   minResizeWidth: 20,
   fixedHeader: 'none', // fixed or absolute or none
