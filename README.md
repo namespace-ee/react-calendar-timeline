@@ -280,7 +280,7 @@ Called when the calendar is first initialised
 ### onBoundsChange(canvasTimeStart, canvasTimeEnd)
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below)
 
-### contentComponent
+### itemRenderer
 React component that will be used to render the item content.  Will be passed the item as a prop.  Using complex
 components will result in severe performance penalties.
 

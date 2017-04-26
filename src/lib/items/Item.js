@@ -33,7 +33,7 @@ export default class Item extends Component {
     // onResizing: React.PropTypes.func,
     // onResized: React.PropTypes.func,
     // onContextMenu: React.PropTypes.func,
-    // contentComponent: React.PropTypes.func
+    // itemRenderer: React.PropTypes.func
   }
   static defaultProps = {
     selected: false
@@ -423,9 +423,9 @@ export default class Item extends Component {
   }
 
   renderContent() {
-    const ContentComponent = this.props.contentComponent
-    if(ContentComponent) {
-      return <ContentComponent item={this.props.item} />
+    const Comp = this.props.itemRenderer
+    if(Comp) {
+      return <Comp item={this.props.item} />
     } else {
       return this.itemTitle
     }

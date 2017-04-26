@@ -45,7 +45,7 @@ export default class Items extends Component {
     onItemDoubleClick: PropTypes.func,
     onItemContextMenu: PropTypes.func,
 
-    contentComponent: PropTypes.func
+    itemRenderer: PropTypes.func
   }
 
   static defaultProps = {
@@ -131,7 +131,7 @@ export default class Items extends Component {
                                         onItemDoubleClick={this.props.onItemDoubleClick}
                                         onContextMenu={this.props.onItemContextMenu}
                                         onSelect={this.props.itemSelect}
-                                        contentComponent={this.props.contentComponent} />)}
+                                        itemRenderer={this.props.itemRenderer} />)}
       </div>
     )
   }

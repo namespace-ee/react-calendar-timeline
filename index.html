@@ -136,7 +136,7 @@
         }
       },
 
-      contentComponent: function(props) {
+      itemRenderer: function(props) {
         return React.createElement('div', null,
             React.createElement('h3', null, props.item.title),
             React.createElement('p', null, props.item.itemProps['data-tip']))
