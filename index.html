@@ -134,6 +134,12 @@
         } else {
           updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
         }
+      },
+
+      contentComponent: function(props) {
+        return React.createElement('div', null,
+            React.createElement('h3', null, props.item.title),
+            React.createElement('p', null, props.item.itemProps['data-tip']))
       }
     }
 

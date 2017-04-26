@@ -689,7 +689,8 @@ export default class ReactCalendarTimeline extends Component {
              onItemDoubleClick={this.props.onItemDoubleClick}
              onItemContextMenu={this.props.onItemContextMenu}
              itemResizing={this.resizingItem}
-             itemResized={this.resizedItem} />
+             itemResized={this.resizedItem}
+             contentComponent={this.props.contentComponent} />
     )
   }
 

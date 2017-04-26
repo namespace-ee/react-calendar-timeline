@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+### Added
+- contentComponent prop to allow specifying a custom component to render the items
+
 ## [0.11.1]
 ### Fixed
 - Without canResize prop in items it gave a Uncaught TypeError. @tgosp
