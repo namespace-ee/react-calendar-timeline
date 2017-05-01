@@ -137,9 +137,14 @@
       },
 
       itemRenderer: function(props) {
-        return React.createElement('div', null,
-            React.createElement('h3', null, props.item.title),
-            React.createElement('p', null, props.item.itemProps['data-tip']))
+          return React.createElement('div', { className: 'custom-item' },
+                  React.createElement('span', {className: 'title'}, props.item.title),
+                  React.createElement('p', {className: 'tip'}, props.item.itemProps['data-tip']))
+      },
+
+      groupRenderer: function(props) {
+        return React.createElement('div', { className: 'custom-group' },
+                props.group.title)
       }
     }
 

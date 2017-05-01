@@ -281,8 +281,13 @@ Called when the calendar is first initialised
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below)
 
 ### itemRenderer
-React component that will be used to render the item content.  Will be passed the item as a prop.  Using complex
-components will result in severe performance penalties.
+React component that will be used to render the item content.  Will be
+passed the item as a prop.  Using complex components may result in 
+performance problems.
+
+### groupRenderer
+React component that will be used to render the content of groups in the
+sidebar.  Will be passed the group as a prop.
 
 ### children
 All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.

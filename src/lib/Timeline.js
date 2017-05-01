@@ -75,6 +75,7 @@ export default class ReactCalendarTimeline extends Component {
 
     moveResizeValidator: PropTypes.func,
     itemRenderer: PropTypes.func,
+    groupRenderer: PropTypes.func,
 
     dayBackground: PropTypes.func,
 
@@ -730,6 +731,7 @@ export default class ReactCalendarTimeline extends Component {
   sidebar (height, groupHeights, headerHeight) {
     return (
       <Sidebar groups={this.props.groups}
+               groupRenderer={this.props.groupRenderer}
                keys={this.props.keys}
 
                width={this.props.sidebarWidth}

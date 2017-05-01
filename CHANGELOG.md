@@ -9,6 +9,7 @@ When you submit a PR, add your changes here!
 
 ### Added
 - itemRenderer prop to allow specifying a custom component to render the items
+- groupRenderer prop to allow specifying a custom component to render the groups
 
 ## [0.11.1]
 ### Fixed
