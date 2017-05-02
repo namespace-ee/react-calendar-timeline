@@ -249,10 +249,10 @@ function (action, item, time, resizeEdge) {
 Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
 
 ### visibleTimeStart and visibleTimeEnd
-The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.
+The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.  This parameter expects a unix timestamp in milliseconds.
 
 ### onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
-A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd to change the scroll behavior, for example to limit scrolling.
+A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd (as unix timestamps in milliseconds) to change the scroll behavior, for example to limit scrolling.
 
 Here is an example that limits the timeline to only show dates starting 6 months from now and ending in 6 months.
 
@@ -275,10 +275,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 ```
 
 ### onTimeInit(visibleTimeStart, visibleTimeEnd)
-Called when the calendar is first initialised
+Called when the calendar is first initialised.  `visibleTimeStart` and `visibleTimeEnd` are unix timestamps in milliseconds.
 
 ### onBoundsChange(canvasTimeStart, canvasTimeEnd)
-Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below)
+Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below).  `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
 
 ### children
 All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
