@@ -194,6 +194,7 @@ export default class Item extends Component {
       .draggable({
         enabled: this.props.selected
       })
+      .styleCursor(false)
       .on('dragstart', (e) => {
         if (this.props.selected) {
           this.setState({
