@@ -207,7 +207,7 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  groupedItems.forEach(function(group, index, array) {
+  groupedItems.forEach(function (group, index, array) {
     // calculate new, non-overlapping positions
     groupTops[index] = totalHeight
 
@@ -267,7 +267,7 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  groupedItems.forEach(function(group, index, array) {
+  groupedItems.forEach(function (group, index, array) {
     // calculate new, non-overlapping positions
     groupTops[index] = totalHeight
 
@@ -301,15 +301,15 @@ export function keyBy (value, key) {
   return obj
 }
 
-export function getGroupedItems(items, groupOrders) {
+export function getGroupedItems (items, groupOrders) {
   var arr = []
 
   // Initialize with empty arrays for each group
-  for(var i = 0; i < Object.keys(groupOrders).length; i++) {
+  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
     arr[i] = []
   }
   // Populate groups
-  for(var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     arr[items[i].dimensions.order].push(items[i])
   }
 
