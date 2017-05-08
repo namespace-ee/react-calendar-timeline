@@ -41,6 +41,7 @@
     "parser": "babel-eslint"
   },
   "dependencies": {
+    "element-resize-detector": "^1.1.12",
     "interact.js": "^1.2.6",
     "react-pure-render": "^1.0.2"
   },
