@@ -230,7 +230,7 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
           var collidingItem = null
           for (var j = 0, jj = group.length; j < jj; j++) {
             var other = group[j]
-            if (other.top !== null && other !== item && other.dimensions.stack && collision(item.dimensions, other.dimensions, item.dimensions.lineHeight)) {
+            if (other.dimensions.top !== null && other !== item && other.dimensions.stack && collision(item.dimensions, other.dimensions, item.dimensions.lineHeight)) {
               collidingItem = other
               break
             } else {
