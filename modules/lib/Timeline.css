@@ -1,8 +1,10 @@
 .react-calendar-timeline * {
   box-sizing: border-box; }
+
 .react-calendar-timeline .rct-outer {
   display: block;
   overflow: hidden; }
+
 .react-calendar-timeline .rct-scroll {
   display: inline-block;
   vertical-align: top;
@@ -10,8 +12,10 @@
   overflow-y: hidden;
   -ms-touch-action: none;
   touch-action: none; }
+
 .react-calendar-timeline .rct-canvas {
   position: relative; }
+
 .react-calendar-timeline .rct-items .rct-item {
   overflow: hidden;
   position: absolute;
@@ -85,6 +89,7 @@
       left: 0;
       padding: 0 6px;
       height: 100%; }
+
 .react-calendar-timeline .rct-header {
   margin: 0; }
   .react-calendar-timeline .rct-header .rct-label-group {
@@ -114,6 +119,7 @@
       background: #c52020; }
     .react-calendar-timeline .rct-header .rct-label.rct-first-of-type {
       border-left: 2px solid #bbb; }
+
 .react-calendar-timeline .rct-sidebar {
   overflow: hidden;
   display: inline-block;
@@ -141,14 +147,18 @@
       background: rgba(0, 0, 0, 0.05); }
     .react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-even {
       background: transparent; }
+
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
   border-bottom: 1px solid #bbb;
   box-sizing: content-box;
   position: absolute; }
+
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
   background: rgba(0, 0, 0, 0.05); }
+
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even {
   background: transparent; }
+
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
   position: absolute;
   border-left: 1px solid #bbb;
@@ -157,10 +167,12 @@
     border-left: 2px solid #bbb; }
   .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6, .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
     background: rgba(250, 246, 225, 0.5); }
+
 .react-calendar-timeline .rct-today {
   position: absolute;
   width: 2px;
   background: red; }
+
 .react-calendar-timeline .rct-infolabel {
   position: fixed;
   left: 100px;
@@ -171,5 +183,3 @@
   font-size: 20px;
   border-radius: 5px;
   z-index: 5; }
-
-/*# sourceMappingURL=Timeline.css.map */
