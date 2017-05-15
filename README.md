@@ -306,3 +306,18 @@ Speed: The calendar itself is actually a 3x wide scrolling canvas of the screen.
 This results in a visually endless scrolling canvas with optimal performance.
 
 Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
+
+
+## Contribute
+If you like to improve React Calendar Timeline fork the repo and get started by running the following:
+
+```
+$ git clone https://github.com/namespace-ee/react-calendar-timeline.git react-calendar-timeline
+$ cd react-calendar-timeline
+$ npm install
+$ npm start
+```
+
+Check http://0.0.0.0:8080/ in your browser and have fun!
+
+Please run `npm run lint` before you send a pull request. `npm run jest` runs the tests.

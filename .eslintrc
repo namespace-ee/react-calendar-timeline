@@ -13,6 +13,9 @@
     "no-labels": 0,
     "arrow-parens": 0
   },
+  "env": {
+    "jasmine": true
+  },
   "extends": "standard",
   "parser": "babel-eslint"
 }
