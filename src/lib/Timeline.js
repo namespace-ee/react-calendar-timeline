@@ -91,7 +91,38 @@ export default class ReactCalendarTimeline extends Component {
     onTimeInit: PropTypes.func,
     onBoundsChange: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+
+    subHeaderLabelFormats: PropTypes.shape({
+      subHeaderLabelYearFormatShort: PropTypes.string,
+      subHeaderLabelYearFormatLong: PropTypes.string,
+      subHeaderLabelMonthFormatShort: PropTypes.string,
+      subHeaderLabelMonthFormatMedium: PropTypes.string,
+      subHeaderLabelMonthFormatLong: PropTypes.string,
+      subHeaderLabelDayFormatShort: PropTypes.string,
+      subHeaderLabelDayFormatMedium: PropTypes.string,
+      subHeaderLabelDayFormatMediumLong: PropTypes.string,
+      subHeaderLabelDayFormatLong: PropTypes.string,
+      subHeaderLabelHourFormatShort: PropTypes.string,
+      subHeaderLabelHourFormatLong: PropTypes.string,
+      subHeaderLabelMinuteFormatShort: PropTypes.string,
+      subHeaderLabelMinuteFormatLong: PropTypes.string,
+    }),
+
+    headerLabelFormats: PropTypes.shape({
+      headerLabelYearFormatShort: PropTypes.string,
+      headerLabelYearFormatLong: PropTypes.string,
+      headerLabelMonthFormatShort: PropTypes.string,
+      headerLabelMonthFormatMedium: PropTypes.string,
+      headerLabelMonthFormatMediumLong: PropTypes.string,
+      headerLabelMonthFormatLong: PropTypes.string,
+      headerLabelDayFormatShort: PropTypes.string,
+      headerLabelDayFormatLong: PropTypes.string,
+      headerLabelHourFormatShort: PropTypes.string,
+      headerLabelHourFormatMedium: PropTypes.string,
+      headerLabelHourFormatMediumLong: PropTypes.string,
+      headerLabelHourFormatLong: PropTypes.string,
+    }),
   }
 
   static defaultProps = {
@@ -153,7 +184,38 @@ export default class ReactCalendarTimeline extends Component {
     onTimeInit: null,
     // called when the canvas area of the calendar changes
     onBoundsChange: null,
-    children: null
+    children: null,
+
+    subHeaderLabelFormats: {
+      subHeaderLabelYearFormatShort: 'YY',
+      subHeaderLabelYearFormatLong: 'YYYY',
+      subHeaderLabelMonthFormatShort: 'MM',
+      subHeaderLabelMonthFormatMedium: 'MMM',
+      subHeaderLabelMonthFormatLong: 'MMMM',
+      subHeaderLabelDayFormatShort: 'D',
+      subHeaderLabelDayFormatMedium: 'dd D',
+      subHeaderLabelDayFormatMediumLong: 'ddd, Do',
+      subHeaderLabelDayFormatLong: 'dddd, Do',
+      subHeaderLabelHourFormatShort: 'h A',
+      subHeaderLabelHourFormatLong: 'h A',
+      subHeaderLabelMinuteFormatShort: 'mm',
+      subHeaderLabelMinuteFormatLong: 'h:mm A',
+    },
+
+    headerLabelFormats: {
+      headerLabelYearFormatShort: 'YY',
+      headerLabelYearFormatLong: 'YYYY',
+      headerLabelMonthFormatShort: 'MM/YY',
+      headerLabelMonthFormatMedium: 'MM/YYYY',
+      headerLabelMonthFormatMediumLong: 'MMM YYYY',
+      headerLabelMonthFormatLong: 'MMMM YYYY',
+      headerLabelDayFormatShort: 'L',
+      headerLabelDayFormatLong: 'dddd, LL',
+      headerLabelHourFormatShort: 'h A',
+      headerLabelHourFormatMedium: 'h A',
+      headerLabelHourFormatMediumLong: 'L, h A',
+      headerLabelHourFormatLong: 'dddd, LL, h A',
+    }
   }
 
   constructor (props) {
@@ -721,7 +783,9 @@ export default class ReactCalendarTimeline extends Component {
               visibleTimeEnd={this.state.visibleTimeEnd}
               fixedHeader={this.props.fixedHeader}
               zIndex={this.props.zIndexStart + 1}
-              showPeriod={this.showPeriod} />
+              showPeriod={this.showPeriod}
+              {...this.props.subHeaderLabelFormats}
+              {...this.props.headerLabelFormats} />
     )
   }
 

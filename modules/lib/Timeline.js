@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -374,7 +376,7 @@ var ReactCalendarTimeline = function (_Component) {
   }, {
     key: 'header',
     value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
-      return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
+      return _react2.default.createElement(_Header2.default, _extends({ canvasTimeStart: canvasTimeStart,
         canvasTimeEnd: canvasTimeEnd,
         canvasWidth: canvasWidth,
         lineHeight: this.props.lineHeight,
@@ -388,7 +390,8 @@ var ReactCalendarTimeline = function (_Component) {
         visibleTimeEnd: this.state.visibleTimeEnd,
         fixedHeader: this.props.fixedHeader,
         zIndex: this.props.zIndexStart + 1,
-        showPeriod: this.showPeriod });
+        showPeriod: this.showPeriod
+      }, this.props.subHeaderLabelFormats, this.props.headerLabelFormats));
     }
   }, {
     key: 'sidebar',
@@ -626,7 +629,38 @@ ReactCalendarTimeline.propTypes = {
   onTimeInit: _react.PropTypes.func,
   onBoundsChange: _react.PropTypes.func,
 
-  children: _react.PropTypes.node
+  children: _react.PropTypes.node,
+
+  subHeaderLabelFormats: _react.PropTypes.shape({
+    subHeaderLabelYearFormatShort: _react.PropTypes.string,
+    subHeaderLabelYearFormatLong: _react.PropTypes.string,
+    subHeaderLabelMonthFormatShort: _react.PropTypes.string,
+    subHeaderLabelMonthFormatMedium: _react.PropTypes.string,
+    subHeaderLabelMonthFormatLong: _react.PropTypes.string,
+    subHeaderLabelDayFormatShort: _react.PropTypes.string,
+    subHeaderLabelDayFormatMedium: _react.PropTypes.string,
+    subHeaderLabelDayFormatMediumLong: _react.PropTypes.string,
+    subHeaderLabelDayFormatLong: _react.PropTypes.string,
+    subHeaderLabelHourFormatShort: _react.PropTypes.string,
+    subHeaderLabelHourFormatLong: _react.PropTypes.string,
+    subHeaderLabelMinuteFormatShort: _react.PropTypes.string,
+    subHeaderLabelMinuteFormatLong: _react.PropTypes.string
+  }),
+
+  headerLabelFormats: _react.PropTypes.shape({
+    headerLabelYearFormatShort: _react.PropTypes.string,
+    headerLabelYearFormatLong: _react.PropTypes.string,
+    headerLabelMonthFormatShort: _react.PropTypes.string,
+    headerLabelMonthFormatMedium: _react.PropTypes.string,
+    headerLabelMonthFormatMediumLong: _react.PropTypes.string,
+    headerLabelMonthFormatLong: _react.PropTypes.string,
+    headerLabelDayFormatShort: _react.PropTypes.string,
+    headerLabelDayFormatLong: _react.PropTypes.string,
+    headerLabelHourFormatShort: _react.PropTypes.string,
+    headerLabelHourFormatMedium: _react.PropTypes.string,
+    headerLabelHourFormatMediumLong: _react.PropTypes.string,
+    headerLabelHourFormatLong: _react.PropTypes.string
+  })
 };
 ReactCalendarTimeline.defaultProps = {
   sidebarWidth: 150,
@@ -687,7 +721,38 @@ ReactCalendarTimeline.defaultProps = {
   onTimeInit: null,
   // called when the canvas area of the calendar changes
   onBoundsChange: null,
-  children: null
+  children: null,
+
+  subHeaderLabelFormats: {
+    subHeaderLabelYearFormatShort: 'YY',
+    subHeaderLabelYearFormatLong: 'YYYY',
+    subHeaderLabelMonthFormatShort: 'MM',
+    subHeaderLabelMonthFormatMedium: 'MMM',
+    subHeaderLabelMonthFormatLong: 'MMMM',
+    subHeaderLabelDayFormatShort: 'D',
+    subHeaderLabelDayFormatMedium: 'dd D',
+    subHeaderLabelDayFormatMediumLong: 'ddd, Do',
+    subHeaderLabelDayFormatLong: 'dddd, Do',
+    subHeaderLabelHourFormatShort: 'h A',
+    subHeaderLabelHourFormatLong: 'h A',
+    subHeaderLabelMinuteFormatShort: 'mm',
+    subHeaderLabelMinuteFormatLong: 'h:mm A'
+  },
+
+  headerLabelFormats: {
+    headerLabelYearFormatShort: 'YY',
+    headerLabelYearFormatLong: 'YYYY',
+    headerLabelMonthFormatShort: 'MM/YY',
+    headerLabelMonthFormatMedium: 'MM/YYYY',
+    headerLabelMonthFormatMediumLong: 'MMM YYYY',
+    headerLabelMonthFormatLong: 'MMMM YYYY',
+    headerLabelDayFormatShort: 'L',
+    headerLabelDayFormatLong: 'dddd, LL',
+    headerLabelHourFormatShort: 'h A',
+    headerLabelHourFormatMedium: 'h A',
+    headerLabelHourFormatMediumLong: 'L, h A',
+    headerLabelHourFormatLong: 'dddd, LL, h A'
+  }
 };
 
 var _initialiseProps = function _initialiseProps() {

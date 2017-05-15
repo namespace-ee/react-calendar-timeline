@@ -1,3 +1,7 @@
+# Purpose of this fork
+
+This fork allow to customize headerLabels with given format date
+
 # React Calendar Timeline
 
 A modern and responsive react timeline component.
