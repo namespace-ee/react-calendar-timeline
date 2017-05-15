@@ -126,7 +126,7 @@ export default class Header extends Component {
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
       visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, fixedHeader,
-      headerLabelGroupHeight, headerLabelHeight
+      headerLabelGroupHeight, headerLabelHeight, hasRightSidebar
     } = this.props
     const {
       scrollTop
@@ -149,7 +149,7 @@ export default class Header extends Component {
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
                href='#'
-               className='rct-label-group'
+               className={`rct-label-group ${hasRightSidebar ? 'rct-has-right-sidebar' : ''}`}
                data-time={time}
                data-unit={nextUnit}
                style={{
@@ -227,6 +227,7 @@ Header.propTypes = {
   // width: React.PropTypes.number.isRequired,
   // lineHeight: React.PropTypes.number.isRequired,
   // headerBackgroundColor: React.PropTypes.string.isRequired,
+  hasRightSidebar: React.PropTypes.bool.isRequired,
   showPeriod: React.PropTypes.func.isRequired,
   canvasTimeStart: React.PropTypes.number.isRequired,
   canvasTimeEnd: React.PropTypes.number.isRequired,

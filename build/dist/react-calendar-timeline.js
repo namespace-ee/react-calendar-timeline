@@ -135,6 +135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var defaultKeys = {
 	  groupIdKey: 'id',
 	  groupTitleKey: 'title',
+	  groupRightSidebarKey: 'right_sidebar',
 	  itemIdKey: 'id',
 	  itemTitleKey: 'title',
 	  itemDivTitleKey: 'title',
@@ -256,7 +257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          containerWidth = _refs$container$getBo.width,
 	          containerTop = _refs$container$getBo.top;
 	
-	      var width = containerWidth - this.props.sidebarWidth;
+	      var width = containerWidth - this.props.sidebarWidth - this.props.rightSidebarWidth;
 	
 	      var _stackItems = this.stackItems(this.props.items, this.props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, width),
 	          dimensionItems = _stackItems.dimensionItems,
@@ -449,6 +450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'header',
 	    value: function header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
 	      return _react2.default.createElement(_Header2.default, { canvasTimeStart: canvasTimeStart,
+	        hasRightSidebar: this.props.rightSidebarWidth > 0,
 	        canvasTimeEnd: canvasTimeEnd,
 	        canvasWidth: canvasWidth,
 	        lineHeight: this.props.lineHeight,
@@ -481,6 +483,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	          fixedHeader: this.props.fixedHeader,
 	          zIndex: this.props.zIndexStart + 2 },
 	        this.props.children
+	      );
+	    }
+	  }, {
+	    key: 'rightSidebar',
+	    value: function rightSidebar(height, groupHeights, headerHeight) {
+	      return _react2.default.createElement(
+	        _Sidebar2.default,
+	        { groups: this.props.groups,
+	          keys: this.props.keys,
+	          isRightSidebar: true,
+	
+	          width: this.props.rightSidebarWidth,
+	          lineHeight: this.props.lineHeight,
+	          groupHeights: groupHeights,
+	          height: height,
+	          headerHeight: headerHeight,
+	
+	          fixedHeader: this.props.fixedHeader,
+	          zIndex: this.props.zIndexStart + 2 },
+	        this.props.rightSidebarContent
 	      );
 	    }
 	  }, {
@@ -557,6 +579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          headerLabelGroupHeight = _props4.headerLabelGroupHeight,
 	          headerLabelHeight = _props4.headerLabelHeight,
 	          sidebarWidth = _props4.sidebarWidth,
+	          rightSidebarWidth = _props4.rightSidebarWidth,
 	          timeSteps = _props4.timeSteps;
 	      var _state4 = this.state,
 	          draggingItem = _state4.draggingItem,
@@ -633,7 +656,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	              this.infoLabel(),
 	              this.header(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight)
 	            )
-	          )
+	          ),
+	          rightSidebarWidth > 0 ? this.rightSidebar(height, groupHeights, headerHeight) : null
 	        )
 	      );
 	    }
@@ -646,6 +670,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  groups: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
 	  items: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.object]).isRequired,
 	  sidebarWidth: _react.PropTypes.number,
+	  rightSidebarWidth: _react.PropTypes.number,
+	  rightSidebarContent: _react.PropTypes.node,
 	  dragSnap: _react.PropTypes.number,
 	  minResizeWidth: _react.PropTypes.number,
 	  fixedHeader: _react.PropTypes.oneOf(['fixed', 'absolute', 'none']),
@@ -704,6 +730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	ReactCalendarTimeline.defaultProps = {
 	  sidebarWidth: 150,
+	  rightSidebarWidth: 0,
 	  dragSnap: 1000 * 60 * 15, // 15min
 	  minResizeWidth: 20,
 	  fixedHeader: 'none', // fixed or absolute or none
@@ -1198,12 +1225,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	// import ItemGroup from './ItemGroup'
 	
 	var canResizeLeft = function canResizeLeft(item, canResize) {
-	  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+	  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : canResize;
 	  return value === 'left' || value === 'both';
 	};
 	
 	var canResizeRight = function canResizeRight(item, canResize) {
-	  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : undefined.props.canResize;
+	  var value = (0, _utils._get)(item, 'canResize') !== undefined ? (0, _utils._get)(item, 'canResize') : canResize;
 	  return value === 'right' || value === 'both' || value === true;
 	};
 	
@@ -2577,10 +2604,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          zIndex = _props.zIndex,
 	          groupHeights = _props.groupHeights,
 	          height = _props.height,
-	          headerHeight = _props.headerHeight;
+	          headerHeight = _props.headerHeight,
+	          isRightSidebar = _props.isRightSidebar;
 	      var _props$keys = this.props.keys,
 	          groupIdKey = _props$keys.groupIdKey,
-	          groupTitleKey = _props$keys.groupTitleKey;
+	          groupTitleKey = _props$keys.groupTitleKey,
+	          groupRightSidebarKey = _props$keys.groupRightSidebarKey;
 	      var scrollTop = this.state.scrollTop;
 	
 	
@@ -2631,14 +2660,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        groupLines.push(_react2.default.createElement(
 	          'div',
 	          { key: (0, _utils._get)(group, groupIdKey), className: 'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd'), style: elementStyle },
-	          (0, _utils._get)(group, groupTitleKey)
+	          (0, _utils._get)(group, isRightSidebar ? groupRightSidebarKey : groupTitleKey)
 	        ));
 	        i += 1;
 	      });
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { ref: 'sidebar', className: 'rct-sidebar', style: sidebarStyle },
+	        { ref: 'sidebar', className: 'rct-sidebar' + (isRightSidebar ? ' rct-sidebar-right' : ''), style: sidebarStyle },
 	        header,
 	        _react2.default.createElement(
 	          'div',
@@ -2662,12 +2691,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  zIndex: _react2.default.PropTypes.number,
 	  fixedHeader: _react2.default.PropTypes.oneOf(['fixed', 'absolute', 'none']),
 	  keys: _react2.default.PropTypes.object.isRequired,
-	  children: _react2.default.PropTypes.node
+	  children: _react2.default.PropTypes.node,
+	  isRightSidebar: _react2.default.PropTypes.bool
 	};
 	Sidebar.defaultProps = {
 	  fixedHeader: 'none',
 	  zIndex: 12,
-	  children: null
+	  children: null,
+	  isRightSidebar: false
 	};
 
 /***/ },
@@ -2854,7 +2885,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          timeSteps = _props.timeSteps,
 	          fixedHeader = _props.fixedHeader,
 	          headerLabelGroupHeight = _props.headerLabelGroupHeight,
-	          headerLabelHeight = _props.headerLabelHeight;
+	          headerLabelHeight = _props.headerLabelHeight,
+	          hasRightSidebar = _props.hasRightSidebar;
 	      var scrollTop = this.state.scrollTop;
 	
 	      var ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
@@ -2862,35 +2894,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // add the top header
 	      if (twoHeaders) {
-	        (function () {
-	          var nextUnit = (0, _utils.getNextUnit)(minUnit);
+	        var nextUnit = (0, _utils.getNextUnit)(minUnit);
 	
-	          (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, function (time, nextTime) {
-	            var startTime = Math.max(visibleTimeStart, time.valueOf());
-	            var endTime = Math.min(visibleTimeEnd, nextTime.valueOf());
-	            var left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2);
-	            var right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2);
-	            var labelWidth = right - left;
-	            var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0;
+	        (0, _utils.iterateTimes)(visibleTimeStart, visibleTimeEnd, nextUnit, timeSteps, function (time, nextTime) {
+	          var startTime = Math.max(visibleTimeStart, time.valueOf());
+	          var endTime = Math.min(visibleTimeEnd, nextTime.valueOf());
+	          var left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2);
+	          var right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2);
+	          var labelWidth = right - left;
+	          var leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0;
 	
-	            timeLabels.push(_react2.default.createElement(
-	              'div',
-	              { key: 'top-label-' + time.valueOf(),
-	                href: '#',
-	                className: 'rct-label-group',
-	                'data-time': time,
-	                'data-unit': nextUnit,
-	                style: {
-	                  left: left + leftCorrect + 'px',
-	                  width: labelWidth + 'px',
-	                  height: headerLabelGroupHeight + 'px',
-	                  lineHeight: headerLabelGroupHeight + 'px',
-	                  cursor: 'pointer'
-	                } },
-	              _this3.headerLabel(time, nextUnit, labelWidth)
-	            ));
-	          });
-	        })();
+	          timeLabels.push(_react2.default.createElement(
+	            'div',
+	            { key: 'top-label-' + time.valueOf(),
+	              href: '#',
+	              className: 'rct-label-group ' + (hasRightSidebar ? 'rct-has-right-sidebar' : ''),
+	              'data-time': time,
+	              'data-unit': nextUnit,
+	              style: {
+	                left: left + leftCorrect + 'px',
+	                width: labelWidth + 'px',
+	                height: headerLabelGroupHeight + 'px',
+	                lineHeight: headerLabelGroupHeight + 'px',
+	                cursor: 'pointer'
+	              } },
+	            _this3.headerLabel(time, nextUnit, labelWidth)
+	          ));
+	        });
 	      }
 	
 	      (0, _utils.iterateTimes)(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, function (time, nextTime) {
@@ -2962,6 +2992,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // width: React.PropTypes.number.isRequired,
 	  // lineHeight: React.PropTypes.number.isRequired,
 	  // headerBackgroundColor: React.PropTypes.string.isRequired,
+	  hasRightSidebar: _react2.default.PropTypes.bool.isRequired,
 	  showPeriod: _react2.default.PropTypes.func.isRequired,
 	  canvasTimeStart: _react2.default.PropTypes.number.isRequired,
 	  canvasTimeEnd: _react2.default.PropTypes.number.isRequired,
