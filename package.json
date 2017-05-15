@@ -11,7 +11,7 @@
     "build": "npm run clean && npm run build:dev && npm run build:prod",
     "build:dev": "echo 'DEV - BUILD' && webpack --config webpack.config.js",
     "build:prod": "echo 'PROD - BUILD' && webpack --config webpack.config.prod.js",
-    "release": "npm run build && babel src --out-dir build && cp README.md build/ && node scripts/release.js",
+    "release": "npm run build && babel src --out-dir build && cp README.md build/",
     "module": "./node_modules/.bin/babel src --out-dir modules && ./node_modules/.bin/node-sass src/lib/Timeline.scss modules/lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' modules/lib/Timeline.js && rm modules/lib/Timeline.js.bak",
     "lint": "eslint --ext .js,.jsx src",
     "lintfix": "eslint --ext .js,.jsx src --fix",
