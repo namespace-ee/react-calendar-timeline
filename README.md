@@ -8,7 +8,7 @@ Demo here: http://namespace.ee/react-calendar-timeline/
 
 ## Getting started
 
-```
+```bash
 # via yarn
 yarn add react-calendar-timeline
 
@@ -20,7 +20,7 @@ npm install --save react-calendar-timeline
 
 You need to install them separately:
 
-```
+```bash
 # via yarn
 yarn add react react-dom # you probably already have these
 yarn add moment interact.js
@@ -69,7 +69,7 @@ The component can take many props:
 
 ### groups
 Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
-```
+```js
 {
   id: 1,
   title: 'group 1'
@@ -78,7 +78,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 
 ### items
 Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
-```
+```js
 {
   id: 1,
   group: 1,
@@ -95,11 +95,11 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 }
 ```
 
-The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (java Date or moment()) will also work, but will be a lot slower.
+The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript Date or moment()) will also work, but will be a lot slower.
 
 ### keys
 An array specifying keys in the `items` and `groups` objects. Defaults to
-```
+```js
 {
   groupIdKey: 'id',
   groupTitleKey: 'title',
@@ -249,10 +249,10 @@ function (action, item, time, resizeEdge) {
 Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
 
 ### visibleTimeStart and visibleTimeEnd
-The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.
+The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.  This parameter expects a unix timestamp in milliseconds.
 
 ### onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
-A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd to change the scroll behavior, for example to limit scrolling.
+A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd (as unix timestamps in milliseconds) to change the scroll behavior, for example to limit scrolling.
 
 Here is an example that limits the timeline to only show dates starting 6 months from now and ending in 6 months.
 
@@ -275,10 +275,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 ```
 
 ### onTimeInit(visibleTimeStart, visibleTimeEnd)
-Called when the calendar is first initialised
+Called when the calendar is first initialised. `visibleTimeStart` and `visibleTimeEnd` are unix timestamps in milliseconds.
 
 ### onBoundsChange(canvasTimeStart, canvasTimeEnd)
-Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below)
+Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
 
 ### itemRenderer
 React component that will be used to render the item content.  Will be
@@ -300,7 +300,7 @@ All children of the Timeline component will be displayed above the sidebar. Use 
 
 You will then need to override the default CSS rule:
 
-```
+```css
 .react-calendar-timeline .rct-items .rct-item.analysis {
   backgroundColor: #68efad;
 }
@@ -315,3 +315,29 @@ Speed: The calendar itself is actually a 3x wide scrolling canvas of the screen.
 This results in a visually endless scrolling canvas with optimal performance.
 
 Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
+
+
+## Contribute
+If you like to improve React Calendar Timeline fork the repo and get started by running the following:
+
+```bash
+$ git clone https://github.com/namespace-ee/react-calendar-timeline.git react-calendar-timeline
+$ cd react-calendar-timeline
+$ npm install
+$ npm start
+```
+
+Check http://0.0.0.0:8080/ in your browser and have fun!
+
+Please run `npm run lint` before you send a pull request. `npm run jest` runs the tests.
+
+
+<!--
+
+If you are core member team to patch npm run:
+
+```bash
+npm version patch
+```
+
+-->

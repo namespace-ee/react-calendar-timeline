@@ -193,15 +193,12 @@ export function collision (a, b, lineHeight) {
 
 export function stack (items, groupOrders, lineHeight, headerHeight, force) {
   var i, iMax
-
   var totalHeight = headerHeight
 
   var groupHeights = {}
   var groupTops = {}
 
-  var groupedItems = groupBy(items, function (item) {
-    return item.dimensions.order
-  })
+  var groupedItems = getGroupedItems(items, groupOrders)
 
   if (force) {
     // reset top position of all items
@@ -210,12 +207,9 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  for (var url of Object.keys(groupOrders)) {
-    var key = groupOrders[url]
+  groupedItems.forEach(function (group, index, array) {
     // calculate new, non-overlapping positions
-    var group = groupedItems[key] || []
-
-    groupTops[key] = totalHeight
+    groupTops[index] = totalHeight
 
     var groupHeight = 0
     var verticalMargin = 0
@@ -246,9 +240,9 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
         } while (collidingItem)
       }
     }
-    groupHeights[key] = Math.max(groupHeight + verticalMargin, lineHeight)
+    groupHeights[index] = Math.max(groupHeight + verticalMargin, lineHeight)
     totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
-  }
+  })
   return {
     height: totalHeight,
     groupHeights,
@@ -264,9 +258,7 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
   var groupHeights = {}
   var groupTops = {}
 
-  var groupedItems = groupBy(items, function (item) {
-    return item.dimensions.order
-  })
+  var groupedItems = getGroupedItems(items, groupOrders)
 
   if (force) {
     // reset top position of all items
@@ -275,12 +267,9 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  for (var url of Object.keys(groupOrders)) {
-    var key = groupOrders[url]
+  groupedItems.forEach(function (group, index, array) {
     // calculate new, non-overlapping positions
-    var group = groupedItems[key] || []
-
-    groupTops[key] = totalHeight
+    groupTops[index] = totalHeight
 
     var groupHeight = 0
     for (i = 0, iMax = group.length; i < iMax; i++) {
@@ -292,9 +281,9 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
         groupHeight = Math.max(groupHeight, item.dimensions.lineHeight)
       }
     }
-    groupHeights[key] = Math.max(groupHeight, lineHeight)
+    groupHeights[index] = Math.max(groupHeight, lineHeight)
     totalHeight += Math.max(groupHeight, lineHeight)
-  }
+  })
   return {
     height: totalHeight,
     groupHeights,
@@ -312,18 +301,19 @@ export function keyBy (value, key) {
   return obj
 }
 
-export function groupBy (collection, groupFunction) {
-  let obj = {}
+export function getGroupedItems (items, groupOrders) {
+  var arr = []
 
-  collection.forEach(function (element, index, array) {
-    const key = groupFunction(element)
-    if (!obj[key]) {
-      obj[key] = []
-    }
-    obj[key].push(element)
-  })
+  // Initialize with empty arrays for each group
+  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
+    arr[i] = []
+  }
+  // Populate groups
+  for (let i = 0; i < items.length; i++) {
+    arr[items[i].dimensions.order].push(items[i])
+  }
 
-  return obj
+  return arr
 }
 
 export function hasSomeParentTheClass (element, classname) {
