@@ -24,6 +24,10 @@
     "info": "npm info react-calendar-timeline",
     "start": "./node_modules/.bin/webpack-dev-server --inline --hot --host 0.0.0.0"
   },
+  "files": [
+    "modules",
+    "src"
+  ],
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
