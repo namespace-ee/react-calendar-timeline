@@ -9,6 +9,7 @@ import Header from './layout/Header'
 import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
+import elementResizeDetectorMaker from 'element-resize-detector'
 
 import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
 
@@ -130,6 +131,7 @@ export default class ReactCalendarTimeline extends Component {
     onItemContextMenu: null,
 
     moveResizeValidator: null,
+    resizeDetectorMethod: 'container',
 
     dayBackground: null,
 
@@ -218,7 +220,20 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    window.addEventListener('resize', this.resizeEventListener)
+    if (this.props.resizeDetectorMethod === 'container') {
+      this.erd = elementResizeDetectorMaker({
+        strategy: 'scroll'
+      })
+
+      this.erd.listenTo(this.refs.container, () => {
+        this.resize()
+      })
+    }
+
+    if (this.props.resizeDetectorMethod === 'window') {
+      window.addEventListener('resize', this.resizeEventListener)
+    }
+
 
     this.lastTouchDistance = null
 
@@ -228,7 +243,14 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentWillUnmount () {
-    window.removeEventListener('resize', this.resizeEventListener)
+    if (this.props.resizeDetectorMethod === 'container') {
+      this.erd.removeAllListeners(this.refs.container)
+    }
+
+    if (this.props.resizeDetectorMethod === 'window') {
+      window.removeEventListener('resize', this.resizeEventListener)
+    }
+
     this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart)
     this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove)
     this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd)
@@ -853,6 +875,7 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
+    console.log('render', this)
     return (
       <div style={this.props.style} ref='container' className='react-calendar-timeline'>
         <div style={outerComponentStyle} className='rct-outer'>
