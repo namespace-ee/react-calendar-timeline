@@ -321,36 +321,6 @@ export function hasSomeParentTheClass (element, classname) {
   return element.parentNode && hasSomeParentTheClass(element.parentNode, classname)
 }
 
-export function createGradientPattern (lineHeight, color1, color2, borderColor) {
-  if (borderColor) {
-    if (!color2 || color1 === color2) {
-      return 'repeating-linear-gradient(to bottom, ' +
-                    `${color1},` +
-                    `${color1} ${lineHeight - 1}px,` +
-                    `${borderColor} ${lineHeight - 1}px,` +
-                    `${borderColor} ${lineHeight}px` +
-              ')'
-    } else {
-      return 'repeating-linear-gradient(to bottom, ' +
-                    `${color1},` +
-                    `${color1} ${lineHeight - 1}px,` +
-                    `${borderColor} ${lineHeight - 1}px,` +
-                    `${borderColor} ${lineHeight}px,` +
-                    `${color2} ${lineHeight}px,` +
-                    `${color2} ${lineHeight * 2 - 1}px,` +
-                    `${borderColor} ${lineHeight * 2 - 1}px,` +
-                    `${borderColor} ${lineHeight * 2}px` +
-              ')'
-    }
-  } else {
-    if (!color2 || color1 === color2) {
-      return color1
-    } else {
-      return `repeating-linear-gradient(to bottom,${color1},${color1} ${lineHeight}px,${color2} ${lineHeight}px,${color2} ${lineHeight * 2}px)`
-    }
-  }
-}
-
 export function deepObjectCompare (obj1, obj2) {
   for (var p in obj1) {
     if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false
