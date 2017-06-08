@@ -14,7 +14,7 @@
     "lint:fix": "eslint --ext .js,.jsx src demo *.js --fix",
     "prepublish": "npm run build:lib",
     "start": "./node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --port 8080 --display-modules",
-    "test": "npm run module && npm run jest && npm run lint"
+    "test": "npm run build:lib && npm run jest && npm run lint"
   },
   "files": [
     "lib",
