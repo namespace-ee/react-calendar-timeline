@@ -1,49 +1,95 @@
-var webpack = require('webpack')
-var path = require('path')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const webpack = require('webpack')
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-module.exports = {
-  context: __dirname,
+const nodeEnv = process.env.NODE_ENV || 'development'
+
+const isProd = nodeEnv === 'production'
+
+const config = {
+  devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
+  context: path.join(__dirname, './demo'),
   entry: {
-    'react-calendar-timeline': './src/index.js'
+    vendor: [
+      'react',
+      'react-dom',
+      'faker',
+      'interact.js',
+      'moment'
+    ],
+    demo: isProd ? [
+      './index.js'
+    ] : [
+      'webpack-dev-server/client?http://0.0.0.0:8080',
+      'webpack/hot/only-dev-server',
+      './index.js'
+    ]
   },
   output: {
-    path: path.join(__dirname, 'build/dist/'),
-    filename: '[name].js',
-    publicPath: 'build/dist/',
-    library: 'ReactCalendarTimeline',
-    libraryTarget: 'umd'
+    path: path.join(__dirname, './docs'),
+    publicPath: '',
+    chunkFilename: '[name].bundle.js',
+    filename: '[name].bundle.js'
   },
-  debug: true,
-  devtool: 'sourcemap',
   module: {
     loaders: [
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+        loader: isProd ? ExtractTextPlugin.extract('style-loader', 'css-loader') : 'style!css'
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+        loader: isProd ? ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader') : 'style!css!sass'
+      },
+      {
+        test: /\.(html|png|jpg|gif|jpeg|svg)$/,
+        loader: 'file',
+        query: {
+          name: '[name].[ext]'
+        }
       },
       {
         test: /\.(js|jsx)$/,
-        loaders: ['babel'],
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        loaders: [
+          'babel-loader'
+        ]
       }
     ]
   },
-  plugins: [
-    new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin('[name].css')
-  ],
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'moment': 'moment',
-    'interact.js': 'interact'
-  },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.scss', '.md']
+    extensions: ['', '.js', '.jsx'],
+    modules: [
+      path.resolve('./demo'),
+      'node_modules'
+    ],
+    alias: {
+      '~': path.join(__dirname, './demo'),
+      'react-calendar-timeline': path.join(__dirname, './src')
+    }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+    new ExtractTextPlugin('[name].css'),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(nodeEnv)
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      output: {
+        comments: false
+      },
+      sourceMap: false
+    })
+  ],
+  devServer: {
+    contentBase: './demo'
   }
 }
+
+module.exports = config
