@@ -4,6 +4,7 @@
   "description": "react calendar timeline",
   "main": "modules/index.js",
   "scripts": {
+    "test": "npm run jest",
     "jest": "node_modules/.bin/jest",
     "jest:update": "node_modules/.bin/jest -u",
     "clean": "rimraf -rf ./build",
