@@ -3,6 +3,7 @@
   "version": "0.11.3",
   "description": "react calendar timeline",
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "build": "npm run build:lib && npm run build:demo",
     "build:demo": "echo '!!! Building Demo' && BABEL_ENV=react node build.js production",
