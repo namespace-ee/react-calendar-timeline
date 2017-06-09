@@ -258,6 +258,12 @@ $weekend: rgba(250, 246, 225, 0.5);
     background: red;
   }
 
+  .rct-cursor-line {
+    position: absolute;
+    width: 2px;
+    background: $item-background;
+  }
+
   .rct-infolabel {
     position: fixed;
     left: 100px;
