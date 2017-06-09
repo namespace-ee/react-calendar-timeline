@@ -32,7 +32,8 @@ export default class Item extends Component {
     // onDrop: React.PropTypes.func,
     // onResizing: React.PropTypes.func,
     // onResized: React.PropTypes.func,
-    // onContextMenu: React.PropTypes.func
+    // onContextMenu: React.PropTypes.func,
+    // itemRenderer: React.PropTypes.func
   }
   static defaultProps = {
     selected: false
@@ -422,6 +423,15 @@ export default class Item extends Component {
     }
   }
 
+  renderContent() {
+    const Comp = this.props.itemRenderer
+    if(Comp) {
+      return <Comp item={this.props.item} />
+    } else {
+      return this.itemTitle
+    }
+  }
+
   render () {
     const dimensions = this.props.dimensions
     if (typeof this.props.order === 'undefined' || this.props.order === null) {
@@ -462,7 +472,7 @@ export default class Item extends Component {
         {this.props.useResizeHandle ? <div ref='dragLeft' className='rct-drag-left'></div> : ''}
         <div className='rct-item-overflow'>
           <div className='rct-item-content'>
-            {this.itemTitle}
+            {this.renderContent()}
           </div>
         </div>
         {this.props.useResizeHandle ? <div ref='dragRight' className='rct-drag-right'></div> : ''}
