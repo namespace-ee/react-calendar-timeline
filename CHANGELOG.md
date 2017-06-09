@@ -9,10 +9,20 @@ When you submit a PR, add your changes here!
 
 ## [0.13.0]
 ### Added
-- An option to add another sidebar to the right of the Timeline. @goooseman
-- `itemRenderer` prop to allow specifying a custom component to render the items
-- `groupRenderer` prop to allow specifying a custom component to render the groups
+- An option to add another sidebar to the right of the Timeline. @goooseman #80
+- `itemRenderer` prop to allow specifying a custom component to render the items @nicocrm #103
+- `groupRenderer` prop to allow specifying a custom component to render the groups @nicocrm #103
 - `showCursorLine` prop to show a vertical line at the snap position @meikoudras
+- You can now select multiple items if you take control of the `selected` prop and the `onItemSelect` handler. @meengit #71
+- Canvas context menu handler `onCanvasContextMenu` @meikoudras
+
+### Fixed
+- Calculate width when we receive sidebar width property @jmerriweather #75
+- Avoid updating updateDimensions right after updateScrollCanvas @nicocrm #87
+- Fix typo collision detection in stack() @nicocrm #96
+- Remove dead code @signalwerk #101
+- Disable cursor style by interactjs @bkniffler #89
+- Fixed header width and Header label weekday support @meikoudras #66
 
 ### Changed
 - [Deprecated] To have content above the left sidebar, pass it in a `sidebarContent={<div />}` prop, not as children to the component.

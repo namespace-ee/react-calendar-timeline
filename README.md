@@ -228,17 +228,20 @@ Called when an item is selected. This is sent on the first click on an item.
 ### onItemClick(itemId, e)
 Called when an item is clicked. Note: the item must be selected before it's clicked... except if it's a touch event and `itemTouchSendsClick` is enabled.
 
-### onCanvasClick(groupId, time, e)
-Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
-
-### onCanvasDoubleClick(groupId, time,e )
-Called when an empty spot on the canvas was double clicked. Get the group ID and the time as arguments.
-
 ### onItemDoubleClick(itemId, e)
 Called when an item was double clicked
 
 ### onItemContextMenu(itemId, e)
 Called when the item is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
+
+### onCanvasClick(groupId, time, e)
+Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
+
+### onCanvasDoubleClick(groupId, time, e)
+Called when an empty spot on the canvas was double clicked. Get the group ID and the time as arguments.
+
+### onCanvasContextMenu(group, time, e)
+Called when the canvas is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
 ### moveResizeValidator(action, itemId, time, resizeEdge)
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
