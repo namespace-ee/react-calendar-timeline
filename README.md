@@ -72,11 +72,12 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 ```js
 {
   id: 1,
-  title: 'group 1'
+  title: 'group 1',
+  rightTitle: 'title in the right sidebar'
 }
 ```
 
-If you use right sidebar, you can pass `right_sidebar` optional property here. 
+If you use right sidebar, you can pass optional `rightTitle` property here.
 
 ### items
 Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
@@ -108,7 +109,7 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 {
   groupIdKey: 'id',
   groupTitleKey: 'title',
-  groupRightSidebarKey: 'right_sidebar',
+  groupRightTitleKey: 'rightTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
@@ -120,6 +121,9 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 
 ### sidebarWidth
 Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
+
+### sidebarContent
+Everything passed here will be displayed above the left sidebar. Use this to display small filters or so. Defaults to `null`.
 
 ### rightSidebarWidth
 Width of the right sidebar in pixels. If set to `0`, the right sidebar is not rendered. Defaults to `0`.
@@ -297,15 +301,15 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 ### itemRenderer
 React component that will be used to render the item content.  Will be
-passed the item as a prop.  Using complex components may result in
+passed the `item` as a prop. Using complex components may result in
 performance problems.
 
 ### groupRenderer
 React component that will be used to render the content of groups in the
-sidebar.  Will be passed the group as a prop.
+sidebar. Will be passed the `group` and `isRightSidebar` as props.
 
 ### children
-All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
+**DEPRECATED. User the sidebarContent prop instead.** All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
 
 ## FAQ
 

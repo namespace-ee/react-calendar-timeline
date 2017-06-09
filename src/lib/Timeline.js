@@ -16,7 +16,7 @@ import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nosta
 const defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
-  groupRightSidebarKey: 'right_sidebar',
+  groupRightTitleKey: 'rightTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
@@ -39,6 +39,7 @@ export default class ReactCalendarTimeline extends Component {
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     sidebarWidth: PropTypes.number,
+    sidebarContent: PropTypes.node,
     rightSidebarWidth: PropTypes.number,
     rightSidebarContent: PropTypes.node,
     dragSnap: PropTypes.number,
@@ -827,7 +828,7 @@ export default class ReactCalendarTimeline extends Component {
 
                fixedHeader={this.props.fixedHeader}
                zIndex={this.props.zIndexStart + 2}>
-        {this.props.children}
+        {this.props.sidebarContent || this.props.children}
       </Sidebar>
     )
   }

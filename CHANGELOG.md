@@ -10,8 +10,12 @@ When you submit a PR, add your changes here!
 ## [0.13.0]
 ### Added
 - An option to add another sidebar to the right of the Timeline. @goooseman
-- itemRenderer prop to allow specifying a custom component to render the items
-- groupRenderer prop to allow specifying a custom component to render the groups
+- `itemRenderer` prop to allow specifying a custom component to render the items
+- `groupRenderer` prop to allow specifying a custom component to render the groups
+- `showCursorLine` prop to show a vertical line at the snap position @meikoudras
+
+### Changed
+- [Deprecated] To have content above the left sidebar, pass it in a `sidebarContent={<div />}` prop, not as children to the component.
 
 ## [0.11.1]
 ### Fixed

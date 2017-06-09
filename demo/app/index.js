@@ -13,7 +13,7 @@ var maxTime = moment().add(6, 'months').valueOf()
 var keys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
-  groupRightSidebarKey: 'rightTitle',
+  groupRightTitleKey: 'rightTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
@@ -133,6 +133,7 @@ export default class App extends Component {
                 fullUpdate
 
                 sidebarWidth={150}
+                sidebarContent={<div>Above The Left</div>}
                 rightSidebarWidth={150}
                 rightSidebarContent={<div>Above The Right</div>}
 
@@ -162,9 +163,7 @@ export default class App extends Component {
 
                 onTimeChange={this.handleTimeChange}
 
-                moveResizeValidator={this.moveResizeValidator}>
-        <div>The Filter</div>
-      </Timeline>
+                moveResizeValidator={this.moveResizeValidator} />
     )
   }
 }

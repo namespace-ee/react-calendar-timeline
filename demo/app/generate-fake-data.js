@@ -11,7 +11,7 @@ export default function () {
     groups.push({
       id: `${i + 1}`,
       title: faker.name.firstName(),
-      right_sidebar: faker.name.lastName()
+      rightTitle: faker.name.lastName()
     })
   }
 

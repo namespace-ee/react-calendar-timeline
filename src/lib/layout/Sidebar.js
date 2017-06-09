@@ -63,11 +63,11 @@ export default class Sidebar extends Component {
     this.setComponentTop()
   }
 
-  renderGroupContent (group, isRightSidebar, groupTitleKey, groupRightSidebarKey) {
+  renderGroupContent (group, isRightSidebar, groupTitleKey, groupRightTitleKey) {
     if (this.props.groupRenderer) {
       return React.createElement(this.props.groupRenderer, { group, isRightSidebar })
     } else {
-      return _get(group, isRightSidebar ? groupRightSidebarKey : groupTitleKey)
+      return _get(group, isRightSidebar ? groupRightTitleKey : groupTitleKey)
     }
   }
 
@@ -76,7 +76,7 @@ export default class Sidebar extends Component {
       fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight, isRightSidebar
     } = this.props
 
-    const {groupIdKey, groupTitleKey, groupRightSidebarKey} = this.props.keys
+    const {groupIdKey, groupTitleKey, groupRightTitleKey} = this.props.keys
 
     const {
       scrollTop
@@ -126,7 +126,7 @@ export default class Sidebar extends Component {
 
       groupLines.push(
         <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
-          {this.renderGroupContent(group, isRightSidebar, groupTitleKey, groupRightSidebarKey)}
+          {this.renderGroupContent(group, isRightSidebar, groupTitleKey, groupRightTitleKey)}
         </div>
       )
       i += 1
