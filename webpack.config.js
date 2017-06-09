@@ -26,7 +26,7 @@ const config = {
     ]
   },
   output: {
-    path: path.join(__dirname, './build'),
+    path: path.join(__dirname, './gh-pages'),
     publicPath: '',
     chunkFilename: '[name].bundle.js',
     filename: '[name].bundle.js'
