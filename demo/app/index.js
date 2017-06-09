@@ -104,6 +104,23 @@ export default class App extends Component {
     return time
   }
 
+  // itemRenderer = ({ item }) => {
+  //   return (
+  //     <div className='custom-item'>
+  //       <span className='title'>{item.title}</span>
+  //       <p className='tip'>{item.itemProps['data-tip']}</p>
+  //     </div>
+  //   )
+  // }
+
+  // groupRenderer = ({ group }) => {
+  //   return (
+  //     <div className='custom-group'>
+  //       {group.title}
+  //     </div>
+  //   )
+  // }
+
   render () {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
@@ -125,6 +142,9 @@ export default class App extends Component {
 
                 defaultTimeStart={defaultTimeStart}
                 defaultTimeEnd={defaultTimeEnd}
+
+                // itemRenderer={this.itemRenderer}
+                // groupRenderer={this.groupRenderer}
 
                 onCanvasClick={this.handleCanvasClick}
                 onItemClick={this.handleItemClick}

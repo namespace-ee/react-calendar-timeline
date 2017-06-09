@@ -423,9 +423,9 @@ export default class Item extends Component {
     }
   }
 
-  renderContent() {
+  renderContent () {
     const Comp = this.props.itemRenderer
-    if(Comp) {
+    if (Comp) {
       return <Comp item={this.props.item} />
     } else {
       return this.itemTitle
