@@ -953,6 +953,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (this.props.onCanvasContextMenu) {
+      e.preventDefault()
       this.props.onCanvasContextMenu(this.props.groups[groupIndex], timePosition, e)
     }
   }

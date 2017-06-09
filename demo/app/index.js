@@ -42,6 +42,10 @@ export default class App extends Component {
     console.log('Canvas clicked')
   }
 
+  handleCanvasContextMenu = (group, time, e) => {
+    console.log('Canvas context menu', group, time)
+  }
+
   handleItemClick = (itemId) => {
     console.log('Clicked: ' + itemId)
   }
@@ -155,6 +159,8 @@ export default class App extends Component {
                 // groupRenderer={this.groupRenderer}
 
                 onCanvasClick={this.handleCanvasClick}
+                onCanvasContextMenu={this.handleCanvasContextMenu}
+
                 onItemClick={this.handleItemClick}
                 onItemSelect={this.handleItemSelect}
                 onItemContextMenu={this.handleItemContextMenu}
