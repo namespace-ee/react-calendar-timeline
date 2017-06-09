@@ -149,7 +149,7 @@ export function calculateDimensions ({ item, order, keys, canvasTimeStart, canva
     width: Math.max(w * ratio, 3),
     height: h,
     order: isDragging ? newGroupOrder : order,
-    stack: true,
+    stack: !item.isOverlay,
     collisionLeft: collisionX,
     originalLeft: itemTimeStart,
     collisionWidth: collisionW,
