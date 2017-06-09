@@ -63,6 +63,14 @@ export default class Sidebar extends Component {
     this.setComponentTop()
   }
 
+  renderGroupContent(group, groupTitleKey) {
+    if(this.props.groupRenderer) {
+      return React.createElement(this.props.groupRenderer, { group })
+    } else {
+      return _get(group, groupTitleKey)
+    }
+  }
+
   render () {
     const {
       fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight
@@ -118,7 +126,7 @@ export default class Sidebar extends Component {
 
       groupLines.push(
         <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
-          {_get(group, groupTitleKey)}
+          {this.renderGroupContent(group, groupTitleKey)}
         </div>
       )
       i += 1
@@ -142,6 +150,7 @@ Sidebar.propTypes = {
   zIndex: React.PropTypes.number,
   fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
   keys: React.PropTypes.object.isRequired,
+  groupRenderer: React.PropTypes.func,
   children: React.PropTypes.node
 }
 Sidebar.defaultProps = {
