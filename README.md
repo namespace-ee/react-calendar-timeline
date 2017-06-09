@@ -98,7 +98,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript Date or moment()) will also work, but will be a lot slower.
 
 ### selected
-An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click. 
+An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click.
 
 ### keys
 An array specifying keys in the `items` and `groups` objects. Defaults to
@@ -175,6 +175,9 @@ Can items be resized? Can be overridden in the `items` array. Accepted values: `
 
 ### useResizeHandle
 Append a special `.rct-drag-right` handle to the elements and only resize if dragged from there. Defaults to `false`
+
+### showCursorLine
+Show a vertical line at the snap point when you mouse over the calendar
 
 ### stackItems
 Stack items under each other, so there is no visual overlap when times collide. Defaults to `false`.
@@ -285,7 +288,7 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 ### itemRenderer
 React component that will be used to render the item content.  Will be
-passed the item as a prop.  Using complex components may result in 
+passed the item as a prop.  Using complex components may result in
 performance problems.
 
 ### groupRenderer

@@ -641,7 +641,7 @@ export default class ReactCalendarTimeline extends Component {
 
   handleCanvasMouseEnter = (e) => {
     const { showCursorLine } = this.props
-    if(showCursorLine) {
+    if (showCursorLine) {
       this.setState({mouseOverCanvas: true})
     }
 
@@ -652,7 +652,7 @@ export default class ReactCalendarTimeline extends Component {
 
   handleCanvasMouseLeave = (e) => {
     const { showCursorLine } = this.props
-    if(showCursorLine) {
+    if (showCursorLine) {
       this.setState({mouseOverCanvas: false})
     }
 
@@ -700,15 +700,14 @@ export default class ReactCalendarTimeline extends Component {
 
   cursorLine (cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
     return (
-      <CursorLine
-                cursorTime={ cursorTime }
-                canvasTimeStart={canvasTimeStart}
-                 canvasTimeEnd={canvasTimeEnd}
-                 canvasWidth={canvasWidth}
-                 lineHeight={this.props.lineHeight}
-                 lineCount={_length(this.props.groups)}
-                 height={height}
-                 headerHeight={headerHeight}
+      <CursorLine cursorTime={ cursorTime }
+                  canvasTimeStart={canvasTimeStart}
+                  canvasTimeEnd={canvasTimeEnd}
+                  canvasWidth={canvasWidth}
+                  lineHeight={this.props.lineHeight}
+                  lineCount={_length(this.props.groups)}
+                  height={height}
+                  headerHeight={headerHeight}
       />
     )
   }
@@ -992,9 +991,9 @@ export default class ReactCalendarTimeline extends Component {
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight)}
               {this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight)}
               {this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)}
-              { mouseOverCanvas && showCursorLine ? this.cursorLine(cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)
-                : null
-              }
+              {mouseOverCanvas && showCursorLine
+                ? this.cursorLine(cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)
+                : null}
               {this.infoLabel()}
               {this.header(
                 canvasTimeStart,

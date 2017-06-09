@@ -1,8 +1,16 @@
 import React, { Component } from 'react'
 
 export default class CursorLine extends Component {
+  static propTypes = {
+    canvasTimeStart: React.PropTypes.number.isRequired,
+    canvasTimeEnd: React.PropTypes.number.isRequired,
+    canvasWidth: React.PropTypes.number.isRequired,
+    lineHeight: React.PropTypes.number.isRequired,
+    lineCount: React.PropTypes.number.isRequired
+  }
+
   render () {
-    const { cursorTime } = this.props;
+    const { cursorTime } = this.props
 
     if (cursorTime > this.props.canvasTimeStart && cursorTime < this.props.canvasTimeEnd) {
       const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
@@ -20,13 +28,4 @@ export default class CursorLine extends Component {
       return <div />
     }
   }
-}
-CursorLine.propTypes = {
-  canvasTimeStart: React.PropTypes.number.isRequired,
-  canvasTimeEnd: React.PropTypes.number.isRequired,
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  lineCount: React.PropTypes.number.isRequired
-}
-CursorLine.defaultProps = {
 }

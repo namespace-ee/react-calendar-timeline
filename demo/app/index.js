@@ -140,6 +140,8 @@ export default class App extends Component {
                 stackItems
                 itemHeightRatio={0.75}
 
+                showCursorLine
+
                 defaultTimeStart={defaultTimeStart}
                 defaultTimeEnd={defaultTimeEnd}
 
