@@ -76,6 +76,8 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 }
 ```
 
+If you use right sidebar, you can pass `right_sidebar` optional property here. 
+
 ### items
 Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
 ```js
@@ -106,6 +108,7 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 {
   groupIdKey: 'id',
   groupTitleKey: 'title',
+  groupRightSidebarKey: 'right_sidebar',
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
@@ -116,7 +119,13 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 ```
 
 ### sidebarWidth
-Width of the sidebar in pixels. Defaults to `150`.
+Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
+
+### rightSidebarWidth
+Width of the right sidebar in pixels. If set to `0`, the right sidebar is not rendered. Defaults to `0`.
+
+### rightSidebarContent
+Everything passed here will be displayed above the right sidebar. Use this to display small filters or so. Defaults to `null`.
 
 ### dragSnap
 Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When so, the items will snap to 15min intervals when dragging.
@@ -309,6 +318,26 @@ You will then need to override the default CSS rule:
 ```css
 .react-calendar-timeline .rct-items .rct-item.analysis {
   backgroundColor: #68efad;
+}
+```
+
+### How can I add one more sidebar on the right?
+
+The library supports right sidebar.
+![right sidebar demo](doc/right-sidebar.png)
+
+To use it, you need to add two props to the `<Timeline />` component:
+```
+      rightSidebarWidth={150}
+      rightSidebarContent={<p>Second filter</p>}
+```
+
+And add `right_sidebar` prop to the groups objects:
+```
+{
+  id: 1,
+  title: 'group 1',
+  right_sidebar: 'additional info about group 1'
 }
 ```
 

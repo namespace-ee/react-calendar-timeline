@@ -7,7 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## [0.13.0]
 ### Added
+- An option to add another sidebar to the right of the Timeline. @goooseman
 - itemRenderer prop to allow specifying a custom component to render the items
 - groupRenderer prop to allow specifying a custom component to render the groups
 
@@ -46,3 +48,4 @@ When you submit a PR, add your changes here!
 [0.10.1]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.10.0...v0.10.1
 [0.11.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.10.1...v0.11.0
 [0.11.1]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.11.0...v0.11.1
+[0.13.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.11.1...v0.13.0

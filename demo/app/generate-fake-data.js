@@ -10,7 +10,8 @@ export default function () {
   for (let i = 0; i < GROUP_COUNT; i++) {
     groups.push({
       id: `${i + 1}`,
-      title: faker.name.firstName()
+      title: faker.name.firstName(),
+      right_sidebar: faker.name.lastName()
     })
   }
 

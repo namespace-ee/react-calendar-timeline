@@ -13,6 +13,7 @@ var maxTime = moment().add(6, 'months').valueOf()
 var keys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
+  groupRightSidebarKey: 'rightTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
@@ -130,6 +131,10 @@ export default class App extends Component {
                 keys={keys}
                 fixedHeader='fixed'
                 fullUpdate
+
+                sidebarWidth={150}
+                rightSidebarWidth={150}
+                rightSidebarContent={<div>Above The Right</div>}
 
                 canMove
                 canResize='right'
