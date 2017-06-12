@@ -44,4 +44,20 @@ describe('Timeline', () => {
     expect(itemsOrder[1].title).toBe('item 1')
     expect(itemsOrder[2].title).toBe('item 3')
   })
+  it('renders component with empty groups', () => {
+
+    let allCorrect = true;
+    try {
+      const wrapper = mount(
+        <Timeline groups={[]}
+                  items={items}
+                  defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                  defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+                  />,
+      );
+    } catch(err) {
+      allCorrect = false;
+    }
+    expect(allCorrect).toBe(true);
+  })
 })
