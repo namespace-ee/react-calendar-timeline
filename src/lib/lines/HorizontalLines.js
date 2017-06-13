@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 
 export default class HorizontalLines extends Component {
+  static propTypes = {
+    canvasWidth: React.PropTypes.number.isRequired,
+    lineHeight: React.PropTypes.number.isRequired,
+    lineCount: React.PropTypes.number.isRequired
+  }
+
+  static defaultProps = {
+    borderWidth: 1
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasWidth === this.props.canvasWidth &&
              nextProps.lineHeight === this.props.lineHeight &&
@@ -32,13 +42,4 @@ export default class HorizontalLines extends Component {
       </div>
     )
   }
-}
-
-HorizontalLines.propTypes = {
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  lineCount: React.PropTypes.number.isRequired
-}
-HorizontalLines.defaultProps = {
-  borderWidth: 1
 }

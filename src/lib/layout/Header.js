@@ -4,6 +4,27 @@ import moment from 'moment'
 import { iterateTimes, getNextUnit } from '../utils.js'
 
 export default class Header extends Component {
+  static propTypes = {
+    hasRightSidebar: React.PropTypes.bool.isRequired,
+    showPeriod: React.PropTypes.func.isRequired,
+    canvasTimeStart: React.PropTypes.number.isRequired,
+    canvasTimeEnd: React.PropTypes.number.isRequired,
+    canvasWidth: React.PropTypes.number.isRequired,
+    lineHeight: React.PropTypes.number.isRequired,
+    visibleTimeStart: React.PropTypes.number.isRequired,
+    visibleTimeEnd: React.PropTypes.number.isRequired,
+    minUnit: React.PropTypes.string.isRequired,
+    timeSteps: React.PropTypes.object.isRequired,
+    width: React.PropTypes.number.isRequired,
+    fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+    zIndex: React.PropTypes.number
+  }
+
+  static defaultProps = {
+    fixedHeader: 'none',
+    zIndex: 11
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -220,29 +241,4 @@ export default class Header extends Component {
       </div>
     )
   }
-}
-
-Header.propTypes = {
-  // groups: React.PropTypes.array.isRequired,
-  // width: React.PropTypes.number.isRequired,
-  // lineHeight: React.PropTypes.number.isRequired,
-  // headerBackgroundColor: React.PropTypes.string.isRequired,
-  hasRightSidebar: React.PropTypes.bool.isRequired,
-  showPeriod: React.PropTypes.func.isRequired,
-  canvasTimeStart: React.PropTypes.number.isRequired,
-  canvasTimeEnd: React.PropTypes.number.isRequired,
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  visibleTimeStart: React.PropTypes.number.isRequired,
-  visibleTimeEnd: React.PropTypes.number.isRequired,
-  // visibleTimeEnd: React.PropTypes.number.isRequired,
-  minUnit: React.PropTypes.string.isRequired,
-  timeSteps: React.PropTypes.object.isRequired,
-  width: React.PropTypes.number.isRequired,
-  fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  zIndex: React.PropTypes.number
-}
-Header.defaultProps = {
-  fixedHeader: 'none',
-  zIndex: 11
 }

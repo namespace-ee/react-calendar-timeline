@@ -3,6 +3,25 @@ import React, { Component } from 'react'
 import { _get, arraysEqual } from '../utils'
 
 export default class Sidebar extends Component {
+  static propTypes = {
+    groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
+    width: React.PropTypes.number.isRequired,
+    lineHeight: React.PropTypes.number.isRequired,
+    zIndex: React.PropTypes.number,
+    fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
+    keys: React.PropTypes.object.isRequired,
+    groupRenderer: React.PropTypes.func,
+    children: React.PropTypes.node,
+    isRightSidebar: React.PropTypes.bool
+  }
+
+  static defaultProps = {
+    fixedHeader: 'none',
+    zIndex: 12,
+    children: null,
+    isRightSidebar: false
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -141,22 +160,4 @@ export default class Sidebar extends Component {
       </div>
     )
   }
-}
-
-Sidebar.propTypes = {
-  groups: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.object]).isRequired,
-  width: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  zIndex: React.PropTypes.number,
-  fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-  keys: React.PropTypes.object.isRequired,
-  groupRenderer: React.PropTypes.func,
-  children: React.PropTypes.node,
-  isRightSidebar: React.PropTypes.bool
-}
-Sidebar.defaultProps = {
-  fixedHeader: 'none',
-  zIndex: 12,
-  children: null,
-  isRightSidebar: false
 }

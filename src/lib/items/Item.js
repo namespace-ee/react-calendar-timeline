@@ -35,6 +35,7 @@ export default class Item extends Component {
     // onContextMenu: React.PropTypes.func,
     // itemRenderer: React.PropTypes.func
   }
+
   static defaultProps = {
     selected: false
   }

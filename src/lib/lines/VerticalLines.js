@@ -3,6 +3,22 @@ import React, { Component } from 'react'
 import { iterateTimes } from '../utils.js'
 
 export default class VerticalLines extends Component {
+  static propTypes = {
+    canvasTimeStart: React.PropTypes.number.isRequired,
+    canvasTimeEnd: React.PropTypes.number.isRequired,
+    canvasWidth: React.PropTypes.number.isRequired,
+    lineHeight: React.PropTypes.number.isRequired,
+    lineCount: React.PropTypes.number.isRequired,
+    minUnit: React.PropTypes.string.isRequired,
+    timeSteps: React.PropTypes.object.isRequired,
+    fixedHeader: React.PropTypes.string.isRequired
+  }
+
+  static defaultProps = {
+    fixedHeader: 'none',
+    dayBackground: null
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasTimeStart === this.props.canvasTimeStart &&
              nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
@@ -52,19 +68,4 @@ export default class VerticalLines extends Component {
       </div>
     )
   }
-}
-
-VerticalLines.propTypes = {
-  canvasTimeStart: React.PropTypes.number.isRequired,
-  canvasTimeEnd: React.PropTypes.number.isRequired,
-  canvasWidth: React.PropTypes.number.isRequired,
-  lineHeight: React.PropTypes.number.isRequired,
-  lineCount: React.PropTypes.number.isRequired,
-  minUnit: React.PropTypes.string.isRequired,
-  timeSteps: React.PropTypes.object.isRequired,
-  fixedHeader: React.PropTypes.string.isRequired
-}
-VerticalLines.defaultProps = {
-  fixedHeader: 'none',
-  dayBackground: null
 }
