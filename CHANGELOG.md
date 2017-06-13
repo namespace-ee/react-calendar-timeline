@@ -9,6 +9,7 @@ When you submit a PR, add your changes here!
 
 ### Added
 - Use `headerLabelFormats` and `subHeaderLabelFormats` to customise the header labels. @Slowyn #68
+- Optional pluggable `resizeDetector` to detect when the element's container is resized. @Ziller321 #94
 
 ### Fixed
 - Fix renders with empty `groups` array. @signalwerk #106

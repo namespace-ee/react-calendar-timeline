@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 
 import Timeline from 'react-calendar-timeline'
+// import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 import generateFakeData from './generate-fake-data'
 
@@ -151,6 +152,8 @@ export default class App extends Component {
                 itemHeightRatio={0.75}
 
                 showCursorLine
+
+                // resizeDetector={containerResizeDetector}
 
                 defaultTimeStart={defaultTimeStart}
                 defaultTimeEnd={defaultTimeEnd}

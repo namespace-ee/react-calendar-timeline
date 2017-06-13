@@ -11,7 +11,7 @@ import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 import CursorLine from './lines/CursorLine'
 
-import elementResizeDetectorMaker from 'element-resize-detector'
+import windowResizeDetector from '../resize-detector/window'
 
 import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
 
@@ -189,6 +189,11 @@ export default class ReactCalendarTimeline extends Component {
       minuteLong: PropTypes.string
     }),
 
+    resizeDetector: PropTypes.shape({
+      addListener: PropTypes.func,
+      removeListener: PropTypes.func
+    }),
+
     children: PropTypes.node
   }
 
@@ -234,7 +239,6 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseMove: null,
 
     moveResizeValidator: null,
-    resizeDetectorMethod: 'container',
 
     dayBackground: null,
 
@@ -322,26 +326,11 @@ export default class ReactCalendarTimeline extends Component {
   componentDidMount () {
     this.resize(this.props)
 
-    this.resizeEventListener = {
-      handleEvent: (event) => {
-        this.resize(this.props)
-      }
+    if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
+      this.props.resizeDetector.addListener(this)
     }
 
-    if (this.props.resizeDetectorMethod === 'container') {
-      this.erd = elementResizeDetectorMaker({
-        strategy: 'scroll'
-      })
-
-      this.erd.listenTo(this.refs.container, () => {
-        this.resize()
-      })
-    }
-
-    if (this.props.resizeDetectorMethod === 'window') {
-      window.addEventListener('resize', this.resizeEventListener)
-    }
-
+    windowResizeDetector.addListener(this)
 
     this.lastTouchDistance = null
 
@@ -351,13 +340,11 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentWillUnmount () {
-    if (this.props.resizeDetectorMethod === 'container') {
-      this.erd.removeAllListeners(this.refs.container)
+    if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
+      this.props.resizeDetector.removeListener(this)
     }
 
-    if (this.props.resizeDetectorMethod === 'window') {
-      window.removeEventListener('resize', this.resizeEventListener)
-    }
+    windowResizeDetector.removeListener(this)
 
     this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart)
     this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove)
@@ -440,8 +427,8 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  resize (props) {
-    const {width: containerWidth, top: containerTop} = this.refs.container.getBoundingClientRect()
+  resize = (props = this.props) => {
+    const { width: containerWidth, top: containerTop } = this.refs.container.getBoundingClientRect()
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
 
     const {
@@ -1111,7 +1098,6 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
-    console.log('render', this)
     return (
       <div style={this.props.style} ref='container' className='react-calendar-timeline'>
         <div style={outerComponentStyle} className='rct-outer'>

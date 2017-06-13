@@ -371,6 +371,16 @@ performance problems.
 React component that will be used to render the content of groups in the
 sidebar. Will be passed the `group` and `isRightSidebar` as props.
 
+### resizeDetector
+The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
+To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
+
+```js
+import componentResizeDetector from 'react-calendar-timeline/lib/resize-detector/component'
+
+<Timeline resizeDetector={componentResizeDetector} ... />
+```
+
 ### children
 **DEPRECATED. User the sidebarContent prop instead.** All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
 
