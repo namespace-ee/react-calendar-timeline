@@ -367,9 +367,49 @@ React component that will be used to render the item content.  Will be
 passed the `item` as a prop. Using complex components may result in
 performance problems.
 
+```jsx
+  let items = [
+    {
+      id: 1,
+      group: 1,
+      title: 'Title',
+      tip: 'additional information',
+      ...
+    }
+  ]
+
+  itemRenderer = ({ item }) => {
+    return (
+      <div className='custom-item'>
+        <span className='title'>{item.title}</span>
+        <p className='tip'>{item.tip}</p>
+      </div>
+    )
+  }
+```
+
 ### groupRenderer
 React component that will be used to render the content of groups in the
 sidebar. Will be passed the `group` and `isRightSidebar` as props.
+
+```jsx
+  let groups = [
+    {
+      id: 1,
+      title: 'Title',
+      tip: 'additional information'
+    }
+  ]
+
+  groupRenderer = ({ group }) => {
+    return (
+      <div className='custom-group'>
+        <span className='title'>{group.title}</span>
+        <p className='tip'>{group.tip}</p>
+      </div>
+    )
+  }
+```
 
 ### resizeDetector
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
