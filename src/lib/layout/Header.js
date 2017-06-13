@@ -16,6 +16,8 @@ export default class Header extends Component {
     minUnit: React.PropTypes.string.isRequired,
     timeSteps: React.PropTypes.object.isRequired,
     width: React.PropTypes.number.isRequired,
+    headerLabelFormats: React.PropTypes.object.isRequired,
+    subHeaderLabelFormats: React.PropTypes.object.isRequired,
     fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
     zIndex: React.PropTypes.number
   }
@@ -73,30 +75,34 @@ export default class Header extends Component {
   }
 
   headerLabel (time, unit, width) {
+    const { headerLabelFormats: f } = this.props
+
     if (unit === 'year') {
-      return time.format(width < 46 ? 'YY' : 'YYYY')
+      return time.format(width < 46 ? f.yearShort : f.yearLong)
     } else if (unit === 'month') {
-      return time.format(width < 65 ? 'MM/YY' : width < 75 ? 'MM/YYYY' : width < 120 ? 'MMM YYYY' : 'MMMM YYYY')
+      return time.format(width < 65 ? f.monthShort : width < 75 ? f.monthMedium : width < 120 ? f.monthMediumLong : f.monthLong)
     } else if (unit === 'day') {
-      return time.format(width < 150 ? 'L' : 'dddd, LL')
+      return time.format(width < 150 ? f.dayShort : f.dayLong)
     } else if (unit === 'hour') {
-      return time.format(width < 50 ? 'HH' : width < 130 ? 'HH:00' : width < 150 ? 'L, HH:00' : 'dddd, LL, HH:00')
+      return time.format(width < 50 ? f.hourShort : width < 130 ? f.hourMedium : width < 150 ? f.hourMediumLong : f.hourLong)
     } else {
-      return time.format('LLL')
+      return time.format(f.time)
     }
   }
 
   subHeaderLabel (time, unit, width) {
+    const { subHeaderLabelFormats: f } = this.props
+
     if (unit === 'year') {
-      return time.format(width < 46 ? 'YY' : 'YYYY')
+      return time.format(width < 46 ? f.yearShort : f.yearLong)
     } else if (unit === 'month') {
-      return time.format(width < 37 ? 'MM' : width < 85 ? 'MMM' : 'MMMM')
+      return time.format(width < 37 ? f.monthShort : width < 85 ? f.monthMedium : f.monthLong)
     } else if (unit === 'day') {
-      return time.format(width < 47 ? 'D' : width < 80 ? 'dd D' : width < 120 ? 'ddd, Do' : 'dddd, Do')
+      return time.format(width < 47 ? f.dayShort : width < 80 ? f.dayMedium : width < 120 ? f.dayMediumLong : f.dayLong)
     } else if (unit === 'hour') {
-      return time.format(width < 50 ? 'HH' : 'HH:00')
+      return time.format(width < 50 ? f.hourShort : f.hourLong)
     } else if (unit === 'minute') {
-      return time.format(width < 60 ? 'mm' : 'HH:mm')
+      return time.format(width < 60 ? f.minuteShort : f.minuteLong)
     } else {
       return time.get(unit)
     }

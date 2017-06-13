@@ -13,7 +13,7 @@ import CursorLine from './lines/CursorLine'
 
 import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
 
-const defaultKeys = {
+export const defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
@@ -25,13 +25,45 @@ const defaultKeys = {
   itemTimeEndKey: 'end_time'
 }
 
-const defaultTimeSteps = {
+export const defaultTimeSteps = {
   second: 1,
   minute: 1,
   hour: 1,
   day: 1,
   month: 1,
   year: 1
+}
+
+export const defaultHeaderLabelFormats = {
+  yearShort: 'YY',
+  yearLong: 'YYYY',
+  monthShort: 'MM/YY',
+  monthMedium: 'MM/YYYY',
+  monthMediumLong: 'MMM YYYY',
+  monthLong: 'MMMM YYYY',
+  dayShort: 'L',
+  dayLong: 'dddd, LL',
+  hourShort: 'HH',
+  hourMedium: 'HH:00',
+  hourMediumLong: 'L, HH:00',
+  hourLong: 'dddd, LL, HH:00',
+  time: 'LLL'
+}
+
+export const defaultSubHeaderLabelFormats = {
+  yearShort: 'YY',
+  yearLong: 'YYYY',
+  monthShort: 'MM',
+  monthMedium: 'MMM',
+  monthLong: 'MMMM',
+  dayShort: 'D',
+  dayMedium: 'dd D',
+  dayMediumLong: 'ddd, Do',
+  dayLong: 'dddd, Do',
+  hourShort: 'HH',
+  hourLong: 'HH:00',
+  minuteShort: 'mm',
+  minuteLong: 'HH:mm'
 }
 
 export default class ReactCalendarTimeline extends Component {
@@ -91,9 +123,27 @@ export default class ReactCalendarTimeline extends Component {
     dayBackground: PropTypes.func,
 
     style: PropTypes.object,
-    keys: PropTypes.object,
 
-    timeSteps: PropTypes.object,
+    keys: PropTypes.shape({
+      groupIdKey: PropTypes.string,
+      groupTitleKey: PropTypes.string,
+      groupRightTitleKey: PropTypes.string,
+      itemIdKey: PropTypes.string,
+      itemTitleKey: PropTypes.string,
+      itemDivTitleKey: PropTypes.string,
+      itemGroupKey: PropTypes.string,
+      itemTimeStartKey: PropTypes.string,
+      itemTimeEndKey: PropTypes.string
+    }),
+
+    timeSteps: PropTypes.shape({
+      second: PropTypes.number,
+      minute: PropTypes.number,
+      hour: PropTypes.number,
+      day: PropTypes.number,
+      month: PropTypes.number,
+      year: PropTypes.number
+    }),
 
     defaultTimeStart: PropTypes.object,
     defaultTimeEnd: PropTypes.object,
@@ -104,9 +154,40 @@ export default class ReactCalendarTimeline extends Component {
     onTimeInit: PropTypes.func,
     onBoundsChange: PropTypes.func,
 
-    children: PropTypes.node,
+    selected: PropTypes.array,
 
-    selected: PropTypes.array
+    headerLabelFormats: PropTypes.shape({
+      yearShort: PropTypes.string,
+      yearLong: PropTypes.string,
+      monthShort: PropTypes.string,
+      monthMedium: PropTypes.string,
+      monthMediumLong: PropTypes.string,
+      monthLong: PropTypes.string,
+      dayShort: PropTypes.string,
+      dayLong: PropTypes.string,
+      hourShort: PropTypes.string,
+      hourMedium: PropTypes.string,
+      hourMediumLong: PropTypes.string,
+      hourLong: PropTypes.string
+    }),
+
+    subHeaderLabelFormats: PropTypes.shape({
+      yearShort: PropTypes.string,
+      yearLong: PropTypes.string,
+      monthShort: PropTypes.string,
+      monthMedium: PropTypes.string,
+      monthLong: PropTypes.string,
+      dayShort: PropTypes.string,
+      dayMedium: PropTypes.string,
+      dayMediumLong: PropTypes.string,
+      dayLong: PropTypes.string,
+      hourShort: PropTypes.string,
+      hourLong: PropTypes.string,
+      minuteShort: PropTypes.string,
+      minuteLong: PropTypes.string
+    }),
+
+    children: PropTypes.node
   }
 
   static defaultProps = {
@@ -175,6 +256,9 @@ export default class ReactCalendarTimeline extends Component {
     // called when the canvas area of the calendar changes
     onBoundsChange: null,
     children: null,
+
+    headerLabelFormats: defaultHeaderLabelFormats,
+    subHeaderLabelFormats: defaultSubHeaderLabelFormats,
 
     selected: null
   }
@@ -810,7 +894,9 @@ export default class ReactCalendarTimeline extends Component {
               visibleTimeEnd={this.state.visibleTimeEnd}
               fixedHeader={this.props.fixedHeader}
               zIndex={this.props.zIndexStart + 1}
-              showPeriod={this.showPeriod} />
+              showPeriod={this.showPeriod}
+              headerLabelFormats={this.props.headerLabelFormats}
+              subHeaderLabelFormats={this.props.subHeaderLabelFormats} />
     )
   }
 

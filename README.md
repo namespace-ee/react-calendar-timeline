@@ -273,6 +273,66 @@ Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the 
 ### visibleTimeStart and visibleTimeEnd
 The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.  This parameter expects a unix timestamp in milliseconds.
 
+### headerLabelFormats and subHeaderLabelFormats
+The formats passed to moment to render times in the header and subheader. Defaults to these:
+
+```js
+import { defaultHeaderLabelFormats, defaultSubHeaderLabelFormats } from 'react-calendar-timeline'
+
+defaultHeaderLabelFormats == {
+  yearShort: 'YY',
+  yearLong: 'YYYY',
+  monthShort: 'MM/YY',
+  monthMedium: 'MM/YYYY',
+  monthMediumLong: 'MMM YYYY',
+  monthLong: 'MMMM YYYY',
+  dayShort: 'L',
+  dayLong: 'dddd, LL',
+  hourShort: 'HH',
+  hourMedium: 'HH:00',
+  hourMediumLong: 'L, HH:00',
+  hourLong: 'dddd, LL, HH:00',
+  time: 'LLL'
+}
+
+defaultSubHeaderLabelFormats == {
+  yearShort: 'YY',
+  yearLong: 'YYYY',
+  monthShort: 'MM',
+  monthMedium: 'MMM',
+  monthLong: 'MMMM',
+  dayShort: 'D',
+  dayMedium: 'dd D',
+  dayMediumLong: 'ddd, Do',
+  dayLong: 'dddd, Do',
+  hourShort: 'HH',
+  hourLong: 'HH:00',
+  minuteShort: 'mm',
+  minuteLong: 'HH:mm'
+}
+```
+
+For US time formats (AM/PM), use these:
+
+```js
+import { defaultHeaderLabelFormats, defaultSubHeaderLabelFormats } from 'react-calendar-timeline'
+
+const usHeaderLabelFormats = Object.assign({}, defaultSubHeaderLabelFormats, {
+  hourShort: 'h A',
+  hourMedium: 'h A',
+  hourMediumLong: 'L, h A',
+  hourLong: 'dddd, LL, h A',
+})
+
+const usSubHeaderLabelFormats = Object.assign({}, defaultSubHeaderLabelFormats, {
+  hourShort: 'h A',
+  hourLong: 'h A',
+  minuteLong: 'h:mm A'
+})
+```
+
+... and then pass these as `headerLabelFormats` and `subHeaderLabelFormats`
+
 ### onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
 A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd (as unix timestamps in milliseconds) to change the scroll behavior, for example to limit scrolling.
 
