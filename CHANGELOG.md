@@ -6,8 +6,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 When you submit a PR, add your changes here!
+
 ### Added
 - Use `headerLabelFormats` and `subHeaderLabelFormats` to customise the header labels. @Slowyn #68
+
+### Fixed
+- Fix renders with empty `groups` array. @signalwerk #106
 
 ## [0.13.0]
 ### Added
