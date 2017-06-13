@@ -444,13 +444,13 @@ The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
 
 To use it, you need to add two props to the `<Timeline />` component:
-```
+```jsx
 rightSidebarWidth={150}
 rightSidebarContent={<p>Second filter</p>}
 ```
 
 And add `right_sidebar` prop to the groups objects:
-```
+```js
 {
   id: 1,
   title: 'group 1',
