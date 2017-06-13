@@ -853,6 +853,18 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   stackItems (items, groups, canvasTimeStart, visibleTimeStart, visibleTimeEnd, width) {
+
+    // if there are no groups return an empty array of dimensions
+    if(groups.length === 0) {
+      return {
+        dimensionItems: [],
+        height: 0,
+        groupHeights: 0,
+        groupTops: 0,
+      };
+    }
+
+
     const { keys, dragSnap, lineHeight, headerLabelGroupHeight, headerLabelHeight, stackItems, fullUpdate, itemHeightRatio } = this.props
     const { draggingItem, dragTime, resizingItem, resizingEdge, resizeTime, newGroupOrder } = this.state
     const zoom = visibleTimeEnd - visibleTimeStart
