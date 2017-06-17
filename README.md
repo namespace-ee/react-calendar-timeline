@@ -340,8 +340,8 @@ Here is an example that limits the timeline to only show dates starting 6 months
 
 ```js
 // this limits the timeline to -6 months ... +6 months
-var minTime = moment().add(-6, 'months').valueOf()
-var maxTime = moment().add(6, 'months').valueOf()
+const minTime = moment().add(-6, 'months').valueOf()
+const maxTime = moment().add(6, 'months').valueOf()
 
 function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
   if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
@@ -367,15 +367,55 @@ React component that will be used to render the item content.  Will be
 passed the `item` as a prop. Using complex components may result in
 performance problems.
 
+```jsx
+let items = [
+  {
+    id: 1,
+    group: 1,
+    title: 'Title',
+    tip: 'additional information',
+    ...
+  }
+]
+
+itemRenderer = ({ item }) => {
+  return (
+    <div className='custom-item'>
+      <span className='title'>{item.title}</span>
+      <p className='tip'>{item.tip}</p>
+    </div>
+  )
+}
+```
+
 ### groupRenderer
 React component that will be used to render the content of groups in the
 sidebar. Will be passed the `group` and `isRightSidebar` as props.
+
+```jsx
+let groups = [
+  {
+    id: 1,
+    title: 'Title',
+    tip: 'additional information'
+  }
+]
+
+groupRenderer = ({ group }) => {
+  return (
+    <div className='custom-group'>
+      <span className='title'>{group.title}</span>
+      <p className='tip'>{group.tip}</p>
+    </div>
+  )
+}
+```
 
 ### resizeDetector
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
 
-```js
+```jsx
 import componentResizeDetector from 'react-calendar-timeline/lib/resize-detector/component'
 
 <Timeline resizeDetector={componentResizeDetector} ... />
@@ -404,13 +444,13 @@ The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
 
 To use it, you need to add two props to the `<Timeline />` component:
-```
-      rightSidebarWidth={150}
-      rightSidebarContent={<p>Second filter</p>}
+```jsx
+rightSidebarWidth={150}
+rightSidebarContent={<p>Second filter</p>}
 ```
 
 And add `right_sidebar` prop to the groups objects:
-```
+```js
 {
   id: 1,
   title: 'group 1',
