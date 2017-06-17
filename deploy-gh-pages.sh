@@ -31,6 +31,14 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]
     exit 0
 fi
 
+# Get the deploy key by using Travis's stored variables to decrypt deploy-travis-key.enc
+ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
+ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
+ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
+ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
+eval `ssh-agent -s`
+openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in ./deploy-travis-key.enc -d | ssh-add -
+
 # Save some useful information
 # REPO=`git config remote.origin.url`
 # SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
@@ -68,13 +76,5 @@ fi
 git add -A .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
-# Get the deploy key by using Travis's stored variables to decrypt deploy-travis-key.enc
-ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
-ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
-ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
-ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
-eval `ssh-agent -s`
-openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in ./deploy-travis-key.enc -d | ssh-add -
-
-# Now that we're all set up, we can push.
+# Push to the remote repository
 git push $SSH_REPO $TARGET_BRANCH
