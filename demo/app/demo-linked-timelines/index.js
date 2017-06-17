@@ -25,8 +25,8 @@ export default class App extends Component {
     const { groups: groups1, items: items1 } = generateFakeData(5, 400)
     const { groups: groups2, items: items2 } = generateFakeData(5, 400)
 
-    const visibleTimeStart = moment().startOf('day').toDate()
-    const visibleTimeEnd = moment().startOf('day').add(1, 'day').toDate()
+    const visibleTimeStart = moment().startOf('day').valueOf()
+    const visibleTimeEnd = moment().startOf('day').add(1, 'day').valueOf()
 
     this.state = {
       groups1,
@@ -40,6 +40,7 @@ export default class App extends Component {
 
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+    // console.log(visibleTimeStart, visibleTimeEnd)
     this.setState({ visibleTimeStart, visibleTimeEnd })
   }
 
