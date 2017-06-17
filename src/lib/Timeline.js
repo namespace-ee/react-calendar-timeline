@@ -484,7 +484,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     // resize if the sidebar width changed
-    if (sidebarWidth !== this.props.sidbarWidth && items && groups) {
+    if (sidebarWidth !== this.props.sidebarWidth && items && groups) {
       this.resize(nextProps)
     }
   }
