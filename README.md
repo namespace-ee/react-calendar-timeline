@@ -93,7 +93,10 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
   canChangeGroup: false,
   className: 'weekend',
   itemProps: {
-    'data-custom-attribute': 'Random content'
+    // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
+    'data-custom-attribute': 'Random content',
+    'aria-hidden': true,
+    onDoubleClick: () => { console.log('You clicked double!') }
   }
 }
 ```
