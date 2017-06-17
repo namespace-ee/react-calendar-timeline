@@ -10,7 +10,8 @@ echo "-- start"
 ls -las
 
 SOURCE_BRANCH="master"
-TARGET_BRANCH="gh-pages"
+TARGET_BRANCH="master"
+SSH_REPO="git@github.com:namespace-ee/react-calendar-timeline-docs"
 DEPLOY_DIR="gh-pages"
 
 function doCompile {
@@ -31,14 +32,14 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]
 fi
 
 # Save some useful information
-REPO=`git config remote.origin.url`
-SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
+# REPO=`git config remote.origin.url`
+# SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
 # Clone the existing gh-pages for this repo into $DEPLOY_DIR/
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
 rm -rf $DEPLOY_DIR
-git clone $REPO $DEPLOY_DIR
+git clone $SSH_REPO $DEPLOY_DIR
 cd $DEPLOY_DIR
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 cd ..
