@@ -38,62 +38,79 @@ export default class App extends Component {
     }
   }
 
-  // this limits the timeline to -6 months ... +6 months
-  handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
-    // console.log(visibleTimeStart, visibleTimeEnd)
+  handleTimeChangeFirst = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+    console.log('first', visibleTimeStart, visibleTimeEnd)
     this.setState({ visibleTimeStart, visibleTimeEnd })
   }
 
-  render () {
-    const { groups1, groups2, items1, items2, visibleTimeStart, visibleTimeEnd } = this.state
+  handleTimeChangeSecond = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+    console.log('second', visibleTimeStart, visibleTimeEnd)
+    this.setState({ visibleTimeStart, visibleTimeEnd })
+  }
+
+  renderFirst () {
+    const { groups1, items1, visibleTimeStart, visibleTimeEnd } = this.state
 
     return (
+      <Timeline groups={groups1}
+                items={items1}
+                keys={keys}
+                fixedHeader='fixed'
+                fullUpdate
+
+                sidebarWidth={150}
+                sidebarContent={<div>Above The Left</div>}
+
+                canMove
+                canResize='right'
+                canSelect
+
+                itemsSorted
+                itemTouchSendsClick={false}
+                stackItems
+                itemHeightRatio={0.75}
+
+                visibleTimeStart={visibleTimeStart}
+                visibleTimeEnd={visibleTimeEnd}
+
+                onTimeChange={this.handleTimeChangeFirst} />
+    )
+  }
+
+  renderSecond () {
+    const { groups2, items2, visibleTimeStart, visibleTimeEnd } = this.state
+
+    return (
+      <Timeline groups={groups2}
+                items={items2}
+                keys={keys}
+                fixedHeader='fixed'
+                fullUpdate
+
+                sidebarWidth={150}
+                sidebarContent={<div>Above The Left</div>}
+
+                canMove
+                canResize='right'
+                canSelect
+
+                itemsSorted
+                itemTouchSendsClick={false}
+                stackItems
+                itemHeightRatio={0.75}
+
+                visibleTimeStart={visibleTimeStart}
+                visibleTimeEnd={visibleTimeEnd}
+
+                onTimeChange={this.handleTimeChangeSecond} />
+    )
+  }
+
+  render () {
+    return (
       <div>
-        <Timeline groups={groups1}
-                  items={items1}
-                  keys={keys}
-                  fixedHeader='fixed'
-                  fullUpdate
-
-                  sidebarWidth={150}
-                  sidebarContent={<div>Above The Left</div>}
-
-                  canMove
-                  canResize='right'
-                  canSelect
-
-                  itemsSorted
-                  itemTouchSendsClick={false}
-                  stackItems
-                  itemHeightRatio={0.75}
-
-                  visibleTimeStart={visibleTimeStart}
-                  visibleTimeEnd={visibleTimeEnd}
-
-                  onTimeChange={this.handleTimeChange} />
-
-        <Timeline groups={groups2}
-                  items={items2}
-                  keys={keys}
-                  fixedHeader='fixed'
-                  fullUpdate
-
-                  sidebarWidth={150}
-                  sidebarContent={<div>Above The Left</div>}
-
-                  canMove
-                  canResize='right'
-                  canSelect
-
-                  itemsSorted
-                  itemTouchSendsClick={false}
-                  stackItems
-                  itemHeightRatio={0.75}
-
-                  visibleTimeStart={visibleTimeStart}
-                  visibleTimeEnd={visibleTimeEnd}
-
-                  onTimeChange={this.handleTimeChange} />
+        {this.renderFirst()}
+        {this.renderSecond()}
       </div>
     )
   }
