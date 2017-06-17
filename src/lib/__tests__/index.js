@@ -59,4 +59,30 @@ describe('Timeline', () => {
     }
     expect(allCorrect).toBe(true)
   })
+
+  it('renders items without corresponding group', () => {
+    let itemsNoValidGroup = [
+      {
+        start_time: moment('1995-12-25').add(-2, 'hour'),
+        end_time: moment('1995-12-25').add(2, 'hour'),
+        group: -1, // this ID is not found in groups!
+        id: 1,
+        title: 'Title'
+      }
+    ]
+
+    let allCorrect = true
+    try {
+      mount(
+        <Timeline groups={groups}
+                  items={itemsNoValidGroup}
+                  defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                  defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+                  />,
+      )
+    } catch (err) {
+      allCorrect = false
+    }
+    expect(allCorrect).toBe(true)
+  })
 })
