@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 export default class CursorLine extends Component {
   static propTypes = {
-    canvasTimeStart: React.PropTypes.number.isRequired,
-    canvasTimeEnd: React.PropTypes.number.isRequired,
-    canvasWidth: React.PropTypes.number.isRequired,
-    lineHeight: React.PropTypes.number.isRequired,
-    lineCount: React.PropTypes.number.isRequired
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+    lineCount: PropTypes.number.isRequired
   }
 
   render () {

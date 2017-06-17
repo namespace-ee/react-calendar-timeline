@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 export default class HorizontalLines extends Component {
   static propTypes = {
-    canvasWidth: React.PropTypes.number.isRequired,
-    lineHeight: React.PropTypes.number.isRequired,
-    lineCount: React.PropTypes.number.isRequired
+    canvasWidth: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+    lineCount: PropTypes.number.isRequired
   }
 
   static defaultProps = {

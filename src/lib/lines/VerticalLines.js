@@ -1,17 +1,18 @@
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 import { iterateTimes } from '../utils.js'
 
 export default class VerticalLines extends Component {
   static propTypes = {
-    canvasTimeStart: React.PropTypes.number.isRequired,
-    canvasTimeEnd: React.PropTypes.number.isRequired,
-    canvasWidth: React.PropTypes.number.isRequired,
-    lineHeight: React.PropTypes.number.isRequired,
-    lineCount: React.PropTypes.number.isRequired,
-    minUnit: React.PropTypes.string.isRequired,
-    timeSteps: React.PropTypes.object.isRequired,
-    fixedHeader: React.PropTypes.string.isRequired
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+    lineCount: PropTypes.number.isRequired,
+    minUnit: PropTypes.string.isRequired,
+    timeSteps: PropTypes.object.isRequired,
+    fixedHeader: PropTypes.string.isRequired
   }
 
   static defaultProps = {

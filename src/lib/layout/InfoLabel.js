@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 export default class InfoLabel extends Component {
   static propTypes = {
-    label: React.PropTypes.string.isRequired
+    label: PropTypes.string.isRequired
   }
 
   static defaultProps = {

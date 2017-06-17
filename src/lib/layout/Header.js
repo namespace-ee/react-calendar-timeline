@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import moment from 'moment'
 
@@ -5,21 +6,21 @@ import { iterateTimes, getNextUnit } from '../utils.js'
 
 export default class Header extends Component {
   static propTypes = {
-    hasRightSidebar: React.PropTypes.bool.isRequired,
-    showPeriod: React.PropTypes.func.isRequired,
-    canvasTimeStart: React.PropTypes.number.isRequired,
-    canvasTimeEnd: React.PropTypes.number.isRequired,
-    canvasWidth: React.PropTypes.number.isRequired,
-    lineHeight: React.PropTypes.number.isRequired,
-    visibleTimeStart: React.PropTypes.number.isRequired,
-    visibleTimeEnd: React.PropTypes.number.isRequired,
-    minUnit: React.PropTypes.string.isRequired,
-    timeSteps: React.PropTypes.object.isRequired,
-    width: React.PropTypes.number.isRequired,
-    headerLabelFormats: React.PropTypes.object.isRequired,
-    subHeaderLabelFormats: React.PropTypes.object.isRequired,
-    fixedHeader: React.PropTypes.oneOf(['fixed', 'absolute', 'none']),
-    zIndex: React.PropTypes.number
+    hasRightSidebar: PropTypes.bool.isRequired,
+    showPeriod: PropTypes.func.isRequired,
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+    visibleTimeStart: PropTypes.number.isRequired,
+    visibleTimeEnd: PropTypes.number.isRequired,
+    minUnit: PropTypes.string.isRequired,
+    timeSteps: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired,
+    headerLabelFormats: PropTypes.object.isRequired,
+    subHeaderLabelFormats: PropTypes.object.isRequired,
+    fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none']),
+    zIndex: PropTypes.number
   }
 
   static defaultProps = {
