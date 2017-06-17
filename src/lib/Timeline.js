@@ -483,9 +483,11 @@ export default class ReactCalendarTimeline extends Component {
       this.updateDimensions(items, groups)
     }
 
-    if (sidebarWidth && items && groups) {
-      this.resize(nextProps)
-    }
+    // TODO: this is commented out because of #109. Should be investigated and fixed.
+    //
+    // if (sidebarWidth && items && groups) {
+    //   this.resize(nextProps)
+    // }
   }
 
   updateDimensions (items, groups) {
