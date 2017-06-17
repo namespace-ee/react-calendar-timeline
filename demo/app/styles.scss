@@ -8,3 +8,27 @@ body {
   background: #21F32C;
   border-color: #29B31A;
 }
+
+.demo-row {
+  padding: 10px;
+  line-height: 15px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fff;
+  z-index: 100;
+}
+
+.demo-demo {
+  margin-top: 35px;
+}
+
+.demo-selection {
+  margin-left: 10px;
+  text-decoration: none;
+  &.selected {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+}

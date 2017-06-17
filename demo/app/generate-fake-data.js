@@ -1,13 +1,9 @@
 import faker from 'faker'
 import moment from 'moment'
 
-const GROUP_COUNT = 30
-const ITEM_COUNT = 1000
-const DAYS_IN_PAST = 30
-
-export default function () {
+export default function (groupCount = 30, itemCount = 1000, daysInPast = 30) {
   let groups = []
-  for (let i = 0; i < GROUP_COUNT; i++) {
+  for (let i = 0; i < groupCount; i++) {
     groups.push({
       id: `${i + 1}`,
       title: faker.name.firstName(),
@@ -16,8 +12,8 @@ export default function () {
   }
 
   let items = []
-  for (let i = 0; i < ITEM_COUNT; i++) {
-    const startDate = faker.date.recent(DAYS_IN_PAST).valueOf() + (DAYS_IN_PAST * 0.3) * 86400 * 1000
+  for (let i = 0; i < itemCount; i++) {
+    const startDate = faker.date.recent(daysInPast).valueOf() + (daysInPast * 0.3) * 86400 * 1000
     const startValue = Math.floor(moment(startDate).valueOf() / 10000000) * 10000000
     const endValue = moment(startDate + faker.random.number({min: 2, max: 20}) * 15 * 60 * 1000).valueOf()
 
