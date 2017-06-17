@@ -39,8 +39,8 @@ export default class App extends Component {
     }
   }
 
-  handleCanvasClick = (event) => {
-    console.log('Canvas clicked')
+  handleCanvasClick = (groupId, time, event) => {
+    console.log('Canvas clicked', groupId, time)
   }
 
   handleCanvasContextMenu = (group, time, e) => {
