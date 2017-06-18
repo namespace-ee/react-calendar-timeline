@@ -310,7 +310,7 @@ export function getGroupedItems (items, groupOrders) {
   }
   // Populate groups
   for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order) {
+    if (items[i].dimensions.order !== undefined) {
       arr[items[i].dimensions.order].push(items[i])
     }
   }
