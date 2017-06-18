@@ -44,6 +44,21 @@ describe('Timeline', () => {
     expect(itemsOrder[1].title).toBe('item 1')
     expect(itemsOrder[2].title).toBe('item 3')
   })
+  it('assigns top dimension to all items', () => {
+    const wrapper = mount(
+      <Timeline groups={groups}
+                items={items}
+                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+                />,
+    )
+
+    // get the items parent
+    const itemsRendered = wrapper.find('.rct-items')
+    itemsRendered.props().children.forEach((item) => {
+      expect(item.props.dimensions.top).not.toBeNull()
+    })
+  })
   it('renders component with empty groups', () => {
     let allCorrect = true
     try {
