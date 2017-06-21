@@ -78,7 +78,6 @@ export default class Item extends Component {
                        nextProps.order !== this.props.order ||
                        nextProps.dragSnap !== this.props.dragSnap ||
                        nextProps.minResizeWidth !== this.props.minResizeWidth ||
-                       nextProps.selected !== this.props.selected ||
                        nextProps.canChangeGroup !== this.props.canChangeGroup ||
                        nextProps.canSelect !== this.props.canSelect ||
                        nextProps.topOffset !== this.props.topOffset ||
