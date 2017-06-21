@@ -846,7 +846,6 @@ export default class ReactCalendarTimeline extends Component {
       <Items canvasTimeStart={canvasTimeStart}
              canvasTimeEnd={canvasTimeEnd}
              canvasWidth={canvasWidth}
-             lineHeight={this.props.lineHeight}
              lineCount={_length(this.props.groups)}
              dimensionItems={dimensionItems}
              minUnit={minUnit}
@@ -999,7 +998,6 @@ export default class ReactCalendarTimeline extends Component {
         dimension.order = isDragging ? newGroupOrder : groupOrders[_get(item, keys.itemGroupKey)]
         dimension.stack = !item.isOverlay
         dimension.height = lineHeight * itemHeightRatio
-        dimension.lineHeight = lineHeight
         dimension.isDragging = isDragging
 
         memo.push({
