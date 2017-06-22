@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.14.5",
+  "version": "0.14.6",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
