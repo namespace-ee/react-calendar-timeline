@@ -151,6 +151,7 @@ $weekend: rgba(250, 246, 225, 0.5);
 
   .rct-header {
     margin: 0;
+    overflow-x: hidden;
 
     .rct-label-group {
       position: absolute;
