@@ -5,6 +5,6 @@ bower_components
 .idea
 .sass-cache
 modules
-lib
+/lib
 build
 gh-pages

@@ -846,7 +846,6 @@ export default class ReactCalendarTimeline extends Component {
       <Items canvasTimeStart={canvasTimeStart}
              canvasTimeEnd={canvasTimeEnd}
              canvasWidth={canvasWidth}
-             lineHeight={this.props.lineHeight}
              lineCount={_length(this.props.groups)}
              dimensionItems={dimensionItems}
              minUnit={minUnit}
@@ -971,31 +970,44 @@ export default class ReactCalendarTimeline extends Component {
     const visibleItems = getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
     const groupOrders = getGroupOrders(groups, keys)
 
-    let dimensionItems = visibleItems.map(item => {
-      return {
-        id: _get(item, keys.itemIdKey),
-        dimensions: calculateDimensions({
-          item,
-          order: groupOrders[_get(item, keys.itemGroupKey)],
-          keys,
-          canvasTimeStart,
-          canvasTimeEnd,
-          canvasWidth,
-          dragSnap,
-          lineHeight,
-          draggingItem,
-          dragTime,
-          resizingItem,
-          resizingEdge,
-          resizeTime,
-          newGroupOrder,
-          itemHeightRatio,
-          fullUpdate,
-          visibleTimeStart,
-          visibleTimeEnd
+    let dimensionItems = visibleItems.reduce((memo, item) => {
+      const itemId = _get(item, keys.itemIdKey)
+      const isDragging = (itemId === draggingItem)
+      const isResizing = (itemId === resizingItem)
+
+      let dimension = calculateDimensions({
+        itemTimeStart: _get(item, keys.itemTimeStartKey),
+        itemTimeEnd: _get(item, keys.itemTimeEndKey),
+        isDragging,
+        isResizing,
+        canvasTimeStart,
+        canvasTimeEnd,
+        canvasWidth,
+        dragSnap,
+        dragTime,
+        resizingItem,
+        resizingEdge,
+        resizeTime,
+        fullUpdate,
+        visibleTimeStart,
+        visibleTimeEnd
+      })
+
+      if (dimension) {
+        dimension.top = null
+        dimension.order = isDragging ? newGroupOrder : groupOrders[_get(item, keys.itemGroupKey)]
+        dimension.stack = !item.isOverlay
+        dimension.height = lineHeight * itemHeightRatio
+        dimension.isDragging = isDragging
+
+        memo.push({
+          id: itemId,
+          dimensions: dimension
         })
       }
-    }).filter(i => i.dimensions)
+
+      return memo
+    }, [])
 
     const stackingMethod = stackItems ? stack : nostack
 

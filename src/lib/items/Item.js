@@ -12,7 +12,6 @@ export default class Item extends Component {
     // canvasTimeStart: React.PropTypes.number.isRequired,
     // canvasTimeEnd: React.PropTypes.number.isRequired,
     // canvasWidth: React.PropTypes.number.isRequired,
-    // lineHeight: React.PropTypes.number.isRequired,
     // order: React.PropTypes.number.isRequired,
     //
     // dragSnap: React.PropTypes.number,
@@ -74,11 +73,9 @@ export default class Item extends Component {
                        nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
                        nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
                        nextProps.canvasWidth !== this.props.canvasWidth ||
-                       nextProps.lineHeight !== this.props.lineHeight ||
                        nextProps.order !== this.props.order ||
                        nextProps.dragSnap !== this.props.dragSnap ||
                        nextProps.minResizeWidth !== this.props.minResizeWidth ||
-                       nextProps.selected !== this.props.selected ||
                        nextProps.canChangeGroup !== this.props.canChangeGroup ||
                        nextProps.canSelect !== this.props.canSelect ||
                        nextProps.topOffset !== this.props.topOffset ||
