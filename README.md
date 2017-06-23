@@ -481,7 +481,7 @@ ctrl + mousewheel = zoom in/out 10× faster
 ```
 
 Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch points).
-
+The pinch gesture on a trackpad (not a touch device) works in Chrome and Firefox (v55+) because these browsers map the gesture to `ctrl + mousewheel`.
 
 ## Contribute
 If you like to improve React Calendar Timeline fork the repo and get started by running the following:
