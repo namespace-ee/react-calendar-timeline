@@ -471,6 +471,17 @@ This results in a visually endless scrolling canvas with optimal performance.
 
 Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
 
+## Interaction
+To interact and navigate within the timeline there are the following options for the user:
+
+```
+shift + mousewheel = move timeline left/right
+alt + mousewheel = zoom in/out
+ctrl + mousewheel = zoom in/out 10× faster
+```
+
+Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch points).
+The pinch gesture on a trackpad (not a touch device) works in Chrome and Firefox (v55+) because these browsers map the gesture to `ctrl + mousewheel`.
 
 ## Contribute
 If you like to improve React Calendar Timeline fork the repo and get started by running the following:
