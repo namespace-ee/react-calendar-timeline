@@ -29,7 +29,7 @@ export default class App extends Component {
       <div>
         <div className='demo-row'>
           Choose the demo:
-          {Object.entries(demos).map(([key, Demo]) => (
+          {Object.keys(demos).map(key => (
             <a href='#' key={key} className={`demo-selection${demo === key ? ' selected' : ''}`} onClick={(e) => this.chooseDemo(key, e)}>{key}</a>
           ))}
         </div>
