@@ -4,23 +4,20 @@ import React, { Component } from 'react'
 export default class HorizontalLines extends Component {
   static propTypes = {
     canvasWidth: PropTypes.number.isRequired,
-    lineHeight: PropTypes.number.isRequired,
-    lineCount: PropTypes.number.isRequired
-  }
-
-  static defaultProps = {
-    borderWidth: 1
+    headerHeight: PropTypes.number.isRequired,
+    lineCount: PropTypes.number.isRequired,
+    groupHeights: PropTypes.object.isRequired
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return !(nextProps.canvasWidth === this.props.canvasWidth &&
-             nextProps.lineHeight === this.props.lineHeight &&
+             nextProps.headerHeight === this.props.headerHeight &&
              nextProps.lineCount === this.props.lineCount &&
              nextProps.groupHeights === this.props.groupHeights)
   }
 
   render () {
-    const { lineCount, canvasWidth, groupHeights, headerHeight } = this.props
+    const { canvasWidth, headerHeight, lineCount, groupHeights } = this.props
     let lines = []
 
     var totalHeight = headerHeight
