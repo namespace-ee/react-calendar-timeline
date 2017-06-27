@@ -554,36 +554,45 @@ export default class ReactCalendarTimeline extends Component {
     this.setState(newState)
   }
 
+  zoomWithWheel = (speed, xPosition, deltaY) => {
+    this.changeZoom(1.0 + speed * deltaY / 500, xPosition / this.state.width)
+  }
+
   onWheel = (e) => {
     const { traditionalZoom } = this.props
-    if (e.ctrlKey) {
+
+    // prevent default scrolling if a modifier is pressed or the header is fixed
+    if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || this.props.fixedHeader === 'fixed') {
       e.preventDefault()
+    }
+
+    // zoom in the time dimension
+    if (e.ctrlKey || e.metaKey || e.altKey) {
       const parentPosition = getParentPosition(e.currentTarget)
       const xPosition = e.clientX - parentPosition.x
-      this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width)
+
+      this.zoomWithWheel(e.ctrlKey ? 10 : 1, xPosition, e.deltaY)
+
+    // convert vertical zoom to horiziontal
     } else if (e.shiftKey) {
-      e.preventDefault()
       const scrollComponent = this.refs.scrollComponent
       scrollComponent.scrollLeft += e.deltaY
-    } else if (e.altKey) {
-      const parentPosition = getParentPosition(e.currentTarget)
-      const xPosition = e.clientX - parentPosition.x
-      this.changeZoom(1.0 + e.deltaY / 500, xPosition / this.state.width)
-    } else {
-      if (this.props.fixedHeader === 'fixed') {
-        e.preventDefault()
-        if (e.deltaX !== 0) {
-          if (!traditionalZoom) {
-            this.refs.scrollComponent.scrollLeft += e.deltaX
-          }
+
+    // no modifier pressed? we prevented the default in the case of a fixed header,
+    // so adjust as needed and scroll or zoom the canvas
+    } else if (this.props.fixedHeader === 'fixed') {
+      if (e.deltaX !== 0) {
+        if (!traditionalZoom) {
+          this.refs.scrollComponent.scrollLeft += e.deltaX
         }
-        if (e.deltaY !== 0) {
-          window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
-          if (traditionalZoom) {
-            const parentPosition = getParentPosition(e.currentTarget)
-            const xPosition = e.clientX - parentPosition.x
-            this.changeZoom(1.0 + e.deltaY / 50, xPosition / this.state.width)
-          }
+      }
+      if (e.deltaY !== 0) {
+        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+        if (traditionalZoom) {
+          const parentPosition = getParentPosition(e.currentTarget)
+          const xPosition = e.clientX - parentPosition.x
+
+          this.zoomWithWheel(10, xPosition, e.deltaY)
         }
       }
     }
