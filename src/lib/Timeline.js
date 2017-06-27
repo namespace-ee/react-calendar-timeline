@@ -647,15 +647,26 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  rowAndTimeFromEvent (e) {
-    const { lineHeight, dragSnap } = this.props
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+  rowAndTimeFromEvent = (e) => {
+    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
+    const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
+    const lineCount = _length(this.props.groups)
 
+    // get coordinates relative to the component
     const parentPosition = getParentPosition(e.currentTarget)
     const x = e.clientX - parentPosition.x
     const y = e.clientY - parentPosition.y
 
-    const row = Math.floor((y - (lineHeight * 2)) / lineHeight)
+    // calculate the y coordinate from `groupHeights` and header heights
+    let row = 0
+    let remainingHeight = y - headerLabelGroupHeight - headerLabelHeight
+
+    while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
+      remainingHeight -= groupHeights[row]
+      row += 1
+    }
+
+    // calculate the x (time) coordinate taking the dragSnap into account
     let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
     time = Math.floor(time / dragSnap) * dragSnap
 
@@ -829,12 +840,10 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  horizontalLines (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight) {
+  horizontalLines (canvasWidth, groupHeights, headerHeight) {
     return (
       <HorizontalLines canvasWidth={canvasWidth}
-                       lineHeight={this.props.lineHeight}
                        lineCount={_length(this.props.groups)}
-                       groups={this.props.groups}
                        groupHeights={groupHeights}
                        headerHeight={headerHeight}
       />
@@ -955,7 +964,7 @@ export default class ReactCalendarTimeline extends Component {
       return {
         dimensionItems: [],
         height: 0,
-        groupHeights: 0,
+        groupHeights: {},
         groupTops: 0
       }
     }
@@ -1136,7 +1145,7 @@ export default class ReactCalendarTimeline extends Component {
             >
               {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops)}
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight)}
-              {this.horizontalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, groupHeights, headerHeight)}
+              {this.horizontalLines(canvasWidth, groupHeights, headerHeight)}
               {this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)}
               {mouseOverCanvas && showCursorLine
                 ? this.cursorLine(cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)
