@@ -571,7 +571,9 @@ export default class ReactCalendarTimeline extends Component {
       const parentPosition = getParentPosition(e.currentTarget)
       const xPosition = e.clientX - parentPosition.x
 
-      this.zoomWithWheel(e.ctrlKey ? 10 : 1, xPosition, e.deltaY)
+      const speed = e.ctrlKey ? 10 : e.metaKey ? 3 : 1
+
+      this.zoomWithWheel(speed, xPosition, e.deltaY)
 
     // convert vertical zoom to horiziontal
     } else if (e.shiftKey) {
