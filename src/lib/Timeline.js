@@ -648,14 +648,14 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   rowAndTimeFromEvent (e) {
-    const { lineHeight, dragSnap } = this.props
+    const { lineHeight, headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
     const { width, visibleTimeStart, visibleTimeEnd } = this.state
 
     const parentPosition = getParentPosition(e.currentTarget)
     const x = e.clientX - parentPosition.x
     const y = e.clientY - parentPosition.y
 
-    const row = Math.floor((y - (lineHeight * 2)) / lineHeight)
+    const row = Math.floor((y - headerLabelGroupHeight - headerLabelHeight) / lineHeight)
     let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
     time = Math.floor(time / dragSnap) * dragSnap
 
