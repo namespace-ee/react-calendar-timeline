@@ -79,7 +79,7 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarContent: PropTypes.node,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none']),
+    fixedHeader: PropTypes.oneOf(['fixed', 'flexible', 'none']),
     fullUpdate: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
@@ -204,7 +204,7 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
-    fixedHeader: 'none', // fixed or absolute or none
+    fixedHeader: 'flexible', // fixed or flexible or none
     fullUpdate: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
@@ -304,6 +304,8 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
 
+      headerPosition: 'top',
+
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
@@ -335,6 +337,8 @@ export default class ReactCalendarTimeline extends Component {
 
     this.lastTouchDistance = null
 
+    window.addEventListener('scroll', this.scrollEventListener)
+
     this.refs.scrollComponent.addEventListener('touchstart', this.touchStart)
     this.refs.scrollComponent.addEventListener('touchmove', this.touchMove)
     this.refs.scrollComponent.addEventListener('touchend', this.touchEnd)
@@ -347,9 +351,29 @@ export default class ReactCalendarTimeline extends Component {
 
     windowResizeDetector.removeListener(this)
 
+    window.removeEventListener('scroll', this.scrollEventListener)
+
     this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart)
     this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove)
     this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd)
+  }
+
+  // called on window scroll. it's job is to figure out if we should fix or float the header
+  scrollEventListener = (e) => {
+    const rect = this.refs.container.getBoundingClientRect()
+
+    if (rect.top <= 0) {
+      this.setState({ headerPosition: 'fixed' })
+    } else {
+      const { headerLabelGroupHeight, headerLabelHeight } = this.props
+      const headerHeight = headerLabelGroupHeight + headerLabelHeight
+
+      if (rect.bottom < headerHeight) {
+        this.setState({ headerPosition: 'bottom' })
+      } else {
+        this.setState({ headerPosition: 'top' })
+      }
+    }
   }
 
   touchStart = (e) => {
@@ -950,6 +974,7 @@ export default class ReactCalendarTimeline extends Component {
               zoom={zoom}
               visibleTimeStart={this.state.visibleTimeStart}
               visibleTimeEnd={this.state.visibleTimeEnd}
+              headerPosition={this.state.headerPosition}
               fixedHeader={this.props.fixedHeader}
               showPeriod={this.showPeriod}
               headerLabelFormats={this.props.headerLabelFormats}
@@ -969,6 +994,7 @@ export default class ReactCalendarTimeline extends Component {
                height={height}
                headerHeight={headerHeight}
 
+               headerPosition={this.state.headerPosition}
                fixedHeader={this.props.fixedHeader}>
         {this.props.sidebarContent || this.props.children}
       </Sidebar>

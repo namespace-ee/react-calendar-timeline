@@ -1,43 +1,67 @@
 import './styles.scss'
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+
+import {
+  HashRouter as Router,
+  Route,
+  Link,
+  withRouter
+} from 'react-router-dom'
 
 const demos = {
   main: require('./demo-main').default,
   linkedTimelines: require('./demo-linked-timelines').default,
-  painter: require('./demo-painter').default
+  elementResize: require('./demo-element-resize').default,
+  painter: require('./demo-painter').default,
+  flexibleHeader: require('./demo-flexible-header').default
 }
 
-export default class App extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      demo: 'main'
-    }
-  }
-
-  chooseDemo = (demo, e) => {
-    e.preventDefault()
-    this.setState({ demo })
+// A simple component that shows the pathname of the current location
+class Menu extends Component {
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   }
 
   render () {
-    const { demo } = this.state
-    const Demo = demos[demo]
+    let pathname = (this.props.location || {}).pathname
+
+    if (!pathname || pathname === '/') {
+      pathname = `/${Object.keys(demos)[0]}`
+    }
 
     return (
-      <div>
-        <div className='demo-row'>
-          Choose the demo:
-          {Object.keys(demos).map(key => (
-            <a href='#' key={key} className={`demo-selection${demo === key ? ' selected' : ''}`} onClick={(e) => this.chooseDemo(key, e)}>{key}</a>
-          ))}
-        </div>
-        <div className='demo-demo'>
-          <Demo />
-        </div>
+      <div className={`demo-row${pathname.indexOf('flexible') >= 0 ? ' flexible' : ''}`}>
+        Choose the demo:
+        {Object.keys(demos).map(key => (
+          <Link key={key} className={pathname === `/${key}` ? 'selected' : ''} to={`/${key}`}>{key}</Link>
+        ))}
       </div>
     )
   }
 }
+
+const MenuWithRouter = withRouter(Menu)
+
+class App extends Component {
+  render () {
+    return (
+      <Router>
+        <div>
+          <MenuWithRouter />
+          <div className='demo-demo'>
+            <Route path='/' exact component={demos[Object.keys(demos)[0]]} />
+            {Object.keys(demos).map(key => (
+              <Route key={key} path={`/${key}`} component={demos[key]} />
+            ))}
+          </div>
+        </div>
+      </Router>
+    )
+  }
+}
+
+export default App
