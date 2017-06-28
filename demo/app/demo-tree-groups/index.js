@@ -25,7 +25,7 @@ export default class App extends Component {
     const defaultTimeStart = moment().startOf('day').toDate()
     const defaultTimeEnd = moment().startOf('day').add(1, 'day').toDate()
 
-    // convert every 2 groups out of 3 to nodes
+    // convert every 2 groups out of 3 to nodes, leaving the first as the root
     const newGroups = groups.map(group => {
       const isRoot = (parseInt(group.id) - 1) % 3 === 0
       const parent = isRoot ? null : Math.floor((parseInt(group.id) - 1) / 3) * 3 + 1
@@ -58,6 +58,7 @@ export default class App extends Component {
   render () {
     const { groups, items, defaultTimeStart, defaultTimeEnd, openGroups } = this.state
 
+    // hide (filter) the groups that are closed, for the rest, patch their "title" and add some callbacks or padding
     const newGroups = groups.filter(g => g.root || openGroups[g.parent]).map(group => {
       return Object.assign({}, group, {
         title: group.root ? (
