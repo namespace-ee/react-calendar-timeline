@@ -185,8 +185,6 @@ export default class Header extends Component {
       lineHeight: `${lineHeight}px`
     }
 
-    console.log(fixedHeader, headerPosition)
-
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.width = `${width}px`

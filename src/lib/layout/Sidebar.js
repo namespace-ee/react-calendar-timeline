@@ -26,10 +26,6 @@ export default class Sidebar extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.fixedHeader === 'absolute' && window && window.document && this.state.scrollTop !== nextState.scrollTop) {
-      return true
-    }
-
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
              nextProps.keys === this.props.keys &&
              nextProps.width === this.props.width &&
