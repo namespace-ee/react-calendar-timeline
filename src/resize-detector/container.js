@@ -5,8 +5,15 @@ function addListener (component) {
     strategy: 'scroll'
   })
 
-  component._erd.listenTo(component.refs.container, () => {
-    component.resize(component.props)
+  component._erdWidth = component.refs.container.offsetWidth
+
+  component._erd.listenTo(component.refs.container, (element) => {
+    var width = element.offsetWidth
+
+    if (component._erdWidth !== width) {
+      component.resize(component.props)
+      component._erdWidth = width
+    }
   })
 }
 

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import moment from 'moment'
 
 import Timeline from 'react-calendar-timeline'
+import containerResizeDetector from '../../../src/resize-detector/container'
+
+// you would use this in real life:
 // import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 import generateFakeData from '../generate-fake-data'
@@ -49,7 +52,7 @@ export default class App extends Component {
                     fullUpdate
 
                     sidebarWidth={150}
-                    sidebarContent={<div>Above The Left</div>}
+                    sidebarContent={<div>Above The Left er aew rawe rwea rwae</div>}
                     rightSidebarWidth={150}
                     rightSidebarContent={<div>Above The Right</div>}
 
@@ -64,7 +67,7 @@ export default class App extends Component {
 
                     showCursorLine
 
-                    // resizeDetector={containerResizeDetector}
+                    resizeDetector={containerResizeDetector}
 
                     defaultTimeStart={defaultTimeStart}
                     defaultTimeEnd={defaultTimeEnd} />
@@ -74,7 +77,7 @@ export default class App extends Component {
             The timeline is {width}% wide.
             <br />
             <br />
-            Set timeline width:
+            Set container's width:
             <br />
             {[20, 40, 60, 80].map(p => (
               <span key={p}
