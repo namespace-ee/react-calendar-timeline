@@ -121,6 +121,8 @@ export default class Header extends Component {
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
 
+    const correctLeftPositions = fixedHeader === 'fixed' || (fixedHeader === 'flexible' && headerPosition === 'fixed')
+
     // add the top header
     if (twoHeaders) {
       const nextUnit = getNextUnit(minUnit)
@@ -131,7 +133,7 @@ export default class Header extends Component {
         const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2)
         const right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2)
         const labelWidth = right - left
-        const leftCorrect = fixedHeader === 'fixed' || (fixedHeader === 'flexible' && headerPosition === 'fixed') ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
+        const leftCorrect = correctLeftPositions ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
@@ -158,7 +160,7 @@ export default class Header extends Component {
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
       const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
       const borderWidth = firstOfType ? 2 : 1
-      const leftCorrect = fixedHeader === 'fixed' || (fixedHeader === 'flexible' && headerPosition === 'fixed') ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
+      const leftCorrect = correctLeftPositions ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}

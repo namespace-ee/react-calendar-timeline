@@ -19,7 +19,7 @@ export default class Sidebar extends Component {
   }
 
   static defaultProps = {
-    fixedHeader: 'none',
+    fixedHeader: 'flexible',
     headerPosition: 'top',
     children: null,
     isRightSidebar: false
@@ -71,6 +71,7 @@ export default class Sidebar extends Component {
       groupsStyle.paddingTop = headerStyle.height
     } else if (fixedHeader === 'flexible') {
       if (headerPosition === 'top') {
+        // do nothing - keep at the top
       } else if (headerPosition === 'fixed') {
         headerStyle.position = 'fixed'
         headerStyle.top = 0

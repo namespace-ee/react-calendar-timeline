@@ -381,7 +381,7 @@ export default class ReactCalendarTimeline extends Component {
       this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
       this.singleTouchStart = null
       this.lastSingleTouch = null
-    } else if (e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
+    } else if (e.touches.length === 1) {
       e.preventDefault()
 
       let x = e.touches[0].clientX
@@ -410,7 +410,7 @@ export default class ReactCalendarTimeline extends Component {
         this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width)
         this.lastTouchDistance = touchDistance
       }
-    } else if (this.lastSingleTouch && e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
+    } else if (this.lastSingleTouch && e.touches.length === 1) {
       e.preventDefault()
 
       let x = e.touches[0].clientX
@@ -583,10 +583,7 @@ export default class ReactCalendarTimeline extends Component {
   onWheel = (e) => {
     const { traditionalZoom } = this.props
 
-    // prevent default scrolling if a modifier is pressed or the header is fixed
-    if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || this.props.fixedHeader === 'fixed') {
-      e.preventDefault()
-    }
+    e.preventDefault()
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
@@ -602,9 +599,8 @@ export default class ReactCalendarTimeline extends Component {
       const scrollComponent = this.refs.scrollComponent
       scrollComponent.scrollLeft += e.deltaY
 
-    // no modifier pressed? we prevented the default in the case of a fixed header,
-    // so adjust as needed and scroll or zoom the canvas
-    } else if (this.props.fixedHeader === 'fixed') {
+    // no modifier pressed? we prevented the default event, so scroll or zoom as needed
+    } else {
       if (e.deltaX !== 0) {
         if (!traditionalZoom) {
           this.refs.scrollComponent.scrollLeft += e.deltaX
