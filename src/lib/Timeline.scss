@@ -28,10 +28,12 @@ $weekend: rgba(250, 246, 225, 0.5);
   .rct-outer {
     display: block;
     overflow: hidden;
+    white-space: nowrap;
   }
 
   .rct-scroll {
     display: inline-block;
+    white-space: normal; // was set to nowrap in .rct-outer
     vertical-align: top;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -196,6 +198,7 @@ $weekend: rgba(250, 246, 225, 0.5);
 
   .rct-sidebar {
     overflow: hidden;
+    white-space: normal; // was set to nowrap in .rct-outer
     display: inline-block;
     vertical-align: top;
     position: relative;

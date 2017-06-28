@@ -432,9 +432,9 @@ The component automatically detects when the window has been resized. Optionally
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
 
 ```jsx
-import componentResizeDetector from 'react-calendar-timeline/lib/resize-detector/component'
+import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
-<Timeline resizeDetector={componentResizeDetector} ... />
+<Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
 ### children
@@ -501,6 +501,7 @@ To interact and navigate within the timeline there are the following options for
 shift + mousewheel = move timeline left/right
 alt + mousewheel = zoom in/out
 ctrl + mousewheel = zoom in/out 10× faster
+meta + mousewheel = zoom in/out 3x faster (win or cmd + mousewheel)
 ```
 
 Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch points).
