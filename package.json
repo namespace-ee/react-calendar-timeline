@@ -94,6 +94,7 @@
     "react-addons-test-utils": "^15.5.1",
     "react-dom": "^15.0.1",
     "react-hot-loader": "^3.0.0-beta.6",
+    "react-router-dom": "^4.1.1",
     "rimraf": "^2.5.0",
     "sass-loader": "~4.0.2",
     "style-loader": "~0.13.0",
