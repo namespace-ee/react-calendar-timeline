@@ -360,19 +360,17 @@ export default class ReactCalendarTimeline extends Component {
 
   // called on window scroll. it's job is to figure out if we should fix or float the header
   scrollEventListener = (e) => {
+    const { headerLabelGroupHeight, headerLabelHeight } = this.props
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
+
     const rect = this.refs.container.getBoundingClientRect()
 
-    if (rect.top <= 0) {
-      this.setState({ headerPosition: 'fixed' })
+    if (rect.top > 0) {
+      this.setState({ headerPosition: 'top' })
+    } else if (rect.bottom < headerHeight) {
+      this.setState({ headerPosition: 'bottom' })
     } else {
-      const { headerLabelGroupHeight, headerLabelHeight } = this.props
-      const headerHeight = headerLabelGroupHeight + headerLabelHeight
-
-      if (rect.bottom < headerHeight) {
-        this.setState({ headerPosition: 'bottom' })
-      } else {
-        this.setState({ headerPosition: 'top' })
-      }
+      this.setState({ headerPosition: 'fixed' })
     }
   }
 
@@ -1013,6 +1011,7 @@ export default class ReactCalendarTimeline extends Component {
                height={height}
                headerHeight={headerHeight}
 
+               headerPosition={this.state.headerPosition}
                fixedHeader={this.props.fixedHeader}>
         {this.props.rightSidebarContent}
       </Sidebar>

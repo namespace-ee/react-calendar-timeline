@@ -131,7 +131,7 @@ export default class Header extends Component {
         const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2)
         const right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2)
         const labelWidth = right - left
-        const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
+        const leftCorrect = fixedHeader === 'fixed' || (fixedHeader === 'flexible' && headerPosition === 'fixed') ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
@@ -158,7 +158,7 @@ export default class Header extends Component {
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
       const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
       const borderWidth = firstOfType ? 2 : 1
-      const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
+      const leftCorrect = fixedHeader === 'fixed' || (fixedHeader === 'flexible' && headerPosition === 'fixed') ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
@@ -198,10 +198,9 @@ export default class Header extends Component {
         headerStyle.top = 0
         headerStyle.width = `${width}px`
       } else if (headerPosition === 'bottom') {
-        // headerStyle.position = 'absolute'
-        // headerStyle.top = '0'
-        // headerStyle.width = `${canvasWidth}px`
-        // headerStyle.left = '0'
+        headerStyle.position = 'absolute'
+        headerStyle.bottom = 0
+        headerStyle.width = `${canvasWidth}px`
       }
     }
 

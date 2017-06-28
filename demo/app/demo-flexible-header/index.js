@@ -25,7 +25,7 @@ export default class App extends Component {
   constructor (props) {
     super(props)
 
-    const { groups, items } = generateFakeData(100, 2000)
+    const { groups, items } = generateFakeData()
     const defaultTimeStart = moment().startOf('day').toDate()
     const defaultTimeEnd = moment().startOf('day').add(1, 'day').toDate()
     const width = 80
@@ -75,11 +75,12 @@ export default class App extends Component {
                   defaultTimeStart={defaultTimeStart}
                   defaultTimeEnd={defaultTimeEnd} />
 
-
         <br />
         There is also a lot of stuff below the timeline. Watch the header fix itself to the bottom of the component.
         <br />
+        <br />
         bla bla bla
+        <br />
         <br />
         Here are random pictures of Tom Selleck:
         <br />
@@ -88,6 +89,9 @@ export default class App extends Component {
         <br />
         <br />
         <img src='https://d1mlsq9roc275d.cloudfront.net/dynamic/1/photos/815000/Tom-Selleck-255815.jpg' style={{width: '80%'}} />
+        <br />
+        <br />
+        <div style={{height: 1000}} />
       </div>
     )
   }

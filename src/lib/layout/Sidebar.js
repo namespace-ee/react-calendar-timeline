@@ -25,14 +25,6 @@ export default class Sidebar extends Component {
     isRightSidebar: false
   }
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      scrollTop: 0,
-      componentTop: 0
-    }
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.fixedHeader === 'absolute' && window && window.document && this.state.scrollTop !== nextState.scrollTop) {
       return true
@@ -43,45 +35,9 @@ export default class Sidebar extends Component {
              nextProps.width === this.props.width &&
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.fixedHeader === this.props.fixedHeader &&
+             nextProps.headerPosition === this.props.headerPosition &&
              nextProps.groupHeights === this.props.groupHeights &&
              nextProps.height === this.props.height)
-  }
-
-  scroll (e) {
-    if (this.props.fixedHeader === 'absolute' && window && window.document) {
-      const scroll = window.document.body.scrollTop
-      this.setState({
-        scrollTop: scroll
-      })
-    }
-  }
-
-  setComponentTop () {
-    const viewportOffset = this.refs.sidebar.getBoundingClientRect()
-    this.setState({
-      componentTop: viewportOffset.top
-    })
-  }
-
-  componentDidMount () {
-    this.setComponentTop()
-    this.scroll()
-
-    this.scrollEventListener = {
-      handleEvent: (event) => {
-        this.scroll()
-      }
-    }
-
-    window.addEventListener('scroll', this.scrollEventListener)
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('scroll', this.scrollEventListener)
-  }
-
-  componentWillReceiveProps () {
-    this.setComponentTop()
   }
 
   renderGroupContent (group, isRightSidebar, groupTitleKey, groupRightTitleKey) {
@@ -94,14 +50,10 @@ export default class Sidebar extends Component {
 
   render () {
     const {
-      fixedHeader, width, lineHeight, groupHeights, height, headerHeight, isRightSidebar
+      fixedHeader, width, lineHeight, groupHeights, height, headerHeight, isRightSidebar, headerPosition
     } = this.props
 
     const {groupIdKey, groupTitleKey, groupRightTitleKey} = this.props.keys
-
-    const {
-      scrollTop
-    } = this.state
 
     const sidebarStyle = {
       width: `${width}px`,
@@ -121,14 +73,15 @@ export default class Sidebar extends Component {
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       groupsStyle.paddingTop = headerStyle.height
-    } else if (fixedHeader === 'absolute') {
-      let componentTop = this.state.componentTop
-      if (scrollTop >= componentTop) {
+    } else if (fixedHeader === 'flexible') {
+      if (headerPosition === 'top') {
+      } else if (headerPosition === 'fixed') {
         headerStyle.position = 'fixed'
-        headerStyle.top = '0'
-        // headerStyle.position = 'absolute'
-        // headerStyle.top = `${scrollTop - componentTop}px`
-        headerStyle.left = '0'
+        headerStyle.top = 0
+        groupsStyle.paddingTop = headerStyle.height
+      } else if (headerPosition === 'bottom') {
+        headerStyle.position = 'absolute'
+        headerStyle.bottom = 0
         groupsStyle.paddingTop = headerStyle.height
       }
     }
