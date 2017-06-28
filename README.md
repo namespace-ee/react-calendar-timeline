@@ -156,9 +156,6 @@ are always fully on the screen, even if the start or end of the items is off scr
 
 When set to `false`, we update the dimensions of the items only when the [scrolling canvas](https://github.com/namespace-ee/react-calendar-timeline#behind-the-scenes) updates. This makes scrolling much faster, but labels can go off screen.
 
-### zIndexStart
-What z-index value do the header and the sidebar have. Default `10`
-
 ### lineHeight
 Height of one line in the calendar in pixels. Default `30`
 
@@ -414,6 +411,22 @@ groupRenderer = ({ group }) => {
 }
 ```
 
+### painter
+React component that will be used to render anything on the timeline (custom backgrounds, arrows, etc). See [the painter demo](http://namespace.ee/react-calendar-timeline-docs/) ([code](https://github.com/namespace-ee/react-calendar-timeline/blob/master/demo/app/demo-painter/index.js)) for an example.
+
+The painter gets passed the following props:
+* `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
+* `canvasWidth` - width of the scrolling canvas in pixels
+* `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
+* `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
+* `lineCount` - number of groups
+* `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
+* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
+* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
+* `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
+* `selectedItem`, `selected` - the selected item or controlled selected items array
+* `timeSteps` - steps for displaying time
+
 ### resizeDetector
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
@@ -461,6 +474,16 @@ And add `right_sidebar` prop to the groups objects:
 }
 ```
 
+### What are the zIndex values for all the elements?
+
+This is useful when using the `painter` component. Override the CSS to change:
+
+* Horizontal Lines: 30
+* Vertical Lines: 40
+* Today line: 50
+* Cursor line: 51
+* Items: 80-88 (depending on selection, dragging, etc)
+* Header: 90
 
 ## Behind the scenes
 The timeline is built with speed, usability and extensibility in mind.

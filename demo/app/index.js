@@ -4,7 +4,8 @@ import React, { Component } from 'react'
 
 const demos = {
   main: require('./demo-main').default,
-  linkedTimelines: require('./demo-linked-timelines').default
+  linkedTimelines: require('./demo-linked-timelines').default,
+  painter: require('./demo-painter').default
 }
 
 export default class App extends Component {
