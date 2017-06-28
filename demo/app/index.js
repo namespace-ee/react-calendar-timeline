@@ -9,6 +9,7 @@ import {
 
 const demos = {
   main: require('./demo-main').default,
+  treeGroups: require('./demo-tree-groups').default,
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default
 }
