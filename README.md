@@ -478,6 +478,7 @@ To interact and navigate within the timeline there are the following options for
 shift + mousewheel = move timeline left/right
 alt + mousewheel = zoom in/out
 ctrl + mousewheel = zoom in/out 10× faster
+meta + mousewheel = zoom in/out 3x faster (win or cmd + mousewheel)
 ```
 
 Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch points).
