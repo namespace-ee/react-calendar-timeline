@@ -419,9 +419,9 @@ The component automatically detects when the window has been resized. Optionally
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
 
 ```jsx
-import componentResizeDetector from 'react-calendar-timeline/lib/resize-detector/component'
+import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
-<Timeline resizeDetector={componentResizeDetector} ... />
+<Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
 ### children

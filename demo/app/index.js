@@ -9,7 +9,8 @@ import {
 
 const demos = {
   main: require('./demo-main').default,
-  linkedTimelines: require('./demo-linked-timelines').default
+  linkedTimelines: require('./demo-linked-timelines').default,
+  elementResize: require('./demo-element-resize').default
 }
 
 export default class App extends Component {
