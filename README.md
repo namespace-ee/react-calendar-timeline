@@ -461,6 +461,13 @@ And add `right_sidebar` prop to the groups objects:
 }
 ```
 
+### I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
+
+These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
+
+If that's too experimental, then the minimum you need is to add is the [`transform-class-properties`](https://babeljs.io/docs/plugins/transform-class-properties/) plugin that's in stage-2 and possibly the [`transform-object-rest-spread`](https://babeljs.io/docs/plugins/transform-object-rest-spread/) plugin from stage-3. However in this case it's easier to make sure you have at least [`stage-2`](https://babeljs.io/docs/plugins/preset-stage-2/) enabled.
+
+See [issue 51](https://github.com/namespace-ee/react-calendar-timeline/issues/51) for more details.
 
 ## Behind the scenes
 The timeline is built with speed, usability and extensibility in mind.
