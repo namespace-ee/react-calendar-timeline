@@ -411,22 +411,6 @@ groupRenderer = ({ group }) => {
 }
 ```
 
-### painter
-React component that will be used to render anything on the timeline (custom backgrounds, arrows, etc). See [the painter demo](http://namespace.ee/react-calendar-timeline-docs/) ([code](https://github.com/namespace-ee/react-calendar-timeline/blob/master/demo/app/demo-painter/index.js)) for an example.
-
-The painter gets passed the following props:
-* `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
-* `canvasWidth` - width of the scrolling canvas in pixels
-* `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
-* `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
-* `lineCount` - number of groups
-* `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
-* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
-* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
-* `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
-* `selectedItem`, `selected` - the selected item or controlled selected items array
-* `timeSteps` - steps for displaying time
-
 ### resizeDetector
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
@@ -437,8 +421,23 @@ import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector
 <Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
-### children
-**DEPRECATED. User the sidebarContent prop instead.** All children of the Timeline component will be displayed above the sidebar. Use this to display small filters or so.
+### children (plugins)
+If you give the component any children, they will be passed some extra props. Use this to render anything on the timeline (custom backgrounds, arrows, etc).
+
+See [the plugins demo](http://namespace.ee/react-calendar-timeline-docs/#/plugins) ([code](https://github.com/namespace-ee/react-calendar-timeline/blob/master/demo/app/demo-plugins/index.js)) for an example.
+
+The children gets passed the following props:
+
+* `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
+* `canvasWidth` - width of the scrolling canvas in pixels
+* `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
+* `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
+* `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
+* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
+* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
+* `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
+* `selected` - an array of selected items
+* `timeSteps` - steps for displaying time
 
 ## FAQ
 
@@ -482,7 +481,7 @@ If that's too experimental, then the minimum you need is to add is the [`transfo
 See [issue 51](https://github.com/namespace-ee/react-calendar-timeline/issues/51) for more details.
 
 ### What are the zIndex values for all the elements?
-This is useful when using the `painter` component. Override the CSS to change:
+This is useful when using the plugins (that you pass as children to the component). Override the CSS to change:
 
 * Horizontal Lines: 30
 * Vertical Lines: 40
