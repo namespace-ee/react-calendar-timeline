@@ -89,6 +89,7 @@
     "karma-webpack": "~1.8.0",
     "moment": "^2.11.1",
     "node-sass": "^4.5.3",
+    "randomcolor": "^0.5.3",
     "react": "^15.0.1",
     "react-addons-perf": "^15.0.1",
     "react-addons-test-utils": "^15.5.1",

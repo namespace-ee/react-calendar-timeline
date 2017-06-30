@@ -156,9 +156,6 @@ are always fully on the screen, even if the start or end of the items is off scr
 
 When set to `false`, we update the dimensions of the items only when the [scrolling canvas](https://github.com/namespace-ee/react-calendar-timeline#behind-the-scenes) updates. This makes scrolling much faster, but labels can go off screen.
 
-### zIndexStart
-What z-index value do the header and the sidebar have. Default `10`
-
 ### lineHeight
 Height of one line in the calendar in pixels. Default `30`
 
@@ -414,6 +411,22 @@ groupRenderer = ({ group }) => {
 }
 ```
 
+### painter
+React component that will be used to render anything on the timeline (custom backgrounds, arrows, etc). See [the painter demo](http://namespace.ee/react-calendar-timeline-docs/) ([code](https://github.com/namespace-ee/react-calendar-timeline/blob/master/demo/app/demo-painter/index.js)) for an example.
+
+The painter gets passed the following props:
+* `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
+* `canvasWidth` - width of the scrolling canvas in pixels
+* `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
+* `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
+* `lineCount` - number of groups
+* `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
+* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
+* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
+* `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
+* `selectedItem`, `selected` - the selected item or controlled selected items array
+* `timeSteps` - steps for displaying time
+
 ### resizeDetector
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
@@ -462,12 +475,21 @@ And add `right_sidebar` prop to the groups objects:
 ```
 
 ### I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
-
 These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
 
 If that's too experimental, then the minimum you need is to add is the [`transform-class-properties`](https://babeljs.io/docs/plugins/transform-class-properties/) plugin that's in stage-2 and possibly the [`transform-object-rest-spread`](https://babeljs.io/docs/plugins/transform-object-rest-spread/) plugin from stage-3. However in this case it's easier to make sure you have at least [`stage-2`](https://babeljs.io/docs/plugins/preset-stage-2/) enabled.
 
 See [issue 51](https://github.com/namespace-ee/react-calendar-timeline/issues/51) for more details.
+
+### What are the zIndex values for all the elements?
+This is useful when using the `painter` component. Override the CSS to change:
+
+* Horizontal Lines: 30
+* Vertical Lines: 40
+* Today line: 50
+* Cursor line: 51
+* Items: 80-88 (depending on selection, dragging, etc)
+* Header: 90
 
 ## Behind the scenes
 The timeline is built with speed, usability and extensibility in mind.
