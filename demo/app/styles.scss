@@ -13,14 +13,24 @@ body {
   padding: 10px;
   line-height: 15px;
   width: 100%;
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
   background: #fff;
   z-index: 100;
+
+  &.flexible {
+    position: relative;
+  }
+
   a {
     margin-left: 10px;
     color: blue;
+    text-decoration: none;
+    &.selected {
+      text-decoration: underline;
+    }
   }
 }
 
