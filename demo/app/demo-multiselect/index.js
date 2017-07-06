@@ -164,7 +164,6 @@ export default class App extends Component {
                 defaultTimeEnd={defaultTimeEnd}
 
                 selected={this.state.selected}
-                canChangeGroup={!(this.state.selected.length > 1)}
 
                 onCanvasClick={this.handleCanvasClick}
                 onCanvasContextMenu={this.handleCanvasContextMenu}
