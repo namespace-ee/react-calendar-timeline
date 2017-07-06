@@ -197,8 +197,8 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
   var i, iMax
   var totalHeight = headerHeight
 
-  var groupHeights = {}
-  var groupTops = {}
+  var groupHeights = []
+  var groupTops = []
 
   var groupedItems = getGroupedItems(items, groupOrders)
 
@@ -211,7 +211,7 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
 
   groupedItems.forEach(function (group, index, array) {
     // calculate new, non-overlapping positions
-    groupTops[index] = totalHeight
+    groupTops.push(totalHeight)
 
     var groupHeight = 0
     var verticalMargin = 0
@@ -242,7 +242,8 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
         } while (collidingItem)
       }
     }
-    groupHeights[index] = Math.max(groupHeight + verticalMargin, lineHeight)
+
+    groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
     totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
   })
   return {

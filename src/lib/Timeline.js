@@ -81,7 +81,6 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: PropTypes.number,
     fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none']),
     fullUpdate: PropTypes.bool,
-    zIndexStart: PropTypes.number,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
@@ -120,6 +119,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseMove: PropTypes.func,
 
     moveResizeValidator: PropTypes.func,
+
     itemRenderer: PropTypes.func,
     groupRenderer: PropTypes.func,
 
@@ -205,7 +205,6 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: 20,
     fixedHeader: 'none', // fixed or absolute or none
     fullUpdate: true,
-    zIndexStart: 10,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
     headerLabelHeight: 30,
@@ -924,7 +923,6 @@ export default class ReactCalendarTimeline extends Component {
               visibleTimeStart={this.state.visibleTimeStart}
               visibleTimeEnd={this.state.visibleTimeEnd}
               fixedHeader={this.props.fixedHeader}
-              zIndex={this.props.zIndexStart + 1}
               showPeriod={this.showPeriod}
               headerLabelFormats={this.props.headerLabelFormats}
               subHeaderLabelFormats={this.props.subHeaderLabelFormats} />
@@ -943,9 +941,8 @@ export default class ReactCalendarTimeline extends Component {
                height={height}
                headerHeight={headerHeight}
 
-               fixedHeader={this.props.fixedHeader}
-               zIndex={this.props.zIndexStart + 2}>
-        {this.props.sidebarContent || this.props.children}
+               fixedHeader={this.props.fixedHeader}>
+        {this.props.sidebarContent}
       </Sidebar>
     )
   }
@@ -962,8 +959,7 @@ export default class ReactCalendarTimeline extends Component {
                height={height}
                headerHeight={headerHeight}
 
-               fixedHeader={this.props.fixedHeader}
-               zIndex={this.props.zIndexStart + 2}>
+               fixedHeader={this.props.fixedHeader}>
         {this.props.rightSidebarContent}
       </Sidebar>
     )
@@ -1098,6 +1094,37 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
+  childrenWithProps (canvasTimeStart, canvasTimeEnd, canvasWidth, dimensionItems, groupHeights, groupTops, height, headerHeight, visibleTimeStart, visibleTimeEnd, minUnit, timeSteps) {
+    if (!this.props.children) {
+      return null
+    }
+
+    // convert to an array and remove the nulls
+    const childArray = Array.isArray(this.props.children) ? this.props.children.filter(c => c) : [this.props.children]
+
+    const childProps = {
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      visibleTimeStart: visibleTimeStart,
+      visibleTimeEnd: visibleTimeEnd,
+      dimensionItems,
+      items: this.props.items,
+      groups: this.props.groups,
+      keys: this.props.keys,
+      // TODO: combine these two
+      groupHeights: groupHeights,
+      groupTops: groupTops,
+      selected: this.state.selectedItem && !this.props.selected ? [this.state.selectedItem] : (this.props.selected || []),
+      height: height,
+      headerHeight: headerHeight,
+      minUnit: minUnit,
+      timeSteps: timeSteps
+    }
+
+    return React.Children.map(childArray, child => React.cloneElement(child, childProps))
+  }
+
   render () {
     const { items, groups, headerLabelGroupHeight, headerLabelHeight, sidebarWidth, rightSidebarWidth, timeSteps, showCursorLine } = this.props
     const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, mouseOverCanvas, cursorTime } = this.state
@@ -1171,8 +1198,8 @@ export default class ReactCalendarTimeline extends Component {
                 timeSteps,
                 headerLabelGroupHeight,
                 headerLabelHeight
-                )
-              }
+              )}
+              {this.childrenWithProps(canvasTimeStart, canvasTimeEnd, canvasWidth, dimensionItems, groupHeights, groupTops, height, headerHeight, visibleTimeStart, visibleTimeEnd, minUnit, timeSteps)}
             </div>
           </div>
           {rightSidebarWidth > 0 ? this.rightSidebar(height, groupHeights, headerHeight) : null}

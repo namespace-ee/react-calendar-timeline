@@ -6,7 +6,7 @@ export default class HorizontalLines extends Component {
     canvasWidth: PropTypes.number.isRequired,
     headerHeight: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
-    groupHeights: PropTypes.object.isRequired
+    groupHeights: PropTypes.array.isRequired
   }
 
   shouldComponentUpdate (nextProps, nextState) {
