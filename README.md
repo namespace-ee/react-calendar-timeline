@@ -426,6 +426,8 @@ If you give the component any children, they will be passed some extra props. Us
 
 See [the plugins demo](http://namespace.ee/react-calendar-timeline-docs/#/plugins) ([code](https://github.com/namespace-ee/react-calendar-timeline/blob/master/demo/app/demo-plugins/index.js)) for an example.
 
+**NOTE!** This API is still experimental and will change in the next versions, as we move toward unifying the internal and external APIs. Keep an eye out for the [changelog](https://github.com/namespace-ee/react-calendar-timeline/blob/master/CHANGELOG.md)!
+
 The children gets passed the following props:
 
 * `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
@@ -433,7 +435,6 @@ The children gets passed the following props:
 * `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
 * `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
 * `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
-* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
 * `groupHeights`, `groupTops` - arrays of heights and tops for the groups
 * `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
 * `selected` - an array of selected items
