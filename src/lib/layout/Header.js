@@ -19,13 +19,11 @@ export default class Header extends Component {
     width: PropTypes.number.isRequired,
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
-    fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none']),
-    zIndex: PropTypes.number
+    fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none'])
   }
 
   static defaultProps = {
-    fixedHeader: 'none',
-    zIndex: 11
+    fixedHeader: 'none'
   }
 
   constructor (props) {
@@ -221,8 +219,6 @@ export default class Header extends Component {
       )
     })
 
-    const { zIndex } = this.props
-
     let headerStyle = {
       height: `${headerLabelGroupHeight + headerLabelHeight}px`,
       lineHeight: `${lineHeight}px`
@@ -231,7 +227,6 @@ export default class Header extends Component {
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.width = `${width}px`
-      headerStyle.zIndex = zIndex
     } else if (fixedHeader === 'absolute') {
       let componentTop = this.state.componentTop
       if (scrollTop >= componentTop) {

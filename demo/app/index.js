@@ -12,6 +12,7 @@ const demos = {
   treeGroups: require('./demo-tree-groups').default,
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
+  plugins: require('./demo-plugins').default
   multiselect: require('./demo-multiselect').default
 }
 

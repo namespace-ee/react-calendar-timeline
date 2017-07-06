@@ -7,8 +7,9 @@ export default class Sidebar extends Component {
   static propTypes = {
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
     lineHeight: PropTypes.number.isRequired,
-    zIndex: PropTypes.number,
+    groupHeights: PropTypes.array.isRequired,
     fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none']),
     keys: PropTypes.object.isRequired,
     groupRenderer: PropTypes.func,
@@ -18,7 +19,6 @@ export default class Sidebar extends Component {
 
   static defaultProps = {
     fixedHeader: 'none',
-    zIndex: 12,
     children: null,
     isRightSidebar: false
   }
@@ -41,7 +41,6 @@ export default class Sidebar extends Component {
              nextProps.width === this.props.width &&
              nextProps.lineHeight === this.props.lineHeight &&
              nextProps.fixedHeader === this.props.fixedHeader &&
-             nextProps.zIndex === this.props.zIndex &&
              nextProps.groupHeights === this.props.groupHeights &&
              nextProps.height === this.props.height)
   }
@@ -93,7 +92,7 @@ export default class Sidebar extends Component {
 
   render () {
     const {
-      fixedHeader, width, lineHeight, zIndex, groupHeights, height, headerHeight, isRightSidebar
+      fixedHeader, width, lineHeight, groupHeights, height, headerHeight, isRightSidebar
     } = this.props
 
     const {groupIdKey, groupTitleKey, groupRightTitleKey} = this.props.keys
@@ -119,7 +118,6 @@ export default class Sidebar extends Component {
 
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
-      headerStyle.zIndex = zIndex
       groupsStyle.paddingTop = headerStyle.height
     } else if (fixedHeader === 'absolute') {
       let componentTop = this.state.componentTop
