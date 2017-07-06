@@ -20,7 +20,7 @@ var keys = {
   itemTimeEndKey: 'end'
 }
 
-class Painter extends Component {
+class BackgroundPainter extends Component {
   // only repaint if something really changes
   shouldComponentUpdate (nextProps) {
     return nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
@@ -30,12 +30,12 @@ class Painter extends Component {
   }
 
   render () {
-    const { lineCount, groupTops, groupHeights, canvasWidth, groups } = this.props
+    const { groupTops, groupHeights, canvasWidth, groups } = this.props
 
-    console.log(this.props)
+    // console.log(this.props)
 
     let backgrounds = []
-    for (let i = 0; i < lineCount; i++) {
+    for (let i = 0; i < groups.length; i++) {
       backgrounds.push(
         <div key={i}
              style={{
@@ -105,10 +105,11 @@ export default class App extends Component {
                   visibleTimeStart={visibleTimeStart}
                   visibleTimeEnd={visibleTimeEnd}
 
-                  painter={Painter}
                   showCursorLine
 
-                  onTimeChange={this.handleTimeChange} />
+                  onTimeChange={this.handleTimeChange}>
+          <BackgroundPainter />
+        </Timeline>
       </div>
     )
   }
