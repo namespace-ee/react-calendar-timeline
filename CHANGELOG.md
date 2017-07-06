@@ -7,6 +7,21 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## [0.15.0]
+Plugin support and sticky header!
+
+### Added
+- Plugins system (pass them as children) @mariusandra #122
+- Sticky header (`fixedHeader='sticky'`) @mariusandra #125
+
+### Removed
+- [BREAKING] Removed deprecated option to pass sidebar header content as children. Use `sidebarContent` instead. @mariusandra
+- [BREAKING] Removed fixedHeader option `absolute`, which was broken and is now replaced with the option `sticky` @mariusandra
+
+### Demo & Docs
+- Notice for modern module bundlers @jlubben @mariusandra #128
+- Add [treeGroups](http://namespace.ee/react-calendar-timeline-docs/#/treeGroups) demo
+
 ## [0.14.11]
 Plenty of bugfixes, tests and new demos in these 0.14 patch releases.
 
@@ -98,3 +113,4 @@ Plenty of bugfixes, tests and new demos in these 0.14 patch releases.
 [0.14.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.13.0...v0.14.0
 [0.14.2]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.14.0...v0.14.2
 [0.14.11]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.14.2...v0.14.11
+[0.15.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.14.11...v0.15.0
