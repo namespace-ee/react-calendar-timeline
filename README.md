@@ -143,8 +143,9 @@ The minimum width, in pixels, of a timeline entry when it's possible to resize. 
 ### fixedHeader
 How does the header (the scrolling part with dates) behave if not all of the groups fit on the page, resulting in a vertical scrollbar.
 
-* `fixed` - the header is always on the screen
-* `none` (default) - the header is always at the top of the component
+* `fixed` - the header is always fixed to its initial position
+* `sticky` (default) - the header follows the scroll of the page to be always visible
+* `none` - the header is always at the top of the component and doesn't stick with scrolling
 
 ### fullUpdate
 If your calendar has large items compared to the zoom level (e.g. multi week events when viewing one day at a time), set this to `true` (default).
