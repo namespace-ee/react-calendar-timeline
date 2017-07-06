@@ -16,7 +16,7 @@ const demos = {
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
   plugins: require('./demo-plugins').default,
-  flexibleHeader: require('./demo-flexible-header').default
+  stickyHeader: require('./demo-sticky-header').default
 }
 
 // A simple component that shows the pathname of the current location
@@ -35,7 +35,7 @@ class Menu extends Component {
     }
 
     return (
-      <div className={`demo-row${pathname.indexOf('flexible') >= 0 ? ' flexible' : ''}`}>
+      <div className={`demo-row${pathname.indexOf('sticky') >= 0 ? ' sticky' : ''}`}>
         Choose the demo:
         {Object.keys(demos).map(key => (
           <Link key={key} className={pathname === `/${key}` ? 'selected' : ''} to={`/${key}`}>{key}</Link>

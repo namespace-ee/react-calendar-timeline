@@ -16,7 +16,7 @@ export default class VerticalLines extends Component {
   }
 
   static defaultProps = {
-    fixedHeader: 'flexible',
+    fixedHeader: 'sticky',
     dayBackground: null
   }
 

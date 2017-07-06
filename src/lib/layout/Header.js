@@ -19,12 +19,12 @@ export default class Header extends Component {
     width: PropTypes.number.isRequired,
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
-    fixedHeader: PropTypes.oneOf(['fixed', 'flexible', 'none']),
+    fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     headerPosition: PropTypes.oneOf(['top', 'bottom', 'fixed'])
   }
 
   static defaultProps = {
-    fixedHeader: 'flexible',
+    fixedHeader: 'sticky',
     headerPosition: 'top'
   }
 
@@ -121,7 +121,7 @@ export default class Header extends Component {
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
 
-    const correctLeftPositions = fixedHeader === 'fixed' || (fixedHeader === 'flexible' && headerPosition === 'fixed')
+    const correctLeftPositions = fixedHeader === 'fixed' || (fixedHeader === 'sticky' && headerPosition === 'fixed')
 
     // add the top header
     if (twoHeaders) {
@@ -190,7 +190,7 @@ export default class Header extends Component {
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.width = `${width}px`
-    } else if (fixedHeader === 'flexible') {
+    } else if (fixedHeader === 'sticky') {
       if (headerPosition === 'top') {
         // do nothing, keep at the top
       } else if (headerPosition === 'fixed') {

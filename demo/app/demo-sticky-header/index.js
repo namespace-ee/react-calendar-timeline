@@ -51,7 +51,7 @@ export default class App extends Component {
         <Timeline groups={groups}
                   items={items}
                   keys={keys}
-                  fixedHeader='flexible'
+                  fixedHeader='sticky'
                   fullUpdate
 
                   sidebarWidth={150}

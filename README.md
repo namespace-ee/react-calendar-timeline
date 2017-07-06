@@ -144,7 +144,7 @@ The minimum width, in pixels, of a timeline entry when it's possible to resize. 
 How does the header (the scrolling part with dates) behave if not all of the groups fit on the page, resulting in a vertical scrollbar.
 
 * `fixed` - the header is always fixed to its initial position
-* `flexible` (default) - the header follows the scroll of the page to be always visible
+* `sticky` (default) - the header follows the scroll of the page to be always visible
 * `none` - the header is always at the top of the component and doesn't stick with scrolling
 
 ### fullUpdate
