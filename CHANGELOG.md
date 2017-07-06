@@ -7,6 +7,26 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## [0.14.11]
+Plenty of bugfixes, tests and new demos in these 0.14 patch releases.
+
+### Fixed
+- Fixed bug with `resizeDetector` and with detecting changes in `sidebarWidth` @mariusandra
+- Fixed bug where order `0` was evaluated as a falsy @nicocrm #111
+- Fix overflow-x with header @signalwerk
+
+### Added
+- Add meta+wheel modifier that zooms 3x the speed of the normal wheel events @mariusandra
+
+### Changed
+- Refactor `calculateDimensions` to be pure @signalwerk
+- Convert `groupHeights` and `groupTops` to arrays (from objects) @mariusandra
+
+### Demo & docs
+- Add [linkedTimelines](http://namespace.ee/react-calendar-timeline-docs/#/linkedTimelines) demo
+- Add [elementResize](http://namespace.ee/react-calendar-timeline-docs/#/elementResize) demo
+- Add docs about modifier keys for zooming/scrolling @signalwerk
+
 ## [0.14.2]
 ### Changed
 - Use `prop-types` instead of `React.PropTypes` to support React 15.5+. @mariusandra #110
@@ -76,4 +96,5 @@ When you submit a PR, add your changes here!
 [0.11.1]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.11.0...v0.11.1
 [0.13.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.11.1...v0.13.0
 [0.14.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.13.0...v0.14.0
-[0.14.2]: https://github.com/namespace-ee/react-calendar-timeline/compare/7483bbdf7d44de56a4576d64544631ea05be77cc...9a04baaffc87be993e9248d005790e4b11b80c4a
+[0.14.2]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.14.0...v0.14.2
+[0.14.11]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.14.2...v0.14.11
