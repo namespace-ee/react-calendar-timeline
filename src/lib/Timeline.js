@@ -992,8 +992,8 @@ export default class ReactCalendarTimeline extends Component {
       return {
         dimensionItems: [],
         height: 0,
-        groupHeights: {},
-        groupTops: 0
+        groupHeights: [],
+        groupTops: []
       }
     }
 
