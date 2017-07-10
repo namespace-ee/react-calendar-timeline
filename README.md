@@ -483,6 +483,15 @@ If that's too experimental, then the minimum you need is to add is the [`transfo
 
 See [issue 51](https://github.com/namespace-ee/react-calendar-timeline/issues/51) for more details.
 
+Alternatively you may import the transpiled version of the timeline like this:
+
+```js
+// import Timeline from 'react-calendar-timeline'  // ESnext version
+import Timeline from 'react-calendar-timeline/lib' // ES5 version
+```
+
+However doing so you lose on some of the features of webpack 2 and will potentially get a slightly larger bundle.
+
 ### It doesn't work with `create-react-app`
 
 It's the same issue as above. See [issue 134](https://github.com/namespace-ee/react-calendar-timeline/issues/134#issuecomment-314215244) for details and options.
