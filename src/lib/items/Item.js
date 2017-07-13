@@ -151,7 +151,6 @@ export default class Item extends Component {
   }
 
   dragend (e) {
-    console.log('item dragend')
 
     const { onDrop, item } = this.props
 
@@ -189,10 +188,7 @@ export default class Item extends Component {
 
   dragGroupDelta (e) {
     const {groupTops, order, topOffset} = this.props
-    if (this.state.dragging) {
-      if (!this.props.canChangeGroup) {
-        return 0
-      }
+    if (this.state.dragging && this.props.canChangeGroup) {
       let groupDelta = 0
 
       for (var key of Object.keys(groupTops)) {
@@ -203,12 +199,10 @@ export default class Item extends Component {
           break
         }
       }
-
       if (this.props.order + groupDelta < 0) {
-        return 0 - this.props.order
-      } else {
-        return groupDelta
+        groupDelta = 0 - this.props.order
       }
+      return groupDelta
     } else {
       return 0
     }
