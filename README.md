@@ -143,8 +143,9 @@ The minimum width, in pixels, of a timeline entry when it's possible to resize. 
 ### fixedHeader
 How does the header (the scrolling part with dates) behave if not all of the groups fit on the page, resulting in a vertical scrollbar.
 
-* `fixed` - the header is always on the screen
-* `none` (default) - the header is always at the top of the component
+* `fixed` - the header is always fixed to its initial position
+* `sticky` (default) - the header follows the scroll of the page to be always visible
+* `none` - the header is always at the top of the component and doesn't stick with scrolling
 
 ### fullUpdate
 If your calendar has large items compared to the zoom level (e.g. multi week events when viewing one day at a time), set this to `true` (default).
@@ -475,13 +476,28 @@ And add `right_sidebar` prop to the groups objects:
 ```
 
 ### I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
+
 These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
 
 If that's too experimental, then the minimum you need is to add is the [`transform-class-properties`](https://babeljs.io/docs/plugins/transform-class-properties/) plugin that's in stage-2 and possibly the [`transform-object-rest-spread`](https://babeljs.io/docs/plugins/transform-object-rest-spread/) plugin from stage-3. However in this case it's easier to make sure you have at least [`stage-2`](https://babeljs.io/docs/plugins/preset-stage-2/) enabled.
 
 See [issue 51](https://github.com/namespace-ee/react-calendar-timeline/issues/51) for more details.
 
+Alternatively you may import the transpiled version of the timeline like this:
+
+```js
+// import Timeline from 'react-calendar-timeline'  // ESnext version
+import Timeline from 'react-calendar-timeline/lib' // ES5 version
+```
+
+However doing so you lose on some of the features of webpack 2 and will potentially get a slightly larger bundle.
+
+### It doesn't work with `create-react-app`
+
+It's the same issue as above. See [issue 134](https://github.com/namespace-ee/react-calendar-timeline/issues/134#issuecomment-314215244) for details and options.
+
 ### What are the zIndex values for all the elements?
+
 This is useful when using the plugins (that you pass as children to the component). Override the CSS to change:
 
 * Horizontal Lines: 30
@@ -492,6 +508,7 @@ This is useful when using the plugins (that you pass as children to the componen
 * Header: 90
 
 ## Behind the scenes
+
 The timeline is built with speed, usability and extensibility in mind.
 
 Speed: The calendar itself is actually a 3x wide scrolling canvas of the screen. All scroll events left and right happen naturally, like scrolling any website. When the timeline has scrolled enough (50% of the invisible surface on one side), we change the "position:absolute;left:{num}px;" variables of each of the visible items and scroll the canvas back. When this happens, the `onBoundsChange` prop is called.
@@ -501,6 +518,7 @@ This results in a visually endless scrolling canvas with optimal performance.
 Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
 
 ## Interaction
+
 To interact and navigate within the timeline there are the following options for the user:
 
 ```
@@ -514,6 +532,7 @@ Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch poi
 The pinch gesture on a trackpad (not a touch device) works in Chrome and Firefox (v55+) because these browsers map the gesture to `ctrl + mousewheel`.
 
 ## Contribute
+
 If you like to improve React Calendar Timeline fork the repo and get started by running the following:
 
 ```bash

@@ -16,7 +16,7 @@ export default class VerticalLines extends Component {
   }
 
   static defaultProps = {
-    fixedHeader: 'none',
+    fixedHeader: 'sticky',
     dayBackground: null
   }
 
@@ -46,7 +46,7 @@ export default class VerticalLines extends Component {
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
       const lineWidth = firstOfType ? 2 : 1
       const labelWidth = Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
-      const leftPush = this.props.fixedHeader === 'fixed' && firstOfType ? -1 : 0
+      const leftPush = this.props.fixedHeader !== 'none' && firstOfType ? -1 : 0
 
       const classNames = 'rct-vl' +
                          (firstOfType ? ' rct-vl-first' : '') +

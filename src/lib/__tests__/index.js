@@ -59,6 +59,7 @@ describe('Timeline', () => {
       expect(item.props.dimensions.top).not.toBeNull()
     })
   })
+
   it('renders component with empty groups', () => {
     let allCorrect = true
     try {
@@ -99,5 +100,41 @@ describe('Timeline', () => {
       allCorrect = false
     }
     expect(allCorrect).toBe(true)
+  })
+
+  it('passes correct props to plugins', () => {
+    let Plugin = (props) => <div className='test-plugin' />
+    const wrapper = mount(
+      <Timeline groups={[]}
+                items={items}
+                stackItems
+                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}>
+        <Plugin />
+      </Timeline>
+    )
+
+    const pluginRendered = wrapper.find('Plugin')
+    const pluginProps = pluginRendered.props()
+
+    expect(typeof pluginProps.canvasTimeStart).toBe('number')
+    expect(typeof pluginProps.canvasTimeEnd).toBe('number')
+    expect(typeof pluginProps.canvasWidth).toBe('number')
+    expect(typeof pluginProps.visibleTimeStart).toBe('number')
+    expect(typeof pluginProps.visibleTimeEnd).toBe('number')
+    expect(typeof pluginProps.height).toBe('number')
+    expect(typeof pluginProps.headerHeight).toBe('number')
+
+    expect(typeof pluginProps.minUnit).toBe('string')
+
+    expect(typeof pluginProps.dimensionItems).toBe('object')
+    expect(typeof pluginProps.items).toBe('object')
+    expect(typeof pluginProps.groups).toBe('object')
+    expect(typeof pluginProps.keys).toBe('object')
+    expect(typeof pluginProps.timeSteps).toBe('object')
+
+    expect(pluginProps.selected).toBeInstanceOf(Array)
+    expect(pluginProps.groupHeights).toBeInstanceOf(Array)
+    expect(pluginProps.groupTops).toBeInstanceOf(Array)
   })
 })

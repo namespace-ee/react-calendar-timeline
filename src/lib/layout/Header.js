@@ -19,58 +19,21 @@ export default class Header extends Component {
     width: PropTypes.number.isRequired,
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
-    fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none'])
+    fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
+    headerPosition: PropTypes.oneOf(['top', 'bottom', 'fixed'])
   }
 
   static defaultProps = {
-    fixedHeader: 'none'
+    fixedHeader: 'sticky',
+    headerPosition: 'top'
   }
 
   constructor (props) {
     super(props)
     this.state = {
-      scrollTop: 0,
-      componentTop: 0,
       touchTarget: null,
       touchActive: false
     }
-  }
-
-  scroll (e) {
-    if (this.props.fixedHeader === 'absolute' && window && window.document) {
-      const scroll = window.document.body.scrollTop
-      this.setState({
-        scrollTop: scroll
-      })
-    }
-  }
-
-  setComponentTop () {
-    const viewportOffset = this.refs.header.getBoundingClientRect()
-    this.setState({
-      componentTop: viewportOffset.top
-    })
-  }
-
-  componentDidMount () {
-    this.setComponentTop()
-    this.scroll()
-
-    this.scrollEventListener = {
-      handleEvent: (event) => {
-        this.scroll()
-      }
-    }
-
-    window.addEventListener('scroll', this.scrollEventListener)
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('scroll', this.scrollEventListener)
-  }
-
-  componentWillReceiveProps () {
-    this.setComponentTop()
   }
 
   headerLabel (time, unit, width) {
@@ -151,14 +114,14 @@ export default class Header extends Component {
     let timeLabels = []
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
-      visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, fixedHeader,
+      visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, fixedHeader, headerPosition,
       headerLabelGroupHeight, headerLabelHeight, hasRightSidebar, width
     } = this.props
-    const {
-      scrollTop
-    } = this.state
+
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
+
+    const correctLeftPositions = fixedHeader === 'fixed' || (fixedHeader === 'sticky' && headerPosition === 'fixed')
 
     // add the top header
     if (twoHeaders) {
@@ -170,7 +133,7 @@ export default class Header extends Component {
         const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio, -2)
         const right = Math.round((endTime.valueOf() - canvasTimeStart) * ratio, -2)
         const labelWidth = right - left
-        const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
+        const leftCorrect = correctLeftPositions ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1 : 0
 
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
@@ -197,7 +160,7 @@ export default class Header extends Component {
       const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
       const labelWidth = Math.round((nextTime.valueOf() - time.valueOf()) * ratio, -2)
       const borderWidth = firstOfType ? 2 : 1
-      const leftCorrect = fixedHeader === 'fixed' ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
+      const leftCorrect = correctLeftPositions ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - borderWidth + 1 : 0
 
       timeLabels.push(
         <div key={`label-${time.valueOf()}`}
@@ -227,13 +190,17 @@ export default class Header extends Component {
     if (fixedHeader === 'fixed') {
       headerStyle.position = 'fixed'
       headerStyle.width = `${width}px`
-    } else if (fixedHeader === 'absolute') {
-      let componentTop = this.state.componentTop
-      if (scrollTop >= componentTop) {
+    } else if (fixedHeader === 'sticky') {
+      if (headerPosition === 'top') {
+        // do nothing, keep at the top
+      } else if (headerPosition === 'fixed') {
+        headerStyle.position = 'fixed'
+        headerStyle.top = 0
+        headerStyle.width = `${width}px`
+      } else if (headerPosition === 'bottom') {
         headerStyle.position = 'absolute'
-        headerStyle.top = `${scrollTop - componentTop}px`
+        headerStyle.bottom = 0
         headerStyle.width = `${canvasWidth}px`
-        headerStyle.left = '0'
       }
     }
 

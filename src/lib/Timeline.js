@@ -79,7 +79,7 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarContent: PropTypes.node,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    fixedHeader: PropTypes.oneOf(['fixed', 'absolute', 'none']),
+    fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     fullUpdate: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
@@ -203,7 +203,7 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
-    fixedHeader: 'none', // fixed or absolute or none
+    fixedHeader: 'sticky', // fixed or sticky or none
     fullUpdate: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
@@ -308,6 +308,8 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
 
+      headerPosition: 'top',
+
       selectedItems: selectedItems,
       dragTimeDelta: 0,
       infoLabel: null,
@@ -340,6 +342,8 @@ export default class ReactCalendarTimeline extends Component {
 
     this.lastTouchDistance = null
 
+    window.addEventListener('scroll', this.scrollEventListener)
+
     this.refs.scrollComponent.addEventListener('touchstart', this.touchStart)
     this.refs.scrollComponent.addEventListener('touchmove', this.touchMove)
     this.refs.scrollComponent.addEventListener('touchend', this.touchEnd)
@@ -352,9 +356,27 @@ export default class ReactCalendarTimeline extends Component {
 
     windowResizeDetector.removeListener(this)
 
+    window.removeEventListener('scroll', this.scrollEventListener)
+
     this.refs.scrollComponent.removeEventListener('touchstart', this.touchStart)
     this.refs.scrollComponent.removeEventListener('touchmove', this.touchMove)
     this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd)
+  }
+
+  // called on window scroll. it's job is to figure out if we should fix or float the header
+  scrollEventListener = (e) => {
+    const { headerLabelGroupHeight, headerLabelHeight } = this.props
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
+
+    const rect = this.refs.container.getBoundingClientRect()
+
+    if (rect.top > 0) {
+      this.setState({ headerPosition: 'top' })
+    } else if (rect.bottom < headerHeight) {
+      this.setState({ headerPosition: 'bottom' })
+    } else {
+      this.setState({ headerPosition: 'fixed' })
+    }
   }
 
   touchStart = (e) => {
@@ -364,7 +386,7 @@ export default class ReactCalendarTimeline extends Component {
       this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
       this.singleTouchStart = null
       this.lastSingleTouch = null
-    } else if (e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
+    } else if (e.touches.length === 1) {
       e.preventDefault()
 
       let x = e.touches[0].clientX
@@ -393,7 +415,7 @@ export default class ReactCalendarTimeline extends Component {
         this.changeZoom(this.lastTouchDistance / touchDistance, xPosition / this.state.width)
         this.lastTouchDistance = touchDistance
       }
-    } else if (this.lastSingleTouch && e.touches.length === 1 && this.props.fixedHeader === 'fixed') {
+    } else if (this.lastSingleTouch && e.touches.length === 1) {
       e.preventDefault()
 
       let x = e.touches[0].clientX
@@ -572,10 +594,7 @@ export default class ReactCalendarTimeline extends Component {
   onWheel = (e) => {
     const { traditionalZoom } = this.props
 
-    // prevent default scrolling if a modifier is pressed or the header is fixed
-    if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || this.props.fixedHeader === 'fixed') {
-      e.preventDefault()
-    }
+    e.preventDefault()
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
@@ -591,9 +610,8 @@ export default class ReactCalendarTimeline extends Component {
       const scrollComponent = this.refs.scrollComponent
       scrollComponent.scrollLeft += e.deltaY
 
-    // no modifier pressed? we prevented the default in the case of a fixed header,
-    // so adjust as needed and scroll or zoom the canvas
-    } else if (this.props.fixedHeader === 'fixed') {
+    // no modifier pressed? we prevented the default event, so scroll or zoom as needed
+    } else {
       if (e.deltaX !== 0) {
         if (!traditionalZoom) {
           this.refs.scrollComponent.scrollLeft += e.deltaX
@@ -956,6 +974,7 @@ export default class ReactCalendarTimeline extends Component {
               zoom={zoom}
               visibleTimeStart={this.state.visibleTimeStart}
               visibleTimeEnd={this.state.visibleTimeEnd}
+              headerPosition={this.state.headerPosition}
               fixedHeader={this.props.fixedHeader}
               showPeriod={this.showPeriod}
               headerLabelFormats={this.props.headerLabelFormats}
@@ -975,6 +994,7 @@ export default class ReactCalendarTimeline extends Component {
                height={height}
                headerHeight={headerHeight}
 
+               headerPosition={this.state.headerPosition}
                fixedHeader={this.props.fixedHeader}>
         {this.props.sidebarContent}
       </Sidebar>
@@ -993,6 +1013,7 @@ export default class ReactCalendarTimeline extends Component {
                height={height}
                headerHeight={headerHeight}
 
+               headerPosition={this.state.headerPosition}
                fixedHeader={this.props.fixedHeader}>
         {this.props.rightSidebarContent}
       </Sidebar>
@@ -1005,8 +1026,8 @@ export default class ReactCalendarTimeline extends Component {
       return {
         dimensionItems: [],
         height: 0,
-        groupHeights: {},
-        groupTops: 0
+        groupHeights: [],
+        groupTops: []
       }
     }
 

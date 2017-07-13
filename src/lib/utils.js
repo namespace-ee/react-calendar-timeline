@@ -258,8 +258,8 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
 
   var totalHeight = headerHeight
 
-  var groupHeights = {}
-  var groupTops = {}
+  var groupHeights = []
+  var groupTops = []
 
   var groupedItems = getGroupedItems(items, groupOrders)
 
@@ -272,7 +272,7 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
 
   groupedItems.forEach(function (group, index, array) {
     // calculate new, non-overlapping positions
-    groupTops[index] = totalHeight
+    groupTops.push(totalHeight)
 
     var groupHeight = 0
     for (i = 0, iMax = group.length; i < iMax; i++) {
@@ -284,7 +284,8 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
         groupHeight = Math.max(groupHeight, lineHeight)
       }
     }
-    groupHeights[index] = Math.max(groupHeight, lineHeight)
+
+    groupHeights.push(Math.max(groupHeight, lineHeight))
     totalHeight += Math.max(groupHeight, lineHeight)
   })
   return {
