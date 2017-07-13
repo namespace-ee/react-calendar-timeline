@@ -312,6 +312,7 @@ export default class ReactCalendarTimeline extends Component {
 
       selectedItems: selectedItems,
       dragTimeDelta: 0,
+      dragGroupDelta: 0,
       infoLabel: null,
       resizeTime: null,
       isDragging: false,
@@ -1070,14 +1071,13 @@ export default class ReactCalendarTimeline extends Component {
 
         let order = groupOrders[_get(item, keys.itemGroupKey)]
         if (isDraggingItem && canChangeGroup && this.state.selectedItems.indexOf(itemId) > -1) {
-          let indexOfGroupOrders = _get(item, keys.itemGroupKey) + dragGroupDelta
-          if (indexOfGroupOrders > groupOrders.length - 1) {
-            indexOfGroupOrders = groupOrders.length - 1
+          order = order + dragGroupDelta
+          if (order > groupOrders.length - 1) {
+            order = groupOrders.length - 1
           }
-          if (indexOfGroupOrders < 0) {
-            indexOfGroupOrders = 0
+          if (order < 0) {
+            order = 0
           }
-          order = groupOrders[indexOfGroupOrders]
         }
         dimension.order = order
         dimension.stack = !item.isOverlay

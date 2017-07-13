@@ -151,7 +151,6 @@ export default class Item extends Component {
   }
 
   dragend (e) {
-
     const { onDrop, item } = this.props
 
     if (onDrop) {
