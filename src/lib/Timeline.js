@@ -80,6 +80,7 @@ export default class ReactCalendarTimeline extends Component {
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
     fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
+	stickyOffset: PropTypes.number,
     fullUpdate: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
@@ -204,6 +205,7 @@ export default class ReactCalendarTimeline extends Component {
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
     fixedHeader: 'sticky', // fixed or sticky or none
+	stickyOffset: 0,
     fullUpdate: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
@@ -364,7 +366,7 @@ export default class ReactCalendarTimeline extends Component {
 
     const rect = this.refs.container.getBoundingClientRect()
 
-    if (rect.top > 0) {
+    if (rect.top > this.props.stickyOffset) {
       this.setState({ headerPosition: 'top' })
     } else if (rect.bottom < headerHeight) {
       this.setState({ headerPosition: 'bottom' })
@@ -942,6 +944,7 @@ export default class ReactCalendarTimeline extends Component {
               visibleTimeEnd={this.state.visibleTimeEnd}
               headerPosition={this.state.headerPosition}
               fixedHeader={this.props.fixedHeader}
+			  stickyOffset={this.props.stickyOffset}
               showPeriod={this.showPeriod}
               headerLabelFormats={this.props.headerLabelFormats}
               subHeaderLabelFormats={this.props.subHeaderLabelFormats} />
@@ -961,6 +964,7 @@ export default class ReactCalendarTimeline extends Component {
                headerHeight={headerHeight}
 
                headerPosition={this.state.headerPosition}
+			   stickyOffset={this.props.stickyOffset}
                fixedHeader={this.props.fixedHeader}>
         {this.props.sidebarContent}
       </Sidebar>
@@ -980,6 +984,7 @@ export default class ReactCalendarTimeline extends Component {
                headerHeight={headerHeight}
 
                headerPosition={this.state.headerPosition}
+			   stickyOffset={this.props.stickyOffset}
                fixedHeader={this.props.fixedHeader}>
         {this.props.rightSidebarContent}
       </Sidebar>
