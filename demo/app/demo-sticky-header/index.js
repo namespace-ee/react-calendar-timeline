@@ -91,6 +91,38 @@ export default class App extends Component {
         <img src='https://d1mlsq9roc275d.cloudfront.net/dynamic/1/photos/815000/Tom-Selleck-255815.jpg' style={{width: '80%'}} />
         <br />
         <br />
+        Here's another calendar, but this one has <code>stickyOffset</code> set to <code>100</code>, meaning that the header will
+        stick 100px from the top. This is useful for example if you already have a sticky navbar.
+        <br />
+        <br />
+
+        <Timeline groups={groups}
+                  items={items}
+                  keys={keys}
+                  fixedHeader='sticky'
+                  stickyOffset={100}
+                  fullUpdate
+
+                  sidebarWidth={150}
+                  sidebarContent={<div>Above The Left</div>}
+                  rightSidebarWidth={150}
+                  rightSidebarContent={<div>Above The Right</div>}
+
+                  canMove
+                  canResize='right'
+                  canSelect
+
+                  itemsSorted
+                  itemTouchSendsClick={false}
+                  stackItems
+                  itemHeightRatio={0.75}
+
+                  showCursorLine
+
+                  resizeDetector={containerResizeDetector}
+
+                  defaultTimeStart={defaultTimeStart}
+                  defaultTimeEnd={defaultTimeEnd} />
         <div style={{height: 1000}} />
       </div>
     )
