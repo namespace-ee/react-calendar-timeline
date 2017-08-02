@@ -147,6 +147,10 @@ How does the header (the scrolling part with dates) behave if not all of the gro
 * `sticky` (default) - the header follows the scroll of the page to be always visible
 * `none` - the header is always at the top of the component and doesn't stick with scrolling
 
+### stickyOffset
+If fixedHeader is `sticky`, at what height from the top of the screen should we start floating it? This is useful if for example you already have
+a sticky navbar. Defaults `0`.
+
 ### fullUpdate
 If your calendar has large items compared to the zoom level (e.g. multi week events when viewing one day at a time), set this to `true` (default).
 
