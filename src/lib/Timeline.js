@@ -368,7 +368,7 @@ export default class ReactCalendarTimeline extends Component {
 
     if (rect.top > this.props.stickyOffset) {
       this.setState({ headerPosition: 'top' })
-    } else if (rect.bottom < headerHeight) {
+    } else if (rect.bottom < headerHeight + this.props.stickyOffset) {
       this.setState({ headerPosition: 'bottom' })
     } else {
       this.setState({ headerPosition: 'fixed' })
