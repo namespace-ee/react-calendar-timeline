@@ -6,7 +6,6 @@ import { iterateTimes, getNextUnit } from '../utils.js'
 
 export default class Header extends Component {
   static propTypes = {
-    hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
@@ -117,7 +116,7 @@ export default class Header extends Component {
     const {
       canvasTimeStart, canvasTimeEnd, canvasWidth, lineHeight,
       visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, fixedHeader, stickyOffset, headerPosition,
-      headerLabelGroupHeight, headerLabelHeight, hasRightSidebar, width
+      headerLabelGroupHeight, headerLabelHeight, width
     } = this.props
 
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
@@ -140,7 +139,7 @@ export default class Header extends Component {
         timeLabels.push(
           <div key={`top-label-${time.valueOf()}`}
                href='#'
-               className={`rct-label-group${hasRightSidebar ? ' rct-has-right-sidebar' : ''}`}
+               className={'rct-label-group'}
                data-time={time}
                data-unit={nextUnit}
                style={{

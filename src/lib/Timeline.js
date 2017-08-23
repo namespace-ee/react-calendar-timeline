@@ -19,7 +19,6 @@ import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nosta
 export const defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
@@ -73,10 +72,7 @@ export default class ReactCalendarTimeline extends Component {
   static propTypes = {
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    sidebarWidth: PropTypes.number,
-    sidebarContent: PropTypes.node,
-    rightSidebarWidth: PropTypes.number,
-    rightSidebarContent: PropTypes.node,
+    sidebars: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
     fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
@@ -131,7 +127,6 @@ export default class ReactCalendarTimeline extends Component {
     keys: PropTypes.shape({
       groupIdKey: PropTypes.string,
       groupTitleKey: PropTypes.string,
-      groupRightTitleKey: PropTypes.string,
       itemIdKey: PropTypes.string,
       itemTitleKey: PropTypes.string,
       itemDivTitleKey: PropTypes.string,
@@ -200,8 +195,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   static defaultProps = {
-    sidebarWidth: 150,
-    rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
     fixedHeader: 'sticky', // fixed or sticky or none
@@ -453,7 +446,8 @@ export default class ReactCalendarTimeline extends Component {
 
   resize = (props = this.props) => {
     const { width: containerWidth, top: containerTop } = this.refs.container.getBoundingClientRect()
-    let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    let sidebarWidths = props.sidebars.reduce((width, sidebar) => width += sidebar.sidebarWidth, 0)
+    let width = containerWidth - sidebarWidths
 
     const {
       dimensionItems, height, groupHeights, groupTops
@@ -498,17 +492,12 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { visibleTimeStart, visibleTimeEnd, items, groups, sidebarWidth } = nextProps
+    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
 
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(visibleTimeStart, visibleTimeEnd, items !== this.props.items || groups !== this.props.groups, items, groups)
     } else if (items !== this.props.items || groups !== this.props.groups) {
       this.updateDimensions(items, groups)
-    }
-
-    // resize if the sidebar width changed
-    if (sidebarWidth !== this.props.sidebarWidth && items && groups) {
-      this.resize(nextProps)
     }
   }
 
@@ -930,7 +919,6 @@ export default class ReactCalendarTimeline extends Component {
   header (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, headerLabelGroupHeight, headerLabelHeight) {
     return (
       <Header canvasTimeStart={canvasTimeStart}
-              hasRightSidebar={this.props.rightSidebarWidth > 0}
               canvasTimeEnd={canvasTimeEnd}
               canvasWidth={canvasWidth}
               lineHeight={this.props.lineHeight}
@@ -951,43 +939,28 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  sidebar (height, groupHeights, headerHeight) {
+  sidebar(height, groupHeights, headerHeight) {
     return (
-      <Sidebar groups={this.props.groups}
-               groupRenderer={this.props.groupRenderer}
-               keys={this.props.keys}
+      this.props.sidebars.map((sidebar) => (
+        <Sidebar key={sidebar.id}
+                 groups={this.props.groups}
+                 groupRenderer={this.props.groupRenderer}
+                 keys={this.props.keys}
+                 isRightSidebar={sidebar.isRightSidebar}
+                 sidebarKey={sidebar.sidebarKey}
 
-               width={this.props.sidebarWidth}
-               lineHeight={this.props.lineHeight}
-               groupHeights={groupHeights}
-               height={height}
-               headerHeight={headerHeight}
+                 width={sidebar.sidebarWidth}
+                 lineHeight={this.props.lineHeight}
+                 groupHeights={groupHeights}
+                 height={height}
+                 headerHeight={headerHeight}
 
-               headerPosition={this.state.headerPosition}
-               stickyOffset={this.props.stickyOffset}
-               fixedHeader={this.props.fixedHeader}>
-        {this.props.sidebarContent}
-      </Sidebar>
-    )
-  }
-
-  rightSidebar (height, groupHeights, headerHeight) {
-    return (
-      <Sidebar groups={this.props.groups}
-               keys={this.props.keys}
-               isRightSidebar
-
-               width={this.props.rightSidebarWidth}
-               lineHeight={this.props.lineHeight}
-               groupHeights={groupHeights}
-               height={height}
-               headerHeight={headerHeight}
-
-               headerPosition={this.state.headerPosition}
-               stickyOffset={this.props.stickyOffset}
-               fixedHeader={this.props.fixedHeader}>
-        {this.props.rightSidebarContent}
-      </Sidebar>
+                 headerPosition={this.state.headerPosition}
+                 stickyOffset={this.props.stickyOffset}
+                 fixedHeader={this.props.fixedHeader}>
+          {sidebar.sidebarContent}
+        </Sidebar>
+      ))
     )
   }
 
@@ -1152,7 +1125,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   render () {
-    const { items, groups, headerLabelGroupHeight, headerLabelHeight, sidebarWidth, rightSidebarWidth, timeSteps, showCursorLine } = this.props
+    const { items, groups, headerLabelGroupHeight, headerLabelHeight, rightSidebarWidth, timeSteps, showCursorLine } = this.props
     const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, mouseOverCanvas, cursorTime } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
@@ -1184,11 +1157,11 @@ export default class ReactCalendarTimeline extends Component {
       width: `${canvasWidth}px`,
       height: `${height}px`
     }
-
+    
     return (
       <div style={this.props.style} ref='container' className='react-calendar-timeline'>
         <div style={outerComponentStyle} className='rct-outer'>
-          {sidebarWidth > 0 ? this.sidebar(height, groupHeights, headerHeight) : null}
+          {this.sidebar(height, groupHeights, headerHeight)}
           <div ref='scrollComponent'
                className='rct-scroll'
                style={scrollComponentStyle}
@@ -1228,7 +1201,6 @@ export default class ReactCalendarTimeline extends Component {
               {this.childrenWithProps(canvasTimeStart, canvasTimeEnd, canvasWidth, dimensionItems, groupHeights, groupTops, height, headerHeight, visibleTimeStart, visibleTimeEnd, minUnit, timeSteps)}
             </div>
           </div>
-          {rightSidebarWidth > 0 ? this.rightSidebar(height, groupHeights, headerHeight) : null}
         </div>
       </div>
     )
