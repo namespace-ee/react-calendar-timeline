@@ -16,6 +16,7 @@ const demos = {
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
   plugins: require('./demo-plugins').default,
+  multiselect: require('./demo-multiselect').default,
   stickyHeader: require('./demo-sticky-header').default
 }
 
