@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 
 export default class TodayLine extends Component {
   static propTypes = {
-    referenceTime: PropTypes.number.isRequired,
+    referenceTime: PropTypes.number,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
@@ -15,7 +15,7 @@ export default class TodayLine extends Component {
   }
 
   render () {
-    let refTime = this.props.referenceTime;
+    let refTime = this.props.referenceTime || new Date().getTime();
 
     if (refTime > this.props.canvasTimeStart && refTime < this.props.canvasTimeEnd) {
       const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
