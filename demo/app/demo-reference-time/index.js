@@ -134,49 +134,55 @@ export default class App extends Component {
     const { groups, items, defaultTimeStart, defaultTimeEnd, referenceTime } = this.state
 
     return (
-      <Timeline groups={groups}
-                items={items}
-                keys={keys}
-                fixedHeader='fixed'
-                fullUpdate
+      <div>
+        <div>Reference Time is set to 2:14am on 29 August 1997, and random tasks are generated around it.</div>
+        <div>
+          <Timeline groups={groups}
+                    items={items}
+                    keys={keys}
+                    fixedHeader='fixed'
+                    fullUpdate
 
-                sidebarWidth={150}
-                sidebarContent={<div>Above The Left</div>}
-                rightSidebarWidth={150}
-                rightSidebarContent={<div>Above The Right</div>}
+                    sidebarWidth={150}
+                    sidebarContent={<div>Above The Left</div>}
+                    rightSidebarWidth={150}
+                    rightSidebarContent={<div>Above The Right</div>}
 
-                canMove
-                canResize='right'
-                canSelect
+                    canMove={false}
+                    canResize={false}
+                    canChangeGroup={false}
+                    canSelect
 
-                itemsSorted
-                itemTouchSendsClick={false}
-                stackItems
-                itemHeightRatio={0.75}
+                    itemsSorted
+                    itemTouchSendsClick={false}
+                    stackItems
+                    itemHeightRatio={0.75}
 
-                showCursorLine
+                    showCursorLine
 
-                // resizeDetector={containerResizeDetector}
+                    // resizeDetector={containerResizeDetector}
 
-                referenceTime={referenceTime}
-                defaultTimeStart={defaultTimeStart}
-                defaultTimeEnd={defaultTimeEnd}
+                    referenceTime={referenceTime}
+                    defaultTimeStart={defaultTimeStart}
+                    defaultTimeEnd={defaultTimeEnd}
 
-                // itemRenderer={this.itemRenderer}
-                // groupRenderer={this.groupRenderer}
+                    // itemRenderer={this.itemRenderer}
+                    // groupRenderer={this.groupRenderer}
 
-                onCanvasClick={this.handleCanvasClick}
-                onCanvasContextMenu={this.handleCanvasContextMenu}
+                    onCanvasClick={this.handleCanvasClick}
+                    onCanvasContextMenu={this.handleCanvasContextMenu}
 
-                onItemClick={this.handleItemClick}
-                onItemSelect={this.handleItemSelect}
-                onItemContextMenu={this.handleItemContextMenu}
-                onItemMove={this.handleItemMove}
-                onItemResize={this.handleItemResize}
+                    onItemClick={this.handleItemClick}
+                    onItemSelect={this.handleItemSelect}
+                    onItemContextMenu={this.handleItemContextMenu}
+                    onItemMove={this.handleItemMove}
+                    onItemResize={this.handleItemResize}
 
-                onTimeChange={this.handleTimeChange}
+                    onTimeChange={this.handleTimeChange}
 
-                moveResizeValidator={this.moveResizeValidator} />
+                    moveResizeValidator={this.moveResizeValidator} />
+            </div>
+      </div>
     )
   }
 }
