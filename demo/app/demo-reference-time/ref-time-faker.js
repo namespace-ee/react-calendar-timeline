@@ -3,10 +3,10 @@ import randomColor from 'randomcolor'
 import moment from 'moment'
 
 export default function (refTimeInMillis, groupCount = 6, itemCount = 100) {
-  const ONE_WEEK = 7 * 24 * 60 * 60 * 1000
+  const THREE_DAYS = 3 * 24 * 60 * 60 * 1000
 
-  const earliestDate = new Date(refTimeInMillis - ONE_WEEK)
-  const latestDate = new Date(refTimeInMillis + ONE_WEEK)
+  const earliestDate = new Date(refTimeInMillis - THREE_DAYS)
+  const latestDate = new Date(refTimeInMillis + THREE_DAYS)
   let randomSeed = Math.floor(Math.random() * 1000)
   let groups = []
   for (let i = 0; i < groupCount; i++) {
@@ -30,8 +30,9 @@ export default function (refTimeInMillis, groupCount = 6, itemCount = 100) {
       title: faker.hacker.phrase(),
       start: startValue,
       end: endValue,
-      canMove: true,
-      canResize: 'both',
+      canMove: false,
+      canResize: false,
+      canChangeGroup: false,
       className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : '',
       itemProps: {
         'data-tip': faker.hacker.phrase()
