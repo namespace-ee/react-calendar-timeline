@@ -1072,8 +1072,8 @@ export default class ReactCalendarTimeline extends Component {
         let order = groupOrders[_get(item, keys.itemGroupKey)]
         if (isDraggingItem && canChangeGroup && this.state.selectedItems.indexOf(itemId) > -1) {
           order = order + dragGroupDelta
-          if (order > groupOrders.length - 1) {
-            order = groupOrders.length - 1
+          if (order > Object.keys(groupOrders).length - 1) {
+            order = Object.keys(groupOrders).length - 1
           }
           if (order < 0) {
             order = 0
