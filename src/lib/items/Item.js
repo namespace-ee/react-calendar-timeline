@@ -28,6 +28,7 @@ export default class Item extends Component {
     //
     // onSelect: React.PropTypes.func,
     // onDrag: React.PropTypes.func,
+    // onDragStart: React.PropTypes.func,
     // onDrop: React.PropTypes.func,
     // onResizing: React.PropTypes.func,
     // onResized: React.PropTypes.func,
@@ -48,8 +49,7 @@ export default class Item extends Component {
       interactMounted: false,
 
       dragging: null,
-      dragStart: null,
-      preDragPosition: null,
+      dragStartPos: null, // holding x,y position when draging
       dragTime: null,
       dragGroupDelta: null,
 
@@ -118,11 +118,65 @@ export default class Item extends Component {
     }
   }
 
+  dragstart (e) {
+    if (this.props.onDragStart) {
+      this.props.onDragStart(this.itemId)
+    }
+    this.setState({
+      dragging: true,
+      dragStartPos: {x: e.pageX, y: e.pageY},
+      dragGroupDelta: 0
+    })
+  }
+
+  dragmove (e) {
+    const { onDrag, dragSnap, item } = this.props
+    let dragTimeDelta = this.dragTimeDelta(e)
+    let dragGroupDelta = this.dragGroupDelta(e)
+
+    if (this.props.moveResizeValidator) {
+      dragTimeDelta = this.props.moveResizeValidator('move', item, this.itemTimeStart + dragTimeDelta) - this.itemTimeStart
+    } else {
+      dragTimeDelta = (Math.round((this.itemTimeStart + dragTimeDelta) / dragSnap) * dragSnap) - this.itemTimeStart
+    }
+
+    if (onDrag) {
+      onDrag(item, dragTimeDelta, this.props.order, dragGroupDelta)
+    }
+
+    this.setState({
+      dragTimeDelta,
+      dragGroupDelta
+    })
+  }
+
+  dragend (e) {
+    const { onDrop, item } = this.props
+
+    if (onDrop) {
+      onDrop(item, this.state.dragTimeDelta, this.props.order, this.state.dragGroupDelta)
+    }
+
+    this.setState({
+      dragging: false,
+      dragTimeDelta: 0,
+      dragGroupDelta: null
+    })
+  }
+
+  dragTimeDelta (e) {
+    if (!this.state.dragging) {
+      return 0
+    }
+    const deltaX = e.pageX - this.state.dragStartPos.x
+    return deltaX * this.coordinateToTimeRatio()
+  }
+
   dragTime (e) {
     const startTime = this.itemTimeStart
 
     if (this.state.dragging) {
-      const deltaX = e.pageX - this.state.dragStart.x
+      const deltaX = e.pageX - this.state.dragStartPos.x
       const timeDelta = deltaX * this.coordinateToTimeRatio()
 
       return this.dragTimeSnap(startTime + timeDelta, true)
@@ -133,10 +187,7 @@ export default class Item extends Component {
 
   dragGroupDelta (e) {
     const {groupTops, order, topOffset} = this.props
-    if (this.state.dragging) {
-      if (!this.props.canChangeGroup) {
-        return 0
-      }
+    if (this.state.dragging && this.props.canChangeGroup) {
       let groupDelta = 0
 
       for (var key of Object.keys(groupTops)) {
@@ -147,26 +198,25 @@ export default class Item extends Component {
           break
         }
       }
-
       if (this.props.order + groupDelta < 0) {
-        return 0 - this.props.order
-      } else {
-        return groupDelta
+        groupDelta = 0 - this.props.order
       }
+      return groupDelta
     } else {
       return 0
     }
   }
 
   resizeTimeDelta (e, resizeEdge) {
+    const { dragSnap } = this.props
     const length = this.itemTimeEnd - this.itemTimeStart
     const timeDelta = this.dragTimeSnap((e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio())
 
-    if (length + (resizeEdge === 'left' ? -timeDelta : timeDelta) < (this.props.dragSnap || 1000)) {
+    if (length + (resizeEdge === 'left' ? -timeDelta : timeDelta) < (dragSnap || 1000)) {
       if (resizeEdge === 'left') {
-        return length - (this.props.dragSnap || 1000)
+        return length - (dragSnap || 1000)
       } else {
-        return (this.props.dragSnap || 1000) - length
+        return (dragSnap || 1000) - length
       }
     } else {
       return timeDelta
@@ -196,55 +246,19 @@ export default class Item extends Component {
       .styleCursor(false)
       .on('dragstart', (e) => {
         if (this.props.selected) {
-          this.setState({
-            dragging: true,
-            dragStart: {x: e.pageX, y: e.pageY},
-            preDragPosition: {x: e.target.offsetLeft, y: e.target.offsetTop},
-            dragTime: this.itemTimeStart,
-            dragGroupDelta: 0
-          })
+          this.dragstart(e)
         } else {
           return false
         }
       })
       .on('dragmove', (e) => {
         if (this.state.dragging) {
-          let dragTime = this.dragTime(e)
-          let dragGroupDelta = this.dragGroupDelta(e)
-
-          if (this.props.moveResizeValidator) {
-            dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
-          }
-
-          if (this.props.onDrag) {
-            this.props.onDrag(this.itemId, dragTime, this.props.order + dragGroupDelta)
-          }
-
-          this.setState({
-            dragTime: dragTime,
-            dragGroupDelta: dragGroupDelta
-          })
+          this.dragmove(e)
         }
       })
       .on('dragend', (e) => {
         if (this.state.dragging) {
-          if (this.props.onDrop) {
-            let dragTime = this.dragTime(e)
-
-            if (this.props.moveResizeValidator) {
-              dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
-            }
-
-            this.props.onDrop(this.itemId, dragTime, this.props.order + this.dragGroupDelta(e))
-          }
-
-          this.setState({
-            dragging: false,
-            dragStart: null,
-            preDragPosition: null,
-            dragTime: null,
-            dragGroupDelta: null
-          })
+          this.dragend(e)
         }
       })
       .on('resizestart', (e) => {
