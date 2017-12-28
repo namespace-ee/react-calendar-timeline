@@ -151,6 +151,9 @@ How does the header (the scrolling part with dates) behave if not all of the gro
 If fixedHeader is `sticky`, at what height from the top of the screen should we start floating it? This is useful if for example you already have
 a sticky navbar. Defaults `0`.
 
+### scrollableContainer
+Pass DOM node here if you want to use `fixedHeader="sticky"` inside element with `overflow: auto`. Default is `window`.
+
 ### fullUpdate
 If your calendar has large items compared to the zoom level (e.g. multi week events when viewing one day at a time), set this to `true` (default).
 
