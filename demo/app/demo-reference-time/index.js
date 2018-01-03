@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 import Timeline from 'react-calendar-timeline'
-// import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 import faker from './ref-time-faker'
 
@@ -33,12 +32,16 @@ export default class App extends Component {
     const defaultTimeStart = new Date(referenceTime - TWENTY_FOUR_LITTLE_HOURS)
     const defaultTimeEnd = new Date(referenceTime + TWENTY_FOUR_LITTLE_HOURS)
 
+    const refTime = referenceTime
+    const refLabel = 'Example Ref Time'
+
     this.state = {
       groups,
       items,
       defaultTimeStart,
       defaultTimeEnd,
-      referenceTime
+      refTime,
+      refLabel
     }
   }
 
@@ -62,6 +65,35 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId)
   }
 
+  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+    const { items, groups } = this.state
+
+    const group = groups[newGroupOrder]
+
+    this.setState({
+      items: items.map(item => item.id === itemId ? Object.assign({}, item, {
+        start: dragTime,
+        end: dragTime + (item.end - item.start),
+        group: group.id
+      }) : item)
+    })
+
+    console.log('Moved', itemId, dragTime, newGroupOrder)
+  }
+
+  handleItemResize = (itemId, time, edge) => {
+    const { items } = this.state
+
+    this.setState({
+      items: items.map(item => item.id === itemId ? Object.assign({}, item, {
+        start: edge === 'left' ? time : item.start,
+        end: edge === 'left' ? item.end : time
+      }) : item)
+    })
+
+    console.log('Resized', itemId, time, edge)
+  }
+
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
     if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
@@ -75,8 +107,34 @@ export default class App extends Component {
     }
   }
 
+  moveResizeValidator = (action, item, time, resizeEdge) => {
+    if (time < new Date().getTime()) {
+      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
+      return newTime
+    }
+
+    return time
+  }
+
+  // itemRenderer = ({ item }) => {
+  //   return (
+  //     <div className='custom-item'>
+  //       <span className='title'>{item.title}</span>
+  //       <p className='tip'>{item.itemProps['data-tip']}</p>
+  //     </div>
+  //   )
+  // }
+
+  // groupRenderer = ({ group }) => {
+  //   return (
+  //     <div className='custom-group'>
+  //       {group.title}
+  //     </div>
+  //   )
+  // }
+
   render () {
-    const { groups, items, defaultTimeStart, defaultTimeEnd, referenceTime } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd, refTime, refLabel } = this.state
 
     return (
       <div>
@@ -107,7 +165,8 @@ export default class App extends Component {
 
                     // resizeDetector={containerResizeDetector}
 
-                    referenceTime={referenceTime}
+                    referenceTime={refTime}
+                    referenceTimeLabel={refLabel}
                     defaultTimeStart={defaultTimeStart}
                     defaultTimeEnd={defaultTimeEnd}
 
@@ -120,8 +179,12 @@ export default class App extends Component {
                     onItemClick={this.handleItemClick}
                     onItemSelect={this.handleItemSelect}
                     onItemContextMenu={this.handleItemContextMenu}
+                    onItemMove={this.handleItemMove}
+                    onItemResize={this.handleItemResize}
 
-                    onTimeChange={this.handleTimeChange}/>
+                    onTimeChange={this.handleTimeChange}
+
+                    moveResizeValidator={this.moveResizeValidator} />
             </div>
       </div>
     )

@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 export default class TodayLine extends Component {
   static propTypes = {
     referenceTime: PropTypes.number,
+    referenceTimeLabel: PropTypes.string,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
@@ -15,7 +16,7 @@ export default class TodayLine extends Component {
   }
 
   render () {
-    let refTime = this.props.referenceTime || new Date().getTime();
+    let refTime = this.props.referenceTime || new Date().getTime()
 
     if (refTime > this.props.canvasTimeStart && refTime < this.props.canvasTimeEnd) {
       const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
@@ -28,7 +29,7 @@ export default class TodayLine extends Component {
         height: `${height}px`
       }
 
-      return <div className='rct-today' style={styles} />
+      return <div className='rct-today' style={styles} title={this.props.referenceTimeLabel}/>
     } else {
       return <div />
     }

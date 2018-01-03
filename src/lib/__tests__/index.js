@@ -102,6 +102,58 @@ describe('Timeline', () => {
     expect(allCorrect).toBe(true)
   })
 
+  it('correctly handles reference time and associated label', () => {
+    const wrapper = mount(
+      <Timeline groups={groups}
+                items={items}
+                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+                referenceTime={moment('1995-12-25').valueOf()}
+                referenceTimeLabel={'Christmas'}
+      />
+    )
+
+    // get the today line
+    const todayLine = wrapper.find('TodayLine')
+    const tlProps = todayLine.props()
+
+    // check that the reference label is set
+    expect(tlProps.referenceTimeLabel).toBe('Christmas')
+    expect(tlProps.referenceTime).toBe(moment('1995-12-25').valueOf())
+
+    const wrapperNoLabel = mount(
+      <Timeline groups={groups}
+                items={items}
+                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+                referenceTime={moment('1995-12-25').valueOf()}
+      />
+    )
+
+    const todayLineNoLabel = wrapperNoLabel.find('TodayLine')
+    const nlProps = todayLineNoLabel.props()
+
+    // check that reference label is the default
+    expect(nlProps.referenceTimeLabel).toBe('Reference Time')
+    expect(nlProps.referenceTime).toBe(moment('1995-12-25').valueOf())
+
+    const wrapperNoRefTime = mount(
+      <Timeline groups={groups}
+                items={items}
+                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+      />
+    )
+
+    const todayLineNoRefTime = wrapperNoRefTime.find('TodayLine')
+    const nrtProps = todayLineNoRefTime.props()
+
+    // check that reference label is the default in absence of a ref time
+    expect(nlProps.referenceTimeLabel).toBe('Reference Time')
+    expect(nrtProps.referenceTime).toBeNull()
+
+  })
+
   it('passes correct props to plugins', () => {
     let Plugin = (props) => <div className='test-plugin' />
     const wrapper = mount(

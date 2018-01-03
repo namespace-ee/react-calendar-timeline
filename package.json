@@ -7,7 +7,9 @@
   "scripts": {
     "build": "npm run build:lib",
     "build:demo": "echo '!!! Building Demo' && BABEL_ENV=react node build.js production",
-    "build:lib": "echo '!!! Building Library' && ./node_modules/.bin/babel src --out-dir lib && ./node_modules/.bin/node-sass src/lib/Timeline.scss lib/lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
+    "build:lib": "echo '!!! Building Library' && npm run babel  && npm run sass && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
+    "babel": "node_modules/.bin/babel src --out-dir lib",
+    "sass": "node_modules/.bin/node-sass src/lib/Timeline.scss lib/lib/Timeline.css",
     "jest": "node_modules/.bin/jest",
     "jest:update": "node_modules/.bin/jest -u",
     "lint": "eslint --ext .js,.jsx src demo *.js",
@@ -28,7 +30,7 @@
   "author": "Marius Andra <marius.andra@gmail.com>",
   "contributors": [
     "Stanisław Chmiela <sjchmiela@gmail.com>",
-    "Mark Shearman <web@krypticsoftware.com>"
+    "Mark Shearman <kryptos@krypticsoftware.com>"
   ],
   "license": "MIT",
   "keywords": [
@@ -51,7 +53,10 @@
   },
   "dependencies": {
     "element-resize-detector": "^1.1.12",
-    "interact.js": "^1.2.6",
+    "interact.js": "^1.2.8",
+    "moment": "^2.20.1",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
     "react-pure-render": "^1.0.2"
   },
   "peerDependencies": {
