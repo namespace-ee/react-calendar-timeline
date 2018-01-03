@@ -151,7 +151,6 @@ describe('Timeline', () => {
     // check that reference label is the default in absence of a ref time
     expect(nlProps.referenceTimeLabel).toBe('Reference Time')
     expect(nrtProps.referenceTime).toBeNull()
-
   })
 
   it('passes correct props to plugins', () => {
