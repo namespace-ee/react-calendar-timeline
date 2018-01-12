@@ -11,3 +11,6 @@ gh-pages
 
 # vscode stuff
 .vscode
+
+# code coverage
+coverage
