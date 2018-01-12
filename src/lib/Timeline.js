@@ -662,8 +662,6 @@ export default class ReactCalendarTimeline extends Component {
     this.props.onTimeChange(visibleTimeStart, visibleTimeStart + zoom, this.updateScrollCanvas)
   }
 
-
-
   selectItem = (item, clickType, e) => {
     const time = this.timeFromEvent(e)
     if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
