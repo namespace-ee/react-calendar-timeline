@@ -42,7 +42,7 @@
   "jest": {
     "verbose": true,
     "testMatch": [
-      "**/__tests__/*.js"
+      "**/__tests__/**/*.js"
     ],
     "setupFiles": [
       "<rootDir>/config/jest-setup.js"
