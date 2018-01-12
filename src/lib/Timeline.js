@@ -663,14 +663,15 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   selectItem = (item, clickType, e) => {
-    const time = this.timeFromEvent(e)
     if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
+        const time = this.timeFromEvent(e)
         this.props.onItemClick(item, e, time)
       }
     } else {
       this.setState({selectedItem: item})
       if (item && this.props.onItemSelect) {
+        const time = this.timeFromEvent(e)
         this.props.onItemSelect(item, e, time)
       } else if (item === null && this.props.onItemDeselect) {
         this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
@@ -713,6 +714,7 @@ export default class ReactCalendarTimeline extends Component {
 
     // calculate the x (time) coordinate taking the dragSnap into account
     let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
+    console.log('raw time', moment(time).format('M/D/YY'))
     time = Math.floor(time / dragSnap) * dragSnap
 
     return [row, time]
