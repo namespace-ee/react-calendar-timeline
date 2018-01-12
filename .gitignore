@@ -5,7 +5,6 @@ bower_components
 .idea
 .sass-cache
 modules
-/lib
 build
 gh-pages
 
@@ -14,3 +13,4 @@ gh-pages
 
 # code coverage
 coverage
+
