@@ -6,6 +6,8 @@ A modern and responsive react timeline component.
 
 Demo here: http://namespace.ee/react-calendar-timeline/
 
+Code sandbox example: https://codesandbox.io/s/x3ql17x204
+
 ## Getting started
 
 ```bash
