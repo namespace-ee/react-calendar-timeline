@@ -45,7 +45,7 @@
       "**/__tests__/*.js"
     ],
     "setupFiles": [
-      "<rootDir>/spec/jest-setup.js"
+      "<rootDir>/config/jest-setup.js"
     ],
     "moduleNameMapper": {
       "^.+\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
@@ -69,6 +69,7 @@
     "babel-cli": "^6.7.5",
     "babel-core": "~6.18.2",
     "babel-eslint": "^7.1.1",
+    "babel-jest": "^22.0.6",
     "babel-loader": "~6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
