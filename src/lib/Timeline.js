@@ -663,16 +663,17 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   selectItem = (item, clickType, e) => {
+    const [, time] = this.rowAndTimeFromEvent(e)
     if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
-        this.props.onItemClick(item, e)
+        this.props.onItemClick(item, e, time)
       }
     } else {
       this.setState({selectedItem: item})
       if (item && this.props.onItemSelect) {
-        this.props.onItemSelect(item, e)
+        this.props.onItemSelect(item, e, time)
       } else if (item === null && this.props.onItemDeselect) {
-        this.props.onItemDeselect(e)
+        this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
       }
     }
   }
