@@ -49,7 +49,10 @@
     ],
     "moduleNameMapper": {
       "^.+\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
-    }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ]
   },
   "dependencies": {
     "element-resize-detector": "^1.1.12",
