@@ -781,6 +781,10 @@ export default class ReactCalendarTimeline extends Component {
     this.setState({isDragging: false, dragStartPosition: null, dragLastPosition: null})
   }
 
+  handleMouseLeave = (e) => {
+    this.setState({isDragging: false, dragStartPosition: null, dragLastPosition: null})
+  }
+
   handleCanvasMouseEnter = (e) => {
     const { showCursorLine } = this.props
     if (showCursorLine) {
@@ -1197,6 +1201,7 @@ export default class ReactCalendarTimeline extends Component {
                onMouseDown={this.handleMouseDown}
                onMouseMove={this.handleMouseMove}
                onMouseUp={this.handleMouseUp}
+               onMouseLeave={this.handleMouseLeave}
           >
             <div ref='canvasComponent'
                  className='rct-canvas'
