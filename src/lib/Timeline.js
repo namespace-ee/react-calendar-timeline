@@ -719,7 +719,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   timeFromEvent = (e) => {
-    const [, time] = this.rowAndTimeFromEvent
+    const [, time] = this.rowAndTimeFromEvent(e)
 
     return time
   }
