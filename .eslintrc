@@ -4,17 +4,18 @@
     "modules": true
   },
   "plugins": [
-    "react"
+    "react",
+    "jest"
   ],
+  "env": {
+    "jest/globals": true
+  },
   "rules": {
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
     "no-labels": 0,
     "arrow-parens": 0
-  },
-  "env": {
-    "jasmine": true
   },
   "extends": "standard",
   "parser": "babel-eslint"

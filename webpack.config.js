@@ -3,6 +3,7 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const nodeEnv = process.env.NODE_ENV || 'development'
+const port = process.env.PORT || 8080
 
 const isProd = nodeEnv === 'production'
 
@@ -20,7 +21,7 @@ const config = {
     demo: isProd ? [
       './index.js'
     ] : [
-      'webpack-dev-server/client?http://0.0.0.0:8080',
+      `webpack-dev-server/client?http://0.0.0.0:${port}`,
       'webpack/hot/only-dev-server',
       './index.js'
     ]
@@ -88,7 +89,8 @@ const config = {
     })
   ],
   devServer: {
-    contentBase: './demo'
+    contentBase: './demo',
+    port
   }
 }
 
