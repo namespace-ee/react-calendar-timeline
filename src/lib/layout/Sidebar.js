@@ -29,21 +29,21 @@ export default class Sidebar extends Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
-             nextProps.keys === this.props.keys &&
-             nextProps.width === this.props.width &&
-             nextProps.lineHeight === this.props.lineHeight &&
-             nextProps.fixedHeader === this.props.fixedHeader &&
-             nextProps.stickyOffset === this.props.stickyOffset &&
-             nextProps.headerPosition === this.props.headerPosition &&
-             nextProps.groupHeights === this.props.groupHeights &&
-             nextProps.height === this.props.height)
+      nextProps.keys === this.props.keys &&
+      nextProps.width === this.props.width &&
+      nextProps.lineHeight === this.props.lineHeight &&
+      nextProps.fixedHeader === this.props.fixedHeader &&
+      nextProps.stickyOffset === this.props.stickyOffset &&
+      nextProps.headerPosition === this.props.headerPosition &&
+      nextProps.groupHeights === this.props.groupHeights &&
+      nextProps.height === this.props.height)
   }
 
-  renderGroupContent (group, isRightSidebar, groupTitleKey, groupRightTitleKey) {
+  renderGroupContent (group, isRightSidebar, groupTitleKey) {
     if (this.props.groupRenderer) {
       return React.createElement(this.props.groupRenderer, { group, isRightSidebar })
     } else {
-      return _get(group, isRightSidebar ? groupRightTitleKey : groupTitleKey)
+      return _get(group, groupTitleKey)
     }
   }
 
@@ -52,7 +52,9 @@ export default class Sidebar extends Component {
       fixedHeader, stickyOffset, width, lineHeight, groupHeights, height, headerHeight, isRightSidebar, headerPosition
     } = this.props
 
-    const {groupIdKey, groupTitleKey, groupRightTitleKey} = this.props.keys
+    const { groupIdKey } = this.props.keys
+
+    const groupTitleKey = this.props.sidebarKey
 
     const sidebarStyle = {
       width: `${width}px`,
@@ -87,8 +89,8 @@ export default class Sidebar extends Component {
     }
 
     const header = <div ref='sidebarHeader' className='rct-sidebar-header' style={headerStyle}>
-                     {this.props.children}
-                   </div>
+      {this.props.children}
+    </div>
 
     let groupLines = []
     let i = 0
@@ -101,7 +103,7 @@ export default class Sidebar extends Component {
 
       groupLines.push(
         <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
-          {this.renderGroupContent(group, isRightSidebar, groupTitleKey, groupRightTitleKey)}
+          {this.renderGroupContent(group, isRightSidebar, groupTitleKey)}
         </div>
       )
       i += 1

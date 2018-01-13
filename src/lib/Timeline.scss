@@ -208,6 +208,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     &.rct-sidebar-right {
       border-right: 0;
       border-left: $border-width solid $border-color;
+      float: right;
     }
 
     .rct-sidebar-header {
