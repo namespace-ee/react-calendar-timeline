@@ -694,13 +694,14 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   rowAndTimeFromEvent = (e) => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
+    const { headerLabelGroupHeight, headerLabelHeight, dragSnap, sidebarWidth } = this.props
     const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
     const lineCount = _length(this.props.groups)
 
     // get coordinates relative to the component
     const parentPosition = getParentPosition(e.currentTarget)
-    const x = e.clientX - parentPosition.x
+
+    const x = e.clientX - sidebarWidth
     const y = e.clientY - parentPosition.y
 
     // calculate the y coordinate from `groupHeights` and header heights
@@ -714,7 +715,6 @@ export default class ReactCalendarTimeline extends Component {
 
     // calculate the x (time) coordinate taking the dragSnap into account
     let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
-    console.log('raw time', moment(time).format('M/D/YY'))
     time = Math.floor(time / dragSnap) * dragSnap
 
     return [row, time]
