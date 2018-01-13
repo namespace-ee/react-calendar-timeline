@@ -5,12 +5,13 @@ bower_components
 .idea
 .sass-cache
 modules
-/lib
 build
 gh-pages
+lib
 
 # vscode stuff
 .vscode
 
 # code coverage
 coverage
+

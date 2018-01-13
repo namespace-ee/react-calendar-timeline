@@ -229,17 +229,17 @@ Callback when an item is moved. Returns 1) the item's ID, 2) the new start time 
 ### onItemResize(itemId, time, edge)
 Callback when an item is resized. Returns 1) the item's ID, 2) the new start or end time of the item 3) The edge that was dragged (`left` or `right`)
 
-### onItemSelect(itemId, e)
-Called when an item is selected. This is sent on the first click on an item.
+### onItemSelect(itemId, e, time)
+Called when an item is selected. This is sent on the first click on an item. `time` is the time that corresponds to where you click/select on the item in the timeline.
 
-### onItemClick(itemId, e)
-Called when an item is clicked. Note: the item must be selected before it's clicked... except if it's a touch event and `itemTouchSendsClick` is enabled.
+### onItemClick(itemId, e, time)
+Called when an item is clicked. Note: the item must be selected before it's clicked... except if it's a touch event and `itemTouchSendsClick` is enabled. `time` is the time that corresponds to where you click on the item in the timeline.
 
-### onItemDoubleClick(itemId, e)
-Called when an item was double clicked
+### onItemDoubleClick(itemId, e, time)
+Called when an item was double clicked. `time` is the time that corresponds to where you double click on the item in the timeline.
 
-### onItemContextMenu(itemId, e)
-Called when the item is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
+### onItemContextMenu(itemId, e, time)
+Called when the item is clicked by the right button of the mouse. `time` is the time that corresponds to where you context click on the item in the timeline. Note: If this property is set the default context menu doesn't appear.
 
 ### onCanvasClick(groupId, time, e)
 Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.

@@ -665,26 +665,43 @@ export default class ReactCalendarTimeline extends Component {
   selectItem = (item, clickType, e) => {
     if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
-        this.props.onItemClick(item, e)
+        const time = this.timeFromEvent(e)
+        this.props.onItemClick(item, e, time)
       }
     } else {
       this.setState({selectedItem: item})
       if (item && this.props.onItemSelect) {
-        this.props.onItemSelect(item, e)
+        const time = this.timeFromEvent(e)
+        this.props.onItemSelect(item, e, time)
       } else if (item === null && this.props.onItemDeselect) {
-        this.props.onItemDeselect(e)
+        this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
       }
     }
   }
 
+  doubleClickItem = (item, e) => {
+    if (this.props.onItemDoubleClick) {
+      const time = this.timeFromEvent(e)
+      this.props.onItemDoubleClick(item, e, time)
+    }
+  }
+
+  contextMenuClickItem = (item, e) => {
+    if (this.props.onItemDoubleClick) {
+      const time = this.timeFromEvent(e)
+      this.props.onItemDoubleClick(item, e, time)
+    }
+  }
+
   rowAndTimeFromEvent = (e) => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
+    const { headerLabelGroupHeight, headerLabelHeight, dragSnap, sidebarWidth } = this.props
     const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
     const lineCount = _length(this.props.groups)
 
     // get coordinates relative to the component
     const parentPosition = getParentPosition(e.currentTarget)
-    const x = e.clientX - parentPosition.x
+
+    const x = e.clientX - sidebarWidth
     const y = e.clientY - parentPosition.y
 
     // calculate the y coordinate from `groupHeights` and header heights
@@ -701,6 +718,12 @@ export default class ReactCalendarTimeline extends Component {
     time = Math.floor(time / dragSnap) * dragSnap
 
     return [row, time]
+  }
+
+  timeFromEvent = (e) => {
+    const [, time] = this.rowAndTimeFromEvent(e)
+
+    return time
   }
 
   scrollAreaClick = (e) => {
@@ -910,8 +933,8 @@ export default class ReactCalendarTimeline extends Component {
              itemSelect={this.selectItem}
              itemDrag={this.dragItem}
              itemDrop={this.dropItem}
-             onItemDoubleClick={this.props.onItemDoubleClick}
-             onItemContextMenu={this.props.onItemContextMenu}
+             onItemDoubleClick={this.doubleClickItem}
+             onItemContextMenu={this.contextMenuClickItem}
              itemResizing={this.resizingItem}
              itemResized={this.resizedItem}
              itemRenderer={this.props.itemRenderer}
