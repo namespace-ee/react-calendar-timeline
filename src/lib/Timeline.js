@@ -14,7 +14,9 @@ import CursorLine from './lines/CursorLine'
 
 import windowResizeDetector from '../resize-detector/window'
 
-import { getMinUnit, getNextUnit, getParentPosition, _get, _length, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, hasSomeParentTheClass } from './utils.js'
+import { getMinUnit, getNextUnit, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems } from './utility/calendar'
+import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
+import { _get, _length } from './utility/generic'
 
 export const defaultKeys = {
   groupIdKey: 'id',

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import { iterateTimes } from '../utils.js'
+import { iterateTimes } from '../utility/calendar'
 
 export default class VerticalLines extends Component {
   static propTypes = {

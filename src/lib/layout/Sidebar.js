@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import { _get, arraysEqual } from '../utils'
+import { _get, arraysEqual } from '../utility/generic'
 
 export default class Sidebar extends Component {
   static propTypes = {

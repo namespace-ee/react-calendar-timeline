@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual, keyBy } from '../utils'
+import { _get, arraysEqual, keyBy } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
   const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize

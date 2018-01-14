@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import moment from 'moment'
 
-import { iterateTimes, getNextUnit } from '../utils.js'
+import { iterateTimes, getNextUnit } from '../utility/calendar'
 
 export default class Header extends Component {
   static propTypes = {

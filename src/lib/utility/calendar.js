@@ -1,20 +1,12 @@
 import moment from 'moment'
+import {_get} from './generic'
 
 const EPSILON = 0.001
 
-// so we could use both immutable.js objects and regular objects
-export function _get (object, key) {
-  return typeof object.get === 'function' ? object.get(key) : object[key]
-}
+/** calendar specific utility functions */
 
-export function _length (object) {
-  return typeof object.count === 'function' ? object.count() : object.length
-}
-
-export function arraysEqual (array1, array2) {
-  return (_length(array1) === _length(array2)) && array1.every((element, index) => {
-    return element === _get(array2, index)
-  })
+export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWidth) {
+  return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
 export function iterateTimes (start, end, unit, timeSteps, callback) {
@@ -70,27 +62,6 @@ export function getNextUnit (unit) {
   }
 
   return nextUnits[unit] || ''
-}
-
-export function getParentPosition (element) {
-  var xPosition = 0
-  var yPosition = 0
-  var first = true
-
-  while (element) {
-    if (!element.offsetParent && element.tagName === 'BODY' && element.scrollLeft === 0 && element.scrollTop === 0) {
-      element = document.scrollingElement || element
-    }
-    xPosition += (element.offsetLeft - (first ? 0 : element.scrollLeft) + element.clientLeft)
-    yPosition += (element.offsetTop - (first ? 0 : element.scrollTop) + element.clientTop)
-    element = element.offsetParent
-    first = false
-  }
-  return { x: xPosition, y: yPosition }
-}
-
-export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWidth) {
-  return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
 export function calculateDimensions ({
@@ -177,6 +148,23 @@ export function getGroupOrders (groups, keys) {
   }
 
   return groupOrders
+}
+
+export function getGroupedItems (items, groupOrders) {
+  var arr = []
+
+  // Initialize with empty arrays for each group
+  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
+    arr[i] = []
+  }
+  // Populate groups
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].dimensions.order !== undefined) {
+      arr[items[i].dimensions.order].push(items[i])
+    }
+  }
+
+  return arr
 }
 
 export function getVisibleItems (items, canvasTimeStart, canvasTimeEnd, keys) {
@@ -298,56 +286,4 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
   }
 }
 
-export function keyBy (value, key) {
-  let obj = {}
-
-  value.forEach(function (element, index, array) {
-    obj[element[key]] = element
-  })
-
-  return obj
-}
-
-export function getGroupedItems (items, groupOrders) {
-  var arr = []
-
-  // Initialize with empty arrays for each group
-  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
-    arr[i] = []
-  }
-  // Populate groups
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order !== undefined) {
-      arr[items[i].dimensions.order].push(items[i])
-    }
-  }
-
-  return arr
-}
-
-export function hasSomeParentTheClass (element, classname) {
-  if (element.className && element.className.split(' ').indexOf(classname) >= 0) return true
-  return element.parentNode && hasSomeParentTheClass(element.parentNode, classname)
-}
-
-export function deepObjectCompare (obj1, obj2) {
-  for (var p in obj1) {
-    if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false
-
-    switch (typeof (obj1[p])) {
-      case 'object':
-        if (!Object.compare(obj1[p], obj2[p])) return false
-        break
-      case 'function':
-        if (typeof (obj2[p]) === 'undefined' || (p !== 'compare' && obj1[p].toString() !== obj2[p].toString())) return false
-        break
-      default:
-        if (obj1[p] !== obj2[p]) return false
-    }
-  }
-
-  for (var r in obj2) {
-    if (typeof (obj1[r]) === 'undefined') return false
-  }
-  return true
-};
+/** END calendar specific utility functions */
