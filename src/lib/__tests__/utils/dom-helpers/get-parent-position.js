@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { getParentPosition } from '../../../utility/dom-helpers'
+import { JSDOM } from 'jsdom'
 
-describe('getParentPosition', () => {
-  xit('WRITE UNIT TEST HERE', () => {
+const buildDom = domString => new JSDOM(`<!DOCTYPE html><body>${domString}></body>`)
 
-  })
-})
+describe('getParentPosition', () => {})
