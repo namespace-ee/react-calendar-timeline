@@ -280,6 +280,9 @@ Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the 
 ### visibleTimeStart and visibleTimeEnd
 The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function.  This parameter expects a unix timestamp in milliseconds.
 
+### referenceTime and referenceTimeLabel
+It is possible to override the red line showing current time (TodayLine) with a referenceTime property (unix timestamp in milliseconds). If there is a referenceTime, the line will be at the specified time and mouse over displays the time along with its referenceTimeLabel. This optional property defaults to 'Reference Time'.
+
 ### headerLabelFormats and subHeaderLabelFormats
 The formats passed to moment to render times in the header and subheader. Defaults to these:
 

@@ -151,6 +151,8 @@ export default class ReactCalendarTimeline extends Component {
 
     defaultTimeStart: PropTypes.object,
     defaultTimeEnd: PropTypes.object,
+    referenceTime: PropTypes.number,
+    referenceTimeLabel: PropTypes.string,
 
     visibleTimeStart: PropTypes.number,
     visibleTimeEnd: PropTypes.number,
@@ -246,6 +248,8 @@ export default class ReactCalendarTimeline extends Component {
 
     defaultTimeStart: null,
     defaultTimeEnd: null,
+    referenceTime: null,
+    referenceTimeLabel: 'Reference Time',
 
     itemTouchSendsClick: false,
 
@@ -301,6 +305,8 @@ export default class ReactCalendarTimeline extends Component {
     this.state = {
       width: 1000,
 
+      referenceTime: this.props.referenceTime,
+      referenceTimeLabel: this.props.referenceTimeLabel,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
@@ -849,12 +855,19 @@ export default class ReactCalendarTimeline extends Component {
       this.props.onCanvasMouseMove(e)
     }
 
+    if (timePosition >= this.props.referenceTime - this.props.dragSnap && timePosition <= this.props.referenceTime + this.props.dragSnap) {
+      this.setState({ todayLineLabel: this.props.referenceTimeLabel })
+    } else {
+      this.setState({ todayLineLabel: null })
+    }
+    this.infoLabel()
+
     if (cursorTime !== timePosition && showCursorLine) {
       this.setState({cursorTime: timePosition, mouseOverCanvas: true})
     }
   }
 
-  todayLine (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight) {
+  todayLine (canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight, referenceTime, referenceTimeLabel) {
     return (
       <TodayLine canvasTimeStart={canvasTimeStart}
                  canvasTimeEnd={canvasTimeEnd}
@@ -863,6 +876,8 @@ export default class ReactCalendarTimeline extends Component {
                  lineCount={_length(this.props.groups)}
                  height={height}
                  headerHeight={headerHeight}
+                 referenceTime={referenceTime}
+                 referenceTimeLabel={referenceTimeLabel}
       />
     )
   }
@@ -949,6 +964,8 @@ export default class ReactCalendarTimeline extends Component {
       label = `${moment(this.state.dragTime).format('LLL')}, ${this.state.dragGroupTitle}`
     } else if (this.state.resizeTime) {
       label = moment(this.state.resizeTime).format('LLL')
+    } else if (this.state.todayLineLabel) {
+      label = this.state.todayLineLabel + ': ' + moment(this.state.referenceTime).format('LLL')
     }
 
     return label ? <InfoLabel label={label} /> : ''
@@ -1147,7 +1164,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  childrenWithProps (canvasTimeStart, canvasTimeEnd, canvasWidth, dimensionItems, groupHeights, groupTops, height, headerHeight, visibleTimeStart, visibleTimeEnd, minUnit, timeSteps) {
+  childrenWithProps (canvasTimeStart, canvasTimeEnd, canvasWidth, dimensionItems, groupHeights, groupTops, height, headerHeight, visibleTimeStart, visibleTimeEnd, minUnit, timeSteps, referenceTime, referenceTimeLabel) {
     if (!this.props.children) {
       return null
     }
@@ -1161,6 +1178,8 @@ export default class ReactCalendarTimeline extends Component {
       canvasWidth,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
+      referenceTime,
+      referenceTimeLabel,
       dimensionItems,
       items: this.props.items,
       groups: this.props.groups,
@@ -1179,7 +1198,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   render () {
-    const { items, groups, headerLabelGroupHeight, headerLabelHeight, sidebarWidth, rightSidebarWidth, timeSteps, showCursorLine } = this.props
+    const { items, groups, headerLabelGroupHeight, headerLabelHeight, sidebarWidth, rightSidebarWidth, timeSteps, showCursorLine, referenceTime, referenceTimeLabel } = this.props
     const { draggingItem, resizingItem, isDragging, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, mouseOverCanvas, cursorTime } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
@@ -1238,7 +1257,7 @@ export default class ReactCalendarTimeline extends Component {
               {this.items(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, dimensionItems, groupHeights, groupTops)}
               {this.verticalLines(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height, headerHeight)}
               {this.horizontalLines(canvasWidth, groupHeights, headerHeight)}
-              {this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)}
+              {this.todayLine(canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight, referenceTime, referenceTimeLabel)}
               {mouseOverCanvas && showCursorLine
                 ? this.cursorLine(cursorTime, canvasTimeStart, zoom, canvasTimeEnd, canvasWidth, minUnit, height, headerHeight)
                 : null}

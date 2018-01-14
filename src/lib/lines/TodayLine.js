@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 
 export default class TodayLine extends Component {
   static propTypes = {
+    referenceTime: PropTypes.number,
+    referenceTimeLabel: PropTypes.string,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
@@ -13,13 +15,12 @@ export default class TodayLine extends Component {
   static defaultProps = {
   }
 
-  // TODO: should currentTime come from a prop? probably...?
   render () {
-    let currentTime = new Date().getTime()
+    let refTime = this.props.referenceTime || new Date().getTime()
 
-    if (currentTime > this.props.canvasTimeStart && currentTime < this.props.canvasTimeEnd) {
+    if (refTime > this.props.canvasTimeStart && refTime < this.props.canvasTimeEnd) {
       const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
-      const left = Math.round((currentTime - this.props.canvasTimeStart) * ratio)
+      const left = Math.round((refTime - this.props.canvasTimeStart) * ratio)
       const top = this.props.headerHeight
       const height = this.props.height - this.props.headerHeight
       const styles = {
@@ -28,7 +29,7 @@ export default class TodayLine extends Component {
         height: `${height}px`
       }
 
-      return <div className='rct-today' style={styles} />
+      return <div className='rct-today' style={styles} title={this.props.referenceTimeLabel}/>
     } else {
       return <div />
     }

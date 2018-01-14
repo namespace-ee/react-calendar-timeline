@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "module": "src/index.js",
@@ -27,7 +27,8 @@
   },
   "author": "Marius Andra <marius.andra@gmail.com>",
   "contributors": [
-    "Stanisław Chmiela <sjchmiela@gmail.com>"
+    "Stanisław Chmiela <sjchmiela@gmail.com>",
+    "Mark Shearman <kryptos@krypticsoftware.com>"
   ],
   "license": "MIT",
   "keywords": [
@@ -56,7 +57,10 @@
   },
   "dependencies": {
     "element-resize-detector": "^1.1.12",
-    "interact.js": "^1.2.6",
+    "interact.js": "^1.2.8",
+    "moment": "^2.20.1",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
     "react-pure-render": "^1.0.2"
   },
   "peerDependencies": {
