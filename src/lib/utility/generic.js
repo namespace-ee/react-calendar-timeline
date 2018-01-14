@@ -2,7 +2,6 @@ import isEqual from 'lodash.isequal'
 
 // so we could use both immutable.js objects and regular objects
 
-/** generic utility functions */
 export function _get (object, key) {
   return typeof object.get === 'function' ? object.get(key) : object[key]
 }
@@ -30,5 +29,3 @@ export function keyBy (value, key) {
 
   return obj
 }
-
-/** END */

@@ -3,8 +3,6 @@ import {_get} from './generic'
 
 const EPSILON = 0.001
 
-/** calendar specific utility functions */
-
 export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWidth) {
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
@@ -285,5 +283,3 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
     groupTops
   }
 }
-
-/** END calendar specific utility functions */
