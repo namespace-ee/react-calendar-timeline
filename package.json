@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "module": "src/index.js",
@@ -27,7 +27,8 @@
   },
   "author": "Marius Andra <marius.andra@gmail.com>",
   "contributors": [
-    "Stanisław Chmiela <sjchmiela@gmail.com>"
+    "Stanisław Chmiela <sjchmiela@gmail.com>",
+    "Mike Joyce <mikejoyce19@gmail.com>"
   ],
   "license": "MIT",
   "keywords": [
