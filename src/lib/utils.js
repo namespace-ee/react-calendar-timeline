@@ -325,9 +325,11 @@ export function getGroupedItems (items, groupOrders) {
   return arr
 }
 
-export function hasSomeParentTheClass (element, classname) {
-  if (element.className && element.className.split(' ').indexOf(classname) >= 0) return true
-  return element.parentNode && hasSomeParentTheClass(element.parentNode, classname)
+export function hasSomeParentTheClass (element, wantedClass) {
+  if (element.nodeType !== 1) return false
+  const actualClasses = element.getAttribute('class')
+  if (actualClasses && actualClasses.split(' ').indexOf(wantedClass) !== -1) return true
+  return hasSomeParentTheClass(element.parentNode, wantedClass)
 }
 
 export function deepObjectCompare (obj1, obj2) {
