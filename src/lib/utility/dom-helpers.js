@@ -1,6 +1,12 @@
-export function hasSomeParentTheClass (element, classname) {
-  if (element.className && element.className.split(' ').indexOf(classname) >= 0) return true
-  return element.parentNode != null && hasSomeParentTheClass(element.parentNode, classname)
+const ELEMENT_NODE = 1
+
+export function hasSomeParentTheClass (element, wantedClass) {
+  if (element.nodeType !== ELEMENT_NODE) return false
+
+  const actualClasses = element.getAttribute('class')
+
+  if (actualClasses && actualClasses.split(' ').indexOf(wantedClass) !== -1) return true
+  return hasSomeParentTheClass(element.parentNode, wantedClass)
 }
 
 // TODO: can we use getBoundingClientRect instead??

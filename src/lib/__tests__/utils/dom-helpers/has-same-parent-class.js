@@ -14,6 +14,22 @@ describe('hasSomeParentTheClass', () => {
 
       expect(result).toBe(false)
     })
+
+    // per PR 205
+    it('doesnt throw for svg element', () => {
+      const dom = buildDom(`<div>
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <circle id=${targetId} cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" />
+      </svg>
+      </div>`)
+
+      try {
+        const result = hasSomeParentTheClass(dom.window.document.getElementById(targetId), 'foo')
+        expect(result).toBe(false)
+      } catch(e) {
+        expect(true).toBe(false)
+      }
+    })
   })
 
   describe('is true', () => {
