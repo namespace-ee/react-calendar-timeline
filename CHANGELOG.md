@@ -7,7 +7,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
-## [0.15.3]
+## 0.15.3
 This version contains one crucial bug fix and a simple update to item clicks to report time.  Much of the other work was around repo maintenance and preparing the repo for future development (update to dev-tooling, some documentation updates)
 
 ### Added
