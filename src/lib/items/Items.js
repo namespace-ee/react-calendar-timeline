@@ -73,6 +73,7 @@ export default class Items extends Component {
     )
   }
 
+  // TODO: this is exact same function as utility
   getGroupOrders () {
     const { groupIdKey } = this.props.keys
 
@@ -94,6 +95,7 @@ export default class Items extends Component {
     }
   }
 
+  // TODO: this is exact same logic as utility function
   getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
     const { itemTimeStartKey, itemTimeEndKey } = this.props.keys
 
