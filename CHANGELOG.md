@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+
+
+## [0.15.4]
+
 ### Fixed
 - Clicking on Svg element throws error #216
 
