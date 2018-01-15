@@ -9,7 +9,7 @@ When you submit a PR, add your changes here!
 
 
 
-## [0.15.4]
+## 0.15.4
 
 ### Fixed
 - Clicking on Svg element throws error #216
