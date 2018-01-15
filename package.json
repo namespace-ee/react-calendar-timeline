@@ -58,6 +58,7 @@
   "dependencies": {
     "element-resize-detector": "^1.1.12",
     "interact.js": "^1.2.6",
+    "lodash.isequal": "^4.5.0",
     "react-pure-render": "^1.0.2"
   },
   "peerDependencies": {
@@ -90,6 +91,7 @@
     "faker": "^4.1.0",
     "file-loader": "^0.11.2",
     "jest": "^22.0.6",
+    "jsdom": "^11.5.1",
     "moment": "^2.11.1",
     "node-sass": "^4.5.3",
     "randomcolor": "^0.5.3",

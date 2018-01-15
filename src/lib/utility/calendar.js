@@ -1,20 +1,10 @@
 import moment from 'moment'
+import {_get} from './generic'
 
 const EPSILON = 0.001
 
-// so we could use both immutable.js objects and regular objects
-export function _get (object, key) {
-  return typeof object.get === 'function' ? object.get(key) : object[key]
-}
-
-export function _length (object) {
-  return typeof object.count === 'function' ? object.count() : object.length
-}
-
-export function arraysEqual (array1, array2) {
-  return (_length(array1) === _length(array2)) && array1.every((element, index) => {
-    return element === _get(array2, index)
-  })
+export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWidth) {
+  return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
 export function iterateTimes (start, end, unit, timeSteps, callback) {
@@ -32,7 +22,28 @@ export function iterateTimes (start, end, unit, timeSteps, callback) {
   }
 }
 
+// this function is VERY HOT as its used in Timeline.js render function
+// TODO: check if there are performance implications here
+// when "weeks" feature is implemented, this function will be modified heavily
+
+/** determine the current rendered time unit based on timeline time span
+ *
+ * zoom: (in milliseconds) difference between time start and time end of timeline canvas
+ * width: (in pixels) pixel width of timeline canvas
+ * timeSteps: map of timeDividers with number to indicate step of each divider
+*/
+
+  // the smallest cell we want to render is 17px
+  // this can be manipulated to make the breakpoints change more/less
+  // i.e. on zoom how often do we switch to the next unit of time
+  // i think this is the distance between cell lines
+export const minCellWidth = 17
+
 export function getMinUnit (zoom, width, timeSteps) {
+      // for supporting weeks, its important to remember that each of these
+    // units has a national progression to the other. i.e. a year is 12 months
+    // a month is 24 days, a day is 24 hours.
+    // with weeks this isnt the case so weeks needs to be handled specially
   let timeDividers = {
     second: 1000,
     minute: 60,
@@ -43,15 +54,32 @@ export function getMinUnit (zoom, width, timeSteps) {
   }
 
   let minUnit = 'year'
-  let breakCount = zoom
-  const minCellWidth = 17
+
+  // this timespan is in ms initially
+  let nextTimeSpanInUnitContext = zoom
 
   Object.keys(timeDividers).some(unit => {
-    breakCount = breakCount / timeDividers[unit]
-    const cellCount = breakCount / timeSteps[unit]
-    const countNeeded = width / (timeSteps[unit] && timeSteps[unit] > 1 ? 3 * minCellWidth : minCellWidth)
+    // converts previous time span to current unit
+    // (e.g. milliseconds to seconds, seconds to minutes, etc)
+    nextTimeSpanInUnitContext = nextTimeSpanInUnitContext / timeDividers[unit]
 
-    if (cellCount < countNeeded) {
+    // timeSteps is "
+    // With what step to display different units. E.g. 15 for minute means only minutes 0, 15, 30 and 45 will be shown."
+    // how many cells would be rendered given this time span, for this unit?
+    // e.g. for time span of 60 minutes, and time step of 1, we would render 60 cells
+    const cellsToBeRenderedForCurrentUnit = nextTimeSpanInUnitContext / timeSteps[unit]
+
+    // what is happening here? why 3 if time steps are greater than 1??
+    const cellWidthToUse = (timeSteps[unit] && timeSteps[unit] > 1 ? 3 * minCellWidth : minCellWidth)
+
+    // for the minWidth of a cell, how many cells would be rendered given
+    // the current pixel width
+    // i.e. f
+    const minimumCellsToRenderUnit = width / cellWidthToUse
+
+    if (cellsToBeRenderedForCurrentUnit < minimumCellsToRenderUnit) {
+      // for the current zoom, the number of cells we'd need to render all parts of this unit
+      // is less than the minimum number of cells needed at minimum cell width
       minUnit = unit
       return true
     }
@@ -70,27 +98,6 @@ export function getNextUnit (unit) {
   }
 
   return nextUnits[unit] || ''
-}
-
-export function getParentPosition (element) {
-  var xPosition = 0
-  var yPosition = 0
-  var first = true
-
-  while (element) {
-    if (!element.offsetParent && element.tagName === 'BODY' && element.scrollLeft === 0 && element.scrollTop === 0) {
-      element = document.scrollingElement || element
-    }
-    xPosition += (element.offsetLeft - (first ? 0 : element.scrollLeft) + element.clientLeft)
-    yPosition += (element.offsetTop - (first ? 0 : element.scrollTop) + element.clientTop)
-    element = element.offsetParent
-    first = false
-  }
-  return { x: xPosition, y: yPosition }
-}
-
-export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWidth) {
-  return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
 export function calculateDimensions ({
@@ -177,6 +184,23 @@ export function getGroupOrders (groups, keys) {
   }
 
   return groupOrders
+}
+
+export function getGroupedItems (items, groupOrders) {
+  var arr = []
+
+  // Initialize with empty arrays for each group
+  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
+    arr[i] = []
+  }
+  // Populate groups
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].dimensions.order !== undefined) {
+      arr[items[i].dimensions.order].push(items[i])
+    }
+  }
+
+  return arr
 }
 
 export function getVisibleItems (items, canvasTimeStart, canvasTimeEnd, keys) {
@@ -297,59 +321,3 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
     groupTops
   }
 }
-
-export function keyBy (value, key) {
-  let obj = {}
-
-  value.forEach(function (element, index, array) {
-    obj[element[key]] = element
-  })
-
-  return obj
-}
-
-export function getGroupedItems (items, groupOrders) {
-  var arr = []
-
-  // Initialize with empty arrays for each group
-  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
-    arr[i] = []
-  }
-  // Populate groups
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order !== undefined) {
-      arr[items[i].dimensions.order].push(items[i])
-    }
-  }
-
-  return arr
-}
-
-export function hasSomeParentTheClass (element, wantedClass) {
-  if (element.nodeType !== 1) return false
-  const actualClasses = element.getAttribute('class')
-  if (actualClasses && actualClasses.split(' ').indexOf(wantedClass) !== -1) return true
-  return hasSomeParentTheClass(element.parentNode, wantedClass)
-}
-
-export function deepObjectCompare (obj1, obj2) {
-  for (var p in obj1) {
-    if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false
-
-    switch (typeof (obj1[p])) {
-      case 'object':
-        if (!Object.compare(obj1[p], obj2[p])) return false
-        break
-      case 'function':
-        if (typeof (obj2[p]) === 'undefined' || (p !== 'compare' && obj1[p].toString() !== obj2[p].toString())) return false
-        break
-      default:
-        if (obj1[p] !== obj2[p]) return false
-    }
-  }
-
-  for (var r in obj2) {
-    if (typeof (obj1[r]) === 'undefined') return false
-  }
-  return true
-};

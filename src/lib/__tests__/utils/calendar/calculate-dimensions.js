@@ -1,4 +1,4 @@
-import { calculateDimensions } from '../utils.js'
+import { calculateDimensions } from '../../../utility/calendar'
 
 describe('calculateDimensions', () => {
   it('the item is full on a canvas no draging no resizing', () => {

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual, keyBy } from '../utils'
+import { _get, arraysEqual, keyBy } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
   const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
@@ -73,6 +73,7 @@ export default class Items extends Component {
     )
   }
 
+  // TODO: this is exact same function as utility
   getGroupOrders () {
     const { groupIdKey } = this.props.keys
 
@@ -94,6 +95,7 @@ export default class Items extends Component {
     }
   }
 
+  // TODO: this is exact same logic as utility function
   getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
     const { itemTimeStartKey, itemTimeEndKey } = this.props.keys
 

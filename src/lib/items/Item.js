@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import interact from 'interact.js'
 import moment from 'moment'
 
-import { _get, deepObjectCompare } from '../utils'
+import { _get, deepObjectCompare } from '../utility/generic'
 
 export default class Item extends Component {
   // removed prop type check for SPEED!
@@ -94,6 +94,7 @@ export default class Item extends Component {
     this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
   }
 
+  // TODO: this is same as coordinateToTimeRatio in utilities
   coordinateToTimeRatio (props = this.props) {
     return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth
   }
