@@ -1,8 +1,6 @@
 import moment from 'moment'
 import {_get} from './generic'
 
-const EPSILON = 0.001
-
 export function coordinateToTimeRatio (canvasTimeStart, canvasTimeEnd, canvasWidth) {
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
@@ -211,13 +209,16 @@ export function getVisibleItems (items, canvasTimeStart, canvasTimeEnd, keys) {
   })
 }
 
-export function collision (a, b, lineHeight) {
-  // var verticalMargin = (lineHeight - a.height)/2;
+const EPSILON = 0.001
+
+export function collision (a, b, lineHeight, collisionPadding = EPSILON) {
+  // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
   var verticalMargin = 0
-  return ((a.collisionLeft + EPSILON) < (b.collisionLeft + b.collisionWidth) &&
-  (a.collisionLeft + a.collisionWidth - EPSILON) > b.collisionLeft &&
-  (a.top - verticalMargin + EPSILON) < (b.top + b.height) &&
-  (a.top + a.height + verticalMargin - EPSILON) > b.top)
+
+  return ((a.collisionLeft + collisionPadding) < (b.collisionLeft + b.collisionWidth) &&
+  (a.collisionLeft + a.collisionWidth - collisionPadding) > b.collisionLeft &&
+  (a.top - verticalMargin + collisionPadding) < (b.top + b.height) &&
+  (a.top + a.height + verticalMargin - collisionPadding) > b.top)
 }
 
 export function stack (items, groupOrders, lineHeight, headerHeight, force) {
