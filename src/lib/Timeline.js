@@ -689,9 +689,9 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   contextMenuClickItem = (item, e) => {
-    if (this.props.onItemDoubleClick) {
+    if (this.props.onItemContextMenu) {
       const time = this.timeFromEvent(e)
-      this.props.onItemDoubleClick(item, e, time)
+      this.props.onItemContextMenu(item, e, time)
     }
   }
 

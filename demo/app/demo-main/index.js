@@ -53,6 +53,10 @@ export default class App extends Component {
     console.log('Selected: ' + itemId)
   }
 
+  handleItemDoubleClick = (itemId) => {
+    console.log('Double Click: ' + itemId)
+  }
+
   handleItemContextMenu = (itemId) => {
     console.log('Context Menu: ' + itemId)
   }
@@ -167,6 +171,7 @@ export default class App extends Component {
                 onItemContextMenu={this.handleItemContextMenu}
                 onItemMove={this.handleItemMove}
                 onItemResize={this.handleItemResize}
+                onItemDoubleClick={this.handleItemDoubleClick}
 
                 onTimeChange={this.handleTimeChange}
 
