@@ -9,6 +9,7 @@ When you submit a PR, add your changes here!
 
 ### Fixed
 - context click actually calls double click callback #225
+- Removed href attribute from header divs #222
 
 ## 0.15.4
 
