@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## 0.15.5
+
 ### Fixed
 - context click actually calls double click callback #225
 - Removed href attribute from header divs #222
