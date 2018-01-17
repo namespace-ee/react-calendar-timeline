@@ -388,7 +388,6 @@ export default class ReactCalendarTimeline extends Component {
 
     // let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
 
-
     return {
       getXPositionFromTime: time => {
         return calculateXPositionForTime(visibleTimeStart, visibleTimeEnd, width, time) + sidebarWidth
