@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import interact from 'interact.js'
 import moment from 'moment'
+import PropTypes from 'prop-types'
 
 import { _get, deepObjectCompare } from '../utility/generic'
 
@@ -58,6 +59,10 @@ export default class Item extends Component {
       resizeStart: null,
       resizeTime: null
     }
+  }
+
+  static contextTypes = {
+    getXPositionFromTime: PropTypes.func
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -425,7 +430,7 @@ export default class Item extends Component {
   renderContent () {
     const Comp = this.props.itemRenderer
     if (Comp) {
-      return <Comp item={this.props.item} />
+      return <Comp item={this.props.item} context={this.context} />
     } else {
       return this.itemTitle
     }

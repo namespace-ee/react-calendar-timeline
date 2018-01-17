@@ -14,7 +14,7 @@ import CursorLine from './lines/CursorLine'
 
 import windowResizeDetector from '../resize-detector/window'
 
-import { getMinUnit, getNextUnit, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems } from './utility/calendar'
+import { getMinUnit, getNextUnit, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, calculateXPositionForTime } from './utility/calendar'
 import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
 import { _get, _length } from './utility/generic'
 
@@ -361,6 +361,74 @@ export default class ReactCalendarTimeline extends Component {
     this.refs.scrollComponent.removeEventListener('touchend', this.touchEnd)
   }
 
+  canvasContextService = () => {
+
+  }
+
+  static childContextTypes = {
+    getXPositionFromTime: PropTypes.func
+  }
+
+  getChildContext () {
+/* this component knows our current zoom, and it knows the width of our
+    // canvas
+    // and it knows the position of the container
+    // if we pass it a time, it can return the x position in relation to
+     the canvas...right?
+    e.g. item passes midpoint of startdate and enddate of item to get the client x position.
+    With this client X, it could substract this amount from the start date of the element
+    it could apply this as "left" style property relative to its parent to render something
+     */
+    const {sidebarWidth} = this.props
+    const {width, visibleTimeStart, visibleTimeEnd} = this.state
+
+    // const currentZoom = visibleTimeEnd - visibleTimeStart
+    // //i think theres a utility method for this
+    // const canvasProportion = width / currentZoom
+
+    // let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
+
+
+    return {
+      getXPositionFromTime: time => {
+        return calculateXPositionForTime(visibleTimeStart, visibleTimeEnd, width, time) + sidebarWidth
+      }
+    }
+  }
+
+  rowAndTimeFromEvent = (e) => {
+    const { headerLabelGroupHeight, headerLabelHeight, dragSnap, sidebarWidth } = this.props
+    const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
+    const lineCount = _length(this.props.groups)
+
+    // get coordinates relative to the component
+    const parentPosition = getParentPosition(e.currentTarget)
+
+    const x = e.clientX - sidebarWidth
+    const y = e.clientY - parentPosition.y
+
+    // calculate the y coordinate from `groupHeights` and header heights
+    let row = 0
+    let remainingHeight = y - headerLabelGroupHeight - headerLabelHeight
+
+    while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
+      remainingHeight -= groupHeights[row]
+      row += 1
+    }
+
+    // calculate the x (time) coordinate taking the dragSnap into account
+    let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
+    time = Math.floor(time / dragSnap) * dragSnap
+
+    return [row, time]
+  }
+
+  timeFromEvent = (e) => {
+    const [, time] = this.rowAndTimeFromEvent(e)
+
+    return time
+  }
+
   // called on window scroll. it's job is to figure out if we should fix or float the header
   scrollEventListener = (e) => {
     const { headerLabelGroupHeight, headerLabelHeight } = this.props
@@ -693,39 +761,6 @@ export default class ReactCalendarTimeline extends Component {
       const time = this.timeFromEvent(e)
       this.props.onItemContextMenu(item, e, time)
     }
-  }
-
-  rowAndTimeFromEvent = (e) => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap, sidebarWidth } = this.props
-    const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
-    const lineCount = _length(this.props.groups)
-
-    // get coordinates relative to the component
-    const parentPosition = getParentPosition(e.currentTarget)
-
-    const x = e.clientX - sidebarWidth
-    const y = e.clientY - parentPosition.y
-
-    // calculate the y coordinate from `groupHeights` and header heights
-    let row = 0
-    let remainingHeight = y - headerLabelGroupHeight - headerLabelHeight
-
-    while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
-      remainingHeight -= groupHeights[row]
-      row += 1
-    }
-
-    // calculate the x (time) coordinate taking the dragSnap into account
-    let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
-    time = Math.floor(time / dragSnap) * dragSnap
-
-    return [row, time]
-  }
-
-  timeFromEvent = (e) => {
-    const [, time] = this.rowAndTimeFromEvent(e)
-
-    return time
   }
 
   scrollAreaClick = (e) => {
