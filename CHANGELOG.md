@@ -9,6 +9,7 @@ When you submit a PR, add your changes here!
 
 ### Fixed
 - Fixed issue with state not properly updated when ending resize #173
+- Fixed issue with onItem* events not reporting correct time when timeline has outer padding #227
 
 ## 0.15.5
 
