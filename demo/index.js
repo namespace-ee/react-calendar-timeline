@@ -4,7 +4,19 @@ import App from './app'
 
 import './index.html'
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-)
+const render = (AppToRender) => {
+  ReactDOM.render(
+    <AppToRender />,
+    document.getElementById('root')
+  )
+}
+
+render(App)
+
+if (module.hot) {
+  module.hot.accept('./app', () => {
+    const NextApp = require('./app').default
+
+    render(NextApp)
+  })
+}
