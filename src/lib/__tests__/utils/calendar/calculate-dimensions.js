@@ -27,7 +27,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 100,
       left: 200,
       originalLeft: 200,
-      width: 100
+      width: 100,
+      visibleTimeStart: 0,
+      visibleTimeEnd: 500,
+      timelineWidth: 500 / 3
     })
   })
 
@@ -57,7 +60,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 108,
       left: 192,
       originalLeft: 200,
-      width: 100
+      width: 100,
+      visibleTimeStart: 0,
+      visibleTimeEnd: 500,
+      timelineWidth: 500 / 3
     })
   })
 
@@ -86,7 +92,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 300,
       left: 0,
       originalLeft: 0,
-      width: 200
+      width: 200,
+      visibleTimeStart: 100,
+      visibleTimeEnd: 500,
+      timelineWidth: 400 / 3
     })
     // if we don't do the fullUpdate we don't get correct
     // clipping informations
@@ -98,7 +107,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 300,
       left: -100,
       originalLeft: 0,
-      width: 300
+      width: 300,
+      visibleTimeStart: 100,
+      visibleTimeEnd: 500,
+      timelineWidth: 400 / 3
     })
   })
 
@@ -127,7 +139,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 300,
       left: 200,
       originalLeft: 700,
-      width: 200
+      width: 200,
+      visibleTimeStart: 500,
+      visibleTimeEnd: 900,
+      timelineWidth: 400 / 3
     })
     // if we don't do the fullUpdate we don't get correct
     // clipping informations
@@ -169,7 +184,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 200,
       left: 300,
       originalLeft: 200,
-      width: 100
+      width: 100,
+      visibleTimeStart: 0,
+      visibleTimeEnd: 500,
+      timelineWidth: 500 / 3
     })
   })
 
@@ -199,7 +217,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 50,
       left: 200,
       originalLeft: 200,
-      width: 50
+      width: 50,
+      visibleTimeStart: 0,
+      visibleTimeEnd: 500,
+      timelineWidth: 500 / 3
     })
   })
 
@@ -229,7 +250,10 @@ describe('calculateDimensions', () => {
       collisionWidth: 90,
       left: 210,
       originalLeft: 200,
-      width: 90
+      width: 90,
+      visibleTimeStart: 0,
+      visibleTimeEnd: 500,
+      timelineWidth: 500 / 3
     })
   })
 })

@@ -14,7 +14,7 @@ import CursorLine from './lines/CursorLine'
 
 import windowResizeDetector from '../resize-detector/window'
 
-import { getMinUnit, getNextUnit, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems, calculateXPositionForTime } from './utility/calendar'
+import { getMinUnit, getNextUnit, stack, nostack, calculateDimensions, getGroupOrders, getVisibleItems } from './utility/calendar'
 import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
 import { _get, _length } from './utility/generic'
 
@@ -363,36 +363,6 @@ export default class ReactCalendarTimeline extends Component {
 
   canvasContextService = () => {
 
-  }
-
-  static childContextTypes = {
-    getXPositionFromTime: PropTypes.func
-  }
-
-  getChildContext () {
-/* this component knows our current zoom, and it knows the width of our
-    // canvas
-    // and it knows the position of the container
-    // if we pass it a time, it can return the x position in relation to
-     the canvas...right?
-    e.g. item passes midpoint of startdate and enddate of item to get the client x position.
-    With this client X, it could substract this amount from the start date of the element
-    it could apply this as "left" style property relative to its parent to render something
-     */
-    const {sidebarWidth} = this.props
-    const {width, visibleTimeStart, visibleTimeEnd} = this.state
-
-    // const currentZoom = visibleTimeEnd - visibleTimeStart
-    // //i think theres a utility method for this
-    // const canvasProportion = width / currentZoom
-
-    // let time = Math.round(visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart))
-
-    return {
-      getXPositionFromTime: time => {
-        return calculateXPositionForTime(visibleTimeStart, visibleTimeEnd, width, time) + sidebarWidth
-      }
-    }
   }
 
   // TODO: this is very similar to timeFromItemEvent, aside from which element to get offsets

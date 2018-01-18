@@ -61,10 +61,6 @@ export default class Item extends Component {
     }
   }
 
-  static contextTypes = {
-    getXPositionFromTime: PropTypes.func
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     var shouldUpdate = nextState.dragging !== this.state.dragging ||
                        nextState.dragTime !== this.state.dragTime ||
@@ -428,9 +424,19 @@ export default class Item extends Component {
   }
 
   renderContent () {
+    const { dimensions } = this.props
+    const {
+      visibleTimeStart,
+      visibleTimeEnd,
+      timelineWidth
+    } = dimensions
     const Comp = this.props.itemRenderer
     if (Comp) {
-      return <Comp item={this.props.item} context={this.context} />
+      return <Comp item={this.props.item} timelineContext={{
+        visibleTimeStart,
+        visibleTimeEnd,
+        timelineWidth
+      }} />
     } else {
       return this.itemTitle
     }
