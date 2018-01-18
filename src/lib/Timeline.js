@@ -395,15 +395,18 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  rowAndTimeFromEvent = (e) => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap, sidebarWidth } = this.props
+  // TODO: this is very similar to timeFromItemEvent, aside from which element to get offsets
+  // from.  Look to consolidate the logic for determining coordinate to time
+  // as well as generalizing how we get time from click on the canvas
+  rowAndTimeFromScrollAreaEvent = (e) => {
+    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
     const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
     const lineCount = _length(this.props.groups)
 
     // get coordinates relative to the component
     const parentPosition = getParentPosition(e.currentTarget)
 
-    const x = e.clientX - sidebarWidth
+    const x = e.clientX - parentPosition.x
     const y = e.clientY - parentPosition.y
 
     // calculate the y coordinate from `groupHeights` and header heights
@@ -422,8 +425,21 @@ export default class ReactCalendarTimeline extends Component {
     return [row, time]
   }
 
-  timeFromEvent = (e) => {
-    const [, time] = this.rowAndTimeFromEvent(e)
+  timeFromItemEvent = (e) => {
+    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+    const { dragSnap } = this.props
+
+    const scrollComponent = this.refs.scrollComponent
+    const {x: scrollX} = scrollComponent.getBoundingClientRect()
+
+    const xRelativeToTimeline = e.clientX - scrollX
+
+    const relativeItemPosition = xRelativeToTimeline / width
+    const zoom = (visibleTimeEnd - visibleTimeStart)
+    const timeOffset = relativeItemPosition * zoom
+
+    let time = Math.round(visibleTimeStart + timeOffset)
+    time = Math.floor(time / dragSnap) * dragSnap
 
     return time
   }
@@ -734,13 +750,13 @@ export default class ReactCalendarTimeline extends Component {
   selectItem = (item, clickType, e) => {
     if (this.state.selectedItem === item || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
-        const time = this.timeFromEvent(e)
+        const time = this.timeFromItemEvent(e)
         this.props.onItemClick(item, e, time)
       }
     } else {
       this.setState({selectedItem: item})
       if (item && this.props.onItemSelect) {
-        const time = this.timeFromEvent(e)
+        const time = this.timeFromItemEvent(e)
         this.props.onItemSelect(item, e, time)
       } else if (item === null && this.props.onItemDeselect) {
         this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
@@ -750,14 +766,14 @@ export default class ReactCalendarTimeline extends Component {
 
   doubleClickItem = (item, e) => {
     if (this.props.onItemDoubleClick) {
-      const time = this.timeFromEvent(e)
+      const time = this.timeFromItemEvent(e)
       this.props.onItemDoubleClick(item, e, time)
     }
   }
 
   contextMenuClickItem = (item, e) => {
     if (this.props.onItemContextMenu) {
-      const time = this.timeFromEvent(e)
+      const time = this.timeFromItemEvent(e)
       this.props.onItemContextMenu(item, e, time)
     }
   }
@@ -769,7 +785,7 @@ export default class ReactCalendarTimeline extends Component {
       if (this.state.selectedItem) {
         this.selectItem(null)
       } else if (this.props.onCanvasClick) {
-        const [row, time] = this.rowAndTimeFromEvent(e)
+        const [row, time] = this.rowAndTimeFromScrollAreaEvent(e)
         if (row >= 0 && row < this.props.groups.length) {
           const groupId = _get(this.props.groups[row], this.props.keys.groupIdKey)
           this.props.onCanvasClick(groupId, time, e)
@@ -805,9 +821,9 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  resizedItem = (item, resizeTime, edge) => {
+  resizedItem = (item, resizeTime, edge, timeDelta) => {
     this.setState({resizingItem: null, resizingEdge: null, resizeTime: null})
-    if (this.props.onItemResize) {
+    if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge)
     }
   }

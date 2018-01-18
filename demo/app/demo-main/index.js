@@ -38,27 +38,27 @@ export default class App extends Component {
   }
 
   handleCanvasClick = (groupId, time, event) => {
-    console.log('Canvas clicked', groupId, time)
+    console.log('Canvas clicked', groupId, moment(time).format())
   }
 
   handleCanvasContextMenu = (group, time, e) => {
-    console.log('Canvas context menu', group, time)
+    console.log('Canvas context menu', group, moment(time).format())
   }
 
-  handleItemClick = (itemId) => {
-    console.log('Clicked: ' + itemId)
+  handleItemClick = (itemId, _, time) => {
+    console.log('Clicked: ' + itemId, moment(time).format())
   }
 
-  handleItemSelect = (itemId) => {
-    console.log('Selected: ' + itemId)
+  handleItemSelect = (itemId, _, time) => {
+    console.log('Selected: ' + itemId, moment(time).format())
   }
 
-  handleItemDoubleClick = (itemId) => {
-    console.log('Double Click: ' + itemId)
+  handleItemDoubleClick = (itemId, _, time) => {
+    console.log('Double Click: ' + itemId, moment(time).format())
   }
 
-  handleItemContextMenu = (itemId) => {
-    console.log('Context Menu: ' + itemId)
+  handleItemContextMenu = (itemId, _, time) => {
+    console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {

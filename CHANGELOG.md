@@ -7,6 +7,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+## 0.15.6
+
+### Fixed
+- Fixed issue with state not properly updated when ending resize #173
+- Fixed issue with onItem* events not reporting correct time when timeline has outer padding #227
+
 ## 0.15.5
 
 ### Fixed

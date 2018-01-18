@@ -300,8 +300,8 @@ export default class Item extends Component {
             resizeTime = this.props.moveResizeValidator('resize', this.props.item, resizeTime, resizeEdge)
           }
 
-          if (this.props.onResized && this.resizeTimeDelta(e, resizeEdge) !== 0) {
-            this.props.onResized(this.itemId, resizeTime, resizeEdge)
+          if (this.props.onResized) {
+            this.props.onResized(this.itemId, resizeTime, resizeEdge, this.resizeTimeDelta(e, resizeEdge))
           }
           this.setState({
             resizing: null,
