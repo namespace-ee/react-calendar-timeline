@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 When you submit a PR, add your changes here!
 
+### Fixed
+- Fixed issue with state not properly updated when ending resize #173
+
 ## 0.15.5
 
 ### Fixed
