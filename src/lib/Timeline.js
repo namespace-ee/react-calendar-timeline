@@ -367,6 +367,8 @@ export default class ReactCalendarTimeline extends Component {
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     const rect = this.refs.container.getBoundingClientRect()
+    const topOffset = rect.top + window.pageYOffset
+    this.setState({ topOffset })
 
     if (rect.top > this.props.stickyOffset) {
       this.setState({ headerPosition: 'top' })
