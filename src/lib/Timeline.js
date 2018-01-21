@@ -406,57 +406,6 @@ export default class ReactCalendarTimeline extends Component {
     this.scrollComponent.removeEventListener('touchend', this.touchEnd)
   }
 
-  // TODO: this is very similar to timeFromItemEvent, aside from which element to get offsets
-  // from.  Look to consolidate the logic for determining coordinate to time
-  // as well as generalizing how we get time from click on the canvas
-  rowAndTimeFromScrollAreaEvent = e => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
-    const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
-    const lineCount = _length(this.props.groups)
-
-    // get coordinates relative to the component
-    const parentPosition = getParentPosition(e.currentTarget)
-
-    const x = e.clientX - parentPosition.x
-    const y = e.clientY - parentPosition.y
-
-    // calculate the y coordinate from `groupHeights` and header heights
-    let row = 0
-    let remainingHeight = y - headerLabelGroupHeight - headerLabelHeight
-
-    while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
-      remainingHeight -= groupHeights[row]
-      row += 1
-    }
-
-    // calculate the x (time) coordinate taking the dragSnap into account
-    let time = Math.round(
-      visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart)
-    )
-    time = Math.floor(time / dragSnap) * dragSnap
-
-    return [row, time]
-  }
-
-  timeFromItemEvent = e => {
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
-    const { dragSnap } = this.props
-
-    const scrollComponent = this.scrollComponent
-    const { x: scrollX } = scrollComponent.getBoundingClientRect()
-
-    const xRelativeToTimeline = e.clientX - scrollX
-
-    const relativeItemPosition = xRelativeToTimeline / width
-    const zoom = visibleTimeEnd - visibleTimeStart
-    const timeOffset = relativeItemPosition * zoom
-
-    let time = Math.round(visibleTimeStart + timeOffset)
-    time = Math.floor(time / dragSnap) * dragSnap
-
-    return time
-  }
-
   // called on window scroll. it's job is to figure out if we should fix or float the header
   scrollEventListener = () => {
     const { headerLabelGroupHeight, headerLabelHeight } = this.props
