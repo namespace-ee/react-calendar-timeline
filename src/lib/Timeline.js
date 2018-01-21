@@ -295,7 +295,9 @@ export default class ReactCalendarTimeline extends Component {
       getTimelineContext: () => {
         const { width, visibleTimeStart, visibleTimeEnd } = this.state
 
-        //prob wanna memoize this so we ensure that if no items changed, we return same reference
+        //TODO: Performance
+        //prob wanna memoize this so we ensure that if no items changed,
+        //we return same context reference
         return {
           timelineWidth: width,
           visibleTimeStart,
