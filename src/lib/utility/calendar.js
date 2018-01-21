@@ -186,10 +186,7 @@ export function calculateDimensions({
     originalLeft: itemTimeStart,
     collisionWidth: collisionW,
     clippedLeft,
-    clippedRight,
-    visibleTimeStart,
-    visibleTimeEnd,
-    timelineWidth: canvasWidth / 3
+    clippedRight
   }
 
   return dimensions
