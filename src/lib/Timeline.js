@@ -286,6 +286,25 @@ export default class ReactCalendarTimeline extends Component {
     selected: null
   }
 
+  static childContextTypes = {
+    getTimelineContext: PropTypes.func
+  }
+
+  getChildContext() {
+    return {
+      getTimelineContext: () => {
+        const { width, visibleTimeStart, visibleTimeEnd } = this.state
+
+        //prob wanna memoize this so we ensure that if no items changed, we return same reference
+        return {
+          timelineWidth: width,
+          visibleTimeStart,
+          visibleTimeEnd
+        }
+      }
+    }
+  }
+
   constructor(props) {
     super(props)
 
