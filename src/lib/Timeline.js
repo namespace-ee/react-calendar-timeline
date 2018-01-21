@@ -406,8 +406,6 @@ export default class ReactCalendarTimeline extends Component {
     this.scrollComponent.removeEventListener('touchend', this.touchEnd)
   }
 
-  canvasContextService = () => {}
-
   // TODO: this is very similar to timeFromItemEvent, aside from which element to get offsets
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
