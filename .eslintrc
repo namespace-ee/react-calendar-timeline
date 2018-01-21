@@ -5,10 +5,13 @@
   },
   "plugins": [
     "react",
-    "jest"
+    "jest",
+    "prettier"
   ],
   "env": {
-    "jest/globals": true
+    "jest/globals": true,
+    "browser": true,
+    "node": true
   },
   "rules": {
     "react/jsx-uses-react": 2,
@@ -17,6 +20,11 @@
     "no-labels": 0,
     "arrow-parens": 0
   },
-  "extends": "standard",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
+  ],
   "parser": "babel-eslint"
 }

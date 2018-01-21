@@ -9,7 +9,7 @@ export default class HorizontalLines extends Component {
     groupHeights: PropTypes.array.isRequired
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps) {
     return !(nextProps.canvasWidth === this.props.canvasWidth &&
              nextProps.headerHeight === this.props.headerHeight &&
              nextProps.lineCount === this.props.lineCount &&

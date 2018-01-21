@@ -7,7 +7,9 @@ export default class TodayLine extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     lineHeight: PropTypes.number.isRequired,
-    lineCount: PropTypes.number.isRequired
+    lineCount: PropTypes.number.isRequired,
+    headerHeight: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
   }
 
   static defaultProps = {

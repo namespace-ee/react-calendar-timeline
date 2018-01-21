@@ -108,7 +108,6 @@ export function calculateDimensions ({
                                        canvasWidth,
                                        dragSnap,
                                        dragTime,
-                                       resizingItem,
                                        resizingEdge,
                                        resizeTime,
                                        fullUpdate,
@@ -237,7 +236,7 @@ export function stack (items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  groupedItems.forEach(function (group, index, array) {
+  groupedItems.forEach(function (group) {
     // calculate new, non-overlapping positions
     groupTops.push(totalHeight)
 
@@ -298,7 +297,7 @@ export function nostack (items, groupOrders, lineHeight, headerHeight, force) {
     }
   }
 
-  groupedItems.forEach(function (group, index, array) {
+  groupedItems.forEach(function (group) {
     // calculate new, non-overlapping positions
     groupTops.push(totalHeight)
 

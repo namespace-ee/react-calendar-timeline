@@ -21,7 +21,9 @@ export default class Header extends Component {
     subHeaderLabelFormats: PropTypes.object.isRequired,
     fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     stickyOffset: PropTypes.number.isRequired,
-    headerPosition: PropTypes.oneOf(['top', 'bottom', 'fixed'])
+    headerPosition: PropTypes.oneOf(['top', 'bottom', 'fixed']),
+    headerLabelGroupHeight: PropTypes.number.isRequired,
+    headerLabelHeight: PropTypes.number.isRequired
   }
 
   static defaultProps = {

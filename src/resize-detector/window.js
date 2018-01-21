@@ -1,6 +1,6 @@
 function addListener (component) {
   component._resizeEventListener = {
-    handleEvent: (event) => {
+    handleEvent: () => {
       component.resize()
     }
   }

@@ -12,7 +12,9 @@ export default class VerticalLines extends Component {
     lineCount: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
-    fixedHeader: PropTypes.string.isRequired
+    fixedHeader: PropTypes.string.isRequired,
+    height: PropTypes.number.isRequired,
+    headerHeight: PropTypes.number.isRequired
   }
 
   static defaultProps = {
@@ -20,7 +22,7 @@ export default class VerticalLines extends Component {
     dayBackground: null
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps) {
     return !(nextProps.canvasTimeStart === this.props.canvasTimeStart &&
              nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
              nextProps.canvasWidth === this.props.canvasWidth &&

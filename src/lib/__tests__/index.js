@@ -103,7 +103,7 @@ describe('Timeline', () => {
   })
 
   it('passes correct props to plugins', () => {
-    let Plugin = (props) => <div className='test-plugin' />
+    let Plugin = () => <div className='test-plugin' />
     const wrapper = mount(
       <Timeline groups={[]}
                 items={items}

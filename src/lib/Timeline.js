@@ -323,10 +323,13 @@ export default class ReactCalendarTimeline extends Component {
       dimensionItems, height, groupHeights, groupTops
     } = this.stackItems(props.items, props.groups, this.state.canvasTimeStart, this.state.visibleTimeStart, this.state.visibleTimeEnd, this.state.width)
 
+    /* eslint-disable react/no-direct-mutation-state */
     this.state.dimensionItems = dimensionItems
     this.state.height = height
     this.state.groupHeights = groupHeights
     this.state.groupTops = groupTops
+
+    /* eslint-enable */
   }
 
   componentDidMount () {
@@ -362,7 +365,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   // called on window scroll. it's job is to figure out if we should fix or float the header
-  scrollEventListener = (e) => {
+  scrollEventListener = () => {
     const { headerLabelGroupHeight, headerLabelHeight } = this.props
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
@@ -822,7 +825,7 @@ export default class ReactCalendarTimeline extends Component {
     this.setState({isDragging: false, dragStartPosition: null, dragLastPosition: null})
   }
 
-  handleMouseLeave = (e) => {
+  handleMouseLeave = () => {
     this.setState({isDragging: false, dragStartPosition: null, dragLastPosition: null})
   }
 
@@ -1072,7 +1075,6 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth,
         dragSnap,
         dragTime,
-        resizingItem,
         resizingEdge,
         resizeTime,
         fullUpdate,

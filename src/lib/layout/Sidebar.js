@@ -16,7 +16,8 @@ export default class Sidebar extends Component {
     keys: PropTypes.object.isRequired,
     groupRenderer: PropTypes.func,
     children: PropTypes.node,
-    isRightSidebar: PropTypes.bool
+    isRightSidebar: PropTypes.bool,
+    headerHeight: PropTypes.number.isRequired
   }
 
   static defaultProps = {
@@ -27,7 +28,7 @@ export default class Sidebar extends Component {
     isRightSidebar: false
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps) {
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
              nextProps.keys === this.props.keys &&
              nextProps.width === this.props.width &&

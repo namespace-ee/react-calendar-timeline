@@ -9,30 +9,39 @@ export default class Item extends Component {
   // they are coming from a trusted component anyway
   // (this complicates performance debugging otherwise)
   static propTypes = {
-    // canvasTimeStart: React.PropTypes.number.isRequired,
-    // canvasTimeEnd: React.PropTypes.number.isRequired,
-    // canvasWidth: React.PropTypes.number.isRequired,
-    // order: React.PropTypes.number.isRequired,
-    //
-    // dragSnap: React.PropTypes.number,
-    // minResizeWidth: React.PropTypes.number,
-    // selected: React.PropTypes.bool,
-    //
-    // canChangeGroup: React.PropTypes.bool.isRequired,
-    // canMove: React.PropTypes.bool.isRequired,
-    // canResizeLeft: React.PropTypes.bool.isRequired,
-    // canResizeRight: React.PropTypes.bool.isRequired,
-    //
-    // keys: React.PropTypes.object.isRequired,
-    // item: React.PropTypes.object.isRequired,
-    //
-    // onSelect: React.PropTypes.func,
-    // onDrag: React.PropTypes.func,
-    // onDrop: React.PropTypes.func,
-    // onResizing: React.PropTypes.func,
-    // onResized: React.PropTypes.func,
-    // onContextMenu: React.PropTypes.func,
-    // itemRenderer: React.PropTypes.func
+    canvasTimeStart: React.PropTypes.number.isRequired,
+    canvasTimeEnd: React.PropTypes.number.isRequired,
+    canvasWidth: React.PropTypes.number.isRequired,
+    order: React.PropTypes.number,
+
+    dragSnap: React.PropTypes.number,
+    minResizeWidth: React.PropTypes.number,
+    selected: React.PropTypes.bool,
+
+    canChangeGroup: React.PropTypes.bool.isRequired,
+    canMove: React.PropTypes.bool.isRequired,
+    canResizeLeft: React.PropTypes.bool.isRequired,
+    canResizeRight: React.PropTypes.bool.isRequired,
+
+    keys: React.PropTypes.object.isRequired,
+    item: React.PropTypes.object.isRequired,
+
+    onSelect: React.PropTypes.func,
+    onDrag: React.PropTypes.func,
+    onDrop: React.PropTypes.func,
+    onResizing: React.PropTypes.func,
+    onResized: React.PropTypes.func,
+    onContextMenu: React.PropTypes.func,
+    itemRenderer: React.PropTypes.func,
+
+    itemProps: React.PropTypes.object,
+    canSelect: React.PropTypes.bool,
+    topOffset: React.PropTypes.number,
+    dimensions: React.PropTypes.object,
+    groupTops: React.PropTypes.array,
+    useResizeHandle: React.PropTypes.bool,
+    moveResizeValidator: React.PropTypes.func,
+    onItemDoubleClick: React.PropTypes.func
   }
 
   static defaultProps = {

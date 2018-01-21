@@ -46,14 +46,19 @@ export default class Items extends Component {
     onItemContextMenu: PropTypes.func,
 
     itemRenderer: PropTypes.func,
-    selected: PropTypes.array
+    selected: PropTypes.array,
+
+    dimensionItems: PropTypes.array,
+    topOffset: PropTypes.number,
+    groupTops: PropTypes.array,
+    useResizeHandle: PropTypes.bool
   }
 
   static defaultProps = {
     selected: []
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps) {
     return !(arraysEqual(nextProps.groups, this.props.groups) &&
              arraysEqual(nextProps.items, this.props.items) &&
              nextProps.keys === this.props.keys &&
@@ -96,7 +101,7 @@ export default class Items extends Component {
   }
 
   // TODO: this is exact same logic as utility function
-  getVisibleItems (canvasTimeStart, canvasTimeEnd, groupOrders) {
+  getVisibleItems (canvasTimeStart, canvasTimeEnd) {
     const { itemTimeStartKey, itemTimeEndKey } = this.props.keys
 
     return this.props.items.filter(item => {
@@ -128,7 +133,6 @@ export default class Items extends Component {
                                         canSelect={_get(item, 'canSelect') !== undefined ? _get(item, 'canSelect') : this.props.canSelect}
                                         useResizeHandle={this.props.useResizeHandle}
                                         topOffset={this.props.topOffset}
-                                        groupHeights={this.props.groupHeights}
                                         groupTops={this.props.groupTops}
                                         canvasTimeStart={this.props.canvasTimeStart}
                                         canvasTimeEnd={this.props.canvasTimeEnd}
