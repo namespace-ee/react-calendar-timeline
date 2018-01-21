@@ -47,7 +47,6 @@ describe('collision', () => {
 
       expect(result).toBe(false)
     })
-
   })
 
   describe('top collision', () => {
@@ -89,6 +88,4 @@ describe('collision', () => {
       expect(result).toBe(false)
     })
   })
-
-
 })

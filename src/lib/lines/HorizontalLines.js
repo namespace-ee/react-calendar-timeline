@@ -9,35 +9,36 @@ export default class HorizontalLines extends Component {
     groupHeights: PropTypes.array.isRequired
   }
 
-  shouldComponentUpdate (nextProps) {
-    return !(nextProps.canvasWidth === this.props.canvasWidth &&
-             nextProps.headerHeight === this.props.headerHeight &&
-             nextProps.lineCount === this.props.lineCount &&
-             nextProps.groupHeights === this.props.groupHeights)
+  shouldComponentUpdate(nextProps) {
+    return !(
+      nextProps.canvasWidth === this.props.canvasWidth &&
+      nextProps.headerHeight === this.props.headerHeight &&
+      nextProps.lineCount === this.props.lineCount &&
+      nextProps.groupHeights === this.props.groupHeights
+    )
   }
 
-  render () {
+  render() {
     const { canvasWidth, headerHeight, lineCount, groupHeights } = this.props
     let lines = []
 
     var totalHeight = headerHeight
     for (let i = 0; i < lineCount; i++) {
       lines.push(
-        <div key={`horizontal-line-${i}`}
-             className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
-             style={{
-               top: `${totalHeight}px`,
-               left: '0px',
-               width: `${canvasWidth}px`,
-               height: `${groupHeights[i] - 1}px`
-             }} />)
+        <div
+          key={`horizontal-line-${i}`}
+          className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
+          style={{
+            top: `${totalHeight}px`,
+            left: '0px',
+            width: `${canvasWidth}px`,
+            height: `${groupHeights[i] - 1}px`
+          }}
+        />
+      )
       totalHeight += groupHeights[i]
     }
 
-    return (
-      <div className='rct-horizontal-lines'>
-        {lines}
-      </div>
-    )
+    return <div className="rct-horizontal-lines">{lines}</div>
   }
 }

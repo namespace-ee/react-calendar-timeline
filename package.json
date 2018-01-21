@@ -13,7 +13,7 @@
     "jest": "node_modules/.bin/jest",
     "jest:update": "node_modules/.bin/jest -u",
     "lint": "eslint --fix --ext .js --ext .jsx ./src",
-    "lint:fix": "prettier-eslint --parser babylon \"src/**/*.js\"",
+    "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
     "prepublish": "npm run build:lib",
     "start":
       "./node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --display-modules",

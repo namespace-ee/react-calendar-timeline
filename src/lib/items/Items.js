@@ -6,12 +6,14 @@ import Item from './Item'
 import { _get, arraysEqual, keyBy } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
-  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
+  const value =
+    _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'left' || value === 'both'
 }
 
 const canResizeRight = (item, canResize) => {
-  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
+  const value =
+    _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'right' || value === 'both' || value === true
 }
 
@@ -58,28 +60,29 @@ export default class Items extends Component {
     selected: []
   }
 
-  shouldComponentUpdate (nextProps) {
-    return !(arraysEqual(nextProps.groups, this.props.groups) &&
-             arraysEqual(nextProps.items, this.props.items) &&
-             nextProps.keys === this.props.keys &&
-             nextProps.canvasTimeStart === this.props.canvasTimeStart &&
-             nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
-             nextProps.canvasWidth === this.props.canvasWidth &&
-             nextProps.selectedItem === this.props.selectedItem &&
-             nextProps.selected === this.props.selected &&
-             nextProps.dragSnap === this.props.dragSnap &&
-             nextProps.minResizeWidth === this.props.minResizeWidth &&
-             nextProps.canChangeGroup === this.props.canChangeGroup &&
-             nextProps.canMove === this.props.canMove &&
-             nextProps.canResize === this.props.canResize &&
-             nextProps.canSelect === this.props.canSelect &&
-             nextProps.dimensionItems === this.props.dimensionItems &&
-             nextProps.topOffset === this.props.topOffset
+  shouldComponentUpdate(nextProps) {
+    return !(
+      arraysEqual(nextProps.groups, this.props.groups) &&
+      arraysEqual(nextProps.items, this.props.items) &&
+      nextProps.keys === this.props.keys &&
+      nextProps.canvasTimeStart === this.props.canvasTimeStart &&
+      nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
+      nextProps.canvasWidth === this.props.canvasWidth &&
+      nextProps.selectedItem === this.props.selectedItem &&
+      nextProps.selected === this.props.selected &&
+      nextProps.dragSnap === this.props.dragSnap &&
+      nextProps.minResizeWidth === this.props.minResizeWidth &&
+      nextProps.canChangeGroup === this.props.canChangeGroup &&
+      nextProps.canMove === this.props.canMove &&
+      nextProps.canResize === this.props.canResize &&
+      nextProps.canSelect === this.props.canSelect &&
+      nextProps.dimensionItems === this.props.dimensionItems &&
+      nextProps.topOffset === this.props.topOffset
     )
   }
 
   // TODO: this is exact same function as utility
-  getGroupOrders () {
+  getGroupOrders() {
     const { groupIdKey } = this.props.keys
 
     let groupOrders = {}
@@ -91,63 +94,89 @@ export default class Items extends Component {
     return groupOrders
   }
 
-  isSelected (item, itemIdKey) {
+  isSelected(item, itemIdKey) {
     if (!this.props.selected) {
       return this.props.selectedItem === _get(item, itemIdKey)
     } else {
       let target = _get(item, itemIdKey)
-      return this.props.selected.find((value) => value === target)
+      return this.props.selected.find(value => value === target)
     }
   }
 
   // TODO: this is exact same logic as utility function
-  getVisibleItems (canvasTimeStart, canvasTimeEnd) {
+  getVisibleItems(canvasTimeStart, canvasTimeEnd) {
     const { itemTimeStartKey, itemTimeEndKey } = this.props.keys
 
     return this.props.items.filter(item => {
-      return _get(item, itemTimeStartKey) <= canvasTimeEnd && _get(item, itemTimeEndKey) >= canvasTimeStart
+      return (
+        _get(item, itemTimeStartKey) <= canvasTimeEnd &&
+        _get(item, itemTimeEndKey) >= canvasTimeStart
+      )
     })
   }
 
-  render () {
+  render() {
     const { canvasTimeStart, canvasTimeEnd, dimensionItems } = this.props
     const { itemIdKey, itemGroupKey } = this.props.keys
 
     const groupOrders = this.getGroupOrders()
-    const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd, groupOrders)
+    const visibleItems = this.getVisibleItems(
+      canvasTimeStart,
+      canvasTimeEnd,
+      groupOrders
+    )
     const sortedDimensionItems = keyBy(dimensionItems, 'id')
 
     return (
-      <div className='rct-items'>
-        {visibleItems.filter(item => sortedDimensionItems[_get(item, itemIdKey)])
-                     .map(item => <Item key={_get(item, itemIdKey)}
-                                        item={item}
-                                        keys={this.props.keys}
-                                        order={groupOrders[_get(item, itemGroupKey)]}
-                                        dimensions={sortedDimensionItems[_get(item, itemIdKey)].dimensions}
-                                        selected={this.isSelected(item, itemIdKey)}
-                                        canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
-                                        canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
-                                        canResizeLeft={canResizeLeft(item, this.props.canResize)}
-                                        canResizeRight={canResizeRight(item, this.props.canResize)}
-                                        canSelect={_get(item, 'canSelect') !== undefined ? _get(item, 'canSelect') : this.props.canSelect}
-                                        useResizeHandle={this.props.useResizeHandle}
-                                        topOffset={this.props.topOffset}
-                                        groupTops={this.props.groupTops}
-                                        canvasTimeStart={this.props.canvasTimeStart}
-                                        canvasTimeEnd={this.props.canvasTimeEnd}
-                                        canvasWidth={this.props.canvasWidth}
-                                        dragSnap={this.props.dragSnap}
-                                        minResizeWidth={this.props.minResizeWidth}
-                                        onResizing={this.props.itemResizing}
-                                        onResized={this.props.itemResized}
-                                        moveResizeValidator={this.props.moveResizeValidator}
-                                        onDrag={this.props.itemDrag}
-                                        onDrop={this.props.itemDrop}
-                                        onItemDoubleClick={this.props.onItemDoubleClick}
-                                        onContextMenu={this.props.onItemContextMenu}
-                                        onSelect={this.props.itemSelect}
-                                        itemRenderer={this.props.itemRenderer} />)}
+      <div className="rct-items">
+        {visibleItems
+          .filter(item => sortedDimensionItems[_get(item, itemIdKey)])
+          .map(item => (
+            <Item
+              key={_get(item, itemIdKey)}
+              item={item}
+              keys={this.props.keys}
+              order={groupOrders[_get(item, itemGroupKey)]}
+              dimensions={
+                sortedDimensionItems[_get(item, itemIdKey)].dimensions
+              }
+              selected={this.isSelected(item, itemIdKey)}
+              canChangeGroup={
+                _get(item, 'canChangeGroup') !== undefined
+                  ? _get(item, 'canChangeGroup')
+                  : this.props.canChangeGroup
+              }
+              canMove={
+                _get(item, 'canMove') !== undefined
+                  ? _get(item, 'canMove')
+                  : this.props.canMove
+              }
+              canResizeLeft={canResizeLeft(item, this.props.canResize)}
+              canResizeRight={canResizeRight(item, this.props.canResize)}
+              canSelect={
+                _get(item, 'canSelect') !== undefined
+                  ? _get(item, 'canSelect')
+                  : this.props.canSelect
+              }
+              useResizeHandle={this.props.useResizeHandle}
+              topOffset={this.props.topOffset}
+              groupTops={this.props.groupTops}
+              canvasTimeStart={this.props.canvasTimeStart}
+              canvasTimeEnd={this.props.canvasTimeEnd}
+              canvasWidth={this.props.canvasWidth}
+              dragSnap={this.props.dragSnap}
+              minResizeWidth={this.props.minResizeWidth}
+              onResizing={this.props.itemResizing}
+              onResized={this.props.itemResized}
+              moveResizeValidator={this.props.moveResizeValidator}
+              onDrag={this.props.itemDrag}
+              onDrop={this.props.itemDrop}
+              onItemDoubleClick={this.props.onItemDoubleClick}
+              onContextMenu={this.props.onItemContextMenu}
+              onSelect={this.props.itemSelect}
+              itemRenderer={this.props.itemRenderer}
+            />
+          ))}
       </div>
     )
   }

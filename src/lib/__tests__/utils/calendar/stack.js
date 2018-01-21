@@ -2,7 +2,5 @@
 import { stack } from '../../../utility/calendar'
 
 describe('stack', () => {
-  xit('WRITE UNIT TEST HERE', () => {
-
-  })
+  xit('WRITE UNIT TEST HERE', () => {})
 })
