@@ -186,10 +186,7 @@ describe('calculateDimensions', () => {
       dragTime: false, // we are not draging right now
       resizingItem: true,
       resizingEdge: 'right',
-      resizeTime: 250,
-      fullUpdate: true,
-      visibleTimeStart: 0,
-      visibleTimeEnd: 500
+      resizeTime: 250
     })
 
     expect(dimension).toMatchObject({

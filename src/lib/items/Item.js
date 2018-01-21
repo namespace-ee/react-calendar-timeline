@@ -49,6 +49,10 @@ export default class Item extends Component {
     selected: false
   }
 
+  static contextTypes = {
+    getTimelineContext: PropTypes.func
+  }
+
   constructor(props) {
     super(props)
 
@@ -482,9 +486,10 @@ export default class Item extends Component {
   }
 
   renderContent() {
+    const timelineContext = this.context.getTimelineContext()
     const Comp = this.props.itemRenderer
     if (Comp) {
-      return <Comp item={this.props.item} />
+      return <Comp item={this.props.item} timelineContext={timelineContext} />
     } else {
       return this.itemTitle
     }

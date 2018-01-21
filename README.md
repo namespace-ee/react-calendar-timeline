@@ -369,8 +369,9 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 ### itemRenderer
 React component that will be used to render the item content.  Will be
-passed the `item` as a prop. Using complex components may result in
-performance problems.
+passed the `item` as a prop.
+
+Using complex components may result in performance problems.
 
 ```jsx
 let items = [
@@ -388,6 +389,36 @@ itemRenderer = ({ item }) => {
     <div className='custom-item'>
       <span className='title'>{item.title}</span>
       <p className='tip'>{item.tip}</p>
+    </div>
+  )
+}
+```
+
+This component will also be passed a `timelineContext` object:
+
+```typescript
+{
+  visibleTimeStart: number, // denotes the start time in ms of the timeline
+  visibleTimeEnd: number, // denotes the end time in ms of the timeline
+  timelineWidth: number, // denotes the width in pixels of the timeline
+}
+```
+
+This data allows you to change your Item component based on timeline width or zoom (e.g. render smaller content
+if we're zoomed out too far)
+
+```jsx
+itemRenderer = ({ item, timelineContext }) => {
+  const {timelineWidth, visibleTimeStart, visibleTimeEnd} = timelineContext
+
+  const isZoomTooWide = someFunctionToCompareZoom(visibleTimeStart, visibleTimeEnd)
+  return ()
+    <div className='custom-item'>
+      {isZoomTooWide ? (
+        <div className='really-tiny'>Small content</div>
+      ): (
+        <span className='big-content'>This is big content - {item.title}</span>
+      )}
     </div>
   )
 }
