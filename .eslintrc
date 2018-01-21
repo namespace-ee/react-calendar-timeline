@@ -1,20 +1,18 @@
 {
-  "ecmaFeatures": {
-    "jsx": true,
-    "modules": true
-  },
   "plugins": ["react", "jest", "prettier"],
   "env": {
     "jest/globals": true,
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
   "rules": {
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
     "no-labels": 0,
-    "arrow-parens": 0
+    "arrow-parens": 0,
+    "react/no-string-refs": 0
   },
   "extends": [
     "eslint:recommended",
