@@ -9,7 +9,15 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 When you submit a PR, add your changes here!
 
-### Added
+## 0.15.7
+
+This release contains a lot of code cleanup as well as an API change to the `itemRenderer` prop.
+
+### Fixed
+
+* peerDependency warning if using React 16 #187
+
+  ### Added
 
 * `timelineContext` is provided to `itemRenderer` #233
 
