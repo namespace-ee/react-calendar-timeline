@@ -3,11 +3,7 @@
     "jsx": true,
     "modules": true
   },
-  "plugins": [
-    "react",
-    "jest",
-    "prettier"
-  ],
+  "plugins": ["react", "jest", "prettier"],
   "env": {
     "jest/globals": true,
     "browser": true,
@@ -26,5 +22,11 @@
     "prettier",
     "prettier/react"
   ],
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  }
 }
