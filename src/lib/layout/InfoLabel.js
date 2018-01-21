@@ -11,13 +11,9 @@ export default class InfoLabel extends Component {
     label: ''
   }
 
-  shouldComponentUpdate = shouldPureComponentUpdate;
+  shouldComponentUpdate = shouldPureComponentUpdate
 
-  render () {
-    return (
-      <div className='rct-infolabel'>
-        {this.props.label}
-      </div>
-    )
+  render() {
+    return <div className="rct-infolabel">{this.props.label}</div>
   }
 }

@@ -8,6 +8,8 @@ describe('coordinateToTimeRatio', () => {
     const canvasTimeStart = 10000
 
     const expected = 10 // 10 units for every pixel;
-    expect(coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, width)).toBe(expected)
+    expect(coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, width)).toBe(
+      expected
+    )
   })
 })

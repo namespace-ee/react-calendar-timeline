@@ -2,7 +2,5 @@
 import { getGroupOrders } from '../../../utility/calendar'
 
 describe('getGroupOrders', () => {
-  xit('WRITE UNIT TEST HERE', () => {
-
-  })
+  xit('WRITE UNIT TEST HERE', () => {})
 })

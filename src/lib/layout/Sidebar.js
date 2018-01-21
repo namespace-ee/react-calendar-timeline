@@ -16,7 +16,8 @@ export default class Sidebar extends Component {
     keys: PropTypes.object.isRequired,
     groupRenderer: PropTypes.func,
     children: PropTypes.node,
-    isRightSidebar: PropTypes.bool
+    isRightSidebar: PropTypes.bool,
+    headerHeight: PropTypes.number.isRequired
   }
 
   static defaultProps = {
@@ -27,32 +28,45 @@ export default class Sidebar extends Component {
     isRightSidebar: false
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    return !(arraysEqual(nextProps.groups, this.props.groups) &&
-             nextProps.keys === this.props.keys &&
-             nextProps.width === this.props.width &&
-             nextProps.lineHeight === this.props.lineHeight &&
-             nextProps.fixedHeader === this.props.fixedHeader &&
-             nextProps.stickyOffset === this.props.stickyOffset &&
-             nextProps.headerPosition === this.props.headerPosition &&
-             nextProps.groupHeights === this.props.groupHeights &&
-             nextProps.height === this.props.height)
+  shouldComponentUpdate(nextProps) {
+    return !(
+      arraysEqual(nextProps.groups, this.props.groups) &&
+      nextProps.keys === this.props.keys &&
+      nextProps.width === this.props.width &&
+      nextProps.lineHeight === this.props.lineHeight &&
+      nextProps.fixedHeader === this.props.fixedHeader &&
+      nextProps.stickyOffset === this.props.stickyOffset &&
+      nextProps.headerPosition === this.props.headerPosition &&
+      nextProps.groupHeights === this.props.groupHeights &&
+      nextProps.height === this.props.height
+    )
   }
 
-  renderGroupContent (group, isRightSidebar, groupTitleKey, groupRightTitleKey) {
+  renderGroupContent(group, isRightSidebar, groupTitleKey, groupRightTitleKey) {
     if (this.props.groupRenderer) {
-      return React.createElement(this.props.groupRenderer, { group, isRightSidebar })
+      return React.createElement(this.props.groupRenderer, {
+        group,
+        isRightSidebar
+      })
     } else {
       return _get(group, isRightSidebar ? groupRightTitleKey : groupTitleKey)
     }
   }
 
-  render () {
+  render() {
     const {
-      fixedHeader, stickyOffset, width, lineHeight, groupHeights, height, headerHeight, isRightSidebar, headerPosition
+      fixedHeader,
+      stickyOffset,
+      width,
+      lineHeight,
+      groupHeights,
+      height,
+      headerHeight,
+      isRightSidebar,
+      headerPosition
     } = this.props
 
-    const {groupIdKey, groupTitleKey, groupRightTitleKey} = this.props.keys
+    const { groupIdKey, groupTitleKey, groupRightTitleKey } = this.props.keys
 
     const sidebarStyle = {
       width: `${width}px`,
@@ -86,9 +100,11 @@ export default class Sidebar extends Component {
       }
     }
 
-    const header = <div ref='sidebarHeader' className='rct-sidebar-header' style={headerStyle}>
-                     {this.props.children}
-                   </div>
+    const header = (
+      <div className="rct-sidebar-header" style={headerStyle}>
+        {this.props.children}
+      </div>
+    )
 
     let groupLines = []
     let i = 0
@@ -100,19 +116,32 @@ export default class Sidebar extends Component {
       }
 
       groupLines.push(
-        <div key={_get(group, groupIdKey)} className={'rct-sidebar-row' + (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')} style={elementStyle}>
-          {this.renderGroupContent(group, isRightSidebar, groupTitleKey, groupRightTitleKey)}
+        <div
+          key={_get(group, groupIdKey)}
+          className={
+            'rct-sidebar-row' +
+            (i % 2 === 0 ? ' rct-sidebar-row-even' : ' rct-sidebar-row-odd')
+          }
+          style={elementStyle}
+        >
+          {this.renderGroupContent(
+            group,
+            isRightSidebar,
+            groupTitleKey,
+            groupRightTitleKey
+          )}
         </div>
       )
       i += 1
     })
 
     return (
-      <div ref='sidebar' className={'rct-sidebar' + (isRightSidebar ? ' rct-sidebar-right' : '')} style={sidebarStyle}>
+      <div
+        className={'rct-sidebar' + (isRightSidebar ? ' rct-sidebar-right' : '')}
+        style={sidebarStyle}
+      >
         {header}
-        <div style={groupsStyle}>
-          {groupLines}
-        </div>
+        <div style={groupsStyle}>{groupLines}</div>
       </div>
     )
   }

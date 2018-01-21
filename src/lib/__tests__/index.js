@@ -5,25 +5,44 @@ import Timeline from '../Timeline'
 import moment from 'moment'
 
 const groups = [
-  {id: 2, title: 'group 2'},
-  {id: 1, title: 'group 1'},
-  {id: 3, title: 'group 3'}
+  { id: 2, title: 'group 2' },
+  { id: 1, title: 'group 1' },
+  { id: 3, title: 'group 3' }
 ]
 
 const items = [
-  {id: 1, group: 1, title: 'item 1', start_time: moment('1995-12-25'), end_time: moment('1995-12-25').add(1, 'hour')},
-  {id: 2, group: 2, title: 'item 2', start_time: moment('1995-12-25').add(-0.5, 'hour'), end_time: moment('1995-12-25').add(0.5, 'hour')},
-  {id: 3, group: 3, title: 'item 3', start_time: moment('1995-12-25').add(2, 'hour'), end_time: moment('1995-12-25').add(3, 'hour')}
+  {
+    id: 1,
+    group: 1,
+    title: 'item 1',
+    start_time: moment('1995-12-25'),
+    end_time: moment('1995-12-25').add(1, 'hour')
+  },
+  {
+    id: 2,
+    group: 2,
+    title: 'item 2',
+    start_time: moment('1995-12-25').add(-0.5, 'hour'),
+    end_time: moment('1995-12-25').add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    group: 3,
+    title: 'item 3',
+    start_time: moment('1995-12-25').add(2, 'hour'),
+    end_time: moment('1995-12-25').add(3, 'hour')
+  }
 ]
 
 describe('Timeline', () => {
   it('shows grouping no matter of the group order', () => {
     const wrapper = mount(
-      <Timeline groups={groups}
-                items={items}
-                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
-                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
-                />,
+      <Timeline
+        groups={groups}
+        items={items}
+        defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+        defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+      />
     )
 
     // get the items parent
@@ -33,10 +52,12 @@ describe('Timeline', () => {
     var itemsOrder = []
 
     // read for every item the title and the top-value and push it to itemsOrder[]
-    itemsRendered.props().children.forEach((itemRendered) => itemsOrder.push({
-      title: itemRendered.props.item.title,
-      top: itemRendered.props.dimensions.top
-    }))
+    itemsRendered.props().children.forEach(itemRendered =>
+      itemsOrder.push({
+        title: itemRendered.props.item.title,
+        top: itemRendered.props.dimensions.top
+      })
+    )
 
     // order the array by top-attribute
     itemsOrder = itemsOrder.sort((a, b) => a.top - b.top)
@@ -46,16 +67,17 @@ describe('Timeline', () => {
   })
   it('assigns top dimension to all items', () => {
     const wrapper = mount(
-      <Timeline groups={groups}
-                items={items}
-                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
-                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
-                />,
+      <Timeline
+        groups={groups}
+        items={items}
+        defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+        defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+      />
     )
 
     // get the items parent
     const itemsRendered = wrapper.find('.rct-items')
-    itemsRendered.props().children.forEach((item) => {
+    itemsRendered.props().children.forEach(item => {
       expect(item.props.dimensions.top).not.toBeNull()
     })
   })
@@ -64,11 +86,12 @@ describe('Timeline', () => {
     let allCorrect = true
     try {
       mount(
-        <Timeline groups={[]}
-                  items={items}
-                  defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
-                  defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
-                  />,
+        <Timeline
+          groups={[]}
+          items={items}
+          defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+          defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+        />
       )
     } catch (err) {
       allCorrect = false
@@ -90,11 +113,12 @@ describe('Timeline', () => {
     let allCorrect = true
     try {
       mount(
-        <Timeline groups={groups}
-                  items={itemsNoValidGroup}
-                  defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
-                  defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
-                  />,
+        <Timeline
+          groups={groups}
+          items={itemsNoValidGroup}
+          defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+          defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+        />
       )
     } catch (err) {
       allCorrect = false
@@ -103,13 +127,15 @@ describe('Timeline', () => {
   })
 
   it('passes correct props to plugins', () => {
-    let Plugin = (props) => <div className='test-plugin' />
+    let Plugin = () => <div className="test-plugin" />
     const wrapper = mount(
-      <Timeline groups={[]}
-                items={items}
-                stackItems
-                defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
-                defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}>
+      <Timeline
+        groups={[]}
+        items={items}
+        stackItems
+        defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+        defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+      >
         <Plugin />
       </Timeline>
     )

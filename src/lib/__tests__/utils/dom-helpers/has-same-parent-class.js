@@ -4,13 +4,16 @@ import { buildDom } from '../../../test-utility'
 
 const targetId = 'target'
 describe('hasSomeParentTheClass', () => {
-  describe('is false', ()=> {
+  describe('is false', () => {
     it('when elements parent and element doesnt have provided class', () => {
       const dom = buildDom(`<div>
         <div id=${targetId}></div>
       </div>`)
 
-      const result = hasSomeParentTheClass(dom.window.document.getElementById(targetId), 'foo')
+      const result = hasSomeParentTheClass(
+        dom.window.document.getElementById(targetId),
+        'foo'
+      )
 
       expect(result).toBe(false)
     })
@@ -24,9 +27,12 @@ describe('hasSomeParentTheClass', () => {
       </div>`)
 
       try {
-        const result = hasSomeParentTheClass(dom.window.document.getElementById(targetId), 'foo')
+        const result = hasSomeParentTheClass(
+          dom.window.document.getElementById(targetId),
+          'foo'
+        )
         expect(result).toBe(false)
-      } catch(e) {
+      } catch (e) {
         expect(true).toBe(false)
       }
     })
@@ -39,7 +45,10 @@ describe('hasSomeParentTheClass', () => {
         <div id=${targetId} class="${foundClass}"></div>
       </div>`)
 
-      const result = hasSomeParentTheClass(dom.window.document.getElementById(targetId), foundClass)
+      const result = hasSomeParentTheClass(
+        dom.window.document.getElementById(targetId),
+        foundClass
+      )
 
       expect(result).toBe(true)
     })
@@ -51,7 +60,10 @@ describe('hasSomeParentTheClass', () => {
       </div>
       </div>`)
 
-      const result = hasSomeParentTheClass(dom.window.document.getElementById(targetId), foundClass)
+      const result = hasSomeParentTheClass(
+        dom.window.document.getElementById(targetId),
+        foundClass
+      )
 
       expect(result).toBe(true)
     })
@@ -63,7 +75,10 @@ describe('hasSomeParentTheClass', () => {
       </div>
       </div>`)
 
-      const result = hasSomeParentTheClass(dom.window.document.getElementById(targetId), foundClass)
+      const result = hasSomeParentTheClass(
+        dom.window.document.getElementById(targetId),
+        foundClass
+      )
 
       expect(result).toBe(true)
     })

@@ -7,14 +7,22 @@ export default class CursorLine extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     lineHeight: PropTypes.number.isRequired,
-    lineCount: PropTypes.number.isRequired
+    lineCount: PropTypes.number.isRequired,
+    cursorTime: PropTypes.number,
+    headerHeight: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
   }
 
-  render () {
+  render() {
     const { cursorTime } = this.props
 
-    if (cursorTime > this.props.canvasTimeStart && cursorTime < this.props.canvasTimeEnd) {
-      const ratio = this.props.canvasWidth / (this.props.canvasTimeEnd - this.props.canvasTimeStart)
+    if (
+      cursorTime > this.props.canvasTimeStart &&
+      cursorTime < this.props.canvasTimeEnd
+    ) {
+      const ratio =
+        this.props.canvasWidth /
+        (this.props.canvasTimeEnd - this.props.canvasTimeStart)
       const left = Math.round((cursorTime - this.props.canvasTimeStart) * ratio)
       const top = this.props.headerHeight
       const height = this.props.height - this.props.headerHeight
@@ -24,7 +32,7 @@ export default class CursorLine extends Component {
         height: `${height}px`
       }
 
-      return <div className='rct-cursor-line' style={styles} />
+      return <div className="rct-cursor-line" style={styles} />
     } else {
       return <div />
     }

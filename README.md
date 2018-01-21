@@ -4,9 +4,7 @@ A modern and responsive react timeline component.
 
 ![calendar demo](https://raw.githubusercontent.com/namespace-ee/react-calendar-timeline/master/demo.gif)
 
-Demo here: https://namespace-ee.github.io/react-calendar-timeline-docs/
-
-Code sandbox example: https://codesandbox.io/s/kkjnv3jmz3
+Checkout the [examples here](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples)!
 
 ## Getting started
 
@@ -462,7 +460,7 @@ import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector
 ### children (plugins)
 If you give the component any children, they will be passed some extra props. Use this to render anything on the timeline (custom backgrounds, arrows, etc).
 
-See [the plugins demo](http://namespace.ee/react-calendar-timeline-docs/#/plugins) ([code](https://github.com/namespace-ee/react-calendar-timeline/blob/master/demo/app/demo-plugins/index.js)) for an example.
+See [the plugins demo](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#plugins-experimental)
 
 **NOTE!** This API is still experimental and will change in the next versions, as we move toward unifying the internal and external APIs. Keep an eye out for the [changelog](https://github.com/namespace-ee/react-calendar-timeline/blob/master/CHANGELOG.md)!
 
