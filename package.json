@@ -48,14 +48,11 @@
   "dependencies": {
     "element-resize-detector": "^1.1.12",
     "interact.js": "^1.2.6",
-    "lodash.isequal": "^4.5.0",
-    "react-pure-render": "^1.0.2"
+    "lodash.isequal": "^4.5.0"
   },
   "peerDependencies": {
-    "interact.js": "*",
     "moment": "*",
-    "react": "^0.14.8 || ^15.0.1",
-    "react-dom": "^0.14.8 || ^15.0.1"
+    "react": "^0.14.8 || >=15"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",

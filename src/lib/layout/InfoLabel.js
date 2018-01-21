@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import shouldPureComponentUpdate from 'react-pure-render/function'
 
 export default class InfoLabel extends Component {
   static propTypes = {
@@ -11,7 +10,11 @@ export default class InfoLabel extends Component {
     label: ''
   }
 
-  shouldComponentUpdate = shouldPureComponentUpdate
+  shouldComponentUpdate(nextProps) {
+    const { label: nextLabel } = nextProps
+
+    return nextLabel !== this.props.label
+  }
 
   render() {
     return <div className="rct-infolabel">{this.props.label}</div>
