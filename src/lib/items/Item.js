@@ -192,13 +192,11 @@ export default class Item extends Component {
     }
   }
 
-  componentDidMount() {}
-
   mountInteract() {
-    const leftResize = this.props.useResizeHandle ? this.refs.dragLeft : true
-    const rightResize = this.props.useResizeHandle ? this.refs.dragRight : true
+    const leftResize = this.props.useResizeHandle ? this.dragLeft : true
+    const rightResize = this.props.useResizeHandle ? this.dragRight : true
 
-    interact(this.refs.item)
+    interact(this.item)
       .resizable({
         edges: {
           left: this.canResizeLeft() && leftResize,
@@ -415,12 +413,10 @@ export default class Item extends Component {
       (couldResizeLeft !== willBeAbleToResizeLeft ||
         couldResizeRight !== willBeAbleToResizeRight)
     ) {
-      const leftResize = this.props.useResizeHandle ? this.refs.dragLeft : true
-      const rightResize = this.props.useResizeHandle
-        ? this.refs.dragRight
-        : true
+      const leftResize = this.props.useResizeHandle ? this.dragLeft : true
+      const rightResize = this.props.useResizeHandle ? this.dragRight : true
 
-      interact(this.refs.item).resizable({
+      interact(this.item).resizable({
         enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
         edges: {
           top: false,
@@ -431,7 +427,7 @@ export default class Item extends Component {
       })
     }
     if (interactMounted && couldDrag !== willBeAbleToDrag) {
-      interact(this.refs.item).draggable({ enabled: willBeAbleToDrag })
+      interact(this.item).draggable({ enabled: willBeAbleToDrag })
     }
   }
 
@@ -525,7 +521,7 @@ export default class Item extends Component {
       <div
         {...this.props.item.itemProps}
         key={this.itemId}
-        ref="item"
+        ref={el => (this.item = el)}
         className={classNames}
         title={this.itemDivTitle}
         onMouseDown={this.onMouseDown}
@@ -537,7 +533,7 @@ export default class Item extends Component {
         style={style}
       >
         {this.props.useResizeHandle ? (
-          <div ref="dragLeft" className="rct-drag-left" />
+          <div ref={el => (this.dragLeft = el)} className="rct-drag-left" />
         ) : (
           ''
         )}
@@ -545,7 +541,7 @@ export default class Item extends Component {
           <div className="rct-item-content">{this.renderContent()}</div>
         </div>
         {this.props.useResizeHandle ? (
-          <div ref="dragRight" className="rct-drag-right" />
+          <div ref={el => (this.dragRight = el)} className="rct-drag-right" />
         ) : (
           ''
         )}

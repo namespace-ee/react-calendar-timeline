@@ -5,9 +5,9 @@ function addListener(component) {
     strategy: 'scroll'
   })
 
-  component._erdWidth = component.refs.container.offsetWidth
+  component._erdWidth = component.container.offsetWidth
 
-  component._erd.listenTo(component.refs.container, element => {
+  component._erd.listenTo(component.container, element => {
     var width = element.offsetWidth
 
     if (component._erdWidth !== width) {
@@ -18,7 +18,7 @@ function addListener(component) {
 }
 
 function removeListener(component) {
-  component._erd.removeAllListeners(component.refs.container)
+  component._erd.removeAllListeners(component.container)
 }
 
 export default { addListener, removeListener }

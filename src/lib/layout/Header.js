@@ -288,7 +288,6 @@ export default class Header extends Component {
 
     return (
       <div
-        ref="header"
         key="header"
         className="rct-header"
         onTouchStart={this.touchStart}
