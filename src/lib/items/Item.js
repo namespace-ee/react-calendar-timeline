@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import interact from 'interact.js'
 import moment from 'moment'
 
@@ -9,39 +10,39 @@ export default class Item extends Component {
   // they are coming from a trusted component anyway
   // (this complicates performance debugging otherwise)
   static propTypes = {
-    canvasTimeStart: React.PropTypes.number.isRequired,
-    canvasTimeEnd: React.PropTypes.number.isRequired,
-    canvasWidth: React.PropTypes.number.isRequired,
-    order: React.PropTypes.number,
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    order: PropTypes.number,
 
-    dragSnap: React.PropTypes.number,
-    minResizeWidth: React.PropTypes.number,
-    selected: React.PropTypes.bool,
+    dragSnap: PropTypes.number,
+    minResizeWidth: PropTypes.number,
+    selected: PropTypes.bool,
 
-    canChangeGroup: React.PropTypes.bool.isRequired,
-    canMove: React.PropTypes.bool.isRequired,
-    canResizeLeft: React.PropTypes.bool.isRequired,
-    canResizeRight: React.PropTypes.bool.isRequired,
+    canChangeGroup: PropTypes.bool.isRequired,
+    canMove: PropTypes.bool.isRequired,
+    canResizeLeft: PropTypes.bool.isRequired,
+    canResizeRight: PropTypes.bool.isRequired,
 
-    keys: React.PropTypes.object.isRequired,
-    item: React.PropTypes.object.isRequired,
+    keys: PropTypes.object.isRequired,
+    item: PropTypes.object.isRequired,
 
-    onSelect: React.PropTypes.func,
-    onDrag: React.PropTypes.func,
-    onDrop: React.PropTypes.func,
-    onResizing: React.PropTypes.func,
-    onResized: React.PropTypes.func,
-    onContextMenu: React.PropTypes.func,
-    itemRenderer: React.PropTypes.func,
+    onSelect: PropTypes.func,
+    onDrag: PropTypes.func,
+    onDrop: PropTypes.func,
+    onResizing: PropTypes.func,
+    onResized: PropTypes.func,
+    onContextMenu: PropTypes.func,
+    itemRenderer: PropTypes.func,
 
-    itemProps: React.PropTypes.object,
-    canSelect: React.PropTypes.bool,
-    topOffset: React.PropTypes.number,
-    dimensions: React.PropTypes.object,
-    groupTops: React.PropTypes.array,
-    useResizeHandle: React.PropTypes.bool,
-    moveResizeValidator: React.PropTypes.func,
-    onItemDoubleClick: React.PropTypes.func
+    itemProps: PropTypes.object,
+    canSelect: PropTypes.bool,
+    topOffset: PropTypes.number,
+    dimensions: PropTypes.object,
+    groupTops: PropTypes.array,
+    useResizeHandle: PropTypes.bool,
+    moveResizeValidator: PropTypes.func,
+    onItemDoubleClick: PropTypes.func
   }
 
   static defaultProps = {
