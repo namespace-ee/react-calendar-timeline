@@ -85,10 +85,10 @@ class ScrollElement extends Component {
   handleMouseDown = e => {
     // TODO: what about header click
     if (e.button === 0) {
+      this.dragStartPosition = e.pageX
+      this.dragLastPosition = e.pageX
       this.setState({
-        isDragging: true,
-        dragStartPosition: e.pageX,
-        dragLastPosition: e.pageX
+        isDragging: true
       })
     }
   }
@@ -96,30 +96,31 @@ class ScrollElement extends Component {
   handleMouseMove = e => {
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
-      this.scrollComponent.scrollLeft += this.state.dragLastPosition - e.pageX
-      this.setState({ dragLastPosition: e.pageX })
+      this.scrollComponent.scrollLeft += this.dragLastPosition - e.pageX
+      this.dragLastPosition = e.pageX
     }
   }
 
   handleMouseUp = e => {
-    const { dragStartPosition } = this.state
-
-    if (Math.abs(dragStartPosition - e.pageX) <= this.props.clickTolerance) {
+    if (
+      Math.abs(this.dragStartPosition - e.pageX) <= this.props.clickTolerance
+    ) {
       this.props.onScrollAreaClick(e)
     }
 
+    this.dragStartPosition = null
+    this.dragLastPosition = null
+
     this.setState({
-      isDragging: false,
-      dragStartPosition: null,
-      dragLastPosition: null
+      isDragging: false
     })
   }
 
   handleMouseLeave = () => {
+    this.dragStartPosition = null
+    this.dragLastPosition = null
     this.setState({
-      isDragging: false,
-      dragStartPosition: null,
-      dragLastPosition: null
+      isDragging: false
     })
   }
 
