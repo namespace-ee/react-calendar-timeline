@@ -386,10 +386,6 @@ export default class ReactCalendarTimeline extends Component {
     this.lastTouchDistance = null
 
     window.addEventListener('scroll', this.scrollEventListener)
-
-    this.scrollComponent.addEventListener('touchstart', this.touchStart)
-    this.scrollComponent.addEventListener('touchmove', this.touchMove)
-    this.scrollComponent.addEventListener('touchend', this.touchEnd)
   }
 
   componentWillUnmount() {
@@ -400,10 +396,6 @@ export default class ReactCalendarTimeline extends Component {
     windowResizeDetector.removeListener(this)
 
     window.removeEventListener('scroll', this.scrollEventListener)
-
-    this.scrollComponent.removeEventListener('touchstart', this.touchStart)
-    this.scrollComponent.removeEventListener('touchmove', this.touchMove)
-    this.scrollComponent.removeEventListener('touchend', this.touchEnd)
   }
 
   // called on window scroll. it's job is to figure out if we should fix or float the header
@@ -419,91 +411,6 @@ export default class ReactCalendarTimeline extends Component {
       this.setState({ headerPosition: 'bottom' })
     } else {
       this.setState({ headerPosition: 'fixed' })
-    }
-  }
-
-  touchStart = e => {
-    if (e.touches.length === 2) {
-      e.preventDefault()
-
-      this.lastTouchDistance = Math.abs(
-        e.touches[0].screenX - e.touches[1].screenX
-      )
-      this.singleTouchStart = null
-      this.lastSingleTouch = null
-    } else if (e.touches.length === 1) {
-      e.preventDefault()
-
-      let x = e.touches[0].clientX
-      let y = e.touches[0].clientY
-
-      this.lastTouchDistance = null
-      this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset }
-      this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset }
-    }
-  }
-
-  touchMove = e => {
-    if (this.state.dragTime || this.state.resizeTime) {
-      e.preventDefault()
-      return
-    }
-    if (this.lastTouchDistance && e.touches.length === 2) {
-      e.preventDefault()
-
-      let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
-
-      let parentPosition = getParentPosition(e.currentTarget)
-      let xPosition =
-        (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
-
-      if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
-        this.changeZoom(
-          this.lastTouchDistance / touchDistance,
-          xPosition / this.state.width
-        )
-        this.lastTouchDistance = touchDistance
-      }
-    } else if (this.lastSingleTouch && e.touches.length === 1) {
-      e.preventDefault()
-
-      let x = e.touches[0].clientX
-      let y = e.touches[0].clientY
-
-      let deltaX = x - this.lastSingleTouch.x
-      // let deltaY = y - this.lastSingleTouch.y
-
-      let deltaX0 = x - this.singleTouchStart.x
-      let deltaY0 = y - this.singleTouchStart.y
-
-      this.lastSingleTouch = { x: x, y: y }
-
-      let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
-      let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
-
-      if (deltaX !== 0 && moveX) {
-        this.scrollComponent.scrollLeft -= deltaX
-      }
-      if (moveY) {
-        window.scrollTo(
-          window.pageXOffset,
-          this.singleTouchStart.screenY - deltaY0
-        )
-      }
-    }
-  }
-
-  touchEnd = e => {
-    if (this.lastTouchDistance) {
-      e.preventDefault()
-
-      this.lastTouchDistance = null
-    }
-    if (this.lastSingleTouch) {
-      e.preventDefault()
-
-      this.lastSingleTouch = null
-      this.singleTouchStart = null
     }
   }
 

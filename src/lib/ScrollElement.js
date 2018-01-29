@@ -123,6 +123,91 @@ class ScrollElement extends Component {
     })
   }
 
+  touchStart = e => {
+    if (e.touches.length === 2) {
+      e.preventDefault()
+
+      this.lastTouchDistance = Math.abs(
+        e.touches[0].screenX - e.touches[1].screenX
+      )
+      this.singleTouchStart = null
+      this.lastSingleTouch = null
+    } else if (e.touches.length === 1) {
+      e.preventDefault()
+
+      let x = e.touches[0].clientX
+      let y = e.touches[0].clientY
+
+      this.lastTouchDistance = null
+      this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset }
+      this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset }
+    }
+  }
+
+  touchMove = e => {
+    const { isInteractingWithItem, width } = this.props
+    if (isInteractingWithItem) {
+      e.preventDefault()
+      return
+    }
+    if (this.lastTouchDistance && e.touches.length === 2) {
+      e.preventDefault()
+
+      let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
+
+      let parentPosition = getParentPosition(e.currentTarget)
+      let xPosition =
+        (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
+
+      if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
+        this.changeZoom(
+          this.lastTouchDistance / touchDistance,
+          xPosition / width
+        )
+        this.lastTouchDistance = touchDistance
+      }
+    } else if (this.lastSingleTouch && e.touches.length === 1) {
+      e.preventDefault()
+
+      let x = e.touches[0].clientX
+      let y = e.touches[0].clientY
+
+      let deltaX = x - this.lastSingleTouch.x
+
+      let deltaX0 = x - this.singleTouchStart.x
+      let deltaY0 = y - this.singleTouchStart.y
+
+      this.lastSingleTouch = { x: x, y: y }
+
+      let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
+      let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
+
+      if (deltaX !== 0 && moveX) {
+        this.scrollComponent.scrollLeft -= deltaX
+      }
+      if (moveY) {
+        window.scrollTo(
+          window.pageXOffset,
+          this.singleTouchStart.screenY - deltaY0
+        )
+      }
+    }
+  }
+
+  touchEnd = e => {
+    if (this.lastTouchDistance) {
+      e.preventDefault()
+
+      this.lastTouchDistance = null
+    }
+    if (this.lastSingleTouch) {
+      e.preventDefault()
+
+      this.lastSingleTouch = null
+      this.singleTouchStart = null
+    }
+  }
+
   render() {
     const { width, height, children } = this.props
     const { isDragging } = this.state
@@ -144,6 +229,9 @@ class ScrollElement extends Component {
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
         onMouseLeave={this.handleMouseLeave}
+        onTouchStart={this.onTouchStart}
+        onTouchMove={this.onTouchMove}
+        onTouchEnd={this.onTouchEnd}
       >
         {children}
       </div>
