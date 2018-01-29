@@ -123,7 +123,7 @@ class ScrollElement extends Component {
     })
   }
 
-  touchStart = e => {
+  handleTouchStart = e => {
     if (e.touches.length === 2) {
       e.preventDefault()
 
@@ -144,7 +144,7 @@ class ScrollElement extends Component {
     }
   }
 
-  touchMove = e => {
+  handleTouchMove = e => {
     const { isInteractingWithItem, width } = this.props
     if (isInteractingWithItem) {
       e.preventDefault()
@@ -194,7 +194,7 @@ class ScrollElement extends Component {
     }
   }
 
-  touchEnd = e => {
+  handleTouchEnd = e => {
     if (this.lastTouchDistance) {
       e.preventDefault()
 
@@ -229,9 +229,9 @@ class ScrollElement extends Component {
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
         onMouseLeave={this.handleMouseLeave}
-        onTouchStart={this.onTouchStart}
-        onTouchMove={this.onTouchMove}
-        onTouchEnd={this.onTouchEnd}
+        onTouchStart={this.handleTouchStart}
+        onTouchMove={this.handleTouchMove}
+        onTouchEnd={this.handleTouchEnd}
       >
         {children}
       </div>
