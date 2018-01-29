@@ -7,12 +7,17 @@ const defaultProps = {
   width: 1000,
   height: 800,
   clickTolerance: 0,
-  onScrollAreaClick: noop,
+  onClick: noop,
   onWheelZoom: noop,
   onScroll: noop,
   traditionalZoom: false,
   scrollRef: noop,
-  isInteractingWithItem: false
+  isInteractingWithItem: false,
+  onDoubleClick: noop,
+  onMouseLeave: noop,
+  onMouseMove: noop,
+  onMouseEnter: noop,
+  onContextMenu: noop
 }
 
 const createMouseEvent = pageX => ({
@@ -106,14 +111,14 @@ describe('ScrollElement', () => {
 
   describe('mouse up', () => {
     const clickTolerance = 10
-    let onScrollAreaClickMock, wrapper
+    let onClickMock, wrapper
 
     beforeEach(() => {
-      onScrollAreaClickMock = jest.fn()
+      onClickMock = jest.fn()
       const props = {
         ...defaultProps,
         clickTolerance,
-        onScrollAreaClick: onScrollAreaClickMock
+        onClick: onClickMock
       }
 
       wrapper = mount(
@@ -122,7 +127,7 @@ describe('ScrollElement', () => {
         </ScrollElement>
       )
     })
-    it('calls onScrollAreaClick if click resulted in a drag less than clickTolerance', () => {
+    it('calls onClick if click resulted in a drag less than clickTolerance', () => {
       const originX = 100
       const mouseDownEvent = createMouseEvent(originX)
       const mouseUpEvent = createMouseEvent(originX + clickTolerance - 1)
@@ -132,10 +137,10 @@ describe('ScrollElement', () => {
         .simulate('mousedown', mouseDownEvent)
         .simulate('mouseup', mouseUpEvent)
 
-      expect(onScrollAreaClickMock).toHaveBeenCalledTimes(1)
+      expect(onClickMock).toHaveBeenCalledTimes(1)
     })
 
-    it('calls onScrollAreaClick if click resulted in a drag equal to clickTolerance', () => {
+    it('calls onClick if click resulted in a drag equal to clickTolerance', () => {
       const originX = 100
       const mouseDownEvent = createMouseEvent(originX)
       const mouseUpEvent = createMouseEvent(originX + clickTolerance)
@@ -145,9 +150,9 @@ describe('ScrollElement', () => {
         .simulate('mousedown', mouseDownEvent)
         .simulate('mouseup', mouseUpEvent)
 
-      expect(onScrollAreaClickMock).toHaveBeenCalledTimes(1)
+      expect(onClickMock).toHaveBeenCalledTimes(1)
     })
-    it('does not call onScrollAreaClick if mouse event resulted in drag greated than clickTolerance', () => {
+    it('does not call onClick if mouse event resulted in drag greated than clickTolerance', () => {
       const originX = 100
       const mouseDownEvent = createMouseEvent(originX)
       const mouseUpEvent = createMouseEvent(originX + clickTolerance + 1)
@@ -157,7 +162,7 @@ describe('ScrollElement', () => {
         .simulate('mousedown', mouseDownEvent)
         .simulate('mouseup', mouseUpEvent)
 
-      expect(onScrollAreaClickMock).not.toHaveBeenCalled()
+      expect(onClickMock).not.toHaveBeenCalled()
     })
   })
 

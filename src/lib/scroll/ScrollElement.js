@@ -8,12 +8,17 @@ class ScrollElement extends Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     clickTolerance: PropTypes.number.isRequired,
-    onScrollAreaClick: PropTypes.func.isRequired,
-    onWheelZoom: PropTypes.func.isRequired,
-    onScroll: PropTypes.func.isRequired,
     traditionalZoom: PropTypes.bool.isRequired,
     scrollRef: PropTypes.func.isRequired,
-    isInteractingWithItem: PropTypes.bool.isRequired
+    isInteractingWithItem: PropTypes.bool.isRequired,
+    onMouseEnter: PropTypes.func.isRequired,
+    onMouseMove: PropTypes.func.isRequired,
+    onMouseLeave: PropTypes.func.isRequired,
+    onContextMenu: PropTypes.func.isRequired,
+    onDoubleClick: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
+    onWheelZoom: PropTypes.func.isRequired,
+    onScroll: PropTypes.func.isRequired
   }
 
   constructor() {
@@ -95,6 +100,7 @@ class ScrollElement extends Component {
   }
 
   handleMouseMove = e => {
+    this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
       this.scrollComponent.scrollLeft += this.dragLastPosition - e.pageX
@@ -106,7 +112,7 @@ class ScrollElement extends Component {
     if (
       Math.abs(this.dragStartPosition - e.pageX) <= this.props.clickTolerance
     ) {
-      this.props.onScrollAreaClick(e)
+      this.props.onClick(e)
     }
 
     this.dragStartPosition = null
@@ -117,7 +123,8 @@ class ScrollElement extends Component {
     })
   }
 
-  handleMouseLeave = () => {
+  handleMouseLeave = e => {
+    this.props.onMouseLeave(e)
     this.dragStartPosition = null
     this.dragLastPosition = null
     this.setState({
@@ -211,7 +218,7 @@ class ScrollElement extends Component {
   }
 
   render() {
-    const { width, height, children } = this.props
+    const { width, height, children, onContextMenu, onDoubleClick } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
@@ -235,6 +242,8 @@ class ScrollElement extends Component {
         onTouchStart={this.handleTouchStart}
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
+        onContextMenu={onContextMenu}
+        onDoubleClick={onDoubleClick}
       >
         {children}
       </div>
