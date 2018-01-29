@@ -160,4 +160,95 @@ describe('ScrollElement', () => {
       expect(onScrollAreaClickMock).not.toHaveBeenCalled()
     })
   })
+
+  describe('scroll', () => {
+    it('calls onScroll with current scrollLeft', () => {
+      const onScrollMock = jest.fn()
+      const props = {
+        ...defaultProps,
+        onScroll: onScrollMock
+      }
+
+      const wrapper = mount(
+        <ScrollElement {...props}>
+          <div />
+        </ScrollElement>
+      )
+      const scrollLeft = 200
+      wrapper.instance().scrollComponent.scrollLeft = scrollLeft
+
+      wrapper.find(scrollElementSelector).simulate('scroll')
+
+      expect(onScrollMock).toHaveBeenCalledTimes(1)
+    })
+    it('adds width to scrollLeft if scrollLeft is less than half of width', () => {
+      const width = 800
+      const props = {
+        ...defaultProps,
+        width
+      }
+
+      const wrapper = mount(
+        <ScrollElement {...props}>
+          <div />
+        </ScrollElement>
+      )
+
+      const currentScrollLeft = 300
+      wrapper.instance().scrollComponent.scrollLeft = currentScrollLeft
+
+      wrapper.simulate('scroll')
+
+      expect(wrapper.instance().scrollComponent.scrollLeft).toBe(
+        currentScrollLeft + width
+      )
+    })
+    it('subtracts width from scrollLeft if scrollLeft is greater than one and a half of width', () => {
+      const width = 800
+      const props = {
+        ...defaultProps,
+        width
+      }
+
+      const wrapper = mount(
+        <ScrollElement {...props}>
+          <div />
+        </ScrollElement>
+      )
+
+      const currentScrollLeft = 1300
+      wrapper.instance().scrollComponent.scrollLeft = currentScrollLeft
+
+      wrapper.simulate('scroll')
+
+      expect(wrapper.instance().scrollComponent.scrollLeft).toBe(
+        currentScrollLeft - width
+      )
+    })
+
+    it('does not alter scrollLeft if scrollLeft is between 0.5 and 1.5 of width', () => {
+      const width = 800
+      const props = {
+        ...defaultProps,
+        width
+      }
+
+      const wrapper = mount(
+        <ScrollElement {...props}>
+          <div />
+        </ScrollElement>
+      )
+
+      // three samples between this range
+      const scrolls = [width * 0.5 + 1, width, width * 1.5 - 1]
+
+      scrolls.forEach(scroll => {
+        wrapper.instance().scrollComponent.scrollLeft = scroll
+
+        wrapper.simulate('scroll')
+
+        expect(wrapper.instance().scrollComponent.scrollLeft).toBe(scroll)
+      })
+    })
+  })
 })
