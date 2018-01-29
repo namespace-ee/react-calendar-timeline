@@ -761,7 +761,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasMouseEnter = e => {
+  handleScrollMouseEnter = e => {
     const { showCursorLine } = this.props
     if (showCursorLine) {
       this.setState({ mouseOverCanvas: true })
@@ -772,7 +772,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasMouseLeave = e => {
+  handleScrollMouseLeave = e => {
     const { showCursorLine } = this.props
     if (showCursorLine) {
       this.setState({ mouseOverCanvas: false })
@@ -783,7 +783,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasMouseMove = e => {
+  handleScrollMouseMove = e => {
     const { showCursorLine } = this.props
     const {
       canvasTimeStart,
@@ -1133,7 +1133,7 @@ export default class ReactCalendarTimeline extends Component {
     return { dimensionItems, height, groupHeights, groupTops }
   }
 
-  handleDoubleClick = e => {
+  handleScrollDoubleClick = e => {
     const {
       canvasTimeStart,
       width,
@@ -1183,7 +1183,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasContextMenu = e => {
+  handleScrollContextMenu = e => {
     const {
       canvasTimeStart,
       width,
@@ -1352,11 +1352,11 @@ export default class ReactCalendarTimeline extends Component {
             onClick={this.scrollAreaClick}
             onScroll={this.onScroll}
             isInteractingWithItem={isInteractingWithItem}
-            onDoubleClick={this.handleDoubleClick}
-            onMouseEnter={this.handleCanvasMouseEnter}
-            onMouseLeave={this.handleCanvasMouseLeave}
-            onMouseMove={this.handleCanvasMouseMove}
-            onContextMenu={this.handleCanvasContextMenu}
+            onDoubleClick={this.handleScrollDoubleClick}
+            onMouseEnter={this.handleScrollMouseEnter}
+            onMouseLeave={this.handleScrollMouseLeave}
+            onMouseMove={this.handleScrollMouseMove}
+            onContextMenu={this.handleScrollContextMenu}
           >
             <div
               ref={el => (this.canvasComponent = el)}
