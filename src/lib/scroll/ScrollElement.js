@@ -30,17 +30,18 @@ class ScrollElement extends Component {
 
   // TODO: fix this where this is called when scrollLeft is set
   handleScroll = () => {
+    const { width } = this.props
     const scrollComponent = this.scrollComponent
 
     const scrollX = scrollComponent.scrollLeft
 
     // move the virtual canvas if needed
     // if scrollX is less...i dont know how to explain the logic here
-    if (scrollX < this.state.width * 0.5) {
-      scrollComponent.scrollLeft += this.state.width
+    if (scrollX < width * 0.5) {
+      scrollComponent.scrollLeft += width
     }
-    if (scrollX > this.state.width * 1.5) {
-      scrollComponent.scrollLeft -= this.state.width
+    if (scrollX > width * 1.5) {
+      scrollComponent.scrollLeft -= width
     }
     this.props.onScroll(scrollX)
   }
@@ -215,7 +216,7 @@ class ScrollElement extends Component {
 
     const scrollComponentStyle = {
       width: `${width}px`,
-      height: `${height + 20}px`,
+      height: `${height + 20}px`, //why 20px?
       cursor: isDragging ? 'move' : 'default'
     }
 
