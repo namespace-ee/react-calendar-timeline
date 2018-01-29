@@ -14,7 +14,8 @@
             "properties": ["data-test-id"]
           }
         ]
-      ]
+      ],
+      "ignore": ["src/lib/__tests__/**"]
     }
   }
 }
