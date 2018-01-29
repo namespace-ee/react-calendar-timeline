@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getParentPosition } from './utility/dom-helpers'
+import { getParentPosition } from '../utility/dom-helpers'
 
 class ScrollElement extends Component {
   static propTypes = {
@@ -221,6 +221,7 @@ class ScrollElement extends Component {
     return (
       <div
         ref={this.refHandler}
+        data-test-id="scroll-element"
         className="rct-scroll"
         style={scrollComponentStyle}
         onScroll={this.handleScroll}

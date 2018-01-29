@@ -11,7 +11,7 @@ import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 import CursorLine from './lines/CursorLine'
-import ScrollElement from './ScrollElement'
+import ScrollElement from './scroll/ScrollElement'
 
 import windowResizeDetector from '../resize-detector/window'
 
