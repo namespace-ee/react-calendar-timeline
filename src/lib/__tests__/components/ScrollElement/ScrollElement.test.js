@@ -29,6 +29,57 @@ const createMouseEvent = pageX => ({
 const scrollElementSelector = sel('scroll-element')
 
 describe('ScrollElement', () => {
+  describe('mouse event delegates', () => {
+    let onDoubleClickMock,
+      onMouseLeaveMock,
+      onMouseMoveMock,
+      onMouseEnterMock,
+      onContextMenuMock,
+      wrapper
+
+    beforeEach(() => {
+      onDoubleClickMock = jest.fn()
+      onMouseLeaveMock = jest.fn()
+      onMouseMoveMock = jest.fn()
+      onMouseEnterMock = jest.fn()
+      onContextMenuMock = jest.fn()
+
+      const props = {
+        ...defaultProps,
+        onDoubleClick: onDoubleClickMock,
+        onMouseLeave: onMouseLeaveMock,
+        onMouseMove: onMouseMoveMock,
+        onMouseEnter: onMouseEnterMock,
+        onContextMenu: onContextMenuMock
+      }
+
+      wrapper = mount(
+        <ScrollElement {...props}>
+          <div />
+        </ScrollElement>
+      )
+    })
+    it('scroll element onDoubleClick calls passed in onDoubleClick', () => {
+      wrapper.find(scrollElementSelector).simulate('doubleclick')
+      expect(onDoubleClickMock).toHaveBeenCalledTimes(1)
+    })
+    it('scroll element onMouseLeave calls passed in onMouseLeave', () => {
+      wrapper.find(scrollElementSelector).simulate('mouseleave')
+      expect(onMouseLeaveMock).toHaveBeenCalledTimes(1)
+    })
+    it('scroll element onMouseMove calls passed in onMouseMove', () => {
+      wrapper.find(scrollElementSelector).simulate('mousemove')
+      expect(onMouseMoveMock).toHaveBeenCalledTimes(1)
+    })
+    it('scroll element onMouseEnter calls passed in onMouseEnter', () => {
+      wrapper.find(scrollElementSelector).simulate('mouseenter')
+      expect(onMouseEnterMock).toHaveBeenCalledTimes(1)
+    })
+    it('scroll element onContextMenu calls passed in onContextMenu', () => {
+      wrapper.find(scrollElementSelector).simulate('contextmenu')
+      expect(onContextMenuMock).toHaveBeenCalledTimes(1)
+    })
+  })
   describe('mouse drag', () => {
     let wrapper
 
