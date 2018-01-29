@@ -218,7 +218,14 @@ class ScrollElement extends Component {
   }
 
   render() {
-    const { width, height, children, onContextMenu, onDoubleClick } = this.props
+    const {
+      width,
+      height,
+      children,
+      onContextMenu,
+      onDoubleClick,
+      onMouseEnter
+    } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
@@ -244,6 +251,7 @@ class ScrollElement extends Component {
         onTouchEnd={this.handleTouchEnd}
         onContextMenu={onContextMenu}
         onDoubleClick={onDoubleClick}
+        onMouseEnter={onMouseEnter}
       >
         {children}
       </div>
