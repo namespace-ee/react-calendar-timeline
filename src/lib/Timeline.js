@@ -1321,19 +1321,19 @@ export default class ReactCalendarTimeline extends Component {
             clickTolerance={clickTolerance}
             onWheelZoom={this.handleWheelZoom}
             traditionalZoom={traditionalZoom}
-            onScrollAreaClick={this.scrollAreaClick}
+            onClick={this.scrollAreaClick}
             onScroll={this.onScroll}
             isInteractingWithItem={isInteractingWithItem}
+            onDoubleClick={this.handleDoubleClick}
+            onMouseEnter={this.handleCanvasMouseEnter}
+            onMouseLeave={this.handleCanvasMouseLeave}
+            onMouseMove={this.handleCanvasMouseMove}
+            onContextMenu={this.handleCanvasContextMenu}
           >
             <div
               ref={el => (this.canvasComponent = el)}
               className="rct-canvas"
               style={canvasComponentStyle}
-              onDoubleClick={this.handleDoubleClick}
-              onMouseEnter={this.handleCanvasMouseEnter}
-              onMouseLeave={this.handleCanvasMouseLeave}
-              onMouseMove={this.handleCanvasMouseMove}
-              onContextMenu={this.handleCanvasContextMenu}
             >
               {this.items(
                 canvasTimeStart,
