@@ -612,7 +612,7 @@ export default class ReactCalendarTimeline extends Component {
         }
       }
       if (e.deltaY !== 0) {
-        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+        this.props.scrollableContainer.scrollTo(this.props.scrollableContainer.scrollLeft, this.props.scrollableContainer.scrollTop + e.deltaY)
         if (traditionalZoom) {
           const parentPosition = getParentPosition(e.currentTarget)
           const xPosition = e.clientX - parentPosition.x
