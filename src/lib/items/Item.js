@@ -119,7 +119,7 @@ export default class Item extends Component {
   dragTimeSnap(dragTime, considerOffset) {
     const { dragSnap } = this.props
     if (dragSnap) {
-      const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0
+      const offset = considerOffset ? moment(dragTime).utcOffset() * 60 * 1000 : 0
       return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap
     } else {
       return dragTime
