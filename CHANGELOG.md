@@ -9,6 +9,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 When you submit a PR, add your changes here!
 
+### Fixed
+
+* propTypes error related to Item prop - #239
+
 ## 0.15.7
 
 This release contains a lot of code cleanup as well as an API change to the `itemRenderer` prop.
