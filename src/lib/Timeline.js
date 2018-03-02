@@ -885,8 +885,13 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   scrollAreaClick = e => {
-    // if not clicking on an item
+    if (hasSomeParentTheClass(e.target, 'rct-header')) {
+      // don't do anything if we clicked on the header
+      // TODO: there should be a better way to handle this...
+      return
+    }
 
+    // if not clicking on an item
     if (!hasSomeParentTheClass(e.target, 'rct-item')) {
       if (this.state.selectedItem) {
         this.selectItem(null)
@@ -1570,6 +1575,16 @@ export default class ReactCalendarTimeline extends Component {
             onMouseUp={this.handleMouseUp}
             onMouseLeave={this.handleMouseLeave}
           >
+            {this.header(
+              canvasTimeStart,
+              zoom,
+              canvasTimeEnd,
+              canvasWidth,
+              minUnit,
+              timeSteps,
+              headerLabelGroupHeight,
+              headerLabelHeight
+            )}
             <div
               ref={el => (this.canvasComponent = el)}
               className="rct-canvas"
@@ -1623,16 +1638,6 @@ export default class ReactCalendarTimeline extends Component {
                   )
                 : null}
               {this.infoLabel()}
-              {this.header(
-                canvasTimeStart,
-                zoom,
-                canvasTimeEnd,
-                canvasWidth,
-                minUnit,
-                timeSteps,
-                headerLabelGroupHeight,
-                headerLabelHeight
-              )}
               {this.childrenWithProps(
                 canvasTimeStart,
                 canvasTimeEnd,
