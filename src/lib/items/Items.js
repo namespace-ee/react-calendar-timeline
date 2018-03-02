@@ -99,7 +99,7 @@ export default class Items extends Component {
       return this.props.selectedItem === _get(item, itemIdKey)
     } else {
       let target = _get(item, itemIdKey)
-      return this.props.selected.find(value => value === target)
+      return this.props.selected.includes(target)
     }
   }
 
