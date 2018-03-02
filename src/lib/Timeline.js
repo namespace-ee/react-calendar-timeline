@@ -1570,6 +1570,16 @@ export default class ReactCalendarTimeline extends Component {
             onMouseUp={this.handleMouseUp}
             onMouseLeave={this.handleMouseLeave}
           >
+            {this.header(
+              canvasTimeStart,
+              zoom,
+              canvasTimeEnd,
+              canvasWidth,
+              minUnit,
+              timeSteps,
+              headerLabelGroupHeight,
+              headerLabelHeight
+            )}
             <div
               ref={el => (this.canvasComponent = el)}
               className="rct-canvas"
@@ -1623,16 +1633,6 @@ export default class ReactCalendarTimeline extends Component {
                   )
                 : null}
               {this.infoLabel()}
-              {this.header(
-                canvasTimeStart,
-                zoom,
-                canvasTimeEnd,
-                canvasWidth,
-                minUnit,
-                timeSteps,
-                headerLabelGroupHeight,
-                headerLabelHeight
-              )}
               {this.childrenWithProps(
                 canvasTimeStart,
                 canvasTimeEnd,
