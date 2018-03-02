@@ -9,6 +9,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 When you submit a PR, add your changes here!
 
+### Fixed
+
+* header positioned incorrectly when not fixed/sticky - caused by #236
+
 ## 0.15.8
 
 ### Fixed
