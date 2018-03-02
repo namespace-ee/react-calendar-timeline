@@ -17,10 +17,7 @@
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "npm run build:lib && npm run jest && npm run lint"
   },
-  "files": [
-    "lib",
-    "src"
-  ],
+  "files": ["lib", "src"],
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
@@ -33,29 +30,18 @@
     "Samuel Rossetti"
   ],
   "license": "MIT",
-  "keywords": [
-    "react",
-    "reactjs",
-    "react-component",
-    "timeline"
-  ],
+  "keywords": ["react", "reactjs", "react-component", "timeline"],
   "standard": {
     "parser": "babel-eslint"
   },
   "jest": {
     "verbose": true,
-    "testMatch": [
-      "**/__tests__/**/*.js"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/jest-setup.js"
-    ],
+    "testMatch": ["**/__tests__/**/*.js"],
+    "setupFiles": ["<rootDir>/config/jest-setup.js"],
     "moduleNameMapper": {
       "^.+\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
     },
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ]
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"]
   },
   "dependencies": {
     "element-resize-detector": "^1.1.12",
