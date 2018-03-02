@@ -12,6 +12,7 @@ When you submit a PR, add your changes here!
 ### Fixed
 
 * propTypes error related to Item prop - #239
+  # onCanvasClick and onCanvasDoubleClick were being called on header click - #236
 
 ## 0.15.7
 
