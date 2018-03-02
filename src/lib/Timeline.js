@@ -1384,6 +1384,16 @@ export default class ReactCalendarTimeline extends Component {
       groupTops,
       topOffset
     } = this.state
+
+    if (
+      this.props.onCanvasDoubleClick == null ||
+      hasSomeParentTheClass(e.target, 'rct-header')
+    ) {
+      // do nothing cuz either we don't have on CanvasdoubleClick or we clicked on header
+      // TODO: there has got to be a better way of handling this
+      return
+    }
+
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
@@ -1588,16 +1598,6 @@ export default class ReactCalendarTimeline extends Component {
             onMouseUp={this.handleMouseUp}
             onMouseLeave={this.handleMouseLeave}
           >
-            {this.header(
-              canvasTimeStart,
-              zoom,
-              canvasTimeEnd,
-              canvasWidth,
-              minUnit,
-              timeSteps,
-              headerLabelGroupHeight,
-              headerLabelHeight
-            )}
             <div
               ref={el => (this.canvasComponent = el)}
               className="rct-canvas"
@@ -1637,6 +1637,16 @@ export default class ReactCalendarTimeline extends Component {
                 minUnit,
                 height,
                 headerHeight
+              )}
+              {this.header(
+                canvasTimeStart,
+                zoom,
+                canvasTimeEnd,
+                canvasWidth,
+                minUnit,
+                timeSteps,
+                headerLabelGroupHeight,
+                headerLabelHeight
               )}
               {mouseOverCanvas && showCursorLine
                 ? this.cursorLine(
