@@ -128,6 +128,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseEnter: PropTypes.func,
     onCanvasMouseLeave: PropTypes.func,
     onCanvasMouseMove: PropTypes.func,
+    onZoom: PropTypes.func,
 
     moveResizeValidator: PropTypes.func,
 
@@ -249,6 +250,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseEnter: null,
     onCanvasMouseLeave: null,
     onCanvasMouseMove: null,
+    onZoom: null,
 
     moveResizeValidator: null,
 
@@ -293,17 +295,21 @@ export default class ReactCalendarTimeline extends Component {
   getChildContext() {
     return {
       getTimelineContext: () => {
-        const { width, visibleTimeStart, visibleTimeEnd } = this.state
-
-        //TODO: Performance
-        //prob wanna memoize this so we ensure that if no items changed,
-        //we return same context reference
-        return {
-          timelineWidth: width,
-          visibleTimeStart,
-          visibleTimeEnd
-        }
+        return this.getTimelineContext()
       }
+    }
+  }
+
+  getTimelineContext = () => {
+    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+
+    //TODO: Performance
+    //prob wanna memoize this so we ensure that if no items changed,
+    //we return same context reference
+    return {
+      timelineWidth: width,
+      visibleTimeStart,
+      visibleTimeEnd
     }
   }
 
@@ -692,7 +698,14 @@ export default class ReactCalendarTimeline extends Component {
       newState.groupTops = groupTops
     }
 
-    this.setState(newState)
+    this.setState(newState, () => {
+      // are we changing zoom? Well then let's report it
+      // need to wait until state is set so that we get current
+      // timeline context
+      if (this.props.onZoom && oldZoom !== newZoom) {
+        this.props.onZoom(this.getTimelineContext())
+      }
+    })
   }
 
   zoomWithWheel = (speed, xPosition, deltaY) => {

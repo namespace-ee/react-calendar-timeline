@@ -14,6 +14,10 @@ When you submit a PR, add your changes here!
 * propTypes error related to Item prop - #239
   # onCanvasClick and onCanvasDoubleClick were being called on header click - #236
 
+### Added
+
+* on timeline zoom, onZoom prop is called with timelineContext - #248
+
 ## 0.15.7
 
 This release contains a lot of code cleanup as well as an API change to the `itemRenderer` prop.

@@ -248,6 +248,9 @@ Called when an empty spot on the canvas was double clicked. Get the group and th
 ### onCanvasContextMenu(group, time, e)
 Called when the canvas is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
+### onZoom(timelineContext)
+Called when the timeline is zoomed, either via mouse/pinch zoom or clicking header to change timeline units
+
 ### moveResizeValidator(action, itemId, time, resizeEdge)
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
 
