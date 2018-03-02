@@ -53,6 +53,8 @@ export default class Header extends Component {
             ? f.monthMedium
             : width < 120 ? f.monthMediumLong : f.monthLong
       )
+    } else if (unit === 'week') {
+      return 'Week ' + time.format(f.week)
     } else if (unit === 'day') {
       return time.format(width < 150 ? f.dayShort : f.dayLong)
     } else if (unit === 'hour') {
@@ -77,6 +79,8 @@ export default class Header extends Component {
       return time.format(
         width < 37 ? f.monthShort : width < 85 ? f.monthMedium : f.monthLong
       )
+    } else if (unit === 'week') {
+      return 'Week ' + time.format(f.week)
     } else if (unit === 'day') {
       return time.format(
         width < 47

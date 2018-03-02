@@ -15,8 +15,12 @@ describe('getNextUnit', () => {
     const result = getNextUnit('hour')
     expect(result).toBe('day')
   })
-  it('day to month', () => {
+  it('day to week', () => {
     const result = getNextUnit('day')
+    expect(result).toBe('week')
+  })
+  it('week to month', () => {
+    const result = getNextUnit('week')
     expect(result).toBe('month')
   })
   it('month to year', () => {

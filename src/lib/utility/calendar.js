@@ -63,8 +63,10 @@ export function getMinUnit(zoom, width, timeSteps) {
     minute: 60,
     hour: 60,
     day: 24,
-    month: 30,
-    year: 12
+    week: 7,
+    month: 4.2, // need to know if we allow weeks, then use 4.2 or 30
+    // quarter: 3,
+    year: 12 // need to know if we allow quarters, then use 12 or 4
   }
 
   let minUnit = 'year'
@@ -97,6 +99,7 @@ export function getMinUnit(zoom, width, timeSteps) {
       // for the current zoom, the number of cells we'd need to render all parts of this unit
       // is less than the minimum number of cells needed at minimum cell width
       minUnit = unit
+      console.log('min unit found', minUnit, cellsToBeRenderedForCurrentUnit)
       return true
     }
   })
@@ -109,7 +112,8 @@ export function getNextUnit(unit) {
     second: 'minute',
     minute: 'hour',
     hour: 'day',
-    day: 'month',
+    day: 'week',
+    week: 'month',
     month: 'year'
   }
 
