@@ -373,7 +373,7 @@ export default class Item extends Component {
   }
 
   canResizeLeft(props = this.props) {
-    if (!props.canResizeLeft || props.dimensions.clippedLeft) {
+    if (!props.canResizeLeft) {
       return false
     }
     let width = parseInt(props.dimensions.width, 10)
@@ -381,7 +381,7 @@ export default class Item extends Component {
   }
 
   canResizeRight(props = this.props) {
-    if (!props.canResizeRight || props.dimensions.clippedRight) {
+    if (!props.canResizeRight) {
       return false
     }
     let width = parseInt(props.dimensions.width, 10)
@@ -510,9 +510,7 @@ export default class Item extends Component {
         : '') +
       (this.canResizeLeft(this.props) ? ' can-resize-left' : '') +
       (this.canResizeRight(this.props) ? ' can-resize-right' : '') +
-      (this.props.item.className ? ` ${this.props.item.className}` : '') +
-      (dimensions.clippedLeft ? ' clipped-left' : '') +
-      (dimensions.clippedRight ? ' clipped-right' : '')
+      (this.props.item.className ? ` ${this.props.item.className}` : '')
 
     const style = {
       left: `${dimensions.left}px`,
