@@ -3,7 +3,7 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const nodeEnv = process.env.NODE_ENV || 'development'
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8888
 
 const isProd = nodeEnv === 'production'
 
@@ -11,20 +11,14 @@ const config = {
   devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
   context: path.join(__dirname, './demo'),
   entry: {
-    vendor: [
-      'react',
-      'react-dom',
-      'faker',
-      'interact.js',
-      'moment'
-    ],
-    demo: isProd ? [
-      './index.js'
-    ] : [
-      `webpack-dev-server/client?http://0.0.0.0:${port}`,
-      'webpack/hot/only-dev-server',
-      './index.js'
-    ]
+    vendor: ['react', 'react-dom', 'faker', 'interact.js', 'moment'],
+    demo: isProd
+      ? ['./index.js']
+      : [
+          `webpack-dev-server/client?http://0.0.0.0:${port}`,
+          'webpack/hot/only-dev-server',
+          './index.js'
+        ]
   },
   output: {
     path: path.join(__dirname, './build'),
@@ -36,11 +30,15 @@ const config = {
     loaders: [
       {
         test: /\.css$/,
-        loader: isProd ? ExtractTextPlugin.extract('style-loader', 'css-loader') : 'style!css'
+        loader: isProd
+          ? ExtractTextPlugin.extract('style-loader', 'css-loader')
+          : 'style!css'
       },
       {
         test: /\.scss$/,
-        loader: isProd ? ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader') : 'style!css!sass'
+        loader: isProd
+          ? ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+          : 'style!css!sass'
       },
       {
         test: /\.(html|png|jpg|gif|jpeg|svg)$/,
@@ -52,18 +50,13 @@ const config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loaders: [
-          'babel-loader'
-        ]
+        loaders: ['babel-loader']
       }
     ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    modules: [
-      path.resolve('./demo'),
-      'node_modules'
-    ],
+    modules: [path.resolve('./demo'), 'node_modules'],
     alias: {
       '~': path.join(__dirname, './demo'),
       'react-calendar-timeline': path.join(__dirname, './src')
