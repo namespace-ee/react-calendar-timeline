@@ -542,9 +542,16 @@ export default class Item extends Component {
         ) : (
           ''
         )}
-        <div className="rct-item-overflow">
-          <div className="rct-item-content">{this.renderContent()}</div>
+
+        <div
+          className="rct-item-content"
+          style={{
+            maxWidth: `${dimensions.width}px`
+          }}
+        >
+          {this.renderContent()}
         </div>
+
         {this.props.useResizeHandle ? (
           <div ref={el => (this.dragRight = el)} className="rct-drag-right" />
         ) : (
