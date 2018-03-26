@@ -151,16 +151,6 @@ How does the header (the scrolling part with dates) behave if not all of the gro
 If fixedHeader is `sticky`, at what height from the top of the screen should we start floating it? This is useful if for example you already have
 a sticky navbar. Defaults `0`.
 
-### fullUpdate
-If your calendar has large items compared to the zoom level (e.g. multi week events when viewing one day at a time), set this to `true` (default).
-
-If you have many small events compared to the zoom level (e.g. hundreds of 30min events and viewing one week at a time), set this to `false`.
-
-When set to `true` we update the dimensions of the items on every scroll event. This looks nicer, as 1) item labels
-are always fully on the screen, even if the start or end of the items is off screen, 2) item stacking also reflects what's on the screen.
-
-When set to `false`, we update the dimensions of the items only when the [scrolling canvas](https://github.com/namespace-ee/react-calendar-timeline#behind-the-scenes) updates. This makes scrolling much faster, but labels can go off screen.
-
 ### lineHeight
 Height of one line in the calendar in pixels. Default `30`
 

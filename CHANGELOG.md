@@ -7,7 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-When you submit a PR, add your changes here!
+### Added
+
+* removed `fullUpdate` prop and functionality. Labels rely on `position: sticky` to show for items that start before `visibleTimeStart`. This (should) greatly improves scroll performance.
 
 ## 0.15.9
 
