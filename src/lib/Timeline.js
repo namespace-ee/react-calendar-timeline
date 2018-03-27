@@ -45,7 +45,6 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: PropTypes.number,
     fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     stickyOffset: PropTypes.number,
-    fullUpdate: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
@@ -171,7 +170,6 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: 20,
     fixedHeader: 'sticky', // fixed or sticky or none
     stickyOffset: 0,
-    fullUpdate: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
     headerLabelHeight: 30,
@@ -489,7 +487,6 @@ export default class ReactCalendarTimeline extends Component {
     const newZoom = visibleTimeEnd - visibleTimeStart
     const items = updatedItems || this.props.items
     const groups = updatedGroups || this.props.groups
-    const { fullUpdate } = this.props
 
     let newState = {
       visibleTimeStart: visibleTimeStart,
@@ -530,7 +527,7 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    if (resetCanvas || forceUpdateDimensions || fullUpdate) {
+    if (resetCanvas || forceUpdateDimensions) {
       const canvasTimeStart = newState.canvasTimeStart
         ? newState.canvasTimeStart
         : oldCanvasTimeStart
@@ -545,8 +542,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart,
         visibleTimeStart,
         visibleTimeEnd,
-        this.state.width,
-        fullUpdate
+        this.state.width
       )
       newState.dimensionItems = dimensionItems
       newState.height = height
@@ -1057,7 +1053,6 @@ export default class ReactCalendarTimeline extends Component {
       headerLabelGroupHeight,
       headerLabelHeight,
       stackItems,
-      fullUpdate,
       itemHeightRatio
     } = this.props
     const {
@@ -1097,10 +1092,7 @@ export default class ReactCalendarTimeline extends Component {
         dragSnap,
         dragTime,
         resizingEdge,
-        resizeTime,
-        fullUpdate,
-        visibleTimeStart,
-        visibleTimeEnd
+        resizeTime
       })
 
       if (dimension) {
