@@ -158,7 +158,6 @@ export default class App extends Component {
         items={items}
         keys={keys}
         fixedHeader="fixed"
-        fullUpdate
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}
         // rightSidebarWidth={150}
