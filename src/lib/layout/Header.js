@@ -12,8 +12,8 @@ export default class Header extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     lineHeight: PropTypes.number.isRequired,
-    visibleTimeStart: PropTypes.number.isRequired,
-    visibleTimeEnd: PropTypes.number.isRequired,
+    // visibleTimeStart: PropTypes.number.isRequired,
+    // visibleTimeEnd: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
@@ -23,7 +23,8 @@ export default class Header extends Component {
     stickyOffset: PropTypes.number.isRequired,
     headerPosition: PropTypes.oneOf(['top', 'bottom', 'fixed']),
     headerLabelGroupHeight: PropTypes.number.isRequired,
-    headerLabelHeight: PropTypes.number.isRequired
+    headerLabelHeight: PropTypes.number.isRequired,
+    registerScroll: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -34,6 +35,12 @@ export default class Header extends Component {
 
   constructor(props) {
     super(props)
+
+    props.registerScroll(scrollX => {
+      if (scrollX != null) {
+        this.headerEl.scrollLeft = scrollX
+      }
+    })
     this.state = {
       touchTarget: null,
       touchActive: false
@@ -141,15 +148,24 @@ export default class Header extends Component {
     })
   }
 
+  shouldComponentUpdate(nextProps) {
+    const willUpate =
+      nextProps.canvasTimeStart != this.props.canvasTimeStart ||
+      nextProps.canvasTimeEnd != this.props.canvasTimeEnd ||
+      nextProps.width != this.props.width ||
+      nextProps.canvasWidth != this.props.canvasWidth
+
+    return willUpate
+  }
+
   render() {
-    let timeLabels = []
     const {
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
       lineHeight,
-      visibleTimeStart,
-      visibleTimeEnd,
+      // visibleTimeStart,
+      // visibleTimeEnd,
       minUnit,
       timeSteps,
       fixedHeader,
@@ -164,36 +180,42 @@ export default class Header extends Component {
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
 
-    const correctLeftPositions =
-      fixedHeader === 'fixed' ||
-      (fixedHeader === 'sticky' && headerPosition === 'fixed')
+    // const correctLeftPositions =
+    //   fixedHeader === 'fixed' ||
+    //   (fixedHeader === 'sticky' && headerPosition === 'fixed')
 
+    const topHeaderLabels = []
     // add the top header
     if (twoHeaders) {
       const nextUnit = getNextUnit(minUnit)
 
       iterateTimes(
-        visibleTimeStart,
-        visibleTimeEnd,
+        canvasTimeStart,
+        canvasTimeEnd,
         nextUnit,
         timeSteps,
         (time, nextTime) => {
-          const startTime = Math.max(visibleTimeStart, time.valueOf())
-          const endTime = Math.min(visibleTimeEnd, nextTime.valueOf())
-          const left = Math.round(
-            (startTime.valueOf() - canvasTimeStart) * ratio,
-            -2
-          )
+          // const startTime = Math.max(visibleTimeStart, time.valueOf())
+          // const endTime = Math.min(visibleTimeEnd, nextTime.valueOf())
+          // const left = Math.round(
+          //   (startTime.valueOf() - canvasTimeStart) * ratio,
+          //   -2
+          // )
+          // const right = Math.round(
+          //   (endTime.valueOf() - canvasTimeStart) * ratio,
+          //   -2
+          // )
+          const left = Math.round((time.valueOf() - canvasTimeStart) * ratio)
           const right = Math.round(
-            (endTime.valueOf() - canvasTimeStart) * ratio,
-            -2
+            (nextTime.valueOf() - canvasTimeStart) * ratio
           )
-          const labelWidth = right - left
-          const leftCorrect = correctLeftPositions
-            ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1
-            : 0
 
-          timeLabels.push(
+          const labelWidth = right - left
+          // const leftCorrect = correctLeftPositions
+          //   ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) - 1
+          //   : 0
+
+          topHeaderLabels.push(
             <div
               key={`top-label-${time.valueOf()}`}
               className={`rct-label-group${
@@ -202,7 +224,7 @@ export default class Header extends Component {
               data-time={time}
               data-unit={nextUnit}
               style={{
-                left: `${left + leftCorrect}px`,
+                left: `${left - 1}px`,
                 width: `${labelWidth}px`,
                 height: `${headerLabelGroupHeight}px`,
                 lineHeight: `${headerLabelGroupHeight}px`,
@@ -216,27 +238,27 @@ export default class Header extends Component {
       )
     }
 
+    const bottomHeaderLabels = []
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
       minUnit,
       timeSteps,
       (time, nextTime) => {
-        const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
+        const left = Math.round((time.valueOf() - canvasTimeStart) * ratio)
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
         const labelWidth = Math.round(
-          (nextTime.valueOf() - time.valueOf()) * ratio,
-          -2
+          (nextTime.valueOf() - time.valueOf()) * ratio
         )
-        const borderWidth = firstOfType ? 2 : 1
-        const leftCorrect = correctLeftPositions
-          ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) -
-            borderWidth +
-            1
-          : 0
+        const leftCorrect = firstOfType ? 1 : 0
+        // const leftCorrect = correctLeftPositions
+        //   ? Math.round((canvasTimeStart - visibleTimeStart) * ratio) -
+        //     borderWidth +
+        //     1
+        //   : 0
 
-        timeLabels.push(
+        bottomHeaderLabels.push(
           <div
             key={`label-${time.valueOf()}`}
             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
@@ -245,8 +267,8 @@ export default class Header extends Component {
             data-time={time}
             data-unit={minUnit}
             style={{
-              top: `${minUnit === 'year' ? 0 : headerLabelGroupHeight}px`,
-              left: `${left + leftCorrect}px`,
+              // top: `${minUnit === 'year' ? 0 : headerLabelGroupHeight}px`,
+              left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,
               height: `${
                 minUnit === 'year'
@@ -302,8 +324,20 @@ export default class Header extends Component {
         onTouchEnd={this.touchEnd}
         onClick={this.periodClick}
         style={headerStyle}
+        ref={el => (this.headerEl = el)}
       >
-        {timeLabels}
+        <div
+          className="top-header"
+          style={{ height: headerLabelGroupHeight, width: canvasWidth }}
+        >
+          {topHeaderLabels}
+        </div>
+        <div
+          className="bottom-header"
+          style={{ height: headerLabelHeight, width: canvasWidth }}
+        >
+          {bottomHeaderLabels}
+        </div>
       </div>
     )
   }

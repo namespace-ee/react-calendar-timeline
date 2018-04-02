@@ -426,6 +426,10 @@ export default class ReactCalendarTimeline extends Component {
         this.updateScrollCanvas
       )
     }
+
+    this.setState({
+      currentScrollLeft: scrollX
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -984,8 +988,17 @@ export default class ReactCalendarTimeline extends Component {
         showPeriod={this.showPeriod}
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
+        registerScroll={this.registerScrollListener}
       />
     )
+  }
+
+  componentDidUpdate() {
+    this.headerScrollListener(this.state.currentScrollLeft)
+  }
+
+  registerScrollListener = listener => {
+    this.headerScrollListener = listener
   }
 
   sidebar(height, groupHeights, headerHeight) {

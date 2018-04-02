@@ -124,6 +124,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     overflow-x: hidden;
     z-index: 90;
 
+    .top-header,
+    .bottom-header {
+      position: relative;
+    }
+
     .rct-label-group {
       position: absolute;
       top: 0;
