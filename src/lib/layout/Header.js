@@ -153,7 +153,8 @@ export default class Header extends Component {
       nextProps.canvasTimeStart != this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd != this.props.canvasTimeEnd ||
       nextProps.width != this.props.width ||
-      nextProps.canvasWidth != this.props.canvasWidth
+      nextProps.canvasWidth != this.props.canvasWidth ||
+      nextProps.headerPosition != this.props.headerPosition
 
     return willUpate
   }
@@ -164,8 +165,6 @@ export default class Header extends Component {
       canvasTimeEnd,
       canvasWidth,
       lineHeight,
-      // visibleTimeStart,
-      // visibleTimeEnd,
       minUnit,
       timeSteps,
       fixedHeader,
