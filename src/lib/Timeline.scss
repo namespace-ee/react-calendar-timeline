@@ -130,10 +130,10 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
 
     .rct-label-group {
+      padding: 0 5px;
       position: absolute;
       top: 0;
       font-size: 14px;
-      overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $thick-border-width solid $border-color;
@@ -145,11 +145,17 @@ $weekend: rgba(250, 246, 225, 0.5);
         border-right: ($thick-border-width / 2) solid $border-color;
         border-left: ($thick-border-width / 2) solid $border-color;
       }
+
+      & > span {
+        position: sticky;
+        left: 5px;
+        right: 5px;
+      }
     }
 
     .rct-label {
       position: absolute;
-      overflow: hidden;
+      // overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $border-width solid $border-color;

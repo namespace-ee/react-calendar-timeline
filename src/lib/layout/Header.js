@@ -231,7 +231,7 @@ export default class Header extends Component {
                 cursor: 'pointer'
               }}
             >
-              {this.headerLabel(time, nextUnit, labelWidth)}
+              <span>{this.headerLabel(time, nextUnit, labelWidth)}</span>
             </div>
           )
         }
