@@ -4,7 +4,6 @@ import TimelineElementsHeader from './TimelineElementsHeader'
 
 class Header extends Component {
   static propTypes = {
-    // header props
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
@@ -31,15 +30,6 @@ class Header extends Component {
       width,
       stickyOffset
     } = this.props
-    const leftSidebarHeaderDiv = (
-      <div className="rct-sidebar-header">{leftSidebarHeader}</div>
-    )
-
-    const rightSidebarHeaderDiv = (
-      <div className="rct-sidebar-header rct-sidebar-right">
-        {rightSidebarHeader}
-      </div>
-    )
 
     const headerStyle = {
       display: 'flex',
@@ -50,11 +40,11 @@ class Header extends Component {
 
     return (
       <div style={headerStyle}>
-        {leftSidebarHeaderDiv}
+        {leftSidebarHeader}
         <div style={{ width }}>
           <TimelineElementsHeader {...this.props} />
         </div>
-        {rightSidebarHeaderDiv}
+        {rightSidebarHeader}
       </div>
     )
   }

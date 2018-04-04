@@ -945,17 +945,26 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight,
     headerLabelHeight
   ) {
-    const leftSidebar = (
-      <div style={{ width: this.props.sidebarWidth }}>
-        {this.props.sidebarContent}
-      </div>
-    )
+    const { sidebarWidth, rightSidebarWidth } = this.props
+    const leftSidebar = sidebarWidth != null &&
+      sidebarWidth > 0 && (
+        <div
+          className="rct-sidebar-header"
+          style={{ width: this.props.sidebarWidth }}
+        >
+          {this.props.sidebarContent}
+        </div>
+      )
 
-    const rightSidebar = (
-      <div style={{ width: this.props.rightSidebarWidth }}>
-        {this.props.rightSidebarContent}
-      </div>
-    )
+    const rightSidebar = rightSidebarWidth != null &&
+      rightSidebarWidth > 0 && (
+        <div
+          className="rct-sidebar-header rct-sidebar-right"
+          style={{ width: this.props.rightSidebarWidth }}
+        >
+          {this.props.rightSidebarContent}
+        </div>
+      )
 
     return (
       <Header
@@ -992,30 +1001,39 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   sidebar(height, groupHeights) {
+    const { sidebarWidth } = this.props
     return (
-      <Sidebar
-        groups={this.props.groups}
-        groupRenderer={this.props.groupRenderer}
-        keys={this.props.keys}
-        width={this.props.sidebarWidth}
-        lineHeight={this.props.lineHeight}
-        groupHeights={groupHeights}
-        height={height}
-      />
+      sidebarWidth != null &&
+      sidebarWidth > 0 && (
+        <Sidebar
+          groups={this.props.groups}
+          groupRenderer={this.props.groupRenderer}
+          keys={this.props.keys}
+          width={this.props.sidebarWidth}
+          lineHeight={this.props.lineHeight}
+          groupHeights={groupHeights}
+          height={height}
+        />
+      )
     )
   }
 
   rightSidebar(height, groupHeights) {
+    const { rightSidebarWidth } = this.props
+
     return (
-      <Sidebar
-        groups={this.props.groups}
-        keys={this.props.keys}
-        isRightSidebar
-        width={this.props.rightSidebarWidth}
-        lineHeight={this.props.lineHeight}
-        groupHeights={groupHeights}
-        height={height}
-      />
+      rightSidebarWidth != null &&
+      rightSidebarWidth > 0 && (
+        <Sidebar
+          groups={this.props.groups}
+          keys={this.props.keys}
+          isRightSidebar
+          width={this.props.rightSidebarWidth}
+          lineHeight={this.props.lineHeight}
+          groupHeights={groupHeights}
+          height={height}
+        />
+      )
     )
   }
 
