@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { sel, noop } from '../../../test-utility'
-import Header from '../../../layout/Header'
+import TimelineElementsHeader from '../../../layout/TimelineElementsHeader'
 
 const defaultProps = {
   hasRightSidebar: false,
@@ -10,27 +10,26 @@ const defaultProps = {
   canvasTimeEnd: 0,
   canvasWidth: 0,
   lineHeight: 0,
-  visibleTimeStart: 0,
-  visibleTimeEnd: 0,
   minUnit: 'day',
   timeSteps: {},
   width: 0,
   headerLabelFormats: {},
   subHeaderLabelFormats: {},
   headerLabelGroupHeight: 0,
-  headerLabelHeight: 0
+  headerLabelHeight: 0,
+  registerScroll: () => {}
 }
 
 describe('Header', () => {
   it('renders', () => {
-    mount(<Header {...defaultProps} />)
+    mount(<TimelineElementsHeader {...defaultProps} />)
   })
 
   it('prevents mouse down from bubbling', () => {
     const mouseDownMock = jest.fn()
     const wrapper = mount(
       <div onMouseDown={mouseDownMock}>
-        <Header {...defaultProps} />
+        <TimelineElementsHeader {...defaultProps} />
       </div>
     )
 
