@@ -8,7 +8,6 @@ export default class TodayLine extends Component {
     canvasWidth: PropTypes.number.isRequired,
     lineHeight: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
-    headerHeight: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }
 
@@ -28,10 +27,9 @@ export default class TodayLine extends Component {
       const left = Math.round(
         (currentTime - this.props.canvasTimeStart) * ratio
       )
-      const top = this.props.headerHeight
-      const height = this.props.height - this.props.headerHeight
+      const height = this.props.height
       const styles = {
-        top: `${top}px`,
+        top: '0px',
         left: `${left}px`,
         height: `${height}px`
       }

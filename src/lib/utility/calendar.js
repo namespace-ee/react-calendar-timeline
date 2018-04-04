@@ -218,9 +218,9 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
-export function stack(items, groupOrders, lineHeight, headerHeight, force) {
+export function stack(items, groupOrders, lineHeight, force) {
   var i, iMax
-  var totalHeight = headerHeight
+  var totalHeight = 0
 
   var groupHeights = []
   var groupTops = []
@@ -286,10 +286,10 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
   }
 }
 
-export function nostack(items, groupOrders, lineHeight, headerHeight, force) {
+export function nostack(items, groupOrders, lineHeight, force) {
   var i, iMax
 
-  var totalHeight = headerHeight
+  var totalHeight = 0
 
   var groupHeights = []
   var groupTops = []
