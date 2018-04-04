@@ -119,6 +119,13 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
   }
 
+  .rct-header-container {
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 90;
+    display: flex;
+  }
+
   .rct-header {
     margin: 0;
     overflow-x: hidden;

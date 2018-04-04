@@ -32,14 +32,11 @@ class Header extends Component {
     } = this.props
 
     const headerStyle = {
-      display: 'flex',
-      zIndex: 100, //TODO: get a hold of zindex yall
-      position: 'sticky',
       top: stickyOffset || 0
     }
 
     return (
-      <div style={headerStyle}>
+      <div className="rct-header-container" style={headerStyle}>
         {leftSidebarHeader}
         <div style={{ width }}>
           <TimelineElementsHeader {...this.props} />
