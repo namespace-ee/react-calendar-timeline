@@ -967,6 +967,18 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight,
     headerLabelHeight
   ) {
+    const leftSidebar = (
+      <div style={{ width: this.props.sidebarWidth }}>
+        {this.props.sidebarContent}
+      </div>
+    )
+
+    const rightSidebar = (
+      <div style={{ width: this.props.rightSidebarWidth }}>
+        {this.props.rightSidebarContent}
+      </div>
+    )
+
     return (
       <Header
         canvasTimeStart={canvasTimeStart}
@@ -989,6 +1001,8 @@ export default class ReactCalendarTimeline extends Component {
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
         registerScroll={this.registerScrollListener}
+        leftSidebarHeader={leftSidebar}
+        rightSidebarHeader={rightSidebar}
       />
     )
   }
@@ -1015,9 +1029,7 @@ export default class ReactCalendarTimeline extends Component {
         headerPosition={this.state.headerPosition}
         stickyOffset={this.props.stickyOffset}
         fixedHeader={this.props.fixedHeader}
-      >
-        {this.props.sidebarContent}
-      </Sidebar>
+      />
     )
   }
 
@@ -1035,9 +1047,7 @@ export default class ReactCalendarTimeline extends Component {
         headerPosition={this.state.headerPosition}
         stickyOffset={this.props.stickyOffset}
         fixedHeader={this.props.fixedHeader}
-      >
-        {this.props.rightSidebarContent}
-      </Sidebar>
+      />
     )
   }
 
@@ -1343,6 +1353,16 @@ export default class ReactCalendarTimeline extends Component {
         ref={el => (this.container = el)}
         className="react-calendar-timeline"
       >
+        {this.header(
+          canvasTimeStart,
+          zoom,
+          canvasTimeEnd,
+          canvasWidth,
+          minUnit,
+          timeSteps,
+          headerLabelGroupHeight,
+          headerLabelHeight
+        )}
         <div style={outerComponentStyle} className="rct-outer">
           {sidebarWidth > 0
             ? this.sidebar(height, groupHeights, headerHeight)
@@ -1397,16 +1417,6 @@ export default class ReactCalendarTimeline extends Component {
                 minUnit,
                 height,
                 headerHeight
-              )}
-              {this.header(
-                canvasTimeStart,
-                zoom,
-                canvasTimeEnd,
-                canvasWidth,
-                minUnit,
-                timeSteps,
-                headerLabelGroupHeight,
-                headerLabelHeight
               )}
               {mouseOverCanvas && showCursorLine
                 ? this.cursorLine(
