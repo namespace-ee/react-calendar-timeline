@@ -94,7 +94,6 @@ export default class App extends Component {
         groups={newGroups}
         items={items}
         keys={keys}
-        fixedHeader="fixed"
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}
         rightSidebarWidth={150}

@@ -43,7 +43,6 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarContent: PropTypes.node,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     stickyOffset: PropTypes.number,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
@@ -168,7 +167,6 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
-    fixedHeader: 'sticky', // fixed or sticky or none
     stickyOffset: 0,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
@@ -857,7 +855,6 @@ export default class ReactCalendarTimeline extends Component {
         lineCount={_length(this.props.groups)}
         minUnit={minUnit}
         timeSteps={timeSteps}
-        fixedHeader={this.props.fixedHeader}
         height={height}
         headerHeight={headerHeight}
       />

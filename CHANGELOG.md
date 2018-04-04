@@ -12,6 +12,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 * removed `fullUpdate` prop and functionality. Labels rely on `position: sticky` to show for items that start before `visibleTimeStart`. This (should) greatly improve scroll performance.
 * removed extraneous css such as `text-align: center` on `.rct-item`, `.rct-item-overflow` to simplify the dom structure of `Item.js`
 
+### Breaking
+
+* removed `fixedHeader` prop in favor of using `position: sticky` by default
+
 ## 0.15.9
 
 ### Fixed

@@ -69,7 +69,6 @@ export default class App extends Component {
         groups={groups1}
         items={items1}
         keys={keys}
-        fixedHeader="fixed"
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}
         canMove
@@ -94,7 +93,6 @@ export default class App extends Component {
         groups={groups2}
         items={items2}
         keys={keys}
-        fixedHeader="fixed"
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}
         canMove
