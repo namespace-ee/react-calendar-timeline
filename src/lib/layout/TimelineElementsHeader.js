@@ -94,8 +94,7 @@ export default class Header extends Component {
     }
   }
 
-  periodClick = e => {
-    const { time, unit } = e.target.dataset
+  handlePeriodClick = (time, unit) => {
     if (time && unit) {
       this.props.showPeriod(moment(time - 0), unit)
     }
@@ -187,8 +186,7 @@ export default class Header extends Component {
               className={`rct-label-group${
                 hasRightSidebar ? ' rct-has-right-sidebar' : ''
               }`}
-              data-time={time}
-              data-unit={nextUnit}
+              onClick={() => this.handlePeriodClick(time, nextUnit)}
               style={{
                 left: `${left - 1}px`,
                 width: `${labelWidth}px`,
@@ -225,8 +223,7 @@ export default class Header extends Component {
             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
               firstOfType ? 'rct-first-of-type' : ''
             } ${minUnit !== 'month' ? `rct-day-${time.day()}` : ''} `}
-            data-time={time}
-            data-unit={minUnit}
+            onClick={() => this.handlePeriodClick(time, minUnit)}
             style={{
               left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,
@@ -265,7 +262,6 @@ export default class Header extends Component {
         onMouseDown={this.handleHeaderMouseDown}
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
-        onClick={this.periodClick}
         style={headerStyle}
         ref={el => (this.headerEl = el)}
       >
