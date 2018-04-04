@@ -11,16 +11,7 @@ export default class Sidebar extends Component {
     groupHeights: PropTypes.array.isRequired,
     keys: PropTypes.object.isRequired,
     groupRenderer: PropTypes.func,
-    children: PropTypes.node,
     isRightSidebar: PropTypes.bool
-  }
-
-  static defaultProps = {
-    fixedHeader: 'sticky',
-    stickyOffset: 0,
-    headerPosition: 'top',
-    children: null,
-    isRightSidebar: false
   }
 
   shouldComponentUpdate(nextProps) {

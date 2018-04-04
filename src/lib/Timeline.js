@@ -302,8 +302,6 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
 
-      headerPosition: 'top',
-
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
@@ -341,8 +339,6 @@ export default class ReactCalendarTimeline extends Component {
     windowResizeDetector.addListener(this)
 
     this.lastTouchDistance = null
-
-    window.addEventListener('scroll', this.scrollEventListener)
   }
 
   componentWillUnmount() {
@@ -351,24 +347,6 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     windowResizeDetector.removeListener(this)
-
-    window.removeEventListener('scroll', this.scrollEventListener)
-  }
-
-  // called on window scroll. it's job is to figure out if we should fix or float the header
-  scrollEventListener = () => {
-    const { headerLabelGroupHeight, headerLabelHeight } = this.props
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
-
-    const rect = this.container.getBoundingClientRect()
-
-    if (rect.top > this.props.stickyOffset) {
-      this.setState({ headerPosition: 'top' })
-    } else if (rect.bottom < headerHeight + this.props.stickyOffset) {
-      this.setState({ headerPosition: 'bottom' })
-    } else {
-      this.setState({ headerPosition: 'fixed' })
-    }
   }
 
   resize = (props = this.props) => {
@@ -994,8 +972,6 @@ export default class ReactCalendarTimeline extends Component {
         zoom={zoom}
         visibleTimeStart={this.state.visibleTimeStart}
         visibleTimeEnd={this.state.visibleTimeEnd}
-        headerPosition={this.state.headerPosition}
-        fixedHeader={this.props.fixedHeader}
         stickyOffset={this.props.stickyOffset}
         showPeriod={this.showPeriod}
         headerLabelFormats={this.props.headerLabelFormats}
@@ -1015,7 +991,7 @@ export default class ReactCalendarTimeline extends Component {
     this.headerScrollListener = listener
   }
 
-  sidebar(height, groupHeights, headerHeight) {
+  sidebar(height, groupHeights) {
     return (
       <Sidebar
         groups={this.props.groups}
@@ -1025,15 +1001,11 @@ export default class ReactCalendarTimeline extends Component {
         lineHeight={this.props.lineHeight}
         groupHeights={groupHeights}
         height={height}
-        headerHeight={headerHeight}
-        headerPosition={this.state.headerPosition}
-        stickyOffset={this.props.stickyOffset}
-        fixedHeader={this.props.fixedHeader}
       />
     )
   }
 
-  rightSidebar(height, groupHeights, headerHeight) {
+  rightSidebar(height, groupHeights) {
     return (
       <Sidebar
         groups={this.props.groups}
@@ -1043,10 +1015,6 @@ export default class ReactCalendarTimeline extends Component {
         lineHeight={this.props.lineHeight}
         groupHeights={groupHeights}
         height={height}
-        headerHeight={headerHeight}
-        headerPosition={this.state.headerPosition}
-        stickyOffset={this.props.stickyOffset}
-        fixedHeader={this.props.fixedHeader}
       />
     )
   }
@@ -1364,9 +1332,7 @@ export default class ReactCalendarTimeline extends Component {
           headerLabelHeight
         )}
         <div style={outerComponentStyle} className="rct-outer">
-          {sidebarWidth > 0
-            ? this.sidebar(height, groupHeights, headerHeight)
-            : null}
+          {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
           <ScrollElement
             scrollRef={el => (this.scrollComponent = el)}
             width={width}
@@ -1448,7 +1414,7 @@ export default class ReactCalendarTimeline extends Component {
             </div>
           </ScrollElement>
           {rightSidebarWidth > 0
-            ? this.rightSidebar(height, groupHeights, headerHeight)
+            ? this.rightSidebar(height, groupHeights)
             : null}
         </div>
       </div>
