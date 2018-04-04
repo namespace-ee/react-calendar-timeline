@@ -37,4 +37,43 @@ describe('Header', () => {
 
     expect(mouseDownMock).not.toHaveBeenCalled()
   })
+
+  describe('scroll sync', () => {
+    it('call to registerScroll listener updates scrollLeft of root element', () => {
+      const registerScrollMock = jest.fn()
+      const props = {
+        ...defaultProps,
+        registerScroll: registerScrollMock
+      }
+
+      const wrapper = mount(<TimelineElementsHeader {...props} />)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(0)
+
+      const scrollListener = registerScrollMock.mock.calls[0][0]
+
+      const scrollX = 100
+
+      scrollListener(scrollX)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(scrollX)
+    })
+    it('scrollLeft is not set if scrollX is null', () => {
+      const registerScrollMock = jest.fn()
+      const props = {
+        ...defaultProps,
+        registerScroll: registerScrollMock
+      }
+
+      const wrapper = mount(<TimelineElementsHeader {...props} />)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(0)
+
+      const scrollListener = registerScrollMock.mock.calls[0][0]
+
+      scrollListener(undefined)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(0)
+    })
+  })
 })
