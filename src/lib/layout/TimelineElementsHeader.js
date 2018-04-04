@@ -109,6 +109,8 @@ export default class Header extends Component {
     }
   }
 
+  // TODO: this is broken on touch devices as period click expects
+  // time and unit.
   touchEnd = e => {
     if (!this.state.touchActive) {
       return this.resetTouchState()
