@@ -183,11 +183,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     box-sizing: border-box;
     border-bottom: $border-width solid $border-color;
     overflow: hidden;
-  }
 
-  &.rct-sidebar-right {
-    border-right: 0;
-    border-left: $border-width solid $border-color;
+    &.rct-sidebar-right {
+      border-right: 0;
+      border-left: $border-width solid $border-color;
+    }
   }
 
   .rct-sidebar {
@@ -198,6 +198,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: relative;
     box-sizing: border-box;
     border-right: $border-width solid $border-color;
+
+    &.rct-sidebar-right {
+      border-right: 0;
+      border-left: $border-width solid $border-color;
+    }
 
     .rct-sidebar-row {
       padding: $list-item-padding;
