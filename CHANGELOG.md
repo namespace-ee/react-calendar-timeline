@@ -9,6 +9,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 When you submit a PR, add your changes here!
 
+### Fixed
+
+* fix issue with time report with onItem\* callbacks for browsers that don't support `x` property in rect object - #266
+
 ## 0.15.9
 
 ### Fixed

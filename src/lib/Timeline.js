@@ -883,7 +883,7 @@ export default class ReactCalendarTimeline extends Component {
     const { dragSnap } = this.props
 
     const scrollComponent = this.scrollComponent
-    const { x: scrollX } = scrollComponent.getBoundingClientRect()
+    const { left: scrollX } = scrollComponent.getBoundingClientRect()
 
     const xRelativeToTimeline = e.clientX - scrollX
 
