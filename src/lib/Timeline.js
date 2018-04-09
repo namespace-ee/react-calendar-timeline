@@ -586,7 +586,8 @@ export default class ReactCalendarTimeline extends Component {
       sidebarWidth
     } = nextProps
     if (scrollableContainer !== this.props.scrollableContainer) {
-      throw new Error('scrollableContainer update is not implemented')
+      this.props.scrollableContainer.removeEventListener('scroll', this.scrollEventListener)
+      scrollableContainer.addEventListener('scroll', this.scrollEventListener)
     }
 
     if (visibleTimeStart && visibleTimeEnd) {

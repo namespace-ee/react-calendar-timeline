@@ -154,6 +154,28 @@ a sticky navbar. Defaults `0`.
 ### scrollableContainer
 Pass DOM node here if you want to use `fixedHeader="sticky"` inside element with `overflow: auto`. Default is `window`.
 
+```
+class TimelineView {
+  _catchScrollableRef = (ref) => {
+    this.setState({scrollableContainer: ReactDOM.findDOMNode(ref)});
+  };
+  render() {
+    return (
+      <div
+        style={{padding: 20, paddingTop: 0, height: '600px', overflow: 'scroll'}}
+        ref={this._catchScrollableRef}
+      >
+        <Timeline
+          scrollableContainer={this.state.scrollableContainer}
+          ...
+        />
+      </div>
+    );
+  }
+}
+
+```
+
 ### fullUpdate
 If your calendar has large items compared to the zoom level (e.g. multi week events when viewing one day at a time), set this to `true` (default).
 
