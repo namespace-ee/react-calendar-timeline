@@ -21,7 +21,8 @@ class Header extends Component {
     headerLabelHeight: PropTypes.number.isRequired,
     registerScroll: PropTypes.func.isRequired,
     leftSidebarHeader: PropTypes.node,
-    rightSidebarHeader: PropTypes.node
+    rightSidebarHeader: PropTypes.node,
+    headerRef: PropTypes.func.isRequired
   }
 
   render() {
@@ -30,7 +31,8 @@ class Header extends Component {
       rightSidebarHeader,
       width,
       stickyOffset,
-      stickyHeader
+      stickyHeader,
+      headerRef
     } = this.props
 
     const headerStyle = {
@@ -42,6 +44,7 @@ class Header extends Component {
     return (
       <div
         className={`rct-header-container ${headerClass}`}
+        ref={headerRef}
         style={headerStyle}
       >
         {leftSidebarHeader}
