@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { sel } from '../../../../lib/test-utility'
 import Header from '../../../layout/Header'
 
@@ -19,7 +19,8 @@ const defaultProps = {
   stickyHeader: true,
   headerLabelGroupHeight: 15,
   headerLabelHeight: 15,
-  registerScroll: () => {}
+  registerScroll: () => {},
+  headerRef: () => {}
 }
 
 const selectors = {
@@ -29,6 +30,23 @@ const selectors = {
 
 describe('Header', () => {
   describe('timeline-elements-header', () => {
+    it('accepts headerRef callback', () => {
+      const headerRefMock = jest.fn()
+
+      const props = {
+        ...defaultProps,
+        headerRef: headerRefMock
+      }
+
+      mount(<Header {...props} />)
+
+      expect(headerRefMock).toHaveBeenCalledTimes(1)
+
+      const mockCallParam = headerRefMock.mock.calls[0][0]
+
+      expect(mockCallParam.dataset.testId).toBe('timeline-elements-container')
+    })
+
     it('container recieves width property', () => {
       const props = {
         ...defaultProps,

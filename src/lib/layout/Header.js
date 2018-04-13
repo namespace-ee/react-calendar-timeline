@@ -44,6 +44,7 @@ class Header extends Component {
     return (
       <div
         className={`rct-header-container ${headerClass}`}
+        data-test-id="timeline-elements-container"
         ref={headerRef}
         style={headerStyle}
       >
