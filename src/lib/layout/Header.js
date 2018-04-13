@@ -15,7 +15,7 @@ class Header extends Component {
     width: PropTypes.number.isRequired,
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
-    stickyOffset: PropTypes.number.isRequired,
+    stickyOffset: PropTypes.number,
     stickyHeader: PropTypes.bool.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
@@ -45,8 +45,14 @@ class Header extends Component {
         style={headerStyle}
       >
         {leftSidebarHeader}
-        <div style={{ width }}>
-          <TimelineElementsHeader {...this.props} />
+        <div
+          style={{ width }}
+          data-test-id="timeline-elements-header-container"
+        >
+          <TimelineElementsHeader
+            data-test-id="timeline-elements-header"
+            {...this.props}
+          />
         </div>
         {rightSidebarHeader}
       </div>
