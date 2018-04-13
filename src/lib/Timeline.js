@@ -44,6 +44,7 @@ export default class ReactCalendarTimeline extends Component {
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
     stickyOffset: PropTypes.number,
+    stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
@@ -168,6 +169,7 @@ export default class ReactCalendarTimeline extends Component {
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
     stickyOffset: 0,
+    stickyHeader: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
     headerLabelHeight: 30,
@@ -979,6 +981,7 @@ export default class ReactCalendarTimeline extends Component {
         visibleTimeStart={this.state.visibleTimeStart}
         visibleTimeEnd={this.state.visibleTimeEnd}
         stickyOffset={this.props.stickyOffset}
+        stickyHeader={this.props.stickyHeader}
         showPeriod={this.showPeriod}
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}

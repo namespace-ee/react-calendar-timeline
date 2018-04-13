@@ -175,6 +175,10 @@ The minimum width, in pixels, of a timeline entry when it's possible to resize. 
 At what height from the top of the screen should we start "sticking" the header (i.e. position: sticky)? This is useful if for example you already have
 a sticky navbar and want to push the timeline header down further. Defaults `0`.
 
+### stickyHeader
+
+Specify whether you want the timeline header to be "sticky". Pass `false` if you want the header to fix at top of element and not fix when you scroll down the page. Defaults to `true`
+
 ### lineHeight
 
 Height of one line in the calendar in pixels. Default `30`

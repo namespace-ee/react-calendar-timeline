@@ -120,10 +120,13 @@ $weekend: rgba(250, 246, 225, 0.5);
   }
 
   .rct-header-container {
-    position: sticky;
-    position: -webkit-sticky;
     z-index: 90;
     display: flex;
+
+    &.header-sticky {
+      position: sticky;
+      position: -webkit-sticky;
+    }
   }
 
   .rct-header {

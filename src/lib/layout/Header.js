@@ -16,6 +16,7 @@ class Header extends Component {
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
     stickyOffset: PropTypes.number.isRequired,
+    stickyHeader: PropTypes.bool.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
     registerScroll: PropTypes.func.isRequired,
@@ -28,15 +29,21 @@ class Header extends Component {
       leftSidebarHeader,
       rightSidebarHeader,
       width,
-      stickyOffset
+      stickyOffset,
+      stickyHeader
     } = this.props
 
     const headerStyle = {
-      top: stickyOffset || 0
+      top: stickyHeader ? stickyOffset || 0 : 0
     }
 
+    const headerClass = stickyHeader ? 'header-sticky' : ''
+
     return (
-      <div className="rct-header-container" style={headerStyle}>
+      <div
+        className={`rct-header-container ${headerClass}`}
+        style={headerStyle}
+      >
         {leftSidebarHeader}
         <div style={{ width }}>
           <TimelineElementsHeader {...this.props} />
