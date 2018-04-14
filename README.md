@@ -561,7 +561,7 @@ You will then need to override the default CSS rule:
 
 ```css
 .react-calendar-timeline .rct-items .rct-item.analysis {
-  backgroundcolor: #68efad;
+  background-color: #68efad;
 }
 ```
 

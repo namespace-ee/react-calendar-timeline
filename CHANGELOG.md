@@ -18,6 +18,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * removed `fixedHeader` prop in favor of using `position: sticky` by default
 
+## 0.15.10
+
+### Fixed
+
+* fix issue with time report with onItem\* callbacks for browsers that don't support `x` property in rect object - #266
+
 ## 0.15.9
 
 ### Fixed
