@@ -6,14 +6,14 @@
   "module": "src/index.js",
   "scripts": {
     "build": "npm run build:lib",
-    "build:demo": "echo '!!! Building Demo' && BABEL_ENV=react node build.js production",
-    "build:lib": "echo '!!! Building Library' && ./node_modules/.bin/babel src --out-dir lib && ./node_modules/.bin/node-sass src/lib/Timeline.scss lib/lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
-    "jest": "node_modules/.bin/jest",
-    "jest:update": "node_modules/.bin/jest -u",
+    "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
+    "build:lib": "echo '!!! Building Library' && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
+    "jest": "jest",
+    "jest:update": "jest -u",
     "lint": "eslint --ext .js --ext .jsx ./src",
     "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
     "prepublish": "npm run build:lib",
-    "start": "./node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --display-modules",
+    "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "npm run build:lib && npm run jest && npm run lint"
   },
   "files": [
@@ -76,6 +76,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.5.0",
+    "cross-env": "^5.1.4",
     "css-loader": "~0.26.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-15": "^1.0.5",
