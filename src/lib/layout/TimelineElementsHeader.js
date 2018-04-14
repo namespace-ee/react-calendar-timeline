@@ -99,45 +99,7 @@ export default class Header extends Component {
       this.props.showPeriod(moment(time - 0), unit)
     }
   }
-
-  touchStart = e => {
-    if (e.touches.length === 1) {
-      this.setState({
-        touchTarget: e.target || e.touchTarget,
-        touchActive: true
-      })
-    }
-  }
-
-  // TODO: this is broken on touch devices as period click expects
-  // time and unit.
-  touchEnd = e => {
-    if (!this.state.touchActive) {
-      return this.resetTouchState()
-    }
-
-    var changedTouches = e.changedTouches[0]
-    if (changedTouches) {
-      var elem = document.elementFromPoint(
-        changedTouches.pageX,
-        changedTouches.pageY
-      )
-      if (elem !== this.state.touchTarget) {
-        return this.resetTouchState()
-      }
-    }
-
-    this.resetTouchState()
-    this.periodClick(e)
-  }
-
-  resetTouchState() {
-    this.setState({
-      touchTarget: null,
-      touchActive: false
-    })
-  }
-
+  
   shouldComponentUpdate(nextProps) {
     const willUpate =
       nextProps.canvasTimeStart != this.props.canvasTimeStart ||
