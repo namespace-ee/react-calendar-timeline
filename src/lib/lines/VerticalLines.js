@@ -12,14 +12,7 @@ export default class VerticalLines extends Component {
     lineCount: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
-    fixedHeader: PropTypes.string.isRequired,
-    height: PropTypes.number.isRequired,
-    headerHeight: PropTypes.number.isRequired
-  }
-
-  static defaultProps = {
-    fixedHeader: 'sticky',
-    dayBackground: null
+    height: PropTypes.number.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
@@ -31,9 +24,7 @@ export default class VerticalLines extends Component {
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
-      nextProps.fixedHeader === this.props.fixedHeader &&
-      nextProps.height === this.props.height &&
-      nextProps.headerHeight === this.props.headerHeight
+      nextProps.height === this.props.height
     )
   }
 
@@ -44,8 +35,7 @@ export default class VerticalLines extends Component {
       canvasWidth,
       minUnit,
       timeSteps,
-      height,
-      headerHeight
+      height
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
@@ -63,8 +53,7 @@ export default class VerticalLines extends Component {
         const lineWidth = firstOfType ? 2 : 1
         const labelWidth =
           Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
-        const leftPush =
-          this.props.fixedHeader !== 'none' && firstOfType ? -1 : 0
+        const leftPush = firstOfType ? -1 : 0
 
         const classNames =
           'rct-vl' +
@@ -78,10 +67,10 @@ export default class VerticalLines extends Component {
             key={`line-${time.valueOf()}`}
             className={classNames}
             style={{
-              top: `${headerHeight}px`,
+              top: '0px',
               left: `${left + leftPush}px`,
               width: `${labelWidth}px`,
-              height: `${height - headerHeight}px`
+              height: `${height}px`
             }}
           />
         )

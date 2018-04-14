@@ -60,7 +60,6 @@ export default class App extends Component {
             groups={groups}
             items={items}
             keys={keys}
-            fixedHeader="fixed"
             sidebarWidth={150}
             sidebarContent={<div>Above The Left er aew rawe rwea rwae</div>}
             rightSidebarWidth={150}

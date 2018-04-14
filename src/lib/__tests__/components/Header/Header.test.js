@@ -1,41 +1,126 @@
 import React from 'react'
-import { mount } from 'enzyme'
-import { sel, noop } from '../../../test-utility'
+import { shallow, mount } from 'enzyme'
+import { sel } from '../../../../lib/test-utility'
 import Header from '../../../layout/Header'
 
 const defaultProps = {
   hasRightSidebar: false,
-  showPeriod: noop,
-  canvasTimeStart: 0,
-  canvasTimeEnd: 0,
-  canvasWidth: 0,
-  lineHeight: 0,
-  visibleTimeStart: 0,
-  visibleTimeEnd: 0,
+  showPeriod: () => {},
+  canvasTimeStart: 10000,
+  canvasTimeEnd: 20000,
+  canvasWidth: 1000,
+  lineHeight: 35,
   minUnit: 'day',
   timeSteps: {},
-  width: 0,
+  width: 400,
   headerLabelFormats: {},
   subHeaderLabelFormats: {},
-  headerLabelGroupHeight: 0,
-  headerLabelHeight: 0
+  stickyOffset: 5,
+  stickyHeader: true,
+  headerLabelGroupHeight: 15,
+  headerLabelHeight: 15,
+  registerScroll: () => {},
+  headerRef: () => {}
+}
+
+const selectors = {
+  headerElementsContainer: sel('timeline-elements-header-container'),
+  headerElements: sel('timeline-elements-header')
 }
 
 describe('Header', () => {
-  it('renders', () => {
-    mount(<Header {...defaultProps} />)
+  describe('timeline-elements-header', () => {
+    it('accepts headerRef callback', () => {
+      const headerRefMock = jest.fn()
+
+      const props = {
+        ...defaultProps,
+        headerRef: headerRefMock
+      }
+
+      mount(<Header {...props} />)
+
+      expect(headerRefMock).toHaveBeenCalledTimes(1)
+
+      const mockCallParam = headerRefMock.mock.calls[0][0]
+
+      expect(mockCallParam.dataset.testId).toBe('timeline-elements-container')
+    })
+
+    it('container recieves width property', () => {
+      const props = {
+        ...defaultProps,
+        width: 1500
+      }
+
+      const wrapper = shallow(<Header {...props} />)
+
+      expect(
+        wrapper.find(selectors.headerElementsContainer).props().style.width
+      ).toBe(props.width)
+    })
+
+    it('elements header receives all props', () => {
+      const wrapper = shallow(<Header {...defaultProps} />)
+
+      expect(wrapper.find(selectors.headerElements).props()).toMatchObject(
+        defaultProps
+      )
+    })
   })
+  describe('sticky header', () => {
+    it('sets "header-sticky" class if stickyHeader is true', () => {
+      const props = {
+        ...defaultProps,
+        stickyHeader: true
+      }
 
-  it('prevents mouse down from bubbling', () => {
-    const mouseDownMock = jest.fn()
-    const wrapper = mount(
-      <div onMouseDown={mouseDownMock}>
-        <Header {...defaultProps} />
-      </div>
-    )
+      const wrapper = shallow(<Header {...props} />)
 
-    wrapper.find(sel('header')).simulate('mousedown')
+      expect(wrapper.props().className).toMatch('header-sticky')
+    })
+    it('does not set "header-sticky" class if stickyHeader is false', () => {
+      const props = {
+        ...defaultProps,
+        stickyHeader: false
+      }
 
-    expect(mouseDownMock).not.toHaveBeenCalled()
+      const wrapper = shallow(<Header {...props} />)
+
+      expect(wrapper.props().className).not.toMatch('header-sticky')
+    })
+    it('style.top is 0 if stickyHeader is false', () => {
+      const props = {
+        ...defaultProps,
+        stickyHeader: false,
+        stickyOffset: 10
+      }
+
+      const wrapper = shallow(<Header {...props} />)
+
+      expect(wrapper.props().style.top).toBe(0)
+    })
+    it('style.top is set to stickyOffset if stickyHeader is true', () => {
+      const props = {
+        ...defaultProps,
+        stickyHeader: true,
+        stickyOffset: 10
+      }
+
+      const wrapper = shallow(<Header {...props} />)
+
+      expect(wrapper.props().style.top).toBe(props.stickyOffset)
+    })
+    it('style.top is set to 0 if stickyHeader is true and no stickyOffset is passed in', () => {
+      const props = {
+        ...defaultProps,
+        stickyHeader: true,
+        stickyOffset: null
+      }
+
+      const wrapper = shallow(<Header {...props} />)
+
+      expect(wrapper.props().style.top).toBe(0)
+    })
   })
 })

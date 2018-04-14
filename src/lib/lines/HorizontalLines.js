@@ -4,7 +4,6 @@ import React, { Component } from 'react'
 export default class HorizontalLines extends Component {
   static propTypes = {
     canvasWidth: PropTypes.number.isRequired,
-    headerHeight: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
     groupHeights: PropTypes.array.isRequired
   }
@@ -12,17 +11,16 @@ export default class HorizontalLines extends Component {
   shouldComponentUpdate(nextProps) {
     return !(
       nextProps.canvasWidth === this.props.canvasWidth &&
-      nextProps.headerHeight === this.props.headerHeight &&
       nextProps.lineCount === this.props.lineCount &&
       nextProps.groupHeights === this.props.groupHeights
     )
   }
 
   render() {
-    const { canvasWidth, headerHeight, lineCount, groupHeights } = this.props
+    const { canvasWidth, lineCount, groupHeights } = this.props
     let lines = []
 
-    var totalHeight = headerHeight
+    var totalHeight = 0
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <div

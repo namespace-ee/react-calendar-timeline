@@ -119,16 +119,31 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
   }
 
+  .rct-header-container {
+    z-index: 90;
+    display: flex;
+
+    &.header-sticky {
+      position: sticky;
+      position: -webkit-sticky;
+    }
+  }
+
   .rct-header {
     margin: 0;
     overflow-x: hidden;
     z-index: 90;
 
+    .top-header,
+    .bottom-header {
+      position: relative;
+    }
+
     .rct-label-group {
+      padding: 0 5px;
       position: absolute;
       top: 0;
       font-size: 14px;
-      overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $thick-border-width solid $border-color;
@@ -140,11 +155,17 @@ $weekend: rgba(250, 246, 225, 0.5);
         border-right: ($thick-border-width / 2) solid $border-color;
         border-left: ($thick-border-width / 2) solid $border-color;
       }
+
+      & > span {
+        position: sticky;
+        left: 5px;
+        right: 5px;
+      }
     }
 
     .rct-label {
       position: absolute;
-      overflow: hidden;
+      // overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $border-width solid $border-color;
@@ -164,6 +185,21 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
   }
 
+  .rct-sidebar-header {
+    margin: 0;
+    color: $sidebar-color;
+    background: $sidebar-background-color;
+    border-right: $border-width solid $border-color;
+    box-sizing: border-box;
+    border-bottom: $border-width solid $border-color;
+    overflow: hidden;
+
+    &.rct-sidebar-right {
+      border-right: 0;
+      border-left: $border-width solid $border-color;
+    }
+  }
+
   .rct-sidebar {
     overflow: hidden;
     white-space: normal; // was set to nowrap in .rct-outer
@@ -176,16 +212,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     &.rct-sidebar-right {
       border-right: 0;
       border-left: $border-width solid $border-color;
-    }
-
-    .rct-sidebar-header {
-      margin: 0;
-      color: $sidebar-color;
-      background: $sidebar-background-color;
-      border-right: $border-width solid $border-color;
-      box-sizing: 'border-box';
-      border-bottom: $border-width solid $border-color;
-      overflow: 'hidden';
     }
 
     .rct-sidebar-row {
