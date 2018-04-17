@@ -9,6 +9,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 When you submit a PR, add your changes here!
 
+## 0.15.11
+
 ### Fixed
 
 * removed `preventDefault` call in item double click handler - #277
