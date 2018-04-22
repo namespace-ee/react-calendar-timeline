@@ -196,7 +196,7 @@ export default class Header extends Component {
               data-time={time}
               data-unit={nextUnit}
               style={{
-                left: `${left + leftCorrect}px`,
+                transform: `translate3d(${left + leftCorrect}px, 0, 0)`,
                 width: `${labelWidth}px`,
                 height: `${headerLabelGroupHeight}px`,
                 lineHeight: `${headerLabelGroupHeight}px`,
