@@ -520,6 +520,10 @@ groupRenderer = ({ group }) => {
 }
 ```
 
+### minimumWidthForItemContentVisibility
+
+To improve performance of the timeline, this prop dictates whether the inner contents of an Item are rendered based on the item width.  This setting is useful if you have a dataset which results in a large number of small items to be rendered on the timeline. Default is 25.
+
 ### resizeDetector
 
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
