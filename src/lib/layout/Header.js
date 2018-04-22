@@ -135,7 +135,7 @@ export default class Header extends Component {
     })
   }
 
-  render() {
+  componentDidUpdate() {
     let timeLabels = []
     const {
       canvasTimeStart,
@@ -286,6 +286,11 @@ export default class Header extends Component {
       }
     }
 
+    this.timeLabels = timeLabels
+    this.headerStyle = headerStyle
+  }
+
+  render() {
     return (
       <div
         key="header"
@@ -293,9 +298,9 @@ export default class Header extends Component {
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
         onClick={this.periodClick}
-        style={headerStyle}
+        style={this.headerStyle}
       >
-        {timeLabels}
+        {this.timeLabels}
       </div>
     )
   }
