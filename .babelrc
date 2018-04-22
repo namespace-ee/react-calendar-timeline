@@ -1,8 +1,10 @@
 {
-  "presets": ["env", "react"],
+  "presets": [
+    "env",
+    "react"
+  ],
   "plugins": [
     "transform-class-properties",
-    "react-hot-loader/babel",
     "transform-object-rest-spread"
   ],
   "env": {
@@ -11,11 +13,15 @@
         [
           "react-remove-properties",
           {
-            "properties": ["data-test-id"]
+            "properties": [
+              "data-test-id"
+            ]
           }
         ]
       ],
-      "ignore": ["src/lib/__tests__/**"]
+      "ignore": [
+        "src/lib/__tests__/**"
+      ]
     }
   }
 }
