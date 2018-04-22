@@ -1082,8 +1082,8 @@ export default class ReactCalendarTimeline extends Component {
 
     const visibleItems = getVisibleItems(
       items,
-      canvasTimeStart,
-      canvasTimeEnd,
+      visibleTimeStart,
+      visibleTimeEnd,
       keys
     )
     const groupOrders = getGroupOrders(groups, keys)
