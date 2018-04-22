@@ -467,7 +467,6 @@ export default class Item extends Component {
   }
 
   handleDoubleClick = e => {
-    e.preventDefault()
     e.stopPropagation()
     if (this.props.onItemDoubleClick) {
       this.props.onItemDoubleClick(this.itemId, e)

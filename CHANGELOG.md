@@ -19,6 +19,16 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * removed `fixedHeader` prop in favor of using `position: sticky` by default
 
+### Fixed
+
+* Shift + Scroll via mouse wheel scrolls canvas horizontally - #281
+
+## 0.15.11
+
+### Fixed
+
+* removed `preventDefault` call in item double click handler - #277
+
 ## 0.15.10
 
 ### Fixed
