@@ -27,9 +27,21 @@
   },
   "author": "Marius Andra <marius.andra@gmail.com>",
   "contributors": [
-    "Stanisław Chmiela <sjchmiela@gmail.com>",
-    "Mike Joyce <mikejoyce19@gmail.com>",
-    "Samuel Rossetti"
+    {
+      "name": "Stanisław Chmiela",
+      "email": "sjchmiela@gmail.com"
+    },
+    {
+      "name": "Mike Joyce",
+      "url": "https://github.com/mcMickJuice"
+    },
+    {
+      "name": "Samuel Rossetti"
+    },
+    {
+      "name": "amakhrov",
+      "url": "https://github.com/amakhrov"
+    }
   ],
   "license": "MIT",
   "keywords": [
