@@ -522,7 +522,7 @@ groupRenderer = ({ group }) => {
 
 ### minimumWidthForItemContentVisibility
 
-To improve performance of the timeline, this prop dictates whether the inner contents of an Item are rendered based on the item width.  This setting is useful if you have a dataset which results in a large number of small items to be rendered on the timeline. Default is 25.
+Number of pixels to render inner content of an Item. To improve performance of the timeline, this prop dictates whether the inner contents of an Item are rendered based on the item width. This setting is useful if you have a dataset which results in a large number of small items to be rendered on the timeline. Default is 25.
 
 ### resizeDetector
 
