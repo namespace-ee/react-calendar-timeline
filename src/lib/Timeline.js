@@ -728,8 +728,8 @@ export default class ReactCalendarTimeline extends Component {
 
       // convert vertical zoom to horiziontal
     } else if (e.shiftKey) {
-      const scrollComponent = this.scrollComponent
-      scrollComponent.scrollLeft += e.deltaY
+      // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
+      this.scrollComponent.scrollLeft += (e.deltaY || e.deltaX)
 
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
     } else {
