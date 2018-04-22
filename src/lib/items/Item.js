@@ -14,6 +14,7 @@ export default class Item extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     order: PropTypes.number,
+    minimumWidthForItemContentVisibility: PropTypes.number.isRequired,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -97,7 +98,9 @@ export default class Item extends Component {
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
-      nextProps.dimensions !== this.props.dimensions
+      nextProps.dimensions !== this.props.dimensions ||
+      nextProps.minimumWidthForItemContentVisibility !==
+        this.props.minimumWidthForItemContentVisibility
     return shouldUpdate
   }
 
@@ -520,6 +523,10 @@ export default class Item extends Component {
       lineHeight: `${dimensions.height}px`
     }
 
+    const showInnerContents =
+      dimensions.width > this.props.minimumWidthForItemContentVisibility
+    // TODO: conditionals are really ugly.  could use Fragment if supporting React 16+ but for now, it'll
+    // be ugly
     return (
       <div
         {...this.props.item.itemProps}
@@ -535,22 +542,26 @@ export default class Item extends Component {
         onContextMenu={this.handleContextMenu}
         style={style}
       >
-        {this.props.useResizeHandle ? (
+        {this.props.useResizeHandle && showInnerContents ? (
           <div ref={el => (this.dragLeft = el)} className="rct-drag-left" />
         ) : (
           ''
         )}
 
-        <div
-          className="rct-item-content"
-          style={{
-            maxWidth: `${dimensions.width}px`
-          }}
-        >
-          {this.renderContent()}
-        </div>
+        {showInnerContents ? (
+          <div
+            className="rct-item-content"
+            style={{
+              maxWidth: `${dimensions.width}px`
+            }}
+          >
+            {this.renderContent()}
+          </div>
+        ) : (
+          ''
+        )}
 
-        {this.props.useResizeHandle ? (
+        {this.props.useResizeHandle && showInnerContents ? (
           <div ref={el => (this.dragRight = el)} className="rct-drag-right" />
         ) : (
           ''
