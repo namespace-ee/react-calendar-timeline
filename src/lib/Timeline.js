@@ -91,6 +91,7 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: PropTypes.number,
     fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     stickyOffset: PropTypes.number,
+    scrollableContainer: PropTypes.object.isRequired,
     fullUpdate: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
@@ -217,6 +218,7 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: 20,
     fixedHeader: 'sticky', // fixed or sticky or none
     stickyOffset: 0,
+    scrollableContainer: window,
     fullUpdate: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
@@ -391,7 +393,7 @@ export default class ReactCalendarTimeline extends Component {
 
     this.lastTouchDistance = null
 
-    window.addEventListener('scroll', this.scrollEventListener)
+    this.props.scrollableContainer.addEventListener('scroll', this.scrollEventListener)
 
     this.scrollComponent.addEventListener('touchstart', this.touchStart)
     this.scrollComponent.addEventListener('touchmove', this.touchMove)
@@ -405,7 +407,7 @@ export default class ReactCalendarTimeline extends Component {
 
     windowResizeDetector.removeListener(this)
 
-    window.removeEventListener('scroll', this.scrollEventListener)
+    this.props.scrollableContainer.removeEventListener('scroll', this.scrollEventListener)
 
     this.scrollComponent.removeEventListener('touchstart', this.touchStart)
     this.scrollComponent.removeEventListener('touchmove', this.touchMove)
@@ -580,8 +582,13 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd,
       items,
       groups,
+      scrollableContainer,
       sidebarWidth
     } = nextProps
+    if (scrollableContainer !== this.props.scrollableContainer) {
+      this.props.scrollableContainer.removeEventListener('scroll', this.scrollEventListener)
+      scrollableContainer.addEventListener('scroll', this.scrollEventListener)
+    }
 
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(
