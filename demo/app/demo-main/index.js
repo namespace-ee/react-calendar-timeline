@@ -151,7 +151,7 @@ export default class App extends Component {
 
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
-
+    console.log("render")
     return (
       <Timeline
         groups={groups}

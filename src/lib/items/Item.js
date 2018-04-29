@@ -47,7 +47,43 @@ export default class Item extends Component {
   }
 
   static defaultProps = {
-    selected: false
+    selected: false,
+    itemRenderer: (
+      item,
+      timelineContext,
+      //includes dimensions, useResizeHandle
+      itemContext,
+      getItemProps,
+      getResizeProps,
+      getContentProps,
+    ) => {
+      const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+      return (
+        <div
+          {...getItemProps(item.itemProps)}
+        >
+          {itemContext.useResizeHandle ? (
+            <div {...leftResizeProps} />
+          ) : (
+              ''
+            )}
+
+          <div
+            {...getContentProps()}
+          >
+            {/* TODO: render title from this.titleItem */}
+            {item.title}
+          </div>
+
+
+          {itemContext.useResizeHandle ? (
+            <div {...rightResizeProps} />
+          ) : (
+              ''
+            )}
+        </div>
+      )
+    }
   }
 
   static contextTypes = {
@@ -100,7 +136,7 @@ export default class Item extends Component {
       nextProps.canResizeRight !== this.props.canResizeRight ||
       nextProps.dimensions !== this.props.dimensions ||
       nextProps.minimumWidthForItemContentVisibility !==
-        this.props.minimumWidthForItemContentVisibility
+      this.props.minimumWidthForItemContentVisibility
     return shouldUpdate
   }
 
@@ -487,22 +523,12 @@ export default class Item extends Component {
     }
   }
 
-  renderContent() {
-    const timelineContext = this.context.getTimelineContext()
-    const Comp = this.props.itemRenderer
-    if (Comp) {
-      return <Comp item={this.props.item} timelineContext={timelineContext} />
-    } else {
-      return this.itemTitle
-    }
-  }
+  getItemRef = el => (this.item = el)
+  getDragLeftRef = el => (this.dragLeft = el)
+  getDragRightRef = el => (this.dragRight = el)
 
-  render() {
-    const dimensions = this.props.dimensions
-    if (typeof this.props.order === 'undefined' || this.props.order === null) {
-      return null
-    }
 
+  getItemProps = (props = {}) => {
     const classNames =
       'rct-item' +
       (this.props.selected ? ' selected' : '') +
@@ -514,6 +540,9 @@ export default class Item extends Component {
       (this.canResizeRight(this.props) ? ' can-resize-right' : '') +
       (this.props.item.className ? ` ${this.props.item.className}` : '')
 
+    const dimensions = this.props.dimensions
+
+
     const style = {
       left: `${dimensions.left}px`,
       top: `${dimensions.top}px`,
@@ -522,50 +551,62 @@ export default class Item extends Component {
       lineHeight: `${dimensions.height}px`
     }
 
-    const showInnerContents =
-      dimensions.width > this.props.minimumWidthForItemContentVisibility
-    // TODO: conditionals are really ugly.  could use Fragment if supporting React 16+ but for now, it'll
-    // be ugly
-    return (
-      <div
-        {...this.props.item.itemProps}
-        key={this.itemId}
-        ref={el => (this.item = el)}
-        className={classNames}
-        title={this.itemDivTitle}
-        onMouseDown={this.onMouseDown}
-        onMouseUp={this.onMouseUp}
-        onTouchStart={this.onTouchStart}
-        onTouchEnd={this.onTouchEnd}
-        onDoubleClick={this.handleDoubleClick}
-        onContextMenu={this.handleContextMenu}
-        style={style}
-      >
-        {this.props.useResizeHandle && showInnerContents ? (
-          <div ref={el => (this.dragLeft = el)} className="rct-drag-left" />
-        ) : (
-          ''
-        )}
+    return {
+      key: this.itemId,
+      ref: this.getItemRef,
+      className: classNames + ` ${props.classNames}`,
+      title: this.itemDivTitle,
+      onMouseDown: this.onMouseDown,
+      onMouseUp: this.onMouseUp,
+      onTouchStart: this.onTouchStart,
+      onTouchEnd: this.onTouchEnd,
+      onDoubleClick: this.handleDoubleClick,
+      onContextMenu: this.handleContextMenu,
+      style: Object.assign({}, props.style, style),
+    }
+  }
 
-        {showInnerContents ? (
-          <div
-            className="rct-item-content"
-            style={{
-              maxWidth: `${dimensions.width}px`
-            }}
-          >
-            {this.renderContent()}
-          </div>
-        ) : (
-          ''
-        )}
+  getResizeProps = (props = {}) => {
+    return {
+      left: {
+        ref: this.getDragLeftRef,
+        className: "rct-drag-left"
+      },
+      right: {
+        ref: this.getDragRightRef,
+        className: "rct-drag-right"
+      }
+    }
+  }
 
-        {this.props.useResizeHandle && showInnerContents ? (
-          <div ref={el => (this.dragRight = el)} className="rct-drag-right" />
-        ) : (
-          ''
-        )}
-      </div>
+  getContentProps = (props = {}) => {
+    const dimensions = this.props.dimensions
+    return {
+      style: {
+        maxWidth: `${dimensions.width}px`
+      },
+      className: "rct-item-content"
+    }
+  }
+
+  render() {
+    if (typeof this.props.order === 'undefined' || this.props.order === null) {
+      return null
+    }
+
+    const timelineContext = this.context.getTimelineContext()
+    const itemContext = {
+      dimensions: this.props.dimensions,
+      useResizeHandle: this.props.useResizeHandle,
+    }
+
+    return this.props.itemRenderer(
+      this.props.item,
+      timelineContext,
+      itemContext,
+      this.getItemProps,
+      this.getResizeProps,
+      this.getContentProps,
     )
   }
 }
