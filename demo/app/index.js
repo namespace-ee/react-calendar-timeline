@@ -12,7 +12,8 @@ const demos = {
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
   plugins: require('./demo-plugins').default,
-  stickyHeader: require('./demo-sticky-header').default
+  stickyHeader: require('./demo-sticky-header').default,
+  cusomItems: require('./demo-cusom-items').default
 }
 
 // A simple component that shows the pathname of the current location

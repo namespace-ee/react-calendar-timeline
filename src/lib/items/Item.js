@@ -4,6 +4,7 @@ import interact from 'interact.js'
 import moment from 'moment'
 
 import { _get, deepObjectCompare } from '../utility/generic'
+import { composeEvents } from '../utility/events'
 
 export default class Item extends Component {
   // removed prop type check for SPEED!
@@ -48,15 +49,14 @@ export default class Item extends Component {
 
   static defaultProps = {
     selected: false,
-    itemRenderer: (
+    itemRenderer: ({
       item,
       timelineContext,
-      //includes dimensions, useResizeHandle
       itemContext,
       getItemProps,
       getResizeProps,
       getContentProps,
-    ) => {
+    }) => {
       const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
       return (
         <div
@@ -72,7 +72,7 @@ export default class Item extends Component {
             {...getContentProps()}
           >
             {/* TODO: render title from this.titleItem */}
-            {item.title}
+            {itemContext.title}
           </div>
 
 
@@ -529,6 +529,7 @@ export default class Item extends Component {
 
 
   getItemProps = (props = {}) => {
+    //TODO: maybe shouldnt include all of these classes
     const classNames =
       'rct-item' +
       (this.props.selected ? ' selected' : '') +
@@ -555,13 +556,12 @@ export default class Item extends Component {
       key: this.itemId,
       ref: this.getItemRef,
       className: classNames + ` ${props.classNames}`,
-      title: this.itemDivTitle,
-      onMouseDown: this.onMouseDown,
-      onMouseUp: this.onMouseUp,
-      onTouchStart: this.onTouchStart,
-      onTouchEnd: this.onTouchEnd,
-      onDoubleClick: this.handleDoubleClick,
-      onContextMenu: this.handleContextMenu,
+      onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
+      onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
+      onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
+      onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
+      onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
+      onContextMenu: composeEvents(this.handleContextMenu, props.composeEvents),
       style: Object.assign({}, props.style, style),
     }
   }
@@ -570,22 +570,23 @@ export default class Item extends Component {
     return {
       left: {
         ref: this.getDragLeftRef,
-        className: "rct-drag-left"
+        className: "rct-drag-left" + ' ' + props.className
       },
       right: {
         ref: this.getDragRightRef,
-        className: "rct-drag-right"
+        className: "rct-drag-right" + ' ' + props.className
       }
     }
   }
 
   getContentProps = (props = {}) => {
     const dimensions = this.props.dimensions
+    const style = {
+      maxWidth: `${dimensions.width}px`
+    };
     return {
-      style: {
-        maxWidth: `${dimensions.width}px`
-      },
-      className: "rct-item-content"
+      style: Object.assign({}, props.style, style),
+      className: "rct-item-content" + ' ' + props.className
     }
   }
 
@@ -598,15 +599,19 @@ export default class Item extends Component {
     const itemContext = {
       dimensions: this.props.dimensions,
       useResizeHandle: this.props.useResizeHandle,
+      title: this.itemDivTitle,
+      canMove: this.canMove(this.props),
+      canResizeLeft: this.canResizeLeft(this.props),
+      canResizeRight: this.canResizeRight(this.props),
     }
 
-    return this.props.itemRenderer(
-      this.props.item,
+    return this.props.itemRenderer({
+      item: this.props.item,
       timelineContext,
       itemContext,
-      this.getItemProps,
-      this.getResizeProps,
-      this.getContentProps,
-    )
+      getItemProps: this.getItemProps,
+      getResizeProps: this.getResizeProps,
+      getContentProps: this.getContentProps,
+    })
   }
 }
