@@ -358,7 +358,10 @@ export default class ReactCalendarTimeline extends Component {
       width: containerWidth,
       top: containerTop
     } = this.container.getBoundingClientRect()
+
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    const { headerLabelGroupHeight, headerLabelHeight } = props
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
       props.items,
@@ -369,13 +372,17 @@ export default class ReactCalendarTimeline extends Component {
       width
     )
 
+    // this is needed by dragItem since it uses pageY from the drag events
+    // if this was in the context of the scrollElement, this would not be necessary
+    const topOffset = containerTop + window.pageYOffset + headerHeight
+
     this.setState({
-      width: width,
-      topOffset: containerTop + window.pageYOffset,
-      dimensionItems: dimensionItems,
-      height: height,
-      groupHeights: groupHeights,
-      groupTops: groupTops
+      width,
+      topOffset,
+      dimensionItems,
+      height,
+      groupHeights,
+      groupTops
     })
     this.scrollComponent.scrollLeft = width
   }
@@ -638,7 +645,7 @@ export default class ReactCalendarTimeline extends Component {
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
   rowAndTimeFromScrollAreaEvent = e => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
+    const { dragSnap } = this.props
     const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
     const lineCount = _length(this.props.groups)
 
@@ -650,7 +657,7 @@ export default class ReactCalendarTimeline extends Component {
 
     // calculate the y coordinate from `groupHeights` and header heights
     let row = 0
-    let remainingHeight = y - headerLabelGroupHeight - headerLabelHeight
+    let remainingHeight = y
 
     while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
       remainingHeight -= groupHeights[row]
