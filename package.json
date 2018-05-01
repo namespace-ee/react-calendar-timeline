@@ -61,9 +61,6 @@
     "setupFiles": [
       "<rootDir>/config/jest-setup.js"
     ],
-    "moduleNameMapper": {
-      "^.+\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
-    },
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ]
