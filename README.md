@@ -36,6 +36,8 @@ At the very minimum:
 
 ```jsx
 import Timeline from 'react-calendar-timeline'
+// make sure you include the timeline stylesheet or the timeline will not be styled
+import 'react-calender-timeline/lib/Timeline.css'
 import moment from 'moment'
 
 const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
@@ -556,6 +558,10 @@ The children gets passed the following props:
 * `timeSteps` - steps for displaying time
 
 ## FAQ
+
+### My timeline is unstyled
+
+You need to include the `Timeline.css` file, either via static file reference or webpack stylesheet bundling. The file is located at `lib/Timeline.css`
 
 ### How can I have items with different colors?
 
