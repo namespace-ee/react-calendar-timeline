@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
-import { sel } from '../../../../lib/test-utility'
-import Header from '../../../layout/Header'
+import { sel } from 'test-utility'
+import Header from 'lib/layout/Header'
 
 const defaultProps = {
   hasRightSidebar: false,

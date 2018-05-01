@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { sel, noop } from '../../../test-utility'
-import ScrollElement from '../../../scroll/ScrollElement'
+import { sel, noop } from 'test-utility'
+import ScrollElement from 'lib/scroll/ScrollElement'
 
 const defaultProps = {
   width: 1000,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { sel, noop } from '../../../test-utility'
-import TimelineElementsHeader from '../../../layout/TimelineElementsHeader'
+import { sel, noop } from 'test-utility'
+import TimelineElementsHeader from 'lib/layout/TimelineElementsHeader'
 
 const defaultProps = {
   hasRightSidebar: false,
