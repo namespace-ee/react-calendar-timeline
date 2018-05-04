@@ -14,6 +14,7 @@ export default class Item extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     order: PropTypes.number,
+    minimumWidthForItemContentVisibility: PropTypes.number.isRequired,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -97,7 +98,9 @@ export default class Item extends Component {
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
-      nextProps.dimensions !== this.props.dimensions
+      nextProps.dimensions !== this.props.dimensions ||
+      nextProps.minimumWidthForItemContentVisibility !==
+        this.props.minimumWidthForItemContentVisibility
     return shouldUpdate
   }
 
@@ -373,7 +376,7 @@ export default class Item extends Component {
   }
 
   canResizeLeft(props = this.props) {
-    if (!props.canResizeLeft || props.dimensions.clippedLeft) {
+    if (!props.canResizeLeft) {
       return false
     }
     let width = parseInt(props.dimensions.width, 10)
@@ -381,7 +384,7 @@ export default class Item extends Component {
   }
 
   canResizeRight(props = this.props) {
-    if (!props.canResizeRight || props.dimensions.clippedRight) {
+    if (!props.canResizeRight) {
       return false
     }
     let width = parseInt(props.dimensions.width, 10)
@@ -509,9 +512,7 @@ export default class Item extends Component {
         : '') +
       (this.canResizeLeft(this.props) ? ' can-resize-left' : '') +
       (this.canResizeRight(this.props) ? ' can-resize-right' : '') +
-      (this.props.item.className ? ` ${this.props.item.className}` : '') +
-      (dimensions.clippedLeft ? ' clipped-left' : '') +
-      (dimensions.clippedRight ? ' clipped-right' : '')
+      (this.props.item.className ? ` ${this.props.item.className}` : '')
 
     const style = {
       left: `${dimensions.left}px`,
@@ -521,6 +522,10 @@ export default class Item extends Component {
       lineHeight: `${dimensions.height}px`
     }
 
+    const showInnerContents =
+      dimensions.width > this.props.minimumWidthForItemContentVisibility
+    // TODO: conditionals are really ugly.  could use Fragment if supporting React 16+ but for now, it'll
+    // be ugly
     return (
       <div
         {...this.props.item.itemProps}
@@ -536,15 +541,26 @@ export default class Item extends Component {
         onContextMenu={this.handleContextMenu}
         style={style}
       >
-        {this.props.useResizeHandle ? (
+        {this.props.useResizeHandle && showInnerContents ? (
           <div ref={el => (this.dragLeft = el)} className="rct-drag-left" />
         ) : (
           ''
         )}
-        <div className="rct-item-overflow">
-          <div className="rct-item-content">{this.renderContent()}</div>
-        </div>
-        {this.props.useResizeHandle ? (
+
+        {showInnerContents ? (
+          <div
+            className="rct-item-content"
+            style={{
+              maxWidth: `${dimensions.width}px`
+            }}
+          >
+            {this.renderContent()}
+          </div>
+        ) : (
+          ''
+        )}
+
+        {this.props.useResizeHandle && showInnerContents ? (
           <div ref={el => (this.dragRight = el)} className="rct-drag-right" />
         ) : (
           ''

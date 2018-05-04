@@ -1,4 +1,4 @@
-import { coordinateToTimeRatio } from '../../../utility/calendar'
+import { coordinateToTimeRatio } from 'lib/utility/calendar'
 
 describe('coordinateToTimeRatio', () => {
   it('calculates ratio', () => {

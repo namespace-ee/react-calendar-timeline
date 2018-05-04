@@ -19,14 +19,19 @@ var keys = {
 }
 
 export default class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     const { groups: groups1, items: items1 } = generateFakeData(5, 400)
     const { groups: groups2, items: items2 } = generateFakeData(5, 400)
 
-    const visibleTimeStart = moment().startOf('day').valueOf()
-    const visibleTimeEnd = moment().startOf('day').add(1, 'day').valueOf()
+    const visibleTimeStart = moment()
+      .startOf('day')
+      .valueOf()
+    const visibleTimeEnd = moment()
+      .startOf('day')
+      .add(1, 'day')
+      .valueOf()
 
     this.state = {
       groups1,
@@ -38,75 +43,73 @@ export default class App extends Component {
     }
   }
 
-  handleTimeChangeFirst = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+  handleTimeChangeFirst = (
+    visibleTimeStart,
+    visibleTimeEnd,
+    updateScrollCanvas
+  ) => {
     console.log('first', visibleTimeStart, visibleTimeEnd)
     this.setState({ visibleTimeStart, visibleTimeEnd })
   }
 
-  handleTimeChangeSecond = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+  handleTimeChangeSecond = (
+    visibleTimeStart,
+    visibleTimeEnd,
+    updateScrollCanvas
+  ) => {
     console.log('second', visibleTimeStart, visibleTimeEnd)
     this.setState({ visibleTimeStart, visibleTimeEnd })
   }
 
-  renderFirst () {
+  renderFirst() {
     const { groups1, items1, visibleTimeStart, visibleTimeEnd } = this.state
 
     return (
-      <Timeline groups={groups1}
-                items={items1}
-                keys={keys}
-                fixedHeader='fixed'
-                fullUpdate
-
-                sidebarWidth={150}
-                sidebarContent={<div>Above The Left</div>}
-
-                canMove
-                canResize='right'
-                canSelect
-
-                itemsSorted
-                itemTouchSendsClick={false}
-                stackItems
-                itemHeightRatio={0.75}
-
-                visibleTimeStart={visibleTimeStart}
-                visibleTimeEnd={visibleTimeEnd}
-
-                onTimeChange={this.handleTimeChangeFirst} />
+      <Timeline
+        groups={groups1}
+        items={items1}
+        keys={keys}
+        sidebarWidth={150}
+        sidebarContent={<div>Above The Left</div>}
+        canMove
+        canResize="right"
+        canSelect
+        itemsSorted
+        itemTouchSendsClick={false}
+        stackItems
+        itemHeightRatio={0.75}
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
+        onTimeChange={this.handleTimeChangeFirst}
+      />
     )
   }
 
-  renderSecond () {
+  renderSecond() {
     const { groups2, items2, visibleTimeStart, visibleTimeEnd } = this.state
 
     return (
-      <Timeline groups={groups2}
-                items={items2}
-                keys={keys}
-                fixedHeader='fixed'
-                fullUpdate
-
-                sidebarWidth={150}
-                sidebarContent={<div>Above The Left</div>}
-
-                canMove
-                canResize='right'
-                canSelect
-
-                itemsSorted
-                itemTouchSendsClick={false}
-                stackItems
-                itemHeightRatio={0.75}
-
-                visibleTimeStart={visibleTimeStart}
-                visibleTimeEnd={visibleTimeEnd}
-
-                onTimeChange={this.handleTimeChangeSecond} />
+      <Timeline
+        groups={groups2}
+        items={items2}
+        keys={keys}
+        sidebarWidth={150}
+        sidebarContent={<div>Above The Left</div>}
+        canMove
+        canResize="right"
+        canSelect
+        itemsSorted
+        itemTouchSendsClick={false}
+        stackItems
+        itemHeightRatio={0.75}
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
+        onTimeChange={this.handleTimeChangeSecond}
+      />
     )
   }
 
-  render () {
+  render() {
     return (
       <div>
         {this.renderFirst()}

@@ -127,10 +127,7 @@ export function calculateDimensions({
   dragSnap,
   dragTime,
   resizingEdge,
-  resizeTime,
-  fullUpdate,
-  visibleTimeStart,
-  visibleTimeEnd
+  resizeTime
 }) {
   const itemStart =
     isResizing && resizingEdge === 'left' ? resizeTime : itemTimeStart
@@ -153,29 +150,6 @@ export function calculateDimensions({
     }
   }
 
-  let clippedLeft = false
-  let clippedRight = false
-
-  if (fullUpdate) {
-    if (!isDragging && (visibleTimeStart > x + w || visibleTimeEnd < x)) {
-      return null
-    }
-
-    if (visibleTimeStart > x) {
-      w -= visibleTimeStart - x
-      x = visibleTimeStart
-      if (isDragging && w < 0) {
-        x += w
-        w = 0
-      }
-      clippedLeft = true
-    }
-    if (x + w > visibleTimeEnd) {
-      w -= x + w - visibleTimeEnd
-      clippedRight = true
-    }
-  }
-
   const ratio =
     1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
 
@@ -184,9 +158,7 @@ export function calculateDimensions({
     width: Math.max(w * ratio, 3),
     collisionLeft: collisionX,
     originalLeft: itemTimeStart,
-    collisionWidth: collisionW,
-    clippedLeft,
-    clippedRight
+    collisionWidth: collisionW
   }
 
   return dimensions
@@ -246,9 +218,9 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
-export function stack(items, groupOrders, lineHeight, headerHeight, force) {
+export function stack(items, groupOrders, lineHeight, force) {
   var i, iMax
-  var totalHeight = headerHeight
+  var totalHeight = 0
 
   var groupHeights = []
   var groupTops = []
@@ -314,10 +286,10 @@ export function stack(items, groupOrders, lineHeight, headerHeight, force) {
   }
 }
 
-export function nostack(items, groupOrders, lineHeight, headerHeight, force) {
+export function nostack(items, groupOrders, lineHeight, force) {
   var i, iMax
 
-  var totalHeight = headerHeight
+  var totalHeight = 0
 
   var groupHeights = []
   var groupTops = []

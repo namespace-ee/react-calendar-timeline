@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import moment from 'moment'
-import './Timeline.scss'
 
 import Items from './items/Items'
 import InfoLabel from './layout/InfoLabel'
@@ -11,6 +10,7 @@ import VerticalLines from './lines/VerticalLines'
 import HorizontalLines from './lines/HorizontalLines'
 import TodayLine from './lines/TodayLine'
 import CursorLine from './lines/CursorLine'
+import ScrollElement from './scroll/ScrollElement'
 
 import windowResizeDetector from '../resize-detector/window'
 
@@ -25,59 +25,12 @@ import {
 } from './utility/calendar'
 import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
 import { _get, _length } from './utility/generic'
-
-export const defaultKeys = {
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemDivTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time'
-}
-
-export const defaultTimeSteps = {
-  second: 1,
-  minute: 1,
-  hour: 1,
-  day: 1,
-  month: 1,
-  year: 1
-}
-
-export const defaultHeaderLabelFormats = {
-  yearShort: 'YY',
-  yearLong: 'YYYY',
-  monthShort: 'MM/YY',
-  monthMedium: 'MM/YYYY',
-  monthMediumLong: 'MMM YYYY',
-  monthLong: 'MMMM YYYY',
-  dayShort: 'L',
-  dayLong: 'dddd, LL',
-  hourShort: 'HH',
-  hourMedium: 'HH:00',
-  hourMediumLong: 'L, HH:00',
-  hourLong: 'dddd, LL, HH:00',
-  time: 'LLL'
-}
-
-export const defaultSubHeaderLabelFormats = {
-  yearShort: 'YY',
-  yearLong: 'YYYY',
-  monthShort: 'MM',
-  monthMedium: 'MMM',
-  monthLong: 'MMMM',
-  dayShort: 'D',
-  dayMedium: 'dd D',
-  dayMediumLong: 'ddd, Do',
-  dayLong: 'dddd, Do',
-  hourShort: 'HH',
-  hourLong: 'HH:00',
-  minuteShort: 'mm',
-  minuteLong: 'HH:mm'
-}
+import {
+  defaultKeys,
+  defaultTimeSteps,
+  defaultHeaderLabelFormats,
+  defaultSubHeaderLabelFormats
+} from './default-config'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -89,13 +42,13 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarContent: PropTypes.node,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    fixedHeader: PropTypes.oneOf(['fixed', 'sticky', 'none']),
     stickyOffset: PropTypes.number,
-    fullUpdate: PropTypes.bool,
+    stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
+    minimumWidthForItemContentVisibility: PropTypes.number,
 
     minZoom: PropTypes.number,
     maxZoom: PropTypes.number,
@@ -150,6 +103,7 @@ export default class ReactCalendarTimeline extends Component {
       itemTimeStartKey: PropTypes.string,
       itemTimeEndKey: PropTypes.string
     }),
+    headerRef: PropTypes.func,
 
     timeSteps: PropTypes.shape({
       second: PropTypes.number,
@@ -215,13 +169,13 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
-    fixedHeader: 'sticky', // fixed or sticky or none
     stickyOffset: 0,
-    fullUpdate: true,
+    stickyHeader: true,
     lineHeight: 30,
     headerLabelGroupHeight: 30,
     headerLabelHeight: 30,
     itemHeightRatio: 0.65,
+    minimumWidthForItemContentVisibility: 25,
 
     minZoom: 60 * 60 * 1000, // 1 hour
     maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
@@ -264,6 +218,7 @@ export default class ReactCalendarTimeline extends Component {
     style: {},
     keys: defaultKeys,
     timeSteps: defaultTimeSteps,
+    headerRef: () => {},
 
     // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
     // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
@@ -350,13 +305,10 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
 
-      headerPosition: 'top',
-
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
       resizeTime: null,
-      isDragging: false,
       topOffset: 0,
       resizingItem: null,
       resizingEdge: null
@@ -390,12 +342,6 @@ export default class ReactCalendarTimeline extends Component {
     windowResizeDetector.addListener(this)
 
     this.lastTouchDistance = null
-
-    window.addEventListener('scroll', this.scrollEventListener)
-
-    this.scrollComponent.addEventListener('touchstart', this.touchStart)
-    this.scrollComponent.addEventListener('touchmove', this.touchMove)
-    this.scrollComponent.addEventListener('touchend', this.touchEnd)
   }
 
   componentWillUnmount() {
@@ -404,113 +350,6 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     windowResizeDetector.removeListener(this)
-
-    window.removeEventListener('scroll', this.scrollEventListener)
-
-    this.scrollComponent.removeEventListener('touchstart', this.touchStart)
-    this.scrollComponent.removeEventListener('touchmove', this.touchMove)
-    this.scrollComponent.removeEventListener('touchend', this.touchEnd)
-  }
-
-  // called on window scroll. it's job is to figure out if we should fix or float the header
-  scrollEventListener = () => {
-    const { headerLabelGroupHeight, headerLabelHeight } = this.props
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
-
-    const rect = this.container.getBoundingClientRect()
-
-    if (rect.top > this.props.stickyOffset) {
-      this.setState({ headerPosition: 'top' })
-    } else if (rect.bottom < headerHeight + this.props.stickyOffset) {
-      this.setState({ headerPosition: 'bottom' })
-    } else {
-      this.setState({ headerPosition: 'fixed' })
-    }
-  }
-
-  touchStart = e => {
-    if (e.touches.length === 2) {
-      e.preventDefault()
-
-      this.lastTouchDistance = Math.abs(
-        e.touches[0].screenX - e.touches[1].screenX
-      )
-      this.singleTouchStart = null
-      this.lastSingleTouch = null
-    } else if (e.touches.length === 1) {
-      e.preventDefault()
-
-      let x = e.touches[0].clientX
-      let y = e.touches[0].clientY
-
-      this.lastTouchDistance = null
-      this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset }
-      this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset }
-    }
-  }
-
-  touchMove = e => {
-    if (this.state.dragTime || this.state.resizeTime) {
-      e.preventDefault()
-      return
-    }
-    if (this.lastTouchDistance && e.touches.length === 2) {
-      e.preventDefault()
-
-      let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
-
-      let parentPosition = getParentPosition(e.currentTarget)
-      let xPosition =
-        (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
-
-      if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
-        this.changeZoom(
-          this.lastTouchDistance / touchDistance,
-          xPosition / this.state.width
-        )
-        this.lastTouchDistance = touchDistance
-      }
-    } else if (this.lastSingleTouch && e.touches.length === 1) {
-      e.preventDefault()
-
-      let x = e.touches[0].clientX
-      let y = e.touches[0].clientY
-
-      let deltaX = x - this.lastSingleTouch.x
-      // let deltaY = y - this.lastSingleTouch.y
-
-      let deltaX0 = x - this.singleTouchStart.x
-      let deltaY0 = y - this.singleTouchStart.y
-
-      this.lastSingleTouch = { x: x, y: y }
-
-      let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
-      let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
-
-      if (deltaX !== 0 && moveX) {
-        this.scrollComponent.scrollLeft -= deltaX
-      }
-      if (moveY) {
-        window.scrollTo(
-          window.pageXOffset,
-          this.singleTouchStart.screenY - deltaY0
-        )
-      }
-    }
-  }
-
-  touchEnd = e => {
-    if (this.lastTouchDistance) {
-      e.preventDefault()
-
-      this.lastTouchDistance = null
-    }
-    if (this.lastSingleTouch) {
-      e.preventDefault()
-
-      this.lastSingleTouch = null
-      this.singleTouchStart = null
-    }
   }
 
   resize = (props = this.props) => {
@@ -518,7 +357,10 @@ export default class ReactCalendarTimeline extends Component {
       width: containerWidth,
       top: containerTop
     } = this.container.getBoundingClientRect()
+
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    const { headerLabelGroupHeight, headerLabelHeight } = props
+    const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
       props.items,
@@ -529,37 +371,37 @@ export default class ReactCalendarTimeline extends Component {
       width
     )
 
+    // this is needed by dragItem since it uses pageY from the drag events
+    // if this was in the context of the scrollElement, this would not be necessary
+    const topOffset = containerTop + window.pageYOffset + headerHeight
+
     this.setState({
-      width: width,
-      topOffset: containerTop + window.pageYOffset,
-      dimensionItems: dimensionItems,
-      height: height,
-      groupHeights: groupHeights,
-      groupTops: groupTops
+      width,
+      topOffset,
+      dimensionItems,
+      height,
+      groupHeights,
+      groupTops
     })
     this.scrollComponent.scrollLeft = width
   }
 
-  onScroll = () => {
-    const scrollComponent = this.scrollComponent
+  onScroll = scrollX => {
     const canvasTimeStart = this.state.canvasTimeStart
-    const scrollX = scrollComponent.scrollLeft
+
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const width = this.state.width
     const visibleTimeStart = canvasTimeStart + zoom * scrollX / width
 
-    // move the virtual canvas if needed
     if (scrollX < this.state.width * 0.5) {
       this.setState({
         canvasTimeStart: this.state.canvasTimeStart - zoom
       })
-      scrollComponent.scrollLeft += this.state.width
     }
     if (scrollX > this.state.width * 1.5) {
       this.setState({
         canvasTimeStart: this.state.canvasTimeStart + zoom
       })
-      scrollComponent.scrollLeft -= this.state.width
     }
 
     if (
@@ -572,6 +414,10 @@ export default class ReactCalendarTimeline extends Component {
         this.updateScrollCanvas
       )
     }
+
+    this.setState({
+      currentScrollLeft: scrollX
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -633,7 +479,6 @@ export default class ReactCalendarTimeline extends Component {
     const newZoom = visibleTimeEnd - visibleTimeStart
     const items = updatedItems || this.props.items
     const groups = updatedGroups || this.props.groups
-    const { fullUpdate } = this.props
 
     let newState = {
       visibleTimeStart: visibleTimeStart,
@@ -674,7 +519,7 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    if (resetCanvas || forceUpdateDimensions || fullUpdate) {
+    if (resetCanvas || forceUpdateDimensions) {
       const canvasTimeStart = newState.canvasTimeStart
         ? newState.canvasTimeStart
         : oldCanvasTimeStart
@@ -689,8 +534,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart,
         visibleTimeStart,
         visibleTimeEnd,
-        this.state.width,
-        fullUpdate
+        this.state.width
       )
       newState.dimensionItems = dimensionItems
       newState.height = height
@@ -708,58 +552,8 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  zoomWithWheel = (speed, xPosition, deltaY) => {
+  handleWheelZoom = (speed, xPosition, deltaY) => {
     this.changeZoom(1.0 + speed * deltaY / 500, xPosition / this.state.width)
-  }
-
-  onWheel = e => {
-    const { traditionalZoom } = this.props
-
-    e.preventDefault()
-
-    // zoom in the time dimension
-    if (e.ctrlKey || e.metaKey || e.altKey) {
-      const parentPosition = getParentPosition(e.currentTarget)
-      const xPosition = e.clientX - parentPosition.x
-
-      const speed = e.ctrlKey ? 10 : e.metaKey ? 3 : 1
-
-      this.zoomWithWheel(speed, xPosition, e.deltaY)
-
-      // convert vertical zoom to horiziontal
-    } else if (e.shiftKey) {
-      // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.scrollComponent.scrollLeft += (e.deltaY || e.deltaX)
-
-      // no modifier pressed? we prevented the default event, so scroll or zoom as needed
-    } else {
-      if (e.deltaX !== 0) {
-        if (!traditionalZoom) {
-          this.scrollComponent.scrollLeft += e.deltaX
-        }
-      }
-      if (e.deltaY !== 0) {
-        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
-        if (traditionalZoom) {
-          const parentPosition = getParentPosition(e.currentTarget)
-          const xPosition = e.clientX - parentPosition.x
-
-          this.zoomWithWheel(10, xPosition, e.deltaY)
-        }
-      }
-    }
-  }
-
-  zoomIn(e) {
-    e.preventDefault()
-
-    this.changeZoom(0.75)
-  }
-
-  zoomOut(e) {
-    e.preventDefault()
-
-    this.changeZoom(1.25)
   }
 
   changeZoom(scale, offset = 0.5) {
@@ -850,7 +644,7 @@ export default class ReactCalendarTimeline extends Component {
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
   rowAndTimeFromScrollAreaEvent = e => {
-    const { headerLabelGroupHeight, headerLabelHeight, dragSnap } = this.props
+    const { dragSnap } = this.props
     const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
     const lineCount = _length(this.props.groups)
 
@@ -862,7 +656,7 @@ export default class ReactCalendarTimeline extends Component {
 
     // calculate the y coordinate from `groupHeights` and header heights
     let row = 0
-    let remainingHeight = y - headerLabelGroupHeight - headerLabelHeight
+    let remainingHeight = y
 
     while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
       remainingHeight -= groupHeights[row]
@@ -955,55 +749,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleMouseDown = e => {
-    const { topOffset } = this.state
-    const { pageY } = e
-    const { headerLabelGroupHeight, headerLabelHeight } = this.props
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
-
-    if (pageY - topOffset > headerHeight && e.button === 0) {
-      this.setState({
-        isDragging: true,
-        dragStartPosition: e.pageX,
-        dragLastPosition: e.pageX
-      })
-    }
-  }
-
-  handleMouseMove = e => {
-    if (
-      this.state.isDragging &&
-      !this.state.draggingItem &&
-      !this.state.resizingItem
-    ) {
-      this.scrollComponent.scrollLeft += this.state.dragLastPosition - e.pageX
-      this.setState({ dragLastPosition: e.pageX })
-    }
-  }
-
-  handleMouseUp = e => {
-    const { dragStartPosition } = this.state
-
-    if (Math.abs(dragStartPosition - e.pageX) <= this.props.clickTolerance) {
-      this.scrollAreaClick(e)
-    }
-
-    this.setState({
-      isDragging: false,
-      dragStartPosition: null,
-      dragLastPosition: null
-    })
-  }
-
-  handleMouseLeave = () => {
-    this.setState({
-      isDragging: false,
-      dragStartPosition: null,
-      dragLastPosition: null
-    })
-  }
-
-  handleCanvasMouseEnter = e => {
+  handleScrollMouseEnter = e => {
     const { showCursorLine } = this.props
     if (showCursorLine) {
       this.setState({ mouseOverCanvas: true })
@@ -1014,7 +760,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasMouseLeave = e => {
+  handleScrollMouseLeave = e => {
     const { showCursorLine } = this.props
     if (showCursorLine) {
       this.setState({ mouseOverCanvas: false })
@@ -1025,7 +771,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasMouseMove = e => {
+  handleScrollMouseMove = e => {
     const { showCursorLine } = this.props
     const {
       canvasTimeStart,
@@ -1121,7 +867,6 @@ export default class ReactCalendarTimeline extends Component {
         lineCount={_length(this.props.groups)}
         minUnit={minUnit}
         timeSteps={timeSteps}
-        fixedHeader={this.props.fixedHeader}
         height={height}
         headerHeight={headerHeight}
       />
@@ -1181,6 +926,9 @@ export default class ReactCalendarTimeline extends Component {
         itemResized={this.resizedItem}
         itemRenderer={this.props.itemRenderer}
         selected={this.props.selected}
+        minimumWidthForItemContentVisibility={
+          this.props.minimumWidthForItemContentVisibility
+        }
       />
     )
   }
@@ -1209,6 +957,27 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight,
     headerLabelHeight
   ) {
+    const { sidebarWidth, rightSidebarWidth } = this.props
+    const leftSidebar = sidebarWidth != null &&
+      sidebarWidth > 0 && (
+        <div
+          className="rct-sidebar-header"
+          style={{ width: this.props.sidebarWidth }}
+        >
+          {this.props.sidebarContent}
+        </div>
+      )
+
+    const rightSidebar = rightSidebarWidth != null &&
+      rightSidebarWidth > 0 && (
+        <div
+          className="rct-sidebar-header rct-sidebar-right"
+          style={{ width: this.props.rightSidebarWidth }}
+        >
+          {this.props.rightSidebarContent}
+        </div>
+      )
+
     return (
       <Header
         canvasTimeStart={canvasTimeStart}
@@ -1224,53 +993,61 @@ export default class ReactCalendarTimeline extends Component {
         zoom={zoom}
         visibleTimeStart={this.state.visibleTimeStart}
         visibleTimeEnd={this.state.visibleTimeEnd}
-        headerPosition={this.state.headerPosition}
-        fixedHeader={this.props.fixedHeader}
         stickyOffset={this.props.stickyOffset}
+        stickyHeader={this.props.stickyHeader}
         showPeriod={this.showPeriod}
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
+        registerScroll={this.registerScrollListener}
+        leftSidebarHeader={leftSidebar}
+        rightSidebarHeader={rightSidebar}
+        headerRef={this.props.headerRef}
       />
     )
   }
 
-  sidebar(height, groupHeights, headerHeight) {
+  componentDidUpdate() {
+    this.headerScrollListener(this.state.currentScrollLeft)
+  }
+
+  registerScrollListener = listener => {
+    this.headerScrollListener = listener
+  }
+
+  sidebar(height, groupHeights) {
+    const { sidebarWidth } = this.props
     return (
-      <Sidebar
-        groups={this.props.groups}
-        groupRenderer={this.props.groupRenderer}
-        keys={this.props.keys}
-        width={this.props.sidebarWidth}
-        lineHeight={this.props.lineHeight}
-        groupHeights={groupHeights}
-        height={height}
-        headerHeight={headerHeight}
-        headerPosition={this.state.headerPosition}
-        stickyOffset={this.props.stickyOffset}
-        fixedHeader={this.props.fixedHeader}
-      >
-        {this.props.sidebarContent}
-      </Sidebar>
+      sidebarWidth != null &&
+      sidebarWidth > 0 && (
+        <Sidebar
+          groups={this.props.groups}
+          groupRenderer={this.props.groupRenderer}
+          keys={this.props.keys}
+          width={this.props.sidebarWidth}
+          lineHeight={this.props.lineHeight}
+          groupHeights={groupHeights}
+          height={height}
+        />
+      )
     )
   }
 
-  rightSidebar(height, groupHeights, headerHeight) {
+  rightSidebar(height, groupHeights) {
+    const { rightSidebarWidth } = this.props
+
     return (
-      <Sidebar
-        groups={this.props.groups}
-        keys={this.props.keys}
-        isRightSidebar
-        width={this.props.rightSidebarWidth}
-        lineHeight={this.props.lineHeight}
-        groupHeights={groupHeights}
-        height={height}
-        headerHeight={headerHeight}
-        headerPosition={this.state.headerPosition}
-        stickyOffset={this.props.stickyOffset}
-        fixedHeader={this.props.fixedHeader}
-      >
-        {this.props.rightSidebarContent}
-      </Sidebar>
+      rightSidebarWidth != null &&
+      rightSidebarWidth > 0 && (
+        <Sidebar
+          groups={this.props.groups}
+          keys={this.props.keys}
+          isRightSidebar
+          width={this.props.rightSidebarWidth}
+          lineHeight={this.props.lineHeight}
+          groupHeights={groupHeights}
+          height={height}
+        />
+      )
     )
   }
 
@@ -1299,7 +1076,6 @@ export default class ReactCalendarTimeline extends Component {
       headerLabelGroupHeight,
       headerLabelHeight,
       stackItems,
-      fullUpdate,
       itemHeightRatio
     } = this.props
     const {
@@ -1339,10 +1115,7 @@ export default class ReactCalendarTimeline extends Component {
         dragSnap,
         dragTime,
         resizingEdge,
-        resizeTime,
-        fullUpdate,
-        visibleTimeStart,
-        visibleTimeEnd
+        resizeTime
       })
 
       if (dimension) {
@@ -1375,7 +1148,7 @@ export default class ReactCalendarTimeline extends Component {
     return { dimensionItems, height, groupHeights, groupTops }
   }
 
-  handleDoubleClick = e => {
+  handleScrollDoubleClick = e => {
     const {
       canvasTimeStart,
       width,
@@ -1425,7 +1198,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  handleCanvasContextMenu = e => {
+  handleScrollContextMenu = e => {
     const {
       canvasTimeStart,
       width,
@@ -1526,12 +1299,13 @@ export default class ReactCalendarTimeline extends Component {
       sidebarWidth,
       rightSidebarWidth,
       timeSteps,
-      showCursorLine
+      showCursorLine,
+      clickTolerance,
+      traditionalZoom
     } = this.props
     const {
       draggingItem,
       resizingItem,
-      isDragging,
       width,
       visibleTimeStart,
       visibleTimeEnd,
@@ -1547,7 +1321,9 @@ export default class ReactCalendarTimeline extends Component {
     const minUnit = getMinUnit(zoom, width, timeSteps)
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
-    if (draggingItem || resizingItem) {
+    const isInteractingWithItem = !!draggingItem || !!resizingItem
+
+    if (isInteractingWithItem) {
       const stackResults = this.stackItems(
         items,
         groups,
@@ -1566,12 +1342,6 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
-    const scrollComponentStyle = {
-      width: `${width}px`,
-      height: `${height + 20}px`,
-      cursor: isDragging ? 'move' : 'default'
-    }
-
     const canvasComponentStyle = {
       width: `${canvasWidth}px`,
       height: `${height}px`
@@ -1583,30 +1353,38 @@ export default class ReactCalendarTimeline extends Component {
         ref={el => (this.container = el)}
         className="react-calendar-timeline"
       >
+        {this.header(
+          canvasTimeStart,
+          zoom,
+          canvasTimeEnd,
+          canvasWidth,
+          minUnit,
+          timeSteps,
+          headerLabelGroupHeight,
+          headerLabelHeight
+        )}
         <div style={outerComponentStyle} className="rct-outer">
-          {sidebarWidth > 0
-            ? this.sidebar(height, groupHeights, headerHeight)
-            : null}
-          <div
-            ref={el => (this.scrollComponent = el)}
-            className="rct-scroll"
-            style={scrollComponentStyle}
+          {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
+          <ScrollElement
+            scrollRef={el => (this.scrollComponent = el)}
+            width={width}
+            height={height}
+            clickTolerance={clickTolerance}
+            onWheelZoom={this.handleWheelZoom}
+            traditionalZoom={traditionalZoom}
+            onClick={this.scrollAreaClick}
             onScroll={this.onScroll}
-            onWheel={this.onWheel}
-            onMouseDown={this.handleMouseDown}
-            onMouseMove={this.handleMouseMove}
-            onMouseUp={this.handleMouseUp}
-            onMouseLeave={this.handleMouseLeave}
+            isInteractingWithItem={isInteractingWithItem}
+            onDoubleClick={this.handleScrollDoubleClick}
+            onMouseEnter={this.handleScrollMouseEnter}
+            onMouseLeave={this.handleScrollMouseLeave}
+            onMouseMove={this.handleScrollMouseMove}
+            onContextMenu={this.handleScrollContextMenu}
           >
             <div
               ref={el => (this.canvasComponent = el)}
               className="rct-canvas"
               style={canvasComponentStyle}
-              onDoubleClick={this.handleDoubleClick}
-              onMouseEnter={this.handleCanvasMouseEnter}
-              onMouseLeave={this.handleCanvasMouseLeave}
-              onMouseMove={this.handleCanvasMouseMove}
-              onContextMenu={this.handleCanvasContextMenu}
             >
               {this.items(
                 canvasTimeStart,
@@ -1638,16 +1416,6 @@ export default class ReactCalendarTimeline extends Component {
                 height,
                 headerHeight
               )}
-              {this.header(
-                canvasTimeStart,
-                zoom,
-                canvasTimeEnd,
-                canvasWidth,
-                minUnit,
-                timeSteps,
-                headerLabelGroupHeight,
-                headerLabelHeight
-              )}
               {mouseOverCanvas && showCursorLine
                 ? this.cursorLine(
                     cursorTime,
@@ -1676,9 +1444,9 @@ export default class ReactCalendarTimeline extends Component {
                 timeSteps
               )}
             </div>
-          </div>
+          </ScrollElement>
           {rightSidebarWidth > 0
-            ? this.rightSidebar(height, groupHeights, headerHeight)
+            ? this.rightSidebar(height, groupHeights)
             : null}
         </div>
       </div>

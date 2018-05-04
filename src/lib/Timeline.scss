@@ -1,12 +1,12 @@
 $item-color: white;
-$item-background: #2196F3;
-$item-border: 1px solid #1A6FB3;
+$item-background: #2196f3;
+$item-border: 1px solid #1a6fb3;
 $item-selected-color: white;
-$item-selected-background: #FFC107;
-$item-selected-border: 1px solid #FF9800;
+$item-selected-background: #ffc107;
+$item-selected-border: 1px solid #ff9800;
 
 $row-background-even: transparent;
-$row-background-odd: rgba(0,0,0,0.05);
+$row-background-odd: rgba(0, 0, 0, 0.05);
 
 $border-color: #bbb;
 $border-width: 1px;
@@ -45,109 +45,88 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: relative;
   }
 
-  .rct-items {
-    .rct-item {
-      overflow: hidden;
+  .rct-item {
+    position: absolute;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: $item-color;
+    cursor: pointer;
+
+    background: $item-background;
+    border: $item-border;
+    z-index: 80;
+
+    &.selected {
+      background: $item-selected-background;
+      border: $item-selected-border;
+      z-index: 82;
+      &.can-move {
+        cursor: move;
+      }
+      &.can-resize-left {
+        border-left-width: 3px;
+
+        .rct-drag-left {
+          cursor: w-resize;
+        }
+      }
+      &.can-resize-right {
+        border-right-width: 3px;
+
+        .rct-drag-right {
+          cursor: e-resize;
+        }
+      }
+    }
+
+    .rct-drag-left {
       position: absolute;
-      box-sizing: border-box;
-      font-size: 12px;
-      color: $item-color;
-      text-align: center;
+      width: 24px;
+      max-width: 20%;
+      min-width: 2px;
+      height: 100%;
+      top: 0;
+      left: 0;
       cursor: pointer;
+      z-index: 88;
+    }
 
-      background: $item-background;
-      border: $item-border;
-      z-index: 80;
+    .rct-drag-right {
+      position: absolute;
+      width: 24px;
+      max-width: 20%;
+      min-width: 2px;
+      height: 100%;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      z-index: 88;
+    }
 
-      &.clipped-left {
-        border-left: 0;
-      }
+    &:hover {
+      z-index: 88;
+    }
 
-      &.clipped-right {
-        border-right: 0;
-      }
+    .rct-item-content {
+      position: sticky;
+      position: -webkit-sticky;
+      left: 0px;
+      overflow: hidden;
+      display: inline-block;
+      border-radius: 2px;
+      left: 0;
+      padding: 0 6px;
+      height: 100%;
+    }
+  }
 
-      &.selected {
-        background: $item-selected-background;
-        border: $item-selected-border;
-        z-index: 82;
+  .rct-header-container {
+    z-index: 90;
+    display: flex;
 
-        &.clipped-left {
-          border-left: 0;
-        }
-        &.clipped-right {
-          border-right: 0;
-        }
-        &.can-move {
-          cursor: move;
-        }
-        &.can-resize-left {
-          border-left-width: 3px;
-
-          .rct-drag-left {
-            cursor: w-resize;
-          }
-        }
-        &.can-resize-right {
-          border-right-width: 3px;
-
-          .rct-drag-right {
-            cursor: e-resize;
-          }
-        }
-      }
-
-      .rct-drag-left {
-        position: absolute;
-        width: 24px;
-        max-width: 20%;
-        min-width: 2px;
-        height: 100%;
-        top: 0;
-        left: 0;
-        cursor: pointer;
-        z-index: 88;
-      }
-
-      .rct-drag-right {
-        position: absolute;
-        width: 24px;
-        max-width: 20%;
-        min-width: 2px;
-        height: 100%;
-        top: 0;
-        right: 0;
-        cursor: pointer;
-        z-index: 88;
-      }
-
-      &:hover {
-        z-index: 88;
-      }
-
-      .rct-item-overflow {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-
-        &:hover {
-          overflow: visible;
-          z-index: 88;
-        }
-
-        .rct-item-content {
-          white-space: nowrap;
-          position: relative;
-          display: inline-block;
-          border-radius: 2px;
-          left: 0;
-          padding: 0 6px;
-          height: 100%;
-        }
-      }
+    &.header-sticky {
+      position: sticky;
+      position: -webkit-sticky;
     }
   }
 
@@ -156,11 +135,16 @@ $weekend: rgba(250, 246, 225, 0.5);
     overflow-x: hidden;
     z-index: 90;
 
+    .top-header,
+    .bottom-header {
+      position: relative;
+    }
+
     .rct-label-group {
+      padding: 0 5px;
       position: absolute;
       top: 0;
       font-size: 14px;
-      overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $thick-border-width solid $border-color;
@@ -172,11 +156,17 @@ $weekend: rgba(250, 246, 225, 0.5);
         border-right: ($thick-border-width / 2) solid $border-color;
         border-left: ($thick-border-width / 2) solid $border-color;
       }
+
+      & > span {
+        position: sticky;
+        left: 5px;
+        right: 5px;
+      }
     }
 
     .rct-label {
       position: absolute;
-      overflow: hidden;
+      // overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $border-width solid $border-color;
@@ -196,6 +186,21 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
   }
 
+  .rct-sidebar-header {
+    margin: 0;
+    color: $sidebar-color;
+    background: $sidebar-background-color;
+    border-right: $border-width solid $border-color;
+    box-sizing: border-box;
+    border-bottom: $border-width solid $border-color;
+    overflow: hidden;
+
+    &.rct-sidebar-right {
+      border-right: 0;
+      border-left: $border-width solid $border-color;
+    }
+  }
+
   .rct-sidebar {
     overflow: hidden;
     white-space: normal; // was set to nowrap in .rct-outer
@@ -208,16 +213,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     &.rct-sidebar-right {
       border-right: 0;
       border-left: $border-width solid $border-color;
-    }
-
-    .rct-sidebar-header {
-      margin: 0;
-      color: $sidebar-color;
-      background: $sidebar-background-color;
-      border-right: $border-width solid $border-color;
-      box-sizing: 'border-box';
-      border-bottom: $border-width solid $border-color;
-      overflow: 'hidden';
     }
 
     .rct-sidebar-row {
@@ -247,14 +242,16 @@ $weekend: rgba(250, 246, 225, 0.5);
       &.rct-vl-first {
         border-left-width: 2px;
       }
-      &.rct-day-6, &.rct-day-0 {
+      &.rct-day-6,
+      &.rct-day-0 {
         background: $weekend;
       }
     }
   }
 
   .rct-horizontal-lines {
-    .rct-hl-even, .rct-hl-odd {
+    .rct-hl-even,
+    .rct-hl-odd {
       border-bottom: $border-width solid $border-color;
       box-sizing: content-box;
       position: absolute;
@@ -286,7 +283,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: fixed;
     left: 100px;
     bottom: 50px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     color: white;
     padding: 10px;
     font-size: 20px;

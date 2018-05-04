@@ -9,7 +9,6 @@ export default class CursorLine extends Component {
     lineHeight: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
     cursorTime: PropTypes.number,
-    headerHeight: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }
 
@@ -24,10 +23,9 @@ export default class CursorLine extends Component {
         this.props.canvasWidth /
         (this.props.canvasTimeEnd - this.props.canvasTimeStart)
       const left = Math.round((cursorTime - this.props.canvasTimeStart) * ratio)
-      const top = this.props.headerHeight
-      const height = this.props.height - this.props.headerHeight
+      const height = this.props.height
       const styles = {
-        top: `${top}px`,
+        top: '0px',
         left: `${left}px`,
         height: `${height}px`
       }

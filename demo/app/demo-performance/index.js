@@ -29,13 +29,12 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData()
+    const { groups, items } = generateFakeData(100, 10000)
     const defaultTimeStart = moment()
-      .startOf('day')
+      .startOf('month')
       .toDate()
     const defaultTimeEnd = moment()
-      .startOf('day')
-      .add(1, 'day')
+      .endOf('month')
       .toDate()
 
     this.state = {
@@ -48,10 +47,6 @@ export default class App extends Component {
 
   handleCanvasClick = (groupId, time, event) => {
     console.log('Canvas clicked', groupId, moment(time).format())
-  }
-
-  handleCanvasDoubleClick = (groupId, time, event) => {
-    console.log('Canvas double clicked', groupId, moment(time).format())
   }
 
   handleCanvasContextMenu = (group, time, e) => {
@@ -182,7 +177,6 @@ export default class App extends Component {
         // groupRenderer={this.groupRenderer}
 
         onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}
         onItemSelect={this.handleItemSelect}

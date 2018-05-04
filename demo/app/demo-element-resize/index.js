@@ -22,12 +22,17 @@ var keys = {
 }
 
 export default class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     const { groups, items } = generateFakeData(10, 200)
-    const defaultTimeStart = moment().startOf('day').toDate()
-    const defaultTimeEnd = moment().startOf('day').add(1, 'day').toDate()
+    const defaultTimeStart = moment()
+      .startOf('day')
+      .toDate()
+    const defaultTimeEnd = moment()
+      .startOf('day')
+      .add(1, 'day')
+      .toDate()
     const width = 80
 
     this.state = {
@@ -39,50 +44,56 @@ export default class App extends Component {
     }
   }
 
-  render () {
-    const { groups, items, defaultTimeStart, defaultTimeEnd, width } = this.state
+  render() {
+    const {
+      groups,
+      items,
+      defaultTimeStart,
+      defaultTimeEnd,
+      width
+    } = this.state
 
     return (
       <div>
-        <div style={{width: `${width}%`, float: 'left'}}>
-          <Timeline groups={groups}
-                    items={items}
-                    keys={keys}
-                    fixedHeader='fixed'
-                    fullUpdate
-
-                    sidebarWidth={150}
-                    sidebarContent={<div>Above The Left er aew rawe rwea rwae</div>}
-                    rightSidebarWidth={150}
-                    rightSidebarContent={<div>Above The Right</div>}
-
-                    canMove
-                    canResize='right'
-                    canSelect
-
-                    itemsSorted
-                    itemTouchSendsClick={false}
-                    stackItems
-                    itemHeightRatio={0.75}
-
-                    showCursorLine
-
-                    resizeDetector={containerResizeDetector}
-
-                    defaultTimeStart={defaultTimeStart}
-                    defaultTimeEnd={defaultTimeEnd} />
+        <div style={{ width: `${width}%`, float: 'left' }}>
+          <Timeline
+            groups={groups}
+            items={items}
+            keys={keys}
+            sidebarWidth={150}
+            sidebarContent={<div>Above The Left er aew rawe rwea rwae</div>}
+            rightSidebarWidth={150}
+            rightSidebarContent={<div>Above The Right</div>}
+            canMove
+            canResize="right"
+            canSelect
+            itemsSorted
+            itemTouchSendsClick={false}
+            stackItems
+            itemHeightRatio={0.75}
+            showCursorLine
+            resizeDetector={containerResizeDetector}
+            defaultTimeStart={defaultTimeStart}
+            defaultTimeEnd={defaultTimeEnd}
+          />
         </div>
-        <div style={{width: `${100 - width}%`, float: 'left'}}>
-          <div style={{padding: 20}}>
+        <div style={{ width: `${100 - width}%`, float: 'left' }}>
+          <div style={{ padding: 20 }}>
             The timeline is {width}% wide.
             <br />
             <br />
-            Set container's width:
+            Set containers width:
             <br />
             {[20, 40, 60, 80].map(p => (
-              <span key={p}
-                    onClick={() => this.setState({ width: p })}
-                    style={{ cursor: 'pointer', marginLeft: 10, textDecoration: p === width ? 'underline' : 'none' }}>
+              <span
+                key={p}
+                onClick={() => this.setState({ width: p })}
+                style={{
+                  cursor: 'pointer',
+                  marginLeft: 10,
+                  textDecoration: p === width ? 'underline' : 'none'
+                }}
+              >
                 {p}%
               </span>
             ))}

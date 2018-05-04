@@ -1,4 +1,4 @@
-import { getVisibleItems } from '../../../utility/calendar'
+import { getVisibleItems } from 'lib/utility/calendar'
 import moment from 'moment'
 
 const itemTimeStartKey = 'start'

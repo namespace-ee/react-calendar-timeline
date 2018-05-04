@@ -7,7 +7,18 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-When you submit a PR, add your changes here!
+### Added
+
+* added `stickyHeader` to disable/enable timeline header sticking on scroll.
+* removed `fullUpdate` prop and functionality. Labels rely on `position: sticky` to show for items that start before `visibleTimeStart`. This (should) greatly improve scroll performance.
+* removed extraneous css such as `text-align: center` on `.rct-item`, `.rct-item-overflow` to simplify the dom structure of `Item.js`
+* added `headerRef` callback to receive a reference to the header element. Due to the change in how the header positioning is implemented (i.e. using `position: sticky`), there is a need to use a polyfill in [certain browsers](https://caniuse.com/#feat=css-sticky) that don't support `position: sticky`. With a reference to the header dom element, you can use a polyfill to apply sticky behavior.
+* `minimumWidthForItemContentVisibility` prop to control at what width inner item content is rendered.
+
+### Breaking
+
+* removed `fixedHeader` prop in favor of using `position: sticky` by default
+* removed import of stylesheets in library code, put onus on user to handle this stylesheet
 
 ## 0.15.12
 

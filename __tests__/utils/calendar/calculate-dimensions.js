@@ -1,4 +1,4 @@
-import { calculateDimensions } from '../../../utility/calendar'
+import { calculateDimensions } from 'lib/utility/calendar'
 
 describe('calculateDimensions', () => {
   it('the item is full on a canvas no draging no resizing', () => {
@@ -15,14 +15,11 @@ describe('calculateDimensions', () => {
       resizingItem: false,
       resizingEdge: false,
       resizeTime: false, // we are not resizing right now
-      fullUpdate: true,
       visibleTimeStart: 0,
       visibleTimeEnd: 500
     })
 
     expect(dimension).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 200,
       collisionWidth: 100,
       left: 200,
@@ -45,14 +42,11 @@ describe('calculateDimensions', () => {
       resizingItem: false,
       resizingEdge: false,
       resizeTime: false, // we are not resizing right now
-      fullUpdate: true,
       visibleTimeStart: 0,
       visibleTimeEnd: 500
     })
 
     expect(dimension).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 192,
       collisionWidth: 108,
       left: 192,
@@ -75,25 +69,11 @@ describe('calculateDimensions', () => {
       resizingItem: false,
       resizingEdge: false,
       resizeTime: false, // we are not resizing right now
-      fullUpdate: true,
       visibleTimeStart: 100,
       visibleTimeEnd: 500
     }
+
     expect(calculateDimensions(example)).toMatchObject({
-      clippedLeft: true,
-      clippedRight: false,
-      collisionLeft: 0,
-      collisionWidth: 300,
-      left: 0,
-      originalLeft: 0,
-      width: 200
-    })
-    // if we don't do the fullUpdate we don't get correct
-    // clipping informations
-    example.fullUpdate = false
-    expect(calculateDimensions(example)).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 0,
       collisionWidth: 300,
       left: -100,
@@ -116,25 +96,11 @@ describe('calculateDimensions', () => {
       resizingItem: false,
       resizingEdge: false,
       resizeTime: false, // we are not resizing right now
-      fullUpdate: true,
       visibleTimeStart: 500,
       visibleTimeEnd: 900
     }
+
     expect(calculateDimensions(example)).toMatchObject({
-      clippedLeft: false,
-      clippedRight: true,
-      collisionLeft: 700,
-      collisionWidth: 300,
-      left: 200,
-      originalLeft: 700,
-      width: 200
-    })
-    // if we don't do the fullUpdate we don't get correct
-    // clipping informations
-    example.fullUpdate = false
-    expect(calculateDimensions(example)).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 700,
       collisionWidth: 300,
       left: 200,
@@ -157,14 +123,11 @@ describe('calculateDimensions', () => {
       resizingItem: false,
       resizingEdge: false,
       resizeTime: false, // we are not resizing right now
-      fullUpdate: true,
       visibleTimeStart: 0,
       visibleTimeEnd: 500
     })
 
     expect(dimension).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 200,
       collisionWidth: 200,
       left: 300,
@@ -190,8 +153,6 @@ describe('calculateDimensions', () => {
     })
 
     expect(dimension).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 200,
       collisionWidth: 50,
       left: 200,
@@ -214,14 +175,11 @@ describe('calculateDimensions', () => {
       resizingItem: true,
       resizingEdge: 'left',
       resizeTime: 210,
-      fullUpdate: true,
       visibleTimeStart: 0,
       visibleTimeEnd: 500
     })
 
     expect(dimension).toMatchObject({
-      clippedLeft: false,
-      clippedRight: false,
       collisionLeft: 210,
       collisionWidth: 90,
       left: 210,
