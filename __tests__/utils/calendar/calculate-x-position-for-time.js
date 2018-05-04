@@ -1,4 +1,4 @@
-import { calculateXPositionForTime } from '../../../utility/calendar'
+import { calculateXPositionForTime } from 'lib/utility/calendar'
 import moment from 'moment'
 
 describe('calculateXPositionForTime', () => {
@@ -7,14 +7,14 @@ describe('calculateXPositionForTime', () => {
   const endTime = 200000
 
   it('returns time in middle of timeline', () => {
-    const time = startTime + ((endTime - startTime) * 0.5)
+    const time = startTime + (endTime - startTime) * 0.5
     const result = calculateXPositionForTime(startTime, endTime, width, time, 0)
 
     expect(result).toBe(500)
   })
 
   it('returns time in the first quarter of timeline', () => {
-    const time = startTime + ((endTime - startTime) * 0.25)
+    const time = startTime + (endTime - startTime) * 0.25
     const result = calculateXPositionForTime(startTime, endTime, width, time)
 
     expect(result).toBe(250)
@@ -23,8 +23,11 @@ describe('calculateXPositionForTime', () => {
   it('returns time in the middle of timeline with actual date', () => {
     const today = moment().startOf('day')
     const startTime = today.valueOf()
-    const endTime = today.clone().add(1, 'day').valueOf()
-    const time = startTime + ((endTime - startTime) * 0.5)
+    const endTime = today
+      .clone()
+      .add(1, 'day')
+      .valueOf()
+    const time = startTime + (endTime - startTime) * 0.5
     const result = calculateXPositionForTime(startTime, endTime, width, time)
 
     expect(result).toBe(500)

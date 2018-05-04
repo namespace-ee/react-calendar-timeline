@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { getMinUnit, minCellWidth } from '../../../utility/calendar'
+import { getMinUnit, minCellWidth } from 'lib/utility/calendar'
 import moment from 'moment'
-import { defaultTimeSteps } from '../../../default-config'
+import { defaultTimeSteps } from 'lib/default-config'
 
 describe('getMinUnit', () => {
   // this is the happy path and used as safety net if we make any refactorings

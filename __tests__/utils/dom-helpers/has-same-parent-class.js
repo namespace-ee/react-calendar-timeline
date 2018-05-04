@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { hasSomeParentTheClass } from '../../../utility/dom-helpers'
-import { buildDom } from '../../../test-utility'
+import { hasSomeParentTheClass } from 'lib/utility/dom-helpers'
+import { buildDom } from 'test-utility'
 
 const targetId = 'target'
 describe('hasSomeParentTheClass', () => {
