@@ -20,6 +20,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 * removed `fixedHeader` prop in favor of using `position: sticky` by default
 * removed import of stylesheets in library code, put onus on user to handle this stylesheet
 
+## 0.15.12
+
 ### Fixed
 
 * Shift + Scroll via mouse wheel scrolls canvas horizontally - #281
