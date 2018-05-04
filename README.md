@@ -18,18 +18,6 @@ npm install --save react-calendar-timeline
 
 `react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interact.js`](http://interactjs.io/docs/) as peer dependencies.
 
-You need to install them separately:
-
-```bash
-# via yarn
-yarn add react react-dom # you probably already have these
-yarn add moment interact.js
-
-# via npm
-npm install --save react react-dom # you probably already have these
-npm install --save moment interact.js
-```
-
 ## Usage
 
 At the very minimum:
@@ -125,6 +113,16 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 ```
 
 The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript Date or moment()) will also work, but will be a lot slower.
+
+### defaultTimeStart and defaultTimeEnd
+
+Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
+
+### visibleTimeStart and visibleTimeEnd
+
+The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a unix timestamp in milliseconds.
+
+**Note that you need to provide either `defaultTimeStart/End` or `visibleTimeStart/End` for the timeline to function**
 
 ### selected
 
@@ -326,14 +324,6 @@ function (action, item, time, resizeEdge) {
   return time
 }
 ```
-
-### defaultTimeStart and defaultTimeEnd
-
-Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
-
-### visibleTimeStart and visibleTimeEnd
-
-The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a unix timestamp in milliseconds.
 
 ### headerLabelFormats and subHeaderLabelFormats
 
@@ -537,26 +527,6 @@ import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector
 <Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
-### children (plugins)
-
-If you give the component any children, they will be passed some extra props. Use this to render anything on the timeline (custom backgrounds, arrows, etc).
-
-See [the plugins demo](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#plugins-experimental)
-
-**NOTE!** This API is still experimental and will change in the next versions, as we move toward unifying the internal and external APIs. Keep an eye out for the [changelog](https://github.com/namespace-ee/react-calendar-timeline/blob/master/CHANGELOG.md)!
-
-The children gets passed the following props:
-
-* `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
-* `canvasWidth` - width of the scrolling canvas in pixels
-* `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
-* `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
-* `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
-* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
-* `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
-* `selected` - an array of selected items
-* `timeSteps` - steps for displaying time
-
 ## FAQ
 
 ### My timeline is unstyled
@@ -575,7 +545,7 @@ You will then need to override the default CSS rule:
 }
 ```
 
-### How can I add one more sidebar on the right?
+### How can I add a sidebar on the right?
 
 The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
