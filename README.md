@@ -689,11 +689,11 @@ If you like to improve React Calendar Timeline fork the repo and get started by 
 ```bash
 $ git clone https://github.com/namespace-ee/react-calendar-timeline.git react-calendar-timeline
 $ cd react-calendar-timeline
-$ npm install
-$ npm start
+$ yarn
+$ yarn start
 ```
 
-Check http://0.0.0.0:8080/ in your browser and have fun!
+Check http://0.0.0.0:8888/ in your browser and have fun!
 
 Please run `npm run lint` before you send a pull request. `npm run jest` runs the tests.
 
