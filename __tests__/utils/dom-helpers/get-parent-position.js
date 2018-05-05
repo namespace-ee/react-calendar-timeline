@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { getParentPosition } from '../../../utility/dom-helpers'
+import { getParentPosition } from 'lib/utility/dom-helpers'
 
 describe('getParentPosition', () => {
   xit('WRITE TEST HERE', () => {})

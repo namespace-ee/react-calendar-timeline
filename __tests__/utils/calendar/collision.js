@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { collision } from '../../../utility/calendar'
+import { collision } from 'lib/utility/calendar'
 
 const buildObject = (x, y, width, height) => ({
   collisionLeft: x,
