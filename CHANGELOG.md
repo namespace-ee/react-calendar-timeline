@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.16.1
+
 ### Added
 
 * added `stickyHeader` to disable/enable timeline header sticking on scroll.
