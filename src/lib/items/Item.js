@@ -98,7 +98,7 @@ export default class Item extends Component {
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
-      nextProps.dimensions !== this.props.dimensions ||
+      !deepObjectCompare(nextProps.dimensions, this.props.dimensions) ||
       nextProps.minimumWidthForItemContentVisibility !==
         this.props.minimumWidthForItemContentVisibility
     return shouldUpdate

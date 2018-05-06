@@ -5,6 +5,11 @@ import App from './app'
 
 import './index.html'
 
+if (process.env.NODE_ENV !== 'production') {
+  const {whyDidYouUpdate} = require('why-did-you-update');
+  whyDidYouUpdate(React);
+}
+
 const render = AppToRender => {
   ReactDOM.render(<AppToRender />, document.getElementById('root'))
 }
