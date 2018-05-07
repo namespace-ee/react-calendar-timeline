@@ -12,10 +12,26 @@ export default class TodayLine extends PureComponent {
   }
 
   static defaultProps = {}
+  
+  state = {
+    currentTime: new Date(),
+  }
 
+  componentDidMount(){
+    this.interval = setInterval(()=> {
+      this.setState({
+        currentTime: new Date(),
+      })
+    }, 1000)
+  }
+
+  componentWillUnmount(){
+    this.interval && clearInterval(this.interval)
+  }
+  
   // TODO: should currentTime come from a prop? probably...?
   render() {
-    let currentTime = new Date().getTime()
+    let currentTime = this.state.currentTime.getTime()
 
     if (
       currentTime > this.props.canvasTimeStart &&

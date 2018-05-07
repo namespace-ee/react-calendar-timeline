@@ -21,7 +21,7 @@ class Header extends PureComponent {
     headerLabelHeight: PropTypes.number.isRequired,
     registerScroll: PropTypes.func.isRequired,
     leftSidebarHeader: PropTypes.func,
-    rightSidebarHeader: PropTypes.node,
+    rightSidebarHeader: PropTypes.func,
     headerRef: PropTypes.func.isRequired
   }
 
@@ -58,7 +58,7 @@ class Header extends PureComponent {
             {...this.props}
           />
         </div>
-        {rightSidebarHeader}
+        {rightSidebarHeader()}
       </div>
     )
   }

@@ -24,7 +24,7 @@ import {
   getVisibleItems
 } from './utility/calendar'
 import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
-import { _get, _length, arraysEqual } from './utility/generic'
+import { _get, _length, arraysEqual, deepObjectCompare } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
@@ -378,7 +378,7 @@ export default class ReactCalendarTimeline extends Component {
     this.setState({
       width,
       topOffset,
-      ...(arraysEqual(this.state.dimensionItems, dimensionItems) ? {} :  {dimensionItems} ),
+      ...(deepObjectCompare(this.state.dimensionItems, dimensionItems) ? {} :  {dimensionItems} ),
       height,
       ...(arraysEqual(this.state.groupTops, groupTops) ? {} :  {groupTops} ),
       ...(arraysEqual(this.state.groupHeights, groupHeights) ? {} :  {groupHeights} )
@@ -464,7 +464,7 @@ export default class ReactCalendarTimeline extends Component {
     )
 
     this.setState({
-      ...(arraysEqual(this.state.dimensionItems, dimensionItems) ? {} :  {dimensionItems} ), 
+      ...(deepObjectCompare(this.state.dimensionItems, dimensionItems) ? {} :  {dimensionItems} ), 
       height,      
       ...(arraysEqual(this.state.groupHeights, groupHeights) ? {} :  {groupHeights} ), 
       groupTops 
@@ -541,7 +541,7 @@ export default class ReactCalendarTimeline extends Component {
         visibleTimeEnd,
         this.state.width
       )
-      if(!arraysEqual(this.state.dimensionItems, dimensionItems)) newState.dimensionItems = dimensionItems
+      if(!deepObjectCompare(this.state.dimensionItems, dimensionItems)) newState.dimensionItems = dimensionItems
       newState.height = height
       if(!arraysEqual(this.state.groupHeights, groupHeights)) newState.groupHeights = groupHeights
       newState.groupTops = groupTops
@@ -952,7 +952,7 @@ export default class ReactCalendarTimeline extends Component {
     return label ? <InfoLabel label={label} /> : ''
   }
 
-  renderSidebarLeft = () => {
+  renderLeftSidebar = () => {
     const { sidebarWidth } = this.props
     return sidebarWidth != null &&
     sidebarWidth > 0 && (
@@ -965,6 +965,19 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+  renderRightSidebar = () => {
+    const { rightSidebarWidth } = this.props
+    return rightSidebarWidth != null &&
+      rightSidebarWidth > 0 && (
+        <div
+          className="rct-sidebar-header rct-sidebar-right"
+          style={{ width: this.props.rightSidebarWidth }}
+        >
+          {this.props.rightSidebarContent}
+        </div>
+      )
+  }
+
   header(
     canvasTimeStart,
     zoom,
@@ -975,17 +988,6 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight,
     headerLabelHeight
   ) {
-    const { sidebarWidth, rightSidebarWidth } = this.props
-
-    const rightSidebar = rightSidebarWidth != null &&
-      rightSidebarWidth > 0 && (
-        <div
-          className="rct-sidebar-header rct-sidebar-right"
-          style={{ width: this.props.rightSidebarWidth }}
-        >
-          {this.props.rightSidebarContent}
-        </div>
-      )
 
     return (
       <Header
@@ -1008,8 +1010,8 @@ export default class ReactCalendarTimeline extends Component {
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
         registerScroll={this.registerScrollListener}
-        leftSidebarHeader={this.renderSidebarLeft}
-        rightSidebarHeader={rightSidebar}
+        leftSidebarHeader={this.renderLeftSidebar}
+        rightSidebarHeader={this.renderRightSidebar}
         headerRef={this.props.headerRef}
       />
     )
@@ -1341,7 +1343,7 @@ export default class ReactCalendarTimeline extends Component {
         visibleTimeEnd,
         width
       )
-      if(!arraysEqual(stackResults.dimensionItems, this.state.dimensionItems)) dimensionItems = stackResults.dimensionItems
+      if(!deepObjectCompare(stackResults.dimensionItems, this.state.dimensionItems)) dimensionItems = stackResults.dimensionItems
       height = stackResults.height
       if(!arraysEqual(stackResults.groupHeights, groupHeights)) groupHeights = stackResults.groupHeights
       if(!arraysEqual(stackResults.groupTops, this.state.groupTops)) groupTops = stackResults.groupTops
