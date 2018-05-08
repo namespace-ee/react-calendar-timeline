@@ -140,18 +140,27 @@ export default class App extends Component {
     getResizeProps,
     getContentProps,
   }) => {
-    console.log('render')
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+    const backgroundColor = itemContext.selected ? itemContext.dragging? 'red' : item.selectedBgColor : item.bgColor;
+    const borderColor = itemContext.resizing? 'red' : item.color;
     return (
       <div
         {...getItemProps({
+          style: {
+            backgroundColor,
+            color: item.color,
+            borderColor,
+            borderStyle: 'solid',
+            borderWidth: 1,
+            borderRadius: 4,
+            borderLeftWidth: itemContext.selected ? 3 : 1,
+            borderRightWidth: itemContext.selected ? 3 : 1,
+          }
         })}
       >
         {itemContext.useResizeHandle ? (
           <div {...leftResizeProps} />
-        ) : (
-            ''
-          )}
+        ) : null}
 
         <div
           {...getContentProps()}
@@ -163,9 +172,7 @@ export default class App extends Component {
 
         {itemContext.useResizeHandle ? (
           <div {...rightResizeProps} />
-        ) : (
-            ''
-          )}
+        ) : null}
       </div>
     )
   }
@@ -198,6 +205,7 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
+        lineHeight={40}
         showCursorLine
         // resizeDetector={containerResizeDetector}
 

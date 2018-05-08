@@ -570,11 +570,11 @@ export default class Item extends Component {
     return {
       left: {
         ref: this.getDragLeftRef,
-        className: "rct-drag-left" + ' ' + props.className
+        className: `rct-drag-left ${props.classNameLeft}`
       },
       right: {
         ref: this.getDragRightRef,
-        className: "rct-drag-right" + ' ' + props.className
+        className: `rct-drag-right ${props.classNameRight}`
       }
     }
   }
@@ -586,7 +586,7 @@ export default class Item extends Component {
     };
     return {
       style: Object.assign({}, props.style, style),
-      className: "rct-item-content" + ' ' + props.className
+      className: `rct-item-content ${props.className}`
     }
   }
 
@@ -603,6 +603,16 @@ export default class Item extends Component {
       canMove: this.canMove(this.props),
       canResizeLeft: this.canResizeLeft(this.props),
       canResizeRight: this.canResizeRight(this.props),
+      selected: this.props.selected,
+      dragging: this.state.dragging,
+      dragStart: this.state.dragStart,
+      dragTime: this.state.dragTime,
+      dragGroupDelta: this.state.dragGroupDelta,
+      resizing: this.state.resizing,
+      resizeEdge: this.state.resizeEdge,
+      resizeStart: this.state.resizeStart,
+      resizeTime: this.state.resizeTime
+      
     }
 
     return this.props.itemRenderer({
