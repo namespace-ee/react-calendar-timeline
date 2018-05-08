@@ -67,8 +67,7 @@ export default class VerticalLines extends Component {
             key={`line-${time.valueOf()}`}
             className={classNames}
             style={{
-              top: '0px',
-              left: `${left + leftPush}px`,
+              transform: `translate3d(${left + leftPush}px, 0px, 0)`,
               width: `${labelWidth}px`,
               height: `${height}px`
             }}

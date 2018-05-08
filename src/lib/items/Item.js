@@ -515,8 +515,7 @@ export default class Item extends Component {
       (this.props.item.className ? ` ${this.props.item.className}` : '')
 
     const style = {
-      left: `${dimensions.left}px`,
-      top: `${dimensions.top}px`,
+      transform: `translate3d(${dimensions.left}px, ${dimensions.top}px, 0)`,
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`

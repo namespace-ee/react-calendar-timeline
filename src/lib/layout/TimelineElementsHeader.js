@@ -110,7 +110,15 @@ export default class Header extends Component {
     return willUpate
   }
 
-  render() {
+  componentDidMount() {
+    this._styleAndLabels()
+  }
+
+  componentDidUpdate() {
+    this._styleAndLabels()
+  }
+
+  _styleAndLabels() {
     const {
       canvasTimeStart,
       canvasTimeEnd,
@@ -220,10 +228,15 @@ export default class Header extends Component {
       }
     )
 
-    let headerStyle = {
+    this.headerStyle = {
       height: `${headerLabelGroupHeight + headerLabelHeight}px`,
       lineHeight: `${lineHeight}px`
     }
+    this.topHeaderLabels = topHeaderLabels
+    this.bottomHeaderLabels = bottomHeaderLabels
+  }
+
+  render() {
 
     return (
       <div
@@ -233,20 +246,20 @@ export default class Header extends Component {
         onMouseDown={this.handleHeaderMouseDown}
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
-        style={headerStyle}
+        style={this.headerStyle}
         ref={el => (this.headerEl = el)}
       >
         <div
           className="top-header"
-          style={{ height: headerLabelGroupHeight, width: canvasWidth }}
+          style={{ height: this.props.headerLabelGroupHeight, width: this.props.canvasWidth }}
         >
-          {topHeaderLabels}
+          {this.topHeaderLabels}
         </div>
         <div
           className="bottom-header"
-          style={{ height: headerLabelHeight, width: canvasWidth }}
+          style={{ height: this.props.headerLabelHeight, width: this.props.canvasWidth }}
         >
-          {bottomHeaderLabels}
+          {this.bottomHeaderLabels}
         </div>
       </div>
     )

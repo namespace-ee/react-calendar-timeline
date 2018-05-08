@@ -27,8 +27,7 @@ export default class HorizontalLines extends Component {
           key={`horizontal-line-${i}`}
           className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
           style={{
-            top: `${totalHeight}px`,
-            left: '0px',
+            transform: `translate3d(0px, ${totalHeight}px, 0)`,
             width: `${canvasWidth}px`,
             height: `${groupHeights[i] - 1}px`
           }}
