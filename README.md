@@ -432,7 +432,10 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 ### itemRenderer
 
-Render prop is a callback function used to render a customized item. The function provides multiple paramerters that can be used to render each item.
+Render prop function used to render a customized item. The function provides multiple paramerters that can be used to render each item.
+
+Paramters provided to the function has two types: context params which have the state of the item and timeline and prop getters functions
+
 
 #### Render props params
 
@@ -446,7 +449,7 @@ Render prop is a callback function used to render a customized item. The functio
 | ---------------------- | ----------------- | ------------------------------------------------------------------------------------------- |
 | `timelineWidth` | `number`    | returns the full width of the timeline.            |
 | `visibleTimeStart`        | `number`    | returns the exact start of view port of the calender                 |
-| `visibleTimeEnd`         | `number`    | returns the exact start of view port of the calender.                    |
+| `visibleTimeEnd`         | `number`    | returns the exact end of view port of the calender.                    |
 
 - `itemContext`
 
@@ -454,7 +457,7 @@ Render prop is a callback function used to render a customized item. The functio
 | ---------------------- | ----------------- | ------------------------------------------------------------------------------------------- |
 | `dimensions` | `object`    | returns the dimensions of the item which includes `collisionLeft`, `collisionWidth`, `height`, `isDragging`, `left`, `order`, `originalLeft`, `stack`, `top`, and `width`             |
 | `useResizeHandle`        | `boolean`    | returns the prop `useResizeHandle` from calendar root component                 |
-| `title`         | `string`    | returns title to render in content div.                    |
+| `title`         | `string`    | returns title to render in content element.                    |
 | `canMove` | `boolean`    | returns if the item is movable.            |
 | `canResizeLeft`        | `boolean`    | returns if the item can resize from the left                 |
 | `canResizeRight`         | `boolean`    | returns if the item can resize from the right.                    |
@@ -463,15 +466,16 @@ Render prop is a callback function used to render a customized item. The functio
 | `dragStart`         | `object`    | returns `x` and `y` of the start dragging point of the item.                    |
 | `dragGroupDelta`        | `number`    | returns number of groups the item moved to above (negative) and to down (positive)                 |
 | `resizing`         | `boolean`    | returns if the item is being resized.                    |
-| `resizeEdge`        | `left`, `right`    | the side from which the component is being resized for                 |
+| `resizeEdge`        | `left`, `right`    | the side from which the component is being resized form                 |
 | `resizeStart`         | `number`    | returns the x value from where the component start moving                    |
 | `showInnerContentsRender`        | `boolean`    | returns if the content of the item should be rendered for performance                 |
 
-##### prop getters 
+##### prop getters functions
 
 These functions are used to apply props to the elements that you render. This gives you maximum flexibility to render what, when, and wherever you like. 
 
 Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
 
 | property               | type              | description                                                                                 |
 | ---------------------- | ----------------- | ------------------------------------------------------------------------------------------- |
@@ -502,21 +506,21 @@ Rather than applying props on the element yourself and to avoid your props being
   - onContextMenu: event handler will be called after the component's event handler
   - style: extra inline styles to be applied to the component
 
-- `getResizeProps` returns the props you should apply to the left and right resize handlers only if `useResizeHandle` set to true. The returned object has the props for the left element under property `left` and the props to be applied to the right element under `right :
+- `getResizeProps` returns the props you should apply to the left and right resize handlers only if `useResizeHandle` set to true. The returned object has the props for the left element under property `left` and the props to be applied to the right element under `right` :
   
   - left
-    - ref: function to get item referance
-    - className: classnames to be applied to the item
+    - ref: function to get element referance
+    - className: classnames to be applied to the left element
   - right 
-    - ref: function to get item referance
-    - className: classnames to be applied to the item
+    - ref: function to get element referance
+    - className: classnames to be applied to the right element
   
 
   These properties can be override using the prop argument with proprties: 
   - classNameLeft: class names to be added to left classname
   - classNameRight: class names to be added to right classname
 
-- `getContentProps` returns the props you should apply to the wrapper for your item content like title:
+- `getContentProps` returns the props you should apply to the wrapper for your item's content like title:
   
   - style: inline style to be applied to the wrapper
   - className: classnames to be applied to the wrapper
