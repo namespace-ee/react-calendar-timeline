@@ -99,7 +99,7 @@ export default class Header extends Component {
       this.props.showPeriod(moment(time - 0), unit)
     }
   }
-  
+
   shouldComponentUpdate(nextProps) {
     const willUpate =
       nextProps.canvasTimeStart != this.props.canvasTimeStart ||
@@ -143,6 +143,11 @@ export default class Header extends Component {
           )
 
           const labelWidth = right - left
+          // this width applies to the content in the header
+          // it simulates stickyness where the content is fixed in the center
+          // of the label.  when the labelWidth is less than visible time range,
+          // have label content fill the entire width
+          const contentWidth = Math.min(labelWidth, canvasWidth / 3)
 
           topHeaderLabels.push(
             <div
@@ -159,7 +164,9 @@ export default class Header extends Component {
                 cursor: 'pointer'
               }}
             >
-              <span>{this.headerLabel(time, nextUnit, labelWidth)}</span>
+              <span style={{ width: contentWidth, display: 'block' }}>
+                {this.headerLabel(time, nextUnit, labelWidth)}
+              </span>
             </div>
           )
         }

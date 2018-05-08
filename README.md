@@ -18,24 +18,14 @@ npm install --save react-calendar-timeline
 
 `react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interact.js`](http://interactjs.io/docs/) as peer dependencies.
 
-You need to install them separately:
-
-```bash
-# via yarn
-yarn add react react-dom # you probably already have these
-yarn add moment interact.js
-
-# via npm
-npm install --save react react-dom # you probably already have these
-npm install --save moment interact.js
-```
-
 ## Usage
 
 At the very minimum:
 
 ```jsx
 import Timeline from 'react-calendar-timeline'
+// make sure you include the timeline stylesheet or the timeline will not be styled
+import 'react-calender-timeline/lib/Timeline.css'
 import moment from 'moment'
 
 const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
@@ -123,6 +113,16 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 ```
 
 The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript Date or moment()) will also work, but will be a lot slower.
+
+### defaultTimeStart and defaultTimeEnd
+
+Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
+
+### visibleTimeStart and visibleTimeEnd
+
+The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a unix timestamp in milliseconds.
+
+**Note that you need to provide either `defaultTimeStart/End` or `visibleTimeStart/End` for the timeline to function**
 
 ### selected
 
@@ -324,14 +324,6 @@ function (action, item, time, resizeEdge) {
   return time
 }
 ```
-
-### defaultTimeStart and defaultTimeEnd
-
-Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
-
-### visibleTimeStart and visibleTimeEnd
-
-The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a unix timestamp in milliseconds.
 
 ### headerLabelFormats and subHeaderLabelFormats
 
@@ -535,27 +527,11 @@ import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector
 <Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
-### children (plugins)
-
-If you give the component any children, they will be passed some extra props. Use this to render anything on the timeline (custom backgrounds, arrows, etc).
-
-See [the plugins demo](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#plugins-experimental)
-
-**NOTE!** This API is still experimental and will change in the next versions, as we move toward unifying the internal and external APIs. Keep an eye out for the [changelog](https://github.com/namespace-ee/react-calendar-timeline/blob/master/CHANGELOG.md)!
-
-The children gets passed the following props:
-
-* `canvasTimeStart`, `canvasTimeEnd` - start and end of the scrolling canvas in Unix timestamps
-* `canvasWidth` - width of the scrolling canvas in pixels
-* `visibleTimeStart`, `visibleTimeEnd` - start and end of the currently visible area
-* `groups`, `items`, `keys` - groups, items and keys as passed to the timeline
-* `height`, `headerHeight` - height of the entire calendar (includes `headerHeight`) or just the header
-* `groupHeights`, `groupTops` - arrays of heights and tops for the groups
-* `dimensionItems` - an array of objects `{ id, dimensions: {...} }` describing positions of all the items
-* `selected` - an array of selected items
-* `timeSteps` - steps for displaying time
-
 ## FAQ
+
+### My timeline is unstyled
+
+You need to include the `Timeline.css` file, either via static file reference or webpack stylesheet bundling. The file is located at `lib/Timeline.css`
 
 ### How can I have items with different colors?
 
@@ -569,7 +545,7 @@ You will then need to override the default CSS rule:
 }
 ```
 
-### How can I add one more sidebar on the right?
+### How can I add a sidebar on the right?
 
 The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
@@ -683,11 +659,11 @@ If you like to improve React Calendar Timeline fork the repo and get started by 
 ```bash
 $ git clone https://github.com/namespace-ee/react-calendar-timeline.git react-calendar-timeline
 $ cd react-calendar-timeline
-$ npm install
-$ npm start
+$ yarn
+$ yarn start
 ```
 
-Check http://0.0.0.0:8080/ in your browser and have fun!
+Check http://0.0.0.0:8888/ in your browser and have fun!
 
 Please run `npm run lint` before you send a pull request. `npm run jest` runs the tests.
 

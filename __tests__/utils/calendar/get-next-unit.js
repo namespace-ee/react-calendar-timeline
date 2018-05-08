@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { getNextUnit } from '../../../utility/calendar'
+import { getNextUnit } from 'lib/utility/calendar'
 
 //what value do these tests have? :)
 describe('getNextUnit', () => {

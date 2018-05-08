@@ -59,7 +59,11 @@ const config = {
     modules: [path.resolve('./demo'), 'node_modules'],
     alias: {
       '~': path.join(__dirname, './demo'),
-      'react-calendar-timeline': path.join(__dirname, './src')
+      'react-calendar-timeline': path.join(__dirname, './src'),
+      'react-calendar-timeline-css': path.join(
+        __dirname,
+        './src/lib/Timeline.scss'
+      )
     }
   },
   plugins: [

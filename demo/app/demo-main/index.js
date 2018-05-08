@@ -50,6 +50,10 @@ export default class App extends Component {
     console.log('Canvas clicked', groupId, moment(time).format())
   }
 
+  handleCanvasDoubleClick = (groupId, time, event) => {
+    console.log('Canvas double clicked', groupId, moment(time).format())
+  }
+
   handleCanvasContextMenu = (group, time, e) => {
     console.log('Canvas context menu', group, moment(time).format())
   }
@@ -80,10 +84,10 @@ export default class App extends Component {
         item =>
           item.id === itemId
             ? Object.assign({}, item, {
-              start: dragTime,
-              end: dragTime + (item.end - item.start),
-              group: group.id
-            })
+                start: dragTime,
+                end: dragTime + (item.end - item.start),
+                group: group.id
+              })
             : item
       )
     })
@@ -99,9 +103,9 @@ export default class App extends Component {
         item =>
           item.id === itemId
             ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time
-            })
+                start: edge === 'left' ? time : item.start,
+                end: edge === 'left' ? item.end : time
+              })
             : item
       )
     })
@@ -132,44 +136,14 @@ export default class App extends Component {
     return time
   }
 
-  itemRenderer = ({
-    item,
-    timelineContext,
-    itemContext,
-    getItemProps,
-    getResizeProps,
-    getContentProps,
-  }) => {
-    console.log('render')
-    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-    return (
-      <div
-        {...getItemProps({
-          onMouseDown: ()=> {console.log("keydown")}
-        })}
-      >
-        {itemContext.useResizeHandle ? (
-          <div {...leftResizeProps} />
-        ) : (
-            ''
-          )}
-
-        <div
-          {...getContentProps()}
-        >
-          {/* TODO: render title from this.titleItem */}
-          {itemContext.title}
-        </div>
-
-
-        {itemContext.useResizeHandle ? (
-          <div {...rightResizeProps} />
-        ) : (
-            ''
-          )}
-      </div>
-    )
-  }
+  // itemRenderer = ({ item }) => {
+  //   return (
+  //     <div className='custom-item'>
+  //       <span className='title'>{item.title}</span>
+  //       <p className='tip'>{item.itemProps['data-tip']}</p>
+  //     </div>
+  //   )
+  // }
 
   // groupRenderer = ({ group }) => {
   //   return (
@@ -181,7 +155,7 @@ export default class App extends Component {
 
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
-    console.log("render")
+
     return (
       <Timeline
         groups={groups}
@@ -204,10 +178,11 @@ export default class App extends Component {
 
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
-        itemRenderer={this.itemRenderer}
+        // itemRenderer={this.itemRenderer}
         // groupRenderer={this.groupRenderer}
 
         onCanvasClick={this.handleCanvasClick}
+        onCanvasDoubleClick={this.handleCanvasDoubleClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}
         onItemSelect={this.handleItemSelect}
