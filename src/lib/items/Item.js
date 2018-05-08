@@ -58,25 +58,26 @@ export default class Item extends Component {
       getContentProps,
     }) => {
       const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+      const showInnerContents = itemContext.dimensions.width > itemContext.minimumWidthForItemContentVisibility
       return (
         <div
           {...getItemProps(item.itemProps)}
         >
-          {itemContext.useResizeHandle ? (
+          {itemContext.useResizeHandle && showInnerContents ? (
             <div {...leftResizeProps} />
           ) : (
               ''
             )}
 
-          <div
+          {showInnerContents && <div
             {...getContentProps()}
           >
             {/* TODO: render title from this.titleItem */}
             {itemContext.title}
-          </div>
+          </div>}
 
 
-          {itemContext.useResizeHandle ? (
+          {itemContext.useResizeHandle && showInnerContents ? (
             <div {...rightResizeProps} />
           ) : (
               ''
@@ -611,7 +612,8 @@ export default class Item extends Component {
       resizing: this.state.resizing,
       resizeEdge: this.state.resizeEdge,
       resizeStart: this.state.resizeStart,
-      resizeTime: this.state.resizeTime
+      resizeTime: this.state.resizeTime,
+      minimumWidthForItemContentVisibility: this.props.minimumWidthForItemContentVisibility,
       
     }
 
