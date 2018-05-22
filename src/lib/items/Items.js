@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
+import { getGroupOrders } from '../utility/calendar';
 
 import { _get, arraysEqual, keyBy } from '../utility/generic'
 
@@ -29,7 +30,7 @@ export default class Items extends Component {
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    selectedItems: PropTypes.array,
 
     canChangeGroup: PropTypes.bool.isRequired,
     canMove: PropTypes.bool.isRequired,
@@ -40,6 +41,7 @@ export default class Items extends Component {
 
     moveResizeValidator: PropTypes.func,
     itemSelect: PropTypes.func,
+    itemDragStart: PropTypes.func,
     itemDrag: PropTypes.func,
     itemDrop: PropTypes.func,
     itemResizing: PropTypes.func,
@@ -49,7 +51,7 @@ export default class Items extends Component {
     onItemContextMenu: PropTypes.func,
 
     itemRenderer: PropTypes.func,
-    selected: PropTypes.array,
+    // selected: PropTypes.array,
 
     dimensionItems: PropTypes.array,
     topOffset: PropTypes.number,
@@ -58,7 +60,7 @@ export default class Items extends Component {
   }
 
   static defaultProps = {
-    selected: []
+    // selected: []
   }
 
   shouldComponentUpdate(nextProps) {
@@ -69,8 +71,7 @@ export default class Items extends Component {
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
       nextProps.canvasWidth === this.props.canvasWidth &&
-      nextProps.selectedItem === this.props.selectedItem &&
-      nextProps.selected === this.props.selected &&
+      arraysEqual(nextProps.selectedItems, this.props.selectedItems) &&
       nextProps.dragSnap === this.props.dragSnap &&
       nextProps.minResizeWidth === this.props.minResizeWidth &&
       nextProps.canChangeGroup === this.props.canChangeGroup &&
@@ -97,13 +98,8 @@ export default class Items extends Component {
     return groupOrders
   }
 
-  isSelected(item, itemIdKey) {
-    if (!this.props.selected) {
-      return this.props.selectedItem === _get(item, itemIdKey)
-    } else {
-      let target = _get(item, itemIdKey)
-      return this.props.selected.includes(target)
-    }
+  isSelected(itemId) {
+    return this.props.selectedItems.indexOf(itemId) > -1;
   }
 
   // TODO: this is exact same logic as utility function
@@ -115,6 +111,37 @@ export default class Items extends Component {
         _get(item, itemTimeStartKey) <= canvasTimeEnd &&
         _get(item, itemTimeEndKey) >= canvasTimeStart
       )
+    })
+  }
+
+  itemDrag = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
+    console.log('itemDrag');
+    this.props.itemDrag(itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta)
+  }
+
+  itemDrop = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
+    console.log('itemDrop');
+    const { itemIdKey, itemGroupKey, itemTimeStartKey } = this.props.keys
+
+    const groupOrders = getGroupOrders(this.props.groups, this.props.keys)
+
+    this.props.selectedItems.forEach((selectedItemId) => {
+      const item = this.props.items.find(itemObj => _get(itemObj, itemIdKey) === selectedItemId)
+      let order = groupOrders[_get(item, itemGroupKey)]
+
+      console.log('items itemDrop')
+      this.props.itemDrop(
+        selectedItemId,
+        _get(item, itemTimeStartKey) + dragTimeDelta,
+        order,
+        dragGroupDelta
+      )
+    })
+
+    this.setState({
+      isDraggingItem: false,
+      dragTimeDelta: 0,
+      infoLabel: null
     })
   }
 
@@ -139,16 +166,19 @@ export default class Items extends Component {
       <div className="rct-items">
         {visibleItems
           .filter(item => sortedDimensionItems[_get(item, itemIdKey)])
-          .map(item => (
-            <Item
-              key={_get(item, itemIdKey)}
+          .map(item => {
+            const itemId = _get(item, itemIdKey);
+            const selected = this.isSelected(itemId);
+
+            return <Item
+              key={itemId}
               item={item}
               keys={this.props.keys}
               order={groupOrders[_get(item, itemGroupKey)]}
               dimensions={
                 sortedDimensionItems[_get(item, itemIdKey)].dimensions
               }
-              selected={this.isSelected(item, itemIdKey)}
+              selected={selected}
               canChangeGroup={
                 _get(item, 'canChangeGroup') !== undefined
                   ? _get(item, 'canChangeGroup')
@@ -177,6 +207,7 @@ export default class Items extends Component {
               onResizing={this.props.itemResizing}
               onResized={this.props.itemResized}
               moveResizeValidator={this.props.moveResizeValidator}
+              onDragStart={this.props.itemDragStart}
               onDrag={this.props.itemDrag}
               onDrop={this.props.itemDrop}
               onItemDoubleClick={this.props.onItemDoubleClick}
@@ -187,7 +218,7 @@ export default class Items extends Component {
                 minimumWidthForItemContentVisibility
               }
             />
-          ))}
+          })}
       </div>
     )
   }

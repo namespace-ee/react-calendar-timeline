@@ -298,6 +298,8 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
+    let selectedItems = (this.props.selected) ? this.props.selected.slice() : [];
+
     this.state = {
       width: 1000,
 
@@ -305,13 +307,15 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
 
-      selectedItem: null,
-      dragTime: null,
-      dragGroupTitle: null,
+      selectedItems: selectedItems,
+      dragTimeDelta: 0,
+      dragGroupDelta: 0,
+      infoLabel: null,
       resizeTime: null,
       topOffset: 0,
       resizingItem: null,
-      resizingEdge: null
+      resizingEdge: null,
+      isDraggingItem: false
     }
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
@@ -426,8 +430,13 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd,
       items,
       groups,
-      sidebarWidth
+      sidebarWidth,
+      selected
     } = nextProps
+
+    if (selected) {
+      this.setState({selectedItems: selected});
+    }
 
     if (visibleTimeStart && visibleTimeEnd) {
       this.updateScrollCanvas(
@@ -608,21 +617,33 @@ export default class ReactCalendarTimeline extends Component {
 
   selectItem = (item, clickType, e) => {
     if (
-      this.state.selectedItem === item ||
+      this.state.selectedItems.indexOf(item) > -1 ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
-      if (item && this.props.onItemClick) {
+      if (this.props.onItemClick) {
         const time = this.timeFromItemEvent(e)
         this.props.onItemClick(item, e, time)
       }
     } else {
-      this.setState({ selectedItem: item })
-      if (item && this.props.onItemSelect) {
+    
+      if (!this.props.selected) {
+        this.setState({ selectedItems: [item] });
+      }
+
+      if (this.props.onItemSelect) {
         const time = this.timeFromItemEvent(e)
         this.props.onItemSelect(item, e, time)
-      } else if (item === null && this.props.onItemDeselect) {
-        this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
       }
+    }
+  }
+
+  deselectItem = () => {
+    if(!this.props.selected) {
+      this.setState({selectedItems: []});
+    }
+
+    if(this.props.onItemDeselect) {
+      this.props.onItemDeselect();
     }
   }
 
@@ -700,8 +721,8 @@ export default class ReactCalendarTimeline extends Component {
 
     // if not clicking on an item
     if (!hasSomeParentTheClass(e.target, 'rct-item')) {
-      if (this.state.selectedItem) {
-        this.selectItem(null)
+      if (this.state.selectedItems.length > -1) {
+        this.deselectItem();
       } else if (this.props.onCanvasClick) {
         const [row, time] = this.rowAndTimeFromScrollAreaEvent(e)
         if (row >= 0 && row < this.props.groups.length) {
@@ -715,35 +736,63 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  dragItem = (item, dragTime, newGroupOrder) => {
-    let newGroup = this.props.groups[newGroupOrder]
-    const keys = this.props.keys
-
-    this.setState({
-      draggingItem: item,
-      dragTime: dragTime,
-      newGroupOrder: newGroupOrder,
-      dragGroupTitle: newGroup ? _get(newGroup, keys.groupTitleKey) : ''
-    })
+  itemDragStart = (item) => {
+    this.setState({isDraggingItem: true});
   }
 
-  dropItem = (item, dragTime, newGroupOrder) => {
-    this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
-    if (this.props.onItemMove) {
-      this.props.onItemMove(item, dragTime, newGroupOrder)
+  itemDrag = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
+    let newGroup = this.props.groups[oldGroupOrder + dragGroupDelta];
+    const { keys } = this.props;
+
+    const dragGroupTitle = _get(newGroup, keys.groupTitleKey);
+    const itemTimeStart = _get(itemId, keys.itemTimeStartKey);
+
+    this.setState({
+      dragTimeDelta, 
+      dragGroupDelta, 
+      infoLabel: `${moment(itemTimeStart + dragTimeDelta).format('LLL')}, ${dragGroupTitle}`
+    });
+  }
+
+  itemDrop = (itemId, dragTime, oldGroupOrder, dragGroupDelta) => {
+    let indexNewGroup = oldGroupOrder + dragGroupDelta;
+    if (indexNewGroup > this.props.groups.length - 1) {
+      indexNewGroup = this.props.groups.length - 1;
     }
+
+    if (indexNewGroup < 0) {
+      indexNewGroup = 0;
+    }
+
+    this.setState({
+      isDraggingItem: false,
+      dragTimeDelta: 0,
+      infoLabel: null
+    });
+
+    if (this.props.onItemMove) {
+      this.props.onItemMove(itemId, dragTime, indexNewGroup);
+    }
+
   }
 
   resizingItem = (item, resizeTime, edge) => {
     this.setState({
       resizingItem: item,
       resizingEdge: edge,
-      resizeTime: resizeTime
-    })
+      resizeTime: resizeTime,
+      infoLabel: moment(resizeTime).format('LLL')
+    });
   }
 
   resizedItem = (item, resizeTime, edge, timeDelta) => {
-    this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
+    this.setState({ 
+      resizingItem: null, 
+      resizingEdge: null, 
+      resizeTime: null,
+      infoLabel: null
+    });
+
     if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge)
     }
@@ -907,7 +956,7 @@ export default class ReactCalendarTimeline extends Component {
         items={this.props.items}
         groups={this.props.groups}
         keys={this.props.keys}
-        selectedItem={this.state.selectedItem}
+        selectedItems={this.state.selectedItems}
         dragSnap={this.props.dragSnap}
         minResizeWidth={this.props.minResizeWidth}
         canChangeGroup={this.props.canChangeGroup}
@@ -918,8 +967,9 @@ export default class ReactCalendarTimeline extends Component {
         moveResizeValidator={this.props.moveResizeValidator}
         topOffset={this.state.topOffset}
         itemSelect={this.selectItem}
-        itemDrag={this.dragItem}
-        itemDrop={this.dropItem}
+        itemDragStart={this.itemDragStart}
+        itemDrag={this.itemDrag}
+        itemDrop={this.itemDrop}
         onItemDoubleClick={this.doubleClickItem}
         onItemContextMenu={this.contextMenuClickItem}
         itemResizing={this.resizingItem}
@@ -931,20 +981,6 @@ export default class ReactCalendarTimeline extends Component {
         }
       />
     )
-  }
-
-  infoLabel() {
-    let label = null
-
-    if (this.state.dragTime) {
-      label = `${moment(this.state.dragTime).format('LLL')}, ${
-        this.state.dragGroupTitle
-      }`
-    } else if (this.state.resizeTime) {
-      label = moment(this.state.resizeTime).format('LLL')
-    }
-
-    return label ? <InfoLabel label={label} /> : ''
   }
 
   header(
@@ -1076,15 +1112,16 @@ export default class ReactCalendarTimeline extends Component {
       headerLabelGroupHeight,
       headerLabelHeight,
       stackItems,
-      itemHeightRatio
+      itemHeightRatio,
+      canChangeGroup
     } = this.props
     const {
-      draggingItem,
-      dragTime,
+      isDraggingItem,
+      dragTimeDelta,
+      dragGroupDelta,
       resizingItem,
       resizingEdge,
-      resizeTime,
-      newGroupOrder
+      resizeTime
     } = this.state
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
@@ -1100,12 +1137,13 @@ export default class ReactCalendarTimeline extends Component {
     const groupOrders = getGroupOrders(groups, keys)
 
     let dimensionItems = visibleItems.reduce((memo, item) => {
-      const itemId = _get(item, keys.itemIdKey)
-      const isDragging = itemId === draggingItem
+      const itemId = _get(item, keys.itemIdKey);
+      const itemTimeStart = _get(item, keys.itemTimeStartKey);
+      const isDragging = isDraggingItem && this.state.selectedItems.indexOf(itemId) > -1;
       const isResizing = itemId === resizingItem
 
       let dimension = calculateDimensions({
-        itemTimeStart: _get(item, keys.itemTimeStartKey),
+        itemTimeStart: itemTimeStart,
         itemTimeEnd: _get(item, keys.itemTimeEndKey),
         isDragging,
         isResizing,
@@ -1113,16 +1151,24 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeEnd,
         canvasWidth,
         dragSnap,
-        dragTime,
+        dragTime: itemTimeStart + dragTimeDelta,
         resizingEdge,
         resizeTime
       })
 
       if (dimension) {
         dimension.top = null
-        dimension.order = isDragging
-          ? newGroupOrder
-          : groupOrders[_get(item, keys.itemGroupKey)]
+        let order = groupOrders[_get(item, keys.itemGroupKey)]
+        if (isDraggingItem && canChangeGroup && this.state.selectedItems.indexOf(itemId) > -1) {
+          order = order + dragGroupDelta
+          if (order > Object.keys(groupOrders).length - 1) {
+            order = Object.keys(groupOrders).length - 1
+          }
+          if (order < 0) {
+            order = 0
+          }
+        }
+        dimension.order = order;
         dimension.stack = !item.isOverlay
         dimension.height = lineHeight * itemHeightRatio
         dimension.isDragging = isDragging
@@ -1304,7 +1350,7 @@ export default class ReactCalendarTimeline extends Component {
       traditionalZoom
     } = this.props
     const {
-      draggingItem,
+      isDraggingItem,
       resizingItem,
       width,
       visibleTimeStart,
@@ -1321,7 +1367,7 @@ export default class ReactCalendarTimeline extends Component {
     const minUnit = getMinUnit(zoom, width, timeSteps)
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
-    const isInteractingWithItem = !!draggingItem || !!resizingItem
+    const isInteractingWithItem = !!isDraggingItem || !!resizingItem
 
     if (isInteractingWithItem) {
       const stackResults = this.stackItems(
@@ -1428,7 +1474,7 @@ export default class ReactCalendarTimeline extends Component {
                     headerHeight
                   )
                 : null}
-              {this.infoLabel()}
+              {this.state.infoLabel ? (<InfoLabel label={this.state.infoLabel} />) : null}
               {this.childrenWithProps(
                 canvasTimeStart,
                 canvasTimeEnd,

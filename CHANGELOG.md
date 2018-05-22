@@ -7,6 +7,13 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Breaking
+* canSelect propType no longer boolean, must be one of "none", "single", "multi". Defaults to "single" for backwards compatibility
+
+### Added
+* multi select of items
+
+
 ### 0.16.1
 
 ### Added
