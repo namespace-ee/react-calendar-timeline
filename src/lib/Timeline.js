@@ -24,7 +24,7 @@ import {
   getVisibleItems
 } from './utility/calendar'
 import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
-import { _get, _length } from './utility/generic'
+import { _get, _length, arraysEqual, deepObjectCompare } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
@@ -374,14 +374,14 @@ export default class ReactCalendarTimeline extends Component {
     // this is needed by dragItem since it uses pageY from the drag events
     // if this was in the context of the scrollElement, this would not be necessary
     const topOffset = containerTop + window.pageYOffset + headerHeight
-
+    
     this.setState({
       width,
       topOffset,
-      dimensionItems,
+      ...(deepObjectCompare(this.state.dimensionItems, dimensionItems) ? {} :  {dimensionItems} ),
       height,
-      groupHeights,
-      groupTops
+      ...(arraysEqual(this.state.groupTops, groupTops) ? {} :  {groupTops} ),
+      ...(arraysEqual(this.state.groupHeights, groupHeights) ? {} :  {groupHeights} )
     })
     this.scrollComponent.scrollLeft = width
   }
@@ -463,7 +463,12 @@ export default class ReactCalendarTimeline extends Component {
       width
     )
 
-    this.setState({ dimensionItems, height, groupHeights, groupTops })
+    this.setState({
+      ...(deepObjectCompare(this.state.dimensionItems, dimensionItems) ? {} :  {dimensionItems} ), 
+      height,      
+      ...(arraysEqual(this.state.groupHeights, groupHeights) ? {} :  {groupHeights} ), 
+      groupTops 
+    })
   }
 
   // called when the visible time changes
@@ -536,9 +541,9 @@ export default class ReactCalendarTimeline extends Component {
         visibleTimeEnd,
         this.state.width
       )
-      newState.dimensionItems = dimensionItems
+      if(!deepObjectCompare(this.state.dimensionItems, dimensionItems)) newState.dimensionItems = dimensionItems
       newState.height = height
-      newState.groupHeights = groupHeights
+      if(!arraysEqual(this.state.groupHeights, groupHeights)) newState.groupHeights = groupHeights
       newState.groupTops = groupTops
     }
 
@@ -947,6 +952,32 @@ export default class ReactCalendarTimeline extends Component {
     return label ? <InfoLabel label={label} /> : ''
   }
 
+  renderLeftSidebar = () => {
+    const { sidebarWidth } = this.props
+    return sidebarWidth != null &&
+    sidebarWidth > 0 && (
+      <div
+        className="rct-sidebar-header"
+        style={{ width: this.props.sidebarWidth }}
+      >
+        {this.props.sidebarContent}
+      </div>
+    )
+  }
+
+  renderRightSidebar = () => {
+    const { rightSidebarWidth } = this.props
+    return rightSidebarWidth != null &&
+      rightSidebarWidth > 0 && (
+        <div
+          className="rct-sidebar-header rct-sidebar-right"
+          style={{ width: this.props.rightSidebarWidth }}
+        >
+          {this.props.rightSidebarContent}
+        </div>
+      )
+  }
+
   header(
     canvasTimeStart,
     zoom,
@@ -957,26 +988,6 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight,
     headerLabelHeight
   ) {
-    const { sidebarWidth, rightSidebarWidth } = this.props
-    const leftSidebar = sidebarWidth != null &&
-      sidebarWidth > 0 && (
-        <div
-          className="rct-sidebar-header"
-          style={{ width: this.props.sidebarWidth }}
-        >
-          {this.props.sidebarContent}
-        </div>
-      )
-
-    const rightSidebar = rightSidebarWidth != null &&
-      rightSidebarWidth > 0 && (
-        <div
-          className="rct-sidebar-header rct-sidebar-right"
-          style={{ width: this.props.rightSidebarWidth }}
-        >
-          {this.props.rightSidebarContent}
-        </div>
-      )
 
     return (
       <Header
@@ -999,8 +1010,8 @@ export default class ReactCalendarTimeline extends Component {
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
         registerScroll={this.registerScrollListener}
-        leftSidebarHeader={leftSidebar}
-        rightSidebarHeader={rightSidebar}
+        leftSidebarHeader={this.renderLeftSidebar}
+        rightSidebarHeader={this.renderRightSidebar}
         headerRef={this.props.headerRef}
       />
     )
@@ -1332,10 +1343,10 @@ export default class ReactCalendarTimeline extends Component {
         visibleTimeEnd,
         width
       )
-      dimensionItems = stackResults.dimensionItems
+      if(!deepObjectCompare(stackResults.dimensionItems, this.state.dimensionItems)) dimensionItems = stackResults.dimensionItems
       height = stackResults.height
-      groupHeights = stackResults.groupHeights
-      groupTops = stackResults.groupTops
+      if(!arraysEqual(stackResults.groupHeights, groupHeights)) groupHeights = stackResults.groupHeights
+      if(!arraysEqual(stackResults.groupTops, this.state.groupTops)) groupTops = stackResults.groupTops
     }
 
     const outerComponentStyle = {

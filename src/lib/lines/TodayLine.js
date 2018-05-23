@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-export default class TodayLine extends Component {
+export default class TodayLine extends PureComponent {
   static propTypes = {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
@@ -12,10 +12,26 @@ export default class TodayLine extends Component {
   }
 
   static defaultProps = {}
+  
+  state = {
+    currentTime: new Date(),
+  }
 
+  componentDidMount(){
+    this.interval = setInterval(()=> {
+      this.setState({
+        currentTime: new Date(),
+      })
+    }, 1000)
+  }
+
+  componentWillUnmount(){
+    this.interval && clearInterval(this.interval)
+  }
+  
   // TODO: should currentTime come from a prop? probably...?
   render() {
-    let currentTime = new Date().getTime()
+    let currentTime = this.state.currentTime.getTime()
 
     if (
       currentTime > this.props.canvasTimeStart &&

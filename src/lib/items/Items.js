@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual, keyBy } from '../utility/generic'
+import { _get, arraysEqual, keyBy, deepObjectCompare } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
   const value =
@@ -77,7 +77,7 @@ export default class Items extends Component {
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
       nextProps.canSelect === this.props.canSelect &&
-      nextProps.dimensionItems === this.props.dimensionItems &&
+      deepObjectCompare(nextProps.dimensionItems, this.props.dimensionItems)  &&
       nextProps.topOffset === this.props.topOffset &&
       nextProps.minimumWidthForItemContentVisibility ===
         this.props.minimumWidthForItemContentVisibility

@@ -20,7 +20,9 @@ const defaultProps = {
   headerLabelGroupHeight: 15,
   headerLabelHeight: 15,
   registerScroll: () => {},
-  headerRef: () => {}
+  headerRef: () => {},
+  leftSidebarHeader: ()=>{},
+  rightSidebarHeader: ()=>{},
 }
 
 const selectors = {

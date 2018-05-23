@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import { _get, arraysEqual } from '../utility/generic'
+import { _get, arraysEqual, deepObjectCompare } from '../utility/generic'
 
 export default class Sidebar extends Component {
   static propTypes = {
@@ -19,7 +19,7 @@ export default class Sidebar extends Component {
       arraysEqual(nextProps.groups, this.props.groups) &&
       nextProps.keys === this.props.keys &&
       nextProps.width === this.props.width &&
-      nextProps.groupHeights === this.props.groupHeights &&
+      !deepObjectCompare(nextProps.groupHeights, this.props.groupHeights) ||
       nextProps.height === this.props.height
     )
   }

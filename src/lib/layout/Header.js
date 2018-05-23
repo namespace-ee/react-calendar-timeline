@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import TimelineElementsHeader from './TimelineElementsHeader'
 
-class Header extends Component {
+class Header extends PureComponent {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
@@ -20,8 +20,8 @@ class Header extends Component {
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
     registerScroll: PropTypes.func.isRequired,
-    leftSidebarHeader: PropTypes.node,
-    rightSidebarHeader: PropTypes.node,
+    leftSidebarHeader: PropTypes.func,
+    rightSidebarHeader: PropTypes.func,
     headerRef: PropTypes.func.isRequired
   }
 
@@ -48,7 +48,7 @@ class Header extends Component {
         ref={headerRef}
         style={headerStyle}
       >
-        {leftSidebarHeader}
+        {leftSidebarHeader()}
         <div
           style={{ width }}
           data-test-id="timeline-elements-header-container"
@@ -58,7 +58,7 @@ class Header extends Component {
             {...this.props}
           />
         </div>
-        {rightSidebarHeader}
+        {rightSidebarHeader()}
       </div>
     )
   }
