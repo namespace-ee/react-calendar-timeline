@@ -106,9 +106,15 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId)
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    console.log('item moved');
 
+  calcNewGroupOrder = (orderOffset, groups, groupId) => {
+
+    const rawGroupOrder = groups.findIndex( g => g.id == groupId) + orderOffset;
+
+    return orderOffset < 0 ? Math.min(0, rawGroupOrder) : Math.min(rawGroupOrder, groups.length -1);
+  }
+
+  handleItemMove = (itemId, dragTime, newGroupOrder) => {
     const { items, groups, selected } = this.state;
 
     const group = groups[newGroupOrder];
@@ -118,16 +124,19 @@ export default class App extends Component {
 
     // The net offset will be negative for moving up
     const orderOffset = newGroupOrder - oldGroupOrder;
+    
+    console.log('Moved', itemId, dragTime, group, newGroupOrder, oldGroupOrder, orderOffset)
 
     this.setState({
-      items: items.map(item => selected.indexOf(item.id) > -1 ? Object.assign({}, item, {
+      items: items.map(item => (
+        selected.indexOf(item.id) > -1 ? Object.assign({}, item, {
         start: item.start + dragTime,
         end:  item.end + dragTime,
-        group: groups[groups.findIndex( g => g.id ==item.group) + orderOffset].id
-      }) : item)
-    })
+        group: groups[this.calcNewGroupOrder(orderOffset, groups, item.group)].id
+      }) : item )
+      )
+    });
 
-    console.log('Moved', itemId, dragTime, group, newGroupOrder, oldGroupOrder, orderOffset)
   }
 
   handleItemResize = (itemId, time, edge) => {
