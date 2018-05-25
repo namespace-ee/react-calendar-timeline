@@ -60,10 +60,6 @@ export default class App extends Component {
           sidebarContent={<div>Above The Left</div>}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
-          canMove
-          canResize="right"
-          canSelect
-          itemsSorted
           itemTouchSendsClick={false}
           stackItems
           itemHeightRatio={0.75}
@@ -109,10 +105,6 @@ export default class App extends Component {
           sidebarContent={<div>Above The Left</div>}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
-          canMove
-          canResize="right"
-          canSelect
-          itemsSorted
           itemTouchSendsClick={false}
           stackItems
           itemHeightRatio={0.75}

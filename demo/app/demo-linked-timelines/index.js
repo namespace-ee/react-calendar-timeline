@@ -73,7 +73,6 @@ export default class App extends Component {
         sidebarContent={<div>Above The Left</div>}
         canMove
         canResize="right"
-        canSelect
         itemsSorted
         itemTouchSendsClick={false}
         stackItems
@@ -97,7 +96,6 @@ export default class App extends Component {
         sidebarContent={<div>Above The Left</div>}
         canMove
         canResize="right"
-        canSelect
         itemsSorted
         itemTouchSendsClick={false}
         stackItems

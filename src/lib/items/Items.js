@@ -112,34 +112,6 @@ export default class Items extends Component {
     })
   }
 
-  itemDrag = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
-    this.props.itemDrag(itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta)
-  }
-
-  itemDrop = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
-    const { itemIdKey, itemGroupKey, itemTimeStartKey } = this.props.keys
-
-    const groupOrders = getGroupOrders(this.props.groups, this.props.keys)
-
-    this.props.selected.forEach((selectedItemId) => {
-      const item = this.props.items.find(itemObj => _get(itemObj, itemIdKey) === selectedItemId)
-      let order = groupOrders[_get(item, itemGroupKey)]
-
-      this.props.itemDrop(
-        selectedItemId,
-        _get(item, itemTimeStartKey) + dragTimeDelta,
-        order,
-        dragGroupDelta
-      )
-    })
-
-    this.setState({
-      isDraggingItem: false,
-      dragTimeDelta: 0,
-      infoLabel: null
-    })
-  }
-
   render() {
     const {
       canvasTimeStart,

@@ -126,7 +126,7 @@ The exact viewport of the calendar. When these are specified, scrolling in the c
 
 ### selected
 
-An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click.
+An array with id's corresponding to id's in items (`item.id`). If this prop is set you need to managed the state of the selected items via `onItemClick` or some other external widget. Leaving this option out or setting to an empty array effectively turns the timeline readonly 
 
 ### keys
 
@@ -209,11 +209,13 @@ Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 864
 
 ### clickTolerance
 
-How many pixels we can drag the background for it to be counted as a click on the background. Defualt: `3`
+How many pixels we can drag the background for it to be counted as a click on the background. Default: `3`
 
 ### canMove
 
 Can items be dragged around? Can be overridden in the `items` array. Defaults to `true`
+
+Note: for this to work, the item(s) need to be present within the `selected` prop.
 
 ### canChangeGroup
 
@@ -241,7 +243,7 @@ Zoom in when scrolling the mouse up/down. Defaults to `false`
 
 ### itemTouchSendsClick
 
-Normally tapping (touching) an item selects it. If this is set to true, a tap will have the same effect, as selecting with the first click and then clicking again to open and send the onItemClick event. Defaults to `false`.
+Normally tapping (touching) an item selects it. If this is set to true, a tap will have the same effect, as selecting with the first click and then clicking again to open and send the `onItemClick` event. Defaults to `false`.
 
 ### timeSteps
 
@@ -260,17 +262,19 @@ Default:
 }
 ```
 
-### onItemMove(itemId, dragTime, newGroupOrder)
+### onItemMove(item, dragTime, newGroupOrder)
 
-Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
+Callback when an item is moved. Returns 1) the item , 2) the drag offset time relative to the start time of the object and 3) the index of the new group in the `groups` array.
+
+Note: In the case of multi-selected movements, the parameters returned are from the item that was physically interacted with during the move event. 
+
+See the multiselect demo for applying these changes to the other selected items in the group.
+
 
 ### onItemResize(itemId, time, edge)
 
 Callback when an item is resized. Returns 1) the item's ID, 2) the new start or end time of the item 3) The edge that was dragged (`left` or `right`)
 
-### onItemSelect(itemId, e, time)
-
-Called when an item is selected. This is sent on the first click on an item. `time` is the time that corresponds to where you click/select on the item in the timeline.
 
 ### onItemClick(itemId, e, time)
 

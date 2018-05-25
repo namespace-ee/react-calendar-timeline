@@ -41,12 +41,15 @@ export default class App extends Component {
       groups,
       items,
       defaultTimeStart,
-      defaultTimeEnd
+      defaultTimeEnd,
+      selected: []
     }
   }
 
   handleCanvasClick = (groupId, time, event) => {
     console.log('Canvas clicked', groupId, moment(time).format())
+    
+    this.setState({selected: []});
   }
 
   handleCanvasContextMenu = (group, time, e) => {
@@ -55,6 +58,12 @@ export default class App extends Component {
 
   handleItemClick = (itemId, _, time) => {
     console.log('Clicked: ' + itemId, moment(time).format())
+
+    const isSelected = this.state.selected.indexOf(itemId) > -1;
+
+    this.setState({
+      selected: isSelected ? []: [itemId] 
+    })
   }
 
   handleItemSelect = (itemId, _, time) => {
@@ -69,25 +78,26 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+  handleItemMove = (item, dragTime, newGroupOrder) => {
+    console.log('Item moved: ', item, dragTime, newGroupOrder);
     const { items, groups } = this.state
 
     const group = groups[newGroupOrder]
 
     this.setState({
       items: items.map(
-        item =>
-          item.id === itemId
+        i =>
+          i.id === item.id
             ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
+                start: i.start + dragTime,
+                end: i.end + dragTime,
                 group: group.id
               })
-            : item
+            : i
       )
     })
 
-    console.log('Moved', itemId, dragTime, newGroupOrder)
+    console.log('Moved', item, dragTime, newGroupOrder)
   }
 
   handleItemResize = (itemId, time, edge) => {
@@ -149,7 +159,7 @@ export default class App extends Component {
   // }
 
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd, selected } = this.state
 
     return (
       <Timeline
@@ -163,7 +173,7 @@ export default class App extends Component {
 
         canMove
         canResize="right"
-        canSelect
+        selected={selected}
         itemsSorted
         itemTouchSendsClick={false}
         stackItems
@@ -179,7 +189,6 @@ export default class App extends Component {
         onCanvasClick={this.handleCanvasClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
         onItemContextMenu={this.handleItemContextMenu}
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}

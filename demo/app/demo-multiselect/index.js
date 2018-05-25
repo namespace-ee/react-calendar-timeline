@@ -131,26 +131,26 @@ export default class App extends Component {
     return orderOffset < 0 ? Math.max(0, rawGroupOrder) : Math.min(rawGroupOrder, groups.length -1);
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+  handleItemMove = (item, dragTime, newGroupOrder) => {
     const { items, groups, selected } = this.state;
 
     const group = groups[newGroupOrder];
 
     // calculate the overall group change for all selected items
-    const oldGroupOrder = groups.findIndex( g => g.id == itemId.group);
+    const oldGroupOrder = groups.findIndex( g => g.id == item.group);
 
     // The net offset will be negative for moving up
     const orderOffset = newGroupOrder - oldGroupOrder;
     
-    console.log('Moved', itemId, dragTime, group, newGroupOrder, oldGroupOrder, orderOffset)
+    console.log('Moved', item, dragTime, group, newGroupOrder, oldGroupOrder, orderOffset)
 
     this.setState({
-      items: items.map(item => (
-        selected.indexOf(item.id) > -1 ? Object.assign({}, item, {
-        start: item.start + dragTime,
-        end:  item.end + dragTime,
-        group: groups[this.calcNewGroupOrder(orderOffset, groups, item.group)].id
-      }) : item )
+      items: items.map(i => (
+        selected.indexOf(i.id) > -1 ? Object.assign({}, i, {
+        start: i.start + dragTime,
+        end:  i.end + dragTime,
+        group: groups[this.calcNewGroupOrder(orderOffset, groups, i.group)].id
+      }) : i )
       )
     });
 

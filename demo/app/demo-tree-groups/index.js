@@ -100,7 +100,8 @@ export default class App extends Component {
         rightSidebarContent={<div>Above The Right</div>}
         canMove
         canResize="right"
-        canSelect
+        // Effectively readonly
+        selected={[]}
         itemsSorted
         itemTouchSendsClick={false}
         stackItems
