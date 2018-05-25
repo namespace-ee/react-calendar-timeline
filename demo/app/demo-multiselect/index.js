@@ -29,6 +29,10 @@ export default class App extends Component {
       {
         id: 3,
         title: 'Group C'
+      },
+      {
+        id: 4,
+        title: 'Group D'
       }
     ]
     let items = [
@@ -55,7 +59,15 @@ export default class App extends Component {
         id: 3,
         title: 'Item C',
         canResize: 'both'
-      }
+      },
+      {
+        start: moment().add(-2, 'hours'),
+        end: moment().add(2, 'hours'),
+        group: 4,
+        id: 4,
+        title: 'Item D',
+        canResize: 'both'
+      },
     ]
 
     const defaultTimeStart = moment().startOf('day').toDate()
@@ -70,36 +82,41 @@ export default class App extends Component {
     }
   }
 
-  handleCanvasClick = (groupId, time, event) => {
+  handleCanvasClick = (groupId, time, e) => {
     console.log('Canvas clicked', groupId, time)
+
+    // Deselect all items
+    this.setState({
+      selected: []
+    });
   }
 
   handleCanvasContextMenu = (group, time, e) => {
     console.log('Canvas context menu', group, time)
   }
 
-  handleItemClick = (itemId) => {
+  handleItemClick = (itemId, e, time) => {
+    console.log('Parent Clicked: ' + itemId)
+
+    // If item is currently selected, then deselect it and vice versa
+    const isSelected = this.state.selected.indexOf(itemId) > -1;
+
+    let newSelected = this.state.selected.slice();
+
+    if( isSelected) {
+      newSelected = this.state.selected.filter(id => id !== itemId)
+    } else {
+      newSelected.push(itemId)
+    }
+
     this.setState({
-      selected: this.state.selected.filter(id => id !== itemId)
+      selected: newSelected
     })
 
-    console.log('Clicked: ' + itemId)
   }
 
-  handleItemSelect = (itemId) => {
-    let selected = this.state.selected.slice()
-    selected.push(itemId)
-    this.setState({
-      selected
-    })
-    console.log('Selected: ' + itemId)
-  }
-
-  handleItemDeselect = () => {
-    this.setState({
-      selected: []
-    })
-    console.log('Deselected all')
+  handleItemDoubleClick = (itemId) => {
+    console.log('Parent double click', itemId);
   }
 
   handleItemContextMenu = (itemId) => {
@@ -110,8 +127,8 @@ export default class App extends Component {
   calcNewGroupOrder = (orderOffset, groups, groupId) => {
 
     const rawGroupOrder = groups.findIndex( g => g.id == groupId) + orderOffset;
-
-    return orderOffset < 0 ? Math.min(0, rawGroupOrder) : Math.min(rawGroupOrder, groups.length -1);
+    
+    return orderOffset < 0 ? Math.max(0, rawGroupOrder) : Math.min(rawGroupOrder, groups.length -1);
   }
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
@@ -153,7 +170,7 @@ export default class App extends Component {
   }
 
   render () {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd, selected } = this.state
 
     return (
       <Timeline groups={groups}
@@ -168,7 +185,7 @@ export default class App extends Component {
                 canMove
                 canResize='both'
                 useResizeHandle
-                canSelect
+                // selectMode="multi"
 
                 itemsSorted
                 itemTouchSendsClick={false}
@@ -180,15 +197,14 @@ export default class App extends Component {
                 defaultTimeStart={defaultTimeStart}
                 defaultTimeEnd={defaultTimeEnd}
 
-                selected={this.state.selected}
+                selected={selected}
                 canChangeGroup={true}
 
                 onCanvasClick={this.handleCanvasClick}
                 onCanvasContextMenu={this.handleCanvasContextMenu}
 
                 onItemClick={this.handleItemClick}
-                onItemSelect={this.handleItemSelect}
-                onItemDeselect={this.handleItemDeselect}
+                onItemDoubleClick={this.handleItemDoubleClick}
                 onItemContextMenu={this.handleItemContextMenu}
                 onItemMove={this.handleItemMove}
                 onItemResize={this.handleItemResize}

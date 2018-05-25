@@ -18,7 +18,7 @@ export default class Item extends Component {
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    selected: PropTypes.bool,
+    isSelected: PropTypes.bool,
 
     canChangeGroup: PropTypes.bool.isRequired,
     canMove: PropTypes.bool.isRequired,
@@ -28,7 +28,6 @@ export default class Item extends Component {
     keys: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
 
-    onSelect: PropTypes.func,
     onDrag: PropTypes.func,
     onDrop: PropTypes.func,
     onResizing: PropTypes.func,
@@ -37,17 +36,17 @@ export default class Item extends Component {
     itemRenderer: PropTypes.func,
 
     itemProps: PropTypes.object,
-    canSelect: PropTypes.bool,
     topOffset: PropTypes.number,
     dimensions: PropTypes.object,
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
     moveResizeValidator: PropTypes.func,
-    onItemDoubleClick: PropTypes.func
+    onItemDoubleClick: PropTypes.func,
+    onItemClick: PropTypes.func
   }
 
   static defaultProps = {
-    selected: false
+    isSelected: false
   }
 
   static contextTypes = {
@@ -83,7 +82,7 @@ export default class Item extends Component {
       nextState.resizeTime !== this.state.resizeTime ||
       nextProps.keys !== this.props.keys ||
       !deepObjectCompare(nextProps.itemProps, this.props.itemProps) ||
-      nextProps.selected !== this.props.selected ||
+      nextProps.isSelected !== this.props.isSelected ||
       nextProps.item !== this.props.item ||
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
@@ -92,7 +91,6 @@ export default class Item extends Component {
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
-      nextProps.canSelect !== this.props.canSelect ||
       nextProps.topOffset !== this.props.topOffset ||
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
@@ -261,14 +259,14 @@ export default class Item extends Component {
           bottom: false
         },
         enabled:
-          this.props.selected && (this.canResizeLeft() || this.canResizeRight())
+          this.props.isSelected && (this.canResizeLeft() || this.canResizeRight())
       })
       .draggable({
-        enabled: this.props.selected
+        enabled: this.props.isSelected
       })
       .styleCursor(false)
       .on('dragstart', e => {
-        if (this.props.selected) {
+        if (this.props.isSelected) {
           this.dragstart(e);
         } else {
           return false
@@ -285,7 +283,7 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', e => {
-        if (this.props.selected) {
+        if (this.props.isSelected) {
           this.setState({
             resizing: true,
             resizeEdge: null, // we don't know yet
@@ -396,18 +394,18 @@ export default class Item extends Component {
     this.cacheDataFromProps(nextProps)
 
     let { interactMounted } = this.state
-    const couldDrag = this.props.selected && this.canMove(this.props)
+    const couldDrag = this.props.isSelected && this.canMove(this.props)
     const couldResizeLeft =
-      this.props.selected && this.canResizeLeft(this.props)
+      this.props.isSelected && this.canResizeLeft(this.props)
     const couldResizeRight =
-      this.props.selected && this.canResizeRight(this.props)
-    const willBeAbleToDrag = nextProps.selected && this.canMove(nextProps)
+      this.props.isSelected && this.canResizeRight(this.props)
+    const willBeAbleToDrag = nextProps.isSelected && this.canMove(nextProps)
     const willBeAbleToResizeLeft =
-      nextProps.selected && this.canResizeLeft(nextProps)
+      nextProps.isSelected && this.canResizeLeft(nextProps)
     const willBeAbleToResizeRight =
-      nextProps.selected && this.canResizeRight(nextProps)
+      nextProps.isSelected && this.canResizeRight(nextProps)
 
-    if (nextProps.selected && !interactMounted) {
+    if (nextProps.isSelected && !interactMounted) {
       this.mountInteract()
       interactMounted = true
     }
@@ -479,9 +477,7 @@ export default class Item extends Component {
   }
 
   actualClick(e, clickType) {
-    if (this.props.canSelect && this.props.onSelect) {
-      this.props.onSelect(this.itemId, clickType, e)
-    }
+    this.props.onItemClick && this.props.onItemClick(this.itemId, clickType, e);
   }
 
   renderContent() {
@@ -502,7 +498,7 @@ export default class Item extends Component {
 
     const classNames =
       'rct-item' +
-      (this.props.selected ? ' selected' : '') +
+      (this.props.isSelected ? ' selected' : '') +
       (this.canMove(this.props) ? ' can-move' : '') +
       (this.canResizeLeft(this.props) || this.canResizeRight(this.props)
         ? ' can-resize'

@@ -30,28 +30,26 @@ export default class Items extends Component {
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    selectedItems: PropTypes.array,
+    selected: PropTypes.array,
 
     canChangeGroup: PropTypes.bool.isRequired,
     canMove: PropTypes.bool.isRequired,
     canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
-    canSelect: PropTypes.bool,
 
     keys: PropTypes.object.isRequired,
 
     moveResizeValidator: PropTypes.func,
-    itemSelect: PropTypes.func,
     itemDragStart: PropTypes.func,
     itemDrag: PropTypes.func,
     itemDrop: PropTypes.func,
     itemResizing: PropTypes.func,
     itemResized: PropTypes.func,
 
+    onItemClick: PropTypes.func,
     onItemDoubleClick: PropTypes.func,
     onItemContextMenu: PropTypes.func,
 
     itemRenderer: PropTypes.func,
-    // selected: PropTypes.array,
 
     dimensionItems: PropTypes.array,
     topOffset: PropTypes.number,
@@ -60,7 +58,7 @@ export default class Items extends Component {
   }
 
   static defaultProps = {
-    // selected: []
+    selected: []
   }
 
   shouldComponentUpdate(nextProps) {
@@ -71,13 +69,12 @@ export default class Items extends Component {
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
       nextProps.canvasWidth === this.props.canvasWidth &&
-      arraysEqual(nextProps.selectedItems, this.props.selectedItems) &&
+      arraysEqual(nextProps.selected, this.props.selected) &&
       nextProps.dragSnap === this.props.dragSnap &&
       nextProps.minResizeWidth === this.props.minResizeWidth &&
       nextProps.canChangeGroup === this.props.canChangeGroup &&
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
-      nextProps.canSelect === this.props.canSelect &&
       nextProps.dimensionItems === this.props.dimensionItems &&
       nextProps.topOffset === this.props.topOffset &&
       nextProps.minimumWidthForItemContentVisibility ===
@@ -98,8 +95,9 @@ export default class Items extends Component {
     return groupOrders
   }
 
+  // TODO: move this into the utility function
   isSelected(itemId) {
-    return this.props.selectedItems.indexOf(itemId) > -1;
+    return this.props.selected.indexOf(itemId) > -1;
   }
 
   // TODO: this is exact same logic as utility function
@@ -115,21 +113,18 @@ export default class Items extends Component {
   }
 
   itemDrag = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
-    console.log('itemDrag');
     this.props.itemDrag(itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta)
   }
 
   itemDrop = (itemId, dragTimeDelta, oldGroupOrder, dragGroupDelta) => {
-    console.log('itemDrop');
     const { itemIdKey, itemGroupKey, itemTimeStartKey } = this.props.keys
 
     const groupOrders = getGroupOrders(this.props.groups, this.props.keys)
 
-    this.props.selectedItems.forEach((selectedItemId) => {
+    this.props.selected.forEach((selectedItemId) => {
       const item = this.props.items.find(itemObj => _get(itemObj, itemIdKey) === selectedItemId)
       let order = groupOrders[_get(item, itemGroupKey)]
 
-      console.log('items itemDrop')
       this.props.itemDrop(
         selectedItemId,
         _get(item, itemTimeStartKey) + dragTimeDelta,
@@ -168,7 +163,7 @@ export default class Items extends Component {
           .filter(item => sortedDimensionItems[_get(item, itemIdKey)])
           .map(item => {
             const itemId = _get(item, itemIdKey);
-            const selected = this.isSelected(itemId);
+            //const selected = this.isSelected(itemId);
 
             return <Item
               key={itemId}
@@ -178,7 +173,7 @@ export default class Items extends Component {
               dimensions={
                 sortedDimensionItems[_get(item, itemIdKey)].dimensions
               }
-              selected={selected}
+              isSelected={this.isSelected(itemId)}
               canChangeGroup={
                 _get(item, 'canChangeGroup') !== undefined
                   ? _get(item, 'canChangeGroup')
@@ -191,11 +186,6 @@ export default class Items extends Component {
               }
               canResizeLeft={canResizeLeft(item, this.props.canResize)}
               canResizeRight={canResizeRight(item, this.props.canResize)}
-              canSelect={
-                _get(item, 'canSelect') !== undefined
-                  ? _get(item, 'canSelect')
-                  : this.props.canSelect
-              }
               useResizeHandle={this.props.useResizeHandle}
               topOffset={this.props.topOffset}
               groupTops={this.props.groupTops}
@@ -212,7 +202,7 @@ export default class Items extends Component {
               onDrop={this.props.itemDrop}
               onItemDoubleClick={this.props.onItemDoubleClick}
               onContextMenu={this.props.onItemContextMenu}
-              onSelect={this.props.itemSelect}
+              onItemClick={this.props.onItemClick}
               itemRenderer={this.props.itemRenderer}
               minimumWidthForItemContentVisibility={
                 minimumWidthForItemContentVisibility

@@ -8,11 +8,17 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 ### Breaking
-* canSelect propType no longer boolean, must be one of "none", "single", "multi". Defaults to "single" for backwards compatibility
+* canSelect, onItemSelect, onItemDeselect removed
+* Removed internal state of selected items. Selected items must now be passed in via props (selected) and selection/deselection managed by the user.
 
 ### Added
 * multi select of items
 
+### Removed
+* onItemSelect callback prop
+* onItemDeselect callback prop
+* canSelect prop
+* selectedItems (not user facing)
 
 ### 0.16.1
 
