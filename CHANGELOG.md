@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Fixed
+* clicking on canvas when item is selected now calls `onCanvasClicked` - #312
+
 ### 0.16.1
 
 ### Added

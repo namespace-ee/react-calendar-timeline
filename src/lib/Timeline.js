@@ -699,10 +699,14 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     // if not clicking on an item
+    // shouldn't the canvas know its being clicked on directly?
     if (!hasSomeParentTheClass(e.target, 'rct-item')) {
       if (this.state.selectedItem) {
         this.selectItem(null)
-      } else if (this.props.onCanvasClick) {
+      }
+
+      // always call onCanvasClick, whether unselecting or not
+      if (this.props.onCanvasClick) {
         const [row, time] = this.rowAndTimeFromScrollAreaEvent(e)
         if (row >= 0 && row < this.props.groups.length) {
           const groupId = _get(
