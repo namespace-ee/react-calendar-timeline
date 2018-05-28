@@ -9,6 +9,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ### Fixed
 * clicking on canvas when item is selected now calls `onCanvasClicked` - #312
+* throw more descriptive error if visibleTimeStart/End and defaultTimeStart/End are not passed as props - #299
 
 ### 0.16.1
 
