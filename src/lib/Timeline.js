@@ -120,7 +120,6 @@ export default class ReactCalendarTimeline extends Component {
     visibleTimeStart: PropTypes.number,
     visibleTimeEnd: PropTypes.number,
     onTimeChange: PropTypes.func,
-    onTimeInit: PropTypes.func,
     onBoundsChange: PropTypes.func,
 
     selected: PropTypes.array,
@@ -231,8 +230,6 @@ export default class ReactCalendarTimeline extends Component {
     ) {
       updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     },
-    // called after the calendar loads and the visible time has been calculated
-    onTimeInit: null,
     // called when the canvas area of the calendar changes
     onBoundsChange: null,
     children: null,
@@ -281,21 +278,10 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
     } else {
-      visibleTimeStart = Math.min(
-        ...this.props.items.map(item => _get(item, 'start').getTime())
+      //throwing an error because neither default or visible time props provided
+      throw new Error(
+        'You must provide either "defaultTimeStart" and "defaultTimeEnd" or "visibleTimeStart" and "visibleTimeEnd" to initialize the Timeline'
       )
-      visibleTimeEnd = Math.max(
-        ...this.props.items.map(item => _get(item, 'end').getTime())
-      )
-
-      if (!visibleTimeStart || !visibleTimeEnd) {
-        visibleTimeStart = new Date().getTime() - 86400 * 7 * 1000
-        visibleTimeEnd = new Date().getTime() + 86400 * 7 * 1000
-      }
-
-      if (this.props.onTimeInit) {
-        this.props.onTimeInit(visibleTimeStart, visibleTimeEnd)
-      }
     }
 
     this.state = {
@@ -699,10 +685,14 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     // if not clicking on an item
+    // shouldn't the canvas know its being clicked on directly?
     if (!hasSomeParentTheClass(e.target, 'rct-item')) {
       if (this.state.selectedItem) {
         this.selectItem(null)
-      } else if (this.props.onCanvasClick) {
+      }
+
+      // always call onCanvasClick, whether unselecting or not
+      if (this.props.onCanvasClick) {
         const [row, time] = this.rowAndTimeFromScrollAreaEvent(e)
         if (row >= 0 && row < this.props.groups.length) {
           const groupId = _get(

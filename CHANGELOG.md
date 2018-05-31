@@ -7,9 +7,13 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-### Breaking
+### Fixed
 
+* clicking on canvas when item is selected now calls `onCanvasClicked` - #312
+
+### Breaking
 * rework item renderer to render the whole item using render prop and prop getters
+* throw more descriptive error if visibleTimeStart/End and defaultTimeStart/End are not passed as props. Timeline no longer calculates visibleTime start and end from items. Removed `onTimeInit` prop as it no longer serves a purpose. - #299
 
 ### 0.16.1
 
