@@ -542,7 +542,7 @@ export default class Item extends Component {
 
     const dimensions = this.props.dimensions
 
-
+    
     const style = {
       left: `${dimensions.left}px`,
       top: `${dimensions.top}px`,
@@ -554,7 +554,7 @@ export default class Item extends Component {
     return {
       key: this.itemId,
       ref: this.getItemRef,
-      className: classNames + ` ${props.classNames}`,
+      className: classNames + `${props.classNames? props.classNames : ''}`,
       onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
       onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
       onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
