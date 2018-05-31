@@ -138,11 +138,10 @@ export default class App extends Component {
     itemContext,
     getItemProps,
     getResizeProps,
-    getContentProps,
   }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-    const backgroundColor = itemContext.selected ? itemContext.dragging? 'red' : item.selectedBgColor : item.bgColor;
-    const borderColor = itemContext.resizing? 'red' : item.color;
+    const backgroundColor = itemContext.selected ? itemContext.dragging ? 'red' : item.selectedBgColor : item.bgColor;
+    const borderColor = itemContext.resizing ? 'red' : item.color;
     return (
       <div
         {...getItemProps({
@@ -156,16 +155,21 @@ export default class App extends Component {
             borderLeftWidth: itemContext.selected ? 3 : 1,
             borderRightWidth: itemContext.selected ? 3 : 1,
           }
-        })}
+        }) }
       >
         {itemContext.useResizeHandle ? (
           <div {...leftResizeProps} />
         ) : null}
 
         <div
-          {...getContentProps()}
+          style={{
+            height: itemContext.dimensions.height,
+            overflow: 'hidden',
+            paddingLeft:3,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
         >
-          {/* TODO: render title from this.titleItem */}
           {itemContext.title}
         </div>
 

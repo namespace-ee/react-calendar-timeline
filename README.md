@@ -430,7 +430,7 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 Render prop function used to render a customized item. The function provides multiple paramerters that can be used to render each item.
 
-Paramters provided to the function has two types: context params which have the state of the item and timeline and prop getters functions
+Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
 
 #### Render props params
@@ -460,7 +460,7 @@ Paramters provided to the function has two types: context params which have the 
 | `selected` | `boolean`    | returns if the item is selected.            |
 | `dragging`        | `boolean`    | returns if the item is being dragged                 |
 | `dragStart`         | `object`    | returns `x` and `y` of the start dragging point of the item.                    |
-| `dragGroupDelta`        | `number`    | returns number of groups the item moved to above (negative) and to down (positive)                 |
+| `dragGroupDelta`        | `number`    | returns number of groups the item moved. if negative, moving was to top. If positive, moving was to down                 |
 | `resizing`         | `boolean`    | returns if the item is being resized.                    |
 | `resizeEdge`        | `left`, `right`    | the side from which the component is being resized form                 |
 | `resizeStart`         | `number`    | returns the x value from where the component start moving                    |
@@ -477,7 +477,6 @@ Rather than applying props on the element yourself and to avoid your props being
 | ---------------------- | ----------------- | ------------------------------------------------------------------------------------------- |
 | `getItemProps` | `function(props={})`    | returns the props you should apply to the root item element.            |
 | `getResizeProps`        | `function(props={})`    | returns two sets of props to apply on the `left` and `right` elements as resizing elements if you have `useResizeHandle` prop set to true                  |
-| `getContentProps`         | `function(props={})`    | returns the props to be applied to the content wrapper                    |
 
 - `getItemProps` returns the props you should apply to the root item element. The returned props are:
 
@@ -516,15 +515,6 @@ Rather than applying props on the element yourself and to avoid your props being
   - classNameLeft: class names to be added to left classname
   - classNameRight: class names to be added to right classname
 
-- `getContentProps` returns the props you should apply to the wrapper for your item's content like title:
-  
-  - style: inline style to be applied to the wrapper
-  - className: classnames to be applied to the wrapper
-
-  These properties can be override using the prop argument with proprties: 
-  - style: extra inline styles to be applied to the component
-  - classNames: class names to be added
-
 example
 
 ```jsx
@@ -541,50 +531,40 @@ let items = [
   }
 ]
 
-itemRenderer = ({
-    item,
-    timelineContext,
-    itemContext,
-    getItemProps,
-    getResizeProps,
-    getContentProps,
-  }) => {
-    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-    const backgroundColor = itemContext.selected ? itemContext.dragging? 'red' : item.selectedBgColor : item.bgColor;
-    const borderColor = itemContext.resizing? 'red' : item.color;
-    return (
-      <div
-        {...getItemProps({
-          style: {
-            backgroundColor,
-            color: item.color,
-            borderColor,
-            borderStyle: 'solid',
-            borderWidth: 1,
-            borderRadius: 4,
-            borderLeftWidth: itemContext.selected ? 3 : 1,
-            borderRightWidth: itemContext.selected ? 3 : 1,
-          }
-        })}
+itemRenderer: ({
+  item,
+  timelineContext,
+  itemContext,
+  getItemProps,
+  getResizeProps,
+}) => {
+  const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+  return (
+    <div
+      {...getItemProps(item.itemProps) }
+    >
+      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
+        <div {...leftResizeProps} />
+      ) : (
+          ''
+        )}
+
+      {itemContext.showInnerContentsRender && <div
+        className="rct-item-content"
+        style={{maxHeight: `${itemContext.dimensions.height}`}}
       >
-        {itemContext.useResizeHandle ? (
-          <div {...leftResizeProps} />
-        ) : null}
-
-        <div
-          {...getContentProps()}
-        >
-          {/* TODO: render title from this.titleItem */}
-          {itemContext.title}
-        </div>
+        {itemContext.title}
+      </div>}
 
 
-        {itemContext.useResizeHandle ? (
-          <div {...rightResizeProps} />
-        ) : null}
-      </div>
-    )
-  }
+      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
+        <div {...rightResizeProps} />
+      ) : (
+          ''
+        )}
+    </div>
+  )
+}
 ```
 
 

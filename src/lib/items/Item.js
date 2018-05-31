@@ -55,12 +55,11 @@ export default class Item extends Component {
       itemContext,
       getItemProps,
       getResizeProps,
-      getContentProps,
     }) => {
       const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
       return (
         <div
-          {...getItemProps(item.itemProps)}
+          {...getItemProps(item.itemProps) }
         >
           {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
             <div {...leftResizeProps} />
@@ -69,9 +68,9 @@ export default class Item extends Component {
             )}
 
           {itemContext.showInnerContentsRender && <div
-            {...getContentProps()}
+            className="rct-item-content"
+            style={{maxHeight: `${itemContext.dimensions.height}`}}
           >
-            {/* TODO: render title from this.titleItem */}
             {itemContext.title}
           </div>}
 
@@ -579,17 +578,6 @@ export default class Item extends Component {
     }
   }
 
-  getContentProps = (props = {}) => {
-    const dimensions = this.props.dimensions
-    const style = {
-      maxWidth: `${dimensions.width}px`
-    };
-    return {
-      style: Object.assign({}, props.style, style),
-      className: `rct-item-content ${props.className}`
-    }
-  }
-
   render() {
     if (typeof this.props.order === 'undefined' || this.props.order === null) {
       return null
@@ -613,7 +601,7 @@ export default class Item extends Component {
       resizeStart: this.state.resizeStart,
       resizeTime: this.state.resizeTime,
       showInnerContentsRender: this.props.dimensions.width > this.props.minimumWidthForItemContentVisibility,
-      
+
     }
 
     return this.props.itemRenderer({
@@ -622,7 +610,6 @@ export default class Item extends Component {
       itemContext,
       getItemProps: this.getItemProps,
       getResizeProps: this.getResizeProps,
-      getContentProps: this.getContentProps,
     })
   }
 }
