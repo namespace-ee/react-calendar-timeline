@@ -23,7 +23,7 @@ import {
   getGroupOrders,
   getVisibleItems
 } from './utility/calendar'
-import { getParentPosition, hasSomeParentTheClass } from './utility/dom-helpers'
+import { getParentPosition } from './utility/dom-helpers'
 import { _get, _length } from './utility/generic'
 import {
   defaultKeys,
@@ -643,25 +643,14 @@ export default class ReactCalendarTimeline extends Component {
   // TODO: this is very similar to timeFromItemEvent, aside from which element to get offsets
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
-  rowAndTimeFromScrollAreaEvent = e => {
+  getTimeFromRowClickEvent = e => {
     const { dragSnap } = this.props
-    const { width, groupHeights, visibleTimeStart, visibleTimeEnd } = this.state
-    const lineCount = _length(this.props.groups)
+    const { width, visibleTimeStart, visibleTimeEnd } = this.state
 
     // get coordinates relative to the component
     const parentPosition = getParentPosition(e.currentTarget)
 
     const x = e.clientX - parentPosition.x
-    const y = e.clientY - parentPosition.y
-
-    // calculate the y coordinate from `groupHeights` and header heights
-    let row = 0
-    let remainingHeight = y
-
-    while (row < lineCount && remainingHeight - groupHeights[row] > 0) {
-      remainingHeight -= groupHeights[row]
-      row += 1
-    }
 
     // calculate the x (time) coordinate taking the dragSnap into account
     let time = Math.round(
@@ -669,7 +658,7 @@ export default class ReactCalendarTimeline extends Component {
     )
     time = Math.floor(time / dragSnap) * dragSnap
 
-    return [row, time]
+    return time
   }
 
   timeFromItemEvent = e => {
@@ -689,34 +678,6 @@ export default class ReactCalendarTimeline extends Component {
     time = Math.floor(time / dragSnap) * dragSnap
 
     return time
-  }
-
-  scrollAreaClick = e => {
-    if (hasSomeParentTheClass(e.target, 'rct-header')) {
-      // don't do anything if we clicked on the header
-      // TODO: there should be a better way to handle this...
-      return
-    }
-
-    // if not clicking on an item
-    // shouldn't the canvas know its being clicked on directly?
-    if (!hasSomeParentTheClass(e.target, 'rct-item')) {
-      if (this.state.selectedItem) {
-        this.selectItem(null)
-      }
-
-      // always call onCanvasClick, whether unselecting or not
-      if (this.props.onCanvasClick) {
-        const [row, time] = this.rowAndTimeFromScrollAreaEvent(e)
-        if (row >= 0 && row < this.props.groups.length) {
-          const groupId = _get(
-            this.props.groups[row],
-            this.props.keys.groupIdKey
-          )
-          this.props.onCanvasClick(groupId, time, e)
-        }
-      }
-    }
   }
 
   dragItem = (item, dragTime, newGroupOrder) => {
@@ -877,13 +838,36 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  horizontalLines(canvasWidth, groupHeights, headerHeight) {
+  handleRowClick = (e, rowIndex) => {
+    if (this.props.onCanvasClick != null) return
+
+    const time = this.getTimeFromRowClickEvent(e)
+    const groupId = _get(
+      this.props.groups[rowIndex],
+      this.props.keys.groupIdKey
+    )
+    this.props.onCanvasClick(groupId, time, e)
+  }
+
+  handleRowDoubleClick = (e, rowIndex) => {
+    if (this.props.onCanvasDoubleClick == null) return
+
+    const time = this.getTimeFromRowClickEvent(e)
+    const groupId = _get(
+      this.props.groups[rowIndex],
+      this.props.keys.groupIdKey
+    )
+    this.props.onCanvasDoubleClick(groupId, time, e)
+  }
+
+  horizontalLines(canvasWidth, groupHeights) {
     return (
       <HorizontalLines
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
         groupHeights={groupHeights}
-        headerHeight={headerHeight}
+        onRowClick={this.handleRowClick}
+        onRowDoubleClick={this.handleRowDoubleClick}
       />
     )
   }
@@ -1152,56 +1136,6 @@ export default class ReactCalendarTimeline extends Component {
     return { dimensionItems, height, groupHeights, groupTops }
   }
 
-  handleScrollDoubleClick = e => {
-    const {
-      canvasTimeStart,
-      width,
-      visibleTimeStart,
-      visibleTimeEnd,
-      groupTops,
-      topOffset
-    } = this.state
-
-    if (
-      this.props.onCanvasDoubleClick == null ||
-      hasSomeParentTheClass(e.target, 'rct-header')
-    ) {
-      // do nothing cuz either we don't have on CanvasdoubleClick or we clicked on header
-      // TODO: there has got to be a better way of handling this
-      return
-    }
-
-    const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasTimeEnd = canvasTimeStart + zoom * 3
-    const canvasWidth = width * 3
-    const { pageX, pageY } = e
-    const ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
-    const boundingRect = this.scrollComponent.getBoundingClientRect()
-    let timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left)
-    if (this.props.dragSnap) {
-      timePosition =
-        Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap
-    }
-
-    let groupIndex = 0
-    for (var key of Object.keys(groupTops)) {
-      var item = groupTops[key]
-      if (pageY - topOffset > item) {
-        groupIndex = parseInt(key, 10)
-      } else {
-        break
-      }
-    }
-
-    if (this.props.onCanvasDoubleClick) {
-      this.props.onCanvasDoubleClick(
-        this.props.groups[groupIndex],
-        timePosition,
-        e
-      )
-    }
-  }
-
   handleScrollContextMenu = e => {
     const {
       canvasTimeStart,
@@ -1377,10 +1311,8 @@ export default class ReactCalendarTimeline extends Component {
             onZoom={this.changeZoom}
             onWheelZoom={this.handleWheelZoom}
             traditionalZoom={traditionalZoom}
-            onClick={this.scrollAreaClick}
             onScroll={this.onScroll}
             isInteractingWithItem={isInteractingWithItem}
-            onDoubleClick={this.handleScrollDoubleClick}
             onMouseEnter={this.handleScrollMouseEnter}
             onMouseLeave={this.handleScrollMouseLeave}
             onMouseMove={this.handleScrollMouseMove}
@@ -1411,7 +1343,7 @@ export default class ReactCalendarTimeline extends Component {
                 height,
                 headerHeight
               )}
-              {this.horizontalLines(canvasWidth, groupHeights, headerHeight)}
+              {this.horizontalLines(canvasWidth, groupHeights)}
               {this.todayLine(
                 canvasTimeStart,
                 zoom,

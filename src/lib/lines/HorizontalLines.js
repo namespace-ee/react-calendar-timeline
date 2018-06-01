@@ -5,7 +5,9 @@ export default class HorizontalLines extends Component {
   static propTypes = {
     canvasWidth: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
-    groupHeights: PropTypes.array.isRequired
+    groupHeights: PropTypes.array.isRequired,
+    onRowClick: PropTypes.func.isRequired,
+    onRowDoubleClick: PropTypes.func.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
@@ -17,24 +19,28 @@ export default class HorizontalLines extends Component {
   }
 
   render() {
-    const { canvasWidth, lineCount, groupHeights } = this.props
+    const {
+      canvasWidth,
+      lineCount,
+      groupHeights,
+      onRowClick,
+      onRowDoubleClick
+    } = this.props
     let lines = []
 
-    var totalHeight = 0
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <div
+          onClick={evt => onRowClick(evt, i)}
+          onDoubleClick={evt => onRowDoubleClick(evt, i)}
           key={`horizontal-line-${i}`}
           className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
           style={{
-            top: `${totalHeight}px`,
-            left: '0px',
             width: `${canvasWidth}px`,
             height: `${groupHeights[i] - 1}px`
           }}
         />
       )
-      totalHeight += groupHeights[i]
     }
 
     return <div className="rct-horizontal-lines">{lines}</div>
