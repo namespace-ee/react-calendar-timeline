@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-export default class HorizontalLines extends Component {
+export default class GroupRows extends Component {
   static propTypes = {
     canvasWidth: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
