@@ -7,7 +7,7 @@ import InfoLabel from './layout/InfoLabel'
 import Sidebar from './layout/Sidebar'
 import Header from './layout/Header'
 import VerticalLines from './lines/VerticalLines'
-import GroupRow from './row/GroupRow'
+import GroupRows from './row/GroupRows'
 import TodayLine from './lines/TodayLine'
 import CursorLine from './lines/CursorLine'
 import ScrollElement from './scroll/ScrollElement'
@@ -867,7 +867,7 @@ export default class ReactCalendarTimeline extends Component {
 
   horizontalLines(canvasWidth, groupHeights) {
     return (
-      <GroupRow
+      <GroupRows
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
         groupHeights={groupHeights}
