@@ -839,7 +839,12 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   handleRowClick = (e, rowIndex) => {
-    if (this.props.onCanvasClick != null) return
+    // shouldnt this be handled by the user, as far as when to deselect an item?
+    if (this.state.selectedItem) {
+      this.selectItem(null)
+    }
+
+    if (this.props.onCanvasClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
     const groupId = _get(
