@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import GroupRow from './GroupRow'
 
 export default class GroupRows extends Component {
   static propTypes = {
@@ -30,11 +31,11 @@ export default class GroupRows extends Component {
 
     for (let i = 0; i < lineCount; i++) {
       lines.push(
-        <div
+        <GroupRow
           onClick={evt => onRowClick(evt, i)}
           onDoubleClick={evt => onRowDoubleClick(evt, i)}
           key={`horizontal-line-${i}`}
-          className={i % 2 === 0 ? 'rct-hl-even' : 'rct-hl-odd'}
+          isEvenRow={i % 2 === 0}
           style={{
             width: `${canvasWidth}px`,
             height: `${groupHeights[i] - 1}px`
