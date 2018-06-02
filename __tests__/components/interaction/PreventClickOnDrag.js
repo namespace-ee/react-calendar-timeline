@@ -4,7 +4,7 @@ import { noop } from 'test-utility'
 import PreventClickOnDrag from 'lib/interaction/PreventClickOnDrag'
 
 describe('PreventClickOnDrag', () => {
-  it('should prevent click if element is dragged further than 10 pixels - forward', () => {
+  it('should prevent click if element is dragged further than 10 pixels forwards', () => {
     const onClickMock = jest.fn()
     const wrapper = mount(
       <PreventClickOnDrag onClick={onClickMock}>
@@ -25,7 +25,7 @@ describe('PreventClickOnDrag', () => {
     expect(onClickMock).not.toHaveBeenCalled()
   })
 
-  it('should prevent click if element is dragged further than 10 pixels - backwards', () => {
+  it('should prevent click if element is dragged further than 10 pixels backwards', () => {
     const onClickMock = jest.fn()
     const wrapper = mount(
       <PreventClickOnDrag onClick={onClickMock}>
@@ -44,7 +44,7 @@ describe('PreventClickOnDrag', () => {
 
     expect(onClickMock).not.toHaveBeenCalled()
   })
-  it('should not prevent click if element is dragged less than 10 pixels - forwards', () => {
+  it('should not prevent click if element is dragged less than 10 pixels forwards', () => {
     const onClickMock = jest.fn()
     const wrapper = mount(
       <PreventClickOnDrag onClick={onClickMock}>
@@ -65,7 +65,7 @@ describe('PreventClickOnDrag', () => {
     expect(onClickMock).toHaveBeenCalledTimes(1)
   })
 
-  it('should not prevent click if element is dragged less than 10 pixels - forwards', () => {
+  it('should not prevent click if element is dragged less than 10 pixels backwards', () => {
     const onClickMock = jest.fn()
     const wrapper = mount(
       <PreventClickOnDrag onClick={onClickMock}>
