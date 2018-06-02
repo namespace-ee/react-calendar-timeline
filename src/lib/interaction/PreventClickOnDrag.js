@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-const dragThreshold = 10
 class PreventClickOnDrag extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    clickTolerance: PropTypes.number.isRequired
   }
 
   handleMouseDown = evt => {
@@ -13,7 +13,7 @@ class PreventClickOnDrag extends Component {
   }
 
   handleMouseUp = evt => {
-    if (Math.abs(this.originClickX - evt.clientX) > dragThreshold) {
+    if (Math.abs(this.originClickX - evt.clientX) > this.props.clickTolerance) {
       this.cancelClick = true
     }
   }

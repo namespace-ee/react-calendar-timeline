@@ -8,7 +8,8 @@ export default class GroupRows extends Component {
     lineCount: PropTypes.number.isRequired,
     groupHeights: PropTypes.array.isRequired,
     onRowClick: PropTypes.func.isRequired,
-    onRowDoubleClick: PropTypes.func.isRequired
+    onRowDoubleClick: PropTypes.func.isRequired,
+    clickTolerance: PropTypes.number.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
@@ -25,13 +26,15 @@ export default class GroupRows extends Component {
       lineCount,
       groupHeights,
       onRowClick,
-      onRowDoubleClick
+      onRowDoubleClick,
+      clickTolerance
     } = this.props
     let lines = []
 
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <GroupRow
+          clickTolerance={clickTolerance}
           onClick={evt => onRowClick(evt, i)}
           onDoubleClick={evt => onRowDoubleClick(evt, i)}
           key={`horizontal-line-${i}`}

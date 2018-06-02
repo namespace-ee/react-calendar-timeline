@@ -7,6 +7,7 @@ const defaultProps = {
   onClick: noop,
   onDoubleClick: noop,
   isEvenRow: false,
+  clickTolerance: 10,
   style: {}
 }
 
