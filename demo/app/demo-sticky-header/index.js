@@ -95,7 +95,7 @@ export default class App extends Component {
         />
         <br />
         <br />
-        Here's another calendar, but this one has <code>stickyOffset</code> set
+        Here is another calendar, but this one has <code>stickyOffset</code> set
         to <code>100</code>, meaning that the header will stick 100px from the
         top. This is useful for example if you already have a sticky navbar.
         <br />

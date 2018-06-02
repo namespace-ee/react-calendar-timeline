@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react'
 import moment from 'moment'
 
 import Timeline from 'react-calendar-timeline'
-// import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -45,11 +45,11 @@ export default class App extends Component {
     }
   }
 
-  handleCanvasClick = (groupId, time, event) => {
+  handleCanvasClick = (groupId, time) => {
     console.log('Canvas clicked', groupId, moment(time).format())
   }
 
-  handleCanvasContextMenu = (group, time, e) => {
+  handleCanvasContextMenu = (group, time) => {
     console.log('Canvas context menu', group, moment(time).format())
   }
 
@@ -121,7 +121,7 @@ export default class App extends Component {
     }
   }
 
-  moveResizeValidator = (action, item, time, resizeEdge) => {
+  moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
       var newTime =
         Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
