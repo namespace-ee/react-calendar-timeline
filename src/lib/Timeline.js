@@ -951,7 +951,6 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth={canvasWidth}
         minUnit={minUnit}
         timeSteps={timeSteps}
-        lineHeight={this.props.lineHeight}
         headerLabelGroupHeight={headerLabelGroupHeight}
         headerLabelHeight={headerLabelHeight}
         width={this.state.width}

@@ -9,7 +9,6 @@ class Header extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    lineHeight: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,

@@ -11,7 +11,6 @@ export default class TimelineElementsHeader extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    lineHeight: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
@@ -115,7 +114,6 @@ export default class TimelineElementsHeader extends Component {
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
-      lineHeight,
       minUnit,
       timeSteps,
       headerLabelGroupHeight,
@@ -221,8 +219,7 @@ export default class TimelineElementsHeader extends Component {
     )
 
     let headerStyle = {
-      height: `${headerLabelGroupHeight + headerLabelHeight}px`,
-      lineHeight: `${lineHeight}px`
+      height: `${headerLabelGroupHeight + headerLabelHeight}px`
     }
 
     return (

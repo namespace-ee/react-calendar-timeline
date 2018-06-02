@@ -9,7 +9,6 @@ const defaultProps = {
   canvasTimeStart: 10000,
   canvasTimeEnd: 20000,
   canvasWidth: 1000,
-  lineHeight: 35,
   minUnit: 'day',
   timeSteps: {},
   width: 400,
