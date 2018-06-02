@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.16.3
+
 ### Fixed
 
 * tap on canvas now dispatches `onCanvasClicked` - #168
