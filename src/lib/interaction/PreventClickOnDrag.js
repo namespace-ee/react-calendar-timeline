@@ -28,7 +28,8 @@ class PreventClickOnDrag extends Component {
   }
 
   render() {
-    return React.cloneElement(this.props.children, {
+    const childElement = React.Children.only(this.props.children)
+    return React.cloneElement(childElement, {
       onMouseDown: this.handleMouseDown,
       onMouseUp: this.handleMouseUp,
       onClick: this.handleClick

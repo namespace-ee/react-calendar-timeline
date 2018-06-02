@@ -1,5 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
+import { noop } from 'test-utility'
 import PreventClickOnDrag from 'lib/interaction/PreventClickOnDrag'
 
 describe('PreventClickOnDrag', () => {
@@ -125,5 +126,21 @@ describe('PreventClickOnDrag', () => {
     wrapper.simulate('doubleclick', {})
 
     expect(doubleClickMock).toHaveBeenCalled()
+  })
+
+  it('only allows single children element', () => {
+    // dont emit propType error
+    jest.spyOn(global.console, 'error').mockImplementationOnce(noop)
+    expect(() =>
+      mount(
+        <PreventClickOnDrag onClick={noop}>
+          <div>hey</div>
+          <div>hi</div>
+          <div>how are ya </div>
+        </PreventClickOnDrag>
+      )
+    ).toThrowError(
+      'React.Children.only expected to receive a single React element child'
+    )
   })
 })
