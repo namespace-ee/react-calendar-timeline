@@ -7,7 +7,6 @@ class ScrollElement extends Component {
     children: PropTypes.element.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    clickTolerance: PropTypes.number.isRequired,
     traditionalZoom: PropTypes.bool.isRequired,
     scrollRef: PropTypes.func.isRequired,
     isInteractingWithItem: PropTypes.bool.isRequired,

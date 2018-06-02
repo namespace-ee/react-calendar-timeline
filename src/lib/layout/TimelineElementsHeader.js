@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { iterateTimes, getNextUnit } from '../utility/calendar'
 
-export default class Header extends Component {
+export default class TimelineElementsHeader extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,

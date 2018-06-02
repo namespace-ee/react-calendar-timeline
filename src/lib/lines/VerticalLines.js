@@ -8,7 +8,6 @@ export default class VerticalLines extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    lineHeight: PropTypes.number.isRequired,
     lineCount: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
@@ -20,7 +19,6 @@ export default class VerticalLines extends Component {
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
       nextProps.canvasWidth === this.props.canvasWidth &&
-      nextProps.lineHeight === this.props.lineHeight &&
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&

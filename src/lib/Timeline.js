@@ -88,8 +88,6 @@ export default class ReactCalendarTimeline extends Component {
     itemRenderer: PropTypes.func,
     groupRenderer: PropTypes.func,
 
-    dayBackground: PropTypes.func,
-
     style: PropTypes.object,
 
     keys: PropTypes.shape({
@@ -767,73 +765,46 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  todayLine(
-    canvasTimeStart,
-    zoom,
-    canvasTimeEnd,
-    canvasWidth,
-    minUnit,
-    height,
-    headerHeight
-  ) {
+  todayLine(canvasTimeStart, canvasTimeEnd, canvasWidth, height) {
     return (
       <TodayLine
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
-        lineHeight={this.props.lineHeight}
-        lineCount={_length(this.props.groups)}
         height={height}
-        headerHeight={headerHeight}
       />
     )
   }
 
-  cursorLine(
-    cursorTime,
-    canvasTimeStart,
-    zoom,
-    canvasTimeEnd,
-    canvasWidth,
-    minUnit,
-    height,
-    headerHeight
-  ) {
+  cursorLine(cursorTime, canvasTimeStart, canvasTimeEnd, canvasWidth, height) {
     return (
       <CursorLine
         cursorTime={cursorTime}
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
-        lineHeight={this.props.lineHeight}
-        lineCount={_length(this.props.groups)}
         height={height}
-        headerHeight={headerHeight}
       />
     )
   }
 
   verticalLines(
     canvasTimeStart,
-    zoom,
     canvasTimeEnd,
     canvasWidth,
     minUnit,
     timeSteps,
-    height,
-    headerHeight
+    height
   ) {
     return (
       <VerticalLines
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
-        lineHeight={this.props.lineHeight}
         lineCount={_length(this.props.groups)}
         minUnit={minUnit}
         timeSteps={timeSteps}
         height={height}
-        headerHeight={headerHeight}
       />
     )
   }
@@ -871,6 +842,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
         groupHeights={groupHeights}
+        clickTolerance={this.props.clickTolerance}
         onRowClick={this.handleRowClick}
         onRowDoubleClick={this.handleRowDoubleClick}
       />
@@ -977,9 +949,9 @@ export default class ReactCalendarTimeline extends Component {
         hasRightSidebar={this.props.rightSidebarWidth > 0}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
-        lineHeight={this.props.lineHeight}
         minUnit={minUnit}
         timeSteps={timeSteps}
+        lineHeight={this.props.lineHeight}
         headerLabelGroupHeight={headerLabelGroupHeight}
         headerLabelHeight={headerLabelHeight}
         width={this.state.width}
@@ -1017,7 +989,6 @@ export default class ReactCalendarTimeline extends Component {
           groupRenderer={this.props.groupRenderer}
           keys={this.props.keys}
           width={this.props.sidebarWidth}
-          lineHeight={this.props.lineHeight}
           groupHeights={groupHeights}
           height={height}
         />
@@ -1036,7 +1007,6 @@ export default class ReactCalendarTimeline extends Component {
           keys={this.props.keys}
           isRightSidebar
           width={this.props.rightSidebarWidth}
-          lineHeight={this.props.lineHeight}
           groupHeights={groupHeights}
           height={height}
         />
@@ -1243,7 +1213,6 @@ export default class ReactCalendarTimeline extends Component {
       rightSidebarWidth,
       timeSteps,
       showCursorLine,
-      clickTolerance,
       traditionalZoom
     } = this.props
     const {
@@ -1312,7 +1281,6 @@ export default class ReactCalendarTimeline extends Component {
             scrollRef={el => (this.scrollComponent = el)}
             width={width}
             height={height}
-            clickTolerance={clickTolerance}
             onZoom={this.changeZoom}
             onWheelZoom={this.handleWheelZoom}
             traditionalZoom={traditionalZoom}
@@ -1340,7 +1308,6 @@ export default class ReactCalendarTimeline extends Component {
               )}
               {this.verticalLines(
                 canvasTimeStart,
-                zoom,
                 canvasTimeEnd,
                 canvasWidth,
                 minUnit,
@@ -1351,23 +1318,17 @@ export default class ReactCalendarTimeline extends Component {
               {this.horizontalLines(canvasWidth, groupHeights)}
               {this.todayLine(
                 canvasTimeStart,
-                zoom,
                 canvasTimeEnd,
                 canvasWidth,
-                minUnit,
-                height,
-                headerHeight
+                height
               )}
               {mouseOverCanvas && showCursorLine
                 ? this.cursorLine(
                     cursorTime,
                     canvasTimeStart,
-                    zoom,
                     canvasTimeEnd,
                     canvasWidth,
-                    minUnit,
-                    height,
-                    headerHeight
+                    height
                   )
                 : null}
               {this.infoLabel()}

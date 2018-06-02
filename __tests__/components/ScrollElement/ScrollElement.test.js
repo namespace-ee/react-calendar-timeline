@@ -6,7 +6,6 @@ import ScrollElement from 'lib/scroll/ScrollElement'
 const defaultProps = {
   width: 1000,
   height: 800,
-  clickTolerance: 0,
   onZoom: noop,
   onWheelZoom: noop,
   onScroll: noop,
