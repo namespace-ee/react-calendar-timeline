@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-const xDelta = 10
-// TODO: add touch interactions too?
+const dragThreshold = 10
 class PreventClickOnDrag extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
@@ -14,7 +13,7 @@ class PreventClickOnDrag extends Component {
   }
 
   handleMouseUp = evt => {
-    if (Math.abs(this.originClickX - evt.clientX) > xDelta) {
+    if (Math.abs(this.originClickX - evt.clientX) > dragThreshold) {
       this.cancelClick = true
     }
   }
