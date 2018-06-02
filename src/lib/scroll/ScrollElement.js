@@ -17,6 +17,7 @@ class ScrollElement extends Component {
     onContextMenu: PropTypes.func.isRequired,
     onDoubleClick: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
+    onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
     onScroll: PropTypes.func.isRequired
   }
@@ -154,7 +155,7 @@ class ScrollElement extends Component {
   }
 
   handleTouchMove = e => {
-    const { isInteractingWithItem, width } = this.props
+    const { isInteractingWithItem, width, onZoom } = this.props
     if (isInteractingWithItem) {
       e.preventDefault()
       return
@@ -166,10 +167,7 @@ class ScrollElement extends Component {
       let xPosition =
         (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
       if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
-        this.changeZoom(
-          this.lastTouchDistance / touchDistance,
-          xPosition / width
-        )
+        onZoom(this.lastTouchDistance / touchDistance, xPosition / width)
         this.lastTouchDistance = touchDistance
       }
     } else if (this.lastSingleTouch && e.touches.length === 1) {

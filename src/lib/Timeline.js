@@ -556,7 +556,7 @@ export default class ReactCalendarTimeline extends Component {
     this.changeZoom(1.0 + speed * deltaY / 500, xPosition / this.state.width)
   }
 
-  changeZoom(scale, offset = 0.5) {
+  changeZoom = (scale, offset = 0.5) => {
     const { minZoom, maxZoom } = this.props
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = Math.min(
@@ -1374,6 +1374,7 @@ export default class ReactCalendarTimeline extends Component {
             width={width}
             height={height}
             clickTolerance={clickTolerance}
+            onZoom={this.changeZoom}
             onWheelZoom={this.handleWheelZoom}
             traditionalZoom={traditionalZoom}
             onClick={this.scrollAreaClick}
