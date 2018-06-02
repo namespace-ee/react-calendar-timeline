@@ -11,6 +11,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * tap on canvas now dispatches `onCanvasClicked` - #168
 * regression bug related to touch zoom
+* code cleanup and refactoring around group rows
 
 ### 0.16.2
 
