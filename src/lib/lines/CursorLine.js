@@ -27,7 +27,8 @@ export default class CursorLine extends Component {
       const styles = {
         top: '0px',
         left: `${left}px`,
-        height: `${height}px`
+        height: `${height}px`,
+        pointerEvents: 'none'
       }
 
       return <div className="rct-cursor-line" style={styles} />

@@ -15,8 +15,6 @@ class ScrollElement extends Component {
     onMouseMove: PropTypes.func.isRequired,
     onMouseLeave: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
-    onDoubleClick: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
     onScroll: PropTypes.func.isRequired
@@ -90,7 +88,6 @@ class ScrollElement extends Component {
   }
 
   handleMouseDown = e => {
-    // TODO: what about header click
     if (e.button === 0) {
       this.dragStartPosition = e.pageX
       this.dragLastPosition = e.pageX
@@ -109,13 +106,7 @@ class ScrollElement extends Component {
     }
   }
 
-  handleMouseUp = e => {
-    if (
-      Math.abs(this.dragStartPosition - e.pageX) <= this.props.clickTolerance
-    ) {
-      this.props.onClick(e)
-    }
-
+  handleMouseUp = () => {
     this.dragStartPosition = null
     this.dragLastPosition = null
 
@@ -203,14 +194,7 @@ class ScrollElement extends Component {
   }
 
   render() {
-    const {
-      width,
-      height,
-      children,
-      onContextMenu,
-      onDoubleClick,
-      onMouseEnter
-    } = this.props
+    const { width, height, children, onContextMenu, onMouseEnter } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
@@ -235,7 +219,6 @@ class ScrollElement extends Component {
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
         onContextMenu={onContextMenu}
-        onDoubleClick={onDoubleClick}
         onMouseEnter={onMouseEnter}
       >
         {children}
