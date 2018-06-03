@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-console */
 import React, { Component } from 'react'
 import moment from 'moment'
 
@@ -43,20 +45,12 @@ export default class App extends Component {
     }
   }
 
-  handleTimeChangeFirst = (
-    visibleTimeStart,
-    visibleTimeEnd,
-    updateScrollCanvas
-  ) => {
+  handleTimeChangeFirst = (visibleTimeStart, visibleTimeEnd) => {
     console.log('first', visibleTimeStart, visibleTimeEnd)
     this.setState({ visibleTimeStart, visibleTimeEnd })
   }
 
-  handleTimeChangeSecond = (
-    visibleTimeStart,
-    visibleTimeEnd,
-    updateScrollCanvas
-  ) => {
+  handleTimeChangeSecond = (visibleTimeStart, visibleTimeEnd) => {
     console.log('second', visibleTimeStart, visibleTimeEnd)
     this.setState({ visibleTimeStart, visibleTimeEnd })
   }

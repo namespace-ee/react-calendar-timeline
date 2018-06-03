@@ -11,6 +11,14 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * throw more descriptive error if visibleTimeStart/End and defaultTimeStart/End are not passed as props. Timeline no longer calculates visibleTime start and end from items. Removed `onTimeInit` prop as it no longer serves a purpose. - #299
 
+### 0.16.3
+
+### Fixed
+
+* tap on canvas now dispatches `onCanvasClicked` - #168
+* regression bug related to touch zoom
+* code cleanup and refactoring around group rows
+
 ### 0.16.2
 
 ### Fixed
