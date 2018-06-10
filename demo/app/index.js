@@ -14,6 +14,7 @@ const demos = {
   plugins: require('./demo-plugins').default,
   stickyHeader: require('./demo-sticky-header').default,
   customItems: require('./demo-cusom-items').default,
+  stickyHeader: require('./demo-sticky-header').default
 }
 
 // A simple component that shows the pathname of the current location

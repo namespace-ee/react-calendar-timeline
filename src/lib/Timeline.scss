@@ -237,7 +237,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     .rct-vl {
       position: absolute;
       border-left: 1px solid $border-color;
-      background: #fff;
       z-index: 30;
       &.rct-vl-first {
         border-left-width: 2px;
@@ -254,7 +253,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     .rct-hl-odd {
       border-bottom: $border-width solid $border-color;
       box-sizing: content-box;
-      position: absolute;
       z-index: 40;
     }
     .rct-hl-odd {

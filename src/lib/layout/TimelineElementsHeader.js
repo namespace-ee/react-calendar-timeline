@@ -4,14 +4,13 @@ import moment from 'moment'
 
 import { iterateTimes, getNextUnit } from '../utility/calendar'
 
-export default class Header extends Component {
+export default class TimelineElementsHeader extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    lineHeight: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
@@ -115,7 +114,6 @@ export default class Header extends Component {
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
-      lineHeight,
       minUnit,
       timeSteps,
       headerLabelGroupHeight,
@@ -221,8 +219,7 @@ export default class Header extends Component {
     )
 
     let headerStyle = {
-      height: `${headerLabelGroupHeight + headerLabelHeight}px`,
-      lineHeight: `${lineHeight}px`
+      height: `${headerLabelGroupHeight + headerLabelHeight}px`
     }
 
     return (

@@ -422,6 +422,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 }
 ```
 
+### onTimeInit(visibleTimeStart, visibleTimeEnd)
+
+Called when the calendar is first initialised. `visibleTimeStart` and `visibleTimeEnd` are unix timestamps in milliseconds.
+
 ### onBoundsChange(canvasTimeStart, canvasTimeEnd)
 
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
