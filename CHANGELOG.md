@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Breaking
+
+* `interactjs` is a peerDependency (wasn't previously). Upped version to 1.3.4 to fix issue #297
+
 ### Fixed
 
 * fix for issue where NaN is returned in onItemMove if the startTime is not unix timestamp #300
