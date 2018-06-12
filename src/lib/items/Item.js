@@ -140,13 +140,13 @@ export default class Item extends Component {
   }
 
   dragTime(e) {
-    const startTime = this.itemTimeStart
+    const startTime = moment(this.itemTimeStart)
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
       const timeDelta = deltaX * this.coordinateToTimeRatio()
 
-      return this.dragTimeSnap(startTime + timeDelta, true)
+      return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
     } else {
       return startTime
     }

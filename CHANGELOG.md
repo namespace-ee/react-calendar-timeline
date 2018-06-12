@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Fixed
+
+* fix for issue where NaN is returned in onItemMove if the startTime is not unix timestamp #300
+
 ### 0.16.3
 
 ### Fixed
