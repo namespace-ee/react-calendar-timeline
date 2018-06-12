@@ -16,7 +16,7 @@ yarn add react-calendar-timeline
 npm install --save react-calendar-timeline
 ```
 
-`react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interact.js`](http://interactjs.io/docs/) as peer dependencies.
+`react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
 
 ## Usage
 
