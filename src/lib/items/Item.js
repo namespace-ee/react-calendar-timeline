@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import interact from 'interact.js'
+import interact from 'interactjs'
 import moment from 'moment'
 
 import { _get, deepObjectCompare } from '../utility/generic'
@@ -140,13 +140,13 @@ export default class Item extends Component {
   }
 
   dragTime(e) {
-    const startTime = this.itemTimeStart
+    const startTime = moment(this.itemTimeStart)
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
       const timeDelta = deltaX * this.coordinateToTimeRatio()
 
-      return this.dragTimeSnap(startTime + timeDelta, true)
+      return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
     } else {
       return startTime
     }

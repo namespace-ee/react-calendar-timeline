@@ -10,6 +10,11 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ### Breaking
 
 * throw more descriptive error if visibleTimeStart/End and defaultTimeStart/End are not passed as props. Timeline no longer calculates visibleTime start and end from items. Removed `onTimeInit` prop as it no longer serves a purpose. - #299
+* `interactjs` is a peerDependency (wasn't previously). Upped version to 1.3.4 to fix issue #297
+
+### Fixed
+
+* fix for issue where NaN is returned in onItemMove if the startTime is not unix timestamp #300
 
 ### 0.16.3
 
