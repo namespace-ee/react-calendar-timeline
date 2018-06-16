@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { mount } from 'enzyme'
 import Timeline from 'lib/Timeline'
+import { noop } from 'test-utility'
 
 const defaultProps = {
   ...Timeline.defaultProps,
@@ -53,9 +54,11 @@ describe('Timeline', () => {
         defaultTimeStart: undefined,
         defaultTimeEnd: undefined
       }
+      jest.spyOn(global.console, 'error').mockImplementation(noop)
       expect(() => mount(<Timeline {...props} />)).toThrow(
         'You must provide either "defaultTimeStart" and "defaultTimeEnd" or "visibleTimeStart" and "visibleTimeEnd" to initialize the Timeline'
       )
+      jest.restoreAllMocks()
     })
   })
 })
