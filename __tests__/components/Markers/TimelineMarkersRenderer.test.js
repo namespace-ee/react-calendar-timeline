@@ -4,6 +4,7 @@ import 'jest-dom/extend-expect'
 import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
 import TimelineMarkers from 'lib/markers/TimelineMarkers'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
+import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
 import TodayMarker from 'lib/markers/TodayMarker'
 import CustomMarker from 'lib/markers/CustomMarker'
 
@@ -11,12 +12,14 @@ import CustomMarker from 'lib/markers/CustomMarker'
 const RenderWrapper = ({ children }) => {
   return (
     <div>
-      <TimelineMarkersProvider>
-        <div>
-          {children}
-          <TimelineMarkersRenderer />
-        </div>
-      </TimelineMarkersProvider>
+      <TimelineStateProvider>
+        <TimelineMarkersProvider>
+          <div>
+            {children}
+            <TimelineMarkersRenderer />
+          </div>
+        </TimelineMarkersProvider>
+      </TimelineStateProvider>
     </div>
   )
 }
