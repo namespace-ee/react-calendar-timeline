@@ -41,6 +41,6 @@ const CustomMarkerWrapper = props => {
   )
 }
 
-CustomMarkerWrapper.displayName = 'TodayLineWrapper'
+CustomMarkerWrapper.displayName = 'CustomMarkerWrapper'
 
 export default CustomMarkerWrapper
