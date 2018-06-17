@@ -15,7 +15,7 @@ const TimelineMarkersRenderer = () => {
             case TimelineMarkerType.Today:
               return <TodayMarker key={marker.id} />
             case TimelineMarkerType.Custom:
-              return <CustomMarker key={marker.id} />
+              return <CustomMarker key={marker.id} renderer={marker.renderer} />
             default:
               return null
           }

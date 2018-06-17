@@ -113,7 +113,20 @@ describe('TimelineMarkersRenderer', () => {
 
       expect(queryAllByTestId(defaultCustomMarkerTestId).length).toBe(3)
     })
-    // it('renders with custom renderer')
+    it('renders with custom renderer', () => {
+      const customDataIdSelector = 'my-custom-marker'
+      const { getByTestId } = render(
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CustomMarker date={1000}>
+              {() => <div data-testid={customDataIdSelector} />}
+            </CustomMarker>
+          </TimelineMarkers>
+        </RenderWrapper>
+      )
+
+      expect(getByTestId(customDataIdSelector)).toBeInTheDOM()
+    })
     it('is removed after unmount', () => {
       class RemoveCustomMarker extends React.Component {
         state = {
@@ -131,7 +144,7 @@ describe('TimelineMarkersRenderer', () => {
                 Hide Custom Marker
               </button>
               <TimelineMarkers>
-                {this.state.isShowing && <CustomMarker />}
+                {this.state.isShowing && <CustomMarker date={1000} />}
               </TimelineMarkers>
             </RenderWrapper>
           )

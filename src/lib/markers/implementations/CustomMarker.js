@@ -1,7 +1,5 @@
 import React from 'react'
-
-// implementation of CustomMarker
-// takes a renderer
+import PropTypes from 'prop-types'
 
 const staticStyles = {
   position: 'absolute',
@@ -9,9 +7,24 @@ const staticStyles = {
   bottom: 0
 }
 
+const defaultCustomMarkerRenderer = ({ style }) => (
+  <div style={style} data-testid="default-customer-marker-id" />
+)
+
+defaultCustomMarkerRenderer.propTypes = {
+  style: PropTypes.object.isRequired
+}
+
 class CustomMarker extends React.Component {
+  static propTypes = {
+    renderer: PropTypes.func
+  }
+
+  static defaultProps = {
+    renderer: defaultCustomMarkerRenderer
+  }
   render() {
-    return <div style={staticStyles} data-testid="default-customer-marker-id" />
+    return this.props.renderer({ style: staticStyles })
   }
 }
 

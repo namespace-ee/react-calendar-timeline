@@ -5,14 +5,16 @@ import { TimelineMarkerType } from './markerType'
 
 class CustomMarker extends React.Component {
   static propTypes = {
-    subscribeMarker: PropTypes.func.isRequired
-    // other props from user
-    // renderer?: (styles, dateTime)
+    subscribeMarker: PropTypes.func.isRequired,
+    children: PropTypes.func,
+    date: PropTypes.number.isRequired
   }
 
   componentDidMount() {
     this.unsubscribe = this.props.subscribeMarker({
-      type: TimelineMarkerType.Custom
+      type: TimelineMarkerType.Custom,
+      renderer: this.props.children,
+      date: this.props.date
     })
   }
 
