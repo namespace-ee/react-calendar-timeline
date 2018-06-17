@@ -4,7 +4,7 @@ import 'jest-dom/extend-expect'
 import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
 import TimelineMarkers from 'lib/markers/TimelineMarkers'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
-import TodayLine from 'lib/markers/TodayLine'
+import TodayMarker from 'lib/markers/TodayMarker'
 
 // eslint-disable-next-line
 const RenderWrapper = ({ children }) => {
@@ -27,7 +27,7 @@ describe('TimelineMarkersRenderer', () => {
     render(
       <RenderWrapper>
         <TimelineMarkers>
-          <TodayLine />
+          <TodayMarker />
         </TimelineMarkers>
       </RenderWrapper>
     )
@@ -46,7 +46,7 @@ describe('TimelineMarkersRenderer', () => {
       const { getByTestId } = render(
         <RenderWrapper>
           <TimelineMarkers>
-            <TodayLine />
+            <TodayMarker />
           </TimelineMarkers>
         </RenderWrapper>
       )
@@ -69,7 +69,7 @@ describe('TimelineMarkersRenderer', () => {
             <RenderWrapper>
               <button onClick={this.handleToggleTodayLine}>Hide Today</button>
               <TimelineMarkers>
-                {this.state.isShowing && <TodayLine />}
+                {this.state.isShowing && <TodayMarker />}
               </TimelineMarkers>
             </RenderWrapper>
           )
