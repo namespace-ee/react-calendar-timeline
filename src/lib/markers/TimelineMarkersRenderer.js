@@ -3,6 +3,7 @@ import React from 'react'
 import { TimelineMarkersConsumer } from './TimelineMarkersContext'
 import { TimelineMarkerType } from './markerType'
 import TodayMarker from './implementations/TodayMarker'
+import CustomMarker from './implementations/CustomMarker'
 
 /** Internal component used in timeline to render markers registered */
 const TimelineMarkersRenderer = () => {
@@ -13,6 +14,8 @@ const TimelineMarkersRenderer = () => {
           switch (marker.type) {
             case TimelineMarkerType.Today:
               return <TodayMarker key={marker.id} />
+            case TimelineMarkerType.Custom:
+              return <CustomMarker key={marker.id} />
             default:
               return null
           }

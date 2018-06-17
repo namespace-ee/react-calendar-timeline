@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { TimelineMarkersConsumer } from './TimelineMarkersContext'
 import { TimelineMarkerType } from './markerType'
 
-class TodayMarker extends React.Component {
+class CustomMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired
     // other props from user
@@ -12,7 +12,7 @@ class TodayMarker extends React.Component {
 
   componentDidMount() {
     this.unsubscribe = this.props.subscribeMarker({
-      type: TimelineMarkerType.Today
+      type: TimelineMarkerType.Custom
     })
   }
 
@@ -29,16 +29,16 @@ class TodayMarker extends React.Component {
 }
 
 // TODO: turn into HOC?
-const TodayMarkerWrapper = props => {
+const CustomMarkerWrapper = props => {
   return (
     <TimelineMarkersConsumer>
       {({ subscribeMarker }) => (
-        <TodayMarker subscribeMarker={subscribeMarker} {...props} />
+        <CustomMarker subscribeMarker={subscribeMarker} {...props} />
       )}
     </TimelineMarkersConsumer>
   )
 }
 
-TodayMarkerWrapper.displayName = 'TodayLineWrapper'
+CustomMarkerWrapper.displayName = 'TodayLineWrapper'
 
-export default TodayMarkerWrapper
+export default CustomMarkerWrapper

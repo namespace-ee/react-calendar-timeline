@@ -5,6 +5,7 @@ import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
 import TimelineMarkers from 'lib/markers/TimelineMarkers'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
 import TodayMarker from 'lib/markers/TodayMarker'
+import CustomMarker from 'lib/markers/CustomMarker'
 
 // eslint-disable-next-line
 const RenderWrapper = ({ children }) => {
@@ -41,8 +42,8 @@ describe('TimelineMarkersRenderer', () => {
     )
   })
 
-  describe('TodayLine', () => {
-    it('TodayLine is present', () => {
+  describe('TodayMarker', () => {
+    it('TodayMarker is present', () => {
       const { getByTestId } = render(
         <RenderWrapper>
           <TimelineMarkers>
@@ -51,15 +52,15 @@ describe('TimelineMarkersRenderer', () => {
         </RenderWrapper>
       )
 
-      expect(getByTestId('today-line-implementation')).toBeDefined()
+      expect(getByTestId('today-line-implementation')).toBeInTheDOM()
     })
 
-    it('TodayLine is removed after initial render', () => {
-      class RemoveTodayLine extends React.Component {
+    it('TodayMarker is removed after initial render', () => {
+      class RemoveTodayMarker extends React.Component {
         state = {
           isShowing: true
         }
-        handleToggleTodayLine = () => {
+        handleToggleTodayMarker = () => {
           this.setState({
             isShowing: false
           })
@@ -67,7 +68,7 @@ describe('TimelineMarkersRenderer', () => {
         render() {
           return (
             <RenderWrapper>
-              <button onClick={this.handleToggleTodayLine}>Hide Today</button>
+              <button onClick={this.handleToggleTodayMarker}>Hide Today</button>
               <TimelineMarkers>
                 {this.state.isShowing && <TodayMarker />}
               </TimelineMarkers>
@@ -76,13 +77,74 @@ describe('TimelineMarkersRenderer', () => {
         }
       }
 
-      const { queryByTestId, getByText } = render(<RemoveTodayLine />)
+      const { queryByTestId, getByText } = render(<RemoveTodayMarker />)
 
       expect(queryByTestId('today-line-implementation')).toBeInTheDOM()
 
       Simulate.click(getByText('Hide Today'))
 
       expect(queryByTestId('today-line-implementation')).not.toBeInTheDOM()
+    })
+  })
+
+  describe('CustomMarker', () => {
+    const defaultCustomMarkerTestId = 'default-customer-marker-id'
+    it('renders one', () => {
+      const { getByTestId } = render(
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CustomMarker date={1000} />
+          </TimelineMarkers>
+        </RenderWrapper>
+      )
+
+      expect(getByTestId(defaultCustomMarkerTestId)).toBeInTheDOM()
+    })
+    it('render multiple', () => {
+      const { queryAllByTestId } = render(
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CustomMarker date={1000} />
+            <CustomMarker date={1000} />
+            <CustomMarker date={1000} />
+          </TimelineMarkers>
+        </RenderWrapper>
+      )
+
+      expect(queryAllByTestId(defaultCustomMarkerTestId).length).toBe(3)
+    })
+    // it('renders with custom renderer')
+    it('is removed after unmount', () => {
+      class RemoveCustomMarker extends React.Component {
+        state = {
+          isShowing: true
+        }
+        handleToggleCustomMarker = () => {
+          this.setState({
+            isShowing: false
+          })
+        }
+        render() {
+          return (
+            <RenderWrapper>
+              <button onClick={this.handleToggleCustomMarker}>
+                Hide Custom Marker
+              </button>
+              <TimelineMarkers>
+                {this.state.isShowing && <CustomMarker />}
+              </TimelineMarkers>
+            </RenderWrapper>
+          )
+        }
+      }
+
+      const { queryByTestId, getByText } = render(<RemoveCustomMarker />)
+
+      expect(queryByTestId(defaultCustomMarkerTestId)).toBeInTheDOM()
+
+      Simulate.click(getByText('Hide Custom Marker'))
+
+      expect(queryByTestId(defaultCustomMarkerTestId)).not.toBeInTheDOM()
     })
   })
 })
