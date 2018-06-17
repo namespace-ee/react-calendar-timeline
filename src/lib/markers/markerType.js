@@ -1,0 +1,4 @@
+export const TimelineMarkerType = {
+  Today: 'Today',
+  Custom: 'Custom'
+}
