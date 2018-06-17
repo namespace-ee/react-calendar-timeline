@@ -14,7 +14,7 @@ const defaultContextState = {
 
 const { Consumer, Provider } = createReactContext(defaultContextState)
 
-// is this the best way to manage ids?
+// REVIEW: is this the best way to manage ids?
 let _id = 0
 const createId = () => {
   _id += 1
@@ -29,7 +29,7 @@ export class TimelineMarkersProvider extends React.Component {
   handleSubscribeToMarker = newMarker => {
     newMarker = {
       ...newMarker,
-      id: createId()
+      id: createId() // REVIEW: this will override any id in here...do we wanna do this?
     }
 
     this.setState(state => {
