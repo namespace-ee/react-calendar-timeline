@@ -8,11 +8,23 @@ import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
 import TodayMarker from 'lib/markers/TodayMarker'
 import CustomMarker from 'lib/markers/CustomMarker'
 
+const oneDay = 1000 * 60 * 60 * 24
 // eslint-disable-next-line
 const RenderWrapper = ({ children }) => {
+  const now = Date.now()
+  const visibleTimeStart = now - oneDay
+  const visibleTimeEnd = now + oneDay
+  const timelineState = {
+    visibleTimeStart,
+    visibleTimeEnd,
+    canvasTimeStart: visibleTimeStart - oneDay,
+    canvasTimeEnd: visibleTimeEnd + oneDay,
+    canvasWidth: 3000,
+    visibleWidth: 1000
+  }
   return (
     <div>
-      <TimelineStateProvider>
+      <TimelineStateProvider {...timelineState}>
         <TimelineMarkersProvider>
           <div>
             {children}
