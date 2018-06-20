@@ -10,7 +10,7 @@ const defaultProps = {
   groups: []
 }
 
-describe('Timeline', () => {
+xdescribe('Timeline', () => {
   describe('initialiation', () => {
     it('sets the visibleTime properties to defaultTime props', () => {
       const defaultTimeStart = moment('2018-01-01')
