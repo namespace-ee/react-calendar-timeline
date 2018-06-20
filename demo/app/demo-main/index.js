@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 
-import Timeline from 'react-calendar-timeline'
+import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -153,7 +153,6 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
-        showCursorLine
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         onCanvasClick={this.handleCanvasClick}
@@ -167,7 +166,11 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
-      />
+      >
+        <TimelineMarkers>
+          <TodayMarker />
+        </TimelineMarkers>
+      </Timeline>
     )
   }
 }
