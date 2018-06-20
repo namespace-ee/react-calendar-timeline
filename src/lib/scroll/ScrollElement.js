@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getParentPosition } from '../utility/dom-helpers'
+import TimelineMarkersRenderer from '../markers/TimelineMarkersRenderer'
 
 class ScrollElement extends Component {
   static propTypes = {
@@ -199,7 +200,8 @@ class ScrollElement extends Component {
     const scrollComponentStyle = {
       width: `${width}px`,
       height: `${height + 20}px`, //20px to push the scroll element down off screen...?
-      cursor: isDragging ? 'move' : 'default'
+      cursor: isDragging ? 'move' : 'default',
+      position: 'relative'
     }
 
     return (
@@ -221,6 +223,7 @@ class ScrollElement extends Component {
         onMouseEnter={onMouseEnter}
       >
         {children}
+        <TimelineMarkersRenderer />
       </div>
     )
   }

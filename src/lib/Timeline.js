@@ -31,6 +31,8 @@ import {
   defaultHeaderLabelFormats,
   defaultSubHeaderLabelFormats
 } from './default-config'
+import { TimelineStateProvider } from './timeline/TimelineStateContext'
+import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -1197,7 +1199,6 @@ export default class ReactCalendarTimeline extends Component {
       sidebarWidth,
       rightSidebarWidth,
       timeSteps,
-      showCursorLine,
       traditionalZoom
     } = this.props
     const {
@@ -1206,9 +1207,7 @@ export default class ReactCalendarTimeline extends Component {
       width,
       visibleTimeStart,
       visibleTimeEnd,
-      canvasTimeStart,
-      mouseOverCanvas,
-      cursorTime
+      canvasTimeStart
     } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
@@ -1245,99 +1244,94 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     return (
-      <div
-        style={this.props.style}
-        ref={el => (this.container = el)}
-        className="react-calendar-timeline"
+      <TimelineStateProvider
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
+        canvasTimeStart={canvasTimeStart}
+        canvasTimeEnd={canvasTimeEnd}
+        canvasWidth={canvasWidth}
       >
-        {this.header(
-          canvasTimeStart,
-          zoom,
-          canvasTimeEnd,
-          canvasWidth,
-          minUnit,
-          timeSteps,
-          headerLabelGroupHeight,
-          headerLabelHeight
-        )}
-        <div style={outerComponentStyle} className="rct-outer">
-          {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
-          <ScrollElement
-            scrollRef={el => (this.scrollComponent = el)}
-            width={width}
-            height={height}
-            onZoom={this.changeZoom}
-            onWheelZoom={this.handleWheelZoom}
-            traditionalZoom={traditionalZoom}
-            onScroll={this.onScroll}
-            isInteractingWithItem={isInteractingWithItem}
-            onMouseEnter={this.handleScrollMouseEnter}
-            onMouseLeave={this.handleScrollMouseLeave}
-            onMouseMove={this.handleScrollMouseMove}
-            onContextMenu={this.handleScrollContextMenu}
+        <TimelineMarkersProvider>
+          <div
+            style={this.props.style}
+            ref={el => (this.container = el)}
+            className="react-calendar-timeline"
           >
-            <div
-              ref={el => (this.canvasComponent = el)}
-              className="rct-canvas"
-              style={canvasComponentStyle}
-            >
-              {this.items(
-                canvasTimeStart,
-                zoom,
-                canvasTimeEnd,
-                canvasWidth,
-                minUnit,
-                dimensionItems,
-                groupHeights,
-                groupTops
-              )}
-              {this.verticalLines(
-                canvasTimeStart,
-                canvasTimeEnd,
-                canvasWidth,
-                minUnit,
-                timeSteps,
-                height,
-                headerHeight
-              )}
-              {this.horizontalLines(canvasWidth, groupHeights)}
-              {this.todayLine(
-                canvasTimeStart,
-                canvasTimeEnd,
-                canvasWidth,
-                height
-              )}
-              {mouseOverCanvas && showCursorLine
-                ? this.cursorLine(
-                    cursorTime,
+            {this.header(
+              canvasTimeStart,
+              zoom,
+              canvasTimeEnd,
+              canvasWidth,
+              minUnit,
+              timeSteps,
+              headerLabelGroupHeight,
+              headerLabelHeight
+            )}
+            <div style={outerComponentStyle} className="rct-outer">
+              {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
+              <ScrollElement
+                scrollRef={el => (this.scrollComponent = el)}
+                width={width}
+                height={height}
+                onZoom={this.changeZoom}
+                onWheelZoom={this.handleWheelZoom}
+                traditionalZoom={traditionalZoom}
+                onScroll={this.onScroll}
+                isInteractingWithItem={isInteractingWithItem}
+                onMouseEnter={this.handleScrollMouseEnter}
+                onMouseLeave={this.handleScrollMouseLeave}
+                onMouseMove={this.handleScrollMouseMove}
+                onContextMenu={this.handleScrollContextMenu}
+              >
+                <div
+                  ref={el => (this.canvasComponent = el)}
+                  className="rct-canvas"
+                  style={canvasComponentStyle}
+                >
+                  {this.items(
+                    canvasTimeStart,
+                    zoom,
+                    canvasTimeEnd,
+                    canvasWidth,
+                    minUnit,
+                    dimensionItems,
+                    groupHeights,
+                    groupTops
+                  )}
+                  {this.verticalLines(
                     canvasTimeStart,
                     canvasTimeEnd,
                     canvasWidth,
-                    height
-                  )
+                    minUnit,
+                    timeSteps,
+                    height,
+                    headerHeight
+                  )}
+                  {this.horizontalLines(canvasWidth, groupHeights)}
+                  {this.infoLabel()}
+                  {this.childrenWithProps(
+                    canvasTimeStart,
+                    canvasTimeEnd,
+                    canvasWidth,
+                    dimensionItems,
+                    groupHeights,
+                    groupTops,
+                    height,
+                    headerHeight,
+                    visibleTimeStart,
+                    visibleTimeEnd,
+                    minUnit,
+                    timeSteps
+                  )}
+                </div>
+              </ScrollElement>
+              {rightSidebarWidth > 0
+                ? this.rightSidebar(height, groupHeights)
                 : null}
-              {this.infoLabel()}
-              {this.childrenWithProps(
-                canvasTimeStart,
-                canvasTimeEnd,
-                canvasWidth,
-                dimensionItems,
-                groupHeights,
-                groupTops,
-                height,
-                headerHeight,
-                visibleTimeStart,
-                visibleTimeEnd,
-                minUnit,
-                timeSteps
-              )}
             </div>
-          </ScrollElement>
-          {rightSidebarWidth > 0
-            ? this.rightSidebar(height, groupHeights)
-            : null}
-        </div>
-      </div>
+          </div>
+        </TimelineMarkersProvider>
+      </TimelineStateProvider>
     )
   }
 }

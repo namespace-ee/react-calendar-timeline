@@ -35,40 +35,24 @@ const getLeftOffsetFromDateImpl = (date, timelineState) => {
 }
 
 export class TimelineStateProvider extends React.Component {
+  /* eslint-disable react/no-unused-prop-types */
   static propTypes = {
     children: PropTypes.element.isRequired,
     visibleTimeStart: PropTypes.number.isRequired,
     visibleTimeEnd: PropTypes.number.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
-    canvasWidth: PropTypes.number.isRequired,
-    visibleWidth: PropTypes.number.isRequired
+    canvasWidth: PropTypes.number.isRequired
+    // visibleWidth: PropTypes.number.isRequired
   }
 
   constructor(props) {
     super(props)
 
-    const {
-      visibleTimeStart,
-      visibleTimeEnd,
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-      visibleWidth
-    } = props
-
     this.state = {
       timelineContext: {
         getTimelineState: this.getTimelineState,
         getLeftOffsetFromDate: this.getLeftOffsetFromDate
-      },
-      timelineState: {
-        visibleTimeStart,
-        visibleTimeEnd,
-        canvasTimeStart,
-        canvasTimeEnd,
-        canvasWidth,
-        visibleWidth
       }
     }
   }
@@ -78,23 +62,9 @@ export class TimelineStateProvider extends React.Component {
   }
 
   getLeftOffsetFromDate = date => {
-    return getLeftOffsetFromDateImpl(date, this.state.timelineState)
+    return getLeftOffsetFromDateImpl(date, this.props)
   }
 
-  state = {
-    timelineContext: {
-      getTimelineState: this.getTimelineState,
-      getLeftOffsetFromDate: this.getLeftOffsetFromDate
-    },
-    timelineState: {
-      visibleTimeStart: 0,
-      visibleTimeEnd: 0,
-      canvasTimeStart: 0,
-      canvasTimeEnd: 0,
-      canvasWidth: 0,
-      visibleWidth: 0
-    }
-  }
   render() {
     return (
       <Provider value={this.state.timelineContext}>
