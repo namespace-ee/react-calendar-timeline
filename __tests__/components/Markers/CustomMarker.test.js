@@ -45,6 +45,45 @@ describe('CustomMarker', () => {
 
     expect(getByTestId(customDataIdSelector)).toBeInTheDOM()
   })
+
+  it('is passed styles with left corresponding to passed in date', () => {
+    const oneDay = 1000 * 60 * 60 * 24
+    const canvasWidth = 3000
+
+    const now = Date.now()
+
+    /**
+     * CanvasTimeStart - one day ago
+     * VisibleTimeStart - now
+     * VisibleTimeEnd - one day in future
+     * CanvasTimeEnd - two days in the future
+     */
+
+    const visibleTimeStart = now
+    const visibleTimeEnd = now + oneDay
+    const timelineState = {
+      visibleTimeStart,
+      visibleTimeEnd,
+      canvasTimeStart: visibleTimeStart - oneDay,
+      canvasTimeEnd: visibleTimeEnd + oneDay,
+      canvasWidth
+    }
+
+    const markerDate = now + oneDay / 2
+
+    const { getByTestId } = render(
+      <RenderWrapper timelineState={timelineState}>
+        <TimelineMarkers>
+          <CustomMarker date={markerDate} />
+        </TimelineMarkers>
+      </RenderWrapper>
+    )
+
+    const el = getByTestId(defaultCustomMarkerTestId)
+
+    expect(el).toHaveStyle(`left: ${3000 / 2}px`)
+  })
+
   it('is removed after unmount', () => {
     class RemoveCustomMarker extends React.Component {
       state = {

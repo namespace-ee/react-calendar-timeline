@@ -28,6 +28,7 @@ const TimelineMarkersRenderer = () => {
                     <CustomMarker
                       key={marker.id}
                       renderer={marker.renderer}
+                      date={marker.date}
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
                     />
                   )
