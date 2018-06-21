@@ -8,6 +8,7 @@ const criticalStyles = {
   position: 'absolute',
   top: 0,
   bottom: 0,
+  // FIXME: are these critical styles?
   width: '2px',
   backgroundColor: 'red'
 }
@@ -19,6 +20,8 @@ const createMarkerStylesWithLeftOffset = leftOffset => ({
   left: leftOffset
 })
 
+// FIXME: this is used in all marker implementations
+// lift into single spot and memoize?
 // eslint-disable-next-line
 const defaultRenderer = ({ styles }) => (
   <div style={styles} data-testid="default-today-line" />
