@@ -7,13 +7,19 @@ class TodayMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
     // other props from user
+    interval: PropTypes.number,
     children: PropTypes.func // custom renderer that accepts ({styles, date})
+  }
+
+  static defaultProps = {
+    interval: 1000 * 10 // default to ten seconds
   }
 
   componentDidMount() {
     this.unsubscribe = this.props.subscribeMarker({
       type: TimelineMarkerType.Today,
-      renderer: this.props.children
+      renderer: this.props.children,
+      interval: this.props.interval
     })
   }
 

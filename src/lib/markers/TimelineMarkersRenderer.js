@@ -20,6 +20,7 @@ const TimelineMarkersRenderer = () => {
                       key={marker.id}
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
                       renderer={marker.renderer}
+                      interval={marker.interval}
                     />
                   )
                 case TimelineMarkerType.Custom:

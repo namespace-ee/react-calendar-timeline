@@ -83,4 +83,8 @@ describe('TodayMarker', () => {
       styles: expect.any(Object)
     })
   })
+
+  // TODO: find good way to test these interval based functionality
+  // xit('sets setInterval timeout based on passed in prop')
+  // xit('sets setInterval timeout to 10 seconds if no interval prop passed in')
 })
