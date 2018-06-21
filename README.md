@@ -227,10 +227,6 @@ Can items be resized? Can be overridden in the `items` array. Accepted values: `
 
 Append a special `.rct-drag-right` handle to the elements and only resize if dragged from there. Defaults to `false`
 
-### showCursorLine
-
-Show a vertical line at the snap point when you mouse over the calendar
-
 ### stackItems
 
 Stack items under each other, so there is no visual overlap when times collide. Defaults to `false`.
@@ -619,7 +615,6 @@ This is useful when using the plugins (that you pass as children to the componen
 
 * Horizontal Lines: 30
 * Vertical Lines: 40
-* Cursor line: 51
 * Items: 80-88 (depending on selection, dragging, etc)
 * Header: 90
 
