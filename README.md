@@ -619,7 +619,6 @@ This is useful when using the plugins (that you pass as children to the componen
 
 * Horizontal Lines: 30
 * Vertical Lines: 40
-* Today line: 50
 * Cursor line: 51
 * Items: 80-88 (depending on selection, dragging, etc)
 * Header: 90

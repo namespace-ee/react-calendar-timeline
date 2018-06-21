@@ -8,7 +8,6 @@ import Sidebar from './layout/Sidebar'
 import Header from './layout/Header'
 import VerticalLines from './lines/VerticalLines'
 import GroupRows from './row/GroupRows'
-import TodayLine from './lines/TodayLine'
 import CursorLine from './lines/CursorLine'
 import ScrollElement from './scroll/ScrollElement'
 
@@ -751,17 +750,6 @@ export default class ReactCalendarTimeline extends Component {
     if (cursorTime !== timePosition && showCursorLine) {
       this.setState({ cursorTime: timePosition, mouseOverCanvas: true })
     }
-  }
-
-  todayLine(canvasTimeStart, canvasTimeEnd, canvasWidth, height) {
-    return (
-      <TodayLine
-        canvasTimeStart={canvasTimeStart}
-        canvasTimeEnd={canvasTimeEnd}
-        canvasWidth={canvasWidth}
-        height={height}
-      />
-    )
   }
 
   cursorLine(cursorTime, canvasTimeStart, canvasTimeEnd, canvasWidth, height) {
