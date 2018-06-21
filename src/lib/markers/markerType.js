@@ -1,4 +1,5 @@
 export const TimelineMarkerType = {
   Today: 'Today',
-  Custom: 'Custom'
+  Custom: 'Custom',
+  Cursor: 'Cursor'
 }

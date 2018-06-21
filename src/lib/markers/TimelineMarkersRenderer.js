@@ -4,6 +4,7 @@ import { TimelineMarkerType } from './markerType'
 import TodayMarker from './implementations/TodayMarker'
 import CustomMarker from './implementations/CustomMarker'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import CursorMarker from './implementations/CursorMarker'
 
 /** Internal component used in timeline to render markers registered */
 const TimelineMarkersRenderer = () => {
@@ -29,6 +30,14 @@ const TimelineMarkersRenderer = () => {
                       key={marker.id}
                       renderer={marker.renderer}
                       date={marker.date}
+                      getLeftOffsetFromDate={getLeftOffsetFromDate}
+                    />
+                  )
+                case TimelineMarkerType.Cursor:
+                  return (
+                    <CursorMarker
+                      key={marker.id}
+                      renderer={marker.renderer}
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
                     />
                   )
