@@ -532,6 +532,12 @@ Timeline markers are markers that are overlayed on the canvas at specific datepo
 Markers can be placed in the Timeline by declaring them as `children` of the `Timeline` component:
 
 ```jsx
+import Timeline, {
+  TimelineMarkers,
+  CustomMarker,
+  TodayMarker
+} from 'react-calendar-timeline'
+
 <Timeline>
   <TimelineMarkers>
     <TodayMarker />
@@ -560,6 +566,10 @@ This object _must_ be passed to the root component's `style` prop in order to be
 > date: number
 
 Date in unix timestamp of this marker. This can be used to change how your marker is rendered (or if its rendered at all)
+
+## TimelineMarkers
+
+Wrapper for timeline markers that you want rendered.
 
 ## TodayMarker
 
