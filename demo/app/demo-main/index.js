@@ -2,7 +2,11 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 
-import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import Timeline, {
+  TimelineMarkers,
+  TodayMarker,
+  CustomMarker
+} from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -169,6 +173,24 @@ export default class App extends Component {
       >
         <TimelineMarkers>
           <TodayMarker />
+          <CustomMarker
+            date={
+              moment()
+                .startOf('day')
+                .valueOf() +
+              1000 * 60 * 60 * 2
+            }
+          />
+          <CustomMarker
+            date={moment()
+              .add(3, 'day')
+              .valueOf()}
+          >
+            {({ styles }) => {
+              const newStyles = { ...styles, backgroundColor: 'blue' }
+              return <div style={newStyles} />
+            }}
+          </CustomMarker>
         </TimelineMarkers>
       </Timeline>
     )
