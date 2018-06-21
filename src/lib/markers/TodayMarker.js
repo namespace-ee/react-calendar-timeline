@@ -5,14 +5,15 @@ import { TimelineMarkerType } from './markerType'
 
 class TodayMarker extends React.Component {
   static propTypes = {
-    subscribeMarker: PropTypes.func.isRequired
+    subscribeMarker: PropTypes.func.isRequired,
     // other props from user
-    // renderer?: (styles, dateTime)
+    children: PropTypes.func // custom renderer that accepts ({styles, date})
   }
 
   componentDidMount() {
     this.unsubscribe = this.props.subscribeMarker({
-      type: TimelineMarkerType.Today
+      type: TimelineMarkerType.Today,
+      renderer: this.props.children
     })
   }
 

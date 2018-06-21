@@ -5,8 +5,10 @@ import { RenderWrapper } from 'test-utility/marker-renderer'
 import TimelineMarkers from 'lib/markers/TimelineMarkers'
 import TodayMarker from 'lib/markers/TodayMarker'
 
+const defaultTestId = 'default-today-line'
+
 describe('TodayMarker', () => {
-  it('TodayMarker is present', () => {
+  it('is present', () => {
     const { getByTestId } = render(
       <RenderWrapper>
         <TimelineMarkers>
@@ -15,10 +17,10 @@ describe('TodayMarker', () => {
       </RenderWrapper>
     )
 
-    expect(getByTestId('today-line-implementation')).toBeInTheDOM()
+    expect(getByTestId(defaultTestId)).toBeInTheDOM()
   })
 
-  it('TodayMarker is removed after initial render', () => {
+  it('is removed after initial render', () => {
     class RemoveTodayMarker extends React.Component {
       state = {
         isShowing: true
@@ -42,10 +44,43 @@ describe('TodayMarker', () => {
 
     const { queryByTestId, getByText } = render(<RemoveTodayMarker />)
 
-    expect(queryByTestId('today-line-implementation')).toBeInTheDOM()
+    expect(queryByTestId(defaultTestId)).toBeInTheDOM()
 
     Simulate.click(getByText('Hide Today'))
 
-    expect(queryByTestId('today-line-implementation')).not.toBeInTheDOM()
+    expect(queryByTestId(defaultTestId)).not.toBeInTheDOM()
+  })
+
+  it('allows for custom renderer', () => {
+    const dataTestId = 'custom-today-renderer'
+
+    const { getByTestId } = render(
+      <RenderWrapper>
+        <TimelineMarkers>
+          <TodayMarker>{() => <div data-testid={dataTestId} />}</TodayMarker>
+        </TimelineMarkers>
+      </RenderWrapper>
+    )
+
+    expect(getByTestId(dataTestId)).toBeInTheDOM()
+  })
+
+  it('custom renderer is passed styles and date', () => {
+    const renderMock = jest.fn(() => null)
+
+    render(
+      <RenderWrapper>
+        <TimelineMarkers>
+          <TodayMarker>{renderMock}</TodayMarker>
+        </TimelineMarkers>
+      </RenderWrapper>
+    )
+
+    // TODO: do we want better assertions around this instead of just any
+    // Number or Object?
+    expect(renderMock).toHaveBeenCalledWith({
+      date: expect.any(Number),
+      styles: expect.any(Object)
+    })
   })
 })

@@ -19,6 +19,7 @@ const TimelineMarkersRenderer = () => {
                     <TodayMarker
                       key={marker.id}
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
+                      renderer={marker.renderer}
                     />
                   )
                 case TimelineMarkerType.Custom:
