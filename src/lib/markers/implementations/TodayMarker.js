@@ -30,7 +30,8 @@ const defaultRenderer = ({ styles }) => (
 class TodayMarker extends React.Component {
   static propTypes = {
     getLeftOffsetFromDate: PropTypes.func.isRequired,
-    renderer: PropTypes.func
+    renderer: PropTypes.func,
+    interval: PropTypes.number // TODO: not yet wired up with TimelinerMarkerRenderer
   }
 
   static defaultProps = {
@@ -47,7 +48,7 @@ class TodayMarker extends React.Component {
         this.setState({
           date: Date.now() // FIXME: use date utils pass in as props
         }),
-      5000
+      this.props.interval || 1000 * 10 // default to ten seconds
     )
   }
 
