@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// this should expect a timelineContext prop or some
-// way to calculate left position
-
 const criticalStyles = {
   position: 'absolute',
   top: 0,
