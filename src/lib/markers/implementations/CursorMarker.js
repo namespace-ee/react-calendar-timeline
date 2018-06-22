@@ -28,7 +28,6 @@ const defaultRenderer = ({ styles }) => (
 class CursorMarker extends React.Component {
   static propTypes = {
     subscribeToCanvasMouseOver: PropTypes.func.isRequired,
-    getLeftOffsetFromDate: PropTypes.func.isRequired,
     renderer: PropTypes.func
   }
 
@@ -36,8 +35,22 @@ class CursorMarker extends React.Component {
     renderer: defaultRenderer
   }
 
-  handleCanvasMouseOver = () => {
-    console.log('cursor marker handle mouse over!!')
+  constructor() {
+    super()
+
+    this.state = {
+      leftOffset: 0,
+      date: 0,
+      isShowingCursor: false
+    }
+  }
+
+  handleCanvasMouseOver = ({ leftOffset, date, isCursorOverCanvas }) => {
+    this.setState({
+      leftOffset,
+      date,
+      isShowingCursor: isCursorOverCanvas
+    })
   }
 
   componentDidMount() {
@@ -54,8 +67,10 @@ class CursorMarker extends React.Component {
   }
 
   render() {
-    const date = 100000
-    const leftOffset = this.props.getLeftOffsetFromDate(date)
+    const { isShowingCursor, leftOffset, date } = this.state
+
+    if (!isShowingCursor) return null
+
     const styles = createMarkerStylesWithLeftOffset(leftOffset)
 
     return this.props.renderer({ styles, date })

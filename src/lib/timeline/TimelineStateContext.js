@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import createReactContext from 'create-react-context'
-import { calculateXPositionForTime } from '../utility/calendar'
+import {
+  calculateXPositionForTime,
+  calculateTimeForXPosition
+} from '../utility/calendar'
 
 /* this context will hold all information regarding timeline state:
   1. timeline width
@@ -17,6 +20,9 @@ const defaultContextState = {
   },
   getLeftOffsetFromDate: () => {
     console.warn('"getLeftOffsetFromDate" default func is being used')
+  },
+  getDateFromLeftOffsetPosition: () => {
+    console.warn('"getDateFromLeftOffsetPosition" default func is being used')
   }
 }
 /* eslint-enable */
@@ -31,6 +37,16 @@ const getLeftOffsetFromDateImpl = (date, timelineState) => {
     canvasTimeEnd,
     canvasWidth,
     date
+  )
+}
+
+const getDateFromLeftOffsetPosition = (leftOffset, timelineState) => {
+  const { canvasTimeStart, canvasTimeEnd, canvasWidth } = timelineState
+  return calculateTimeForXPosition(
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    leftOffset
   )
 }
 
@@ -52,7 +68,8 @@ export class TimelineStateProvider extends React.Component {
     this.state = {
       timelineContext: {
         getTimelineState: this.getTimelineState,
-        getLeftOffsetFromDate: this.getLeftOffsetFromDate
+        getLeftOffsetFromDate: this.getLeftOffsetFromDate,
+        getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition
       }
     }
   }
@@ -63,6 +80,10 @@ export class TimelineStateProvider extends React.Component {
 
   getLeftOffsetFromDate = date => {
     return getLeftOffsetFromDateImpl(date, this.props)
+  }
+
+  getDateFromLeftOffsetPosition = leftOffset => {
+    return getDateFromLeftOffsetPosition(leftOffset, this.props)
   }
 
   render() {

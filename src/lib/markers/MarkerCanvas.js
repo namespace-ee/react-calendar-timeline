@@ -1,6 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { MarkerCanvasProvider } from './MarkerCanvasContext'
 import TimelineMarkersRenderer from './TimelineMarkersRenderer'
+import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
 /**
  * Renders registered markers and exposes a mouse over listener for
@@ -17,24 +19,35 @@ const staticStyles = {
 }
 
 class MarkerCanvas extends React.Component {
-  handleMouseMove = () => {
-    // const target = evt.target
-    // TODO: wrap this in a RAF
-    // but we dont want to do that for every render
-    // we could inject in scrollLeft but then this would
-    // be rerenderer every scroll
-    // we could wrap in TimelineStateContext (which well need anyways)
-    // but that wont help us as we need to know our current state of scroll
-    // const offsetLeft = target.getBoundingClientRect().left
-    // console.log('mouse over')
+  static propTypes = {
+    getDateFromLeftOffsetPosition: PropTypes.func.isRequired
+  }
+
+  handleMouseMove = evt => {
     if (this.subscription != null) {
-      this.subscription()
+      const { pageX } = evt
+      // FIXME: dont use this. Use passed in scroll amount
+      const { left: containerLeft } = this.containerEl.getBoundingClientRect()
+
+      // number of pixels from left we are on canvas
+      const canvasX = pageX - containerLeft
+      const date = this.props.getDateFromLeftOffsetPosition(canvasX)
+      this.subscription({
+        leftOffset: canvasX,
+        date,
+        isCursorOverCanvas: true
+      })
     }
   }
-  // TODO: what about mouse enter and mouse leave?
+
+  handleMouseLeave = () => {
+    if (this.subscription != null) {
+      // tell subscriber that we're not on canvas
+      this.subscription({ leftOffset: 0, date: 0, isCursorOverCanvas: false })
+    }
+  }
 
   handleMouseMoveSubscribe = sub => {
-    // console.log('subscribing!')
     this.subscription = sub
     return () => {
       this.subscription = null
@@ -48,7 +61,12 @@ class MarkerCanvas extends React.Component {
   render() {
     return (
       <MarkerCanvasProvider value={this.state}>
-        <div style={staticStyles} onMouseMove={this.handleMouseMove}>
+        <div
+          style={staticStyles}
+          onMouseMove={this.handleMouseMove}
+          onMouseLeave={this.handleMouseLeave}
+          ref={el => (this.containerEl = el)}
+        >
           <TimelineMarkersRenderer />
         </div>
       </MarkerCanvasProvider>
@@ -56,4 +74,15 @@ class MarkerCanvas extends React.Component {
   }
 }
 
-export default MarkerCanvas
+const MarkerCanvasWrapper = props => (
+  <TimelineStateConsumer>
+    {({ getDateFromLeftOffsetPosition }) => (
+      <MarkerCanvas
+        getDateFromLeftOffsetPosition={getDateFromLeftOffsetPosition}
+        {...props}
+      />
+    )}
+  </TimelineStateConsumer>
+)
+
+export default MarkerCanvasWrapper
