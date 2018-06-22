@@ -6,7 +6,7 @@ A modern and responsive react timeline component.
 
 Checkout the [examples here](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples)!
 
-## Getting started
+# Getting started
 
 ```bash
 # via yarn
@@ -18,7 +18,7 @@ npm install --save react-calendar-timeline
 
 `react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
 
-## Usage
+# Usage
 
 At the very minimum:
 
@@ -68,13 +68,13 @@ ReactDOM.render(
 )
 ```
 
-## API
+# API
 
 _NB!_ All props need to be immutable. For example, this means if you wish to change the title of one of your items, please pass in a whole new items array instead of changing the title in the old array. [Here's more info.](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 The component can take many props:
 
-### groups
+## groups
 
 Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
 
@@ -88,7 +88,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 
 If you use right sidebar, you can pass optional `rightTitle` property here.
 
-### items
+## items
 
 Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
 
@@ -114,21 +114,21 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 
 The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript Date or moment()) will also work, but will be a lot slower.
 
-### defaultTimeStart and defaultTimeEnd
+## defaultTimeStart and defaultTimeEnd
 
 Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
 
-### visibleTimeStart and visibleTimeEnd
+## visibleTimeStart and visibleTimeEnd
 
 The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a unix timestamp in milliseconds.
 
 **Note that you need to provide either `defaultTimeStart/End` or `visibleTimeStart/End` for the timeline to function**
 
-### selected
+## selected
 
 An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click.
 
-### keys
+## keys
 
 An array specifying keys in the `items` and `groups` objects. Defaults to
 
@@ -146,84 +146,84 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 }
 ```
 
-### sidebarWidth
+## sidebarWidth
 
 Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
 
-### sidebarContent
+## sidebarContent
 
 Everything passed here will be displayed above the left sidebar. Use this to display small filters or so. Defaults to `null`.
 
-### rightSidebarWidth
+## rightSidebarWidth
 
 Width of the right sidebar in pixels. If set to `0`, the right sidebar is not rendered. Defaults to `0`.
 
-### rightSidebarContent
+## rightSidebarContent
 
 Everything passed here will be displayed above the right sidebar. Use this to display small filters or so. Defaults to `null`.
 
-### dragSnap
+## dragSnap
 
 Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When so, the items will snap to 15min intervals when dragging.
 
-### minResizeWidth
+## minResizeWidth
 
 The minimum width, in pixels, of a timeline entry when it's possible to resize. If not reached, you must zoom in to resize more. Default to `20`.
 
-### stickyOffset
+## stickyOffset
 
 At what height from the top of the screen should we start "sticking" the header (i.e. position: sticky)? This is useful if for example you already have
 a sticky navbar and want to push the timeline header down further. Defaults `0`.
 
-### stickyHeader
+## stickyHeader
 
 Specify whether you want the timeline header to be "sticky". Pass `false` if you want the header to fix at top of element and not fix when you scroll down the page. Defaults to `true`
 
-### headerRef
+## headerRef
 
 Ref callback that gets a DOM reference to the header element. See [FAQ below](#the-timeline-header-doesnt-fix-to-the-top-of-the-container-when-i-scroll-down).
 
-### lineHeight
+## lineHeight
 
 Height of one line in the calendar in pixels. Default `30`
 
-### headerLabelGroupHeight
+## headerLabelGroupHeight
 
 Height of the top header line. Default `30`
 
-### headerLabelHeight
+## headerLabelHeight
 
 Height of the bottom header line. Default `30`
 
-### itemHeightRatio
+## itemHeightRatio
 
 What percentage of the height of the line is taken by the item? Default `0.65`
 
-### minZoom
+## minZoom
 
 Smallest time the calendar can zoom to in milliseconds. Default `60 * 60 * 1000` (1 hour)
 
-### maxZoom
+## maxZoom
 
 Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 86400 * 1000` (5 years)
 
-### clickTolerance
+## clickTolerance
 
 How many pixels we can drag the background for it to be counted as a click on the background. Defualt: `3`
 
-### canMove
+## canMove
 
 Can items be dragged around? Can be overridden in the `items` array. Defaults to `true`
 
-### canChangeGroup
+## canChangeGroup
 
 Can items be moved between groups? Can be overridden in the `items` array. Defaults to `true`
 
-### canResize
+## canResize
 
 Can items be resized? Can be overridden in the `items` array. Accepted values: `false`, `"left"`, `"right"`, `"both"`. Defaults to `"right"`. If you pass `true`, it will be treated as `"right"` to not break compatibility with versions 0.9 and below.
 
-### useResizeHandle
+## useResizeHandle
 
 Append a special `.rct-drag-right` handle to the elements and only resize if dragged from there. Defaults to `false`
 
@@ -231,15 +231,15 @@ Append a special `.rct-drag-right` handle to the elements and only resize if dra
 
 Stack items under each other, so there is no visual overlap when times collide. Defaults to `false`.
 
-### traditionalZoom
+## traditionalZoom
 
 Zoom in when scrolling the mouse up/down. Defaults to `false`
 
-### itemTouchSendsClick
+## itemTouchSendsClick
 
 Normally tapping (touching) an item selects it. If this is set to true, a tap will have the same effect, as selecting with the first click and then clicking again to open and send the onItemClick event. Defaults to `false`.
 
-### timeSteps
+## timeSteps
 
 With what step to display different units. E.g. `15` for `minute` means only minutes 0, 15, 30 and 45 will be shown.
 
@@ -256,47 +256,47 @@ Default:
 }
 ```
 
-### onItemMove(itemId, dragTime, newGroupOrder)
+## onItemMove(itemId, dragTime, newGroupOrder)
 
 Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
 
-### onItemResize(itemId, time, edge)
+## onItemResize(itemId, time, edge)
 
 Callback when an item is resized. Returns 1) the item's ID, 2) the new start or end time of the item 3) The edge that was dragged (`left` or `right`)
 
-### onItemSelect(itemId, e, time)
+## onItemSelect(itemId, e, time)
 
 Called when an item is selected. This is sent on the first click on an item. `time` is the time that corresponds to where you click/select on the item in the timeline.
 
-### onItemClick(itemId, e, time)
+## onItemClick(itemId, e, time)
 
 Called when an item is clicked. Note: the item must be selected before it's clicked... except if it's a touch event and `itemTouchSendsClick` is enabled. `time` is the time that corresponds to where you click on the item in the timeline.
 
-### onItemDoubleClick(itemId, e, time)
+## onItemDoubleClick(itemId, e, time)
 
 Called when an item was double clicked. `time` is the time that corresponds to where you double click on the item in the timeline.
 
-### onItemContextMenu(itemId, e, time)
+## onItemContextMenu(itemId, e, time)
 
 Called when the item is clicked by the right button of the mouse. `time` is the time that corresponds to where you context click on the item in the timeline. Note: If this property is set the default context menu doesn't appear.
 
-### onCanvasClick(groupId, time, e)
+## onCanvasClick(groupId, time, e)
 
 Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
 
-### onCanvasDoubleClick(group, time, e)
+## onCanvasDoubleClick(group, time, e)
 
 Called when an empty spot on the canvas was double clicked. Get the group and the time as arguments.
 
-### onCanvasContextMenu(group, time, e)
+## onCanvasContextMenu(group, time, e)
 
 Called when the canvas is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
-### onZoom(timelineContext)
+## onZoom(timelineContext)
 
 Called when the timeline is zoomed, either via mouse/pinch zoom or clicking header to change timeline units
 
-### moveResizeValidator(action, itemId, time, resizeEdge)
+## moveResizeValidator(action, itemId, time, resizeEdge)
 
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
 
@@ -321,7 +321,7 @@ function (action, item, time, resizeEdge) {
 }
 ```
 
-### headerLabelFormats and subHeaderLabelFormats
+## headerLabelFormats and subHeaderLabelFormats
 
 The formats passed to moment to render times in the header and subheader. Defaults to these:
 
@@ -394,7 +394,7 @@ const usSubHeaderLabelFormats = Object.assign(
 
 ... and then pass these as `headerLabelFormats` and `subHeaderLabelFormats`
 
-### onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
+## onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
 
 A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd (as unix timestamps in milliseconds) to change the scroll behavior, for example to limit scrolling.
 
@@ -418,11 +418,11 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 }
 ```
 
-### onBoundsChange(canvasTimeStart, canvasTimeEnd)
+## onBoundsChange(canvasTimeStart, canvasTimeEnd)
 
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
 
-### itemRenderer
+## itemRenderer
 
 React component that will be used to render the item content. Will be
 passed the `item` as a prop.
@@ -480,7 +480,7 @@ itemRenderer = ({ item, timelineContext }) => {
 }
 ```
 
-### groupRenderer
+## groupRenderer
 
 React component that will be used to render the content of groups in the
 sidebar. Will be passed the `group` and `isRightSidebar` as props.
@@ -504,11 +504,11 @@ groupRenderer = ({ group }) => {
 }
 ```
 
-### minimumWidthForItemContentVisibility
+## minimumWidthForItemContentVisibility
 
 Number of pixels to render inner content of an Item. To improve performance of the timeline, this prop dictates whether the inner contents of an Item are rendered based on the item width. This setting is useful if you have a dataset which results in a large number of small items to be rendered on the timeline. Default is 25.
 
-### resizeDetector
+## resizeDetector
 
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
 To do this, pass a `resizeDetector`. Since bundling it by default would add ~18kb of minimized JS, you need to opt in to this like so:
@@ -519,13 +519,85 @@ import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector
 <Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
-## FAQ
+# Timeline Markers
 
-### My timeline is unstyled
+Timeline markers are markers that are overlayed on the canvas at specific datepoints.
+
+## Overview
+
+Markers can be placed in the Timeline by declaring them as `children` of the `Timeline` component:
+
+```jsx
+import Timeline, {
+  TimelineMarkers,
+  CustomMarker,
+  TodayMarker
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineMarkers>
+    <TodayMarker />
+    <CustomMarker date={today} />
+    <CustomMarker date={tomorrow}>
+      {/* custom renderer for this marker */}
+      {({ styles, date }) => {
+        const customStyles = {
+          ...styles,
+          backgroundColor: 'deeppink',
+          width: '4px'
+        }
+        return <div style={customStyles} onClick={someCustomHandler} />
+      }}
+    </CustomMarker>
+  </TimelineMarkers>
+</Timeline>
+```
+
+Each marker allows for passing in a custom renderer via a [function as a child component](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9). This allows the user to render whatever they want (event handlers, custom styling, etc). This custom renderer receives an object with two properties:
+
+> styles: {position: 'absolute', top: 0, bottom: 0, left: number}
+
+This object _must_ be passed to the root component's `style` prop in order to be rendered properly. Note that you can merge this object with any other properties.
+
+> date: number
+
+Date in unix timestamp of this marker. This can be used to change how your marker is rendered (or if its rendered at all)
+
+## TimelineMarkers
+
+Wrapper for timeline markers that you want rendered.
+
+## TodayMarker
+
+Marker that is placed on the current date/time.
+
+> interval: number | default: 10000
+
+How often the TodayMarker refreshes. Value represents milliseconds.
+
+> children: function({styles: object, date: number}) => JSX.Element
+
+Custom renderer for this marker. Ensure that you always pass `styles` to the root component's `style` prop as this object contains positioning of the marker.
+
+## CustomMarker
+
+Marker that is placed on the current date/time.
+
+> date: number | required
+
+Where to place the marker on the timeline. `date` value is unix timestamp.
+
+> children: function({styles: object, date: number}) => JSX.Element
+
+Custom renderer for this marker. Ensure that you always pass `styles` to the root component's `style` prop as this object contains positioning of the marker.
+
+# FAQ
+
+## My timeline is unstyled
 
 You need to include the `Timeline.css` file, either via static file reference or webpack stylesheet bundling. The file is located at `lib/Timeline.css`
 
-### How can I have items with different colors?
+## How can I have items with different colors?
 
 [Items](https://github.com/namespace-ee/react-calendar-timeline#items) have a "className" parameter. For example if you have "standard" items and "analysis" items, then you can just add an "analysis" class for your analysis items and then change the css backgroundColor property for them.
 
@@ -537,7 +609,7 @@ You will then need to override the default CSS rule:
 }
 ```
 
-### How can I add a sidebar on the right?
+## How can I add a sidebar on the right?
 
 The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
@@ -559,7 +631,7 @@ And add `right_sidebar` prop to the groups objects:
 }
 ```
 
-### The timeline header doesn't fix to the top of the container when I scroll down.
+## The timeline header doesn't fix to the top of the container when I scroll down.
 
 There are two causes of this:
 
@@ -588,7 +660,7 @@ render() {
 }
 ```
 
-### I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
+## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
 
 These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
 
@@ -605,11 +677,11 @@ import Timeline from 'react-calendar-timeline/lib' // ES5 version
 
 However doing so you lose on some of the features of webpack 2 and will potentially get a slightly larger bundle.
 
-### It doesn't work with `create-react-app`
+## It doesn't work with `create-react-app`
 
 It's the same issue as above. See [issue 134](https://github.com/namespace-ee/react-calendar-timeline/issues/134#issuecomment-314215244) for details and options.
 
-### What are the zIndex values for all the elements?
+## What are the zIndex values for all the elements?
 
 This is useful when using the plugins (that you pass as children to the component). Override the CSS to change:
 
