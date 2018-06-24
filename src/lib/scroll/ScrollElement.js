@@ -7,7 +7,6 @@ class ScrollElement extends Component {
     children: PropTypes.element.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    clickTolerance: PropTypes.number.isRequired,
     traditionalZoom: PropTypes.bool.isRequired,
     scrollRef: PropTypes.func.isRequired,
     isInteractingWithItem: PropTypes.bool.isRequired,
@@ -15,8 +14,7 @@ class ScrollElement extends Component {
     onMouseMove: PropTypes.func.isRequired,
     onMouseLeave: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
-    onDoubleClick: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
     onScroll: PropTypes.func.isRequired
   }
@@ -89,7 +87,6 @@ class ScrollElement extends Component {
   }
 
   handleMouseDown = e => {
-    // TODO: what about header click
     if (e.button === 0) {
       this.dragStartPosition = e.pageX
       this.dragLastPosition = e.pageX
@@ -108,13 +105,7 @@ class ScrollElement extends Component {
     }
   }
 
-  handleMouseUp = e => {
-    if (
-      Math.abs(this.dragStartPosition - e.pageX) <= this.props.clickTolerance
-    ) {
-      this.props.onClick(e)
-    }
-
+  handleMouseUp = () => {
     this.dragStartPosition = null
     this.dragLastPosition = null
 
@@ -154,43 +145,31 @@ class ScrollElement extends Component {
   }
 
   handleTouchMove = e => {
-    const { isInteractingWithItem, width } = this.props
+    const { isInteractingWithItem, width, onZoom } = this.props
     if (isInteractingWithItem) {
       e.preventDefault()
       return
     }
     if (this.lastTouchDistance && e.touches.length === 2) {
       e.preventDefault()
-
       let touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
-
       let parentPosition = getParentPosition(e.currentTarget)
       let xPosition =
         (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
-
       if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
-        this.changeZoom(
-          this.lastTouchDistance / touchDistance,
-          xPosition / width
-        )
+        onZoom(this.lastTouchDistance / touchDistance, xPosition / width)
         this.lastTouchDistance = touchDistance
       }
     } else if (this.lastSingleTouch && e.touches.length === 1) {
       e.preventDefault()
-
       let x = e.touches[0].clientX
       let y = e.touches[0].clientY
-
       let deltaX = x - this.lastSingleTouch.x
-
       let deltaX0 = x - this.singleTouchStart.x
       let deltaY0 = y - this.singleTouchStart.y
-
       this.lastSingleTouch = { x: x, y: y }
-
       let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
       let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
-
       if (deltaX !== 0 && moveX) {
         this.scrollComponent.scrollLeft -= deltaX
       }
@@ -203,29 +182,18 @@ class ScrollElement extends Component {
     }
   }
 
-  handleTouchEnd = e => {
+  handleTouchEnd = () => {
     if (this.lastTouchDistance) {
-      e.preventDefault()
-
       this.lastTouchDistance = null
     }
     if (this.lastSingleTouch) {
-      e.preventDefault()
-
       this.lastSingleTouch = null
       this.singleTouchStart = null
     }
   }
 
   render() {
-    const {
-      width,
-      height,
-      children,
-      onContextMenu,
-      onDoubleClick,
-      onMouseEnter
-    } = this.props
+    const { width, height, children, onContextMenu, onMouseEnter } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
@@ -250,7 +218,6 @@ class ScrollElement extends Component {
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
         onContextMenu={onContextMenu}
-        onDoubleClick={onDoubleClick}
         onMouseEnter={onMouseEnter}
       >
         {children}

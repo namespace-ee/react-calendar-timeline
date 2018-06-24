@@ -12,7 +12,7 @@ Basic functionality of the timeline, included panning, zooming and rendering of 
 
 Moving and Resizing examples. Clicking and dragging can move items into different groups. Notice the `handleItemMove` and `handleItemResize` handlers passed to the Timeline.
 
-[Example Codesandbox](https://codesandbox.io/s/8nl1l4j6rj)
+[Example Codesandbox](https://codesandbox.io/s/ww7wr5k8ww)
 
 ## Custom Item Rendering - Basic
 

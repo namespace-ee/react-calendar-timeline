@@ -6,8 +6,6 @@ export default class CursorLine extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    lineHeight: PropTypes.number.isRequired,
-    lineCount: PropTypes.number.isRequired,
     cursorTime: PropTypes.number,
     height: PropTypes.number.isRequired
   }
@@ -27,7 +25,8 @@ export default class CursorLine extends Component {
       const styles = {
         top: '0px',
         left: `${left}px`,
-        height: `${height}px`
+        height: `${height}px`,
+        pointerEvents: 'none'
       }
 
       return <div className="rct-cursor-line" style={styles} />

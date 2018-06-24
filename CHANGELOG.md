@@ -7,6 +7,23 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Breaking
+* rework item renderer to render the whole item using render prop and prop getters
+
+### 0.16.3
+
+### Fixed
+
+* tap on canvas now dispatches `onCanvasClicked` - #168
+* regression bug related to touch zoom
+* code cleanup and refactoring around group rows
+
+### 0.16.2
+
+### Fixed
+
+* clicking on canvas when item is selected now calls `onCanvasClicked` - #312
+
 ### 0.16.1
 
 ### Added
