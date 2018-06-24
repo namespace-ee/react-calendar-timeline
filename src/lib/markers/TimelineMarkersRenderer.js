@@ -52,8 +52,4 @@ const TimelineMarkersRenderer = () => {
   )
 }
 
-// TimelineMarkersRenderer.propTypes = {
-
-// }
-
 export default TimelineMarkersRenderer

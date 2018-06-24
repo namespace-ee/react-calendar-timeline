@@ -6,9 +6,8 @@ import { TimelineMarkerType } from './markerType'
 class TodayMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
-    // other props from user
     interval: PropTypes.number,
-    children: PropTypes.func // custom renderer that accepts ({styles, date})
+    children: PropTypes.func
   }
 
   static defaultProps = {

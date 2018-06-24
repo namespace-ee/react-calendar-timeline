@@ -6,8 +6,7 @@ import { TimelineMarkerType } from './markerType'
 class CursorMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
-    //other props from user
-    children: PropTypes.func // custom renderer that accepts ({styles, date})
+    children: PropTypes.func
   }
 
   componentDidMount() {

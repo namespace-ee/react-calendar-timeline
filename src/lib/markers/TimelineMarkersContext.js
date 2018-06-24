@@ -29,7 +29,8 @@ export class TimelineMarkersProvider extends React.Component {
   handleSubscribeToMarker = newMarker => {
     newMarker = {
       ...newMarker,
-      id: createId() // REVIEW: this will override any id in here...do we wanna do this?
+      // REVIEW: in the event that we accept id to be passed to the Marker components, this line would override those
+      id: createId()
     }
 
     this.setState(state => {
