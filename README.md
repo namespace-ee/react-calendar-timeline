@@ -531,7 +531,8 @@ Markers can be placed in the Timeline by declaring them as `children` of the `Ti
 import Timeline, {
   TimelineMarkers,
   CustomMarker,
-  TodayMarker
+  TodayMarker,
+  CursorMarker
 } from 'react-calendar-timeline'
 
 <Timeline>
@@ -549,6 +550,7 @@ import Timeline, {
         return <div style={customStyles} onClick={someCustomHandler} />
       }}
     </CustomMarker>
+    <CursorMarker />
   </TimelineMarkers>
 </Timeline>
 ```
@@ -586,6 +588,14 @@ Marker that is placed on the current date/time.
 > date: number | required
 
 Where to place the marker on the timeline. `date` value is unix timestamp.
+
+> children: function({styles: object, date: number}) => JSX.Element
+
+Custom renderer for this marker. Ensure that you always pass `styles` to the root component's `style` prop as this object contains positioning of the marker.
+
+## CursorMarker
+
+Marker that is displayed when hovering over the timeline and matches where your cursor is.
 
 > children: function({styles: object, date: number}) => JSX.Element
 
