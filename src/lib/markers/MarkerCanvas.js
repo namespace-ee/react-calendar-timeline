@@ -29,6 +29,10 @@ class MarkerCanvas extends React.Component {
       const { left: containerLeft } = this.containerEl.getBoundingClientRect()
 
       // number of pixels from left we are on canvas
+      // we do this calculation as pageX is based on x from viewport whereas
+      // our canvas can be scrolled left and right and is generally outside
+      // of the viewport.  This calculation is to get how many pixels the cursor
+      // is from left of this element
       const canvasX = pageX - containerLeft
       const date = this.props.getDateFromLeftOffsetPosition(canvasX)
       this.subscription({
