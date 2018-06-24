@@ -25,6 +25,16 @@ const defaultRenderer = ({ styles }) => (
   <div style={styles} data-testid="default-cursor-marker" />
 )
 
+/**
+ * CursorMarker implementation subscribe to 'subscribeToCanvasMouseOver' on mount.
+ * This subscription is passed in via MarkerCanvasConsumer, which is wired up to
+ * MarkerCanvasProvider in the MarkerCanvas component. When the user mouses over MarkerCanvas,
+ * the callback registered in CursorMarker (this component) is passed:
+ *  leftOffset - pixels from left edge of canvas, used to position this element
+ *  date - the date the cursor pertains to
+ *  isCursorOverCanvas - whether the user cursor is over the canvas. This is set to 'false'
+ *  when the user mouseleaves the element
+ */
 class CursorMarker extends React.Component {
   static propTypes = {
     subscribeToCanvasMouseOver: PropTypes.func.isRequired,

@@ -4,11 +4,6 @@ import { MarkerCanvasProvider } from './MarkerCanvasContext'
 import TimelineMarkersRenderer from './TimelineMarkersRenderer'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
-/**
- * Renders registered markers and exposes a mouse over listener for
- * CursorMarkers to subscribe to
- */
-
 // expand to fill entire parent container (ScrollElement)
 const staticStyles = {
   position: 'absolute',
@@ -18,6 +13,10 @@ const staticStyles = {
   bottom: 0
 }
 
+/**
+ * Renders registered markers and exposes a mouse over listener for
+ * CursorMarkers to subscribe to
+ */
 class MarkerCanvas extends React.Component {
   static propTypes = {
     getDateFromLeftOffsetPosition: PropTypes.func.isRequired
@@ -26,7 +25,7 @@ class MarkerCanvas extends React.Component {
   handleMouseMove = evt => {
     if (this.subscription != null) {
       const { pageX } = evt
-      // FIXME: dont use this. Use passed in scroll amount
+      // FIXME: dont use getBoundingClientRect. Use passed in scroll amount
       const { left: containerLeft } = this.containerEl.getBoundingClientRect()
 
       // number of pixels from left we are on canvas
