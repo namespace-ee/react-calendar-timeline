@@ -206,7 +206,7 @@ class ScrollElement extends Component {
     return (
       <div
         ref={this.refHandler}
-        data-test-id="scroll-element"
+        data-testid="scroll-element"
         className="rct-scroll"
         style={scrollComponentStyle}
         onScroll={this.handleScroll}

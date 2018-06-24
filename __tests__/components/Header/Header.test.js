@@ -43,7 +43,7 @@ describe('Header', () => {
 
       const mockCallParam = headerRefMock.mock.calls[0][0]
 
-      expect(mockCallParam.dataset.testId).toBe('timeline-elements-container')
+      expect(mockCallParam.dataset.testid).toBe('timeline-elements-container')
     })
 
     it('container recieves width property', () => {
