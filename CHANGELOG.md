@@ -7,6 +7,32 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+
+* timeline markers - user can have more control over markers that are rendered on the timeline. See `TimelineMarkers` section of README for documentation - #
+
+### Breaking
+
+* removed `showCursorLine` prop in favor of using the `CursorMarker` component. See `TimelineMarkers` section of README for documentation.
+
+```diff
+import Timeline,
++ {TimelineMarkers, CursorMarker}
+from 'react-calendar-timeline'
+
+<Timeline
+- showCursorLine
+
+- />
++ >
+
++ <TimelineMarkers>
++  <CursorMarker />
++ </TimelineMarkers>
+
++ </Timeline>
+```
+
 ### 0.17.0
 
 ### Breaking
