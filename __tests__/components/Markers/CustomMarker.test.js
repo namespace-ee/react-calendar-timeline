@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, Simulate } from 'react-testing-library'
 import 'jest-dom/extend-expect'
-import TimelineMarkers from 'lib/markers/TimelineMarkers'
-import CustomMarker from 'lib/markers/CustomMarker'
+import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
+import CustomMarker from 'lib/markers/public/CustomMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'
 
 describe('CustomMarker', () => {

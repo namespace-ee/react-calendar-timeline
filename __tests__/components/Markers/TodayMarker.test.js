@@ -2,8 +2,8 @@ import React from 'react'
 import { render, Simulate } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import { RenderWrapper } from 'test-utility/marker-renderer'
-import TimelineMarkers from 'lib/markers/TimelineMarkers'
-import TodayMarker from 'lib/markers/TodayMarker'
+import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
+import TodayMarker from 'lib/markers/public/TodayMarker'
 
 const defaultTestId = 'default-today-line'
 

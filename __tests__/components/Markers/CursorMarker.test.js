@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, Simulate } from 'react-testing-library'
 import 'jest-dom/extend-expect'
-import TimelineMarkers from 'lib/markers/TimelineMarkers'
-import CursorMarker from 'lib/markers/CursorMarker'
+import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
+import CursorMarker from 'lib/markers/public/CursorMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'
 import { MarkerCanvasProvider } from 'lib/markers/MarkerCanvasContext'
 
