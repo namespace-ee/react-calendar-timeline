@@ -4,87 +4,119 @@ import 'jest-dom/extend-expect'
 import TimelineMarkers from 'lib/markers/TimelineMarkers'
 import CursorMarker from 'lib/markers/CursorMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'
+import { MarkerCanvasProvider } from 'lib/markers/MarkerCanvasContext'
+
+/**
+ * CursorMarker implementation relies on MarkerCanvas to notify it when the user
+ * mouses over.  On mouse over, CursorMarker is notified detail on the mouseover
+ * such as date and leftOffset which is used to position the line.  These tests
+ * kind of stub that behavior out but are kind of dirty...
+ */
 
 describe('CursorMarker', () => {
   const defaultCursorMarkerTestId = 'default-cursor-marker'
   it('renders one', () => {
+    const subscribeToMouseOverMock = jest.fn()
+
     const { getByTestId } = render(
-      <RenderWrapper>
-        <TimelineMarkers>
-          <CursorMarker date={1000} />
-        </TimelineMarkers>
-      </RenderWrapper>
+      <MarkerCanvasProvider
+        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
+      >
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CursorMarker />
+          </TimelineMarkers>
+        </RenderWrapper>
+      </MarkerCanvasProvider>
     )
+
+    subscribeToMouseOverMock.mock.calls[0][0]({
+      isCursorOverCanvas: true
+    })
 
     expect(getByTestId(defaultCursorMarkerTestId)).toBeInTheDOM()
   })
-  it('render multiple', () => {
-    const { queryAllByTestId } = render(
-      <RenderWrapper>
-        <TimelineMarkers>
-          <CursorMarker />
-          <CursorMarker />
-          <CursorMarker />
-        </TimelineMarkers>
-      </RenderWrapper>
-    )
 
-    expect(queryAllByTestId(defaultCursorMarkerTestId).length).toBe(3)
-  })
   it('renders with custom renderer', () => {
     const customDataIdSelector = 'my-custom-marker-cursor'
+    const subscribeToMouseOverMock = jest.fn()
     const { getByTestId } = render(
-      <RenderWrapper>
-        <TimelineMarkers>
-          <CursorMarker>
-            {() => <div data-testid={customDataIdSelector} />}
-          </CursorMarker>
-        </TimelineMarkers>
-      </RenderWrapper>
+      <MarkerCanvasProvider
+        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
+      >
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CursorMarker>
+              {() => <div data-testid={customDataIdSelector} />}
+            </CursorMarker>
+          </TimelineMarkers>
+        </RenderWrapper>
+      </MarkerCanvasProvider>
     )
+
+    subscribeToMouseOverMock.mock.calls[0][0]({
+      isCursorOverCanvas: true
+    })
 
     expect(getByTestId(customDataIdSelector)).toBeInTheDOM()
   })
 
-  // it('is passed styles with left corresponding to passed in date', () => {
-  //   const oneDay = 1000 * 60 * 60 * 24
-  //   const canvasWidth = 3000
+  it('styles.left based on callback leftOffset', () => {
+    const subscribeToMouseOverMock = jest.fn()
+    const { getByTestId } = render(
+      <MarkerCanvasProvider
+        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
+      >
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CursorMarker />
+          </TimelineMarkers>
+        </RenderWrapper>
+      </MarkerCanvasProvider>
+    )
 
-  //   const now = Date.now()
+    const leftOffset = 1000
 
-  //   /**
-  //    * CanvasTimeStart - one day ago
-  //    * VisibleTimeStart - now
-  //    * VisibleTimeEnd - one day in future
-  //    * CanvasTimeEnd - two days in the future
-  //    */
+    subscribeToMouseOverMock.mock.calls[0][0]({
+      isCursorOverCanvas: true,
+      leftOffset
+    })
 
-  //   const visibleTimeStart = now
-  //   const visibleTimeEnd = now + oneDay
-  //   const timelineState = {
-  //     visibleTimeStart,
-  //     visibleTimeEnd,
-  //     canvasTimeStart: visibleTimeStart - oneDay,
-  //     canvasTimeEnd: visibleTimeEnd + oneDay,
-  //     canvasWidth
-  //   }
+    const el = getByTestId(defaultCursorMarkerTestId)
 
-  //   const markerDate = now + oneDay / 2
+    expect(el).toHaveStyle(`left: ${leftOffset}px`)
+  })
 
-  //   const { getByTestId } = render(
-  //     <RenderWrapper timelineState={timelineState}>
-  //       <TimelineMarkers>
-  //         <CursorMarker date={markerDate} />
-  //       </TimelineMarkers>
-  //     </RenderWrapper>
-  //   )
+  it('child function is passed in date from callback', () => {
+    const subscribeToMouseOverMock = jest.fn()
+    const rendererMock = jest.fn(() => null)
+    render(
+      <MarkerCanvasProvider
+        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
+      >
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CursorMarker>{rendererMock}</CursorMarker>
+          </TimelineMarkers>
+        </RenderWrapper>
+      </MarkerCanvasProvider>
+    )
 
-  //   const el = getByTestId(defaultCursorMarkerTestId)
+    const now = Date.now()
 
-  //   expect(el).toHaveStyle(`left: ${3000 / 2}px`)
-  // })
+    subscribeToMouseOverMock.mock.calls[0][0]({
+      isCursorOverCanvas: true,
+      date: now
+    })
+
+    expect(rendererMock).toHaveBeenCalledWith({
+      styles: expect.any(Object),
+      date: now
+    })
+  })
 
   it('is removed after unmount', () => {
+    const subscribeToMouseOverMock = jest.fn()
     class RemoveCursorMarker extends React.Component {
       state = {
         isShowing: true
@@ -96,19 +128,27 @@ describe('CursorMarker', () => {
       }
       render() {
         return (
-          <RenderWrapper>
-            <button onClick={this.handleToggleCursorMarker}>
-              Hide Cursor Marker
-            </button>
-            <TimelineMarkers>
-              {this.state.isShowing && <CursorMarker date={1000} />}
-            </TimelineMarkers>
-          </RenderWrapper>
+          <MarkerCanvasProvider
+            value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
+          >
+            <RenderWrapper>
+              <button onClick={this.handleToggleCursorMarker}>
+                Hide Cursor Marker
+              </button>
+              <TimelineMarkers>
+                {this.state.isShowing && <CursorMarker />}
+              </TimelineMarkers>
+            </RenderWrapper>
+          </MarkerCanvasProvider>
         )
       }
     }
 
     const { queryByTestId, getByText } = render(<RemoveCursorMarker />)
+
+    subscribeToMouseOverMock.mock.calls[0][0]({
+      isCursorOverCanvas: true
+    })
 
     expect(queryByTestId(defaultCursorMarkerTestId)).toBeInTheDOM()
 
