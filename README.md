@@ -581,6 +581,24 @@ How often the TodayMarker refreshes. Value represents milliseconds.
 
 Custom renderer for this marker. Ensure that you always pass `styles` to the root component's `style` prop as this object contains positioning of the marker.
 
+```jsx
+// custom interval
+const twoSeconds = 2000
+
+<TodayMarker interval={twoSeconds} />
+
+//custom renderer
+
+<TodayMarker>
+  {({ styles, date }) =>
+  // date is value of current date. Use this to render special styles for the marker
+  // or any other custom logic based on date:
+  // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+  return <div style={styles} />
+  }
+</TodayMarker>
+```
+
 ## CustomMarker
 
 Marker that is placed on the current date/time.
@@ -593,6 +611,29 @@ Where to place the marker on the timeline. `date` value is unix timestamp.
 
 Custom renderer for this marker. Ensure that you always pass `styles` to the root component's `style` prop as this object contains positioning of the marker.
 
+```jsx
+const today = Date.now()
+<CustomMarker date={today} />
+
+//custom renderer
+<CustomMarker date={today}>
+  {({ styles, date }) =>
+  return <div style={styles} />
+  }
+</CustomMarker>
+
+// multiple CustomMarkers
+const markerDates = [
+  {date: today, id: 1,},
+  {date: tomorrow, id: 2,},
+  {date: nextFriday, id: 3,},
+]
+
+<TimelineMarkers>
+  {markerDates.map(marker => <CustomMarker key={marker.date} date={marker.date}/> )}
+</TimelineMarkers>
+```
+
 ## CursorMarker
 
 Marker that is displayed when hovering over the timeline and matches where your cursor is.
@@ -600,6 +641,21 @@ Marker that is displayed when hovering over the timeline and matches where your 
 > children: function({styles: object, date: number}) => JSX.Element
 
 Custom renderer for this marker. Ensure that you always pass `styles` to the root component's `style` prop as this object contains positioning of the marker.
+
+```jsx
+// render default marker for Cursor
+<CursorMarker />
+
+//custom renderer
+<CursorMarker>
+  {({ styles, date }) =>
+  // date is value of current date. Use this to render special styles for the marker
+  // or any other custom logic based on date:
+  // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+  return <div style={styles} />
+  }
+</CursorMarker>
+```
 
 # FAQ
 
