@@ -691,59 +691,6 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  // handleScrollMouseEnter = e => {
-  //   const { showCursorLine } = this.props
-  //   if (showCursorLine) {
-  //     this.setState({ mouseOverCanvas: true })
-  //   }
-
-  //   if (this.props.onCanvasMouseEnter) {
-  //     this.props.onCanvasMouseEnter(e)
-  //   }
-  // }
-
-  // handleScrollMouseLeave = e => {
-  //   const { showCursorLine } = this.props
-  //   if (showCursorLine) {
-  //     this.setState({ mouseOverCanvas: false })
-  //   }
-
-  //   if (this.props.onCanvasMouseLeave) {
-  //     this.props.onCanvasMouseLeave(e)
-  //   }
-  // }
-
-  // handleScrollMouseMove = e => {
-  //   const { showCursorLine } = this.props
-  //   const {
-  //     canvasTimeStart,
-  //     width,
-  //     visibleTimeStart,
-  //     visibleTimeEnd,
-  //     cursorTime
-  //   } = this.state
-  //   const zoom = visibleTimeEnd - visibleTimeStart
-  //   const canvasTimeEnd = canvasTimeStart + zoom * 3
-  //   const canvasWidth = width * 3
-  //   const { pageX } = e
-  //   const ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
-  //   const boundingRect = this.scrollComponent.getBoundingClientRect()
-  //   let timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left)
-
-  //   if (this.props.dragSnap) {
-  //     timePosition =
-  //       Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap
-  //   }
-
-  //   if (this.props.onCanvasMouseMove) {
-  //     this.props.onCanvasMouseMove(e)
-  //   }
-
-  //   if (cursorTime !== timePosition && showCursorLine) {
-  //     this.setState({ cursorTime: timePosition, mouseOverCanvas: true })
-  //   }
-  // }
-
   verticalLines(
     canvasTimeStart,
     canvasTimeEnd,
