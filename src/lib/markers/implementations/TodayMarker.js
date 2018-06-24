@@ -10,6 +10,7 @@ const criticalStyles = {
   backgroundColor: 'red'
 }
 
+// FIXME: this is used in all marker implementations
 // REVIEW: might want to memoize this as it creates a new object
 // in each render which is passed to React component
 const createMarkerStylesWithLeftOffset = leftOffset => ({
@@ -17,15 +18,13 @@ const createMarkerStylesWithLeftOffset = leftOffset => ({
   left: leftOffset
 })
 
-// FIXME: this is used in all marker implementations
-// lift into single spot and memoize?
 // eslint-disable-next-line
 const defaultRenderer = ({ styles }) => (
   <div style={styles} data-testid="default-today-line" />
 )
 
-/** Implementation of TodayMarker.  This component will be in charge
- * of setting interval as to when to re render with new time
+/** Marker that is placed based on current date.  This component updates itself on
+ * a set interval, dictated by the 'interval' prop.
  */
 class TodayMarker extends React.Component {
   static propTypes = {

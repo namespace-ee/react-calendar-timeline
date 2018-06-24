@@ -11,6 +11,7 @@ const criticalStyles = {
   backgroundColor: 'pink'
 }
 
+// FIXME: this is used in all marker implementations
 // REVIEW: might want to memoize this as it creates a new object
 // in each render which is passed to React component
 const createMarkerStylesWithLeftOffset = leftOffset => ({
@@ -18,8 +19,6 @@ const createMarkerStylesWithLeftOffset = leftOffset => ({
   left: leftOffset
 })
 
-// FIXME: this is used in all marker implementations
-// lift into single spot and memoize?
 // eslint-disable-next-line
 const defaultRenderer = ({ styles }) => (
   <div style={styles} data-testid="default-cursor-marker" />

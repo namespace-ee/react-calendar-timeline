@@ -10,6 +10,7 @@ const criticalStyles = {
   backgroundColor: 'green'
 }
 
+// FIXME: this is used in all marker implementations
 // REVIEW: might want to memoize this as it creates a new object
 // in each render which is passed to React component
 const createMarkerStylesWithLeftOffset = leftOffset => ({
@@ -17,13 +18,14 @@ const createMarkerStylesWithLeftOffset = leftOffset => ({
   left: leftOffset
 })
 
-// FIXME: this is used in all marker implementations
-// lift into single spot and memoize?
 // eslint-disable-next-line
 const defaultCustomMarkerRenderer = ({ styles }) => (
   <div style={styles} data-testid="default-customer-marker-id" />
 )
 
+/**
+ * CustomMarker that is placed based on passed in date prop
+ */
 class CustomMarker extends React.Component {
   static propTypes = {
     getLeftOffsetFromDate: PropTypes.func.isRequired,
