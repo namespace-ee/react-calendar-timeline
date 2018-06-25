@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.17,1
+
 ### Added
 
 * pass canvasTimeStart/End via timelineContext to the itemRenderer prop
