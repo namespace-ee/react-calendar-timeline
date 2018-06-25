@@ -7,6 +7,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+
+* pass canvasTimeStart/End via timelineContext to the itemRenderer prop
+
+### 0.17.0
+
 ### Breaking
 
 * throw more descriptive error if visibleTimeStart/End and defaultTimeStart/End are not passed as props. Timeline no longer calculates visibleTime start and end from items. Removed `onTimeInit` prop as it no longer serves a purpose. - #299
