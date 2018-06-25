@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Breaking
+* rework item renderer to render the whole item using render prop and prop getters
+
 ### 0.17,1
 
 ### Added
