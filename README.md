@@ -454,8 +454,10 @@ This component will also be passed a `timelineContext` object:
 
 ```typescript
 {
-  visibleTimeStart: number, // denotes the start time in ms of the timeline
-  visibleTimeEnd: number, // denotes the end time in ms of the timeline
+  visibleTimeStart: number, // denotes the start time in ms of the visible timeline
+  visibleTimeEnd: number, // denotes the end time in ms of the visible timeline
+  canvasTimeStart: number, // denotes the start time in ms of the canvas timeline
+  canvasTimeEnd: number, // denotes the end time in ms of the canvas timeline
   timelineWidth: number, // denotes the width in pixels of the timeline
 }
 ```

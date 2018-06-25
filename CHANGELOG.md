@@ -33,6 +33,13 @@ from 'react-calendar-timeline'
 + </Timeline>
 ```
 
+### 0.17,1
+
+### Added
+
+* pass canvasTimeStart/End via timelineContext to the itemRenderer prop
+
+
 ### 0.17.0
 
 ### Breaking

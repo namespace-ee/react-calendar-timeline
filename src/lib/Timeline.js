@@ -244,7 +244,14 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   getTimelineContext = () => {
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+    const {
+      width,
+      visibleTimeStart,
+      visibleTimeEnd,
+      canvasTimeStart
+    } = this.state
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = canvasTimeStart + zoom * 3
 
     //TODO: Performance
     //prob wanna memoize this so we ensure that if no items changed,
@@ -252,7 +259,9 @@ export default class ReactCalendarTimeline extends Component {
     return {
       timelineWidth: width,
       visibleTimeStart,
-      visibleTimeEnd
+      visibleTimeEnd,
+      canvasTimeStart,
+      canvasTimeEnd
     }
   }
 
