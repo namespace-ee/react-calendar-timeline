@@ -16,7 +16,7 @@ yarn add react-calendar-timeline
 npm install --save react-calendar-timeline
 ```
 
-`react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interact.js`](http://interactjs.io/docs/) as peer dependencies.
+`react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
 
 ## Usage
 
@@ -421,10 +421,6 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
   }
 }
 ```
-
-### onTimeInit(visibleTimeStart, visibleTimeEnd)
-
-Called when the calendar is first initialised. `visibleTimeStart` and `visibleTimeEnd` are unix timestamps in milliseconds.
 
 ### onBoundsChange(canvasTimeStart, canvasTimeEnd)
 

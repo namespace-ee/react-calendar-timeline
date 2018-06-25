@@ -11,7 +11,7 @@ const config = {
   devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
   context: path.join(__dirname, './demo'),
   entry: {
-    vendor: ['react', 'react-dom', 'faker', 'interact.js', 'moment'],
+    vendor: ['react', 'react-dom', 'faker', 'interactjs', 'moment'],
     demo: isProd
       ? ['./index.js']
       : [
