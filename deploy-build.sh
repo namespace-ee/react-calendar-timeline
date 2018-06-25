@@ -8,10 +8,10 @@ git config --global user.email ahmad.ilaiwi@gmail.com
 function deploy_branch() {
   local branch_name=$1
 
-  git clone --depth=1 --branch "$branch_name" "https://github.com/$TRAVIS_REPO_SLUG.git" ./$branch_name
+  git clone --depth=1 --branch "$branch_name" "https://github.com/FoothillSolutions/react-calendar-timeline" ./$branch_name
 
   rm -rf ./$branch_name/*
-  cp -rf ./package.json ./README.md ./LICENSE ./ramda/$branch_name/* ./$branch_name
+  cp -rf ./package.json ./README.md ./LICENSE ./$branch_name/* ./$branch_name
 
   cd ./$branch_name
 
