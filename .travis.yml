@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "8"
 after_success:
-  - bash deploy-gh-pages.sh
+  - "if [ \"$TRAVIS_BRANCH\" = \"master\" ] && [ \"$TRAVIS_PULL_REQUEST\" = \"false\" ]; then bash deploy-build.sh; fi"
 env:
   global:
   - ENCRYPTION_LABEL: "d8c751632116"
