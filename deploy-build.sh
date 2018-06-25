@@ -22,4 +22,4 @@ function deploy_branch() {
   cd ..
 }
 
-deploy_branch "lib"
+deploy_branch "dist"
