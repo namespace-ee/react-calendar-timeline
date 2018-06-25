@@ -20,6 +20,7 @@ function deploy_branch() {
   git push -qf "https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG.git"
 
   cd ..
+  
 }
 
 deploy_branch "dist"
