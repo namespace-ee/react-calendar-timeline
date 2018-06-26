@@ -21,7 +21,10 @@ class Header extends Component {
     registerScroll: PropTypes.func.isRequired,
     leftSidebarHeader: PropTypes.node,
     rightSidebarHeader: PropTypes.node,
-    headerRef: PropTypes.func.isRequired
+    headerRef: PropTypes.func.isRequired,
+
+    onHeaderClick: PropTypes.func,
+    onSubHeaderClick: PropTypes.func,
   }
 
   render() {

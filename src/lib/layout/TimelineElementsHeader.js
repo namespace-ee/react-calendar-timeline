@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import moment from 'moment'
 
-import { iterateTimes, getNextUnit } from '../utility/calendar'
+import { iterateTimes, getNextUnit, getPreviousUnit } from '../utility/calendar'
 
 export default class TimelineElementsHeader extends Component {
   static propTypes = {
@@ -18,7 +18,10 @@ export default class TimelineElementsHeader extends Component {
     subHeaderLabelFormats: PropTypes.object.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
-    registerScroll: PropTypes.func.isRequired
+    registerScroll: PropTypes.func.isRequired,
+
+    onHeaderClick: PropTypes.func,
+    onSubHeaderClick: PropTypes.func,
   }
 
   constructor(props) {
@@ -147,13 +150,15 @@ export default class TimelineElementsHeader extends Component {
           // have label content fill the entire width
           const contentWidth = Math.min(labelWidth, canvasWidth / 3)
 
+          let defaultOnClick = () => this.handlePeriodClick(time, nextUnit);
+
           topHeaderLabels.push(
             <div
               key={`top-label-${time.valueOf()}`}
               className={`rct-label-group${
                 hasRightSidebar ? ' rct-has-right-sidebar' : ''
               }`}
-              onClick={() => this.handlePeriodClick(time, nextUnit)}
+              onClick={(e) => this.props.onHeaderClick ? this.props.onHeaderClick(time, minUnit, nextUnit, e, defaultOnClick) : defaultOnClick()}
               style={{
                 left: `${left - 1}px`,
                 width: `${labelWidth}px`,
@@ -172,6 +177,7 @@ export default class TimelineElementsHeader extends Component {
     }
 
     const bottomHeaderLabels = []
+    const previousUnit = getPreviousUnit(minUnit);
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
@@ -186,13 +192,15 @@ export default class TimelineElementsHeader extends Component {
         )
         const leftCorrect = firstOfType ? 1 : 0
 
+        let defaultOnClick = () => this.handlePeriodClick(time, minUnit);
+
         bottomHeaderLabels.push(
           <div
             key={`label-${time.valueOf()}`}
             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
               firstOfType ? 'rct-first-of-type' : ''
             } ${minUnit !== 'month' ? `rct-day-${time.day()}` : ''} `}
-            onClick={() => this.handlePeriodClick(time, minUnit)}
+            onClick={(e) => this.props.onSubHeaderClick ? this.props.onSubHeaderClick(time, minUnit, previousUnit, e, defaultOnClick) : defaultOnClick()}
             style={{
               left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,
