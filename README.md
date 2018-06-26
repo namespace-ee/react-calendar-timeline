@@ -492,7 +492,7 @@ Rather than applying props on the element yourself and to avoid your props being
   - style: inline object style
 
   These properties can be override using the prop argument with proprties: 
-  - classNames: class names to be added
+  - className: class names to be added
   - onMouseDown: event handler will be called after the component's event handler
   - onMouseUp: event handler will be called after the component's event handler
   - onTouchStart: event handler will be called after the component's event handler
