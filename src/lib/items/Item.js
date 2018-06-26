@@ -554,7 +554,7 @@ export default class Item extends Component {
     return {
       key: this.itemId,
       ref: this.getItemRef,
-      className: classNames + `${props.className? props.className : ''}`,
+      className: classNames + ` ${props.className? props.className : ''}`,
       onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
       onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
       onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
