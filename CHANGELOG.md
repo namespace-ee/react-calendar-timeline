@@ -7,6 +7,11 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+
+* support `Item` prop `style`
+* `selected` is provided to `itemRenderer`
+
 ### 0.17,1
 
 ### Added
