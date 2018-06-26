@@ -491,7 +491,11 @@ export default class Item extends Component {
     const timelineContext = this.context.getTimelineContext()
     const Comp = this.props.itemRenderer
     if (Comp) {
-      return <Comp item={this.props.item} timelineContext={timelineContext} />
+      return <Comp
+        item={this.props.item}
+        selected={this.props.selected}
+        timelineContext={timelineContext}
+      />
     } else {
       return this.itemTitle
     }
@@ -519,7 +523,8 @@ export default class Item extends Component {
       top: `${dimensions.top}px`,
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
-      lineHeight: `${dimensions.height}px`
+      lineHeight: `${dimensions.height}px`,
+      ...this.props.item.style
     }
 
     const showInnerContents =
