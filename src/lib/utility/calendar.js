@@ -124,7 +124,6 @@ export function calculateDimensions({
   canvasTimeStart,
   canvasTimeEnd,
   canvasWidth,
-  dragSnap,
   dragTime,
   resizingEdge,
   resizeTime
@@ -134,31 +133,18 @@ export function calculateDimensions({
   const itemEnd =
     isResizing && resizingEdge === 'right' ? resizeTime : itemTimeEnd
 
-  let x = isDragging ? dragTime : itemStart
+  const itemTimeRange = itemEnd - itemStart
 
-  let w = Math.max(itemEnd - itemStart, dragSnap)
-
-  let collisionX = itemStart
-  let collisionW = w
-
-  if (isDragging) {
-    if (itemTimeStart >= dragTime) {
-      collisionX = dragTime
-      collisionW = Math.max(itemTimeEnd - dragTime, dragSnap)
-    } else {
-      collisionW = Math.max(dragTime - itemTimeStart + w, dragSnap)
-    }
-  }
+  let newItemStart = isDragging ? dragTime : itemStart
 
   const ratio =
     1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
 
   const dimensions = {
-    left: (x - canvasTimeStart) * ratio,
-    width: Math.max(w * ratio, 3),
-    collisionLeft: collisionX,
-    originalLeft: itemTimeStart,
-    collisionWidth: collisionW
+    left: (newItemStart - canvasTimeStart) * ratio,
+    width: Math.max(itemTimeRange * ratio, 3),
+    collisionLeft: newItemStart,
+    collisionWidth: itemTimeRange
   }
 
   return dimensions
