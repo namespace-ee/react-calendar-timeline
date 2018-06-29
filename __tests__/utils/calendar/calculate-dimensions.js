@@ -23,7 +23,6 @@ describe('calculateDimensions', () => {
       collisionLeft: 200,
       collisionWidth: 100,
       left: 200,
-      originalLeft: 200,
       width: 100
     })
   })
@@ -48,14 +47,13 @@ describe('calculateDimensions', () => {
 
     expect(dimension).toMatchObject({
       collisionLeft: 192,
-      collisionWidth: 108,
+      collisionWidth: 100,
       left: 192,
-      originalLeft: 200,
       width: 100
     })
   })
 
-  it('the item is on the left side clipped', () => {
+  it('items timeStart is less than canvasTimeStart', () => {
     let example = {
       itemTimeStart: 0,
       itemTimeEnd: 300,
@@ -76,40 +74,63 @@ describe('calculateDimensions', () => {
     expect(calculateDimensions(example)).toMatchObject({
       collisionLeft: 0,
       collisionWidth: 300,
-      left: -100,
-      originalLeft: 0,
-      width: 300
+      left: 0,
+      width: 200
     })
   })
 
-  it('the item is on the right side clipped', () => {
+  it('items timeEnd is greater than canvasTimeEnd', () => {
     let example = {
-      itemTimeStart: 700,
-      itemTimeEnd: 1000,
+      itemTimeStart: 400,
+      itemTimeEnd: 700,
       isDragging: false,
       isResizing: false,
-      canvasTimeStart: 500,
-      canvasTimeEnd: 900,
+      canvasTimeStart: 100,
+      canvasTimeEnd: 500,
       canvasWidth: 400,
       dragSnap: 0,
       dragTime: false, // we are not draging right now
       resizingItem: false,
       resizingEdge: false,
       resizeTime: false, // we are not resizing right now
-      visibleTimeStart: 500,
-      visibleTimeEnd: 900
+      visibleTimeStart: 100,
+      visibleTimeEnd: 500
     }
 
     expect(calculateDimensions(example)).toMatchObject({
-      collisionLeft: 700,
+      collisionLeft: 400,
       collisionWidth: 300,
-      left: 200,
-      originalLeft: 700,
-      width: 300
+      left: 300,
+      width: 100
+    })
+  })
+  it('item time range completely overlaps canvas time range', () => {
+    let example = {
+      itemTimeStart: 0, // item range extends before and after canvas
+      itemTimeEnd: 600,
+      isDragging: false,
+      isResizing: false,
+      canvasTimeStart: 100,
+      canvasTimeEnd: 500,
+      canvasWidth: 400,
+      dragSnap: 0,
+      dragTime: false, // we are not draging right now
+      resizingItem: false,
+      resizingEdge: false,
+      resizeTime: false, // we are not resizing right now
+      visibleTimeStart: 100,
+      visibleTimeEnd: 500
+    }
+
+    expect(calculateDimensions(example)).toMatchObject({
+      collisionLeft: 0,
+      collisionWidth: 600,
+      left: 0,
+      width: 400
     })
   })
 
-  it('the item is draged', () => {
+  it('the item is dragged', () => {
     const dimension = calculateDimensions({
       itemTimeStart: 200,
       itemTimeEnd: 300,
@@ -128,10 +149,9 @@ describe('calculateDimensions', () => {
     })
 
     expect(dimension).toMatchObject({
-      collisionLeft: 200,
-      collisionWidth: 200,
+      collisionLeft: 300,
+      collisionWidth: 100,
       left: 300,
-      originalLeft: 200,
       width: 100
     })
   })
@@ -156,7 +176,6 @@ describe('calculateDimensions', () => {
       collisionLeft: 200,
       collisionWidth: 50,
       left: 200,
-      originalLeft: 200,
       width: 50
     })
   })
@@ -183,7 +202,6 @@ describe('calculateDimensions', () => {
       collisionLeft: 210,
       collisionWidth: 90,
       left: 210,
-      originalLeft: 200,
       width: 90
     })
   })
