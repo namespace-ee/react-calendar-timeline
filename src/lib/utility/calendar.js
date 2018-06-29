@@ -140,9 +140,14 @@ export function calculateDimensions({
   const ratio =
     1 / coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
 
+  // restrict startTime and endTime to be bounded by canvasTimeStart and canasTimeEnd
+  const effectiveStartTime = Math.max(itemStart, canvasTimeStart)
+  const effectiveEndTime = Math.min(itemEnd, canvasTimeEnd)
+  const itemWidth = (effectiveEndTime - effectiveStartTime) * ratio
+
   const dimensions = {
-    left: (newItemStart - canvasTimeStart) * ratio,
-    width: Math.max(itemTimeRange * ratio, 3),
+    left: Math.max(newItemStart - canvasTimeStart, 0) * ratio,
+    width: Math.max(itemWidth, 3),
     collisionLeft: newItemStart,
     collisionWidth: itemTimeRange
   }
