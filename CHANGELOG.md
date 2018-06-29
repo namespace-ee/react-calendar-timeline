@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.17.2
+
 ### Added
 
 * support passing `style` prop from item - #347
