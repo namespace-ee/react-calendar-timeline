@@ -9,8 +9,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ### Added
 
-* support `Item` prop `style`
-* `selected` is provided to `itemRenderer`
+* support passing `style` prop from item - #347
+* `selected` is provided to `itemRenderer` - #348
 
 ### 0.17,1
 
