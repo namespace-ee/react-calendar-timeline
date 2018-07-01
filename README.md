@@ -103,6 +103,9 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
   canResize: false,
   canChangeGroup: false,
   className: 'weekend',
+  style: {
+    backgroundColor: 'fuchsia'
+  },
   itemProps: {
     // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
     'data-custom-attribute': 'Random content',
@@ -425,7 +428,7 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 ## itemRenderer
 
 React component that will be used to render the item content. Will be
-passed the `item` as a prop.
+passed the `item` and the `selected` as a props.
 
 Using complex components may result in performance problems.
 
@@ -440,11 +443,11 @@ let items = [
   }
 ]
 
-itemRenderer = ({ item }) => {
+itemRenderer = ({ item, selected }) => {
   return (
     <div className='custom-item'>
       <span className='title'>{item.title}</span>
-      <p className='tip'>{item.tip}</p>
+      {selected && <p className='tip'>{item.tip}</p>}
     </div>
   )
 }

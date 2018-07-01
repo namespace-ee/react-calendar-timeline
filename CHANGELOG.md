@@ -33,7 +33,17 @@ from 'react-calendar-timeline'
 + </Timeline>
 ```
 
-### 0.17,1
+
+
+### 0.17.2
+
+### Added
+
+* support passing `style` prop from item - #347
+* `selected` is provided to `itemRenderer` - #348
+* simplify logic for calculate dimensions and prevent item width and left properties from being unbounded - (refactoring)
+
+### 0.17.1
 
 ### Added
 
