@@ -1,31 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {
+  createMarkerStylesWithLeftOffset,
+  createDefaultRenderer
+} from './shared'
 import { MarkerCanvasConsumer } from '../MarkerCanvasContext'
 
-const criticalStyles = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  // FIXME: are these critical styles?
-  width: '2px',
-  backgroundColor: 'pink'
-}
-
-// FIXME: this is used in all marker implementations
-// REVIEW: might want to memoize this as it creates a new object
-// in each render which is passed to React component
-const createMarkerStylesWithLeftOffset = leftOffset => ({
-  ...criticalStyles,
-  left: leftOffset
-})
-
-// eslint-disable-next-line
-const defaultRenderer = ({ styles }) => (
-  <div style={styles} data-testid="default-cursor-marker" />
-)
+const defaultRenderer = createDefaultRenderer('default-cursor-marker')
 
 /**
- * CursorMarker implementation subscribe to 'subscribeToCanvasMouseOver' on mount.
+ * CursorMarker implementation subscribes to 'subscribeToCanvasMouseOver' on mount.
  * This subscription is passed in via MarkerCanvasConsumer, which is wired up to
  * MarkerCanvasProvider in the MarkerCanvas component. When the user mouses over MarkerCanvas,
  * the callback registered in CursorMarker (this component) is passed:

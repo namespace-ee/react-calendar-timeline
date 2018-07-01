@@ -1210,7 +1210,6 @@ export default class ReactCalendarTimeline extends Component {
               >
                 <div
                   ref={el => (this.canvasComponent = el)}
-                  className="rct-canvas"
                   style={canvasComponentStyle}
                 >
                   <MarkerCanvas />
