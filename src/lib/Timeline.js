@@ -379,6 +379,7 @@ export default class ReactCalendarTimeline extends Component {
     this.scrollComponent.scrollLeft = width
   }
 
+  // FIXME: this function calls set state EVERY TIME YOU SCROLL
   onScroll = scrollX => {
     const canvasTimeStart = this.state.canvasTimeStart
 
