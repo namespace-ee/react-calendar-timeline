@@ -525,7 +525,7 @@ export default class Item extends Component {
       onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
       onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
       onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
-      onContextMenu: composeEvents(this.handleContextMenu, props.composeEvents),
+      onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
       style: Object.assign({}, props.style, style)
     }
   }
