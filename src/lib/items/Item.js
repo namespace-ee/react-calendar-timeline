@@ -54,32 +54,36 @@ export default class Item extends Component {
       timelineContext,
       itemContext,
       getItemProps,
-      getResizeProps,
+      getResizeProps
     }) => {
-      const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+      const {
+        left: leftResizeProps,
+        right: rightResizeProps
+      } = getResizeProps()
       return (
-        <div
-          {...getItemProps(item.itemProps) }
-        >
-          {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
+        <div {...getItemProps(item.itemProps)}>
+          {itemContext.useResizeHandle &&
+          itemContext.showInnerContentsRender ? (
             <div {...leftResizeProps} />
           ) : (
-              ''
-            )}
+            ''
+          )}
 
-          {itemContext.showInnerContentsRender && <div
-            className="rct-item-content"
-            style={{maxHeight: `${itemContext.dimensions.height}`}}
-          >
-            {itemContext.title}
-          </div>}
+          {itemContext.showInnerContentsRender && (
+            <div
+              className="rct-item-content"
+              style={{ maxHeight: `${itemContext.dimensions.height}` }}
+            >
+              {itemContext.title}
+            </div>
+          )}
 
-
-          {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
+          {itemContext.useResizeHandle &&
+          itemContext.showInnerContentsRender ? (
             <div {...rightResizeProps} />
           ) : (
-              ''
-            )}
+            ''
+          )}
         </div>
       )
     }
@@ -135,7 +139,7 @@ export default class Item extends Component {
       nextProps.canResizeRight !== this.props.canResizeRight ||
       nextProps.dimensions !== this.props.dimensions ||
       nextProps.minimumWidthForItemContentVisibility !==
-      this.props.minimumWidthForItemContentVisibility
+        this.props.minimumWidthForItemContentVisibility
     return shouldUpdate
   }
 
@@ -158,7 +162,7 @@ export default class Item extends Component {
     const { dragSnap } = this.props
     if (dragSnap) {
       const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0
-      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap
+      return Math.round(dragTime / dragSnap) * dragSnap - (offset % dragSnap)
     } else {
       return dragTime
     }
@@ -526,7 +530,6 @@ export default class Item extends Component {
   getDragLeftRef = el => (this.dragLeft = el)
   getDragRightRef = el => (this.dragRight = el)
 
-
   getItemProps = (props = {}) => {
     //TODO: maybe shouldnt include all of these classes
     const classNames =
@@ -542,7 +545,6 @@ export default class Item extends Component {
 
     const dimensions = this.props.dimensions
 
-    
     const style = {
       left: `${dimensions.left}px`,
       top: `${dimensions.top}px`,
@@ -554,14 +556,14 @@ export default class Item extends Component {
     return {
       key: this.itemId,
       ref: this.getItemRef,
-      className: classNames + ` ${props.className? props.className : ''}`,
+      className: classNames + ` ${props.className ? props.className : ''}`,
       onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
       onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
       onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
       onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
       onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
       onContextMenu: composeEvents(this.handleContextMenu, props.composeEvents),
-      style: Object.assign({}, props.style, style),
+      style: Object.assign({}, props.style, style)
     }
   }
 
@@ -600,8 +602,9 @@ export default class Item extends Component {
       resizeEdge: this.state.resizeEdge,
       resizeStart: this.state.resizeStart,
       resizeTime: this.state.resizeTime,
-      showInnerContentsRender: this.props.dimensions.width > this.props.minimumWidthForItemContentVisibility,
-
+      showInnerContentsRender:
+        this.props.dimensions.width >
+        this.props.minimumWidthForItemContentVisibility
     }
 
     return this.props.itemRenderer({
@@ -609,7 +612,7 @@ export default class Item extends Component {
       timelineContext,
       itemContext,
       getItemProps: this.getItemProps,
-      getResizeProps: this.getResizeProps,
+      getResizeProps: this.getResizeProps
     })
   }
 }
