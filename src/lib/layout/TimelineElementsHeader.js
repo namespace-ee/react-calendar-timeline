@@ -225,7 +225,7 @@ export default class TimelineElementsHeader extends Component {
     return (
       <div
         key="header"
-        data-test-id="header"
+        data-testid="header"
         className="rct-header"
         onMouseDown={this.handleHeaderMouseDown}
         onTouchStart={this.touchStart}

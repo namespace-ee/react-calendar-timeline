@@ -21,6 +21,19 @@ export function calculateXPositionForTime(
   return timeOffset * widthToZoomRatio
 }
 
+export function calculateTimeForXPosition(
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth,
+  leftOffset
+) {
+  const timeToPxRatio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
+
+  const timeFromCanvasTimeStart = timeToPxRatio * leftOffset
+
+  return timeFromCanvasTimeStart + canvasTimeEnd
+}
+
 export function iterateTimes(start, end, unit, timeSteps, callback) {
   let time = moment(start).startOf(unit)
 
