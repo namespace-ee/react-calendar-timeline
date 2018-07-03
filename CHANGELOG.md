@@ -10,11 +10,49 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ### Breaking
 * rework item renderer to render the whole item using render prop and prop getters
 
-### 0.17,1
+### Added
+
+* timeline markers - user can have more control over markers that are rendered on the timeline. See `TimelineMarkers` section of README for documentation - #327
+
+### Breaking
+
+* Removed support for React 15 and lower.  This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
+* removed `showCursorLine` prop in favor of using the `CursorMarker` component. See `TimelineMarkers` section of README for documentation.
+
+```diff
+import Timeline,
++ {TimelineMarkers, CursorMarker}
+from 'react-calendar-timeline'
+
+<Timeline
+- showCursorLine
+
+- />
++ >
+
++ <TimelineMarkers>
++  <CursorMarker />
++ </TimelineMarkers>
+
++ </Timeline>
+```
+
+
+
+### 0.17.2
+
+### Added
+
+* support passing `style` prop from item - #347
+* `selected` is provided to `itemRenderer` - #348
+* simplify logic for calculate dimensions and prevent item width and left properties from being unbounded - (refactoring)
+
+### 0.17.1
 
 ### Added
 
 * pass canvasTimeStart/End via timelineContext to the itemRenderer prop
+
 
 ### 0.17.0
 
