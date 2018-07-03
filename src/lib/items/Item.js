@@ -5,7 +5,7 @@ import moment from 'moment'
 
 import { _get, deepObjectCompare } from '../utility/generic'
 import { composeEvents } from '../utility/events'
-
+import { defaultItemRenderer } from './defaultItemRendere'
 export default class Item extends Component {
   // removed prop type check for SPEED!
   // they are coming from a trusted component anyway
@@ -49,44 +49,7 @@ export default class Item extends Component {
 
   static defaultProps = {
     selected: false,
-    itemRenderer: ({
-      item,
-      timelineContext,
-      itemContext,
-      getItemProps,
-      getResizeProps
-    }) => {
-      const {
-        left: leftResizeProps,
-        right: rightResizeProps
-      } = getResizeProps()
-      return (
-        <div {...getItemProps(item.itemProps)}>
-          {itemContext.useResizeHandle &&
-          itemContext.showInnerContentsRender ? (
-            <div {...leftResizeProps} />
-          ) : (
-            ''
-          )}
-
-          {itemContext.showInnerContentsRender && (
-            <div
-              className="rct-item-content"
-              style={{ maxHeight: `${itemContext.dimensions.height}` }}
-            >
-              {itemContext.title}
-            </div>
-          )}
-
-          {itemContext.useResizeHandle &&
-          itemContext.showInnerContentsRender ? (
-            <div {...rightResizeProps} />
-          ) : (
-            ''
-          )}
-        </div>
-      )
-    }
+    itemRenderer: defaultItemRenderer
   }
 
   static contextTypes = {
@@ -162,7 +125,7 @@ export default class Item extends Component {
     const { dragSnap } = this.props
     if (dragSnap) {
       const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0
-      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap
+      return Math.round(dragTime / dragSnap) * dragSnap - (offset % dragSnap)
     } else {
       return dragTime
     }
