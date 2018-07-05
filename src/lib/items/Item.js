@@ -497,24 +497,7 @@ export default class Item extends Component {
     //TODO: maybe shouldnt include all of these classes
     const classNames =
       'rct-item' +
-      (this.props.selected ? ' selected' : '') +
-      (this.canMove(this.props) ? ' can-move' : '') +
-      (this.canResizeLeft(this.props) || this.canResizeRight(this.props)
-        ? ' can-resize'
-        : '') +
-      (this.canResizeLeft(this.props) ? ' can-resize-left' : '') +
-      (this.canResizeRight(this.props) ? ' can-resize-right' : '') +
       (this.props.item.className ? ` ${this.props.item.className}` : '')
-
-    const dimensions = this.props.dimensions
-
-    const style = {
-      left: `${dimensions.left}px`,
-      top: `${dimensions.top}px`,
-      width: `${dimensions.width}px`,
-      height: `${dimensions.height}px`,
-      lineHeight: `${dimensions.height}px`
-    }
 
     return {
       key: this.itemId,
@@ -526,21 +509,116 @@ export default class Item extends Component {
       onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
       onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
       onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
-      style: Object.assign({}, props.style, style)
+      style: Object.assign({}, this.getItemStyle(props))
     }
   }
+  
 
   getResizeProps = (props = {}) => {
+
+    const leftResizeStyle = {
+      position: "absolute",
+      width: 24,
+      maxWidth: "20%",
+      minWidth: 2,
+      height: "100%",
+      top: 0,
+      left: 0,
+      cursor: "pointer",
+      zIndex: 88,
+    }
+
+
+    const rightResizeStyle = {
+      position: "absolute",
+      width: 24,
+      maxWidth: "20%",
+      minWidth: 2,
+      height: "100%",
+      top: 0,
+      right: 0,
+      cursor: "pointer",
+      zIndex: 88,
+    }
+
+
+
     return {
+      //TODO: add style to documentation and delete classname
       left: {
         ref: this.getDragLeftRef,
-        className: `rct-drag-left ${props.classNameLeft}`
+        style: Object.assign({}, leftResizeStyle, props.leftStyle)
       },
       right: {
         ref: this.getDragRightRef,
-        className: `rct-drag-right ${props.classNameRight}`
+        style: Object.assign({}, rightResizeStyle, props.rightStyle)
       }
     }
+  }
+
+  getItemStyle(props) {
+    const dimensions = this.props.dimensions
+
+    const baseStyles = {
+      position: 'absolute',
+      boxSizing: 'border-box',
+      left: `${dimensions.left}px`,
+      top: `${dimensions.top}px`,
+      width: `${dimensions.width}px`,
+      height: `${dimensions.height}px`,
+      lineHeight: `${dimensions.height}px`
+    }
+    const overridableStyles = {
+      fontSize: 12,
+      color: 'white',
+      cursor: 'pointer',
+      background: '#2196f3',
+      border: '1px solid #1a6fb3',
+      zIndex: 80
+    }
+    const selectedStyle = {
+      background: '#ffc107',
+      border: '1px solid #ff9800',
+      zIndex: 82
+    }
+    const selectedAndCanMove = {
+      cursor: 'move'
+    }
+    const selectedAndCanResizeLeft = {
+      borderLeftWidth: 3
+    }
+    const selectedAndCanResizeLeftAndDragLeft = {
+      cursor: 'w-resize'
+    }
+    const selectedAndCanResizeRight = {
+      borderRightWidth: 3
+    }
+    const selectedAndCanResizeRightAndDragRight = {
+      cursor: 'e-resize'
+    }
+    const finalStyle = Object.assign(
+      {},
+      overridableStyles,
+      this.props.selected ? selectedStyle : {},
+      this.props.selected & this.canMove(this.props) ? selectedAndCanMove : {},
+      this.props.selected & this.canResizeLeft(this.props)
+        ? selectedAndCanResizeLeft
+        : {},
+      this.props.selected & this.canResizeLeft(this.props) & this.state.dragging
+        ? selectedAndCanResizeLeftAndDragLeft
+        : {},
+      this.props.selected & this.canResizeRight(this.props)
+        ? selectedAndCanResizeRight
+        : {},
+      this.props.selected &
+      this.canResizeRight(this.props) &
+      this.state.dragging
+        ? selectedAndCanResizeRightAndDragRight
+        : {},
+      props.style,
+      baseStyles
+    )
+    return finalStyle
   }
 
   render() {
