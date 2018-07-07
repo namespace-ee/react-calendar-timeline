@@ -25,7 +25,6 @@ export default class Items extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    minimumWidthForItemContentVisibility: PropTypes.number.isRequired,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -78,9 +77,7 @@ export default class Items extends Component {
       nextProps.canResize === this.props.canResize &&
       nextProps.canSelect === this.props.canSelect &&
       nextProps.dimensionItems === this.props.dimensionItems &&
-      nextProps.topOffset === this.props.topOffset &&
-      nextProps.minimumWidthForItemContentVisibility ===
-        this.props.minimumWidthForItemContentVisibility
+      nextProps.topOffset === this.props.topOffset
     )
   }
 
@@ -123,7 +120,6 @@ export default class Items extends Component {
       canvasTimeStart,
       canvasTimeEnd,
       dimensionItems,
-      minimumWidthForItemContentVisibility
     } = this.props
     const { itemIdKey, itemGroupKey } = this.props.keys
 
@@ -183,9 +179,6 @@ export default class Items extends Component {
               onContextMenu={this.props.onItemContextMenu}
               onSelect={this.props.itemSelect}
               itemRenderer={this.props.itemRenderer}
-              minimumWidthForItemContentVisibility={
-                minimumWidthForItemContentVisibility
-              }
             />
           ))}
       </div>

@@ -15,7 +15,6 @@ export default class Item extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     order: PropTypes.number,
-    minimumWidthForItemContentVisibility: PropTypes.number.isRequired,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -100,9 +99,7 @@ export default class Item extends Component {
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
-      nextProps.dimensions !== this.props.dimensions ||
-      nextProps.minimumWidthForItemContentVisibility !==
-        this.props.minimumWidthForItemContentVisibility
+      nextProps.dimensions !== this.props.dimensions
     return shouldUpdate
   }
 
@@ -544,7 +541,6 @@ export default class Item extends Component {
 
 
     return {
-      //TODO: add style to documentation and delete classname
       left: {
         ref: this.getDragLeftRef,
         style: Object.assign({}, leftResizeStyle, props.leftStyle)
@@ -643,9 +639,7 @@ export default class Item extends Component {
       resizeEdge: this.state.resizeEdge,
       resizeStart: this.state.resizeStart,
       resizeTime: this.state.resizeTime,
-      showInnerContentsRender:
-        this.props.dimensions.width >
-        this.props.minimumWidthForItemContentVisibility
+      width: this.props.dimensions.width,
     }
 
     return this.props.itemRenderer({

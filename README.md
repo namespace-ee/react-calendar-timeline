@@ -463,7 +463,7 @@ Paramters provided to the function has two types: context params which have the 
 | `resizing`         | `boolean`    | returns if the item is being resized.                    |
 | `resizeEdge`        | `left`, `right`    | the side from which the component is being resized form                 |
 | `resizeStart`         | `number`    | returns the x value from where the component start moving                    |
-| `showInnerContentsRender`        | `boolean`    | returns if the content of the item should be rendered for performance                 |
+| `width`        | `boolean`    | returns the width of the item (same as in dimensions)                 |
 
 ##### prop getters functions
 
@@ -504,15 +504,15 @@ Rather than applying props on the element yourself and to avoid your props being
   
   - left
     - ref: function to get element referance
-    - className: classnames to be applied to the left element
+    - style: style to be applied to the left element
   - right 
     - ref: function to get element referance
-    - className: classnames to be applied to the right element
+    - style: style to be applied to the right element
   
 
   These properties can be override using the prop argument with proprties: 
-  - classNameLeft: class names to be added to left classname
-  - classNameRight: class names to be added to right classname
+  - leftStyle: style to be added to left style
+  - rightStyle: style to be added to right style
 
 example
 
@@ -591,9 +591,6 @@ groupRenderer = ({ group }) => {
 }
 ```
 
-## minimumWidthForItemContentVisibility
-
-Number of pixels to render inner content of an Item. To improve performance of the timeline, this prop dictates whether the inner contents of an Item are rendered based on the item width. This setting is useful if you have a dataset which results in a large number of small items to be rendered on the timeline. Default is 25.
 
 ## resizeDetector
 
