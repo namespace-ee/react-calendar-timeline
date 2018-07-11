@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+* fix issue with single row header - #359
 
 ### 0.17.2
 
