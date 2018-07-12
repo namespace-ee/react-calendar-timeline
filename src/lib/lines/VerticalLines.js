@@ -11,7 +11,8 @@ export default class VerticalLines extends Component {
     lineCount: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
-    height: PropTypes.number.isRequired
+    height: PropTypes.number.isRequired,
+    verticalLineClassNamesForTime: PropTypes.func,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -22,7 +23,8 @@ export default class VerticalLines extends Component {
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
-      nextProps.height === this.props.height
+      nextProps.height === this.props.height &&
+      nextProps.verticalLineClassNamesForTime === this.props.verticalLineClassNamesForTime
     )
   }
 
@@ -33,7 +35,8 @@ export default class VerticalLines extends Component {
       canvasWidth,
       minUnit,
       timeSteps,
-      height
+      height,
+      verticalLineClassNamesForTime
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
@@ -53,12 +56,18 @@ export default class VerticalLines extends Component {
           Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
         const leftPush = firstOfType ? -1 : 0
 
+        let classNamesForDay = []
+        if (verticalLineClassNamesForTime) {
+          classNamesForDay = [verticalLineClassNamesForTime(time.unix() * 1000, nextTime.unix() * 1000 - 1)];
+        }
+
         const classNames =
           'rct-vl' +
           (firstOfType ? ' rct-vl-first' : '') +
           (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute'
-            ? ` rct-day-${time.day()}`
-            : '')
+            ? ` rct-day-${time.day()} `
+            : '') +
+          classNamesForDay.join(' ')
 
         lines.push(
           <div

@@ -528,6 +528,24 @@ import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector
 <Timeline resizeDetector={containerResizeDetector} ... />
 ```
 
+### verticalLineClassNamesForTime(start, end)
+
+This function is called when the vertical line is rendered. `start` and `end` are the unix timestamps in milliseconds for the current column. The function should return an array of strings containing the classNames which should be applied to the column. This makes it possible to visually highlight e.g. public holidays or office hours.
+An example could look like:
+
+```jsx
+verticalLineClassNamesForTime = (timeStart, timeEnd) => {
+  const currentTimeStart = moment(timeStart)
+  const currentTimeEnd = moment(timeEnd)
+
+  for (let holiday of holidays) {
+    if (holiday.isSame(currentTimeStart, "day") && holiday.isSame(currentTimeEnd, "day")) {
+      return ["holiday"]
+    }
+  }
+}
+```
+
 ## FAQ
 
 ### My timeline is unstyled
