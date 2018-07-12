@@ -56,9 +56,9 @@ export default class VerticalLines extends Component {
           Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
         const leftPush = firstOfType ? -1 : 0
 
-        let classNamesForDay = []
+        let classNamesForTime = []
         if (verticalLineClassNamesForTime) {
-          classNamesForDay = [verticalLineClassNamesForTime(time.unix() * 1000, nextTime.unix() * 1000 - 1)];
+          classNamesForTime = [verticalLineClassNamesForTime(time.unix() * 1000, nextTime.unix() * 1000 - 1)];
         }
 
         const classNames =
@@ -67,7 +67,7 @@ export default class VerticalLines extends Component {
           (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute'
             ? ` rct-day-${time.day()} `
             : '') +
-          classNamesForDay.join(' ')
+          classNamesForTime.join(' ')
 
         lines.push(
           <div
