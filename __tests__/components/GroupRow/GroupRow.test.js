@@ -49,7 +49,7 @@ describe('GroupRow', () => {
 
     const wrapper = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('class')).toBe('rct-hl-even')
+    expect(wrapper.prop('class').trim()).toBe('rct-hl-even')
   })
   it('assigns "rct-hl-odd" if isEvenRow is false', () => {
     const props = {
@@ -59,7 +59,7 @@ describe('GroupRow', () => {
 
     const wrapper = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('class')).toBe('rct-hl-odd')
+    expect(wrapper.prop('class').trim()).toBe('rct-hl-odd')
   })
   it('passes style prop to style', () => {
     const props = {

@@ -7,6 +7,11 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+
+* possibility to add custom classes to the group-rows
+* possibility to add custom height to row (tree-group example)
+
 ### 0.17.3
 
 ### Added

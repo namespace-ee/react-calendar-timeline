@@ -36,16 +36,23 @@ export default class App extends Component {
       const parent = isRoot
         ? null
         : Math.floor((parseInt(group.id) - 1) / 3) * 3 + 1
+      const height = isRoot ? 15 : null;
 
       return Object.assign({}, group, {
         root: isRoot,
-        parent: parent
+        parent: parent,
+        height: height
       })
     })
 
+    const newItems = items.filter(item => {
+      const group = newGroups.find(group => group.id === item.group);
+      return !group.root;
+    });
+
     this.state = {
       groups: newGroups,
-      items,
+      items: newItems,
       defaultTimeStart,
       defaultTimeEnd,
       openGroups: {}
@@ -108,6 +115,7 @@ export default class App extends Component {
         showCursorLine
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
+        horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
       />
     )
   }
