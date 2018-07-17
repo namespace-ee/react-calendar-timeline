@@ -535,16 +535,7 @@ This function is called when the horizontal line is rendered. `group` is the gro
 An example could look like:
 
 ```jsx
-verticalLineClassNamesForTime = (timeStart, timeEnd) => {
-  const currentTimeStart = moment(timeStart)
-  const currentTimeEnd = moment(timeEnd)
-
-  for (let holiday of holidays) {
-    if (holiday.isSame(currentTimeStart, "day") && holiday.isSame(currentTimeEnd, "day")) {
-      return ["holiday"]
-    }
-  }
-}
+horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
 
 ## FAQ
