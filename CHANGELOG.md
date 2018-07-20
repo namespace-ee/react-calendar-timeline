@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* add scroll ref
+
 ### 0.17.3
 
 ### Added

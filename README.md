@@ -263,6 +263,10 @@ Default:
 }
 ```
 
+### scrollRef
+
+Ref callback that gets a DOM reference to the header element. Can be useful to programmatically scroll.
+
 ### onItemMove(itemId, dragTime, newGroupOrder)
 
 Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
