@@ -32,6 +32,8 @@ import {
 } from './default-config'
 import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
+import Headers from './headers/Headers';
+import {TimelineHeadersProvider} from './headers/HeadersContext'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -1175,6 +1177,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth={canvasWidth}
       >
         <TimelineMarkersProvider>
+          <TimelineHeadersProvider leftSidebarWidth={this.props.sidebarWidth} rightSidebarWidth={this.props.rightSidebarWidth}>
           <div
             style={this.props.style}
             ref={el => (this.container = el)}
@@ -1190,6 +1193,7 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelGroupHeight,
               headerLabelHeight
             )}
+            <Headers/>
             <div style={outerComponentStyle} className="rct-outer">
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
@@ -1253,6 +1257,7 @@ export default class ReactCalendarTimeline extends Component {
                 : null}
             </div>
           </div>
+          </TimelineHeadersProvider>
         </TimelineMarkersProvider>
       </TimelineStateProvider>
     )
