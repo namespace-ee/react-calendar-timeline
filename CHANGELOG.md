@@ -34,7 +34,10 @@ from 'react-calendar-timeline'
 + </Timeline>
 ```
 
+### 0.17.3
 
+### Added
+* fix issue with single row header - #359
 
 ### 0.17.2
 

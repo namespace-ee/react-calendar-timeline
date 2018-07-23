@@ -372,6 +372,7 @@ export default class ReactCalendarTimeline extends Component {
     this.scrollComponent.scrollLeft = width
   }
 
+  // FIXME: this function calls set state EVERY TIME YOU SCROLL
   onScroll = scrollX => {
     const canvasTimeStart = this.state.canvasTimeStart
 
@@ -943,14 +944,7 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    const {
-      keys,
-      lineHeight,
-      headerLabelGroupHeight,
-      headerLabelHeight,
-      stackItems,
-      itemHeightRatio
-    } = this.props
+    const { keys, lineHeight, stackItems, itemHeightRatio } = this.props
     const {
       draggingItem,
       dragTime,
@@ -962,7 +956,6 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     const visibleItems = getVisibleItems(
       items,
@@ -1013,8 +1006,7 @@ export default class ReactCalendarTimeline extends Component {
     const { height, groupHeights, groupTops } = stackingMethod(
       dimensionItems,
       groupOrders,
-      lineHeight,
-      headerHeight
+      lineHeight
     )
 
     return { dimensionItems, height, groupHeights, groupTops }
