@@ -7,7 +7,9 @@ import Timeline, {
   TodayMarker,
   CustomMarker,
   CursorMarker,
-  SidebarHeader
+  SidebarHeader,
+  CustomHeader,
+  TimelineHeaders
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -175,17 +177,41 @@ export default class App extends Component {
         rightSidebarWidth={150}
         rightSidebarContent={<div>Above The Right</div>}
       >
-        <TimelineMarkers>
+        <TimelineHeaders>
           <SidebarHeader>
-            {({ width }) => {
-              return <div style={{ width }}>Ahmad</div>
+            {({ provided }) => {
+              return <div {...provided}>Left</div>
             }}
           </SidebarHeader>
           <SidebarHeader variant="right">
-            {({ width }) => {
-              return <div style={{ width }}>Ahmad</div>
+            {({ provided }) => {
+              return <div {...provided}>Right</div>
             }}
           </SidebarHeader>
+          <CustomHeader>
+            {({provided, intervals}) => {
+              console.log(intervals)
+              return <div {...provided}>{intervals.map(({
+                startTime,
+                endTime,
+                provided: intervalProvided,
+              })=>{
+                return <div {...intervalProvided}>{startTime.format('HH')}</div>
+              })}</div>
+            }}
+          </CustomHeader>
+          <CustomHeader>
+            {() => {
+              return <div>Header2</div>
+            }}
+          </CustomHeader>
+          <CustomHeader>
+            {() => {
+              return <div>Header3</div>
+            }}
+          </CustomHeader>
+        </TimelineHeaders>
+        <TimelineMarkers>
           <TodayMarker />
           <CustomMarker
             date={

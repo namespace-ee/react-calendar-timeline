@@ -75,7 +75,20 @@ export class TimelineStateProvider extends React.Component {
   }
 
   getTimelineState = () => {
-    return this.state.timelineState // REVIEW: return copy or object.freeze?
+    const {
+      visibleTimeStart,
+      visibleTimeEnd,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth
+    } = this.props
+    return {
+      visibleTimeStart,
+      visibleTimeEnd,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth
+    } // REVIEW,
   }
 
   getLeftOffsetFromDate = date => {
