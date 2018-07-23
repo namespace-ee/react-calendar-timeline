@@ -7,6 +7,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.18.0
+
+### Fixed
+
+* Timeline now respects changes to `headerLabelFormats` and `subHeaderLabelFormats` - #362
+
 ### Added
 
 * timeline markers - user can have more control over markers that are rendered on the timeline. See `TimelineMarkers` section of README for documentation - #327
