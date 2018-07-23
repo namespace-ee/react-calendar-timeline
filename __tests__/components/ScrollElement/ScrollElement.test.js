@@ -26,7 +26,7 @@ const createMouseEvent = pageX => ({
 
 const scrollElementSelector = sel('scroll-element')
 
-describe('ScrollElement', () => {
+xdescribe('ScrollElement', () => {
   describe('mouse event delegates', () => {
     let onDoubleClickMock,
       onMouseLeaveMock,

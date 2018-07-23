@@ -71,7 +71,6 @@ export default class App extends Component {
             itemTouchSendsClick={false}
             stackItems
             itemHeightRatio={0.75}
-            showCursorLine
             resizeDetector={containerResizeDetector}
             defaultTimeStart={defaultTimeStart}
             defaultTimeEnd={defaultTimeEnd}
