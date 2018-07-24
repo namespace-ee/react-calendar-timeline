@@ -31,7 +31,7 @@ export function calculateTimeForXPosition(
 
   const timeFromCanvasTimeStart = timeToPxRatio * leftOffset
 
-  return timeFromCanvasTimeStart + canvasTimeEnd
+  return timeFromCanvasTimeStart + canvasTimeStart
 }
 
 export function iterateTimes(start, end, unit, timeSteps, callback) {
