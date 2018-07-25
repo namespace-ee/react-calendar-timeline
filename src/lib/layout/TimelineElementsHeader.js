@@ -178,12 +178,14 @@ export default class TimelineElementsHeader extends Component {
       minUnit,
       timeSteps,
       (time, nextTime) => {
+        // console.log('original', [time.format('HH:mm'), nextTime.format('HH:mm')])
         const left = Math.round((time.valueOf() - canvasTimeStart) * ratio)
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
         const labelWidth = Math.round(
           (nextTime.valueOf() - time.valueOf()) * ratio
         )
+        console.log(labelWidth, canvasWidth, canvasTimeStart, canvasTimeEnd, ratio)
         const leftCorrect = firstOfType ? 1 : 0
 
         bottomHeaderLabels.push(

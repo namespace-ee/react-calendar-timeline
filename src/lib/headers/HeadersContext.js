@@ -3,13 +3,19 @@ import PropTypes from 'prop-types'
 import createReactContext from 'create-react-context'
 import { noop } from '../utility/generic'
 import { LEFT_SIDEBAR_ID, RIGHT_SIDEBAR_ID } from './constants'
-import { getNextUnit } from '../utility/calendar';
+import { getNextUnit } from '../utility/calendar'
 
 const defaultContextState = {
-  headers: [],
-  subscribeHeader: () => {
+  calendarHeaders: [],
+  sidebarHeaders: {},
+  subscribeCalendarHeader: () => {
     // eslint-disable-next-line
-    console.warn('default subscribe header used')
+    console.warn('default subscribe calender header used')
+    return noop
+  },
+  subscribeSidebarHeader: () => {
+    // eslint-disable-next-line
+    console.warn('default subscribe sidebar header used')
     return noop
   },
   rightSidebarWidth: 0,
@@ -32,12 +38,12 @@ export class TimelineHeadersProvider extends React.Component {
     leftSidebarWidth: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     //TODO: maybe this should be skipped?
-    timeSteps: PropTypes.object.isRequired,
+    timeSteps: PropTypes.object.isRequired
   }
 
   state = {
-    headers: {
-      leftSidebarHeader: {
+    sidebarHeaders: {
+      [LEFT_SIDEBAR_ID]: {
         renderer: ({ provided }) => <div {...provided} />,
         props: {
           provided: {
@@ -47,82 +53,86 @@ export class TimelineHeadersProvider extends React.Component {
           }
         }
       },
-      calenderHeaders: [],
-      rightSidebarHeader: null
+      [RIGHT_SIDEBAR_ID]: null
+    },
+    calendarHeaders: []
+  }
+
+  handleSubscribeSidebarHeader = (header, id) => {
+    if (!header) throw Error('header is not provided')
+    if (!id) {
+      console.warn('you should provide header sidebar with id')
+      return
+    }
+    this.setState(state => ({
+      sidebarHeaders: {
+        ...state.sidebarHeaders,
+        [id]: header
+      }
+    }))
+
+    return {
+      unsubscribeHeader: () => {
+        this.setState(state => ({
+          sidebarHeaders: {
+            ...state.sidebarHeaders,
+            [id]: null
+          }
+        }))
+      },
+      resubscribeHeader: newHeader => {
+        this.setState(state => ({
+          sidebarHeaders: {
+            ...state.sidebarHeaders,
+            [id]: newHeader
+          }
+        }))
+      }
     }
   }
 
-  handleSubscribeToHeader = (newHeader, id) => {
-    newHeader = {
-      ...newHeader,
-      // REVIEW: in the event that we accept id to be passed to the Header components, this line would override those
-      id: id ? id : createId()
-    }
+  handleSubscribeCalendarHeader = header => {
+    console.log(header)
+    if (!header) throw Error('header is not provided')
+    const headerId = createId()
+    header.id = headerId
+    this.setState(state => ({
+      calendarHeaders: [...state.calendarHeaders, header]
+    }))
 
-    this.setState(state => {
-      if (!id)
-        return {
-          headers: {
-            ...state.headers,
-            calenderHeaders: [...state.headers.calenderHeaders, newHeader]
-          }
-        }
-      if (id && id === LEFT_SIDEBAR_ID)
-        return {
-          headers: {
-            ...state.headers,
-            leftSidebarHeader: newHeader
-          }
-        }
-      if (id && id === RIGHT_SIDEBAR_ID)
-        return {
-          headers: {
-            ...state.headers,
-            rightSidebarHeader: newHeader
-          }
-        }
-    })
-    return () => {
-      this.setState(state => {
-        if (!id)
+    return {
+      unsubscribeHeader: () => {
+        this.setState(state => ({
+          calendarHeaders: state.calendarHeaders.filter(header => header !== newHeader)
+        }))
+      },
+      resubscribeHeader: newHeader => {
+        newHeader.id = headerId
+        //TODO: keep order
+        this.setState(state => {
+          const filteredHeaders = state.calendarHeaders.filter(
+            header => header.id !== headerId
+          )
           return {
-            headers: {
-              ...state.headers,
-              calenderHeaders: state.headers.calenderHeaders.filter(
-                header => header !== newHeader
-              )
-            }
+            calendarHeaders: [...filteredHeaders, newHeader]
           }
-        if (id && id === LEFT_SIDEBAR_ID)
-          return {
-            headers: {
-              ...state.headers,
-              leftSidebarHeader: null
-            }
-          }
-        if (id && id === RIGHT_SIDEBAR_ID)
-          return {
-            headers: {
-              ...state.headers,
-              rightSidebarHeader: null
-            }
-          }
-        return {
-          headers: state.headers.filter(header => header !== newHeader)
-        }
-      })
+        })
+      }
     }
   }
 
   render() {
+    console.log(this.state)
     const contextValue = {
-      headers: this.state.headers,
-      subscribeHeader: this.handleSubscribeToHeader,
+      calendarHeaders: this.state.calendarHeaders,
+      sidebarHeaders: this.state.sidebarHeaders,
+      subscribeCalendarHeader: this.handleSubscribeCalendarHeader,
+      subscribeSidebarHeader: this.handleSubscribeSidebarHeader,
       rightSidebarWidth: this.props.rightSidebarWidth,
       leftSidebarWidth: this.props.leftSidebarWidth,
       minUnit: this.props.minUnit,
       maxUnit: getNextUnit(this.props.minUnit),
-      timeSteps: this.props.timeSteps,
+      timeSteps: this.props.timeSteps
     }
     return <Provider value={contextValue}>{this.props.children}</Provider>
   }

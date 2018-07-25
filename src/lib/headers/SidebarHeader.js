@@ -38,7 +38,7 @@ class SidebarHeader extends React.PureComponent {
         }
       },
       id
-    )
+    ).unsubscribeHeader
   }
 
   componentWillUnmount() {
@@ -55,12 +55,12 @@ class SidebarHeader extends React.PureComponent {
 
 const SidebarWrapper = ({ children, variant }) => (
   <TimelineHeadersConsumer>
-    {({ subscribeHeader, leftSidebarWidth, rightSidebarWidth }) => {
+    {({ subscribeSidebarHeader, leftSidebarWidth, rightSidebarWidth }) => {
       return (
         <SidebarHeader
           leftSidebarWidth={leftSidebarWidth}
           rightSidebarWidth={rightSidebarWidth}
-          subscribeHeader={subscribeHeader}
+          subscribeHeader={subscribeSidebarHeader}
           children={children}
           variant={variant}
         />

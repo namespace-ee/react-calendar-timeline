@@ -884,12 +884,14 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+  headerScrollListener= []
+
   componentDidUpdate() {
-    this.headerScrollListener(this.state.currentScrollLeft)
+    this.headerScrollListener.map(listener => listener((this.state.currentScrollLeft)))
   }
 
   registerScrollListener = listener => {
-    this.headerScrollListener = listener
+    this.headerScrollListener.push(listener)
   }
 
   sidebar(height, groupHeights) {
@@ -1193,7 +1195,9 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelGroupHeight,
               headerLabelHeight
             )}
-            <HeadersRenderer/>
+            <HeadersRenderer
+              registerScroll={this.registerScrollListener}
+            />
             <div style={outerComponentStyle} className="rct-outer">
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement

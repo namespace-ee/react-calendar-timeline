@@ -190,7 +190,6 @@ export default class App extends Component {
           </SidebarHeader>
           <CustomHeader>
             {({provided, intervals}) => {
-              console.log(intervals)
               return <div {...provided}>{intervals.map(({
                 startTime,
                 endTime,
@@ -200,7 +199,7 @@ export default class App extends Component {
               })}</div>
             }}
           </CustomHeader>
-          <CustomHeader>
+          {/* <CustomHeader>
             {() => {
               return <div>Header2</div>
             }}
@@ -209,7 +208,7 @@ export default class App extends Component {
             {() => {
               return <div>Header3</div>
             }}
-          </CustomHeader>
+          </CustomHeader> */}
         </TimelineHeaders>
         <TimelineMarkers>
           <TodayMarker />
