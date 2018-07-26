@@ -10,8 +10,8 @@ import {
 const defaultProps = {
   hasRightSidebar: false,
   showPeriod: () => {},
-  canvasTimeStart: 10000,
-  canvasTimeEnd: 20000,
+  canvasTimeStart: 1000 * 60 * 60 * 8, // eight hours into the epoch - need to adjust for Mike Joyce being in CST :)
+  canvasTimeEnd: 1000 * 60 * 60 * 10, // ten hours into the epoch
   canvasWidth: 1000,
   minUnit: 'day',
   timeSteps: {},
@@ -125,6 +125,8 @@ describe('Header', () => {
 
       expect(wrapper.props().style.top).toBe(0)
     })
+    // TODO: fix these tests so that they're time zone agnostic. Right now these will fail if your timezone is
+    // way behind UTC offset
     it('should update headers format when subHeaderLabelFormats and subHeaderLabelFormats change', () => {
       const wrapper = mount(<Header {...defaultProps} />)
       expect(
