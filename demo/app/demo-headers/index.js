@@ -10,7 +10,7 @@ import Timeline, {
   SidebarHeader,
   CustomHeader,
   TimelineHeaders,
-  DateHeader,
+  DateHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -181,6 +181,7 @@ export default class App extends Component {
         <TimelineHeaders>
           <SidebarHeader>
             {({ provided }) => {
+              console.log('left')
               return <div {...provided}>Left</div>
             }}
           </SidebarHeader>
@@ -189,64 +190,88 @@ export default class App extends Component {
               return <div {...provided}>Right</div>
             }}
           </SidebarHeader>
+          <DateHeader primaryHeader />
           <DateHeader />
-          <DateHeader primaryHeader/>
           {/* <CustomHeader unit="year">
-            {({provided, intervals}) => {
+            {({ provided, intervals }) => {
               const rootStyle = {
-                height:30,
+                height: 30,
                 ...provided.style
               }
-              return <div {...provided} style={rootStyle}>{intervals.map(({
-                startTime,
-                endTime,
-                provided: intervalProvided,
-                showPeriod,
-              })=>{
-                const style = {
-                  // height: 30,
-                  lineHeight: '30px',
-                  textAlign: 'center',
-                  borderLeft: '1px solid black',
-                  cursor: 'pointer',
-                  ...intervalProvided.style,
-                }
-                return <div onClick={()=>{showPeriod(startTime, undefined, endTime)}} {...intervalProvided} style={style}><div className="sticky">{startTime.format('YYYY')}</div></div>
-              })}</div>
+              return (
+                <div {...provided} style={rootStyle}>
+                  {intervals.map(
+                    ({
+                      startTime,
+                      endTime,
+                      provided: intervalProvided,
+                      showPeriod
+                    }) => {
+                      const style = {
+                        // height: 30,
+                        lineHeight: '30px',
+                        textAlign: 'center',
+                        borderLeft: '1px solid black',
+                        cursor: 'pointer',
+                        ...intervalProvided.style
+                      }
+                      return (
+                        <div
+                          onClick={() => {
+                            showPeriod(startTime, undefined, endTime)
+                          }}
+                          {...intervalProvided}
+                          style={style}
+                        >
+                          <div className="sticky">
+                            {startTime.format('YYYY')}
+                          </div>
+                        </div>
+                      )
+                    }
+                  )}
+                </div>
+              )
             }}
           </CustomHeader>
           <CustomHeader>
-            {({provided, intervals}) => {
+            {({ provided, intervals }) => {
               const rootStyle = {
-                height:30,
+                height: 30,
                 ...provided.style
               }
-              return <div {...provided} style={rootStyle}>{intervals.map(({
-                startTime,
-                endTime,
-                provided: intervalProvided,
-                showPeriod,
-              })=>{
-                const style = {
-                  // height: 30,
-                  lineHeight: '30px',
-                  textAlign: 'center',
-                  borderLeft: '1px solid black',
-                  cursor: 'pointer',
-                  ...intervalProvided.style,
-                }
-                return <div onClick={()=>{showPeriod(startTime, undefined, endTime)}} {...intervalProvided} style={style}>{startTime.format('HH')}</div>
-              })}</div>
-            }}
-          </CustomHeader> */}
-          {/* <CustomHeader>
-            {() => {
-              return <div>Header2</div>
-            }}
-          </CustomHeader>
-          <CustomHeader>
-            {() => {
-              return <div>Header3</div>
+              return (
+                <div {...provided} style={rootStyle}>
+                  {intervals.map(
+                    ({
+                      startTime,
+                      endTime,
+                      provided: intervalProvided,
+                      showPeriod
+                    }) => {
+                      const style = {
+                        // height: 30,
+                        lineHeight: '30px',
+                        textAlign: 'center',
+                        borderLeft: '1px solid black',
+                        cursor: 'pointer',
+                        ...intervalProvided.style
+                      }
+                      return (
+                        <div
+                          onClick={() => {
+                            showPeriod(startTime, undefined, endTime)
+                          }}
+                          {...intervalProvided}
+                          style={style}
+                        >
+                          {startTime.format('HH')}
+                        </div>
+                      )
+                    }
+                  )}
+                </div>
+              )
             }}
           </CustomHeader> */}
         </TimelineHeaders>

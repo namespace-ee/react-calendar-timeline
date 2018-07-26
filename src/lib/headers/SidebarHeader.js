@@ -11,56 +11,34 @@ import {
 class SidebarHeader extends React.PureComponent {
   static propTypes = {
     children: PropTypes.func.isRequired,
-    subscribeHeader: PropTypes.func.isRequired,
     rightSidebarWidth: PropTypes.number,
     leftSidebarWidth: PropTypes.number.isRequired,
     variant: PropTypes.string
   }
 
-  constructor(props) {
-    super(props)
+
+  render() {
     const width =
-      props.variant === RIGHT_VARIANT
-        ? props.rightSidebarWidth
-        : props.leftSidebarWidth
-    const id =
-      props.variant === RIGHT_VARIANT ? RIGHT_SIDEBAR_ID : LEFT_SIDEBAR_ID
+      this.props.variant === RIGHT_VARIANT
+        ? this.props.rightSidebarWidth
+        : this.props.leftSidebarWidth
     const provided = {
       style: {
         width
       }
     }
-    this.unsubscribe = props.subscribeHeader(
-      {
-        renderer: props.children,
-        props: {
-          provided
-        }
-      },
-      id
-    ).unsubscribeHeader
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribe != null) {
-      this.unsubscribe()
-      this.unsubscribe = null
-    }
-  }
-
-  render() {
-    return null
+    return this.props.children({provided})
   }
 }
 
 const SidebarWrapper = ({ children, variant }) => (
   <TimelineHeadersConsumer>
-    {({ subscribeSidebarHeader, leftSidebarWidth, rightSidebarWidth }) => {
+    {({ leftSidebarWidth, rightSidebarWidth }) => {
+      console.log("sidebar wrapper")
       return (
         <SidebarHeader
           leftSidebarWidth={leftSidebarWidth}
           rightSidebarWidth={rightSidebarWidth}
-          subscribeHeader={subscribeSidebarHeader}
           children={children}
           variant={variant}
         />

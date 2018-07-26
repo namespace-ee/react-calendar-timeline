@@ -8,8 +8,6 @@ export class CustomHeader extends React.PureComponent {
   static propTypes = {
     //component props
     children: PropTypes.func.isRequired,
-    //Headers context
-    subscribeHeader: PropTypes.func.isRequired,
     unit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     //Timeline context
@@ -18,14 +16,10 @@ export class CustomHeader extends React.PureComponent {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    showPeriod: PropTypes.func.isRequired,
+    showPeriod: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
-    const newHeader = this.getNewHeader(props)
-    const subscribers = props.subscribeHeader(newHeader)
-    this.unsubscribe = subscribers.unsubscribeHeader
-    this.resubscribe = subscribers.resubscribeHeader
   }
 
   getHeaderIntervals = ({
@@ -34,7 +28,7 @@ export class CustomHeader extends React.PureComponent {
     canvasWidth,
     unit,
     timeSteps,
-    showPeriod,
+    showPeriod
   }) => {
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const intervals = []
@@ -76,72 +70,54 @@ export class CustomHeader extends React.PureComponent {
           endTime,
           provided: headerItemProvided,
           showPeriod: showPeriod,
-          intervalContext: {intervalWidth: labelWidth}
+          intervalContext: { intervalWidth: labelWidth }
         })
       }
     )
     return intervals
   }
 
-  getNewHeader({
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    unit,
-    timeSteps,
-    showPeriod,
-    children,
-  }) {
+  
+
+  render() {
     const provided = {
       style: {
         position: 'relative'
       }
     }
-    const newHeader = {
-      renderer: children,
-      props: {
-        provided,
-        intervals: this.getHeaderIntervals({
-          canvasTimeStart,
-          canvasTimeEnd,
-          canvasWidth,
-          unit,
-          timeSteps,
-          showPeriod,
-        })
-      }
+    const {
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      unit,
+      timeSteps,
+      showPeriod,
+    } = this.props
+    //TODO: only evaluate on changing params
+    const props = {
+      provided,
+      intervals: this.getHeaderIntervals({
+        canvasTimeStart,
+        canvasTimeEnd,
+        canvasWidth,
+        unit,
+        timeSteps,
+        showPeriod
+      })
     }
-    return newHeader
-  }
-
-  componentWillReceiveProps(nextProps) {
-    //TODO: optimize calls to getNewHeaders for visable start and end
-    if (
-      this.props.children !== nextProps.children ||
-      this.props.unit !== nextProps.unit ||
-      this.props.timeSteps !== nextProps.timeSteps ||
-      this.props.canvasTimeStart !== nextProps.canvasTimeStart ||
-      this.props.canvasTimeEnd !== nextProps.canvasTimeEnd ||
-      this.props.canvasWidth !== nextProps.canvasWidth
-    ) {
-      this.resubscribe(this.getNewHeader(nextProps))
-    }
-  }
-
-  render() {
-    return null
+    console.log(props.intervals)
+    return this.props.children(props)
   }
 }
 
-const CustomHeaderWrapper = ({ children, unit, }) => (
+const CustomHeaderWrapper = ({ children, unit }) => (
   <TimelineStateConsumer>
     {({ getTimelineState, showPeriod }) => {
       const timelineState = getTimelineState()
       return (
         <TimelineHeadersConsumer>
-          {({ subscribeCalendarHeader, timeSteps }) => (
+          {({ timeSteps }) => (
             <CustomHeader
-              subscribeHeader={subscribeCalendarHeader}
               children={children}
               timeSteps={timeSteps}
               showPeriod={showPeriod}
@@ -157,7 +133,7 @@ const CustomHeaderWrapper = ({ children, unit, }) => (
 
 CustomHeaderWrapper.propTypes = {
   children: PropTypes.func.isRequired,
-  unit: PropTypes.string,
+  unit: PropTypes.string
 }
 
 export default CustomHeaderWrapper

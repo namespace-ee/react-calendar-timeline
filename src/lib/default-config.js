@@ -29,20 +29,26 @@ export const defaultHeaderFormats = {
   month: {
     long: 'MMMM YYYY',
     mediumLong: 'MMM YYYY',
-    medium: 'MM/YYYY',
+    medium: 'MMMM',
     short: 'MM/YY'
   },
   day: {
     long: 'dddd, LL',
     mediumLong: 'dddd, LL',
-    medium: 'ddd LL',
-    short: 'L'
+    medium: 'ddd',
+    short: 'D'
   },
   hour: {
     long: 'dddd, LL, HH:00',
     mediumLong: 'L, HH:00',
     medium: 'HH:00',
     short: 'HH'
+  },
+  minute: {
+    long: 'HH:mm',
+    mediumLong: 'HH:mm',
+    medium: 'HH:mm',
+    short: 'mm',
   }
 }
 

@@ -32,7 +32,6 @@ import {
 } from './default-config'
 import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
-import HeadersRenderer from './headers/HeadersRenderer';
 import {TimelineHeadersProvider} from './headers/HeadersContext'
 
 export default class ReactCalendarTimeline extends Component {
@@ -568,7 +567,6 @@ export default class ReactCalendarTimeline extends Component {
       .add(1, unit)
       .valueOf()
     let zoom = visibleTimeEnd - visibleTimeStart
-
     // can't zoom in more than to show one hour
     if (zoom < 360000) {
       return
@@ -576,7 +574,7 @@ export default class ReactCalendarTimeline extends Component {
 
     // clicked on the big header and already focused here, zoom out
     if (
-      unit !== 'year' &&
+      unit && unit !== 'year' &&
       this.state.visibleTimeStart === visibleTimeStart &&
       this.state.visibleTimeEnd === visibleTimeEnd
     ) {
@@ -1181,7 +1179,7 @@ export default class ReactCalendarTimeline extends Component {
         timelineUnit={minUnit}
       >
         <TimelineMarkersProvider>
-          <TimelineHeadersProvider timeSteps={timeSteps} leftSidebarWidth={this.props.sidebarWidth} rightSidebarWidth={this.props.rightSidebarWidth}>
+          <TimelineHeadersProvider registerScroll={this.registerScrollListener} timeSteps={timeSteps} leftSidebarWidth={this.props.sidebarWidth} rightSidebarWidth={this.props.rightSidebarWidth}>
           <div
             style={this.props.style}
             ref={el => (this.container = el)}
@@ -1197,9 +1195,7 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelGroupHeight,
               headerLabelHeight
             )}
-            <HeadersRenderer
-              registerScroll={this.registerScrollListener}
-            />
+            {this.props.children}
             <div style={outerComponentStyle} className="rct-outer">
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
@@ -1242,7 +1238,7 @@ export default class ReactCalendarTimeline extends Component {
                   )}
                   {this.horizontalLines(canvasWidth, groupHeights)}
                   {this.infoLabel()}
-                  {this.childrenWithProps(
+                  {/* {this.childrenWithProps(
                     canvasTimeStart,
                     canvasTimeEnd,
                     canvasWidth,
@@ -1255,7 +1251,7 @@ export default class ReactCalendarTimeline extends Component {
                     visibleTimeEnd,
                     minUnit,
                     timeSteps
-                  )}
+                  )} */}
                 </div>
               </ScrollElement>
               {rightSidebarWidth > 0

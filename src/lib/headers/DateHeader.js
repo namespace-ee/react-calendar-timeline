@@ -58,7 +58,16 @@ class DateHeader extends React.Component {
                   return (
                     <div
                       onClick={() => {
-                        showPeriod(startTime, undefined, endTime)
+                        if(this.props.primaryHeader){
+                          const nextUnit = getNextUnit(unit)
+                          const newStartTime =startTime.clone().startOf(nextUnit)
+                          const newEndTime = startTime.clone().endOf(nextUnit)
+                          console.log(startTime, newEndTime)
+                          showPeriod(newStartTime, undefined, newEndTime)
+                        }
+                        else {
+                          showPeriod(startTime, undefined, endTime)
+                        }
                       }}
                       {...intervalProvided}
                       style={style}
@@ -115,6 +124,7 @@ function formatLabel(
   {intervalWidth},
   formatOptions = defaultHeaderFormats
 ) {
+  console.log(unit)
   const f = formatOptions
   let format 
   if (intervalWidth >= 150) {
