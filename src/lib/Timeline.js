@@ -562,9 +562,9 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  showPeriod = (from, unit) => {
+  showPeriod = (from, unit, to) => {
     let visibleTimeStart = from.valueOf()
-    let visibleTimeEnd = moment(from)
+    let visibleTimeEnd = to ? to.valueOf() : moment(from)
       .add(1, unit)
       .valueOf()
     let zoom = visibleTimeEnd - visibleTimeStart
@@ -1177,9 +1177,11 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
+        showPeriod={this.showPeriod}
+        timelineUnit={minUnit}
       >
         <TimelineMarkersProvider>
-          <TimelineHeadersProvider timeSteps={timeSteps} minUnit={minUnit} leftSidebarWidth={this.props.sidebarWidth} rightSidebarWidth={this.props.rightSidebarWidth}>
+          <TimelineHeadersProvider timeSteps={timeSteps} leftSidebarWidth={this.props.sidebarWidth} rightSidebarWidth={this.props.rightSidebarWidth}>
           <div
             style={this.props.style}
             ref={el => (this.container = el)}

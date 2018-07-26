@@ -9,4 +9,5 @@ export { default as CursorMarker } from './lib/markers/public/CursorMarker'
 export { default as TimelineHeaders } from './lib/headers/TimelineHeaders'
 export {default as SidebarHeader} from './lib/headers/SidebarHeader'
 export {default as CustomHeader} from './lib/headers/CustomHeader'
+export {default as DateHeader} from './lib/headers/DateHeader'
 export default Timeline

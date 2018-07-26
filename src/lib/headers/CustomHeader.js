@@ -10,45 +10,47 @@ export class CustomHeader extends React.PureComponent {
     children: PropTypes.func.isRequired,
     //Headers context
     subscribeHeader: PropTypes.func.isRequired,
-    minUnit: PropTypes.string.isRequired,
-    maxUnit: PropTypes.string.isRequired,
+    unit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     //Timeline context
     visibleTimeStart: PropTypes.number.isRequired,
     visibleTimeEnd: PropTypes.number.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
-    canvasWidth: PropTypes.number.isRequired
+    canvasWidth: PropTypes.number.isRequired,
+    showPeriod: PropTypes.func.isRequired,
   }
   constructor(props) {
-    console.log("constructor CustomHeader", props)
     super(props)
-    const newHeader = this.getNewHeader(props);
-     const subscribers = props.subscribeHeader(newHeader)
+    const newHeader = this.getNewHeader(props)
+    const subscribers = props.subscribeHeader(newHeader)
     this.unsubscribe = subscribers.unsubscribeHeader
     this.resubscribe = subscribers.resubscribeHeader
   }
 
-  getHeaderIntervals = () => {
-    const ratio =
-      this.props.canvasWidth /
-      (this.props.canvasTimeEnd - this.props.canvasTimeStart)
-    const { canvasTimeStart, canvasTimeEnd, minUnit, timeSteps } = this.props
+  getHeaderIntervals = ({
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    unit,
+    timeSteps,
+    showPeriod,
+  }) => {
+    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const intervals = []
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
-      minUnit,
+      unit,
       timeSteps,
       (startTime, endTime) => {
         const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio)
-        const minUnitValue = startTime.get(minUnit === 'day' ? 'date' : minUnit)
-        const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
+        const unitValue = startTime.get(unit === 'day' ? 'date' : unit)
+        const firstOfType = unitValue === (unit === 'day' ? 1 : 0)
         // console.log('new', [startTime.format('HH:mm'), endTime.format('HH:mm')])
         const labelWidth = Math.round(
           (endTime.valueOf() - startTime.valueOf()) * ratio
         )
-        console.log(labelWidth, this.props.canvasWidth, canvasTimeStart, canvasTimeEnd, ratio)
         const leftCorrect = firstOfType ? 1 : 0
         const headerItemProvided = {
           style: {
@@ -56,47 +58,72 @@ export class CustomHeader extends React.PureComponent {
             width: labelWidth,
             position: 'absolute'
             // height:
-            //   minUnit === 'year'
+            //   unit === 'year'
             //     ? headerLabelGroupHeight + headerLabelHeight
             //     : headerLabelHeight,
             // lineHeight:
-            //   minUnit === 'year'
+            //   unit === 'year'
             //     ? headerLabelGroupHeight + headerLabelHeight
             //     : headerLabelHeight,
             // fontSize: `${
             //   labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
             // }px`
           }
-          //   onClick: () => this.handlePeriodClick(startTime, minUnit)
+          //   onClick: () => this.handlePeriodClick(startTime, unit)
         }
         intervals.push({
           startTime,
           endTime,
-          provided: headerItemProvided
+          provided: headerItemProvided,
+          showPeriod: showPeriod,
+          intervalContext: {intervalWidth: labelWidth}
         })
       }
     )
     return intervals
   }
 
-  getNewHeader(props) {
+  getNewHeader({
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    unit,
+    timeSteps,
+    showPeriod,
+    children,
+  }) {
     const provided = {
       style: {
         position: 'relative'
       }
-    };
+    }
     const newHeader = {
-      renderer: props.children,
+      renderer: children,
       props: {
         provided,
-        intervals: this.getHeaderIntervals()
+        intervals: this.getHeaderIntervals({
+          canvasTimeStart,
+          canvasTimeEnd,
+          canvasWidth,
+          unit,
+          timeSteps,
+          showPeriod,
+        })
       }
-    };
-    return newHeader;
+    }
+    return newHeader
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.canvasWidth !== this.props.canvasWidth) {
+  componentWillReceiveProps(nextProps) {
+    //TODO: optimize calls to getNewHeaders for visable start and end
+    if (
+      this.props.children !== nextProps.children ||
+      this.props.unit !== nextProps.unit ||
+      this.props.timeSteps !== nextProps.timeSteps ||
+      this.props.canvasTimeStart !== nextProps.canvasTimeStart ||
+      this.props.canvasTimeEnd !== nextProps.canvasTimeEnd ||
+      this.props.canvasWidth !== nextProps.canvasWidth
+    ) {
       this.resubscribe(this.getNewHeader(nextProps))
     }
   }
@@ -106,19 +133,19 @@ export class CustomHeader extends React.PureComponent {
   }
 }
 
-const CustomHeaderWrapper = ({ children }) => (
+const CustomHeaderWrapper = ({ children, unit, }) => (
   <TimelineStateConsumer>
-    {({ getTimelineState }) => {
+    {({ getTimelineState, showPeriod }) => {
       const timelineState = getTimelineState()
       return (
         <TimelineHeadersConsumer>
-          {({ subscribeCalendarHeader, minUnit, maxUnit, timeSteps }) => (
+          {({ subscribeCalendarHeader, timeSteps }) => (
             <CustomHeader
-              minUnit={minUnit}
-              maxUnit={maxUnit}
               subscribeHeader={subscribeCalendarHeader}
               children={children}
               timeSteps={timeSteps}
+              showPeriod={showPeriod}
+              unit={unit ? unit : timelineState.timelineUnit}
               {...timelineState}
             />
           )}
@@ -129,7 +156,8 @@ const CustomHeaderWrapper = ({ children }) => (
 )
 
 CustomHeaderWrapper.propTypes = {
-  children: PropTypes.func.isRequired
+  children: PropTypes.func.isRequired,
+  unit: PropTypes.string,
 }
 
 export default CustomHeaderWrapper

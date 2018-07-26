@@ -23,6 +23,9 @@ const defaultContextState = {
   },
   getDateFromLeftOffsetPosition: () => {
     console.warn('"getDateFromLeftOffsetPosition" default func is being used')
+  },
+  showPeriod: () => {
+    console.warn('"showPeriod" default func is being used')
   }
 }
 /* eslint-enable */
@@ -58,7 +61,9 @@ export class TimelineStateProvider extends React.Component {
     visibleTimeEnd: PropTypes.number.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
-    canvasWidth: PropTypes.number.isRequired
+    canvasWidth: PropTypes.number.isRequired,
+    showPeriod: PropTypes.func.isRequired,
+    timelineUnit: PropTypes.string.isRequired,
     // visibleWidth: PropTypes.number.isRequired
   }
 
@@ -69,7 +74,8 @@ export class TimelineStateProvider extends React.Component {
       timelineContext: {
         getTimelineState: this.getTimelineState,
         getLeftOffsetFromDate: this.getLeftOffsetFromDate,
-        getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition
+        getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition,
+        showPeriod: this.props.showPeriod,
       }
     }
   }
@@ -80,14 +86,16 @@ export class TimelineStateProvider extends React.Component {
       visibleTimeEnd,
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth
+      canvasWidth,
+      timelineUnit,
     } = this.props
     return {
       visibleTimeStart,
       visibleTimeEnd,
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth
+      canvasWidth,
+      timelineUnit,
     } // REVIEW,
   }
 

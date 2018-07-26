@@ -36,7 +36,6 @@ export class TimelineHeadersProvider extends React.Component {
     children: PropTypes.element.isRequired,
     rightSidebarWidth: PropTypes.number,
     leftSidebarWidth: PropTypes.number.isRequired,
-    minUnit: PropTypes.string.isRequired,
     //TODO: maybe this should be skipped?
     timeSteps: PropTypes.object.isRequired
   }
@@ -108,13 +107,15 @@ export class TimelineHeadersProvider extends React.Component {
       },
       resubscribeHeader: newHeader => {
         newHeader.id = headerId
-        //TODO: keep order
+        //TODO: fix order
         this.setState(state => {
-          const filteredHeaders = state.calendarHeaders.filter(
+          const index = state.calendarHeaders.findIndex(
             header => header.id !== headerId
           )
+          state.calendarHeaders[index]=newHeader;
+          const newHeadersList = [... state.calendarHeaders]
           return {
-            calendarHeaders: [...filteredHeaders, newHeader]
+            calendarHeaders: newHeadersList
           }
         })
       }
@@ -122,7 +123,6 @@ export class TimelineHeadersProvider extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     const contextValue = {
       calendarHeaders: this.state.calendarHeaders,
       sidebarHeaders: this.state.sidebarHeaders,
@@ -130,8 +130,6 @@ export class TimelineHeadersProvider extends React.Component {
       subscribeSidebarHeader: this.handleSubscribeSidebarHeader,
       rightSidebarWidth: this.props.rightSidebarWidth,
       leftSidebarWidth: this.props.leftSidebarWidth,
-      minUnit: this.props.minUnit,
-      maxUnit: getNextUnit(this.props.minUnit),
       timeSteps: this.props.timeSteps
     }
     return <Provider value={contextValue}>{this.props.children}</Provider>
