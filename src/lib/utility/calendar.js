@@ -21,6 +21,14 @@ export function calculateXPositionForTime(
   return timeOffset * widthToZoomRatio
 }
 
+/**
+ * For a given x position (leftOffset) in pixels, calculate time based on
+ * timeline state (timeline width in px, canvas time range)
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @param {number} leftOffset
+ */
 export function calculateTimeForXPosition(
   canvasTimeStart,
   canvasTimeEnd,
