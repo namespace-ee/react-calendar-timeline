@@ -1193,10 +1193,7 @@ export default class ReactCalendarTimeline extends Component {
                 onMouseMove={this.handleScrollMouseMove}
                 onContextMenu={this.handleScrollContextMenu}
               >
-                <MarkerCanvas
-                  
-                >
-                  
+                <MarkerCanvas>
                   {this.items(
                     canvasTimeStart,
                     zoom,
