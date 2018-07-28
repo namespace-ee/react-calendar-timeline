@@ -1153,12 +1153,6 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
-    const canvasComponentStyle = {
-      width: `${canvasWidth}px`,
-      height: `${height}px`,
-      position: 'relative'
-    }
-
     return (
       <TimelineStateProvider
         visibleTimeStart={visibleTimeStart}
@@ -1199,11 +1193,10 @@ export default class ReactCalendarTimeline extends Component {
                 onMouseMove={this.handleScrollMouseMove}
                 onContextMenu={this.handleScrollContextMenu}
               >
-                <div
-                  ref={el => (this.canvasComponent = el)}
-                  style={canvasComponentStyle}
+                <MarkerCanvas
+                  
                 >
-                  <MarkerCanvas />
+                  
                   {this.items(
                     canvasTimeStart,
                     zoom,
@@ -1239,7 +1232,7 @@ export default class ReactCalendarTimeline extends Component {
                     minUnit,
                     timeSteps
                   )}
-                </div>
+                </MarkerCanvas>
               </ScrollElement>
               {rightSidebarWidth > 0
                 ? this.rightSidebar(height, groupHeights)
