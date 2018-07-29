@@ -87,6 +87,8 @@ export default class ReactCalendarTimeline extends Component {
 
     style: PropTypes.object,
 
+    verticalScrollContainer: PropTypes.object,
+
     keys: PropTypes.shape({
       groupIdKey: PropTypes.string,
       groupTitleKey: PropTypes.string,
@@ -1198,6 +1200,7 @@ export default class ReactCalendarTimeline extends Component {
                 onMouseLeave={this.handleScrollMouseLeave}
                 onMouseMove={this.handleScrollMouseMove}
                 onContextMenu={this.handleScrollContextMenu}
+                verticalScrollContainer={this.props.verticalScrollContainer && this.props.verticalScrollContainer.current}
               >
                 <div
                   ref={el => (this.canvasComponent = el)}

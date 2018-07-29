@@ -16,7 +16,9 @@ class ScrollElement extends Component {
     onContextMenu: PropTypes.func.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
-    onScroll: PropTypes.func.isRequired
+    onScroll: PropTypes.func.isRequired,
+
+    verticalScrollContainer: PropTypes.object,
   }
 
   constructor() {
@@ -75,7 +77,8 @@ class ScrollElement extends Component {
         }
       }
       if (e.deltaY !== 0) {
-        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+        this.verticallyScrollTo(null, e.deltaY)
+
         if (traditionalZoom) {
           const parentPosition = getParentPosition(e.currentTarget)
           const xPosition = e.clientX - parentPosition.x
@@ -139,8 +142,10 @@ class ScrollElement extends Component {
       let y = e.touches[0].clientY
 
       this.lastTouchDistance = null
-      this.singleTouchStart = { x: x, y: y, screenY: window.pageYOffset }
-      this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset }
+      // Cache the position of the top of the vertical scroll container while the user scrolls
+      let screenY = this.props.verticalScrollContainer ? this.props.verticalScrollContainer.scrollTop : window.pageYOffset;
+      this.singleTouchStart = { x: x, y: y, screenY: screenY }
+      this.lastSingleTouch = { x: x, y: y, screenY: screenY }
     }
   }
 
@@ -174,10 +179,7 @@ class ScrollElement extends Component {
         this.scrollComponent.scrollLeft -= deltaX
       }
       if (moveY) {
-        window.scrollTo(
-          window.pageXOffset,
-          this.singleTouchStart.screenY - deltaY0
-        )
+        this.verticallyScrollTo(this.singleTouchStart.screenY, -deltaY0);
       }
     }
   }
@@ -189,6 +191,20 @@ class ScrollElement extends Component {
     if (this.lastSingleTouch) {
       this.lastSingleTouch = null
       this.singleTouchStart = null
+    }
+  }
+
+  verticallyScrollTo(startY, deltaY) {
+    // If no startY given get the default, however accept 0 as a valid startY
+    if (!startY && startY !== 0) {
+      startY = this.props.verticalScrollContainer ? this.props.verticalScrollContainer.scrollTop : window.pageYOffset;
+    }
+
+    // Decide on what element to scroll
+    if (this.props.verticalScrollContainer) {
+      this.props.verticalScrollContainer.scrollTo(this.props.verticalScrollContainer.scrollLeft, startY + deltaY)
+    } else {
+      window.scrollTo(window.pageXOffset, startY + deltaY)
     }
   }
 
