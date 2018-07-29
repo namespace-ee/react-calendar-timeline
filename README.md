@@ -731,6 +731,30 @@ render() {
 }
 ```
 
+## The timeline can't scroll vertically inside a fixed div
+By default the timeline uses the window properties in order to scroll vertically.
+If inside a fixed element the window might not be able to scroll because the height of the fixed element does not impact the  window height.
+In order to solve that, provide the element ref of the containing fixed element.
+
+```jsx
+constructor(props) {
+    super(props)
+    // Create the ref
+    this.scrollContainerRef = React.createRef();
+}
+
+render () {
+  // Assign the created ref to the containing element
+  // Make sure the element has a height and overflow auto or scroll
+  // Then provide the created ref to the verticalScrollContainer property
+  <div style={{position:'fixed', height: 600, overflow:'scroll'}} ref={this.scrollContainerRef}>
+    <Timeline
+      verticalScrollContainer={this.scrollContainerRef}>
+    </Timeline>
+  </div>
+}
+```
+
 ## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
 
 These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
