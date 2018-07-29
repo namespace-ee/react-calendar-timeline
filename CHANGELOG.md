@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+* Added optional verticalScrollContainer prop, can be used when the Timeline is inside a fixed element in order to support vertical scroll
 
 ### 0.18.1
 
