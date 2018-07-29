@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.18.0-beta.2",
+  "version": "0.18.2",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -38,6 +38,10 @@
     {
       "name": "amakhrov",
       "url": "https://github.com/amakhrov"
+    },
+    {
+      "name": "Ahmad Ilaiwi",
+      "url": "https://github.com/Ilaiwi"
     }
   ],
   "license": "MIT",
