@@ -758,6 +758,22 @@ export default class ReactCalendarTimeline extends Component {
     this.props.onCanvasDoubleClick(groupId, time, e)
   }
 
+  handleScrollContextMenu = (e, rowIndex) => {
+    if (this.props.onCanvasContextMenu == null) return
+
+    const timePosition = this.getTimeFromRowClickEvent(e)
+
+    const groupId = _get(
+      this.props.groups[rowIndex],
+      this.props.keys.groupIdKey
+    )
+
+    if (this.props.onCanvasContextMenu) {
+      e.preventDefault()
+      this.props.onCanvasContextMenu(groupId, timePosition, e)
+    }
+  }
+
   horizontalLines(canvasWidth, groupHeights) {
     return (
       <GroupRows
@@ -1023,21 +1039,7 @@ export default class ReactCalendarTimeline extends Component {
     return { dimensionItems, height, groupHeights, groupTops }
   }
 
-  handleScrollContextMenu = (e, rowIndex) => {
-    if (this.props.onCanvasContextMenu == null) return
 
-    const timePosition = this.getTimeFromRowClickEvent(e)
-
-    const groupId = _get(
-      this.props.groups[rowIndex],
-      this.props.keys.groupIdKey
-    )
-
-    if (this.props.onCanvasContextMenu) {
-      e.preventDefault()
-      this.props.onCanvasContextMenu(groupId, timePosition, e)
-    }
-  }
 
   childrenWithProps(
     canvasTimeStart,
