@@ -1188,9 +1188,6 @@ export default class ReactCalendarTimeline extends Component {
                 traditionalZoom={traditionalZoom}
                 onScroll={this.onScroll}
                 isInteractingWithItem={isInteractingWithItem}
-                onMouseEnter={this.handleScrollMouseEnter}
-                onMouseLeave={this.handleScrollMouseLeave}
-                onMouseMove={this.handleScrollMouseMove}
                 onContextMenu={this.handleScrollContextMenu}
               >
                 <MarkerCanvas>
