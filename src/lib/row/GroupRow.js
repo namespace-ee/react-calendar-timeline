@@ -6,6 +6,7 @@ class GroupRow extends Component {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
     onDoubleClick: PropTypes.func.isRequired,
+    onContextMenu: PropTypes.func.isRequired,
     isEvenRow: PropTypes.bool.isRequired,
     style: PropTypes.object.isRequired,
     clickTolerance: PropTypes.number.isRequired
@@ -13,6 +14,7 @@ class GroupRow extends Component {
 
   render() {
     const {
+      onContextMenu,
       onDoubleClick,
       isEvenRow,
       style,
@@ -23,6 +25,7 @@ class GroupRow extends Component {
     return (
       <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
         <div
+          onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
           className={isEvenRow ? 'rct-hl-even' : 'rct-hl-odd'}
           style={style}

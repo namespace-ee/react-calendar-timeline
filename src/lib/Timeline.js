@@ -758,6 +758,7 @@ export default class ReactCalendarTimeline extends Component {
         clickTolerance={this.props.clickTolerance}
         onRowClick={this.handleRowClick}
         onRowDoubleClick={this.handleRowDoubleClick}
+        onRowContextClick={this.handleScrollContextMenu}
       />
     )
   }
@@ -1013,44 +1014,19 @@ export default class ReactCalendarTimeline extends Component {
     return { dimensionItems, height, groupHeights, groupTops }
   }
 
-  handleScrollContextMenu = e => {
-    const {
-      canvasTimeStart,
-      width,
-      visibleTimeStart,
-      visibleTimeEnd,
-      groupTops,
-      topOffset
-    } = this.state
-    const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasTimeEnd = canvasTimeStart + zoom * 3
-    const canvasWidth = width * 3
-    const { pageX, pageY } = e
-    const ratio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
-    const boundingRect = this.scrollComponent.getBoundingClientRect()
-    let timePosition = visibleTimeStart + ratio * (pageX - boundingRect.left)
-    if (this.props.dragSnap) {
-      timePosition =
-        Math.round(timePosition / this.props.dragSnap) * this.props.dragSnap
-    }
+  handleScrollContextMenu = (e, rowIndex) => {
+    if (this.props.onCanvasContextMenu == null) return
 
-    let groupIndex = 0
-    for (var key of Object.keys(groupTops)) {
-      var item = groupTops[key]
-      if (pageY - topOffset > item) {
-        groupIndex = parseInt(key, 10)
-      } else {
-        break
-      }
-    }
+    const timePosition = this.getTimeFromRowClickEvent(e)
+
+    const groupId = _get(
+      this.props.groups[rowIndex],
+      this.props.keys.groupIdKey
+    )
 
     if (this.props.onCanvasContextMenu) {
       e.preventDefault()
-      this.props.onCanvasContextMenu(
-        this.props.groups[groupIndex],
-        timePosition,
-        e
-      )
+      this.props.onCanvasContextMenu(groupId, timePosition, e)
     }
   }
 
@@ -1087,7 +1063,6 @@ export default class ReactCalendarTimeline extends Component {
       items: this.props.items,
       groups: this.props.groups,
       keys: this.props.keys,
-      // TODO: combine these two
       groupHeights: groupHeights,
       groupTops: groupTops,
       selected:

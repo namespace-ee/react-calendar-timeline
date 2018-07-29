@@ -10,7 +10,6 @@ class ScrollElement extends Component {
     traditionalZoom: PropTypes.bool.isRequired,
     scrollRef: PropTypes.func.isRequired,
     isInteractingWithItem: PropTypes.bool.isRequired,
-    onContextMenu: PropTypes.func.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
     onScroll: PropTypes.func.isRequired
@@ -190,7 +189,7 @@ class ScrollElement extends Component {
   }
 
   render() {
-    const { width, height, children, onContextMenu } = this.props
+    const { width, height, children } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
@@ -215,7 +214,6 @@ class ScrollElement extends Component {
         onTouchStart={this.handleTouchStart}
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
-        onContextMenu={onContextMenu}
       >
         {children}
       </div>
