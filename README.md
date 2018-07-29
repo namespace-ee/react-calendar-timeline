@@ -445,6 +445,8 @@ Paramters provided to the function has two types: context params which have the 
 | `timelineWidth` | `number`    | returns the full width of the timeline.            |
 | `visibleTimeStart`        | `number`    | returns the exact start of view port of the calender                 |
 | `visibleTimeEnd`         | `number`    | returns the exact end of view port of the calender.                    |
+| `canvasTimeStart`        | `number`    | denotes the start time in ms of the canvas timeline                 |
+| `canvasTimeEnd`         | `number`    | denotes the end time in ms of the canvas timeline                    |
 
 - `itemContext`
 

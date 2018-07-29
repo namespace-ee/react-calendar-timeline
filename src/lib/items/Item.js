@@ -6,6 +6,18 @@ import moment from 'moment'
 import { _get, deepObjectCompare } from '../utility/generic'
 import { composeEvents } from '../utility/events'
 import { defaultItemRenderer } from './defaultItemRendere'
+
+import {
+  overridableStyles,
+  selectedStyle,
+  selectedAndCanMove,
+  selectedAndCanResizeLeft,
+  selectedAndCanResizeLeftAndDragLeft,
+  selectedAndCanResizeRight,
+  selectedAndCanResizeRightAndDragRight,
+  leftResizeStyle,
+  rightResizeStyle
+} from './styles'
 export default class Item extends Component {
   // removed prop type check for SPEED!
   // they are coming from a trusted component anyway
@@ -509,37 +521,8 @@ export default class Item extends Component {
       style: Object.assign({}, this.getItemStyle(props))
     }
   }
-  
 
   getResizeProps = (props = {}) => {
-
-    const leftResizeStyle = {
-      position: "absolute",
-      width: 24,
-      maxWidth: "20%",
-      minWidth: 2,
-      height: "100%",
-      top: 0,
-      left: 0,
-      cursor: "pointer",
-      zIndex: 88,
-    }
-
-
-    const rightResizeStyle = {
-      position: "absolute",
-      width: 24,
-      maxWidth: "20%",
-      minWidth: 2,
-      height: "100%",
-      top: 0,
-      right: 0,
-      cursor: "pointer",
-      zIndex: 88,
-    }
-
-
-
     return {
       left: {
         ref: this.getDragLeftRef,
@@ -564,34 +547,7 @@ export default class Item extends Component {
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`
     }
-    const overridableStyles = {
-      fontSize: 12,
-      color: 'white',
-      cursor: 'pointer',
-      background: '#2196f3',
-      border: '1px solid #1a6fb3',
-      zIndex: 80
-    }
-    const selectedStyle = {
-      background: '#ffc107',
-      border: '1px solid #ff9800',
-      zIndex: 82
-    }
-    const selectedAndCanMove = {
-      cursor: 'move'
-    }
-    const selectedAndCanResizeLeft = {
-      borderLeftWidth: 3
-    }
-    const selectedAndCanResizeLeftAndDragLeft = {
-      cursor: 'w-resize'
-    }
-    const selectedAndCanResizeRight = {
-      borderRightWidth: 3
-    }
-    const selectedAndCanResizeRightAndDragRight = {
-      cursor: 'e-resize'
-    }
+
     const finalStyle = Object.assign(
       {},
       overridableStyles,
@@ -639,7 +595,7 @@ export default class Item extends Component {
       resizeEdge: this.state.resizeEdge,
       resizeStart: this.state.resizeStart,
       resizeTime: this.state.resizeTime,
-      width: this.props.dimensions.width,
+      width: this.props.dimensions.width
     }
 
     return this.props.itemRenderer({
