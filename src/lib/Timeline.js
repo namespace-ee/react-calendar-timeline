@@ -6,7 +6,7 @@ import Items from './items/Items'
 import InfoLabel from './layout/InfoLabel'
 import Sidebar from './layout/Sidebar'
 import Header from './layout/Header'
-import VerticalLines from './lines/VerticalLines'
+import Columns from './columns/Columns'
 import GroupRows from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
@@ -710,7 +710,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  verticalLines(
+  columns(
     canvasTimeStart,
     canvasTimeEnd,
     canvasWidth,
@@ -719,7 +719,7 @@ export default class ReactCalendarTimeline extends Component {
     height
   ) {
     return (
-      <VerticalLines
+      <Columns
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
@@ -774,7 +774,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  horizontalLines(canvasWidth, groupHeights) {
+  rows(canvasWidth, groupHeights) {
     return (
       <GroupRows
         canvasWidth={canvasWidth}
@@ -1039,8 +1039,6 @@ export default class ReactCalendarTimeline extends Component {
     return { dimensionItems, height, groupHeights, groupTops }
   }
 
-
-
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,
@@ -1187,7 +1185,7 @@ export default class ReactCalendarTimeline extends Component {
                     groupHeights,
                     groupTops
                   )}
-                  {this.verticalLines(
+                  {this.columns(
                     canvasTimeStart,
                     canvasTimeEnd,
                     canvasWidth,
@@ -1196,7 +1194,7 @@ export default class ReactCalendarTimeline extends Component {
                     height,
                     headerHeight
                   )}
-                  {this.horizontalLines(canvasWidth, groupHeights)}
+                  {this.rows(canvasWidth, groupHeights)}
                   {this.infoLabel()}
                   {this.childrenWithProps(
                     canvasTimeStart,
