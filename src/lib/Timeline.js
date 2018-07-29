@@ -803,10 +803,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
-        lineCount={_length(this.props.groups)}
         dimensionItems={dimensionItems}
-        minUnit={minUnit}
-        groupHeights={groupHeights}
         groupTops={groupTops}
         items={this.props.items}
         groups={this.props.groups}
@@ -853,7 +850,6 @@ export default class ReactCalendarTimeline extends Component {
 
   header(
     canvasTimeStart,
-    zoom,
     canvasTimeEnd,
     canvasWidth,
     minUnit,
@@ -893,9 +889,6 @@ export default class ReactCalendarTimeline extends Component {
         headerLabelGroupHeight={headerLabelGroupHeight}
         headerLabelHeight={headerLabelHeight}
         width={this.state.width}
-        zoom={zoom}
-        visibleTimeStart={this.state.visibleTimeStart}
-        visibleTimeEnd={this.state.visibleTimeEnd}
         stickyOffset={this.props.stickyOffset}
         stickyHeader={this.props.stickyHeader}
         showPeriod={this.showPeriod}
@@ -1153,7 +1146,6 @@ export default class ReactCalendarTimeline extends Component {
           >
             {this.header(
               canvasTimeStart,
-              zoom,
               canvasTimeEnd,
               canvasWidth,
               minUnit,
@@ -1172,7 +1164,6 @@ export default class ReactCalendarTimeline extends Component {
                 traditionalZoom={traditionalZoom}
                 onScroll={this.onScroll}
                 isInteractingWithItem={isInteractingWithItem}
-                onContextMenu={this.handleScrollContextMenu}
               >
                 <MarkerCanvas>
                   {this.items(
