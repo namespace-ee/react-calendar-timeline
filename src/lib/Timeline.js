@@ -79,6 +79,8 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasDoubleClick: PropTypes.func,
     onCanvasContextMenu: PropTypes.func,
     onZoom: PropTypes.func,
+    onHeaderClick: PropTypes.func,
+    onSubHeaderClick: PropTypes.func,
 
     moveResizeValidator: PropTypes.func,
 
@@ -879,6 +881,8 @@ export default class ReactCalendarTimeline extends Component {
         leftSidebarHeader={leftSidebar}
         rightSidebarHeader={rightSidebar}
         headerRef={this.props.headerRef}
+        onHeaderClick={this.props.onHeaderClick}
+        onSubHeaderClick={this.props.onSubHeaderClick}
       />
     )
   }

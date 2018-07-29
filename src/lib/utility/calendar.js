@@ -154,6 +154,18 @@ export function getNextUnit(unit) {
   return nextUnits[unit] || ''
 }
 
+export function getPreviousUnit(unit) {
+  let previousUnits = {
+    minute: 'second',
+    hour: 'minute',
+    day: 'hour',
+    month: 'day',
+    year: 'month'
+  }
+
+  return previousUnits[unit] || ''
+}
+
 export function calculateDimensions({
   itemTimeStart,
   itemTimeEnd,
