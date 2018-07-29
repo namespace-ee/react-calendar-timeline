@@ -492,6 +492,8 @@ Rather than applying props on the element yourself and to avoid your props being
   - onContextMenu: event handler
   - style: inline object style
 
+  ** _the given styles will only override the styles that are not a requirement for postioning the item. Other styles like `color`, `radius` and  others_
+
   These properties can be override using the prop argument with proprties: 
   - className: class names to be added
   - onMouseDown: event handler will be called after the component's event handler
