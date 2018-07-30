@@ -45,7 +45,8 @@ class TimelineHeaders extends React.Component {
         style={{
           display: 'flex',
           width: '100%',
-          background: 'red'
+          background: '#c52020',
+          borderBottom: '1px solid #bbb'
         }}
       >
         {leftSidebarHeader}
@@ -53,7 +54,7 @@ class TimelineHeaders extends React.Component {
           ref={el => (this.headerEl = el)}
           style={{
             overflow: 'hidden',
-            width: `calc(100% - ${leftSidebarWidth + rightSidebarWidth}px)`
+            width: `calc(100% - ${leftSidebarWidth + rightSidebarWidth}px)`,
           }}
         >
           {calendarHeaders} 

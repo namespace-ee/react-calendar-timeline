@@ -48,9 +48,8 @@ export default class VerticalLines extends Component {
         const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
-        const lineWidth = firstOfType ? 2 : 1
         const labelWidth =
-          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
+          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio)
         const leftPush = firstOfType ? -1 : 0
 
         const classNames =

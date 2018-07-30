@@ -4,8 +4,6 @@ import { TimelineHeadersConsumer } from './HeadersContext'
 import {
   LEFT_VARIANT,
   RIGHT_VARIANT,
-  LEFT_SIDEBAR_ID,
-  RIGHT_SIDEBAR_ID
 } from './constants'
 
 class SidebarHeader extends React.PureComponent {

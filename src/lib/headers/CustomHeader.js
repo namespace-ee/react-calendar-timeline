@@ -4,7 +4,7 @@ import { TimelineHeadersConsumer } from './HeadersContext'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import { iterateTimes } from '../utility/calendar'
 
-export class CustomHeader extends React.PureComponent {
+export class CustomHeader extends React.Component {
   static propTypes = {
     //component props
     children: PropTypes.func.isRequired,
@@ -20,6 +20,68 @@ export class CustomHeader extends React.PureComponent {
   }
   constructor(props) {
     super(props)
+    const {
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      unit,
+      timeSteps,
+      showPeriod
+    } = props
+    const intervals = this.getHeaderIntervals({
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      unit,
+      timeSteps,
+      showPeriod
+    })
+    this.state = {
+      intervals
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (
+      nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      nextProps.canvasWidth !== this.props.canvasWidth ||
+      nextProps.unit !== this.props.unit ||
+      nextProps.timeSteps !== this.props.timeSteps ||
+      nextProps.showPeriod !== this.props.showPeriod
+    ) {
+      return true
+    }
+    return false
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      nextProps.canvasWidth !== this.props.canvasWidth ||
+      nextProps.unit !== this.props.unit ||
+      nextProps.timeSteps !== this.props.timeSteps ||
+      nextProps.showPeriod !== this.props.showPeriod
+    ) {
+      const {
+        canvasTimeStart,
+        canvasTimeEnd,
+        canvasWidth,
+        unit,
+        timeSteps,
+        showPeriod
+      } = nextProps
+      const intervals = this.getHeaderIntervals({
+        canvasTimeStart,
+        canvasTimeEnd,
+        canvasWidth,
+        unit,
+        timeSteps,
+        showPeriod
+      })
+      this.setState({ intervals })
+    }
   }
 
   getHeaderIntervals = ({
@@ -42,28 +104,17 @@ export class CustomHeader extends React.PureComponent {
         const unitValue = startTime.get(unit === 'day' ? 'date' : unit)
         const firstOfType = unitValue === (unit === 'day' ? 1 : 0)
         // console.log('new', [startTime.format('HH:mm'), endTime.format('HH:mm')])
-        const labelWidth = Math.round(
+        const labelWidth = Math.ceil(
           (endTime.valueOf() - startTime.valueOf()) * ratio
         )
         const leftCorrect = firstOfType ? 1 : 0
+        console.log(leftCorrect, unitValue)
         const headerItemProvided = {
           style: {
             left: left - leftCorrect,
             width: labelWidth,
             position: 'absolute'
-            // height:
-            //   unit === 'year'
-            //     ? headerLabelGroupHeight + headerLabelHeight
-            //     : headerLabelHeight,
-            // lineHeight:
-            //   unit === 'year'
-            //     ? headerLabelGroupHeight + headerLabelHeight
-            //     : headerLabelHeight,
-            // fontSize: `${
-            //   labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
-            // }px`
           }
-          //   onClick: () => this.handlePeriodClick(startTime, unit)
         }
         intervals.push({
           startTime,
@@ -77,35 +128,30 @@ export class CustomHeader extends React.PureComponent {
     return intervals
   }
 
-  
-
-  render() {
-    const provided = {
-      style: {
-        position: 'relative'
-      }
+  rootElementProvided = {
+    style: {
+      position: 'relative'
     }
+  }
+
+  getStateAndHelpers(props) {
     const {
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
       unit,
       timeSteps,
-      showPeriod,
-    } = this.props
+      showPeriod
+    } = props
     //TODO: only evaluate on changing params
-    const props = {
-      provided,
-      intervals: this.getHeaderIntervals({
-        canvasTimeStart,
-        canvasTimeEnd,
-        canvasWidth,
-        unit,
-        timeSteps,
-        showPeriod
-      })
+    return {
+      provided: this.rootElementProvided,
+      intervals: this.state.intervals
     }
-    console.log(props.intervals)
+  }
+
+  render() {
+    const props = this.getStateAndHelpers(this.props)
     return this.props.children(props)
   }
 }

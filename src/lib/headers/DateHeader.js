@@ -30,7 +30,6 @@ class DateHeader extends React.Component {
 
   render() {
     const unit = this.getHeaderUnit()
-    console.log(unit, this.props.primaryHeader && "primaryHeader", this.props.secondaryHeader && "secondaryHeader", this.props.timelineUnit)
     return (
       <CustomHeader unit={unit}>
         {({ provided, intervals }) => {
@@ -49,10 +48,15 @@ class DateHeader extends React.Component {
                   intervalContext,
                 }) => {
                   const style = {
+                    backgroundColor: this.props.secondaryHeader && !this.props.primaryHeader ? 'rgb(240, 240, 240)' : 'initial',
                     lineHeight: '30px',
                     textAlign: 'center',
-                    borderLeft: '1px solid black',
+                    borderLeft: this.props.primaryHeader? "1px solid #bbb" : '2px solid #bbb',
+                    borderRight: this.props.primaryHeader? "1px solid #bbb" : "none",
+                    borderBottom: '1px solid #bbb',
+                    color: this.props.primaryHeader ? '#fff' : 'initial',
                     cursor: 'pointer',
+                    fontSize: '14px',
                     ...intervalProvided.style
                   }
                   return (
@@ -62,7 +66,6 @@ class DateHeader extends React.Component {
                           const nextUnit = getNextUnit(unit)
                           const newStartTime =startTime.clone().startOf(nextUnit)
                           const newEndTime = startTime.clone().endOf(nextUnit)
-                          console.log(startTime, newEndTime)
                           showPeriod(newStartTime, undefined, newEndTime)
                         }
                         else {
@@ -72,7 +75,7 @@ class DateHeader extends React.Component {
                       {...intervalProvided}
                       style={style}
                     >
-                      {this.props.labelFormat([startTime, endTime], unit, intervalContext)}
+                      {this.getLabelFormat([startTime, endTime], unit, intervalContext)}
                     </div>
                   )
                 }
@@ -82,6 +85,23 @@ class DateHeader extends React.Component {
         }}
       </CustomHeader>
     )
+  }
+
+  getLabelFormat(interval, unit, intervalContext) {
+    const {labelFormat} = this.props;
+    if(typeof labelFormat === 'string'){
+      const startTime = interval[0]
+      return startTime.format(labelFormat)
+    }
+    else if (typeof labelFormat === 'object'){
+      return formatLabel(interval, unit, intervalContext, labelFormat)
+    }
+    else if (typeof labelFormat === 'function'){
+      return labelFormat(interval, unit, intervalContext);
+    }
+    else {
+      throw new Error('labelFormat should be function, object or string')
+    }
   }
 }
 
@@ -124,19 +144,17 @@ function formatLabel(
   {intervalWidth},
   formatOptions = defaultHeaderFormats
 ) {
-  console.log(unit)
-  const f = formatOptions
   let format 
   if (intervalWidth >= 150) {
-    format = f[unit]['long']
+    format = formatOptions[unit]['long']
   } else if (intervalWidth >= 100) {
-    format = f[unit]['mediumLong']
+    format = formatOptions[unit]['mediumLong']
   }
   else if (intervalWidth >= 50) {
-    format = f[unit]['medium']
+    format = formatOptions[unit]['medium']
   }
   else {
-    format = f[unit]['short']
+    format = formatOptions[unit]['short']
   }
   return timeStart.format(format)
 }
