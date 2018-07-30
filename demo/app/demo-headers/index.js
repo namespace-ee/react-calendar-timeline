@@ -213,6 +213,8 @@ export default class App extends Component {
                         textAlign: 'center',
                         borderLeft: '1px solid black',
                         cursor: 'pointer',
+                        backgroundColor: 'Turquoise',
+                        color: 'white',
                         ...intervalProvided.style
                       }
                       return (
