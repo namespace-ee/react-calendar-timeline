@@ -41,10 +41,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     touch-action: none;
   }
 
-  .rct-canvas {
-    position: relative;
-  }
-
   .rct-item {
     position: absolute;
     box-sizing: border-box;
@@ -261,13 +257,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     .rct-hl-even {
       background: $row-background-even;
     }
-  }
-
-  .rct-today {
-    position: absolute;
-    width: 2px;
-    background: red;
-    z-index: 50;
   }
 
   .rct-cursor-line {

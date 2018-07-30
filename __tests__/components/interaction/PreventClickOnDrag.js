@@ -149,7 +149,7 @@ describe('PreventClickOnDrag', () => {
 
   it('only allows single children element', () => {
     // dont emit propType error
-    jest.spyOn(global.console, 'error').mockImplementationOnce(noop)
+    jest.spyOn(global.console, 'error').mockImplementation(noop)
     expect(() =>
       mount(
         <PreventClickOnDrag
@@ -164,5 +164,7 @@ describe('PreventClickOnDrag', () => {
     ).toThrowError(
       'React.Children.only expected to receive a single React element child'
     )
+
+    jest.restoreAllMocks()
   })
 })

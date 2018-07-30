@@ -14,7 +14,7 @@
           "react-remove-properties",
           {
             "properties": [
-              "data-test-id"
+              "data-testid"
             ]
           }
         ]
