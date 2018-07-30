@@ -7,6 +7,27 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+
+### 0.18.2
+
+### Fixed
+
+* `onCanvasClick` not fired - #383
+* cursor marker disappear while hovering over item - #378
+
+### 0.18.1
+
+### Fixed
+
+* Date passed to CursorMarker child is wrong - #379
+* groupRenderer doesnt work for right sidebar - #377
+
+### 0.18.0
+
+### Fixed
+
+* Timeline now respects changes to `headerLabelFormats` and `subHeaderLabelFormats` - #362
+
 ### Added
 
 * timeline markers - user can have more control over markers that are rendered on the timeline. See `TimelineMarkers` section of README for documentation - #327
@@ -34,7 +55,10 @@ from 'react-calendar-timeline'
 + </Timeline>
 ```
 
+### 0.17.3
 
+### Added
+* fix issue with single row header - #359
 
 ### 0.17.2
 

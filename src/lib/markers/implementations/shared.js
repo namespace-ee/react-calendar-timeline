@@ -8,7 +8,11 @@ const criticalStyles = {
   top: 0,
   bottom: 0,
   width: '2px',
-  backgroundColor: 'black'
+  backgroundColor: 'black',
+  // by default, pointer events (specifically click) will
+  // "pass through".  This is added so that CursorMarker
+  // will not get in the way of canvas click
+  pointerEvents: 'none'
 }
 
 // FIXME: this creates a new object each time in render

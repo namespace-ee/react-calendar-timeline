@@ -1,6 +1,13 @@
 import moment from 'moment'
 import { _get } from './generic'
 
+/**
+ * Calculate the ms / pixel ratio of the timeline state
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @returns {number}
+ */
 export function coordinateToTimeRatio(
   canvasTimeStart,
   canvasTimeEnd,
@@ -9,6 +16,15 @@ export function coordinateToTimeRatio(
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
+/**
+ * For a given time, calculate the pixel position given timeline state
+ * (timeline width in px, canvas time range)
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @param {number} time
+ * @returns {number}
+ */
 export function calculateXPositionForTime(
   canvasTimeStart,
   canvasTimeEnd,
@@ -21,6 +37,15 @@ export function calculateXPositionForTime(
   return timeOffset * widthToZoomRatio
 }
 
+/**
+ * For a given x position (leftOffset) in pixels, calculate time based on
+ * timeline state (timeline width in px, canvas time range)
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @param {number} leftOffset
+ * @returns {number}
+ */
 export function calculateTimeForXPosition(
   canvasTimeStart,
   canvasTimeEnd,
@@ -31,7 +56,7 @@ export function calculateTimeForXPosition(
 
   const timeFromCanvasTimeStart = timeToPxRatio * leftOffset
 
-  return timeFromCanvasTimeStart + canvasTimeEnd
+  return timeFromCanvasTimeStart + canvasTimeStart
 }
 
 export function iterateTimes(start, end, unit, timeSteps, callback) {
@@ -68,7 +93,7 @@ export const minCellWidth = 17
 
 export function getMinUnit(zoom, width, timeSteps) {
   // for supporting weeks, its important to remember that each of these
-  // units has a national progression to the other. i.e. a year is 12 months
+  // units has a natural progression to the other. i.e. a year is 12 months
   // a month is 24 days, a day is 24 hours.
   // with weeks this isnt the case so weeks needs to be handled specially
   let timeDividers = {
@@ -222,7 +247,7 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
-export function stack(items, groupOrders, lineHeight, force) {
+export function stack(items, groupOrders, lineHeight) {
   var i, iMax
   var totalHeight = 0
 
@@ -230,13 +255,6 @@ export function stack(items, groupOrders, lineHeight, force) {
   var groupTops = []
 
   var groupedItems = getGroupedItems(items, groupOrders)
-
-  if (force) {
-    // reset top position of all items
-    for (i = 0, iMax = items.length; i < iMax; i++) {
-      items[i].dimensions.top = null
-    }
-  }
 
   groupedItems.forEach(function(group) {
     // calculate new, non-overlapping positions
@@ -290,7 +308,7 @@ export function stack(items, groupOrders, lineHeight, force) {
   }
 }
 
-export function nostack(items, groupOrders, lineHeight, force) {
+export function nostack(items, groupOrders, lineHeight) {
   var i, iMax
 
   var totalHeight = 0
@@ -299,13 +317,6 @@ export function nostack(items, groupOrders, lineHeight, force) {
   var groupTops = []
 
   var groupedItems = getGroupedItems(items, groupOrders)
-
-  if (force) {
-    // reset top position of all items
-    for (i = 0, iMax = items.length; i < iMax; i++) {
-      items[i].dimensions.top = null
-    }
-  }
 
   groupedItems.forEach(function(group) {
     // calculate new, non-overlapping positions
