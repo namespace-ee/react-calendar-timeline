@@ -133,7 +133,7 @@ $weekend: rgba(250, 246, 225, 0.5);
 
     .top-header,
     .bottom-header {
-      position: relative;
+      // position: relative;
     }
 
     .rct-label-group {
@@ -190,6 +190,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     box-sizing: border-box;
     border-bottom: $border-width solid $border-color;
     overflow: hidden;
+    position: sticky;
 
     &.rct-sidebar-right {
       border-right: 0;
@@ -202,7 +203,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     white-space: normal; // was set to nowrap in .rct-outer
     display: inline-block;
     vertical-align: top;
-    position: relative;
+    // position: relative;
     box-sizing: border-box;
     border-right: $border-width solid $border-color;
 

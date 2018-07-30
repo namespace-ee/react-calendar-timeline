@@ -18,16 +18,11 @@ class Header extends Component {
     stickyHeader: PropTypes.bool.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
-    registerScroll: PropTypes.func.isRequired,
-    leftSidebarHeader: PropTypes.node,
-    rightSidebarHeader: PropTypes.node,
     headerRef: PropTypes.func.isRequired
   }
 
   render() {
     const {
-      leftSidebarHeader,
-      rightSidebarHeader,
       width,
       stickyOffset,
       stickyHeader,
@@ -47,14 +42,12 @@ class Header extends Component {
         ref={headerRef}
         style={headerStyle}
       >
-        {leftSidebarHeader}
         <div style={{ width }} data-testid="timeline-elements-header-container">
           <TimelineElementsHeader
             data-testid="timeline-elements-header"
             {...this.props}
           />
         </div>
-        {rightSidebarHeader}
       </div>
     )
   }
