@@ -261,7 +261,7 @@ Default:
 
 ## scrollRef
 
-Ref callback that gets a DOM reference to the header element. Can be useful to programmatically scroll.
+Ref callback that gets a DOM reference to the scroll body element. Can be useful to programmatically scroll.
 
 ## onItemMove(itemId, dragTime, newGroupOrder)
 
