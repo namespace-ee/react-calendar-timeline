@@ -28,14 +28,14 @@ export const defaultHeaderFormats = {
   },
   month: {
     long: 'MMMM YYYY',
-    mediumLong: 'MMM YYYY',
+    mediumLong: 'MMMM',
     medium: 'MMMM',
     short: 'MM/YY'
   },
   day: {
     long: 'dddd, LL',
     mediumLong: 'dddd, LL',
-    medium: 'ddd',
+    medium: 'dd D',
     short: 'D'
   },
   hour: {

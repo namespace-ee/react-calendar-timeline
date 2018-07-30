@@ -192,7 +192,7 @@ export default class App extends Component {
           </SidebarHeader>
           <DateHeader primaryHeader />
           <DateHeader />
-          {/* <CustomHeader unit="year">
+          <CustomHeader unit="year">
             {({ provided, intervals }) => {
               const rootStyle = {
                 height: 30,
@@ -218,7 +218,7 @@ export default class App extends Component {
                       return (
                         <div
                           onClick={() => {
-                            showPeriod(startTime, undefined, endTime)
+                            showPeriod(startTime, endTime)
                           }}
                           {...intervalProvided}
                           style={style}
@@ -260,7 +260,7 @@ export default class App extends Component {
                       return (
                         <div
                           onClick={() => {
-                            showPeriod(startTime, undefined, endTime)
+                            showPeriod(startTime, endTime)
                           }}
                           {...intervalProvided}
                           style={style}
@@ -273,7 +273,7 @@ export default class App extends Component {
                 </div>
               )
             }}
-          </CustomHeader> */}
+          </CustomHeader>
         </TimelineHeaders>
         <TimelineMarkers>
           <TodayMarker />

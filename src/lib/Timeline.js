@@ -561,31 +561,14 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  showPeriod = (from, unit, to) => {
+  showPeriod = (from, to) => {
     let visibleTimeStart = from.valueOf()
-    let visibleTimeEnd = to
-      ? to.valueOf()
-      : moment(from)
-          .add(1, unit)
-          .valueOf()
+    let visibleTimeEnd = to.valueOf()
+
     let zoom = visibleTimeEnd - visibleTimeStart
     // can't zoom in more than to show one hour
     if (zoom < 360000) {
       return
-    }
-
-    // clicked on the big header and already focused here, zoom out
-    if (
-      unit &&
-      unit !== 'year' &&
-      this.state.visibleTimeStart === visibleTimeStart &&
-      this.state.visibleTimeEnd === visibleTimeEnd
-    ) {
-      let nextUnit = getNextUnit(unit)
-
-      visibleTimeStart = from.startOf(nextUnit).valueOf()
-      visibleTimeEnd = moment(visibleTimeStart).add(1, nextUnit)
-      zoom = visibleTimeEnd - visibleTimeStart
     }
 
     this.props.onTimeChange(
@@ -1075,11 +1058,7 @@ export default class ReactCalendarTimeline extends Component {
     }
     return (
       <TimelineHeaders>
-        <SidebarHeader>
-            {({ provided }) => {
-              return <div {...provided}/>
-            }}
-        </SidebarHeader>
+        <SidebarHeader/>
         <DateHeader primaryHeader />
         <DateHeader />
       </TimelineHeaders>

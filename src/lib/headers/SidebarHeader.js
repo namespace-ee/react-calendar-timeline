@@ -16,6 +16,7 @@ class SidebarHeader extends React.PureComponent {
 
 
   render() {
+    console.log("sidebar wrapper")
     const width =
       this.props.variant === RIGHT_VARIANT
         ? this.props.rightSidebarWidth
@@ -25,14 +26,16 @@ class SidebarHeader extends React.PureComponent {
         width
       }
     }
-    return this.props.children({provided})
+    if(this.props.children){
+      return this.props.children({provided})
+    }
+    return <div {...provided}/>
   }
 }
 
 const SidebarWrapper = ({ children, variant }) => (
   <TimelineHeadersConsumer>
     {({ leftSidebarWidth, rightSidebarWidth }) => {
-      console.log("sidebar wrapper")
       return (
         <SidebarHeader
           leftSidebarWidth={leftSidebarWidth}

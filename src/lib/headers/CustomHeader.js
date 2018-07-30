@@ -64,6 +64,7 @@ export class CustomHeader extends React.Component {
       nextProps.timeSteps !== this.props.timeSteps ||
       nextProps.showPeriod !== this.props.showPeriod
     ) {
+      
       const {
         canvasTimeStart,
         canvasTimeEnd,

@@ -66,10 +66,10 @@ class DateHeader extends React.Component {
                           const nextUnit = getNextUnit(unit)
                           const newStartTime =startTime.clone().startOf(nextUnit)
                           const newEndTime = startTime.clone().endOf(nextUnit)
-                          showPeriod(newStartTime, undefined, newEndTime)
+                          showPeriod(newStartTime, newEndTime)
                         }
                         else {
-                          showPeriod(startTime, undefined, endTime)
+                          showPeriod(startTime, endTime)
                         }
                       }}
                       {...intervalProvided}
