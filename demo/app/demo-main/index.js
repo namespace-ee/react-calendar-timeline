@@ -25,14 +25,6 @@ var keys = {
   itemTimeEndKey: 'end'
 }
 
-const format = "DD.MM.YYYY"
-const holidays = [moment("01.01.2018", format), moment("06.01.2018", format), moment("30.03.2018", format),
-  moment("01.04.2018", format), moment("02.04.2018", format), moment("01.05.2018", format),
-  moment("10.05.2018", format), moment("20.05.2018", format), moment("21.05.2018", format),
-  moment("31.05.2018", format), moment("15.08.2018", format), moment("26.10.2018", format),
-  moment("01.11.2018", format), moment("08.12.2018", format), moment("24.12.2018", format),
-  moment("25.12.2018", format), moment("26.12.2018", format), moment("31.12.2018", format)]
-
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -144,17 +136,6 @@ export default class App extends Component {
     return time
   }
 
-  verticalLineClassNamesForTime = (timeStart, timeEnd) => {
-    const currentTimeStart = moment(timeStart)
-    const currentTimeEnd = moment(timeEnd)
-
-    for (let holiday of holidays) {
-      if (holiday.isSame(currentTimeStart, "day") && holiday.isSame(currentTimeEnd, "day")) {
-        return ["holiday"]
-      }
-    }
-  }
-
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
@@ -186,7 +167,6 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
-        verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
       />
     )
   }

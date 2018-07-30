@@ -11,7 +11,8 @@ const demos = {
   treeGroups: require('./demo-tree-groups').default,
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
-  stickyHeader: require('./demo-sticky-header').default
+  stickyHeader: require('./demo-sticky-header').default,
+  verticalClasses: require('./demo-vertical-classes').default
 }
 
 // A simple component that shows the pathname of the current location
