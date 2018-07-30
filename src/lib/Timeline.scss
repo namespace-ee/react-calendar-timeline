@@ -23,6 +23,7 @@ $weekend: rgba(250, 246, 225, 0.5);
 .react-calendar-timeline {
   * {
     box-sizing: border-box;
+    scroll-behavior: unset;
   }
 
   .rct-outer {
