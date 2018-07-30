@@ -42,13 +42,13 @@ export default class Sidebar extends Component {
   }
 
   render() {
-    const { width, groupHeights, height, isRightSidebar } = this.props
+    const { width, groupHeights, height, isRightSidebar, headerHeight } = this.props
 
     const { groupIdKey, groupTitleKey, groupRightTitleKey } = this.props.keys
 
     const sidebarStyle = {
       width: `${width}px`,
-      height: `${height}px`
+      height: `${height + headerHeight}px`
     }
 
     const groupsStyle = {
