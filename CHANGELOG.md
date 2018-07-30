@@ -11,6 +11,53 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * possibility to set classes for vertical lines depending on its time
 
+### 0.18.2
+
+### Fixed
+
+* `onCanvasClick` not fired - #383
+* cursor marker disappear while hovering over item - #378
+
+### 0.18.1
+
+### Fixed
+
+* Date passed to CursorMarker child is wrong - #379
+* groupRenderer doesnt work for right sidebar - #377
+
+### 0.18.0
+
+### Fixed
+
+* Timeline now respects changes to `headerLabelFormats` and `subHeaderLabelFormats` - #362
+
+### Added
+
+* timeline markers - user can have more control over markers that are rendered on the timeline. See `TimelineMarkers` section of README for documentation - #327
+
+### Breaking
+
+* Removed support for React 15 and lower.  This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
+* removed `showCursorLine` prop in favor of using the `CursorMarker` component. See `TimelineMarkers` section of README for documentation.
+
+```diff
+import Timeline,
++ {TimelineMarkers, CursorMarker}
+from 'react-calendar-timeline'
+
+<Timeline
+- showCursorLine
+
+- />
++ >
+
++ <TimelineMarkers>
++  <CursorMarker />
++ </TimelineMarkers>
+
++ </Timeline>
+```
+
 ### 0.17.3
 
 ### Added

@@ -5,7 +5,7 @@ export function buildDom(domString) {
 }
 
 export function sel(selectorString) {
-  return `[data-test-id="${selectorString}"]`
+  return `[data-testid="${selectorString}"]`
 }
 
 export function noop() {}

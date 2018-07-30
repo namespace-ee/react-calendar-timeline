@@ -1,6 +1,13 @@
 import moment from 'moment'
 import { _get } from './generic'
 
+/**
+ * Calculate the ms / pixel ratio of the timeline state
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @returns {number}
+ */
 export function coordinateToTimeRatio(
   canvasTimeStart,
   canvasTimeEnd,
@@ -9,6 +16,15 @@ export function coordinateToTimeRatio(
   return (canvasTimeEnd - canvasTimeStart) / canvasWidth
 }
 
+/**
+ * For a given time, calculate the pixel position given timeline state
+ * (timeline width in px, canvas time range)
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @param {number} time
+ * @returns {number}
+ */
 export function calculateXPositionForTime(
   canvasTimeStart,
   canvasTimeEnd,
@@ -19,6 +35,28 @@ export function calculateXPositionForTime(
   const timeOffset = time - canvasTimeStart
 
   return timeOffset * widthToZoomRatio
+}
+
+/**
+ * For a given x position (leftOffset) in pixels, calculate time based on
+ * timeline state (timeline width in px, canvas time range)
+ * @param {number} canvasTimeStart
+ * @param {number} canvasTimeEnd
+ * @param {number} canvasWidth
+ * @param {number} leftOffset
+ * @returns {number}
+ */
+export function calculateTimeForXPosition(
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth,
+  leftOffset
+) {
+  const timeToPxRatio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
+
+  const timeFromCanvasTimeStart = timeToPxRatio * leftOffset
+
+  return timeFromCanvasTimeStart + canvasTimeStart
 }
 
 export function iterateTimes(start, end, unit, timeSteps, callback) {

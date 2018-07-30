@@ -43,17 +43,14 @@ class Header extends Component {
     return (
       <div
         className={`rct-header-container ${headerClass}`}
-        data-test-id="timeline-elements-container"
+        data-testid="timeline-elements-container"
         ref={headerRef}
         style={headerStyle}
       >
         {leftSidebarHeader}
-        <div
-          style={{ width }}
-          data-test-id="timeline-elements-header-container"
-        >
+        <div style={{ width }} data-testid="timeline-elements-header-container">
           <TimelineElementsHeader
-            data-test-id="timeline-elements-header"
+            data-testid="timeline-elements-header"
             {...this.props}
           />
         </div>
