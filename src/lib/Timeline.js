@@ -414,8 +414,8 @@ export default class ReactCalendarTimeline extends Component {
        * Bail out here as we are a controlled component
        * There should not be situations where we will not
        * receive new props and check if our canvas needs
-       * to be updated
-       * Avoid updating state
+       * to be updated.
+       * Avoids updating state
        */ 
       return; 
     }
@@ -430,8 +430,6 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart: canvasTimeStart + zoom
       })
     }
-
-
   }
 
   componentWillReceiveProps(nextProps) {
