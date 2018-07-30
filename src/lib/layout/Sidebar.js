@@ -13,7 +13,9 @@ export default class Sidebar extends Component {
     keys: PropTypes.object.isRequired,
     groupRenderer: PropTypes.func,
     isRightSidebar: PropTypes.bool,
-    content: PropTypes.node
+    content: PropTypes.node,
+    stickyOffset: PropTypes.number,
+    stickyHeader: PropTypes.bool.isRequired,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -77,14 +79,21 @@ export default class Sidebar extends Component {
       )
     })
 
+    const headerStyle = {
+      width: width,
+      height: this.props.headerHeight,
+      top: this.props.stickyHeader ? this.props.stickyOffset || 0 : 0
+    }
+    const headerClass = this.props.stickyHeader ? 'header-sticky' : ''
+
     return (
       <div
         className={'rct-sidebar' + (isRightSidebar ? ' rct-sidebar-right' : '')}
         style={sidebarStyle}
       >
         <div
-          className="rct-sidebar-header"
-          style={{ width, height: this.props.headerHeight }}
+          className={`rct-sidebar-header ${headerClass}`}
+          style={headerStyle}
         >
           {this.props.content}
         </div>

@@ -119,6 +119,7 @@ $weekend: rgba(250, 246, 225, 0.5);
   .rct-header-container {
     z-index: 90;
     display: flex;
+    overflow: hidden;
 
     &.header-sticky {
       position: sticky;
@@ -128,7 +129,6 @@ $weekend: rgba(250, 246, 225, 0.5);
 
   .rct-header {
     margin: 0;
-    overflow-x: hidden;
     z-index: 90;
 
     .top-header,
@@ -190,16 +190,20 @@ $weekend: rgba(250, 246, 225, 0.5);
     box-sizing: border-box;
     border-bottom: $border-width solid $border-color;
     overflow: hidden;
-    position: sticky;
 
     &.rct-sidebar-right {
       border-right: 0;
       border-left: $border-width solid $border-color;
     }
+
+    &.header-sticky {
+      position: sticky;
+      position: -webkit-sticky;
+    }
   }
 
   .rct-sidebar {
-    overflow: hidden;
+    // overflow: hidden;
     white-space: normal; // was set to nowrap in .rct-outer
     display: inline-block;
     vertical-align: top;
