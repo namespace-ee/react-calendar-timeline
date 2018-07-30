@@ -99,6 +99,7 @@ export default class ReactCalendarTimeline extends Component {
       itemTimeEndKey: PropTypes.string
     }),
     headerRef: PropTypes.func,
+    scrollRef: PropTypes.func,
 
     timeSteps: PropTypes.shape({
       second: PropTypes.number,
@@ -209,6 +210,7 @@ export default class ReactCalendarTimeline extends Component {
     keys: defaultKeys,
     timeSteps: defaultTimeSteps,
     headerRef: () => {},
+    scrollRef: () => {},
 
     // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
     // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
@@ -1189,7 +1191,10 @@ export default class ReactCalendarTimeline extends Component {
             <div style={outerComponentStyle} className="rct-outer">
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
-                scrollRef={el => (this.scrollComponent = el)}
+                scrollRef={el => {
+                  this.props.scrollRef(el);
+                  this.scrollComponent = el
+                }}
                 width={width}
                 height={height}
                 onZoom={this.changeZoom}
