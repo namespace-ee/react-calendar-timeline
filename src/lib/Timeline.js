@@ -20,9 +20,9 @@ import {
   nostack,
   calculateDimensions,
   getGroupOrders,
-  getVisibleItems
+  getVisibleItems,
+  calculateTimeForXPosition
 } from './utility/calendar'
-import { getParentPosition } from './utility/dom-helpers'
 import { _get, _length } from './utility/generic'
 import {
   defaultKeys,
@@ -657,16 +657,25 @@ export default class ReactCalendarTimeline extends Component {
   // as well as generalizing how we get time from click on the canvas
   getTimeFromRowClickEvent = e => {
     const { dragSnap } = this.props
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+    const {
+      width,
+      canvasTimeStart,
+      visibleTimeStart,
+      visibleTimeEnd
+    } = this.state
+    // this gives us distance from left of row element, so event is in
+    // context of the row element, not client or page
+    const { offsetX } = e.nativeEvent
 
-    // get coordinates relative to the component
-    const parentPosition = getParentPosition(e.currentTarget)
+    // FIXME: DRY up way to calculate canvasTimeEnd
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = zoom * 3 + canvasTimeStart
 
-    const x = e.clientX - parentPosition.x
-
-    // calculate the x (time) coordinate taking the dragSnap into account
-    let time = Math.round(
-      visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart)
+    let time = calculateTimeForXPosition(
+      canvasTimeStart,
+      canvasTimeEnd,
+      width * 3,
+      offsetX
     )
     time = Math.floor(time / dragSnap) * dragSnap
 
@@ -918,6 +927,7 @@ export default class ReactCalendarTimeline extends Component {
         <Sidebar
           groups={this.props.groups}
           keys={this.props.keys}
+          groupRenderer={this.props.groupRenderer}
           isRightSidebar
           width={this.props.rightSidebarWidth}
           groupHeights={groupHeights}
@@ -1157,12 +1167,6 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
-    const canvasComponentStyle = {
-      width: `${canvasWidth}px`,
-      height: `${height}px`,
-      position: 'relative'
-    }
-
     return (
       <TimelineStateProvider
         visibleTimeStart={visibleTimeStart}
@@ -1204,8 +1208,7 @@ export default class ReactCalendarTimeline extends Component {
                   onMouseMove={this.handleScrollMouseMove}
                   onContextMenu={this.handleScrollContextMenu}
                 >
-                  <div style={canvasComponentStyle}>
-                    <MarkerCanvas />
+                <MarkerCanvas>
                     {this.items(
                       canvasTimeStart,
                       zoom,
@@ -1241,7 +1244,7 @@ export default class ReactCalendarTimeline extends Component {
                       minUnit,
                       timeSteps
                     )}
-                  </div>
+                </MarkerCanvas>
                 </ScrollElement>
                 </div>
               </div>
