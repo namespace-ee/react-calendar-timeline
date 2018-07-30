@@ -50,3 +50,7 @@ body {
 .holiday {
   background-color: rgba(250, 246, 225, 0.5);
 }
+
+.lunch {
+  background-color: rgba(255, 0, 0, 0.5) !important; /* we need to overwrite the weekend rule */
+}

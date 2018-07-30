@@ -58,7 +58,7 @@ export default class VerticalLines extends Component {
 
         let classNamesForTime = []
         if (verticalLineClassNamesForTime) {
-          classNamesForTime = [verticalLineClassNamesForTime(time.unix() * 1000, nextTime.unix() * 1000 - 1)];
+          classNamesForTime = verticalLineClassNamesForTime(time.unix() * 1000, nextTime.unix() * 1000 - 1);
         }
 
         const classNames =

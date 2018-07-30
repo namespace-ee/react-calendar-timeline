@@ -46,40 +46,61 @@ export default class App extends Component {
     }
   }
 
+  getMinutesOfDay = (date) => {
+    return date.hours() * 60 + date.minutes()
+  }
+
   verticalLineClassNamesForTime = (timeStart, timeEnd) => {
     const currentTimeStart = moment(timeStart)
     const currentTimeEnd = moment(timeEnd)
 
+    let classes = [];
+
+    // check for public holidays
     for (let holiday of holidays) {
       if (holiday.isSame(currentTimeStart, "day") && holiday.isSame(currentTimeEnd, "day")) {
-        return ["holiday"]
+        classes.push("holiday")
       }
     }
+
+    // highlight lunch break (12:00-13:00)
+    const lunchStart = moment().hours(12).minutes(0).seconds(0);
+    const lunchEnd = moment().hours(13).minutes(0).seconds(0);
+    if (this.getMinutesOfDay(currentTimeStart) >= this.getMinutesOfDay(lunchStart) &&
+      this.getMinutesOfDay(currentTimeEnd) <= this.getMinutesOfDay(lunchEnd)) {
+      classes.push("lunch");
+    }
+
+    return classes;
   }
 
   render() {
     const {groups, items, defaultTimeStart, defaultTimeEnd} = this.state
 
     return (
-      <Timeline
-        groups={groups}
-        items={items}
-        keys={keys}
-        sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
-        canMove
-        canResize="right"
-        canSelect
-        itemsSorted
-        itemTouchSendsClick={false}
-        stackItems
-        itemHeightRatio={0.75}
-        showCursorLine
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
-      />
-    )
+      <div style={{ padding: 20, paddingTop: 0 }}>
+        In this example we have public holidays we want to highlight.<br />
+        Also we want to visually highlight a blocking range (e.g. lunch break).<br />
+        <br />
+        <Timeline
+          groups={groups}
+          items={items}
+          keys={keys}
+          sidebarWidth={150}
+          sidebarContent={<div>Above The Left</div>}
+          canMove
+          canResize="right"
+          canSelect
+          itemsSorted
+          itemTouchSendsClick={false}
+          stackItems
+          itemHeightRatio={0.75}
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+          verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
+        />
+      </div>
+  )
   }
 
 }
