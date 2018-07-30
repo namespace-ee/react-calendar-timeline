@@ -284,24 +284,12 @@ export default class ReactCalendarTimeline extends Component {
       )
     }
 
-    let canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart);
-    let width = 0;
-
-    const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
-      props.items,
-      props.groups,
-      canvasTimeStart,
-      visibleTimeStart,
-      visibleTimeEnd,
-      width
-    )
-
     this.state = {
-      width: width,
+      width: 1000,
 
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
-      canvasTimeStart: canvasTimeStart,
+      canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
 
       selectedItem: null,
       dragTime: null,
@@ -309,13 +297,25 @@ export default class ReactCalendarTimeline extends Component {
       resizeTime: null,
       topOffset: 0,
       resizingItem: null,
-      resizingEdge: null,
-
-      dimensionItems: dimensionItems,
-      height: height,
-      groupHeights: groupHeights,
-      groupTops: groupTops
+      resizingEdge: null
     }
+
+    const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
+      props.items,
+      props.groups,
+      this.state.canvasTimeStart,
+      this.state.visibleTimeStart,
+      this.state.visibleTimeEnd,
+      this.state.width
+    )
+
+    /* eslint-disable react/no-direct-mutation-state */
+    this.state.dimensionItems = dimensionItems
+    this.state.height = height
+    this.state.groupHeights = groupHeights
+    this.state.groupTops = groupTops
+
+    /* eslint-enable */
   }
 
   componentDidMount() {
