@@ -420,9 +420,12 @@ export default class ReactCalendarTimeline extends Component {
       sidebarWidth
     } = nextProps
 
-    const forceUpdate = true//items !== this.props.items || groups !== this.props.groups
+    // This is a gross hack pushing items and groups in to state only to allow
+    // For the forceUpdate check
+    let derivedState = {items, groups}
 
-    let derivedState = {}
+    const forceUpdate = items !== prevState.items || groups !== prevState.groups
+
     if (visibleTimeStart && visibleTimeEnd) {
       Object.assign(derivedState, 
         ReactCalendarTimeline.calculateUpdateScrollCanvas(
@@ -467,7 +470,12 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   updateDimensions(items, groups) {
-    this.setState(ReactCalendarTimeline.calculateUpdateDimensions(items, groups, this.props, this.state))
+    this.setState(
+      ReactCalendarTimeline.calculateUpdateDimensions(
+        items, 
+        groups, 
+        this.props, 
+        this.state))
   }
 
   static calculateUpdateScrollCanvas(
@@ -515,75 +523,15 @@ export default class ReactCalendarTimeline extends Component {
     items = this.props.items,
     groups = this.props.groups
   ) => {
-    const oldCanvasTimeStart = this.state.canvasTimeStart
-    const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-    const newZoom = visibleTimeEnd - visibleTimeStart
-
-    let newState = {
-      visibleTimeStart: visibleTimeStart,
-      visibleTimeEnd: visibleTimeEnd
-    }
-
-    let resetCanvas = false
-
-    const canKeepCanvas =
-      visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
-      visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
-      visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
-      visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
-
-    // if new visible time is in the right canvas area
-    if (canKeepCanvas) {
-      // but we need to update the scroll
-      const newScrollLeft = Math.round(
-        this.state.width * (visibleTimeStart - oldCanvasTimeStart) / newZoom
-      )
-      if (this.scrollComponent.scrollLeft !== newScrollLeft) {
-        resetCanvas = true
-      }
-    } else {
-      resetCanvas = true
-    }
-
-    if (resetCanvas) {
-      // Todo: need to calculate new dimensions
-      newState.canvasTimeStart = visibleTimeStart - newZoom
-      this.scrollComponent.scrollLeft = this.state.width
-
-      if (this.props.onBoundsChange) {
-        this.props.onBoundsChange(
-          newState.canvasTimeStart,
-          newState.canvasTimeStart + newZoom * 3
-        )
-      }
-    }
-
-    if (resetCanvas || forceUpdateDimensions) {
-      const canvasTimeStart = newState.canvasTimeStart
-        ? newState.canvasTimeStart
-        : oldCanvasTimeStart
-      const {
-        dimensionItems,
-        height,
-        groupHeights,
-        groupTops
-      } = ReactCalendarTimeline.stackItems(
-        items,
-        groups,
-        canvasTimeStart,
-        visibleTimeStart,
-        visibleTimeEnd,
-        this.state.width,
-        this.props,
-        this.state
-      )
-      newState.dimensionItems = dimensionItems
-      newState.height = height
-      newState.groupHeights = groupHeights
-      newState.groupTops = groupTops
-    }
-
-    this.setState(newState)
+    this.setState(
+      ReactCalendarTimeline.calculateUpdateScrollCanvas(
+        visibleTimeStart, 
+        visibleTimeEnd, 
+        forceUpdateDimensions, 
+        items, 
+        groups, 
+        this.props, 
+        this.state))
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -596,16 +544,19 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     // The bounds have changed? Report it!
-    if (this.state.canvasTimeStart !== prevState.canvasTimeStart) {
-      this.onBoundsChange(this.state.canvasTimeStart, this.state.canvasTimeStart + newZoom * 3)
+    if (this.props.onBoundsChange && this.state.canvasTimeStart !== prevState.canvasTimeStart) {
+      this.props.onBoundsChange(this.state.canvasTimeStart, this.state.canvasTimeStart + newZoom * 3)
     }
 
     // Check the scroll is correct
     const scrollLeft = Math.round(
-      prevState.width * (this.state.visibleTimeStart - prevState.canvasTimeStart) / newZoom)
+      this.state.width * (this.state.visibleTimeStart - this.state.canvasTimeStart) / newZoom)
     if (this.scrollComponent.scrollLeft !== scrollLeft) {
-      this.scrollComponent.scrollLeft = scrollLeft
-      this.headerRef.scrollLeft = scrollLeft
+      //this.scrollComponent.scrollLeft = scrollLeft
+    }
+
+    if (this.headerRef.scrollLeft !== scrollLeft) {
+      //this.headerRef.scrollLeft = scrollLeft
     }
   }
 
