@@ -27,7 +27,6 @@ class ScrollElement extends Component {
     this.props.scrollRef(el)
   }
 
-  // TODO: fix this where this is called when scrollLeft is set
   handleScroll = () => {
     const { width } = this.props
     const scrollComponent = this.scrollComponent

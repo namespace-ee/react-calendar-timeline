@@ -253,9 +253,6 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
 
-    //TODO: Performance
-    //prob wanna memoize this so we ensure that if no items changed,
-    //we return same context reference
     return {
       timelineWidth: width,
       visibleTimeStart,
@@ -494,7 +491,6 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (resetCanvas) {
-      // Todo: need to calculate new dimensions
       newState.canvasTimeStart = visibleTimeStart - newZoom
       this.scrollComponent.scrollLeft = this.state.width
 
