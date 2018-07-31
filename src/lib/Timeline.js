@@ -404,28 +404,6 @@ export default class ReactCalendarTimeline extends Component {
         this.updateScrollCanvas
       )
     }
-
-    if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
-      /* 
-       * Bail out here as we are a controlled component
-       * There should not be situations where we will not
-       * receive new props and check if our canvas needs
-       * to be updated.
-       * Avoids updating state
-       */ 
-      return; 
-    }
-
-    if (newScrollX < width * 0.5) {
-      this.setState({
-        canvasTimeStart: canvasTimeStart - zoom
-      })
-    }
-    if (newScrollX > width * 1.5) {
-      this.setState({
-        canvasTimeStart: canvasTimeStart + zoom
-      })
-    }
   }
 
   componentWillReceiveProps(nextProps) {
