@@ -392,7 +392,7 @@ export default class ReactCalendarTimeline extends Component {
 
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     
-    const visibleTimeStart = canvasTimeStart + zoom * newScrollX / width
+    const visibleTimeStart = canvasTimeStart + zoom * scrollX / width
 
     if (
       this.state.visibleTimeStart !== visibleTimeStart ||
