@@ -300,13 +300,15 @@ export default class ReactCalendarTimeline extends Component {
       resizingEdge: null
     }
 
-    const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
+    const { dimensionItems, height, groupHeights, groupTops } = ReactCalendarTimeline.stackItems(
       props.items,
       props.groups,
       this.state.canvasTimeStart,
       this.state.visibleTimeStart,
       this.state.visibleTimeEnd,
-      this.state.width
+      this.state.width,
+      this.props,
+      this.state
     )
 
     /* eslint-disable react/no-direct-mutation-state */
@@ -348,13 +350,15 @@ export default class ReactCalendarTimeline extends Component {
     const { headerLabelGroupHeight, headerLabelHeight } = props
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
-    const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
+    const { dimensionItems, height, groupHeights, groupTops } = ReactCalendarTimeline.stackItems(
       props.items,
       props.groups,
       this.state.canvasTimeStart,
       this.state.visibleTimeStart,
       this.state.visibleTimeEnd,
-      width
+      width,
+      this.props,
+      this.state
     )
 
     // this is needed by dragItem since it uses pageY from the drag events
@@ -369,6 +373,7 @@ export default class ReactCalendarTimeline extends Component {
       groupHeights,
       groupTops
     })
+    
     this.scrollComponent.scrollLeft = width
     this.headerRef.scrollLeft = width
   }
@@ -428,7 +433,7 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, prevState) {
     const {
       visibleTimeStart,
       visibleTimeEnd,
@@ -437,56 +442,104 @@ export default class ReactCalendarTimeline extends Component {
       sidebarWidth
     } = nextProps
 
+    const forceUpdate = true//items !== this.props.items || groups !== this.props.groups
+
+    let derivedState = {}
     if (visibleTimeStart && visibleTimeEnd) {
-      this.updateScrollCanvas(
-        visibleTimeStart,
-        visibleTimeEnd,
-        items !== this.props.items || groups !== this.props.groups,
-        items,
-        groups
-      )
-    } else if (items !== this.props.items || groups !== this.props.groups) {
-      this.updateDimensions(items, groups)
+      Object.assign(derivedState, 
+        ReactCalendarTimeline.calculateUpdateScrollCanvas(
+          visibleTimeStart,
+          visibleTimeEnd,
+          forceUpdate,
+          items,
+          groups,
+          nextProps,
+          prevState
+      ))
+    } else if (forceUpdate) {
+      Object.assign(derivedState, 
+        ReactCalendarTimeline.calculateUpdateDimensions(
+          items, 
+          groups, 
+          nextProps,
+          prevState
+      ))
     }
 
-    // resize if the sidebar width changed
-    if (sidebarWidth !== this.props.sidebarWidth && items && groups) {
-      this.resize(nextProps)
-    }
+    return derivedState
   }
 
-  updateDimensions(items, groups) {
+  static calculateUpdateDimensions(items, groups, props, state) {
     const {
       canvasTimeStart,
       visibleTimeStart,
       visibleTimeEnd,
       width
-    } = this.state
-    const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
+    } = state
+    return ReactCalendarTimeline.stackItems(
       items,
       groups,
       canvasTimeStart,
       visibleTimeStart,
       visibleTimeEnd,
-      width
+      width,
+      props,
+      state
     )
-
-    this.setState({ dimensionItems, height, groupHeights, groupTops })
   }
+
+  updateDimensions(items, groups) {
+    this.setState(ReactCalendarTimeline.calculateUpdateDimensions(items, groups, this.props, this.state))
+  }
+
+  static calculateUpdateScrollCanvas(
+    visibleTimeStart,
+    visibleTimeEnd,
+    forceUpdateDimensions,
+    items,
+    groups,
+    props,
+    state) {
+      const oldCanvasTimeStart = state.canvasTimeStart
+      const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
+
+      const newState = { visibleTimeStart, visibleTimeEnd }
+  
+      const canKeepCanvas =
+        visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
+        visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
+        visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
+        visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
+      
+      if (!canKeepCanvas || forceUpdateDimensions) {
+        const canvasTimeStart = newState.canvasTimeStart
+          ? newState.canvasTimeStart
+          : oldCanvasTimeStart
+        Object.assign(newState, ReactCalendarTimeline.stackItems(
+          items,
+          groups,
+          canvasTimeStart,
+          visibleTimeStart,
+          visibleTimeEnd,
+          state.width,
+          props,
+          state
+        ))  
+      }
+      return newState
+    }
 
   // called when the visible time changes
   updateScrollCanvas = (
     visibleTimeStart,
     visibleTimeEnd,
     forceUpdateDimensions,
-    updatedItems,
-    updatedGroups
+    items = this.props.items,
+    groups = this.props.groups
   ) => {
     const oldCanvasTimeStart = this.state.canvasTimeStart
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = visibleTimeEnd - visibleTimeStart
-    const items = updatedItems || this.props.items
-    const groups = updatedGroups || this.props.groups
 
     let newState = {
       visibleTimeStart: visibleTimeStart,
@@ -536,13 +589,15 @@ export default class ReactCalendarTimeline extends Component {
         height,
         groupHeights,
         groupTops
-      } = this.stackItems(
+      } = ReactCalendarTimeline.stackItems(
         items,
         groups,
         canvasTimeStart,
         visibleTimeStart,
         visibleTimeEnd,
-        this.state.width
+        this.state.width,
+        this.props,
+        this.state
       )
       newState.dimensionItems = dimensionItems
       newState.height = height
@@ -550,14 +605,30 @@ export default class ReactCalendarTimeline extends Component {
       newState.groupTops = groupTops
     }
 
-    this.setState(newState, () => {
-      // are we changing zoom? Well then let's report it
-      // need to wait until state is set so that we get current
-      // timeline context
-      if (this.props.onZoom && oldZoom !== newZoom) {
+    this.setState(newState)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const newZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const oldZoom = prevState.visibleTimeEnd - prevState.visibleTimeStart
+    
+    // are we changing zoom? Report it!
+    if (this.props.onZoom && newZoom !== oldZoom) {
         this.props.onZoom(this.getTimelineContext())
-      }
-    })
+    }
+
+    // The bounds have changed? Report it!
+    if (this.state.canvasTimeStart !== prevState.canvasTimeStart) {
+      this.onBoundsChange(this.state.canvasTimeStart, this.state.canvasTimeStart + newZoom * 3)
+    }
+
+    // Check the scroll is correct
+    const scrollLeft = Math.round(
+      prevState.width * (this.state.visibleTimeStart - prevState.canvasTimeStart) / newZoom)
+    if (this.scrollComponent.scrollLeft !== scrollLeft) {
+      this.scrollComponent.scrollLeft = scrollLeft
+      this.headerRef.scrollLeft = scrollLeft
+    }
   }
 
   handleWheelZoom = (speed, xPosition, deltaY) => {
@@ -937,13 +1008,15 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  stackItems(
+  static stackItems(
     items,
     groups,
     canvasTimeStart,
     visibleTimeStart,
     visibleTimeEnd,
-    width
+    width,
+    props,
+    state
   ) {
     // if there are no groups return an empty array of dimensions
     if (groups.length === 0) {
@@ -955,7 +1028,7 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    const { keys, lineHeight, stackItems, itemHeightRatio } = this.props
+    const { keys, lineHeight, stackItems, itemHeightRatio } = props
     const {
       draggingItem,
       dragTime,
@@ -963,7 +1036,7 @@ export default class ReactCalendarTimeline extends Component {
       resizingEdge,
       resizeTime,
       newGroupOrder
-    } = this.state
+    } = state
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
@@ -1145,13 +1218,15 @@ export default class ReactCalendarTimeline extends Component {
     const isInteractingWithItem = !!draggingItem || !!resizingItem
 
     if (isInteractingWithItem) {
-      const stackResults = this.stackItems(
+      const stackResults = ReactCalendarTimeline.stackItems(
         items,
         groups,
         canvasTimeStart,
         visibleTimeStart,
         visibleTimeEnd,
-        width
+        width,
+        this.props,
+        this.state
       )
       dimensionItems = stackResults.dimensionItems
       height = stackResults.height
