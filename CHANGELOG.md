@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* add scroll ref
+
+### 0.18.2
+
 ### Fixed
 
 * `onCanvasClick` not fired - #383
@@ -70,7 +74,6 @@ from 'react-calendar-timeline'
 ### Added
 
 * pass canvasTimeStart/End via timelineContext to the itemRenderer prop
-
 
 ### 0.17.0
 

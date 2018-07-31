@@ -20,7 +20,7 @@ const staticStyles = {
 class MarkerCanvas extends React.Component {
   static propTypes = {
     getDateFromLeftOffsetPosition: PropTypes.func.isRequired,
-    children: PropTypes.element
+    children: PropTypes.node
   }
 
   handleMouseMove = evt => {
