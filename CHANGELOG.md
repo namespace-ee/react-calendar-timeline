@@ -7,9 +7,14 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* rework item renderer to render the whole item using render prop and prop getters
+
+### Breaking
 * add scroll ref
 
 ### 0.18.2
+
+
 
 ### Fixed
 
