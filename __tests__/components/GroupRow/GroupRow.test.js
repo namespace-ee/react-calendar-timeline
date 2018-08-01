@@ -6,6 +6,7 @@ import GroupRow from 'lib/row/GroupRow'
 const defaultProps = {
   onClick: noop,
   onDoubleClick: noop,
+  onContextMenu: noop,
   isEvenRow: false,
   clickTolerance: 10,
   style: {}
@@ -40,6 +41,20 @@ describe('GroupRow', () => {
     wrapper.simulate('click')
 
     expect(onClickMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls passed in onContextMenu', () => {
+    const onContextMenuMock = jest.fn()
+    const props = {
+      ...defaultProps,
+      onContextMenu: onContextMenuMock
+    }
+
+    const wrapper = mount(<GroupRow {...props} />)
+
+    wrapper.simulate('contextmenu')
+
+    expect(onContextMenuMock).toHaveBeenCalledTimes(1)
   })
   it('assigns "rct-hl-even" class if isEvenRow is true', () => {
     const props = {

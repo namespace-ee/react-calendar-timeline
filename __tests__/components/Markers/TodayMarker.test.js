@@ -76,8 +76,7 @@ describe('TodayMarker', () => {
       </RenderWrapper>
     )
 
-    // TODO: do we want better assertions around this instead of just any
-    // Number or Object?
+    // FIXME: test for date and styles as actual values
     expect(renderMock).toHaveBeenCalledWith({
       date: expect.any(Number),
       styles: expect.any(Object)
