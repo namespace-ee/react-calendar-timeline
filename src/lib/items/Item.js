@@ -6,7 +6,7 @@ import moment from 'moment'
 import { _get, deepObjectCompare } from '../utility/generic'
 import { composeEvents } from '../utility/events'
 import { defaultItemRenderer } from './defaultItemRendere'
-
+import { coordinateToTimeRatio } from '../utility/calendar'
 import {
   overridableStyles,
   selectedStyle,
@@ -125,16 +125,16 @@ export default class Item extends Component {
     this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
   }
 
-  // TODO: this is same as coordinateToTimeRatio in utilities
-  coordinateToTimeRatio(props = this.props) {
-    return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth
+  getTimeRatio() {
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
+    return coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
   }
 
   dragTimeSnap(dragTime, considerOffset) {
     const { dragSnap } = this.props
     if (dragSnap) {
       const offset = considerOffset ? moment().utcOffset() * 60 * 1000 : 0
-      return Math.round(dragTime / dragSnap) * dragSnap - (offset % dragSnap)
+      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap
     } else {
       return dragTime
     }
@@ -155,7 +155,7 @@ export default class Item extends Component {
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
-      const timeDelta = deltaX * this.coordinateToTimeRatio()
+      const timeDelta = deltaX * this.getTimeRatio()
 
       return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
     } else {
@@ -193,7 +193,7 @@ export default class Item extends Component {
   resizeTimeDelta(e, resizeEdge) {
     const length = this.itemTimeEnd - this.itemTimeStart
     const timeDelta = this.dragTimeSnap(
-      (e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio()
+      (e.pageX - this.state.resizeStart) * this.getTimeRatio()
     )
 
     if (

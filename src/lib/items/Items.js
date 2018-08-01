@@ -4,6 +4,7 @@ import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
 import { _get, arraysEqual, keyBy } from '../utility/generic'
+import { getGroupOrders, getVisibleItems } from '../utility/calendar'
 
 const canResizeLeft = (item, canResize) => {
   const value =
@@ -81,17 +82,10 @@ export default class Items extends Component {
     )
   }
 
-  // TODO: this is exact same function as utility
   getGroupOrders() {
-    const { groupIdKey } = this.props.keys
+    const { keys, groups } = this.props
 
-    let groupOrders = {}
-
-    for (let i = 0; i < this.props.groups.length; i++) {
-      groupOrders[_get(this.props.groups[i], groupIdKey)] = i
-    }
-
-    return groupOrders
+    return getGroupOrders(groups, keys)
   }
 
   isSelected(item, itemIdKey) {
@@ -103,16 +97,10 @@ export default class Items extends Component {
     }
   }
 
-  // TODO: this is exact same logic as utility function
   getVisibleItems(canvasTimeStart, canvasTimeEnd) {
-    const { itemTimeStartKey, itemTimeEndKey } = this.props.keys
+    const { keys, items } = this.props
 
-    return this.props.items.filter(item => {
-      return (
-        _get(item, itemTimeStartKey) <= canvasTimeEnd &&
-        _get(item, itemTimeEndKey) >= canvasTimeStart
-      )
-    })
+    return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
   }
 
   render() {
