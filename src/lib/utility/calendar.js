@@ -342,3 +342,127 @@ export function nostack(items, groupOrders, lineHeight) {
     groupTops
   }
 }
+
+
+export function stackItems(
+items,
+groups,
+canvasTimeStart,
+visibleTimeStart,
+visibleTimeEnd,
+width,
+props,
+state
+) {
+// if there are no groups return an empty array of dimensions
+if (groups.length === 0) {
+  return {
+    dimensionItems: [],
+    height: 0,
+    groupHeights: [],
+    groupTops: []
+  }
+}
+
+const { keys, lineHeight, stackItems, itemHeightRatio } = props
+const {
+  draggingItem,
+  dragTime,
+  resizingItem,
+  resizingEdge,
+  resizeTime,
+  newGroupOrder
+} = state
+const zoom = visibleTimeEnd - visibleTimeStart
+const canvasTimeEnd = canvasTimeStart + zoom * 3
+const canvasWidth = width * 3
+
+const visibleItems = getVisibleItems(
+  items,
+  canvasTimeStart,
+  canvasTimeEnd,
+  keys
+)
+const groupOrders = getGroupOrders(groups, keys)
+
+let dimensionItems = visibleItems.reduce((memo, item) => {
+  const itemId = _get(item, keys.itemIdKey)
+  const isDragging = itemId === draggingItem
+  const isResizing = itemId === resizingItem
+
+  let dimension = calculateDimensions({
+    itemTimeStart: _get(item, keys.itemTimeStartKey),
+    itemTimeEnd: _get(item, keys.itemTimeEndKey),
+    isDragging,
+    isResizing,
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    dragTime,
+    resizingEdge,
+    resizeTime
+  })
+
+  if (dimension) {
+    dimension.top = null
+    dimension.order = isDragging
+      ? newGroupOrder
+      : groupOrders[_get(item, keys.itemGroupKey)]
+    dimension.stack = !item.isOverlay
+    dimension.height = lineHeight * itemHeightRatio
+    dimension.isDragging = isDragging
+
+    memo.push({
+      id: itemId,
+      dimensions: dimension
+    })
+  }
+
+  return memo
+}, [])
+
+const stackingMethod = stackItems ? stack : nostack
+
+const { height, groupHeights, groupTops } = stackingMethod(
+  dimensionItems,
+  groupOrders,
+  lineHeight
+)
+
+return { dimensionItems, height, groupHeights, groupTops }
+}
+
+export function calculateScrollCanvas(
+visibleTimeStart,
+visibleTimeEnd,
+forceUpdateDimensions,
+items,
+groups,
+props,
+state) {
+  const oldCanvasTimeStart = state.canvasTimeStart
+  const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
+
+  const newState = { visibleTimeStart, visibleTimeEnd }
+
+  const canKeepCanvas =
+    visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
+    visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
+    visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
+    visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
+  
+  if (!canKeepCanvas || forceUpdateDimensions) {
+    newState.canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
+    Object.assign(newState, stackItems(
+      items,
+      groups,
+      newState.canvasTimeStart,
+      visibleTimeStart,
+      visibleTimeEnd,
+      state.width,
+      props,
+      state
+    ))
+  }
+  return newState
+}
