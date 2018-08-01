@@ -29,27 +29,6 @@ const defaultContextState = {
 
 const { Consumer, Provider } = createReactContext(defaultContextState)
 
-// TODO: move into utility function
-const getLeftOffsetFromDateImpl = (date, timelineState) => {
-  const { canvasTimeStart, canvasTimeEnd, canvasWidth } = timelineState
-  return calculateXPositionForTime(
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    date
-  )
-}
-
-const getDateFromLeftOffsetPosition = (leftOffset, timelineState) => {
-  const { canvasTimeStart, canvasTimeEnd, canvasWidth } = timelineState
-  return calculateTimeForXPosition(
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    leftOffset
-  )
-}
-
 export class TimelineStateProvider extends React.Component {
   /* eslint-disable react/no-unused-prop-types */
   static propTypes = {
@@ -59,7 +38,6 @@ export class TimelineStateProvider extends React.Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired
-    // visibleWidth: PropTypes.number.isRequired
   }
 
   constructor(props) {
@@ -79,11 +57,23 @@ export class TimelineStateProvider extends React.Component {
   }
 
   getLeftOffsetFromDate = date => {
-    return getLeftOffsetFromDateImpl(date, this.props)
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
+    return calculateXPositionForTime(
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      date
+    )
   }
 
   getDateFromLeftOffsetPosition = leftOffset => {
-    return getDateFromLeftOffsetPosition(leftOffset, this.props)
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
+    return calculateTimeForXPosition(
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      leftOffset
+    )
   }
 
   render() {

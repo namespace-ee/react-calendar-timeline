@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import interact from 'interactjs'
 import moment from 'moment'
 
+import { coordinateToTimeRatio } from '../utility/calendar'
 import { _get, deepObjectCompare } from '../utility/generic'
 
 export default class Item extends Component {
@@ -114,9 +115,9 @@ export default class Item extends Component {
     this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
   }
 
-  // TODO: this is same as coordinateToTimeRatio in utilities
-  coordinateToTimeRatio(props = this.props) {
-    return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth
+  getTimeRatio() {
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
+    return coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
   }
 
   dragTimeSnap(dragTime, considerOffset) {
@@ -144,7 +145,7 @@ export default class Item extends Component {
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
-      const timeDelta = deltaX * this.coordinateToTimeRatio()
+      const timeDelta = deltaX * this.getTimeRatio()
 
       return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
     } else {
@@ -182,7 +183,7 @@ export default class Item extends Component {
   resizeTimeDelta(e, resizeEdge) {
     const length = this.itemTimeEnd - this.itemTimeStart
     const timeDelta = this.dragTimeSnap(
-      (e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio()
+      (e.pageX - this.state.resizeStart) * this.getTimeRatio()
     )
 
     if (
@@ -491,11 +492,13 @@ export default class Item extends Component {
     const timelineContext = this.context.getTimelineContext()
     const Comp = this.props.itemRenderer
     if (Comp) {
-      return <Comp
-        item={this.props.item}
-        selected={this.props.selected}
-        timelineContext={timelineContext}
-      />
+      return (
+        <Comp
+          item={this.props.item}
+          selected={this.props.selected}
+          timelineContext={timelineContext}
+        />
+      )
     } else {
       return this.itemTitle
     }
@@ -529,8 +532,7 @@ export default class Item extends Component {
 
     const showInnerContents =
       dimensions.width > this.props.minimumWidthForItemContentVisibility
-    // TODO: conditionals are really ugly.  could use Fragment if supporting React 16+ but for now, it'll
-    // be ugly
+
     return (
       <div
         {...this.props.item.itemProps}
