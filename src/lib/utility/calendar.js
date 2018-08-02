@@ -193,33 +193,39 @@ export function calculateDimensions({
   return dimensions
 }
 
+// Get the order of groups based on their keys
 export function getGroupOrders(groups, keys) {
   const { groupIdKey } = keys
 
   let groupOrders = {}
 
   for (let i = 0; i < groups.length; i++) {
-    groupOrders[_get(groups[i], groupIdKey)] = i
+    groupOrders[_get(groups[i], groupIdKey)] = {index: i, group: groups[i]} 
   }
 
   return groupOrders
 }
 
-export function getGroupedItems(items, groupOrders) {
-  var arr = []
-
-  // Initialize with empty arrays for each group
+function getGroupedItems(items, groupOrders) {
+  var groupedItems = {}
+  // Initialize with result object for each group
   for (let i = 0; i < Object.keys(groupOrders).length; i++) {
-    arr[i] = []
-  }
-  // Populate groups
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order !== undefined) {
-      arr[items[i].dimensions.order].push(items[i])
+    const groupOrder = groupOrders[Object.keys(groupOrders)[i]]
+    groupedItems[i] = {
+      index: groupOrder.index,
+      group: groupOrder.group,
+      items: []
     }
   }
 
-  return arr
+  // Populate groups
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].dimensions.order !== undefined) {
+      groupedItems[items[i].dimensions.order].items.push(items[i])
+    }
+  }
+
+  return groupedItems
 }
 
 export function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
@@ -247,70 +253,53 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
-export function stack(items, groupOrders, lineHeight) {
-  var i, iMax
-  var totalHeight = 0
-
-  var groupHeights = []
-  var groupTops = []
-
-  var groupedItems = getGroupedItems(items, groupOrders)
-
-  groupedItems.forEach(function(group) {
-    // calculate new, non-overlapping positions
-    groupTops.push(totalHeight)
-
-    var groupHeight = 0
-    var verticalMargin = 0
-    for (i = 0, iMax = group.length; i < iMax; i++) {
-      var item = group[i]
-      verticalMargin = lineHeight - item.dimensions.height
-
-      if (item.dimensions.stack && item.dimensions.top === null) {
-        item.dimensions.top = totalHeight + verticalMargin
-        groupHeight = Math.max(groupHeight, lineHeight)
-        do {
-          var collidingItem = null
-          for (var j = 0, jj = group.length; j < jj; j++) {
-            var other = group[j]
-            if (
-              other.dimensions.top !== null &&
-              other !== item &&
-              other.dimensions.stack &&
-              collision(item.dimensions, other.dimensions, lineHeight)
-            ) {
-              collidingItem = other
-              break
-            } else {
-              // console.log('dont test', other.top !== null, other !== item, other.stack);
-            }
-          }
-
-          if (collidingItem != null) {
-            // There is a collision. Reposition the items above the colliding element
-            item.dimensions.top = collidingItem.dimensions.top + lineHeight
-            groupHeight = Math.max(
-              groupHeight,
-              item.dimensions.top + item.dimensions.height - totalHeight
-            )
-          }
-        } while (collidingItem)
+function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
+  // calculate non-overlapping positions
+  let x = groupHeight
+  let verticalMargin = lineHeight - item.dimensions.height
+  if (item.dimensions.stack && item.dimensions.top === null) {
+    item.dimensions.top = totalHeight + verticalMargin
+    x = Math.max(x, lineHeight)
+    do {
+      var collidingItem = null
+      for (var j = i-1, jj = 0; j >= jj; j--) {
+        var other = group[j]
+        if (
+          other.dimensions.top !== null &&
+          other.dimensions.stack &&
+          collision(item.dimensions, other.dimensions, lineHeight)
+        ) {
+          collidingItem = other
+          break
+        } else {
+          // console.log('dont test', other.top !== null, other !== item, other.stack);
+        }
       }
-    }
 
-    groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
-    totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
-  })
-  return {
-    height: totalHeight,
-    groupHeights,
-    groupTops
+      if (collidingItem != null) {
+        // There is a collision. Reposition the items above the colliding element
+        item.dimensions.top = collidingItem.dimensions.top + lineHeight
+        x = Math.max(
+          x,
+          item.dimensions.top + item.dimensions.height - totalHeight
+        )
+      }
+    } while (collidingItem)
   }
+  return {groupHeight: x, verticalMargin}
 }
 
-export function nostack(items, groupOrders, lineHeight) {
-  var i, iMax
+function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
+  let verticalMargin = (lineHeight - item.dimensions.height) / 2
+  if (item.dimensions.top === null) {
+    item.dimensions.top = totalHeight + verticalMargin
+    groupHeight = Math.max(groupHeight, lineHeight)
+  }
+  return {groupHeight, verticalMargin: 0}
+}
 
+export function stackAll(items, groupOrders, lineHeight, stackItems) {
+  var i, iMax
   var totalHeight = 0
 
   var groupHeights = []
@@ -318,24 +307,29 @@ export function nostack(items, groupOrders, lineHeight) {
 
   var groupedItems = getGroupedItems(items, groupOrders)
 
-  groupedItems.forEach(function(group) {
-    // calculate new, non-overlapping positions
+  for (var index in groupedItems) {
+    const groupItems = groupedItems[index]
+    const {items, group} = groupItems
     groupTops.push(totalHeight)
-
+    const isGroupStacked = group.stackItems !== undefined ? group.stackItems : stackItems
     var groupHeight = 0
-    for (i = 0, iMax = group.length; i < iMax; i++) {
-      var item = group[i]
-      var verticalMargin = (lineHeight - item.dimensions.height) / 2
-
-      if (item.dimensions.top === null) {
-        item.dimensions.top = totalHeight + verticalMargin
-        groupHeight = Math.max(groupHeight, lineHeight)
+    var verticalMargin = 0
+    for (i = 0, iMax = items.length; i < iMax; i++) {
+      let r = {}
+      if (isGroupStacked) {
+        r = groupStack(lineHeight, items[i], items, groupHeight, totalHeight, i)
+      } else {
+        r = groupNoStack(lineHeight, items[i], groupHeight, totalHeight)
       }
+      groupHeight = r.groupHeight
+      verticalMargin = r.verticalMargin
+
     }
 
-    groupHeights.push(Math.max(groupHeight, lineHeight))
-    totalHeight += Math.max(groupHeight, lineHeight)
-  })
+    
+    groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
+    totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
+  }
   return {
     height: totalHeight,
     groupHeights,

@@ -82,7 +82,8 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 {
   id: 1,
   title: 'group 1',
-  rightTitle: 'title in the right sidebar'
+  rightTitle: 'title in the right sidebar',
+  stackItems?: true
 }
 ```
 
@@ -232,7 +233,7 @@ Append a special `.rct-drag-right` handle to the elements and only resize if dra
 
 ### stackItems
 
-Stack items under each other, so there is no visual overlap when times collide. Defaults to `false`.
+Stack items under each other, so there is no visual overlap when times collide.  Can be overridden in the `groups` array. Defaults to `false`.
 
 ## traditionalZoom
 

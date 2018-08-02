@@ -16,8 +16,7 @@ import windowResizeDetector from '../resize-detector/window'
 import {
   getMinUnit,
   getNextUnit,
-  stack,
-  nostack,
+  stackAll,
   calculateDimensions,
   getGroupOrders,
   getVisibleItems,
@@ -1000,7 +999,7 @@ export default class ReactCalendarTimeline extends Component {
         dimension.top = null
         dimension.order = isDragging
           ? newGroupOrder
-          : groupOrders[_get(item, keys.itemGroupKey)]
+          : groupOrders[_get(item, keys.itemGroupKey)].index
         dimension.stack = !item.isOverlay
         dimension.height = lineHeight * itemHeightRatio
         dimension.isDragging = isDragging
@@ -1014,12 +1013,11 @@ export default class ReactCalendarTimeline extends Component {
       return memo
     }, [])
 
-    const stackingMethod = stackItems ? stack : nostack
-
-    const { height, groupHeights, groupTops } = stackingMethod(
+    const { height, groupHeights, groupTops } = stackAll(
       dimensionItems,
       groupOrders,
-      lineHeight
+      lineHeight,
+      stackItems
     )
 
     return { dimensionItems, height, groupHeights, groupTops }

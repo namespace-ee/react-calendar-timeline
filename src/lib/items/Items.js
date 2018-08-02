@@ -82,12 +82,6 @@ export default class Items extends Component {
     )
   }
 
-  getGroupOrders() {
-    const { keys, groups } = this.props
-
-    return getGroupOrders(groups, keys)
-  }
-
   isSelected(item, itemIdKey) {
     if (!this.props.selected) {
       return this.props.selectedItem === _get(item, itemIdKey)
@@ -108,10 +102,12 @@ export default class Items extends Component {
       canvasTimeStart,
       canvasTimeEnd,
       dimensionItems,
+      keys,
+      groups
     } = this.props
-    const { itemIdKey, itemGroupKey } = this.props.keys
+    const { itemIdKey, itemGroupKey } = keys
 
-    const groupOrders = this.getGroupOrders()
+    const groupOrders = getGroupOrders(groups, keys)
     const visibleItems = this.getVisibleItems(
       canvasTimeStart,
       canvasTimeEnd,
