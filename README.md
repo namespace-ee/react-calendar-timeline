@@ -82,11 +82,12 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 {
   id: 1,
   title: 'group 1',
-  rightTitle: 'title in the right sidebar'
+  rightTitle: 'title in the right sidebar',
 }
 ```
 
 If you use right sidebar, you can pass optional `rightTitle` property here.
+If you want to overwrite the calculated height with a custom height, you can pass a `height` property as an int in pixels here. This can be very useful for categorized groups.
 
 ## items
 
@@ -259,6 +260,10 @@ Default:
 }
 ```
 
+## scrollRef
+
+Ref callback that gets a DOM reference to the scroll body element. Can be useful to programmatically scroll.
+
 ## onItemMove(itemId, dragTime, newGroupOrder)
 
 Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
@@ -427,10 +432,97 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 ## itemRenderer
 
-React component that will be used to render the item content. Will be
-passed the `item` and the `selected` as a props.
+Render prop function used to render a customized item. The function provides multiple paramerters that can be used to render each item.
 
-Using complex components may result in performance problems.
+Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
+
+#### Render props params
+
+##### context
+
+* `item` has the item we passed as a prop to the calendar.
+
+* `timelineContext`
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `timelineWidth`    | `number` | returns the full width of the timeline.              |
+| `visibleTimeStart` | `number` | returns the exact start of view port of the calender |
+| `visibleTimeEnd`   | `number` | returns the exact end of view port of the calender.  |
+| `canvasTimeStart`  | `number` | denotes the start time in ms of the canvas timeline  |
+| `canvasTimeEnd`    | `number` | denotes the end time in ms of the canvas timeline    |
+
+* `itemContext`
+
+| property          | type            | description                                                                                                                                                               |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dimensions`      | `object`        | returns the dimensions of the item which includes `collisionLeft`, `collisionWidth`, `height`, `isDragging`, `left`, `order`, `originalLeft`, `stack`, `top`, and `width` |
+| `useResizeHandle` | `boolean`       | returns the prop `useResizeHandle` from calendar root component                                                                                                           |
+| `title`           | `string`        | returns title to render in content element.                                                                                                                               |
+| `canMove`         | `boolean`       | returns if the item is movable.                                                                                                                                           |
+| `canResizeLeft`   | `boolean`       | returns if the item can resize from the left                                                                                                                              |
+| `canResizeRight`  | `boolean`       | returns if the item can resize from the right.                                                                                                                            |
+| `selected`        | `boolean`       | returns if the item is selected.                                                                                                                                          |
+| `dragging`        | `boolean`       | returns if the item is being dragged                                                                                                                                      |
+| `dragStart`       | `object`        | returns `x` and `y` of the start dragging point of the item.                                                                                                              |
+| `dragGroupDelta`  | `number`        | returns number of groups the item moved. if negative, moving was to top. If positive, moving was to down                                                                  |
+| `resizing`        | `boolean`       | returns if the item is being resized.                                                                                                                                     |
+| `resizeEdge`      | `left`, `right` | the side from which the component is being resized form                                                                                                                   |
+| `resizeStart`     | `number`        | returns the x value from where the component start moving                                                                                                                 |
+| `width`           | `boolean`       | returns the width of the item (same as in dimensions)                                                                                                                     |
+
+##### prop getters functions
+
+These functions are used to apply props to the elements that you render. This gives you maximum flexibility to render what, when, and wherever you like.
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description                                                                                                                               |
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getItemProps`   | `function(props={})` | returns the props you should apply to the root item element.                                                                              |
+| `getResizeProps` | `function(props={})` | returns two sets of props to apply on the `left` and `right` elements as resizing elements if you have `useResizeHandle` prop set to true |
+
+* `getItemProps` returns the props you should apply to the root item element. The returned props are:
+
+  * key: item id
+  * ref: function to get item referance
+  * className: classnames to be applied to the item
+  * onMouseDown: event handler
+  * onMouseUp: event handler
+  * onTouchStart: event handler
+  * onTouchEnd: event handler
+  * onDoubleClick: event handler
+  * onContextMenu: event handler
+  * style: inline object style
+
+  \*\* _the given styles will only override the styles that are not a requirement for postioning the item. Other styles like `color`, `radius` and others_
+
+  These properties can be override using the prop argument with proprties:
+
+  * className: class names to be added
+  * onMouseDown: event handler will be called after the component's event handler
+  * onMouseUp: event handler will be called after the component's event handler
+  * onTouchStart: event handler will be called after the component's event handler
+  * onTouchEnd: event handler will be called after the component's event handler
+  * onDoubleClick: event handler will be called after the component's event handler
+  * onContextMenu: event handler will be called after the component's event handler
+  * style: extra inline styles to be applied to the component
+
+* `getResizeProps` returns the props you should apply to the left and right resize handlers only if `useResizeHandle` set to true. The returned object has the props for the left element under property `left` and the props to be applied to the right element under `right` :
+
+  * left
+    * ref: function to get element referance
+    * style: style to be applied to the left element
+  * right
+    * ref: function to get element referance
+    * style: style to be applied to the right element
+
+These properties can be override using the prop argument with proprties:
+
+* leftStyle: style to be added to left style
+* rightStyle: style to be added to right style
+
+example
 
 ```jsx
 let items = [
@@ -439,47 +531,44 @@ let items = [
     group: 1,
     title: 'Title',
     tip: 'additional information',
+    color: 'rgb(158, 14, 206)',
+    selectedBgColor: 'rgba(225, 166, 244, 1)',
+    bgColor : 'rgba(225, 166, 244, 0.6)',
     ...
   }
 ]
 
-itemRenderer = ({ item, selected }) => {
+itemRenderer: ({
+  item,
+  timelineContext,
+  itemContext,
+  getItemProps,
+  getResizeProps,
+}) => {
+  const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
   return (
-    <div className='custom-item'>
-      <span className='title'>{item.title}</span>
-      {selected && <p className='tip'>{item.tip}</p>}
-    </div>
-  )
-}
-```
+    <div
+      {...getItemProps(item.itemProps) }
+    >
+      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
+        <div {...leftResizeProps} />
+      ) : (
+          ''
+        )}
 
-This component will also be passed a `timelineContext` object:
+      {itemContext.showInnerContentsRender && <div
+        className="rct-item-content"
+        style={{maxHeight: `${itemContext.dimensions.height}`}}
+      >
+        {itemContext.title}
+      </div>}
 
-```typescript
-{
-  visibleTimeStart: number, // denotes the start time in ms of the visible timeline
-  visibleTimeEnd: number, // denotes the end time in ms of the visible timeline
-  canvasTimeStart: number, // denotes the start time in ms of the canvas timeline
-  canvasTimeEnd: number, // denotes the end time in ms of the canvas timeline
-  timelineWidth: number, // denotes the width in pixels of the timeline
-}
-```
 
-This data allows you to change your Item component based on timeline width or zoom (e.g. render smaller content
-if we're zoomed out too far)
-
-```jsx
-itemRenderer = ({ item, timelineContext }) => {
-  const {timelineWidth, visibleTimeStart, visibleTimeEnd} = timelineContext
-
-  const isZoomTooWide = someFunctionToCompareZoom(visibleTimeStart, visibleTimeEnd)
-  return ()
-    <div className='custom-item'>
-      {isZoomTooWide ? (
-        <div className='really-tiny'>Small content</div>
-      ): (
-        <span className='big-content'>This is big content - {item.title}</span>
-      )}
+      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
+        <div {...rightResizeProps} />
+      ) : (
+          ''
+        )}
     </div>
   )
 }
@@ -509,10 +598,6 @@ groupRenderer = ({ group }) => {
 }
 ```
 
-## minimumWidthForItemContentVisibility
-
-Number of pixels to render inner content of an Item. To improve performance of the timeline, this prop dictates whether the inner contents of an Item are rendered based on the item width. This setting is useful if you have a dataset which results in a large number of small items to be rendered on the timeline. Default is 25.
-
 ## resizeDetector
 
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
@@ -535,11 +620,25 @@ verticalLineClassNamesForTime = (timeStart, timeEnd) => {
   const currentTimeEnd = moment(timeEnd)
 
   for (let holiday of holidays) {
-    if (holiday.isSame(currentTimeStart, "day") && holiday.isSame(currentTimeEnd, "day")) {
-      return ["holiday"]
+    if (
+      holiday.isSame(currentTimeStart, 'day') &&
+      holiday.isSame(currentTimeEnd, 'day')
+    ) {
+      return ['holiday']
     }
   }
 }
+```
+
+Be aware that this function should be as optimized for performance as possible as it will be called on each render of the timeline (i.e. when the canvas is reset, when zooming, etc)
+
+## horizontalLineClassNamesForGroup(group)
+
+This function is called when the horizontal line is rendered. `group` is the group which will be rendered into the current row. The function should return an array of strings containing the classNames which should be applied to the row. This makes it possible to visually highlight categories or important items.
+An example could look like:
+
+```jsx
+horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
 
 # Timeline Markers

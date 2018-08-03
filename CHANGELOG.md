@@ -11,7 +11,18 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * possibility to set classes for vertical lines depending on its time
 
+### Added
+
+* possibility to add custom classes to the group-rows
+* possibility to add custom height to row (tree-group example)
+* rework item renderer to render the whole item using render prop and prop getters
+
+### Breaking
+* add scroll ref
+
 ### 0.18.2
+
+
 
 ### Fixed
 

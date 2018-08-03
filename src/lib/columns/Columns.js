@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 
 import { iterateTimes } from '../utility/calendar'
 
-export default class VerticalLines extends Component {
+export default class Columns extends Component {
   static propTypes = {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
@@ -12,7 +12,7 @@ export default class VerticalLines extends Component {
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     height: PropTypes.number.isRequired,
-    verticalLineClassNamesForTime: PropTypes.func,
+    verticalLineClassNamesForTime: PropTypes.func
   }
 
   shouldComponentUpdate(nextProps) {
@@ -24,7 +24,8 @@ export default class VerticalLines extends Component {
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
       nextProps.height === this.props.height &&
-      nextProps.verticalLineClassNamesForTime === this.props.verticalLineClassNamesForTime
+      nextProps.verticalLineClassNamesForTime ===
+        this.props.verticalLineClassNamesForTime
     )
   }
 
@@ -58,9 +59,13 @@ export default class VerticalLines extends Component {
 
         let classNamesForTime = []
         if (verticalLineClassNamesForTime) {
-          classNamesForTime = verticalLineClassNamesForTime(time.unix() * 1000, nextTime.unix() * 1000 - 1);
+          classNamesForTime = verticalLineClassNamesForTime(
+            time.unix() * 1000, // turn into ms, which is what verticalLineClassNamesForTime expects
+            nextTime.unix() * 1000 - 1
+          )
         }
 
+        // TODO: rename or remove class that has reference to vertical-line
         const classNames =
           'rct-vl' +
           (firstOfType ? ' rct-vl-first' : '') +

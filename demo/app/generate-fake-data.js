@@ -29,8 +29,11 @@ export default function (groupCount = 30, itemCount = 1000, daysInPast = 30) {
       canMove: startValue > new Date().getTime(),
       canResize: startValue > new Date().getTime() ? (endValue > new Date().getTime() ? 'both' : 'left') : (endValue > new Date().getTime() ? 'right' : false),
       className: (moment(startDate).day() === 6 || moment(startDate).day() === 0) ? 'item-weekend' : '',
+      bgColor: randomColor({ luminosity: 'light', seed: randomSeed + i, format:'rgba', alpha:0.6 }),
+      selectedBgColor: randomColor({ luminosity: 'light', seed: randomSeed + i, format:'rgba', alpha:1 }),
+      color: randomColor({ luminosity: 'dark', seed: randomSeed + i }),
       itemProps: {
-        'data-tip': faker.hacker.phrase()
+        'data-tip': faker.hacker.phrase(),
       }
     })
   }

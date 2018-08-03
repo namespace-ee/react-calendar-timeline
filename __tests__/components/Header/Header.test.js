@@ -62,14 +62,6 @@ describe('Header', () => {
         wrapper.find(selectors.headerElementsContainer).props().style.width
       ).toBe(props.width)
     })
-
-    it('elements header receives all props', () => {
-      const wrapper = shallow(<Header {...defaultProps} />)
-
-      expect(wrapper.find(selectors.headerElements).props()).toMatchObject(
-        defaultProps
-      )
-    })
   })
   describe('sticky header', () => {
     it('sets "header-sticky" class if stickyHeader is true', () => {

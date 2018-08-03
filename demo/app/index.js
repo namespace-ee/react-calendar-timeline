@@ -12,15 +12,14 @@ const demos = {
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
   stickyHeader: require('./demo-sticky-header').default,
-  verticalClasses: require('./demo-vertical-classes').default
+  verticalClasses: require('./demo-vertical-classes').default,
+  customItems: require('./demo-cusom-items').default
 }
 
 // A simple component that shows the pathname of the current location
 class Menu extends Component {
   static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired
   }
 
   render() {
