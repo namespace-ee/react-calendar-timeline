@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.19.0
+
 ### Added
 
 * ability to set classes for timeline columns depending on its time - #364
