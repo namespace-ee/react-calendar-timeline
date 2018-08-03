@@ -1,10 +1,23 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import interact from 'interactjs'
 import moment from 'moment'
 
 import { _get, deepObjectCompare } from '../utility/generic'
-
+import { composeEvents } from '../utility/events'
+import { defaultItemRenderer } from './defaultItemRenderer'
+import { coordinateToTimeRatio } from '../utility/calendar'
+import {
+  overridableStyles,
+  selectedStyle,
+  selectedAndCanMove,
+  selectedAndCanResizeLeft,
+  selectedAndCanResizeLeftAndDragLeft,
+  selectedAndCanResizeRight,
+  selectedAndCanResizeRightAndDragRight,
+  leftResizeStyle,
+  rightResizeStyle
+} from './styles'
 export default class Item extends Component {
   // removed prop type check for SPEED!
   // they are coming from a trusted component anyway
@@ -14,7 +27,6 @@ export default class Item extends Component {
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     order: PropTypes.number,
-    minimumWidthForItemContentVisibility: PropTypes.number.isRequired,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -47,7 +59,8 @@ export default class Item extends Component {
   }
 
   static defaultProps = {
-    selected: false
+    selected: false,
+    itemRenderer: defaultItemRenderer
   }
 
   static contextTypes = {
@@ -98,9 +111,7 @@ export default class Item extends Component {
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
-      nextProps.dimensions !== this.props.dimensions ||
-      nextProps.minimumWidthForItemContentVisibility !==
-        this.props.minimumWidthForItemContentVisibility
+      nextProps.dimensions !== this.props.dimensions
     return shouldUpdate
   }
 
@@ -114,9 +125,9 @@ export default class Item extends Component {
     this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
   }
 
-  // TODO: this is same as coordinateToTimeRatio in utilities
-  coordinateToTimeRatio(props = this.props) {
-    return (props.canvasTimeEnd - props.canvasTimeStart) / props.canvasWidth
+  getTimeRatio() {
+    const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
+    return coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
   }
 
   dragTimeSnap(dragTime, considerOffset) {
@@ -144,7 +155,7 @@ export default class Item extends Component {
 
     if (this.state.dragging) {
       const deltaX = e.pageX - this.state.dragStart.x
-      const timeDelta = deltaX * this.coordinateToTimeRatio()
+      const timeDelta = deltaX * this.getTimeRatio()
 
       return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
     } else {
@@ -182,7 +193,7 @@ export default class Item extends Component {
   resizeTimeDelta(e, resizeEdge) {
     const length = this.itemTimeEnd - this.itemTimeStart
     const timeDelta = this.dragTimeSnap(
-      (e.pageX - this.state.resizeStart) * this.coordinateToTimeRatio()
+      (e.pageX - this.state.resizeStart) * this.getTimeRatio()
     )
 
     if (
@@ -487,39 +498,49 @@ export default class Item extends Component {
     }
   }
 
-  renderContent() {
-    const timelineContext = this.context.getTimelineContext()
-    const Comp = this.props.itemRenderer
-    if (Comp) {
-      return <Comp
-        item={this.props.item}
-        selected={this.props.selected}
-        timelineContext={timelineContext}
-      />
-    } else {
-      return this.itemTitle
+  getItemRef = el => (this.item = el)
+  getDragLeftRef = el => (this.dragLeft = el)
+  getDragRightRef = el => (this.dragRight = el)
+
+  getItemProps = (props = {}) => {
+    //TODO: maybe shouldnt include all of these classes
+    const classNames =
+      'rct-item' +
+      (this.props.item.className ? ` ${this.props.item.className}` : '')
+
+    return {
+      key: this.itemId,
+      ref: this.getItemRef,
+      className: classNames + ` ${props.className ? props.className : ''}`,
+      onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
+      onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
+      onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
+      onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
+      onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
+      onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
+      style: Object.assign({}, this.getItemStyle(props))
     }
   }
 
-  render() {
-    const dimensions = this.props.dimensions
-    if (typeof this.props.order === 'undefined' || this.props.order === null) {
-      return null
+  getResizeProps = (props = {}) => {
+    return {
+      left: {
+        ref: this.getDragLeftRef,
+        style: Object.assign({}, leftResizeStyle, props.leftStyle)
+      },
+      right: {
+        ref: this.getDragRightRef,
+        style: Object.assign({}, rightResizeStyle, props.rightStyle)
+      }
     }
+  }
 
-    const classNames =
-      'rct-item' +
-      (this.props.selected ? ' selected' : '') +
-      (this.canMove(this.props) ? ' can-move' : '') +
-      (this.canResizeLeft(this.props) || this.canResizeRight(this.props)
-        ? ' can-resize'
-        : '') +
-      (this.canResizeLeft(this.props) ? ' can-resize-left' : '') +
-      (this.canResizeRight(this.props) ? ' can-resize-right' : '') +
-      (this.props.item.className ? ` ${this.props.item.className}` : '')
+  getItemStyle(props) {
+    const dimensions = this.props.dimensions
 
-    const style = {
-      ...this.props.item.style,
+    const baseStyles = {
+      position: 'absolute',
+      boxSizing: 'border-box',
       left: `${dimensions.left}px`,
       top: `${dimensions.top}px`,
       width: `${dimensions.width}px`,
@@ -527,50 +548,62 @@ export default class Item extends Component {
       lineHeight: `${dimensions.height}px`
     }
 
-    const showInnerContents =
-      dimensions.width > this.props.minimumWidthForItemContentVisibility
-    // TODO: conditionals are really ugly.  could use Fragment if supporting React 16+ but for now, it'll
-    // be ugly
-    return (
-      <div
-        {...this.props.item.itemProps}
-        key={this.itemId}
-        ref={el => (this.item = el)}
-        className={classNames}
-        title={this.itemDivTitle}
-        onMouseDown={this.onMouseDown}
-        onMouseUp={this.onMouseUp}
-        onTouchStart={this.onTouchStart}
-        onTouchEnd={this.onTouchEnd}
-        onDoubleClick={this.handleDoubleClick}
-        onContextMenu={this.handleContextMenu}
-        style={style}
-      >
-        {this.props.useResizeHandle && showInnerContents ? (
-          <div ref={el => (this.dragLeft = el)} className="rct-drag-left" />
-        ) : (
-          ''
-        )}
-
-        {showInnerContents ? (
-          <div
-            className="rct-item-content"
-            style={{
-              maxWidth: `${dimensions.width}px`
-            }}
-          >
-            {this.renderContent()}
-          </div>
-        ) : (
-          ''
-        )}
-
-        {this.props.useResizeHandle && showInnerContents ? (
-          <div ref={el => (this.dragRight = el)} className="rct-drag-right" />
-        ) : (
-          ''
-        )}
-      </div>
+    const finalStyle = Object.assign(
+      {},
+      overridableStyles,
+      this.props.selected ? selectedStyle : {},
+      this.props.selected & this.canMove(this.props) ? selectedAndCanMove : {},
+      this.props.selected & this.canResizeLeft(this.props)
+        ? selectedAndCanResizeLeft
+        : {},
+      this.props.selected & this.canResizeLeft(this.props) & this.state.dragging
+        ? selectedAndCanResizeLeftAndDragLeft
+        : {},
+      this.props.selected & this.canResizeRight(this.props)
+        ? selectedAndCanResizeRight
+        : {},
+      this.props.selected &
+      this.canResizeRight(this.props) &
+      this.state.dragging
+        ? selectedAndCanResizeRightAndDragRight
+        : {},
+      props.style,
+      baseStyles
     )
+    return finalStyle
+  }
+
+  render() {
+    if (typeof this.props.order === 'undefined' || this.props.order === null) {
+      return null
+    }
+
+    const timelineContext = this.context.getTimelineContext()
+    const itemContext = {
+      dimensions: this.props.dimensions,
+      useResizeHandle: this.props.useResizeHandle,
+      title: this.itemDivTitle,
+      canMove: this.canMove(this.props),
+      canResizeLeft: this.canResizeLeft(this.props),
+      canResizeRight: this.canResizeRight(this.props),
+      selected: this.props.selected,
+      dragging: this.state.dragging,
+      dragStart: this.state.dragStart,
+      dragTime: this.state.dragTime,
+      dragGroupDelta: this.state.dragGroupDelta,
+      resizing: this.state.resizing,
+      resizeEdge: this.state.resizeEdge,
+      resizeStart: this.state.resizeStart,
+      resizeTime: this.state.resizeTime,
+      width: this.props.dimensions.width
+    }
+
+    return this.props.itemRenderer({
+      item: this.props.item,
+      timelineContext,
+      itemContext,
+      getItemProps: this.getItemProps,
+      getResizeProps: this.getResizeProps
+    })
   }
 }
