@@ -9,20 +9,15 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ### Added
 
-* possibility to set classes for vertical lines depending on its time
-
-### Added
-
-* possibility to add custom classes to the group-rows
-* possibility to add custom height to row (tree-group example)
-* rework item renderer to render the whole item using render prop and prop getters
+* ability to set classes for timeline columns depending on its time - #364
+* ability to add custom classes and custom heights to the timeline rows - #367
+* add `scrollRef` to allow for programmatically scrolling timeline - #372
 
 ### Breaking
-* add scroll ref
+
+* rework item renderer to render the whole item using render prop and prop getters - #289
 
 ### 0.18.2
-
-
 
 ### Fixed
 

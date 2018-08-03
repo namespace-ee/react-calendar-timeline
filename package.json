@@ -42,6 +42,10 @@
     {
       "name": "Ahmad Ilaiwi",
       "url": "https://github.com/Ilaiwi"
+    },
+    {
+      "name": "dkarnutsch",
+      "url": "https://github.com/dkarnutsch"
     }
   ],
   "license": "MIT",
@@ -85,7 +89,8 @@
     "interactjs": "^1.3.4",
     "moment": "*",
     "prop-types": "^15.6.2",
-    "react": ">=16"
+    "react": ">=16",
+    "react-dom": ">=16"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
