@@ -112,7 +112,6 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
-        showCursorLine
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}

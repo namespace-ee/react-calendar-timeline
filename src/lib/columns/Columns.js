@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 
 import { iterateTimes } from '../utility/calendar'
 
-export default class VerticalLines extends Component {
+export default class Columns extends Component {
   static propTypes = {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
@@ -53,6 +53,7 @@ export default class VerticalLines extends Component {
           Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
         const leftPush = firstOfType ? -1 : 0
 
+        // TODO: rename or remove class that has reference to vertical-line
         const classNames =
           'rct-vl' +
           (firstOfType ? ' rct-vl-first' : '') +

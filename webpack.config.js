@@ -1,24 +1,17 @@
-const webpack = require('webpack')
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-const nodeEnv = process.env.NODE_ENV || 'development'
 const port = process.env.PORT || 8888
 
-const isProd = nodeEnv === 'production'
-
 const config = {
-  devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
+  devtool: 'cheap-eval-source-map',
   context: path.join(__dirname, './demo'),
   entry: {
-    vendor: ['react', 'react-dom', 'faker', 'interactjs', 'moment'],
-    demo: isProd
-      ? ['./index.js']
-      : [
-          `webpack-dev-server/client?http://0.0.0.0:${port}`,
-          'webpack/hot/only-dev-server',
-          './index.js'
-        ]
+    // vendor: ['react', 'react-dom', 'faker', 'interactjs', 'moment'],
+    demo: [
+      `webpack-dev-server/client?http://0.0.0.0:${port}`,
+      'webpack/hot/only-dev-server',
+      './index.js'
+    ]
   },
   output: {
     path: path.join(__dirname, './build'),
@@ -26,26 +19,12 @@ const config = {
     chunkFilename: '[name].bundle.js',
     filename: '[name].bundle.js'
   },
+  mode: 'development',
   module: {
-    loaders: [
-      {
-        test: /\.css$/,
-        loader: isProd
-          ? ExtractTextPlugin.extract('style-loader', 'css-loader')
-          : 'style!css'
-      },
+    rules: [
       {
         test: /\.scss$/,
-        loader: isProd
-          ? ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
-          : 'style!css!sass'
-      },
-      {
-        test: /\.(html|png|jpg|gif|jpeg|svg)$/,
-        loader: 'file',
-        query: {
-          name: '[name].[ext]'
-        }
+        loader: 'style-loader!css-loader!sass-loader'
       },
       {
         test: /\.(js|jsx)$/,
@@ -55,7 +34,7 @@ const config = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
     modules: [path.resolve('./demo'), 'node_modules'],
     alias: {
       '~': path.join(__dirname, './demo'),
@@ -66,25 +45,6 @@ const config = {
       )
     }
   },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
-    new ExtractTextPlugin('[name].css'),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(nodeEnv)
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
-      },
-      sourceMap: false
-    })
-  ],
   devServer: {
     contentBase: './demo',
     port
