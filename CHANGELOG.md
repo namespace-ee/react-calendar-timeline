@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+
+* possibility to set classes for vertical lines depending on its time
 
 ### Added
 
