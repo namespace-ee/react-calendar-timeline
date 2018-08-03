@@ -13,7 +13,7 @@ const demos = {
   elementResize: require('./demo-element-resize').default,
   stickyHeader: require('./demo-sticky-header').default,
   verticalClasses: require('./demo-vertical-classes').default,
-  customItems: require('./demo-cusom-items').default
+  customItems: require('./demo-custom-items').default
 }
 
 // A simple component that shows the pathname of the current location
