@@ -9,7 +9,8 @@ const defaultProps = {
   onContextMenu: noop,
   isEvenRow: false,
   clickTolerance: 10,
-  style: {}
+  style: {},
+  group: {}
 }
 
 // using mount to be able to interact with element, render
