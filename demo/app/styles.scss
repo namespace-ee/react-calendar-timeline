@@ -46,3 +46,9 @@ body {
     text-decoration: underline;
   }
 }
+
+.row-root {
+  position: relative;
+  z-index: 999;
+  background-color: darkgray !important;
+}

@@ -67,6 +67,8 @@ export default class ReactCalendarTimeline extends Component {
 
     itemTouchSendsClick: PropTypes.bool,
 
+    horizontalLineClassNamesForGroup: PropTypes.func,
+
     onItemMove: PropTypes.func,
     onItemResize: PropTypes.func,
     onItemClick: PropTypes.func,
@@ -184,6 +186,8 @@ export default class ReactCalendarTimeline extends Component {
     stackItems: false,
 
     traditionalZoom: false,
+
+    horizontalLineClassNamesForGroup: null,
 
     onItemMove: null,
     onItemResize: null,
@@ -770,15 +774,17 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  rows(canvasWidth, groupHeights) {
+  rows(canvasWidth, groupHeights, groups) {
     return (
       <GroupRows
+        groups={groups}
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
         groupHeights={groupHeights}
         clickTolerance={this.props.clickTolerance}
         onRowClick={this.handleRowClick}
         onRowDoubleClick={this.handleRowDoubleClick}
+        horizontalLineClassNamesForGroup={this.props.horizontalLineClassNamesForGroup}
         onRowContextClick={this.handleScrollContextMenu}
       />
     )
@@ -1019,7 +1025,8 @@ export default class ReactCalendarTimeline extends Component {
     const { height, groupHeights, groupTops } = stackingMethod(
       dimensionItems,
       groupOrders,
-      lineHeight
+      lineHeight,
+      groups
     )
 
     return { dimensionItems, height, groupHeights, groupTops }
@@ -1181,7 +1188,7 @@ export default class ReactCalendarTimeline extends Component {
                     height,
                     headerHeight
                   )}
-                  {this.rows(canvasWidth, groupHeights)}
+                  {this.rows(canvasWidth, groupHeights, groups)}
                   {this.infoLabel()}
                   {this.childrenWithProps(
                     canvasTimeStart,

@@ -82,11 +82,12 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 {
   id: 1,
   title: 'group 1',
-  rightTitle: 'title in the right sidebar'
+  rightTitle: 'title in the right sidebar',
 }
 ```
 
 If you use right sidebar, you can pass optional `rightTitle` property here.
+If you want to overwrite the calculated height with a custom height, you can pass a `height` property as an int in pixels here. This can be very useful for categorized groups.
 
 ## items
 
@@ -609,6 +610,15 @@ To do this, pass a `resizeDetector`. Since bundling it by default would add ~18k
 import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 <Timeline resizeDetector={containerResizeDetector} ... />
+```
+
+### horizontalLineClassNamesForGroup(group)
+
+This function is called when the horizontal line is rendered. `group` is the group which will be rendered into the current row. The function should return an array of strings containing the classNames which should be applied to the row. This makes it possible to visually highlight categories or important items.
+An example could look like:
+
+```jsx
+horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
 
 # Timeline Markers
