@@ -180,98 +180,87 @@ export default class App extends Component {
       >
         <TimelineHeaders>
           <SidebarHeader>
-            {({ provided }) => {
+            {({ getRootProps }) => {
               console.log('left')
-              return <div {...provided}>Left</div>
+              return <div {...getRootProps()}>Left</div>
             }}
           </SidebarHeader>
           <SidebarHeader variant="right">
-            {({ provided }) => {
-              return <div {...provided}>Right</div>
+            {({ getRootProps }) => {
+              return <div {...getRootProps()}>Right</div>
             }}
           </SidebarHeader>
           <DateHeader primaryHeader />
           <DateHeader />
           <CustomHeader unit="year">
-            {({ provided, intervals }) => {
-              const rootStyle = {
-                height: 30,
-                ...provided.style
-              }
+            {({
+              headerContext: { intervals },
+              getRootProps,
+              getIntervalProps,
+              showPeriod
+            }) => {
               return (
-                <div {...provided} style={rootStyle}>
-                  {intervals.map(
-                    ({
-                      startTime,
-                      endTime,
-                      provided: intervalProvided,
-                      showPeriod
-                    }) => {
-                      const style = {
-                        // height: 30,
-                        lineHeight: '30px',
-                        textAlign: 'center',
-                        borderLeft: '1px solid black',
-                        cursor: 'pointer',
-                        backgroundColor: 'Turquoise',
-                        color: 'white',
-                        ...intervalProvided.style
-                      }
-                      return (
-                        <div
-                          onClick={() => {
-                            showPeriod(startTime, endTime)
-                          }}
-                          {...intervalProvided}
-                          style={style}
-                        >
-                          <div className="sticky">
-                            {startTime.format('YYYY')}
-                          </div>
-                        </div>
-                      )
+                <div {...getRootProps({ style: { height: 30 } })}>
+                  {intervals.map(interval => {
+                    const intervalStyle = {
+                      // height: 30,
+                      lineHeight: '30px',
+                      textAlign: 'center',
+                      borderLeft: '1px solid black',
+                      cursor: 'pointer',
+                      backgroundColor: 'Turquoise',
+                      color: 'white'
                     }
-                  )}
+                    return (
+                      <div
+                        onClick={() => {
+                          showPeriod(interval.startTime, interval.endTime)
+                        }}
+                        {...getIntervalProps({
+                          interval,
+                          style: intervalStyle
+                        })}
+                      >
+                        <div className="sticky">
+                          {interval.startTime.format('YYYY')}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               )
             }}
           </CustomHeader>
           <CustomHeader>
-            {({ provided, intervals }) => {
-              const rootStyle = {
-                height: 30,
-                ...provided.style
-              }
+            {({
+              headerContext: { intervals },
+              getRootProps,
+              getIntervalProps,
+              showPeriod
+            }) => {
               return (
-                <div {...provided} style={rootStyle}>
-                  {intervals.map(
-                    ({
-                      startTime,
-                      endTime,
-                      provided: intervalProvided,
-                      showPeriod
-                    }) => {
-                      const style = {
-                        // height: 30,
-                        lineHeight: '30px',
-                        textAlign: 'center',
-                        borderLeft: '1px solid black',
-                        cursor: 'pointer',
-                        ...intervalProvided.style
-                      }
-                      return (
-                        <div
-                          onClick={() => {
-                            showPeriod(startTime, endTime)
-                          }}
-                          {...intervalProvided}
-                          style={style}
-                        >
-                          {startTime.format('HH')}
-                        </div>
-                      )
+                <div {...getRootProps({ style: { height: 30 } })}>
+                  {intervals.map(interval => {
+                    const intervalStyle = {
+                      lineHeight: '30px',
+                      textAlign: 'center',
+                      borderLeft: '1px solid black',
+                      cursor: 'pointer'
                     }
-                  )}
+                    return (
+                      <div
+                        onClick={() => {
+                          showPeriod(interval.startTime, interval.endTime)
+                        }}
+                        {...getIntervalProps({
+                          interval,
+                          style: intervalStyle
+                        })}
+                      >
+                        {interval.startTime.format('HH')}
+                      </div>
+                    )
+                  })}
                 </div>
               )
             }}

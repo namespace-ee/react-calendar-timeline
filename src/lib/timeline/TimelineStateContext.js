@@ -45,6 +45,7 @@ export class TimelineStateProvider extends React.Component {
     timelineUnit: PropTypes.string.isRequired,
     showPeriod: PropTypes.func.isRequired,
     timelineUnit: PropTypes.string.isRequired,
+    timelineWidth: PropTypes.number.isRequired,
   }
 
   constructor(props) {
@@ -68,6 +69,7 @@ export class TimelineStateProvider extends React.Component {
       canvasTimeEnd,
       canvasWidth,
       timelineUnit,
+      timelineWidth,
     } = this.props
     return {
       visibleTimeStart,
@@ -76,6 +78,7 @@ export class TimelineStateProvider extends React.Component {
       canvasTimeEnd,
       canvasWidth,
       timelineUnit,
+      timelineWidth,
     } // REVIEW,
   }
 

@@ -1101,6 +1101,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth={canvasWidth}
         showPeriod={this.showPeriod}
         timelineUnit={minUnit}
+        timelineWidth={this.state.width}
       >
         <TimelineMarkersProvider>
           <TimelineHeadersProvider

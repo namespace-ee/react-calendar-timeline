@@ -6,8 +6,6 @@ import { RIGHT_VARIANT, LEFT_VARIANT } from './constants';
 class TimelineHeaders extends React.Component {
   static propTypes = {
     registerScroll: PropTypes.func.isRequired,
-    calendarHeaders: PropTypes.array.isRequired,
-    sidebarHeaders: PropTypes.object.isRequired,
     leftSidebarWidth: PropTypes.number.isRequired,
     rightSidebarWidth: PropTypes.number.isRequired
   }
@@ -64,16 +62,12 @@ class TimelineHeaders extends React.Component {
 const TimelineHeadersWrapper = ({children}) => (
   <TimelineHeadersConsumer>
     {({
-      calendarHeaders,
-      sidebarHeaders,
       leftSidebarWidth,
       rightSidebarWidth,
       registerScroll,
     }) => {
       return (
         <TimelineHeaders
-          calendarHeaders={calendarHeaders}
-          sidebarHeaders={sidebarHeaders}
           leftSidebarWidth={leftSidebarWidth}
           rightSidebarWidth={rightSidebarWidth}
           registerScroll={registerScroll}

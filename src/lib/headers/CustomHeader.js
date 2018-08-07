@@ -28,16 +28,24 @@ export class CustomHeader extends React.Component {
       timeSteps,
       showPeriod
     } = props
+    const ratio = this.calculateRatio(
+      canvasWidth,
+      canvasTimeEnd,
+      canvasTimeStart
+    )
     const intervals = this.getHeaderIntervals({
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
       unit,
       timeSteps,
-      showPeriod
+      showPeriod,
+      ratio,
     })
+    
     this.state = {
-      intervals
+      intervals,
+      ratio
     }
   }
 
@@ -64,7 +72,6 @@ export class CustomHeader extends React.Component {
       nextProps.timeSteps !== this.props.timeSteps ||
       nextProps.showPeriod !== this.props.showPeriod
     ) {
-      
       const {
         canvasTimeStart,
         canvasTimeEnd,
@@ -73,27 +80,32 @@ export class CustomHeader extends React.Component {
         timeSteps,
         showPeriod
       } = nextProps
+      const ratio = this.calculateRatio(
+        canvasWidth,
+        canvasTimeEnd,
+        canvasTimeStart
+      )
       const intervals = this.getHeaderIntervals({
         canvasTimeStart,
         canvasTimeEnd,
         canvasWidth,
         unit,
         timeSteps,
-        showPeriod
+        showPeriod,
+        ratio,
       })
-      this.setState({ intervals })
+      
+      this.setState({ intervals, ratio })
     }
   }
 
   getHeaderIntervals = ({
     canvasTimeStart,
     canvasTimeEnd,
-    canvasWidth,
     unit,
     timeSteps,
-    showPeriod
+    ratio,
   }) => {
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const intervals = []
     iterateTimes(
       canvasTimeStart,
@@ -101,58 +113,97 @@ export class CustomHeader extends React.Component {
       unit,
       timeSteps,
       (startTime, endTime) => {
-        const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio)
-        const unitValue = startTime.get(unit === 'day' ? 'date' : unit)
-        const firstOfType = unitValue === (unit === 'day' ? 1 : 0)
-        // console.log('new', [startTime.format('HH:mm'), endTime.format('HH:mm')])
         const labelWidth = Math.ceil(
           (endTime.valueOf() - startTime.valueOf()) * ratio
         )
-        const leftCorrect = firstOfType ? 1 : 0
-        console.log(leftCorrect, unitValue)
-        const headerItemProvided = {
-          style: {
-            left: left - leftCorrect,
-            width: labelWidth,
-            position: 'absolute'
-          }
-        }
         intervals.push({
           startTime,
           endTime,
-          provided: headerItemProvided,
-          showPeriod: showPeriod,
-          intervalContext: { intervalWidth: labelWidth }
+          labelWidth
         })
       }
     )
     return intervals
   }
 
-  rootElementProvided = {
+  rootProps = {
     style: {
       position: 'relative'
     }
   }
 
-  getStateAndHelpers(props) {
+  getRootProps = (props = {}) => {
+    const {style} = props
+    return {
+      style: Object.assign({}, style ? style : {}, this.rootProps.style)
+    }
+  }
+
+  getIntervalProps = (props= {}) => {
+    const { interval, style } = props
+    if(!interval) throw new Error("you should provide interval to the prop getter")
+    const { startTime, labelWidth } = interval
+    return {
+      style: this.getIntervalStyle({
+        style,
+        startTime,
+        labelWidth,
+        canvasTimeStart: this.props.canvasTimeStart,
+        unit: this.props.unit,
+        ratio: this.state.ratio
+      }),
+      key: `label-${startTime.valueOf()}`
+    }
+  }
+
+  calculateRatio(canvasWidth, canvasTimeEnd, canvasTimeStart) {
+    return canvasWidth / (canvasTimeEnd - canvasTimeStart)
+  }
+
+  getIntervalStyle=({ startTime, canvasTimeStart, ratio, unit, labelWidth, style, }) => {
+    const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio)
+    const unitValue = startTime.get(unit === 'day' ? 'date' : unit)
+    const firstOfType = unitValue === (unit === 'day' ? 1 : 0)
+    const leftCorrect = firstOfType ? 1 : 0
+    return {
+      ...style,
+      left: left - leftCorrect,
+      width: labelWidth,
+      position: 'absolute'
+    }
+  }
+
+  getStateAndHelpers = () => {
     const {
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth,
       unit,
-      timeSteps,
-      showPeriod
-    } = props
+      showPeriod,
+      timelineWidth,
+      visibleTimeStart,
+      visibleTimeEnd
+    } = this.props
     //TODO: only evaluate on changing params
     return {
-      provided: this.rootElementProvided,
-      intervals: this.state.intervals
+      timelineContext: {
+        timelineWidth,
+        visibleTimeStart,
+        visibleTimeEnd,
+        canvasTimeStart,
+        canvasTimeEnd
+      },
+      headerContext: {
+        unit,
+        intervals: this.state.intervals
+      },
+      getRootProps: this.getRootProps,
+      getIntervalProps: this.getIntervalProps,
+      showPeriod
     }
   }
 
   render() {
-    const props = this.getStateAndHelpers(this.props)
+    const props = this.getStateAndHelpers()
     return this.props.children(props)
   }
 }

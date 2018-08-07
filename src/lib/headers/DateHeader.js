@@ -30,82 +30,91 @@ class DateHeader extends React.Component {
 
   render() {
     const unit = this.getHeaderUnit()
+    return <CustomHeader unit={unit} children={this.headerRenderer} />
+  }
+
+  headerRenderer = ({
+    headerContext: { intervals },
+    getRootProps,
+    getIntervalProps,
+    showPeriod
+  }) => {
+    const unit = this.getHeaderUnit()
+
+    const rootStyle = {
+      height: 30
+    }
     return (
-      <CustomHeader unit={unit}>
-        {({ provided, intervals }) => {
-          const rootStyle = {
-            height: 30,
-            ...provided.style
+      <div {...getRootProps({ style: rootStyle })}>
+        {intervals.map(interval => {
+          const intervalStyle = {
+            backgroundColor:
+              this.props.secondaryHeader && !this.props.primaryHeader
+                ? 'rgb(240, 240, 240)'
+                : 'initial',
+            lineHeight: '30px',
+            textAlign: 'center',
+            borderLeft: this.props.primaryHeader
+              ? '1px solid #bbb'
+              : '2px solid #bbb',
+            borderRight: this.props.primaryHeader ? '1px solid #bbb' : 'none',
+            borderBottom: '1px solid #bbb',
+            color: this.props.primaryHeader ? '#fff' : 'initial',
+            cursor: 'pointer',
+            fontSize: '14px'
           }
           return (
-            <div {...provided} style={rootStyle}>
-              {intervals.map(
-                ({
-                  startTime,
-                  endTime,
-                  provided: intervalProvided,
-                  showPeriod,
-                  intervalContext,
-                }) => {
-                  const style = {
-                    backgroundColor: this.props.secondaryHeader && !this.props.primaryHeader ? 'rgb(240, 240, 240)' : 'initial',
-                    lineHeight: '30px',
-                    textAlign: 'center',
-                    borderLeft: this.props.primaryHeader? "1px solid #bbb" : '2px solid #bbb',
-                    borderRight: this.props.primaryHeader? "1px solid #bbb" : "none",
-                    borderBottom: '1px solid #bbb',
-                    color: this.props.primaryHeader ? '#fff' : 'initial',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    ...intervalProvided.style
-                  }
-                  return (
-                    <div
-                      onClick={() => {
-                        if(this.props.primaryHeader){
-                          const nextUnit = getNextUnit(unit)
-                          const newStartTime =startTime.clone().startOf(nextUnit)
-                          const newEndTime = startTime.clone().endOf(nextUnit)
-                          showPeriod(newStartTime, newEndTime)
-                        }
-                        else {
-                          showPeriod(startTime, endTime)
-                        }
-                      }}
-                      {...intervalProvided}
-                      style={style}
-                    >
-                      {this.getLabelFormat([startTime, endTime], unit, intervalContext)}
-                    </div>
-                  )
+            <div
+              onClick={() => {
+                if (this.props.primaryHeader) {
+                  const nextUnit = getNextUnit(unit)
+                  const newStartTime = interval.startTime
+                    .clone()
+                    .startOf(nextUnit)
+                  const newEndTime = interval.startTime.clone().endOf(nextUnit)
+                  showPeriod(newStartTime, newEndTime)
+                } else {
+                  showPeriod(interval.startTime, interval.endTime)
                 }
+              }}
+              {...getIntervalProps({
+                interval,
+                style: intervalStyle
+              })}
+            >
+              {this.getLabelFormat(
+                [interval.startTime, interval.endTime],
+                unit,
+                interval
               )}
             </div>
           )
-        }}
-      </CustomHeader>
+        })}
+      </div>
     )
   }
 
   getLabelFormat(interval, unit, intervalContext) {
-    const {labelFormat} = this.props;
-    if(typeof labelFormat === 'string'){
+    const { labelFormat } = this.props
+    if (typeof labelFormat === 'string') {
       const startTime = interval[0]
       return startTime.format(labelFormat)
-    }
-    else if (typeof labelFormat === 'object'){
+    } else if (typeof labelFormat === 'object') {
       return formatLabel(interval, unit, intervalContext, labelFormat)
-    }
-    else if (typeof labelFormat === 'function'){
-      return labelFormat(interval, unit, intervalContext);
-    }
-    else {
+    } else if (typeof labelFormat === 'function') {
+      return labelFormat(interval, unit, intervalContext)
+    } else {
       throw new Error('labelFormat should be function, object or string')
     }
   }
 }
 
-const DateHeaderWrapper = ({ primaryHeader, secondaryHeader, unit, labelFormat }) => (
+const DateHeaderWrapper = ({
+  primaryHeader,
+  secondaryHeader,
+  unit,
+  labelFormat
+}) => (
   <TimelineStateConsumer>
     {({ getTimelineState }) => {
       const timelineState = getTimelineState()
@@ -141,19 +150,17 @@ DateHeaderWrapper.defaultProps = {
 function formatLabel(
   [timeStart, timeEnd],
   unit,
-  {intervalWidth},
+  { labelWidth },
   formatOptions = defaultHeaderFormats
 ) {
-  let format 
-  if (intervalWidth >= 150) {
+  let format
+  if (labelWidth >= 150) {
     format = formatOptions[unit]['long']
-  } else if (intervalWidth >= 100) {
+  } else if (labelWidth >= 100) {
     format = formatOptions[unit]['mediumLong']
-  }
-  else if (intervalWidth >= 50) {
+  } else if (labelWidth >= 50) {
     format = formatOptions[unit]['medium']
-  }
-  else {
+  } else {
     format = formatOptions[unit]['short']
   }
   return timeStart.format(format)

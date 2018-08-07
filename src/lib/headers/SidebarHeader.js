@@ -1,10 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { TimelineHeadersConsumer } from './HeadersContext'
-import {
-  LEFT_VARIANT,
-  RIGHT_VARIANT,
-} from './constants'
+import { LEFT_VARIANT, RIGHT_VARIANT } from './constants'
 
 class SidebarHeader extends React.PureComponent {
   static propTypes = {
@@ -14,22 +11,29 @@ class SidebarHeader extends React.PureComponent {
     variant: PropTypes.string
   }
 
-
-  render() {
-    console.log("sidebar wrapper")
+  getRootProps = (props = {}) => {
+    const { style } = props
     const width =
       this.props.variant === RIGHT_VARIANT
         ? this.props.rightSidebarWidth
         : this.props.leftSidebarWidth
-    const provided = {
+    return {
       style: {
-        width
+        width,
+        ...style
       }
     }
-    if(this.props.children){
-      return this.props.children({provided})
+  }
+
+  getStateAndHelpers = () => {
+    return {
+      getRootProps: this.getRootProps
     }
-    return <div {...provided}/>
+  }
+
+  render() {
+    const props = this.getStateAndHelpers()
+    return this.props.children(props)
   }
 }
 
@@ -54,7 +58,8 @@ SidebarWrapper.propTypes = {
 }
 
 SidebarWrapper.defaultProps = {
-  variant: LEFT_VARIANT
+  variant: LEFT_VARIANT,
+  children: ({ getRootProps }) => <div {...getRootProps()} />
 }
 
 export default SidebarWrapper
