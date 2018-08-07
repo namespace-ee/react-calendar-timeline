@@ -42,62 +42,7 @@ $weekend: rgba(250, 246, 225, 0.5);
   }
 
   .rct-item {
-    position: absolute;
-    box-sizing: border-box;
-    font-size: 12px;
-    color: $item-color;
-    cursor: pointer;
 
-    background: $item-background;
-    border: $item-border;
-    z-index: 80;
-
-    &.selected {
-      background: $item-selected-background;
-      border: $item-selected-border;
-      z-index: 82;
-      &.can-move {
-        cursor: move;
-      }
-      &.can-resize-left {
-        border-left-width: 3px;
-
-        .rct-drag-left {
-          cursor: w-resize;
-        }
-      }
-      &.can-resize-right {
-        border-right-width: 3px;
-
-        .rct-drag-right {
-          cursor: e-resize;
-        }
-      }
-    }
-
-    .rct-drag-left {
-      position: absolute;
-      width: 24px;
-      max-width: 20%;
-      min-width: 2px;
-      height: 100%;
-      top: 0;
-      left: 0;
-      cursor: pointer;
-      z-index: 88;
-    }
-
-    .rct-drag-right {
-      position: absolute;
-      width: 24px;
-      max-width: 20%;
-      min-width: 2px;
-      height: 100%;
-      top: 0;
-      right: 0;
-      cursor: pointer;
-      z-index: 88;
-    }
 
     &:hover {
       z-index: 88;
@@ -229,6 +174,8 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
   }
 
+  // TODO: rename or remove once we make breaking change to rename vertical lines
+  // to columns
   .rct-vertical-lines {
     .rct-vl {
       position: absolute;

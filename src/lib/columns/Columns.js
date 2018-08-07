@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 
 import { iterateTimes } from '../utility/calendar'
 
-export default class VerticalLines extends Component {
+export default class Columns extends Component {
   static propTypes = {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
@@ -11,7 +11,8 @@ export default class VerticalLines extends Component {
     lineCount: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
-    height: PropTypes.number.isRequired
+    height: PropTypes.number.isRequired,
+    verticalLineClassNamesForTime: PropTypes.func
   }
 
   shouldComponentUpdate(nextProps) {
@@ -22,7 +23,9 @@ export default class VerticalLines extends Component {
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
-      nextProps.height === this.props.height
+      nextProps.height === this.props.height &&
+      nextProps.verticalLineClassNamesForTime ===
+        this.props.verticalLineClassNamesForTime
     )
   }
 
@@ -33,7 +36,8 @@ export default class VerticalLines extends Component {
       canvasWidth,
       minUnit,
       timeSteps,
-      height
+      height,
+      verticalLineClassNamesForTime
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
@@ -52,12 +56,22 @@ export default class VerticalLines extends Component {
           Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio)
         const leftPush = firstOfType ? -1 : 0
 
+        let classNamesForTime = []
+        if (verticalLineClassNamesForTime) {
+          classNamesForTime = verticalLineClassNamesForTime(
+            time.unix() * 1000, // turn into ms, which is what verticalLineClassNamesForTime expects
+            nextTime.unix() * 1000 - 1
+          )
+        }
+
+        // TODO: rename or remove class that has reference to vertical-line
         const classNames =
           'rct-vl' +
           (firstOfType ? ' rct-vl-first' : '') +
           (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute'
-            ? ` rct-day-${time.day()}`
-            : '')
+            ? ` rct-day-${time.day()} `
+            : '') +
+          classNamesForTime.join(' ')
 
         lines.push(
           <div

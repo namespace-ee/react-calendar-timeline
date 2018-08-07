@@ -6,9 +6,11 @@ import GroupRow from 'lib/row/GroupRow'
 const defaultProps = {
   onClick: noop,
   onDoubleClick: noop,
+  onContextMenu: noop,
   isEvenRow: false,
   clickTolerance: 10,
-  style: {}
+  style: {},
+  group: {}
 }
 
 // using mount to be able to interact with element, render
@@ -41,6 +43,20 @@ describe('GroupRow', () => {
 
     expect(onClickMock).toHaveBeenCalledTimes(1)
   })
+
+  it('calls passed in onContextMenu', () => {
+    const onContextMenuMock = jest.fn()
+    const props = {
+      ...defaultProps,
+      onContextMenu: onContextMenuMock
+    }
+
+    const wrapper = mount(<GroupRow {...props} />)
+
+    wrapper.simulate('contextmenu')
+
+    expect(onContextMenuMock).toHaveBeenCalledTimes(1)
+  })
   it('assigns "rct-hl-even" class if isEvenRow is true', () => {
     const props = {
       ...defaultProps,
@@ -49,7 +65,7 @@ describe('GroupRow', () => {
 
     const wrapper = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('class')).toBe('rct-hl-even')
+    expect(wrapper.prop('class').trim()).toBe('rct-hl-even')
   })
   it('assigns "rct-hl-odd" if isEvenRow is false', () => {
     const props = {
@@ -59,7 +75,7 @@ describe('GroupRow', () => {
 
     const wrapper = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('class')).toBe('rct-hl-odd')
+    expect(wrapper.prop('class').trim()).toBe('rct-hl-odd')
   })
   it('passes style prop to style', () => {
     const props = {

@@ -163,4 +163,77 @@ xdescribe('Timeline', () => {
     expect(pluginProps.groupHeights).toBeInstanceOf(Array)
     expect(pluginProps.groupTops).toBeInstanceOf(Array)
   })
+
+  it('should render items', () => {
+    const props = {
+      items: items,
+      groups: groups,
+      defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
+      defaultTimeEnd : moment('1995-12-25').add(12, 'hour'),
+    }
+
+    const wrapper = mount(<Timeline {...props} />)
+    expect(wrapper.find('div.rct-item').length).toEqual(3)
+  })
+
+  it('should render custom elements using itemRenderer with title', () => {
+    const props = {
+      items: items,
+      groups: groups,
+      defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
+      defaultTimeEnd : moment('1995-12-25').add(12, 'hour'),
+      itemRenderer: ({
+        item,
+        timelineContext,
+        itemContext,
+        getItemProps,
+        getResizeProps
+      }) => {
+        const {
+          left: leftResizeProps,
+          right: rightResizeProps
+        } = getResizeProps()
+
+        return <h1 {...getItemProps(item.itemProps)}>{itemContext.title}</h1>
+      }
+    }
+
+    const wrapper = mount(<Timeline {...props} />)
+    const wrapperItems = wrapper.find('h1.rct-item')
+    expect(wrapperItems.length).toEqual(3)
+    wrapperItems.forEach((item, index) => {
+      expect(item.text()).toEqual(items[index].title)
+    })
+  })
+
+  it('should render custom elements using itemRenderer with title', () => {
+    const props = {
+      items: items,
+      groups: groups,
+      defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
+      defaultTimeEnd : moment('1995-12-25').add(12, 'hour'),
+      itemRenderer: ({
+        item,
+        timelineContext,
+        itemContext,
+        getItemProps,
+        getResizeProps
+      }) => {
+        const {
+          left: leftResizeProps,
+          right: rightResizeProps
+        } = getResizeProps()
+
+        return <h1 {...getItemProps(item.itemProps)}>{itemContext.title}</h1>
+      }
+    }
+
+    const wrapper = mount(<Timeline {...props} />)
+    const wrapperItems = wrapper.find('h1.rct-item')
+    expect(wrapperItems.length).toEqual(3)
+    wrapperItems.forEach((item, index) => {
+      expect(item.text()).toEqual(items[index].title)
+    })
+  })
+
 })

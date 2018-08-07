@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import 'react-calendar-timeline-css'
 import App from './app'
 
-import './index.html'
-
 const render = AppToRender => {
   ReactDOM.render(<AppToRender />, document.getElementById('root'))
 }
