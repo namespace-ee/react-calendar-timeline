@@ -19,12 +19,13 @@ class DateHeader extends React.Component {
   }
 
   getHeaderUnit = () => {
-    if (this.props.primaryHeader) {
-      return getNextUnit(this.props.timelineUnit)
-    } else if (this.props.secondaryHeader) {
-      return this.props.timelineUnit
-    } else {
+    if(this.props.unit) {
       return this.props.unit
+    }
+    else if (this.props.primaryHeader) {
+      return getNextUnit(this.props.timelineUnit)
+    } else {
+      return this.props.timelineUnit
     }
   }
 
@@ -85,7 +86,7 @@ class DateHeader extends React.Component {
               {this.getLabelFormat(
                 [interval.startTime, interval.endTime],
                 unit,
-                interval
+                interval.labelWidth,
               )}
             </div>
           )
@@ -94,15 +95,15 @@ class DateHeader extends React.Component {
     )
   }
 
-  getLabelFormat(interval, unit, intervalContext) {
+  getLabelFormat(interval, unit, labelWidth) {
     const { labelFormat } = this.props
     if (typeof labelFormat === 'string') {
       const startTime = interval[0]
       return startTime.format(labelFormat)
     } else if (typeof labelFormat === 'object') {
-      return formatLabel(interval, unit, intervalContext, labelFormat)
+      return formatLabel(interval, unit, labelWidth, labelFormat)
     } else if (typeof labelFormat === 'function') {
-      return labelFormat(interval, unit, intervalContext)
+      return labelFormat(interval, unit, labelWidth)
     } else {
       throw new Error('labelFormat should be function, object or string')
     }
@@ -150,7 +151,7 @@ DateHeaderWrapper.defaultProps = {
 function formatLabel(
   [timeStart, timeEnd],
   unit,
-  { labelWidth },
+  labelWidth,
   formatOptions = defaultHeaderFormats
 ) {
   let format
