@@ -97,7 +97,7 @@ TimelineHeadersWrapper.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   calendarHeaderStyle: PropTypes.object,
-  calendarHeaderClassName: PropTypes.string
+  calendarHeaderClassName: PropTypes.string,
 }
 
 export default TimelineHeadersWrapper

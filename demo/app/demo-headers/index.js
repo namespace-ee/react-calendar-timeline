@@ -191,7 +191,7 @@ export default class App extends Component {
             }}
           </SidebarHeader>
           <DateHeader primaryHeader />
-          <DateHeader />
+          <DateHeader style={{height: 50}}/>
           <CustomHeader unit="year">
             {({
               headerContext: { intervals },

@@ -10,6 +10,8 @@ class DateHeader extends React.Component {
     primaryHeader: PropTypes.bool,
     secondaryHeader: PropTypes.bool,
     unit: PropTypes.string,
+    style: PropTypes.object,
+    className: PropTypes.string,
     timelineUnit: PropTypes.string,
     labelFormat: PropTypes.oneOfType([
       PropTypes.func,
@@ -34,6 +36,14 @@ class DateHeader extends React.Component {
     return <CustomHeader unit={unit} children={this.headerRenderer} />
   }
 
+  getRootStyle = () => {
+    console.log(this.props)
+    return {
+      height: 30,
+      ...this.props.style,
+    }
+  }
+
   headerRenderer = ({
     headerContext: { intervals },
     getRootProps,
@@ -42,19 +52,18 @@ class DateHeader extends React.Component {
   }) => {
     const unit = this.getHeaderUnit()
 
-    const rootStyle = {
-      height: 30
-    }
     return (
-      <div {...getRootProps({ style: rootStyle })}>
+      <div className={this.props.className} {...getRootProps({ style: this.getRootStyle() })}>
         {intervals.map(interval => {
           const intervalStyle = {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             backgroundColor:
               this.props.secondaryHeader && !this.props.primaryHeader
                 ? 'rgb(240, 240, 240)'
                 : 'initial',
-            lineHeight: '30px',
-            textAlign: 'center',
+            height: '100%',
             borderLeft: this.props.primaryHeader
               ? '1px solid #bbb'
               : '2px solid #bbb',
@@ -83,11 +92,13 @@ class DateHeader extends React.Component {
                 style: intervalStyle
               })}
             >
+              <span>
               {this.getLabelFormat(
                 [interval.startTime, interval.endTime],
                 unit,
                 interval.labelWidth,
               )}
+              </span>
             </div>
           )
         })}
@@ -114,7 +125,9 @@ const DateHeaderWrapper = ({
   primaryHeader,
   secondaryHeader,
   unit,
-  labelFormat
+  labelFormat,
+  style,
+  className,
 }) => (
   <TimelineStateConsumer>
     {({ getTimelineState }) => {
@@ -126,6 +139,8 @@ const DateHeaderWrapper = ({
           secondaryHeader={secondaryHeader}
           unit={unit}
           labelFormat={labelFormat}
+          style={style}
+          className={className}
         />
       )
     }}
@@ -133,6 +148,8 @@ const DateHeaderWrapper = ({
 )
 
 DateHeaderWrapper.propTypes = {
+  style: PropTypes.object,
+  className: PropTypes.string,
   primaryHeader: PropTypes.bool,
   secondaryHeader: PropTypes.bool,
   unit: PropTypes.string,
