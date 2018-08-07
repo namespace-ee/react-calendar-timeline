@@ -14,11 +14,6 @@ class TimelineHeaders extends React.Component {
 
   constructor(props) {
     super(props)
-    props.registerScroll(scrollX => {
-      if (scrollX != null) {
-        this.headerEl.scrollLeft = scrollX
-      }
-    })
   }
 
   render() {
@@ -51,7 +46,7 @@ class TimelineHeaders extends React.Component {
       >
         {leftSidebarHeader}
         <div
-          ref={el => (this.headerEl = el)}
+          ref={this.props.registerScroll}
           style={{
             overflow: 'hidden',
             width: `calc(100% - ${leftSidebarWidth + rightSidebarWidth}px)`,

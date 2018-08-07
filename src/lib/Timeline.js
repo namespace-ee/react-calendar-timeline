@@ -350,8 +350,7 @@ export default class ReactCalendarTimeline extends Component {
     } = this.container.getBoundingClientRect()
 
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
-    const { headerLabelGroupHeight, headerLabelHeight } = props
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
+    const {height: headerHeight} = this.headerElement.getBoundingClientRect()
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
       props.items,
@@ -837,16 +836,13 @@ export default class ReactCalendarTimeline extends Component {
     return label ? <InfoLabel label={label} /> : ''
   }
 
-  headerScrollListener = []
 
   componentDidUpdate() {
-    this.headerScrollListener.map(listener =>
-      listener(this.state.currentScrollLeft)
-    )
+    this.headerElement.scrollLeft=this.state.currentScrollLeft
   }
 
-  registerScrollListener = listener => {
-    this.headerScrollListener.push(listener)
+  registerScrollListener = elm => {
+    this.headerElement = elm
   }
 
   sidebar(height, groupHeights) {

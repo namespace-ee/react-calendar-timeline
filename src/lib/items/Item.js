@@ -246,7 +246,7 @@ export default class Item extends Component {
         if (this.state.dragging) {
           let dragTime = this.dragTime(e)
           let dragGroupDelta = this.dragGroupDelta(e)
-
+          console.log(dragGroupDelta)
           if (this.props.moveResizeValidator) {
             dragTime = this.props.moveResizeValidator(
               'move',

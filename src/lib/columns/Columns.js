@@ -52,8 +52,9 @@ export default class Columns extends Component {
         const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
+        const lineWidth = firstOfType ? 2 : 1
         const labelWidth =
-          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio)
+          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
         const leftPush = firstOfType ? -1 : 0
 
         let classNamesForTime = []
