@@ -38,7 +38,6 @@ class Header extends Component {
       subHeaderLabelFormats,
       headerLabelGroupHeight,
       headerLabelHeight,
-      registerScroll
     } = this.props
 
     const headerStyle = {
@@ -69,7 +68,6 @@ class Header extends Component {
             subHeaderLabelFormats={subHeaderLabelFormats}
             headerLabelGroupHeight={headerLabelGroupHeight}
             headerLabelHeight={headerLabelHeight}
-            registerScroll={registerScroll}
           />
         </div>
       </div>

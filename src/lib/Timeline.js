@@ -16,10 +16,6 @@ import windowResizeDetector from '../resize-detector/window'
 import {
   getMinUnit,
   getNextUnit,
-  stack,
-  nostack,
-  getGroupOrders,
-  getVisibleItems,
   stackItems,
   calculateScrollCanvas,
   calculateTimeForXPosition
@@ -351,8 +347,7 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart,
       visibleTimeEnd,
       items,
-      groups,
-      sidebarWidth
+      groups
     } = nextProps
 
     // This is a gross hack pushing items and groups in to state only to allow
@@ -413,7 +408,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (this.headerRef.scrollLeft !== scrollLeft) {
-      //this.headerRef.scrollLeft = scrollLeft
+      this.headerRef.scrollLeft = scrollLeft
     }
   }
 

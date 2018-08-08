@@ -460,7 +460,8 @@ state
   const { height, groupHeights, groupTops } = stackingMethod(
     dimensionItems,
     groupOrders,
-    lineHeight
+    lineHeight,
+    groups
   )
 
   return { dimensionItems, height, groupHeights, groupTops }
