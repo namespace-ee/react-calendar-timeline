@@ -9,6 +9,7 @@ class ScrollElement extends Component {
     height: PropTypes.number.isRequired,
     traditionalZoom: PropTypes.bool.isRequired,
     scrollRef: PropTypes.func.isRequired,
+    scrollContainerHelper: PropTypes.object.isRequired,
     isInteractingWithItem: PropTypes.bool.isRequired,
     // onMouseEnter: PropTypes.func.isRequired,
     // onMouseMove: PropTypes.func.isRequired,
@@ -17,8 +18,6 @@ class ScrollElement extends Component {
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
     onScroll: PropTypes.func.isRequired,
-
-    verticalScrollContainer: PropTypes.object,
   }
 
   constructor() {
@@ -143,7 +142,7 @@ class ScrollElement extends Component {
 
       this.lastTouchDistance = null
       // Cache the position of the top of the vertical scroll container while the user scrolls
-      let screenY = this.props.verticalScrollContainer ? this.props.verticalScrollContainer.scrollTop : window.pageYOffset;
+      let screenY = this.props.scrollContainerHelper.getYOffset();
       this.singleTouchStart = { x: x, y: y, screenY: screenY }
       this.lastSingleTouch = { x: x, y: y, screenY: screenY }
     }
@@ -197,15 +196,9 @@ class ScrollElement extends Component {
   verticallyScrollTo(startY, deltaY) {
     // If no startY given get the default, however accept 0 as a valid startY
     if (!startY && startY !== 0) {
-      startY = this.props.verticalScrollContainer ? this.props.verticalScrollContainer.scrollTop : window.pageYOffset;
+      startY = this.props.scrollContainerHelper.getYOffset();;
     }
-
-    // Decide on what element to scroll
-    if (this.props.verticalScrollContainer) {
-      this.props.verticalScrollContainer.scrollTo(this.props.verticalScrollContainer.scrollLeft, startY + deltaY)
-    } else {
-      window.scrollTo(window.pageXOffset, startY + deltaY)
-    }
+    this.props.scrollContainerHelper.scrollTo(this.props.scrollContainerHelper.getXOffset(), startY + deltaY);
   }
 
   render() {

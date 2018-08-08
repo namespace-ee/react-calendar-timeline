@@ -318,6 +318,13 @@ export default class ReactCalendarTimeline extends Component {
     this.state.groupTops = groupTops
 
     /* eslint-enable */
+
+    // Wrap the scroll container in our helper, because we might not have a container and want to use the window. which sometimes has different props\methods.
+    this.scrollContainerHelper = {
+      getYOffset: () => this.props.verticalScrollContainer && this.props.verticalScrollContainer.current ? this.props.verticalScrollContainer.current.scrollTop : window.pageYOffset,
+      getXOffset: () => this.props.verticalScrollContainer && this.props.verticalScrollContainer.current ? this.props.verticalScrollContainer.current.scrollLeft : window.pageYOffset,
+      scrollTo: (x, y) => this.props.verticalScrollContainer && this.props.verticalScrollContainer.current ? this.props.verticalScrollContainer.current.scrollTo(x, y) : window.scrollTo(x, y)
+    }
   }
 
   componentDidMount() {
@@ -1200,7 +1207,7 @@ export default class ReactCalendarTimeline extends Component {
                 onMouseLeave={this.handleScrollMouseLeave}
                 onMouseMove={this.handleScrollMouseMove}
                 onContextMenu={this.handleScrollContextMenu}
-                verticalScrollContainer={this.props.verticalScrollContainer && this.props.verticalScrollContainer.current}
+                scrollContainerHelper={this.scrollContainerHelper}
               >
                 <div
                   ref={el => (this.canvasComponent = el)}
