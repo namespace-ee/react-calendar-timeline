@@ -247,8 +247,9 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
-export function stack(items, groupOrders, lineHeight) {
+export function stack(items, groupOrders, lineHeight, groups) {
   var i, iMax
+  var k = 0
   var totalHeight = 0
 
   var groupHeights = []
@@ -257,6 +258,8 @@ export function stack(items, groupOrders, lineHeight) {
   var groupedItems = getGroupedItems(items, groupOrders)
 
   groupedItems.forEach(function(group) {
+    var groupVal = groups[k++];
+
     // calculate new, non-overlapping positions
     groupTops.push(totalHeight)
 
@@ -298,8 +301,13 @@ export function stack(items, groupOrders, lineHeight) {
       }
     }
 
-    groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
-    totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
+    if (groupVal.height) {
+      groupHeights.push(groupVal.height)
+      totalHeight += groupVal.height
+    } else {
+      groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
+      totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
+    }
   })
   return {
     height: totalHeight,
@@ -308,8 +316,8 @@ export function stack(items, groupOrders, lineHeight) {
   }
 }
 
-export function nostack(items, groupOrders, lineHeight) {
-  var i, iMax
+export function nostack(items, groupOrders, lineHeight, groups) {
+  var i, j=0, iMax
 
   var totalHeight = 0
 
@@ -319,6 +327,8 @@ export function nostack(items, groupOrders, lineHeight) {
   var groupedItems = getGroupedItems(items, groupOrders)
 
   groupedItems.forEach(function(group) {
+    var groupVal = groups[j++];
+
     // calculate new, non-overlapping positions
     groupTops.push(totalHeight)
 
@@ -333,8 +343,13 @@ export function nostack(items, groupOrders, lineHeight) {
       }
     }
 
-    groupHeights.push(Math.max(groupHeight, lineHeight))
-    totalHeight += Math.max(groupHeight, lineHeight)
+    if (groupVal.height) {
+      groupHeights.push(groupVal.height);
+      totalHeight += groupVal.height;
+    } else {
+      groupHeights.push(Math.max(groupHeight, lineHeight))
+      totalHeight += Math.max(groupHeight, lineHeight)
+    }
   })
   return {
     height: totalHeight,

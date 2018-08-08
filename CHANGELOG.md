@@ -7,7 +7,17 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-* add scroll ref
+### 0.19.0
+
+### Added
+
+* ability to set classes for timeline columns depending on its time - #364
+* ability to add custom classes and custom heights to the timeline rows - #367
+* add `scrollRef` to allow for programmatically scrolling timeline - #372
+
+### Breaking
+
+* rework item renderer to render the whole item using render prop and prop getters - #289
 
 ### 0.18.2
 

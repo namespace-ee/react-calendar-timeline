@@ -1,12 +1,12 @@
 body {
-  font-family: "Lato";
+  font-family: 'Lato';
   margin: 0;
   font-size: 13px;
 }
 
 .react-calendar-timeline .rct-item.item-weekend {
-  background: #21F32C;
-  border-color: #29B31A;
+  background: #21f32c;
+  border-color: #29b31a;
 }
 
 .demo-row {
@@ -45,4 +45,23 @@ body {
     font-weight: 700;
     text-decoration: underline;
   }
+}
+
+.holiday {
+  background-color: rgba(250, 246, 225, 0.5);
+}
+
+.lunch {
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.5
+  ) !important; /* we need to overwrite the weekend rule */
+}
+
+.row-root {
+  position: relative;
+  z-index: 999;
+  background-color: darkgray !important;
 }

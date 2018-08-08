@@ -50,7 +50,6 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
-    minimumWidthForItemContentVisibility: PropTypes.number,
 
     minZoom: PropTypes.number,
     maxZoom: PropTypes.number,
@@ -68,6 +67,8 @@ export default class ReactCalendarTimeline extends Component {
     traditionalZoom: PropTypes.bool,
 
     itemTouchSendsClick: PropTypes.bool,
+
+    horizontalLineClassNamesForGroup: PropTypes.func,
 
     onItemMove: PropTypes.func,
     onItemResize: PropTypes.func,
@@ -157,6 +158,8 @@ export default class ReactCalendarTimeline extends Component {
       removeListener: PropTypes.func
     }),
 
+    verticalLineClassNamesForTime: PropTypes.func,
+
     children: PropTypes.node
   }
 
@@ -171,7 +174,6 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight: 30,
     headerLabelHeight: 30,
     itemHeightRatio: 0.65,
-    minimumWidthForItemContentVisibility: 25,
 
     minZoom: 60 * 60 * 1000, // 1 hour
     maxZoom: 5 * 365.24 * 86400 * 1000, // 5 years
@@ -188,6 +190,8 @@ export default class ReactCalendarTimeline extends Component {
 
     traditionalZoom: false,
 
+    horizontalLineClassNamesForGroup: null,
+
     onItemMove: null,
     onItemResize: null,
     onItemClick: null,
@@ -197,6 +201,8 @@ export default class ReactCalendarTimeline extends Component {
     onItemDoubleClick: null,
     onItemContextMenu: null,
     onZoom: null,
+
+    verticalLineClassNamesForTime: null,
 
     moveResizeValidator: null,
 
@@ -688,6 +694,7 @@ export default class ReactCalendarTimeline extends Component {
         minUnit={minUnit}
         timeSteps={timeSteps}
         height={height}
+        verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
       />
     )
   }
@@ -735,15 +742,17 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  rows(canvasWidth, groupHeights) {
+  rows(canvasWidth, groupHeights, groups) {
     return (
       <GroupRows
+        groups={groups}
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
         groupHeights={groupHeights}
         clickTolerance={this.props.clickTolerance}
         onRowClick={this.handleRowClick}
         onRowDoubleClick={this.handleRowDoubleClick}
+        horizontalLineClassNamesForGroup={this.props.horizontalLineClassNamesForGroup}
         onRowContextClick={this.handleScrollContextMenu}
       />
     )
@@ -788,9 +797,6 @@ export default class ReactCalendarTimeline extends Component {
         itemResized={this.resizedItem}
         itemRenderer={this.props.itemRenderer}
         selected={this.props.selected}
-        minimumWidthForItemContentVisibility={
-          this.props.minimumWidthForItemContentVisibility
-        }
       />
     )
   }
@@ -887,6 +893,7 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+      groups
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,
@@ -1046,7 +1053,7 @@ export default class ReactCalendarTimeline extends Component {
                       height,
                       headerHeight
                     )}
-                  {this.rows(canvasWidth, groupHeights)}
+                  {this.rows(canvasWidth, groupHeights, groups)}
                     {this.infoLabel()}
                     {this.childrenWithProps(
                       canvasTimeStart,
