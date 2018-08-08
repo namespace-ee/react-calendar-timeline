@@ -358,7 +358,18 @@ export function nostack(items, groupOrders, lineHeight, groups) {
   }
 }
 
-
+/**
+ * Stack the items that will be visible
+ * within the canvas area
+ * @param {item[]} items 
+ * @param {group[]} groups 
+ * @param {number} canvasTimeStart 
+ * @param {number} visibleTimeStart 
+ * @param {number} visibleTimeEnd 
+ * @param {number} width 
+ * @param {*} props 
+ * @param {*} state 
+ */
 export function stackItems(
 items,
 groups,
@@ -369,84 +380,104 @@ width,
 props,
 state
 ) {
-// if there are no groups return an empty array of dimensions
-if (groups.length === 0) {
-  return {
-    dimensionItems: [],
-    height: 0,
-    groupHeights: [],
-    groupTops: []
+  // if there are no groups return an empty array of dimensions
+  if (groups.length === 0) {
+    return {
+      dimensionItems: [],
+      height: 0,
+      groupHeights: [],
+      groupTops: []
+    }
   }
-}
 
-const { keys, lineHeight, stackItems, itemHeightRatio } = props
-const {
-  draggingItem,
-  dragTime,
-  resizingItem,
-  resizingEdge,
-  resizeTime,
-  newGroupOrder
-} = state
-const zoom = visibleTimeEnd - visibleTimeStart
-const canvasTimeEnd = canvasTimeStart + zoom * 3
-const canvasWidth = width * 3
+  const { keys, lineHeight, stackItems, itemHeightRatio } = props
+  const {
+    draggingItem,
+    dragTime,
+    resizingItem,
+    resizingEdge,
+    resizeTime,
+    newGroupOrder
+  } = state
+  const zoom = visibleTimeEnd - visibleTimeStart
+  const canvasTimeEnd = canvasTimeStart + zoom * 3
+  const canvasWidth = width * 3
 
-const visibleItems = getVisibleItems(
-  items,
-  canvasTimeStart,
-  canvasTimeEnd,
-  keys
-)
-const groupOrders = getGroupOrders(groups, keys)
-
-let dimensionItems = visibleItems.reduce((memo, item) => {
-  const itemId = _get(item, keys.itemIdKey)
-  const isDragging = itemId === draggingItem
-  const isResizing = itemId === resizingItem
-
-  let dimension = calculateDimensions({
-    itemTimeStart: _get(item, keys.itemTimeStartKey),
-    itemTimeEnd: _get(item, keys.itemTimeEndKey),
-    isDragging,
-    isResizing,
+  // Find items that fit within canvasTimeStart and canvasTimeEnd
+  // this is used when calculating the number of 'lines' each group
+  // will use.
+  const visibleItems = getVisibleItems(
+    items,
     canvasTimeStart,
     canvasTimeEnd,
-    canvasWidth,
-    dragTime,
-    resizingEdge,
-    resizeTime
-  })
+    keys
+  )
 
-  if (dimension) {
-    dimension.top = null
-    dimension.order = isDragging
-      ? newGroupOrder
-      : groupOrders[_get(item, keys.itemGroupKey)]
-    dimension.stack = !item.isOverlay
-    dimension.height = lineHeight * itemHeightRatio
-    dimension.isDragging = isDragging
+  // Get the order of groups based on their id key
+  const groupOrders = getGroupOrders(groups, keys)
 
-    memo.push({
-      id: itemId,
-      dimensions: dimension
+
+  let dimensionItems = visibleItems.reduce((memo, item) => {
+    const itemId = _get(item, keys.itemIdKey)
+    const isDragging = itemId === draggingItem
+    const isResizing = itemId === resizingItem
+
+
+    let dimension = calculateDimensions({
+      itemTimeStart: _get(item, keys.itemTimeStartKey),
+      itemTimeEnd: _get(item, keys.itemTimeEndKey),
+      isDragging,
+      isResizing,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      dragTime,
+      resizingEdge,
+      resizeTime
     })
-  }
 
-  return memo
-}, [])
+    if (dimension) {
+      dimension.top = null
+      dimension.order = isDragging
+        ? newGroupOrder
+        : groupOrders[_get(item, keys.itemGroupKey)]
+      dimension.stack = !item.isOverlay
+      dimension.height = lineHeight * itemHeightRatio
+      dimension.isDragging = isDragging
 
-const stackingMethod = stackItems ? stack : nostack
+      memo.push({
+        id: itemId,
+        dimensions: dimension
+      })
+    }
 
-const { height, groupHeights, groupTops } = stackingMethod(
-  dimensionItems,
-  groupOrders,
-  lineHeight
-)
+    return memo
+  }, [])
 
-return { dimensionItems, height, groupHeights, groupTops }
+  const stackingMethod = stackItems ? stack : nostack
+
+  // Get a new array of groupOrders holding the stacked items
+  const { height, groupHeights, groupTops } = stackingMethod(
+    dimensionItems,
+    groupOrders,
+    lineHeight
+  )
+
+  return { dimensionItems, height, groupHeights, groupTops }
 }
 
+/**
+ * Get the the canvas area for a given visible time
+ * Will shift the start/end of the canvas if the visible time
+ * does not fit within the existing
+ * @param {number} visibleTimeStart 
+ * @param {number} visibleTimeEnd 
+ * @param {boolean} forceUpdateDimensions 
+ * @param {*} items 
+ * @param {*} groups 
+ * @param {*} props 
+ * @param {*} state 
+ */
 export function calculateScrollCanvas(
 visibleTimeStart,
 visibleTimeEnd,
@@ -460,6 +491,7 @@ state) {
 
   const newState = { visibleTimeStart, visibleTimeEnd }
 
+  // Check if the current canvas covers the new times
   const canKeepCanvas =
     visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
     visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
@@ -468,6 +500,7 @@ state) {
   
   if (!canKeepCanvas || forceUpdateDimensions) {
     newState.canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
+    // The canvas cannot be kept, so calculate the new items position
     Object.assign(newState, stackItems(
       items,
       groups,

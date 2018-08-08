@@ -364,6 +364,7 @@ export default class ReactCalendarTimeline extends Component {
 
     // We are a controlled component
     if (visibleTimeStart && visibleTimeEnd) {
+      // Get the new canvas position
       Object.assign(derivedState, 
         calculateScrollCanvas(
           visibleTimeStart,
@@ -375,6 +376,7 @@ export default class ReactCalendarTimeline extends Component {
           prevState
       ))
     } else if (forceUpdate) {
+      // Calculate new item stack position as canvas may have changed
       Object.assign(derivedState, 
         stackItems(items, 
           groups, 
