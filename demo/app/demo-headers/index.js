@@ -178,7 +178,7 @@ export default class App extends Component {
         rightSidebarWidth={150}
         rightSidebarContent={<div>Above The Right</div>}
       >
-        <TimelineHeaders style={{backgroundColor: 'gray'}}>
+        <TimelineHeaders className="header-background">
           <SidebarHeader>
             {({ getRootProps }) => {
               console.log('left')
@@ -191,7 +191,7 @@ export default class App extends Component {
             }}
           </SidebarHeader>
           <DateHeader primaryHeader />
-          <DateHeader style={{height: 50}}/>
+          <DateHeader style={{ height: 50 }} />
           <CustomHeader unit="year">
             {({
               headerContext: { intervals },
@@ -223,6 +223,45 @@ export default class App extends Component {
                       >
                         <div className="sticky">
                           {interval.startTime.format('YYYY')}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            }}
+          </CustomHeader>
+          <CustomHeader unit="week">
+            {({
+              headerContext: { intervals },
+              getRootProps,
+              getIntervalProps,
+              showPeriod
+            }) => {
+              return (
+                <div {...getRootProps({ style: { height: 30 } })}>
+                  {intervals.map(interval => {
+                    const intervalStyle = {
+                      // height: 30,
+                      lineHeight: '30px',
+                      textAlign: 'center',
+                      borderLeft: '1px solid black',
+                      cursor: 'pointer',
+                      backgroundColor: 'indianred',
+                      color: 'white'
+                    }
+                    return (
+                      <div
+                        onClick={() => {
+                          showPeriod(interval.startTime, interval.endTime)
+                        }}
+                        {...getIntervalProps({
+                          interval,
+                          style: intervalStyle
+                        })}
+                      >
+                        <div className="sticky">
+                          {interval.startTime.format('MM/DD')}
                         </div>
                       </div>
                     )
@@ -265,6 +304,16 @@ export default class App extends Component {
               )
             }}
           </CustomHeader>
+          <DateHeader
+            unit="week"
+            labelFormat="MM/DD"
+            style={{ height: 50 }}
+            intervalRenderer={({ getIntervalProps, intervalContext }) => {
+              return <div {...getIntervalProps()}>
+                {intervalContext.intervalText}
+              </div>
+            }}
+          />
         </TimelineHeaders>
         <TimelineMarkers>
           <TodayMarker />

@@ -4,6 +4,7 @@ import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import CustomHeader from './CustomHeader'
 import { getNextUnit } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
+import Interval from './Interval'
 
 class DateHeader extends React.Component {
   static propTypes = {
@@ -17,14 +18,14 @@ class DateHeader extends React.Component {
       PropTypes.func,
       PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
       PropTypes.string
-    ]).isRequired
+    ]).isRequired,
+    intervalRenderer: PropTypes.func
   }
 
   getHeaderUnit = () => {
-    if(this.props.unit) {
+    if (this.props.unit) {
       return this.props.unit
-    }
-    else if (this.props.primaryHeader) {
+    } else if (this.props.primaryHeader) {
       return getNextUnit(this.props.timelineUnit)
     } else {
       return this.props.timelineUnit
@@ -37,10 +38,9 @@ class DateHeader extends React.Component {
   }
 
   getRootStyle = () => {
-    console.log(this.props)
     return {
       height: 30,
-      ...this.props.style,
+      ...this.props.style
     }
   }
 
@@ -53,53 +53,28 @@ class DateHeader extends React.Component {
     const unit = this.getHeaderUnit()
 
     return (
-      <div className={this.props.className} {...getRootProps({ style: this.getRootStyle() })}>
-        {intervals.map(interval => {
-          const intervalStyle = {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor:
-              this.props.secondaryHeader && !this.props.primaryHeader
-                ? 'rgb(240, 240, 240)'
-                : 'initial',
-            height: '100%',
-            borderLeft: this.props.primaryHeader
-              ? '1px solid #bbb'
-              : '2px solid #bbb',
-            borderRight: this.props.primaryHeader ? '1px solid #bbb' : 'none',
-            borderBottom: '1px solid #bbb',
-            color: this.props.primaryHeader ? '#fff' : 'initial',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }
+      <div
+        className={this.props.className}
+        {...getRootProps({ style: this.getRootStyle() })}
+      >
+        {intervals.map((interval) => {
+          const intervalText = this.getLabelFormat(
+            [interval.startTime, interval.endTime],
+            unit,
+            interval.labelWidth
+          )
           return (
-            <div
-              onClick={() => {
-                if (this.props.primaryHeader) {
-                  const nextUnit = getNextUnit(unit)
-                  const newStartTime = interval.startTime
-                    .clone()
-                    .startOf(nextUnit)
-                  const newEndTime = interval.startTime.clone().endOf(nextUnit)
-                  showPeriod(newStartTime, newEndTime)
-                } else {
-                  showPeriod(interval.startTime, interval.endTime)
-                }
-              }}
-              {...getIntervalProps({
-                interval,
-                style: intervalStyle
-              })}
-            >
-              <span>
-              {this.getLabelFormat(
-                [interval.startTime, interval.endTime],
-                unit,
-                interval.labelWidth,
-              )}
-              </span>
-            </div>
+            <Interval
+              key={`label-${interval.startTime.valueOf()}`}
+              unit={unit}
+              interval={interval}
+              showPeriod={showPeriod}
+              intervalText={intervalText}
+              primaryHeader={!!this.props.primaryHeader}
+              secondaryHeader={!!this.props.secondaryHeader}
+              getIntervalProps={getIntervalProps}
+              intervalRenderer={this.props.intervalRenderer}
+            />
           )
         })}
       </div>
@@ -128,6 +103,7 @@ const DateHeaderWrapper = ({
   labelFormat,
   style,
   className,
+  intervalRenderer
 }) => (
   <TimelineStateConsumer>
     {({ getTimelineState }) => {
@@ -141,6 +117,7 @@ const DateHeaderWrapper = ({
           labelFormat={labelFormat}
           style={style}
           className={className}
+          intervalRenderer={intervalRenderer}
         />
       )
     }}
@@ -157,7 +134,8 @@ DateHeaderWrapper.propTypes = {
     PropTypes.func,
     PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
     PropTypes.string
-  ])
+  ]),
+  intervalRenderer: PropTypes.func
 }
 
 DateHeaderWrapper.defaultProps = {
