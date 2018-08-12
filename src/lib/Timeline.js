@@ -1007,7 +1007,7 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelGroupHeight,
               headerLabelHeight
             )}
-            {sidebarWidth && this.sidebar(height, groupHeights, headerHeight)}
+            {sidebarWidth > 0 && this.sidebar(height, groupHeights, headerHeight)}
             <div style={{display: 'inline-block'}}>
 
               <div style={outerComponentStyle} className="rct-outer">
@@ -1064,7 +1064,7 @@ export default class ReactCalendarTimeline extends Component {
               </ScrollElement>
               </div>
             </div>
-            {rightSidebarWidth && this.rightSidebar(height, groupHeights, headerHeight)}
+            {rightSidebarWidth > 0 && this.rightSidebar(height, groupHeights, headerHeight)}
           </div>
         </TimelineMarkersProvider>
       </TimelineStateProvider>
