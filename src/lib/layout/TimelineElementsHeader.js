@@ -237,7 +237,7 @@ export default class TimelineElementsHeader extends Component {
         </div>
         <div
           className="bottom-header"
-          style={{ height: twoHeaders ? headerLabelHeight : headerLabelHeight + headerLabelGroupHeight, width: canvasWidth }}
+          style={{ height: headerLabelHeight, width: canvasWidth }}
         >
           {bottomHeaderLabels}
         </div>

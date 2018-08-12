@@ -72,7 +72,6 @@ class Header extends Component {
       </div>
     )
 
-
     return (
       <div
         className={`rct-header-container ${headerClass}`}

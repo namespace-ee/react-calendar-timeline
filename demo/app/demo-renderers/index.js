@@ -27,7 +27,7 @@ var keys = {
 
 class GroupRenderer extends Component {
   render() {
-    console.log("heading rendering");
+    // console.log("heading rendering");
     return <table><thead><tr><td>Name</td><td>Metadata</td></tr></thead></table>;
   }
 }
@@ -36,7 +36,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(100, 2000)
+    const { groups, items } = generateFakeData(100, 5000)
     const visibleTimeStart = moment()
       .startOf('month')
       .toDate().valueOf()
