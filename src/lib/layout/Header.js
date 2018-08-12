@@ -24,7 +24,7 @@ class Header extends Component {
     rightSidebarWidth: PropTypes.number,
     headerRef: PropTypes.func.isRequired
   }
- 
+
   render() {
     const {
       width,
