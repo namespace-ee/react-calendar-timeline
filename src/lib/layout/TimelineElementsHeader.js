@@ -214,7 +214,7 @@ export default class TimelineElementsHeader extends Component {
         )
       }
     )
-
+ 
     let headerStyle = {
       height: `${headerLabelGroupHeight + headerLabelHeight}px`
     }

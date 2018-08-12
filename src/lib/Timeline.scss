@@ -74,11 +74,12 @@ $weekend: rgba(250, 246, 225, 0.5);
 
   .rct-header {
     margin: 0;
+    overflow-x: hidden;
     z-index: 90;
 
     .top-header,
     .bottom-header {
-      // position: relative;
+      position: relative;
     }
 
     .rct-label-group {
@@ -126,7 +127,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       }
     }
   }
-
+ 
   .rct-sidebar-header {
     margin: 0;
     color: $sidebar-color;
@@ -140,19 +141,14 @@ $weekend: rgba(250, 246, 225, 0.5);
       border-right: 0;
       border-left: $border-width solid $border-color;
     }
-
-    &.header-sticky {
-      position: sticky;
-      position: -webkit-sticky;
-    }
   }
 
   .rct-sidebar {
-    // overflow: hidden;
+    overflow: hidden;
     white-space: normal; // was set to nowrap in .rct-outer
     display: inline-block;
     vertical-align: top;
-    // position: relative;
+    position: relative;
     box-sizing: border-box;
     border-right: $border-width solid $border-color;
 

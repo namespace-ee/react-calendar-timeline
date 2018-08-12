@@ -25,11 +25,18 @@ var keys = {
   itemTimeEndKey: 'end'
 }
 
+class GroupRenderer extends Component {
+  render() {
+    console.log("heading rendering");
+    return <table><thead><tr><td>Name</td><td>Metadata</td></tr></thead></table>;
+  }
+}
+
 export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(100, 10000)
+    const { groups, items } = generateFakeData(100, 2000)
     const visibleTimeStart = moment()
       .startOf('month')
       .toDate().valueOf()
@@ -171,7 +178,7 @@ export default class App extends Component {
         items={items}
         keys={keys}
         sidebarWidth={150}
-        sidebarContent={<table><thead><tr><td>Name</td><td>Metadata</td></tr></thead></table>}
+        sidebarContent={<GroupRenderer />}
         // rightSidebarWidth={150}
         // rightSidebarContent={<div>Above The Right</div>}
 
