@@ -407,8 +407,8 @@ export default class ReactCalendarTimeline extends Component {
       this.scrollComponent.scrollLeft = scrollLeft
     }
 
-    if (this.headerRef.scrollLeft !== scrollLeft) {
-      this.headerRef.scrollLeft = scrollLeft
+    if (this.scrollHeaderRef.scrollLeft !== scrollLeft) {
+      this.scrollHeaderRef.scrollLeft = scrollLeft
     }
   }
 
@@ -812,8 +812,12 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   handleHeaderRef = el => {
-    this.headerRef = el;
-    this.props.headerRef(el);
+    this.headerRef = el
+    this.props.headerRef(el)
+  }
+
+  handleScrollHeaderRef = el => {
+    this.scrollHeaderRef = el
   }
 
   header(
@@ -842,6 +846,7 @@ export default class ReactCalendarTimeline extends Component {
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
         headerRef={this.handleHeaderRef}
+        scrollHeaderRef={this.handleScrollHeaderRef}
         leftSidebarWidth={this.props.sidebarWidth}
         rightSidebarWidth={this.props.rightSidebarWidth}
         leftSidebarHeader={this.props.sidebarContent}

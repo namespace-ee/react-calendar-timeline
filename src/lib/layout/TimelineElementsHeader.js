@@ -18,6 +18,7 @@ export default class TimelineElementsHeader extends Component {
     subHeaderLabelFormats: PropTypes.object.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
+    scrollHeaderRef: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -228,6 +229,7 @@ export default class TimelineElementsHeader extends Component {
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
         style={headerStyle}
+        ref={this.props.scrollHeaderRef}
       >
         <div
           className="top-header"

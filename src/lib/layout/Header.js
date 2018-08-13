@@ -22,7 +22,8 @@ class Header extends Component {
     rightSidebarHeader: PropTypes.node,
     leftSidebarWidth: PropTypes.number,
     rightSidebarWidth: PropTypes.number,
-    headerRef: PropTypes.func.isRequired
+    headerRef: PropTypes.func.isRequired,
+    scrollHeaderRef: PropTypes.func.isRequired
   }
 
   render() {
@@ -31,6 +32,7 @@ class Header extends Component {
       stickyOffset,
       stickyHeader,
       headerRef,
+      scrollHeaderRef,
       hasRightSidebar,
       showPeriod,
       canvasTimeStart,
@@ -95,6 +97,8 @@ class Header extends Component {
             subHeaderLabelFormats={subHeaderLabelFormats}
             headerLabelGroupHeight={headerLabelGroupHeight}
             headerLabelHeight={headerLabelHeight}
+            scrollHeaderRef={scrollHeaderRef}
+
           />
         </div>
         {rightSidebar}
