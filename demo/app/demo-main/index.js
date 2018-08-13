@@ -34,7 +34,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(5)
+    const { groups, items } = generateFakeData()
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
@@ -44,16 +44,11 @@ export default class App extends Component {
       .toDate()
 
     this.state = {
-      groups2: groups,
-      groups: [],
+      groups,
       items,
       defaultTimeStart,
       defaultTimeEnd
     }
-  }
-
-  componentDidMount() {
-    this.setState(p => ({groups: p.groups2}));
   }
 
   handleCanvasClick = (groupId, time) => {
