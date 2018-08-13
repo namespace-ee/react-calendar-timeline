@@ -16,7 +16,7 @@ const defaultProps = {
   subHeaderLabelFormats: {},
   headerLabelGroupHeight: 0,
   headerLabelHeight: 0,
-  registerScroll: () => {}
+  scrollHeaderRef: () => {}
 }
 
 describe('Header', () => {
@@ -35,5 +35,22 @@ describe('Header', () => {
     wrapper.find(sel('header')).simulate('mousedown')
 
     expect(mouseDownMock).not.toHaveBeenCalled()
+  })
+
+  it('accepts scrollHeaderRef callback', () => {
+    const scrollHeaderRef = jest.fn()
+
+    const props = {
+      ...defaultProps,
+      scrollHeaderRef: scrollHeaderRef
+    }
+
+    mount(<TimelineElementsHeader {...props} />)
+
+    expect(scrollHeaderRef).toHaveBeenCalledTimes(1)
+
+    const mockCallParam = scrollHeaderRef.mock.calls[0][0]
+
+    expect(mockCallParam.dataset.testid).toBe('header')
   })
 })
