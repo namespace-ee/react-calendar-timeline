@@ -34,7 +34,46 @@ class DateHeader extends React.Component {
 
   render() {
     const unit = this.getHeaderUnit()
-    return <CustomHeader unit={unit} children={this.headerRenderer} />
+    return (
+      <CustomHeader unit={unit}>
+        {({
+          headerContext: { intervals },
+          getRootProps,
+          getIntervalProps,
+          showPeriod
+        }) => {
+          const unit = this.getHeaderUnit()
+
+          return (
+            <div
+              className={this.props.className}
+              {...getRootProps({ style: this.getRootStyle() })}
+            >
+              {intervals.map(interval => {
+                const intervalText = this.getLabelFormat(
+                  [interval.startTime, interval.endTime],
+                  unit,
+                  interval.labelWidth
+                )
+                return (
+                  <Interval
+                    key={`label-${interval.startTime.valueOf()}`}
+                    unit={unit}
+                    interval={interval}
+                    showPeriod={showPeriod}
+                    intervalText={intervalText}
+                    primaryHeader={!!this.props.primaryHeader}
+                    secondaryHeader={!!this.props.secondaryHeader}
+                    getIntervalProps={getIntervalProps}
+                    intervalRenderer={this.props.intervalRenderer}
+                  />
+                )
+              })}
+            </div>
+          )
+        }}
+      </CustomHeader>
+    )
   }
 
   getRootStyle = () => {
@@ -42,43 +81,6 @@ class DateHeader extends React.Component {
       height: 30,
       ...this.props.style
     }
-  }
-
-  headerRenderer = ({
-    headerContext: { intervals },
-    getRootProps,
-    getIntervalProps,
-    showPeriod
-  }) => {
-    const unit = this.getHeaderUnit()
-
-    return (
-      <div
-        className={this.props.className}
-        {...getRootProps({ style: this.getRootStyle() })}
-      >
-        {intervals.map((interval) => {
-          const intervalText = this.getLabelFormat(
-            [interval.startTime, interval.endTime],
-            unit,
-            interval.labelWidth
-          )
-          return (
-            <Interval
-              key={`label-${interval.startTime.valueOf()}`}
-              unit={unit}
-              interval={interval}
-              showPeriod={showPeriod}
-              intervalText={intervalText}
-              primaryHeader={!!this.props.primaryHeader}
-              secondaryHeader={!!this.props.secondaryHeader}
-              getIntervalProps={getIntervalProps}
-              intervalRenderer={this.props.intervalRenderer}
-            />
-          )
-        })}
-      </div>
-    )
   }
 
   getLabelFormat(interval, unit, labelWidth) {
