@@ -51,8 +51,13 @@ export default class App extends Component {
       groups,
       items,
       defaultTimeStart,
-      defaultTimeEnd
+      defaultTimeEnd,
+      format: false,
     }
+  }
+
+  handleClick = () => {
+    this.setState({format: true})
   }
 
   handleCanvasClick = (groupId, time) => {
@@ -149,6 +154,8 @@ export default class App extends Component {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
     return (
+      <div>
+        <button onClick={this.handleClick}>format</button>
       <Timeline
         groups={groups}
         items={items}
@@ -190,7 +197,7 @@ export default class App extends Component {
               return <div {...getRootProps()}>Right</div>
             }}
           </SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader labelFormat={this.state.format? "d": undefined} primaryHeader />
           <DateHeader style={{ height: 50 }} />
           <CustomHeader unit="year">
             {({
@@ -338,6 +345,7 @@ export default class App extends Component {
           <CursorMarker />
         </TimelineMarkers>
       </Timeline>
+      </div>
     )
   }
 }
