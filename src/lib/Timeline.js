@@ -888,7 +888,6 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-      groups
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,
