@@ -264,13 +264,8 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
 }
 
 /**
- * Stack a group of items
- * @param {*} lineHeight 
- * @param {*} item 
- * @param {*} group 
- * @param {*} groupHeight 
- * @param {*} totalHeight 
- * @param {*} i 
+ * Calculate the position of a given item for a group that
+ * is being stacked
  */
 function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
   // calculate non-overlapping positions
@@ -309,6 +304,7 @@ function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
   return {groupHeight: curHeight, verticalMargin}
 }
 
+// Calculate the position of this item for a group that is not being stacked
 function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
   let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.top === null) {
@@ -319,7 +315,11 @@ function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
 }
 
 /**
- * Stacks all groups
+ * Stack all groups
+ * @param {*} items items to be stacked
+ * @param {*} groupOrders the groupOrders object
+ * @param {*} lineHeight 
+ * @param {*} stackItems should items be stacked?
  */
 export function stackAll(items, groupOrders, lineHeight, stackItems) {
   var i, iMax
@@ -334,9 +334,12 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
     const groupItems = groupedItems[index]
     const {items, group} = groupItems
     groupTops.push(totalHeight)
+  
+    // Is group being stacked?
     const isGroupStacked = group.stackItems !== undefined ? group.stackItems : stackItems
     var groupHeight = 0
     var verticalMargin = 0
+    // Find positions for each item in group
     for (i = 0, iMax = items.length; i < iMax; i++) {
       let r = {}
       if (isGroupStacked) {
@@ -349,9 +352,11 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
 
     }
 
+    // If group height is overridden, push new height
+    // Do this late as item position still needs to be calculated
     if (group.height) {
-      groupHeights.push(groupItems.group.height)
-      totalHeight += groupItems.group.height
+      groupHeights.push(group.height)
+      totalHeight += group.height
     } else {
       groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
       totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
