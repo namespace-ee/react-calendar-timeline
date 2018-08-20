@@ -193,19 +193,29 @@ export function calculateDimensions({
   return dimensions
 }
 
-// Get the order of groups based on their keys
+/**
+ * Get the order of groups based on their keys
+ * @param {*} groups array of groups
+ * @param {*} keys the keys object
+ * @returns Ordered hash of objects with their array index and group
+ */
 export function getGroupOrders(groups, keys) {
   const { groupIdKey } = keys
 
   let groupOrders = {}
 
   for (let i = 0; i < groups.length; i++) {
-    groupOrders[_get(groups[i], groupIdKey)] = {index: i, group: groups[i]} 
+    groupOrders[_get(groups[i], groupIdKey)] = { index: i, group: groups[i] } 
   }
 
   return groupOrders
 }
 
+/**
+ * Adds items relevant to each group to the result of getGroupOrders
+ * @param {*} items list of all items
+ * @param {*} groupOrders the result of getGroupOrders
+ */
 function getGroupedItems(items, groupOrders) {
   var groupedItems = {}
   // Initialize with result object for each group
@@ -253,15 +263,25 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
+/**
+ * Stack a group of items
+ * @param {*} lineHeight 
+ * @param {*} item 
+ * @param {*} group 
+ * @param {*} groupHeight 
+ * @param {*} totalHeight 
+ * @param {*} i 
+ */
 function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
   // calculate non-overlapping positions
-  let x = groupHeight
+  let curHeight = groupHeight
   let verticalMargin = lineHeight - item.dimensions.height
   if (item.dimensions.stack && item.dimensions.top === null) {
     item.dimensions.top = totalHeight + verticalMargin
-    x = Math.max(x, lineHeight)
+    curHeight = Math.max(curHeight, lineHeight)
     do {
       var collidingItem = null
+      //Items are placed from i=0 onwards, only check items with index < i
       for (var j = i-1, jj = 0; j >= jj; j--) {
         var other = group[j]
         if (
@@ -279,14 +299,14 @@ function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
       if (collidingItem != null) {
         // There is a collision. Reposition the items above the colliding element
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
-        x = Math.max(
-          x,
+        curHeight = Math.max(
+          curHeight,
           item.dimensions.top + item.dimensions.height - totalHeight
         )
       }
     } while (collidingItem)
   }
-  return {groupHeight: x, verticalMargin}
+  return {groupHeight: curHeight, verticalMargin}
 }
 
 function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
@@ -298,6 +318,9 @@ function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
   return {groupHeight, verticalMargin: 0}
 }
 
+/**
+ * Stacks all groups
+ */
 export function stackAll(items, groupOrders, lineHeight, stackItems) {
   var i, iMax
   var totalHeight = 0
@@ -326,9 +349,13 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
 
     }
 
-    
-    groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
-    totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
+    if (group.height) {
+      groupHeights.push(groupItems.group.height)
+      totalHeight += groupItems.group.height
+    } else {
+      groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
+      totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
+    }
   }
   return {
     height: totalHeight,
