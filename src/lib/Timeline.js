@@ -1006,7 +1006,7 @@ export default class ReactCalendarTimeline extends Component {
         resizeTime
       })
 
-      if (dimension) {
+      if (dimension && groupOrders[_get(item, keys.itemGroupKey)]) {
         dimension.top = null
         dimension.order = isDragging
           ? newGroupOrder
