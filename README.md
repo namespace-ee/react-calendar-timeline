@@ -779,6 +779,182 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
 </CursorMarker>
 ```
 
+# Timeline Headers
+
+Timeline headers are the section above the timeline which consist of two main parts: First, the calender header which is a scrolable div containing the dates of the calendar called `DateHeader`. Second, is the headers for the sidebars, called `SidebarHeader`, the left one and optionally the right one.
+
+## Default usage
+
+For the default case, two `DateHeader`s are rendered above the timeline, one `primary` and `secondary`. The secondary has the same date unit as the timeline and a `primary` which has a unit larger than the timeline unit by one.
+
+For the `SidebarHeader`s an empty `SidebarHeader` will be render for the left and optionally an empty right sidebar header if `rightSidebarWith` exists.
+
+## Overview
+
+To provide any custom headers for `DateHeader` or `SidebarHeader`. You need to provide basic usage to provide any custom headers. These Custom headers should be always included inside `TimelineHeaders` component in the component's children.
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader primaryHeader />
+    <DateHeader />
+  </TimelineHeaders>
+<Timeline>
+```
+## Components
+
+Custom headers are implemented through a set of component with mostly [function as a child component](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) pattern, designed to give the user the most control on how to render the headers.
+
+### `TimelineHeader`
+
+Is the core component wrapper component for custom headers
+
+#### props
+
+| Prop          | type            | description                                                                                                                                                               |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `style`| `object`| applied to the root component of headers |
+| `classnames` | `string`| applied to the root component of the headers|
+| `calendarHeaderStyle`| `object`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
+| `calendarHeaderClassName`| `string`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
+
+
+### `SidebarHeader`
+
+Responsible for rendering the headers above the left and right sidebars.
+
+#### props
+
+| Prop          | type            | description                                                                                                                                                               |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`| `left` (default), `right`| renders above the left or right sidebar |
+| `children` | `Function`| function as a child component to render the header|
+
+#### Child function renderer
+
+a Function provides multiple parameters that can be used to render the sidebar headers
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+
+* `getRootProps` The returned props are:
+
+  * style: inline object style
+
+  These properties can be override using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <SidebarHeader variant="right">
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader primaryHeader />
+    <DateHeader />
+  </TimelineHeaders>
+<Timeline>
+```
+
+### `DateHeader`
+
+
+Responsible for rendering the headers above calendar part of the timeline
+
+#### props
+
+| Prop          | type            | description|
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `style`| `object`| applied to the root of the header |
+| `className` | `Function`| applied to the root of the header|
+| `unit`| `second`, `minute`, `hour`, `day`, `month`, `year` | intervals between columns |
+| `primaryHeader`| `boolean` | main header with interval unit larger than timeline unit by 1 |
+| `secondaryHeader` | `boolean` (`true` by default) | sub header with interval equal to timeline unit |
+| `labelFormat` | `Function` or `object` or `string`| controls the how to format the interval label |
+| `intervalRenderer`| `Function`| render prop to render each interval in the header |
+
+#### Child function renderer
+
+a Function provides multiple parameters that can be used to render the sidebar headers
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+
+* `getRootProps` The returned props are:
+
+  * style: inline object style
+
+  These properties can be override using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <SidebarHeader variant="right">
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader primaryHeader />
+    <DateHeader />
+  </TimelineHeaders>
+<Timeline>
+```
+
+### `CustomHeader`
+
+
 # FAQ
 
 ## My timeline is unstyled
