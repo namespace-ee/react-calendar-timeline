@@ -825,7 +825,7 @@ Is the core component wrapper component for custom headers
 | Prop          | type            | description                                                                                                                                                               |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `style`| `object`| applied to the root component of headers |
-| `classnames` | `string`| applied to the root component of the headers|
+| `className` | `string`| applied to the root component of the headers|
 | `calendarHeaderStyle`| `object`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
 | `calendarHeaderClassName`| `string`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
 
@@ -898,7 +898,7 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | Prop          | type            | description|
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `style`| `object`| applied to the root of the header |
-| `className` | `Function`| applied to the root of the header|
+| `className` | `string`| applied to the root of the header|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` | intervals between columns |
 | `primaryHeader`| `boolean` | main header with interval unit larger than timeline unit by 1 |
 | `secondaryHeader` | `boolean` (`true` by default) | sub header with interval equal to timeline unit |
