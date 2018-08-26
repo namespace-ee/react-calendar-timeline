@@ -60,7 +60,6 @@ class Interval extends React.PureComponent {
 
   render() {
     const { intervalText, interval, intervalRenderer } = this.props
-    console.log(intervalRenderer)
     if (intervalRenderer)
       return intervalRenderer({
         getIntervalProps: this.getIntervalProps,
