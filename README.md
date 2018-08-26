@@ -879,7 +879,7 @@ import Timeline, {
     </SidebarHeader>
     <SidebarHeader variant="right">
       {({ getRootProps }) => {
-        return <div {...getRootProps()}>Left</div>
+        return <div {...getRootProps()}>Right</div>
       }}
     </SidebarHeader>
     <DateHeader primaryHeader />
@@ -891,7 +891,7 @@ import Timeline, {
 ### `DateHeader`
 
 
-Responsible for rendering the headers above calendar part of the timeline
+Responsible for rendering the headers above calendar part of the timeline. Consists of time intervals dividing the headers in columns.
 
 #### props
 
@@ -899,15 +899,102 @@ Responsible for rendering the headers above calendar part of the timeline
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `style`| `object`| applied to the root of the header |
 | `className` | `Function`| applied to the root of the header|
-| `unit`| `second`, `minute`, `hour`, `day`, `month`, `year` | intervals between columns |
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` | intervals between columns |
 | `primaryHeader`| `boolean` | main header with interval unit larger than timeline unit by 1 |
 | `secondaryHeader` | `boolean` (`true` by default) | sub header with interval equal to timeline unit |
 | `labelFormat` | `Function` or `object` or `string`| controls the how to format the interval label |
 | `intervalRenderer`| `Function`| render prop to render each interval in the header |
 
-#### Child function renderer
+#### Interval unit
 
-a Function provides multiple parameters that can be used to render the sidebar headers
+intervals are decided through three props: `unit`, `primaryHeader` and `secondaryHeader` (default true). `secondaryHeader` is the default if no prop are set. The unit of the intervals will be the same the timeline and a special style is matches the default style of the secondary header from when no custom headers are applied. 
+
+If `primaryHeader` is set to true, it will override `secondaryHeader` and the unit if the timeline will be larger by 1 of the timeline unit. The default style will match the primary header from when no custom headers are applied.
+
+If `unit` is set, it will override both `primaryHeader` and `secondaryHeader`. The unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. The default style will match the primary header from when no custom headers are applied.
+
+#### Label format
+
+To format each interval label you can use 3 types of props to format which are:
+
+- `string`: if a string was passed it will be based to `momentjs`'s `startTime` method `format`.
+
+- `object`: this will give you more flexibility to format the label with respect to `labelWidth`. Internally the `startTime` will be formated with the string corresponding to `formatObject[unit][range]`
+
+  The object will be with in the following format: 
+  ```typescript
+  type unit = `second` | `minute` | `hour` | `day` | `week` | `month` | `year`
+  interface LabelFormat {
+    [unit]: {
+      long: string,
+      mediumLong: string,
+      medium: string,
+      short: string
+    }
+  }
+  // default format object
+  const format : LabelFormat = {
+    year: {
+    long: 'YYYY',
+    mediumLong: 'YYYY',
+    medium: 'YYYY',
+    short: 'YY'
+    },
+    month: {
+      long: 'MMMM YYYY',
+      mediumLong: 'MMMM',
+      medium: 'MMMM',
+      short: 'MM/YY'
+    },
+    day: {
+      long: 'dddd, LL',
+      mediumLong: 'dddd, LL',
+      medium: 'dd D',
+      short: 'D'
+    },
+    hour: {
+      long: 'dddd, LL, HH:00',
+      mediumLong: 'L, HH:00',
+      medium: 'HH:00',
+      short: 'HH'
+    },
+    minute: {
+      long: 'HH:mm',
+      mediumLong: 'HH:mm',
+      medium: 'HH:mm',
+      short: 'mm',
+    }
+  }
+  ```
+
+  The `long`, `mediumLong`, `medium` and `short` will be be decided through the `labelWidth` according to where it lays upon the following scale:
+
+  ```
+  |-----`short`-----50px-----`medium`-----100px-----`mediumLong`-----150px--------`long`-----
+  ```
+
+- Function: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
+
+  ```typescript
+    type Unit = `second` | `minute` | `hour` | `day` | `month` | `year`
+  ([startTime, endTime] : [Moment, Moment], unit: Unit, labelWidth: number, formatOptions: LabelFormat = defaultFormat ) => string
+  ```
+
+#### intervalRenderer
+
+Render prop function used to render a customized interval. The function provides multiple parameters that can be used to render each interval.
+
+Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
+
+##### interval context
+
+An object contains the following properties:
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `interval`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `intervalText` | `string` | the string returned from `labelFormat` prop |
+
 
 ##### Prop getters functions
 
@@ -915,15 +1002,18 @@ Rather than applying props on the element yourself and to avoid your props being
 
 | property         | type                 | description|
 | ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+| `getIntervalProps`   | `function(props={})` | returns the props you should apply to the root div element.|
 
-* `getRootProps` The returned props are:
+* `getIntervalProps` The returned props are:
 
   * style: inline object style
+  * onClick: event handler
+  * key
 
-  These properties can be override using the prop argument with properties:
+  These properties can be extended using the prop argument with properties:
 
   * style: extra inline styles to be applied to the component
+  * onClick: extra click handler added to the normal `showPeriod callback`
 
 #### example
 
@@ -941,13 +1031,19 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    <SidebarHeader variant="right">
-      {({ getRootProps }) => {
-        return <div {...getRootProps()}>Left</div>
-      }}
     </SidebarHeader>
     <DateHeader primaryHeader />
     <DateHeader />
+    <DateHeader
+      unit="day"
+      labelFormat="MM/DD"
+      style={{ height: 50 }}
+      intervalRenderer={({ getIntervalProps, intervalContext }) => {
+        return <div {...getIntervalProps()}>
+          {intervalContext.intervalText}
+        </div>
+      }}
+    />
   </TimelineHeaders>
 <Timeline>
 ```
