@@ -917,11 +917,11 @@ If `unit` is set, it will override both `primaryHeader` and `secondaryHeader`. T
 
 To format each interval label you can use 3 types of props to format which are:
 
-- `string`: if a string was passed it will be based to `momentjs`'s `startTime` method `format`.
+- `string`: if a string was passed it will be passed to `startTime` method `format` which is a `momentjs` object  .
 
 - `object`: this will give you more flexibility to format the label with respect to `labelWidth`. Internally the `startTime` will be formated with the string corresponding to `formatObject[unit][range]`
 
-  The object will be with in the following format: 
+  The object will be in the following type: 
   ```typescript
   type unit = `second` | `minute` | `hour` | `day` | `week` | `month` | `year`
   interface LabelFormat {
@@ -967,13 +967,13 @@ To format each interval label you can use 3 types of props to format which are:
   }
   ```
 
-  The `long`, `mediumLong`, `medium` and `short` will be be decided through the `labelWidth` according to where it lays upon the following scale:
+  The `long`, `mediumLong`, `medium` and `short` will be be decided through the `labelWidth` value according to where it lays upon the following scale:
 
   ```
   |-----`short`-----50px-----`medium`-----100px-----`mediumLong`-----150px--------`long`-----
   ```
 
-- Function: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
+- `Function`: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
 
   ```typescript
     type Unit = `second` | `minute` | `hour` | `day` | `month` | `year`
@@ -1031,7 +1031,6 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    </SidebarHeader>
     <DateHeader primaryHeader />
     <DateHeader />
     <DateHeader
@@ -1045,7 +1044,7 @@ import Timeline, {
       }}
     />
   </TimelineHeaders>
-<Timeline>
+</Timeline>
 ```
 
 ### `CustomHeader`
