@@ -1049,6 +1049,156 @@ import Timeline, {
 
 ### `CustomHeader`
 
+Responsible for rendering the headers above calendar part of the timeline. This is the base component for `DateHeader` and offers more control with less features.
+
+#### props
+
+| Prop          | type            | description|
+| ----------------- | --------------- | ---|
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
+| `children` | `Function`| function as a child component to render the header|
+
+#### unit
+
+The unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. The default value for unit is `timelineUnit`
+
+#### Children
+
+Function as a child component to render the header
+
+Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
+
+```
+({
+  timelineContext: {
+    timelineWidth,
+    visibleTimeStart,
+    visibleTimeEnd,
+    canvasTimeStart,
+    canvasTimeEnd
+  },
+  headerContext: {
+    unit,
+    intervals: this.state.intervals
+  },
+  getRootProps: this.getRootProps,
+  getIntervalProps: this.getIntervalProps,
+  showPeriod
+})=> React.Node
+```
+
+##### context
+
+An object contains context for `timeline` and `header`:
+
+
+###### Timeline context
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `timelineWidth`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `visibleTimeStart` | `string` | the string returned from `labelFormat` prop |
+| `visibleTimeEnd`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `canvasTimeStart` | `string` | the string returned from `labelFormat` prop |
+| `canvasTimeEnd`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+
+###### Header context
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `intervals`    | `array` | an array with all intervals|
+| `unit` | `string` | unit passed or timelineUnit |
+
+** `interval`: `[startTime: Moment, endTime: Moment]`
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+| `getIntervalProps`   | `function(props={})` | returns the props you should apply to the interval div element.|
+
+* `getIntervalProps` The returned props are:
+
+  * style: inline object style
+  * onClick: event handler
+  * key
+
+  These properties can be extended using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+  * onClick: extra click handler added to the normal `showPeriod callback`
+
+##### helpers:
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `showPeriod`   | `function(props={})` | returns the props you should apply to the root div element.|
+
+
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader primaryHeader />
+    <DateHeader />
+    <CustomHeader unit="year">
+      {({
+        headerContext: { intervals },
+        getRootProps,
+        getIntervalProps,
+        showPeriod
+      }) => {
+        return (
+          <div {...getRootProps({ style: { height: 30 } })}>
+            {intervals.map(interval => {
+              const intervalStyle = {
+                // height: 30,
+                lineHeight: '30px',
+                textAlign: 'center',
+                borderLeft: '1px solid black',
+                cursor: 'pointer',
+                backgroundColor: 'Turquoise',
+                color: 'white'
+              }
+              return (
+                <div
+                  onClick={() => {
+                    showPeriod(interval.startTime, interval.endTime)
+                  }}
+                  {...getIntervalProps({
+                    interval,
+                    style: intervalStyle
+                  })}
+                >
+                  <div className="sticky">
+                    {interval.startTime.format('YYYY')}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )
+      }}
+    </CustomHeader>
+  </TimelineHeaders>
+</Timeline>
+```
 
 # FAQ
 
