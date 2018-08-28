@@ -251,7 +251,10 @@ export default class Item extends Component {
             dragTime = this.props.moveResizeValidator(
               'move',
               this.props.item,
-              dragTime
+              dragTime,
+              undefined,
+              this.props.order + dragGroupDelta,
+              this.props.order
             )
           }
 
@@ -259,7 +262,8 @@ export default class Item extends Component {
             this.props.onDrag(
               this.itemId,
               dragTime,
-              this.props.order + dragGroupDelta
+              this.props.order + dragGroupDelta,
+              this.props.item
             )
           }
 
@@ -273,19 +277,25 @@ export default class Item extends Component {
         if (this.state.dragging) {
           if (this.props.onDrop) {
             let dragTime = this.dragTime(e)
+            const dragGroupDelta = this.dragGroupDelta(e)
 
             if (this.props.moveResizeValidator) {
               dragTime = this.props.moveResizeValidator(
                 'move',
                 this.props.item,
-                dragTime
+                dragTime,
+                undefined,
+                this.props.order + dragGroupDelta,
+                this.props.order
               )
             }
 
             this.props.onDrop(
               this.itemId,
               dragTime,
-              this.props.order + this.dragGroupDelta(e)
+              this.props.order + dragGroupDelta,
+              this.props.order,
+              this.props.item
             )
           }
 
@@ -330,7 +340,9 @@ export default class Item extends Component {
               'resize',
               this.props.item,
               resizeTime,
-              resizeEdge
+              resizeEdge,
+              this.props.order + this.dragGroupDelta(e),
+              this.props.order
             )
           }
 
@@ -357,7 +369,9 @@ export default class Item extends Component {
               'resize',
               this.props.item,
               resizeTime,
-              resizeEdge
+              resizeEdge,
+              this.props.order + this.dragGroupDelta(e),
+              this.props.order
             )
           }
 
@@ -480,7 +494,7 @@ export default class Item extends Component {
   handleDoubleClick = e => {
     e.stopPropagation()
     if (this.props.onItemDoubleClick) {
-      this.props.onItemDoubleClick(this.itemId, e)
+      this.props.onItemDoubleClick(this.itemId, e, this.props.item)
     }
   }
 
@@ -488,13 +502,13 @@ export default class Item extends Component {
     if (this.props.onContextMenu) {
       e.preventDefault()
       e.stopPropagation()
-      this.props.onContextMenu(this.itemId, e)
+      this.props.onContextMenu(this.itemId, e, this.props.item)
     }
   }
 
   actualClick(e, clickType) {
     if (this.props.canSelect && this.props.onSelect) {
-      this.props.onSelect(this.itemId, clickType, e)
+      this.props.onSelect(this.itemId, clickType, e, this.props.item)
     }
   }
 

@@ -597,37 +597,37 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  selectItem = (item, clickType, e) => {
+  selectItem = (itemId, clickType, e, item) => {
     if (
-      this.state.selectedItem === item ||
+      this.state.selectedItem === itemId ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
-      if (item && this.props.onItemClick) {
+      if (itemId && this.props.onItemClick) {
         const time = this.timeFromItemEvent(e)
-        this.props.onItemClick(item, e, time)
+        this.props.onItemClick(itemId, e, time, item)
       }
     } else {
-      this.setState({ selectedItem: item })
-      if (item && this.props.onItemSelect) {
+      this.setState({ selectedItem: itemId })
+      if (itemId && this.props.onItemSelect) {
         const time = this.timeFromItemEvent(e)
-        this.props.onItemSelect(item, e, time)
+        this.props.onItemSelect(itemId, e, time, item)
       } else if (item === null && this.props.onItemDeselect) {
         this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
       }
     }
   }
 
-  doubleClickItem = (item, e) => {
+  doubleClickItem = (itemId, e, item) => {
     if (this.props.onItemDoubleClick) {
       const time = this.timeFromItemEvent(e)
-      this.props.onItemDoubleClick(item, e, time)
+      this.props.onItemDoubleClick(itemId, e, time, item)
     }
   }
 
-  contextMenuClickItem = (item, e) => {
+  contextMenuClickItem = (itemId, e, item) => {
     if (this.props.onItemContextMenu) {
       const time = this.timeFromItemEvent(e)
-      this.props.onItemContextMenu(item, e, time)
+      this.props.onItemContextMenu(itemId, e, time, item)
     }
   }
 
@@ -692,26 +692,34 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  dropItem = (item, dragTime, newGroupOrder) => {
+  dropItem = (itemId, dragTime, newGroupOrder, previousGroupOrder, item) => {
     this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
     if (this.props.onItemMove) {
-      this.props.onItemMove(item, dragTime, newGroupOrder)
+      const group = this.props.groups[newGroupOrder]
+      const previousGroup = this.props.groups[previousGroupOrder]
+      this.props.onItemMove(itemId, dragTime, newGroupOrder, previousGroupOrder, item, group, previousGroup)
     }
   }
 
-  resizingItem = (item, resizeTime, edge) => {
+  resizingItem = (itemId, resizeTime, edge) => {
     this.setState({
-      resizingItem: item,
+      resizingItem: itemId,
       resizingEdge: edge,
       resizeTime: resizeTime
     })
   }
 
-  resizedItem = (item, resizeTime, edge, timeDelta) => {
+  resizedItem = (itemId, resizeTime, edge, timeDelta, item) => {
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
-      this.props.onItemResize(item, resizeTime, edge)
+      this.props.onItemResize(itemId, resizeTime, edge, item)
     }
+  }
+
+  onMoveResizeValidator = (action, item, time, edge, newGroupIndex, originalGroupIndex) => {
+    const newGroup = this.props.groups[newGroupIndex]
+    const originalGroup = this.props.groups[originalGroupIndex]
+    return this.props.moveResizeValidator(action, item, time, edge, newGroup, originalGroup)
   }
 
   columns(
@@ -736,7 +744,7 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  handleRowClick = (e, rowIndex) => {
+  handleRowClick = (e, rowIndex, group) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
     if (this.state.selectedItem) {
       this.selectItem(null)
@@ -745,37 +753,38 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.onCanvasClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
+
     const groupId = _get(
-      this.props.groups[rowIndex],
+      group,
       this.props.keys.groupIdKey
     )
-    this.props.onCanvasClick(groupId, time, e)
+    this.props.onCanvasClick(groupId, time, e, group)
   }
 
-  handleRowDoubleClick = (e, rowIndex) => {
+  handleRowDoubleClick = (e, rowIndex, group) => {
     if (this.props.onCanvasDoubleClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
     const groupId = _get(
-      this.props.groups[rowIndex],
+      group,
       this.props.keys.groupIdKey
     )
-    this.props.onCanvasDoubleClick(groupId, time, e)
+    this.props.onCanvasDoubleClick(groupId, time, e, group)
   }
 
-  handleScrollContextMenu = (e, rowIndex) => {
+  handleScrollContextMenu = (e, rowIndex, group) => {
     if (this.props.onCanvasContextMenu == null) return
 
     const timePosition = this.getTimeFromRowClickEvent(e)
 
     const groupId = _get(
-      this.props.groups[rowIndex],
+      group,
       this.props.keys.groupIdKey
     )
 
     if (this.props.onCanvasContextMenu) {
       e.preventDefault()
-      this.props.onCanvasContextMenu(groupId, timePosition, e)
+      this.props.onCanvasContextMenu(groupId, timePosition, e, group)
     }
   }
 
@@ -823,7 +832,7 @@ export default class ReactCalendarTimeline extends Component {
         canResize={this.props.canResize}
         useResizeHandle={this.props.useResizeHandle}
         canSelect={this.props.canSelect}
-        moveResizeValidator={this.props.moveResizeValidator}
+        moveResizeValidator={this.onMoveResizeValidator}
         topOffset={this.state.topOffset}
         itemSelect={this.selectItem}
         itemDrag={this.dragItem}
