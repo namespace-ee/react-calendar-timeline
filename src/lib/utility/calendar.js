@@ -234,8 +234,6 @@ function getGroupedItems(items, groupOrders) {
       const groupOrder = groupedItems[items[i].dimensions.order.index]
       if (groupOrder) {
         groupOrder.items.push(items[i])
-      } else {
-        console.log("hey")
       }
     }
   }
