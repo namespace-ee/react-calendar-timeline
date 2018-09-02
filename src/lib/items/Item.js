@@ -420,7 +420,7 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.cacheDataFromProps(nextProps)
 
     let { interactMounted } = this.state
