@@ -596,37 +596,37 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  selectItem = (itemId, clickType, e, item) => {
+  selectItem = (item, clickType, e) => {
     if (
-      this.state.selectedItem === itemId ||
+      this.state.selectedItem === item ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
-      if (itemId && this.props.onItemClick) {
+      if (item && this.props.onItemClick) {
         const time = this.timeFromItemEvent(e)
-        this.props.onItemClick(itemId, e, time, item)
+        this.props.onItemClick(item, e, time)
       }
     } else {
-      this.setState({ selectedItem: itemId })
-      if (itemId && this.props.onItemSelect) {
+      this.setState({ selectedItem: item })
+      if (item && this.props.onItemSelect) {
         const time = this.timeFromItemEvent(e)
-        this.props.onItemSelect(itemId, e, time, item)
+        this.props.onItemSelect(item, e, time)
       } else if (item === null && this.props.onItemDeselect) {
         this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
       }
     }
   }
 
-  doubleClickItem = (itemId, e, item) => {
+  doubleClickItem = (item, e) => {
     if (this.props.onItemDoubleClick) {
       const time = this.timeFromItemEvent(e)
-      this.props.onItemDoubleClick(itemId, e, time, item)
+      this.props.onItemDoubleClick(item, e, time)
     }
   }
 
-  contextMenuClickItem = (itemId, e, item) => {
+  contextMenuClickItem = (item, e) => {
     if (this.props.onItemContextMenu) {
       const time = this.timeFromItemEvent(e)
-      this.props.onItemContextMenu(itemId, e, time, item)
+      this.props.onItemContextMenu(item, e, time)
     }
   }
 
@@ -691,34 +691,26 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  dropItem = (itemId, dragTime, newGroupOrder, previousGroupOrder, item) => {
+  dropItem = (item, dragTime, newGroupOrder) => {
     this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
     if (this.props.onItemMove) {
-      const group = this.props.groups[newGroupOrder]
-      const previousGroup = this.props.groups[previousGroupOrder]
-      this.props.onItemMove(itemId, dragTime, newGroupOrder, previousGroupOrder, item, group, previousGroup)
+      this.props.onItemMove(item, dragTime, newGroupOrder)
     }
   }
 
-  resizingItem = (itemId, resizeTime, edge) => {
+  resizingItem = (item, resizeTime, edge) => {
     this.setState({
-      resizingItem: itemId,
+      resizingItem: item,
       resizingEdge: edge,
       resizeTime: resizeTime
     })
   }
 
-  resizedItem = (itemId, resizeTime, edge, timeDelta, item) => {
+  resizedItem = (item, resizeTime, edge, timeDelta) => {
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
-      this.props.onItemResize(itemId, resizeTime, edge, item)
+      this.props.onItemResize(item, resizeTime, edge)
     }
-  }
-
-  onMoveResizeValidator = (action, item, time, edge, newGroupIndex, originalGroupIndex) => {
-    const newGroup = this.props.groups[newGroupIndex]
-    const originalGroup = this.props.groups[originalGroupIndex]
-    return this.props.moveResizeValidator(action, item, time, edge, newGroup, originalGroup)
   }
 
   columns(
@@ -743,7 +735,7 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  handleRowClick = (e, rowIndex, group) => {
+  handleRowClick = (e, rowIndex) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
     if (this.state.selectedItem) {
       this.selectItem(null)
@@ -752,38 +744,37 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.onCanvasClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
-
     const groupId = _get(
-      group,
+      this.props.groups[rowIndex],
       this.props.keys.groupIdKey
     )
-    this.props.onCanvasClick(groupId, time, e, group)
+    this.props.onCanvasClick(groupId, time, e)
   }
 
-  handleRowDoubleClick = (e, rowIndex, group) => {
+  handleRowDoubleClick = (e, rowIndex) => {
     if (this.props.onCanvasDoubleClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
     const groupId = _get(
-      group,
+      this.props.groups[rowIndex],
       this.props.keys.groupIdKey
     )
-    this.props.onCanvasDoubleClick(groupId, time, e, group)
+    this.props.onCanvasDoubleClick(groupId, time, e)
   }
 
-  handleScrollContextMenu = (e, rowIndex, group) => {
+  handleScrollContextMenu = (e, rowIndex) => {
     if (this.props.onCanvasContextMenu == null) return
 
     const timePosition = this.getTimeFromRowClickEvent(e)
 
     const groupId = _get(
-      group,
+      this.props.groups[rowIndex],
       this.props.keys.groupIdKey
     )
 
     if (this.props.onCanvasContextMenu) {
       e.preventDefault()
-      this.props.onCanvasContextMenu(groupId, timePosition, e, group)
+      this.props.onCanvasContextMenu(groupId, timePosition, e)
     }
   }
 
@@ -831,7 +822,7 @@ export default class ReactCalendarTimeline extends Component {
         canResize={this.props.canResize}
         useResizeHandle={this.props.useResizeHandle}
         canSelect={this.props.canSelect}
-        moveResizeValidator={this.onMoveResizeValidator}
+        moveResizeValidator={this.props.moveResizeValidator}
         topOffset={this.state.topOffset}
         itemSelect={this.selectItem}
         itemDrag={this.dragItem}
@@ -1015,7 +1006,7 @@ export default class ReactCalendarTimeline extends Component {
         resizeTime
       })
 
-      if (dimension && groupOrders[_get(item, keys.itemGroupKey)]) {
+      if (dimension) {
         dimension.top = null
         dimension.order = isDragging
           ? newGroupOrder
@@ -1037,7 +1028,11 @@ export default class ReactCalendarTimeline extends Component {
       dimensionItems,
       groupOrders,
       lineHeight,
+<<<<<<< HEAD
       stackItems
+=======
+      groups
+>>>>>>> forked/develop
     )
 
     return { dimensionItems, height, groupHeights, groupTops }
