@@ -129,14 +129,16 @@ export default class App extends Component {
     }
   }
 
-  moveResizeValidator = (action, item, time, edge, newGroup, currentGroup) => {
-    if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
-      return newTime
-    }
-
-    return time
+  moveResizeValidator = (action, item, time, edge, newGroupIndex, newGroup, currentGroupIndex, currentGroup) => {
+    const isNewValid = ((newGroupIndex + 1) % 2) === ((currentGroupIndex + 1) % 2)
+    const returnIndex = !isNewValid ? newGroupIndex - 1 : newGroupIndex
+    const newTime = time < new Date().getTime() ?
+      Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000) :
+      time
+    return ({
+      time: newTime,
+      newGroupIndex: returnIndex
+    })
   }
 
   render() {

@@ -102,7 +102,8 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      nextProps.order.index !== this.props.order.index ||
+      (nextProps.order ? nextProps.order.idnex : undefined) !== 
+        (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
@@ -248,7 +249,7 @@ export default class Item extends Component {
           let dragGroupDelta = this.dragGroupDelta(e)
 
           if (this.props.moveResizeValidator) {
-            dragTime = this.props.moveResizeValidator(
+            const validResult = this.props.moveResizeValidator(
               'move',
               this.props.item,
               dragTime,
@@ -256,6 +257,15 @@ export default class Item extends Component {
               this.props.order.index + dragGroupDelta,
               this.props.order.index
             )
+            
+            if (validResult.time) {
+              dragTime = validResult.time
+            } else {
+              dragTime = validResult
+            }
+            if (validResult.newGroupIndex) {
+              dragGroupDelta = validResult.newGroupIndex - this.props.order.index
+            }
           }
 
           if (this.props.onDrag) {
@@ -277,10 +287,10 @@ export default class Item extends Component {
         if (this.state.dragging) {
           if (this.props.onDrop) {
             let dragTime = this.dragTime(e)
-            const dragGroupDelta = this.dragGroupDelta(e)
+            let dragGroupDelta = this.dragGroupDelta(e)
 
             if (this.props.moveResizeValidator) {
-              dragTime = this.props.moveResizeValidator(
+              const validResult = this.props.moveResizeValidator(
                 'move',
                 this.props.item,
                 dragTime,
@@ -288,6 +298,15 @@ export default class Item extends Component {
                 this.props.order.index + dragGroupDelta,
                 this.props.order.index
               )
+
+              if (validResult.time) {
+                dragTime = validResult.time
+              } else {
+                dragTime = validResult
+              }
+              if (validResult.newGroupIndex) {
+                dragGroupDelta = validResult.newGroupIndex - this.props.order.index
+              }
             }
 
             this.props.onDrop(
@@ -336,7 +355,7 @@ export default class Item extends Component {
           )
 
           if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator(
+            const validResult = this.props.moveResizeValidator(
               'resize',
               this.props.item,
               resizeTime,
@@ -344,6 +363,12 @@ export default class Item extends Component {
               this.props.order.index + this.dragGroupDelta(e),
               this.props.order.index
             )
+
+            if (validResult.time) {
+              resizeTime = validResult.time
+            } else {
+              resizeTime = validResult
+            }
           }
 
           if (this.props.onResizing) {
@@ -365,7 +390,7 @@ export default class Item extends Component {
           )
 
           if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator(
+            const validResult = this.props.moveResizeValidator(
               'resize',
               this.props.item,
               resizeTime,
@@ -373,6 +398,12 @@ export default class Item extends Component {
               this.props.order.index + this.dragGroupDelta(e),
               this.props.order.index
             )
+
+            if (validResult.time) {
+              resizeTime = validResult.time
+            } else {
+              resizeTime = validResult
+            }
           }
 
           if (this.props.onResized) {
