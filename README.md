@@ -304,7 +304,7 @@ Called when the canvas is clicked by the right button of the mouse. Note: If thi
 
 Called when the timeline is zoomed, either via mouse/pinch zoom or clicking header to change timeline units
 
-## moveResizeValidator(action, item, time, resizeEdge, newGroup, originalGroup)
+## moveResizeValidator(action, item, time, resizeEdge, newGroupIndex, newGroup, originalGroupIndex, originalGroup)
 
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
 
@@ -314,7 +314,15 @@ The argument `resizeEdge` is when resizing one of `left` or `right`.
 
 The argument `time` describes the proposed new time for either the start time of the item (for move) or the start or end time (for resize).
 
-The function must return a new unix timestamp in milliseconds... or just `time` if the proposed new time doesn't interfere with business logic.
+The argument `newGroupIndex` is the index in to the groups array that the item is currently at
+
+The argument `newGroup` is the current group
+
+The argument `originalGroupIndex` is the index in to the groups array for the item's original group
+
+The argument `originalGroup` is the item's original group
+
+The function must return eithera new unix timestamp in milliseconds... or just `time` if the proposed new time doesn't interfere with business logic OR an object `{time, newGroupIndex}`, where `time` is a new unix timestamp and `newGroupIndex` is the desired `newGroupIndex` for the item
 
 For example, to prevent moving of items into the past, but to keep them at 15min intervals, use this code:
 
