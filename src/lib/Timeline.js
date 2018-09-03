@@ -719,7 +719,7 @@ export default class ReactCalendarTimeline extends Component {
   onMoveResizeValidator = (action, item, time, edge, newGroupIndex, originalGroupIndex) => {
     const newGroup = this.props.groups[newGroupIndex]
     const originalGroup = this.props.groups[originalGroupIndex]
-    return this.props.moveResizeValidator(action, item, time, edge, newGroup, originalGroup)
+    return this.props.moveResizeValidator(action, item, time, edge, newGroupIndex, newGroup, originalGroupIndex, originalGroup)
   }
 
   columns(
