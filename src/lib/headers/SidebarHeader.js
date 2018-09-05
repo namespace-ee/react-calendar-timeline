@@ -8,7 +8,8 @@ class SidebarHeader extends React.PureComponent {
     children: PropTypes.func.isRequired,
     rightSidebarWidth: PropTypes.number,
     leftSidebarWidth: PropTypes.number.isRequired,
-    variant: PropTypes.string
+    variant: PropTypes.string,
+    props: PropTypes.object
   }
 
   getRootProps = (props = {}) => {
@@ -33,11 +34,11 @@ class SidebarHeader extends React.PureComponent {
 
   render() {
     const props = this.getStateAndHelpers()
-    return this.props.children(props)
+    return this.props.children(props, this.props.props)
   }
 }
 
-const SidebarWrapper = ({ children, variant }) => (
+const SidebarWrapper = ({ children, variant, props }) => (
   <TimelineHeadersConsumer>
     {({ leftSidebarWidth, rightSidebarWidth }) => {
       return (
@@ -46,6 +47,7 @@ const SidebarWrapper = ({ children, variant }) => (
           rightSidebarWidth={rightSidebarWidth}
           children={children}
           variant={variant}
+          props={props}
         />
       )
     }}
@@ -54,7 +56,8 @@ const SidebarWrapper = ({ children, variant }) => (
 
 SidebarWrapper.propTypes = {
   children: PropTypes.func.isRequired,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  props: PropTypes.object
 }
 
 SidebarWrapper.defaultProps = {

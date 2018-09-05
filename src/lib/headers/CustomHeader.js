@@ -16,7 +16,8 @@ export class CustomHeader extends React.Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    showPeriod: PropTypes.func.isRequired
+    showPeriod: PropTypes.func.isRequired,
+    props: PropTypes.object
   }
   constructor(props) {
     super(props)
@@ -42,7 +43,7 @@ export class CustomHeader extends React.Component {
       showPeriod,
       ratio,
     })
-    
+
     this.state = {
       intervals,
       ratio
@@ -95,7 +96,7 @@ export class CustomHeader extends React.Component {
         showPeriod,
         ratio,
       })
-      
+
       this.setState({ intervals, ratio })
     }
   }
@@ -134,15 +135,15 @@ export class CustomHeader extends React.Component {
   }
 
   getRootProps = (props = {}) => {
-    const {style} = props
+    const { style } = props
     return {
       style: Object.assign({}, style ? style : {}, this.rootProps.style)
     }
   }
 
-  getIntervalProps = (props= {}) => {
+  getIntervalProps = (props = {}) => {
     const { interval, style } = props
-    if(!interval) throw new Error("you should provide interval to the prop getter")
+    if (!interval) throw new Error("you should provide interval to the prop getter")
     const { startTime, labelWidth } = interval
     return {
       style: this.getIntervalStyle({
@@ -161,7 +162,7 @@ export class CustomHeader extends React.Component {
     return canvasWidth / (canvasTimeEnd - canvasTimeStart)
   }
 
-  getIntervalStyle=({ startTime, canvasTimeStart, ratio, unit, labelWidth, style, }) => {
+  getIntervalStyle = ({ startTime, canvasTimeStart, ratio, unit, labelWidth, style, }) => {
     const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio)
     const unitValue = startTime.get(unit === 'day' ? 'date' : unit)
     const firstOfType = unitValue === (unit === 'day' ? 1 : 0)
@@ -205,11 +206,11 @@ export class CustomHeader extends React.Component {
 
   render() {
     const props = this.getStateAndHelpers()
-    return this.props.children(props)
+    return this.props.children(props, this.props.props)
   }
 }
 
-const CustomHeaderWrapper = ({ children, unit }) => (
+const CustomHeaderWrapper = ({ children, unit, props }) => (
   <TimelineStateConsumer>
     {({ getTimelineState, showPeriod }) => {
       const timelineState = getTimelineState()
@@ -222,6 +223,7 @@ const CustomHeaderWrapper = ({ children, unit }) => (
               showPeriod={showPeriod}
               unit={unit ? unit : timelineState.timelineUnit}
               {...timelineState}
+              props={props}
             />
           )}
         </TimelineHeadersConsumer>
@@ -232,7 +234,8 @@ const CustomHeaderWrapper = ({ children, unit }) => (
 
 CustomHeaderWrapper.propTypes = {
   children: PropTypes.func.isRequired,
-  unit: PropTypes.string
+  unit: PropTypes.string,
+  props: PropTypes.object,
 }
 
 export default CustomHeaderWrapper

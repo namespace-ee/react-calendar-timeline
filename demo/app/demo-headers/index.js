@@ -199,13 +199,14 @@ export default class App extends Component {
           </SidebarHeader>
           <DateHeader labelFormat={this.state.format? "d": undefined} primaryHeader />
           <DateHeader style={{ height: 50 }} />
-          <CustomHeader unit="year">
+          <CustomHeader unit="year" props={{hey: 'you'}}>
             {({
               headerContext: { intervals },
               getRootProps,
               getIntervalProps,
               showPeriod
-            }) => {
+            }, props) => {
+              console.log("props", props)
               return (
                 <div {...getRootProps({ style: { height: 30 } })}>
                   {intervals.map(interval => {
