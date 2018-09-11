@@ -1009,8 +1009,8 @@ export default class ReactCalendarTimeline extends Component {
       if (dimension && groupOrders[_get(item, keys.itemGroupKey)]) {
         dimension.top = null
         dimension.order = isDragging
-          ? newGroupOrder
-          : groupOrders[_get(item, keys.itemGroupKey)].index
+          ? { index: newGroupOrder, group: groups[newGroupOrder] }
+          : groupOrders[_get(item, keys.itemGroupKey)]
         dimension.stack = !item.isOverlay
         dimension.height = lineHeight * itemHeightRatio
         dimension.isDragging = isDragging
