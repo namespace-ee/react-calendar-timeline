@@ -54,7 +54,9 @@ export default class Items extends Component {
     dimensionItems: PropTypes.array,
     topOffset: PropTypes.number,
     groupTops: PropTypes.array,
-    useResizeHandle: PropTypes.bool
+    useResizeHandle: PropTypes.bool,
+
+    scrollRef: PropTypes.object
   }
 
   static defaultProps = {
@@ -82,12 +84,6 @@ export default class Items extends Component {
     )
   }
 
-  getGroupOrders() {
-    const { keys, groups } = this.props
-
-    return getGroupOrders(groups, keys)
-  }
-
   isSelected(item, itemIdKey) {
     if (!this.props.selected) {
       return this.props.selectedItem === _get(item, itemIdKey)
@@ -108,10 +104,12 @@ export default class Items extends Component {
       canvasTimeStart,
       canvasTimeEnd,
       dimensionItems,
+      keys,
+      groups
     } = this.props
-    const { itemIdKey, itemGroupKey } = this.props.keys
+    const { itemIdKey, itemGroupKey } = keys
 
-    const groupOrders = this.getGroupOrders()
+    const groupOrders = getGroupOrders(groups, keys)
     const visibleItems = this.getVisibleItems(
       canvasTimeStart,
       canvasTimeEnd,
@@ -167,6 +165,7 @@ export default class Items extends Component {
               onContextMenu={this.props.onItemContextMenu}
               onSelect={this.props.itemSelect}
               itemRenderer={this.props.itemRenderer}
+              scrollRef={this.props.scrollRef}
             />
           ))}
       </div>

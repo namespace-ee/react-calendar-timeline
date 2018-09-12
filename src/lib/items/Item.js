@@ -6,7 +6,7 @@ import moment from 'moment'
 import { _get, deepObjectCompare } from '../utility/generic'
 import { composeEvents } from '../utility/events'
 import { defaultItemRenderer } from './defaultItemRenderer'
-import { coordinateToTimeRatio } from '../utility/calendar'
+import { coordinateToTimeRatio, calculateTimeForXPosition } from '../utility/calendar'
 import {
   overridableStyles,
   selectedStyle,
@@ -26,7 +26,7 @@ export default class Item extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    order: PropTypes.number,
+    order: PropTypes.object,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -55,7 +55,9 @@ export default class Item extends Component {
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
     moveResizeValidator: PropTypes.func,
-    onItemDoubleClick: PropTypes.func
+    onItemDoubleClick: PropTypes.func,
+
+    scrollRef: PropTypes.object
   }
 
   static defaultProps = {
@@ -102,7 +104,8 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      nextProps.order !== this.props.order ||
+      (nextProps.order ? nextProps.order.idnex : undefined) !== 
+        (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
@@ -154,13 +157,18 @@ export default class Item extends Component {
     const startTime = moment(this.itemTimeStart)
 
     if (this.state.dragging) {
-      const deltaX = e.pageX - this.state.dragStart.x
-      const timeDelta = deltaX * this.getTimeRatio()
-
-      return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
+      return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart.offset, true)
     } else {
       return startTime
     }
+  }
+
+  timeFor(e) {
+    const ratio = coordinateToTimeRatio(this.props.canvasTimeStart, this.props.canvasTimeEnd, this.props.canvasWidth)
+    const offset = this.props.scrollRef.offsetLeft
+    const scrollX = this.props.scrollRef.scrollLeft
+      
+    return (e.pageX - offset + scrollX) * ratio + this.props.canvasTimeStart;
   }
 
   dragGroupDelta(e) {
@@ -174,39 +182,19 @@ export default class Item extends Component {
       for (var key of Object.keys(groupTops)) {
         var item = groupTops[key]
         if (e.pageY - topOffset > item) {
-          groupDelta = parseInt(key, 10) - order
+          groupDelta = parseInt(key, 10) - order.index
         } else {
           break
         }
       }
 
-      if (this.props.order + groupDelta < 0) {
-        return 0 - this.props.order
+      if (this.props.order.index + groupDelta < 0) {
+        return 0 - this.props.order.index
       } else {
         return groupDelta
       }
     } else {
       return 0
-    }
-  }
-
-  resizeTimeDelta(e, resizeEdge) {
-    const length = this.itemTimeEnd - this.itemTimeStart
-    const timeDelta = this.dragTimeSnap(
-      (e.pageX - this.state.resizeStart) * this.getTimeRatio()
-    )
-
-    if (
-      length + (resizeEdge === 'left' ? -timeDelta : timeDelta) <
-      (this.props.dragSnap || 1000)
-    ) {
-      if (resizeEdge === 'left') {
-        return length - (this.props.dragSnap || 1000)
-      } else {
-        return (this.props.dragSnap || 1000) - length
-      }
-    } else {
-      return timeDelta
     }
   }
 
@@ -231,10 +219,13 @@ export default class Item extends Component {
       .styleCursor(false)
       .on('dragstart', e => {
         if (this.props.selected) {
+          const clickTime = this.timeFor(e);
           this.setState({
             dragging: true,
-            dragStart: { x: e.pageX, y: e.pageY },
-            preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
+            dragStart: { 
+              x: e.pageX,
+              y: e.pageY,
+              offset: this.itemTimeStart - clickTime },
             dragTime: this.itemTimeStart,
             dragGroupDelta: 0
           })
@@ -248,18 +239,31 @@ export default class Item extends Component {
           let dragGroupDelta = this.dragGroupDelta(e)
 
           if (this.props.moveResizeValidator) {
-            dragTime = this.props.moveResizeValidator(
+            const validResult = this.props.moveResizeValidator(
               'move',
               this.props.item,
-              dragTime
+              dragTime,
+              undefined,
+              this.props.order.index + dragGroupDelta,
+              this.props.order.index
             )
+            
+            if (validResult.time) {
+              dragTime = validResult.time
+            } else {
+              dragTime = validResult
+            }
+            if (validResult.newGroupIndex) {
+              dragGroupDelta = validResult.newGroupIndex - this.props.order.index
+            }
           }
 
           if (this.props.onDrag) {
             this.props.onDrag(
               this.itemId,
               dragTime,
-              this.props.order + dragGroupDelta
+              this.props.order.index + dragGroupDelta,
+              this.props.item
             )
           }
 
@@ -273,19 +277,34 @@ export default class Item extends Component {
         if (this.state.dragging) {
           if (this.props.onDrop) {
             let dragTime = this.dragTime(e)
+            let dragGroupDelta = this.dragGroupDelta(e)
 
             if (this.props.moveResizeValidator) {
-              dragTime = this.props.moveResizeValidator(
+              const validResult = this.props.moveResizeValidator(
                 'move',
                 this.props.item,
-                dragTime
+                dragTime,
+                undefined,
+                this.props.order.index + dragGroupDelta,
+                this.props.order.index
               )
+
+              if (validResult.time) {
+                dragTime = validResult.time
+              } else {
+                dragTime = validResult
+              }
+              if (validResult.newGroupIndex) {
+                dragGroupDelta = validResult.newGroupIndex - this.props.order.index
+              }
             }
 
             this.props.onDrop(
               this.itemId,
               dragTime,
-              this.props.order + this.dragGroupDelta(e)
+              this.props.order.index + dragGroupDelta,
+              this.props.order.index,
+              this.props.item
             )
           }
 
@@ -318,20 +337,24 @@ export default class Item extends Component {
             resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right'
             this.setState({ resizeEdge })
           }
-          const time =
-            resizeEdge === 'left' ? this.itemTimeStart : this.itemTimeEnd
 
-          let resizeTime = this.resizeTimeSnap(
-            time + this.resizeTimeDelta(e, resizeEdge)
-          )
+          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
           if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator(
+            const validResult = this.props.moveResizeValidator(
               'resize',
               this.props.item,
               resizeTime,
-              resizeEdge
+              resizeEdge,
+              this.props.order.index + this.dragGroupDelta(e),
+              this.props.order.index
             )
+
+            if (validResult.time) {
+              resizeTime = validResult.time
+            } else {
+              resizeTime = validResult
+            }
           }
 
           if (this.props.onResizing) {
@@ -346,27 +369,35 @@ export default class Item extends Component {
       .on('resizeend', e => {
         if (this.state.resizing) {
           const { resizeEdge } = this.state
-          const time =
-            resizeEdge === 'left' ? this.itemTimeStart : this.itemTimeEnd
-          let resizeTime = this.resizeTimeSnap(
-            time + this.resizeTimeDelta(e, resizeEdge)
-          )
+          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
           if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator(
+            const validResult = this.props.moveResizeValidator(
               'resize',
               this.props.item,
               resizeTime,
-              resizeEdge
+              resizeEdge,
+              this.props.order.index + this.dragGroupDelta(e),
+              this.props.order.index
             )
+
+            if (validResult.time) {
+              resizeTime = validResult.time
+            } else {
+              resizeTime = validResult
+            }
           }
 
           if (this.props.onResized) {
+            const delta = resizeEdge === "left" ? 
+              (this.itemTimeStart - resizeTime) : 
+              (resizeTime - this.itemTimeEnd)
+
             this.props.onResized(
               this.itemId,
               resizeTime,
               resizeEdge,
-              this.resizeTimeDelta(e, resizeEdge)
+              delta
             )
           }
           this.setState({
@@ -406,7 +437,7 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.cacheDataFromProps(nextProps)
 
     let { interactMounted } = this.state
@@ -480,7 +511,7 @@ export default class Item extends Component {
   handleDoubleClick = e => {
     e.stopPropagation()
     if (this.props.onItemDoubleClick) {
-      this.props.onItemDoubleClick(this.itemId, e)
+      this.props.onItemDoubleClick(this.itemId, e, this.props.item)
     }
   }
 
@@ -488,13 +519,13 @@ export default class Item extends Component {
     if (this.props.onContextMenu) {
       e.preventDefault()
       e.stopPropagation()
-      this.props.onContextMenu(this.itemId, e)
+      this.props.onContextMenu(this.itemId, e, this.props.item)
     }
   }
 
   actualClick(e, clickType) {
     if (this.props.canSelect && this.props.onSelect) {
-      this.props.onSelect(this.itemId, clickType, e)
+      this.props.onSelect(this.itemId, clickType, e, this.props.item)
     }
   }
 
