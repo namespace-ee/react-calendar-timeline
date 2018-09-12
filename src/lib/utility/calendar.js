@@ -52,9 +52,7 @@ export function calculateTimeForXPosition(
   canvasWidth,
   leftOffset
 ) {
-  const timeToPxRatio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
-
-  const timeFromCanvasTimeStart = timeToPxRatio * leftOffset
+  const timeFromCanvasTimeStart = coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth) * leftOffset
 
   return timeFromCanvasTimeStart + canvasTimeStart
 }

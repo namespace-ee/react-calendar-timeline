@@ -54,7 +54,9 @@ export default class Items extends Component {
     dimensionItems: PropTypes.array,
     topOffset: PropTypes.number,
     groupTops: PropTypes.array,
-    useResizeHandle: PropTypes.bool
+    useResizeHandle: PropTypes.bool,
+
+    scrollRef: PropTypes.object
   }
 
   static defaultProps = {
@@ -163,6 +165,7 @@ export default class Items extends Component {
               onContextMenu={this.props.onItemContextMenu}
               onSelect={this.props.itemSelect}
               itemRenderer={this.props.itemRenderer}
+              scrollRef={this.props.scrollRef}
             />
           ))}
       </div>
