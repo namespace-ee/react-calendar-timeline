@@ -473,7 +473,6 @@ state
     dimensionItems,
     groupOrders,
     lineHeight,
-    groups,
     stackItems
   )
 
