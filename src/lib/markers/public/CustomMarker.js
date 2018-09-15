@@ -10,6 +10,17 @@ class CustomMarker extends React.Component {
     date: PropTypes.number.isRequired
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.date !== this.props.date) {
+      this.unsubscribe()
+      this.unsubscribe = this.props.subscribeMarker({
+        type: TimelineMarkerType.Custom,
+        renderer: this.props.children,
+        date: this.props.date
+      })
+    }
+  }
+
   componentDidMount() {
     this.unsubscribe = this.props.subscribeMarker({
       type: TimelineMarkerType.Custom,
