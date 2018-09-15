@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Fixed
+
+* When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline
+
 ### 0.19.0
 
 ### Added
