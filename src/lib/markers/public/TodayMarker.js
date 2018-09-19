@@ -15,11 +15,12 @@ class TodayMarker extends React.Component {
   }
 
   componentDidMount() {
-    this.unsubscribe = this.props.subscribeMarker({
+     const { unsubscribe } = this.props.subscribeMarker({
       type: TimelineMarkerType.Today,
       renderer: this.props.children,
       interval: this.props.interval
     })
+    this.unsubscribe = unsubscribe
   }
 
   componentWillUnmount() {
