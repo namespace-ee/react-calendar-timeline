@@ -38,17 +38,41 @@ export class TimelineMarkersProvider extends React.Component {
         markers: [...state.markers, newMarker]
       }
     })
-    return () => {
-      this.setState(state => {
-        return {
-          markers: state.markers.filter(marker => marker !== newMarker)
-        }
-      })
+    return {
+      unsubscribe: () => {
+        this.setState(state => {
+          return {
+            markers: state.markers.filter(marker => marker !== newMarker)
+          }
+        })
+      },
+      getMarker: () => {
+        return newMarker
+      }
     }
   }
+
+  handleUpdateMarker = (updateMarker, newDate) => {
+    const markerIndex = this.state.markers.findIndex(marker => marker.id === updateMarker.id)
+    if (markerIndex < 0) return
+    this.setState(state => {
+      return {
+        markers: [
+          ...state.markers.slice(0, markerIndex),
+          {
+            ...updateMarker,
+            date: newDate
+          },
+          ...state.markers.slice(markerIndex + 1)
+        ]
+      }
+    })
+  }
+
   state = {
     markers: [],
-    subscribeMarker: this.handleSubscribeToMarker
+    subscribeMarker: this.handleSubscribeToMarker,
+    updateMarker: this.handleUpdateMarker
   }
 
   render() {
