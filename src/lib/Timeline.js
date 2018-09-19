@@ -17,7 +17,8 @@ import {
   getMinUnit,
   getNextUnit,
   stackItems,
-  calculateTimeForXPosition
+  calculateTimeForXPosition,
+  calculateScrollCanvas
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {

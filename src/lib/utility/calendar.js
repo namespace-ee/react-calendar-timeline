@@ -230,8 +230,9 @@ function getGroupedItems(items, groupOrders) {
 
   // Populate groups
   for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order !== undefined) {
-      groupedItems[items[i].dimensions.order].items.push(items[i])
+    const groupItem = groupedItems[items[i].dimensions.order.index]
+    if (groupItem) {
+      groupItem.items.push(items[i])
     }
   }
 
@@ -449,9 +450,9 @@ state
 
     if (dimension) {
       dimension.top = null
-      dimension.order = isDragging
-        ? newGroupOrder
-        : groupOrders[_get(item, keys.itemGroupKey)]
+      dimension.order = isDragging ?
+        { index: newGroupOrder, group: groups[newGroupOrder] } :
+        groupOrders[_get(item, keys.itemGroupKey)]
       dimension.stack = !item.isOverlay
       dimension.height = lineHeight * itemHeightRatio
       dimension.isDragging = isDragging
