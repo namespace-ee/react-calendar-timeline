@@ -102,7 +102,8 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      nextProps.order.index !== this.props.order.index ||
+      (nextProps.order ? nextProps.order.idnex : undefined) !== 
+        (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
