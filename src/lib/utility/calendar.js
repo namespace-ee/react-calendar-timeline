@@ -230,12 +230,11 @@ function getGroupedItems(items, groupOrders) {
 
   // Populate groups
   for (let i = 0; i < items.length; i++) {
-    if (!items[i].dimensions.order) {
-      continue
-    }
-    const groupItem = groupedItems[items[i].dimensions.order.index]
-    if (groupItem) {
-      groupItem.items.push(items[i])
+    if (items[i].dimensions.order !== undefined) {
+      const groupItem = groupedItems[items[i].dimensions.order.index]
+      if (groupItem) {
+        groupItem.items.push(items[i])
+      }
     }
   }
 
