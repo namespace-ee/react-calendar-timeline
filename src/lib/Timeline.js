@@ -200,7 +200,10 @@ export default class ReactCalendarTimeline extends Component {
 
     verticalLineClassNamesForTime: null,
 
-    moveResizeValidator: null,
+    moveResizeValidator: (action, item, time, edge, newGroupIndex, newGroup, originalGroupIndex, originalGroup)=> {return {
+      time: item,
+      newGroupIndex: newGroupIndex
+    }},
 
     dayBackground: null,
 
@@ -643,7 +646,6 @@ export default class ReactCalendarTimeline extends Component {
   dragItem = (item, dragTime, newGroupOrder) => {
     let newGroup = this.props.groups[newGroupOrder]
     const keys = this.props.keys
-
     this.setState({
       draggingItem: item,
       dragTime: dragTime,
