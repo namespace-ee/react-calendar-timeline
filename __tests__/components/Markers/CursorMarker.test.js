@@ -33,7 +33,6 @@ describe('CursorMarker', () => {
     subscribeToMouseOverMock.mock.calls[0][0]({
       isCursorOverCanvas: true
     })
-
     expect(getByTestId(defaultCursorMarkerTestId)).toBeInTheDOM()
   })
 
