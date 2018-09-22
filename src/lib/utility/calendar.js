@@ -218,9 +218,10 @@ export function getGroupOrders(groups, keys) {
  */
 function getGroupedItems(items, groupOrders) {
   var groupedItems = {}
+  var keys = Object.keys(groupOrders)
   // Initialize with result object for each group
-  for (let i = 0; i < Object.keys(groupOrders).length; i++) {
-    const groupOrder = groupOrders[Object.keys(groupOrders)[i]]
+  for (let i = 0; i < keys.length; i++) {
+    const groupOrder = groupOrders[keys[i]]
     groupedItems[i] = {
       index: groupOrder.index,
       group: groupOrder.group,
