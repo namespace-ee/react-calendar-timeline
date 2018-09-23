@@ -794,6 +794,7 @@ export default class ReactCalendarTimeline extends Component {
         itemResized={this.resizedItem}
         itemRenderer={this.props.itemRenderer}
         selected={this.props.selected}
+        scrollRef={this.scrollComponent}
       />
     )
   }

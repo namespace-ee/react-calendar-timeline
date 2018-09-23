@@ -55,7 +55,9 @@ export default class Item extends Component {
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
     moveResizeValidator: PropTypes.func,
-    onItemDoubleClick: PropTypes.func
+    onItemDoubleClick: PropTypes.func,
+
+    scrollRef: PropTypes.object
   }
 
   static defaultProps = {
@@ -154,13 +156,18 @@ export default class Item extends Component {
     const startTime = moment(this.itemTimeStart)
 
     if (this.state.dragging) {
-      const deltaX = e.pageX - this.state.dragStart.x
-      const timeDelta = deltaX * this.getTimeRatio()
-
-      return this.dragTimeSnap(startTime.valueOf() + timeDelta, true)
+      return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart.offset, true)
     } else {
       return startTime
     }
+  }
+
+  timeFor(e) {
+    const ratio = coordinateToTimeRatio(this.props.canvasTimeStart, this.props.canvasTimeEnd, this.props.canvasWidth)
+    const offset = this.props.scrollRef.offsetLeft
+    const scrollX = this.props.scrollRef.scrollLeft
+      
+    return (e.pageX - offset + scrollX) * ratio + this.props.canvasTimeStart;
   }
 
   dragGroupDelta(e) {
@@ -231,9 +238,13 @@ export default class Item extends Component {
       .styleCursor(false)
       .on('dragstart', e => {
         if (this.props.selected) {
+          const clickTime = this.timeFor(e);
           this.setState({
             dragging: true,
-            dragStart: { x: e.pageX, y: e.pageY },
+            dragStart: { 
+              x: e.pageX,
+              y: e.pageY,
+            offset: this.itemTimeStart - clickTime },
             preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
             dragTime: this.itemTimeStart,
             dragGroupDelta: 0
@@ -318,12 +329,7 @@ export default class Item extends Component {
             resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right'
             this.setState({ resizeEdge })
           }
-          const time =
-            resizeEdge === 'left' ? this.itemTimeStart : this.itemTimeEnd
-
-          let resizeTime = this.resizeTimeSnap(
-            time + this.resizeTimeDelta(e, resizeEdge)
-          )
+          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
           if (this.props.moveResizeValidator) {
             resizeTime = this.props.moveResizeValidator(
@@ -346,11 +352,7 @@ export default class Item extends Component {
       .on('resizeend', e => {
         if (this.state.resizing) {
           const { resizeEdge } = this.state
-          const time =
-            resizeEdge === 'left' ? this.itemTimeStart : this.itemTimeEnd
-          let resizeTime = this.resizeTimeSnap(
-            time + this.resizeTimeDelta(e, resizeEdge)
-          )
+          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
           if (this.props.moveResizeValidator) {
             resizeTime = this.props.moveResizeValidator(
@@ -406,7 +408,7 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.cacheDataFromProps(nextProps)
 
     let { interactMounted } = this.state
