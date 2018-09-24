@@ -165,22 +165,25 @@ export default class Item extends Component {
   timeFor(e) {
     const ratio = coordinateToTimeRatio(this.props.canvasTimeStart, this.props.canvasTimeEnd, this.props.canvasWidth)
     const offset = this.props.scrollRef.offsetLeft
-    const scrollX = this.props.scrollRef.scrollLeft
+    const scrolls = this.getSumScrolls(this.props.scrollRef)
       
-    return (e.pageX - offset + scrollX) * ratio + this.props.canvasTimeStart;
+    return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
 
   dragGroupDelta(e) {
-    const { groupTops, order, topOffset } = this.props
+    const { groupTops, order } = this.props
     if (this.state.dragging) {
       if (!this.props.canChangeGroup) {
         return 0
       }
       let groupDelta = 0
 
+      const offset = this.props.scrollRef.offsetTop
+      const scrolls = this.getSumScrolls(this.props.scrollRef)
+      
       for (var key of Object.keys(groupTops)) {
-        var item = groupTops[key]
-        if (e.pageY - topOffset > item) {
+        var groupTop = groupTops[key]
+        if (e.pageY - offset + scrolls.scrollTop > groupTop) {
           groupDelta = parseInt(key, 10) - order
         } else {
           break
@@ -195,6 +198,19 @@ export default class Item extends Component {
     } else {
       return 0
     }
+  }
+
+  getSumScrolls(node) {
+    if (node === document.body) {
+      return {scrollLeft: 0, scrollTop: 0}
+    } else {
+      const parent = this.getSumScrolls(node.parentNode)
+      return ({
+        scrollLeft: node.scrollLeft + parent.scrollLeft,
+        scrollTop: node.scrollTop + parent.scrollTop
+      })
+    }
+
   }
 
   resizeTimeDelta(e, resizeEdge) {
