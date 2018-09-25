@@ -11,7 +11,7 @@ class TimelineHeaders extends React.Component {
     style: PropTypes.object,
     className: PropTypes.string,
     calendarHeaderStyle: PropTypes.object,
-    calendarHeaderClassName: PropTypes.string,
+    calendarHeaderClassName: PropTypes.string
   }
 
   constructor(props) {
@@ -29,20 +29,27 @@ class TimelineHeaders extends React.Component {
   }
 
   getCalendarHeaderStyle = () => {
-    const {leftSidebarWidth, rightSidebarWidth, calendarHeaderStyle} = this.props
+    const {
+      leftSidebarWidth,
+      rightSidebarWidth,
+      calendarHeaderStyle
+    } = this.props
     return {
       border: '1px solid #bbb',
       ...calendarHeaderStyle,
       overflow: 'hidden',
-      width: `calc(100% - ${leftSidebarWidth + rightSidebarWidth}px)`,
-    };
+      width: `calc(100% - ${leftSidebarWidth + rightSidebarWidth}px)`
+    }
   }
 
   render() {
     let rightSidebarHeader
     let leftSidebarHeader
     let calendarHeaders = []
-    React.Children.map(this.props.children, child => {
+    const children = Array.isArray(this.props.children)
+      ? this.props.children.filter(c => c)
+      : [this.props.children]
+    React.Children.map(children, child => {
       if (
         child.type === SidebarHeader &&
         child.props.variant === RIGHT_VARIANT
@@ -71,10 +78,15 @@ class TimelineHeaders extends React.Component {
       </div>
     )
   }
-
 }
 
-const TimelineHeadersWrapper = ({ children, style, className, calendarHeaderStyle, calendarHeaderClassName }) => (
+const TimelineHeadersWrapper = ({
+  children,
+  style,
+  className,
+  calendarHeaderStyle,
+  calendarHeaderClassName
+}) => (
   <TimelineHeadersConsumer>
     {({ leftSidebarWidth, rightSidebarWidth, registerScroll }) => {
       return (
@@ -97,7 +109,7 @@ TimelineHeadersWrapper.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   calendarHeaderStyle: PropTypes.object,
-  calendarHeaderClassName: PropTypes.string,
+  calendarHeaderClassName: PropTypes.string
 }
 
 export default TimelineHeadersWrapper
