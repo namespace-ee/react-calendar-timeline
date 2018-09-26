@@ -316,7 +316,9 @@ export default class App extends Component {
             unit="week"
             labelFormat="MM/DD"
             style={{ height: 50 }}
-            intervalRenderer={({ getIntervalProps, intervalContext }) => {
+            props={{hey: 'date header'}}
+            intervalRenderer={({ getIntervalProps, intervalContext }, props) => {
+              console.log("intervalRenderer props", props)
               return <div {...getIntervalProps()}>
                 {intervalContext.intervalText}
               </div>
