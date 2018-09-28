@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import Timeline from 'lib/Timeline'
+import { render, cleanup } from 'react-testing-library'
 
 import moment from 'moment'
 
@@ -169,7 +170,7 @@ xdescribe('Timeline', () => {
       items: items,
       groups: groups,
       defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
-      defaultTimeEnd : moment('1995-12-25').add(12, 'hour'),
+      defaultTimeEnd: moment('1995-12-25').add(12, 'hour')
     }
 
     const wrapper = mount(<Timeline {...props} />)
@@ -181,7 +182,7 @@ xdescribe('Timeline', () => {
       items: items,
       groups: groups,
       defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
-      defaultTimeEnd : moment('1995-12-25').add(12, 'hour'),
+      defaultTimeEnd: moment('1995-12-25').add(12, 'hour'),
       itemRenderer: ({
         item,
         timelineContext,
@@ -211,7 +212,7 @@ xdescribe('Timeline', () => {
       items: items,
       groups: groups,
       defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
-      defaultTimeEnd : moment('1995-12-25').add(12, 'hour'),
+      defaultTimeEnd: moment('1995-12-25').add(12, 'hour'),
       itemRenderer: ({
         item,
         timelineContext,
@@ -235,5 +236,21 @@ xdescribe('Timeline', () => {
       expect(item.text()).toEqual(items[index].title)
     })
   })
+})
 
+describe('Timeline', () => {
+  afterEach(cleanup)
+  it('should render timeline with correct line heigh with no stacking', () => {
+    const lineHeight=60
+    const { getByTestId } = render(
+      <Timeline
+        groups={groups}
+        items={items}
+        defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
+        defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
+        lineHeight={lineHeight}
+      />
+    )
+    expect(getByTestId('group-row').style.height).toBe(`${lineHeight}px`)
+  })
 })
