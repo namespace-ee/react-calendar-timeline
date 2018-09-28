@@ -34,6 +34,7 @@ class GroupRow extends Component {
     return (
       <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
         <div
+          data-testid="group-row"
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
           className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
