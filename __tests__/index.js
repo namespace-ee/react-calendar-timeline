@@ -240,17 +240,21 @@ xdescribe('Timeline', () => {
 
 describe('Timeline', () => {
   afterEach(cleanup)
-  it('should render timeline with correct line heigh with no stacking', () => {
+  it('should render timeline with correct line heigh with while no stacking', () => {
     const lineHeight=60
-    const { getByTestId } = render(
+    const { getByTestId, getByText,  debug} = render(
       <Timeline
         groups={groups}
         items={items}
         defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
         defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
         lineHeight={lineHeight}
+        itemHeightRatio={1}
       />
     )
+    debug()
     expect(getByTestId('group-row').style.height).toBe(`${lineHeight}px`)
+    expect(getByText('item 1').parentElement.style.height).toBe(`${lineHeight}px`)
+    expect(getByText('group 1').style.height).toBe(`${lineHeight}px`)
   })
 })
