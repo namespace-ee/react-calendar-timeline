@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+* update to `react-testing-library` version 5
+* remove deprecated `toBeInDom`
 
 ### 0.19.0
 
