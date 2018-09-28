@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, Simulate } from 'react-testing-library'
+import { render, fireEvent, cleanup } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import CursorMarker from 'lib/markers/public/CursorMarker'
@@ -14,6 +14,7 @@ import { MarkerCanvasProvider } from 'lib/markers/MarkerCanvasContext'
  */
 
 describe('CursorMarker', () => {
+  afterEach(cleanup)
   const defaultCursorMarkerTestId = 'default-cursor-marker'
   it('renders one', () => {
     const subscribeToMouseOverMock = jest.fn()
@@ -34,7 +35,7 @@ describe('CursorMarker', () => {
       isCursorOverCanvas: true
     })
 
-    expect(getByTestId(defaultCursorMarkerTestId)).toBeInTheDOM()
+    expect(getByTestId(defaultCursorMarkerTestId)).toBeInTheDocument()
   })
 
   it('renders with custom renderer', () => {
@@ -58,7 +59,7 @@ describe('CursorMarker', () => {
       isCursorOverCanvas: true
     })
 
-    expect(getByTestId(customDataIdSelector)).toBeInTheDOM()
+    expect(getByTestId(customDataIdSelector)).toBeInTheDocument()
   })
 
   it('styles.left based on callback leftOffset', () => {
@@ -150,10 +151,10 @@ describe('CursorMarker', () => {
       isCursorOverCanvas: true
     })
 
-    expect(queryByTestId(defaultCursorMarkerTestId)).toBeInTheDOM()
+    expect(queryByTestId(defaultCursorMarkerTestId)).toBeInTheDocument()
 
-    Simulate.click(getByText('Hide Cursor Marker'))
+    fireEvent.click(getByText('Hide Cursor Marker'))
 
-    expect(queryByTestId(defaultCursorMarkerTestId)).not.toBeInTheDOM()
+    expect(queryByTestId(defaultCursorMarkerTestId)).not.toBeInTheDocument()
   })
 })
