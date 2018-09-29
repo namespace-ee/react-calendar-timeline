@@ -26,13 +26,22 @@ class TodayMarker extends React.Component {
   }
 
   componentDidMount() {
-    this.intervalToken = setInterval(
-      () =>
-        this.setState({
-          date: Date.now() // FIXME: use date utils pass in as props
-        }),
-      this.props.interval
-    )
+    this.intervalToken = this.createIntervalUpdater(this.props.interval)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.interval !== this.props.interval) {
+      clearInterval(this.intervalToken)
+      this.intervalToken = this.createIntervalUpdater(this.props.interval)
+    }
+  }
+
+  createIntervalUpdater(interval) {
+    return setInterval(() => {
+      this.setState({
+        date: Date.now() // FIXME: use date utils pass in as props
+      });
+    }, interval);
   }
 
   componentWillUnmount() {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, Simulate } from 'react-testing-library'
+import { render, fireEvent, cleanup } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import { RenderWrapper } from 'test-utility/marker-renderer'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
@@ -8,6 +8,7 @@ import TodayMarker from 'lib/markers/public/TodayMarker'
 const defaultTestId = 'default-today-line'
 
 describe('TodayMarker', () => {
+  afterEach(cleanup)
   it('is present', () => {
     const { getByTestId } = render(
       <RenderWrapper>
@@ -17,7 +18,7 @@ describe('TodayMarker', () => {
       </RenderWrapper>
     )
 
-    expect(getByTestId(defaultTestId)).toBeInTheDOM()
+    expect(getByTestId(defaultTestId)).toBeInTheDocument()
   })
 
   it('is removed after initial render', () => {
@@ -44,11 +45,11 @@ describe('TodayMarker', () => {
 
     const { queryByTestId, getByText } = render(<RemoveTodayMarker />)
 
-    expect(queryByTestId(defaultTestId)).toBeInTheDOM()
+    expect(queryByTestId(defaultTestId)).toBeInTheDocument()
 
-    Simulate.click(getByText('Hide Today'))
+    fireEvent.click(getByText('Hide Today'))
 
-    expect(queryByTestId(defaultTestId)).not.toBeInTheDOM()
+    expect(queryByTestId(defaultTestId)).not.toBeInTheDocument()
   })
 
   it('allows for custom renderer', () => {
@@ -62,7 +63,7 @@ describe('TodayMarker', () => {
       </RenderWrapper>
     )
 
-    expect(getByTestId(dataTestId)).toBeInTheDOM()
+    expect(getByTestId(dataTestId)).toBeInTheDocument()
   })
 
   it('custom renderer is passed styles and date', () => {

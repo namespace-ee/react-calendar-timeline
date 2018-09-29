@@ -540,37 +540,26 @@ let items = [
 
 itemRenderer: ({
   item,
-  timelineContext,
   itemContext,
   getItemProps,
-  getResizeProps,
+  getResizeProps
 }) => {
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
   return (
-    <div
-      {...getItemProps(item.itemProps) }
-    >
-      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
-        <div {...leftResizeProps} />
-      ) : (
-          ''
-        )}
+    <div {...getItemProps(item.itemProps)}>
+      {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
 
-      {itemContext.showInnerContentsRender && <div
+      <div
         className="rct-item-content"
-        style={{maxHeight: `${itemContext.dimensions.height}`}}
+        style={{ maxHeight: `${itemContext.dimensions.height}` }}
       >
         {itemContext.title}
-      </div>}
+      </div>
 
-
-      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
-        <div {...rightResizeProps} />
-      ) : (
-          ''
-        )}
+      {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}
     </div>
-  )
+  )}
+
 }
 ```
 
@@ -787,15 +776,8 @@ You need to include the `Timeline.css` file, either via static file reference or
 
 ## How can I have items with different colors?
 
-[Items](https://github.com/namespace-ee/react-calendar-timeline#items) have a "className" parameter. For example if you have "standard" items and "analysis" items, then you can just add an "analysis" class for your analysis items and then change the css backgroundColor property for them.
-
-You will then need to override the default CSS rule:
-
-```css
-.react-calendar-timeline .rct-items .rct-item.analysis {
-  background-color: #68efad;
-}
-```
+Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer). 
+Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering) for a sandbox example
 
 ## How can I add a sidebar on the right?
 
