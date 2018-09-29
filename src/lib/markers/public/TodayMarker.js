@@ -35,7 +35,10 @@ class TodayMarker extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.interval !== this.props.interval && this.getMarker) {
       const marker = this.getMarker()
-      this.props.updateMarker(marker, this.props.interval)
+      this.props.updateMarker({
+        ...marker,
+        interval: this.props.interval,
+      })
     }
   }
 

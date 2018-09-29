@@ -14,7 +14,7 @@ class CustomMarker extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.date !== this.props.date && this.getMarker) {
       const marker = this.getMarker()
-      this.props.updateMarker(marker, this.props.date)
+      this.props.updateMarker({ ...marker, date: this.props.date })
     }
   }
 

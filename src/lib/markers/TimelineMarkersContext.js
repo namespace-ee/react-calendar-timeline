@@ -52,17 +52,16 @@ export class TimelineMarkersProvider extends React.Component {
     }
   }
 
-  handleUpdateMarker = (updateMarker, newDate) => {
-    const markerIndex = this.state.markers.findIndex(marker => marker.id === updateMarker.id)
+  handleUpdateMarker = updateMarker => {
+    const markerIndex = this.state.markers.findIndex(
+      marker => marker.id === updateMarker.id
+    )
     if (markerIndex < 0) return
     this.setState(state => {
       return {
         markers: [
           ...state.markers.slice(0, markerIndex),
-          {
-            ...updateMarker,
-            date: newDate
-          },
+          updateMarker,
           ...state.markers.slice(markerIndex + 1)
         ]
       }
