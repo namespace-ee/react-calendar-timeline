@@ -14,11 +14,11 @@ Moving and Resizing examples. Clicking and dragging can move items into differen
 
 [Example Codesandbox](https://codesandbox.io/s/6vo2jkov23)
 
-## Custom Item Rendering - Basic
+## Custom Item Rendering
 
 The `itemRenderer` component allows you to customize what contents are shown in the item on the calendar.
 
-[Example Codesandbox](https://codesandbox.io/s/04l9x67qxv)
+[Example Codesandbox](https://codesandbox.io/s/1p8m477w7)
 
 <!-- ## Custom Item Rendering using `timelineContext` - position sub items
 
@@ -26,11 +26,11 @@ Using `itemRenderer` and `timelineContext` [docs](https://github.com/namespace-e
 
 [Example Codesandbox](https://codesandbox.io/s/6y15696o23) -->
 
-## Custom Item Rendering using `timelineContext` - conditionally render components
+<!-- ## Custom Item Rendering using `timelineContext` - conditionally render components
 
 Using `itemRenderer` [docs] you can render different components based on the `timelineContext` zoom (`visibleTimeStart` and `visibleTimeEnd`). Zoom in and out to see item render with slightly different elements.
 
-[Example Codesandbox](https://codesandbox.io/s/r74qoxw94p)
+[Example Codesandbox](https://codesandbox.io/s/r74qoxw94p) -->
 
 ## Restricting Item Moving and Resizing
 

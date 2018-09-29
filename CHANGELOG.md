@@ -6,12 +6,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+
+### 0.20.0
+
+### improvements
+* eliminate extra renders on every scroll - #357 [acemac](https://github.com/acemac)
+
+### Fixed
+* When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline - #421 [kevinmanncito](https://github.com/kevinmanncito) [ilaiwi](https://github.com/ilaiwi)
+* Header has a bounce effect - #311 [acemac](https://github.com/acemac)
+
+####dev
+
 * update to `react-testing-library` version 5
 * remove deprecated `toBeInDom`
 
-### Fixed
 
-* When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline - #421
 
 ### 0.19.0
 
