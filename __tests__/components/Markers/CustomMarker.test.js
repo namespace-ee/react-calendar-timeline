@@ -117,4 +117,20 @@ describe('CustomMarker', () => {
 
     expect(queryByTestId(defaultCustomMarkerTestId)).not.toBeInTheDocument()
   })
+  it('updates marker location after passing new date', ()=>{
+    const { getByTestId, rerender } = render(
+      <RenderWrapper>
+        <TimelineMarkers>
+          <CustomMarker date={1000} />
+        </TimelineMarkers>
+      </RenderWrapper>)
+      const positionLeftBeforeChange = getByTestId(defaultCustomMarkerTestId).style.left
+      rerender(<RenderWrapper>
+        <TimelineMarkers>
+          <CustomMarker date={2000} />
+        </TimelineMarkers>
+      </RenderWrapper>)
+      const positionLeftAfterChange = getByTestId(defaultCustomMarkerTestId).style.left
+      expect(positionLeftBeforeChange).not.toEqual(positionLeftAfterChange)
+  })
 })
