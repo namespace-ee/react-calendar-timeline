@@ -9,6 +9,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 * update to `react-testing-library` version 5
 * remove deprecated `toBeInDom`
 
+### Fixed
+
+* When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline - #421
+
 ### 0.19.0
 
 ### Added
