@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { getParentPosition } from '../utility/dom-helpers'
 
-class ScrollElement extends Component {
+class ScrollElement extends PureComponent {
   static propTypes = {
     children: PropTypes.element.isRequired,
     width: PropTypes.number.isRequired,

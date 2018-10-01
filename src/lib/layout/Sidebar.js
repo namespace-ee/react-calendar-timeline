@@ -19,7 +19,7 @@ export default class Sidebar extends Component {
       arraysEqual(nextProps.groups, this.props.groups) &&
       nextProps.keys === this.props.keys &&
       nextProps.width === this.props.width &&
-      nextProps.groupHeights === this.props.groupHeights &&
+      arraysEqual(nextProps.groupHeights, this.props.groupHeights) &&
       nextProps.height === this.props.height
     )
   }

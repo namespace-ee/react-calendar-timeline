@@ -6,7 +6,7 @@ import { getNextUnit } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
 import Interval from './Interval'
 
-class DateHeader extends React.Component {
+class DateHeader extends React.PureComponent {
   static propTypes = {
     primaryHeader: PropTypes.bool,
     secondaryHeader: PropTypes.bool,
