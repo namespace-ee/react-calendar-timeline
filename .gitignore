@@ -7,7 +7,6 @@ bower_components
 modules
 build
 gh-pages
-/lib
 
 # vscode stuff
 .vscode
