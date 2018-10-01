@@ -15,8 +15,8 @@ import windowResizeDetector from '../resize-detector/window'
 import {
   getMinUnit,
   stackItems,
-  calculateScrollCanvas,
-  calculateTimeForXPosition
+  calculateTimeForXPosition,
+  calculateScrollCanvas
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
