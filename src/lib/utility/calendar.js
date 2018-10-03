@@ -409,6 +409,9 @@ state
     const isDragging = itemId === draggingItem
     const isResizing = itemId === resizingItem
 
+    if (!groupOrders[_get(item, keys.itemGroupKey)]) {
+      return;
+    }
 
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),

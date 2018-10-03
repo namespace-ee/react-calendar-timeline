@@ -424,8 +424,8 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.cacheDataFromProps(nextProps)
+  componentDidUpdate(prevProps) {
+    this.cacheDataFromProps(this.props)
 
     let { interactMounted } = this.state
     const couldDrag = this.props.selected && this.canMove(this.props)
@@ -433,13 +433,13 @@ export default class Item extends Component {
       this.props.selected && this.canResizeLeft(this.props)
     const couldResizeRight =
       this.props.selected && this.canResizeRight(this.props)
-    const willBeAbleToDrag = nextProps.selected && this.canMove(nextProps)
+    const willBeAbleToDrag = this.props.selected && this.canMove(this.props)
     const willBeAbleToResizeLeft =
-      nextProps.selected && this.canResizeLeft(nextProps)
+      this.props.selected && this.canResizeLeft(this.props)
     const willBeAbleToResizeRight =
-      nextProps.selected && this.canResizeRight(nextProps)
+      this.props.selected && this.canResizeRight(this.props)
 
-    if (nextProps.selected && !interactMounted) {
+    if (this.props.selected && !interactMounted) {
       this.mountInteract()
       interactMounted = true
     }
@@ -529,6 +529,7 @@ export default class Item extends Component {
     return {
       key: this.itemId,
       ref: this.getItemRef,
+      title: this.itemDivTitle,
       className: classNames + ` ${props.className ? props.className : ''}`,
       onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
       onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
@@ -600,7 +601,7 @@ export default class Item extends Component {
     const itemContext = {
       dimensions: this.props.dimensions,
       useResizeHandle: this.props.useResizeHandle,
-      title: this.itemDivTitle,
+      title: this.itemTitle,
       canMove: this.canMove(this.props),
       canResizeLeft: this.canResizeLeft(this.props),
       canResizeRight: this.canResizeRight(this.props),
