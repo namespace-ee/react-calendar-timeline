@@ -32,6 +32,7 @@ export const defaultHeaderLabelFormats = {
   hourMedium: 'HH:00',
   hourMediumLong: 'L, HH:00',
   hourLong: 'dddd, LL, HH:00',
+  minute: 'dddd, LL, HH:mm:00',
   time: 'LLL'
 }
 
