@@ -449,7 +449,7 @@ export default class ReactCalendarTimeline extends Component {
     this.scrollComponent.scrollLeft = width
     this.headerRef.scrollLeft = width
   }
-  
+
   onScroll = scrollX => {
     const width = this.state.width
     let newScrollX = scrollX
@@ -532,8 +532,9 @@ export default class ReactCalendarTimeline extends Component {
       .valueOf()
     let zoom = visibleTimeEnd - visibleTimeStart
 
-    // can't zoom in more than to show one hour
-    if (zoom < 360000) {
+    // can zoom to second only min zoom is set less/equal than 1 minute
+    const canZoomToSecond = this.props.minZoom <= 60000 && zoom >=60000;
+    if (zoom < 360000 && !canZoomToSecond) {
       return
     }
 

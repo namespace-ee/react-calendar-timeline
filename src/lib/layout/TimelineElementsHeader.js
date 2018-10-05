@@ -59,6 +59,8 @@ export default class TimelineElementsHeader extends Component {
             ? f.hourMedium
             : width < 150 ? f.hourMediumLong : f.hourLong
       )
+    } else if (unit === 'minute') {
+      return time.format(f.minute)
     } else {
       return time.format(f.time)
     }
