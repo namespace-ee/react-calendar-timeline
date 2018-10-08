@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Fixed
+
+* Provided a new key `groupLabelKey` to allow splitting of the key used to render the Sidebar and the InfoLabel visible during drag operations. `groupTitleKey` continues to be used to render the Sidebar.
+
 ### 0.20.0
 
 ### improvements
