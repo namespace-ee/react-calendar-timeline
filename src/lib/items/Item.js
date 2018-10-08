@@ -554,13 +554,13 @@ export default class Item extends Component {
 
   getResizeProps = (props = {}) => {
     let leftName = "rct-item-handler rct-item-handler-left rct-item-handler-resize-left"
-    if (props.left && props.left.className) {
-      leftName += ` ${props.left.className}`
+    if (props.leftClassName) {
+      leftName += ` ${props.leftClassName}`
     }
 
     let rightName = "rct-item-handler rct-item-handler-right rct-item-handler-resize-right"
-    if (props.right && props.right.className) {
-      rightName += ` ${props.right.className}`
+    if (props.rightClassName) {
+      rightName += ` ${props.rightClassName}`
     }
     return {
       left: {
