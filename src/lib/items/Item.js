@@ -553,15 +553,24 @@ export default class Item extends Component {
   }
 
   getResizeProps = (props = {}) => {
+    let leftName = "rct-item-handler rct-item-handler-left rct-item-handler-resize-left"
+    if (props.left && props.left.className) {
+      leftName += ` ${props.left.className}`
+    }
+
+    let rightName = "rct-item-handler rct-item-handler-right rct-item-handler-resize-right"
+    if (props.right && props.right.className) {
+      rightName += ` ${props.right.className}`
+    }
     return {
       left: {
         ref: this.getDragLeftRef,
-        className: "rct-item-handler rct-item-handler-left rct-item-handler-resize-left",
+        className: leftName,
         style: props.leftStyle
       },
       right: {
         ref: this.getDragRightRef,
-        className: "rct-item-handler rct-item-handler-right rct-item-handler-resize-right",
+        className: rightName,
         style: props.rightStyle
       }
     }
