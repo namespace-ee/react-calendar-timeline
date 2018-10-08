@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
-    "url": "https://github.com/namespace-ee/react-calendar-timeline.git"
+    "url": "https://github.com/sky-uk/react-calendar-timeline.git"
   },
   "author": "Marius Andra <marius.andra@gmail.com>",
   "contributors": [
