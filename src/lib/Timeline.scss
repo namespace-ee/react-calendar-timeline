@@ -48,6 +48,24 @@ $weekend: rgba(250, 246, 225, 0.5);
       z-index: 88;
     }
 
+    .rct-item-handler {
+      position: absolute;
+      width: 24px;
+      max-width: 20%;
+      min-width: 2px;
+      height: 100%;
+      top: 0;
+      cursor: ew-resize;
+      z-index: 88;
+
+      &.rct-item-handler-left {
+        left: 0;
+      }
+      &.rct-item-handler-right {
+        right: 0;
+      }
+    }
+
     .rct-item-content {
       position: sticky;
       position: -webkit-sticky;

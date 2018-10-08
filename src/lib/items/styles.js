@@ -26,28 +26,3 @@ export const selectedAndCanResizeRight = {
 export const selectedAndCanResizeRightAndDragRight = {
   cursor: 'e-resize'
 }
-
-export const leftResizeStyle = {
-    position: "absolute",
-    width: 24,
-    maxWidth: "20%",
-    minWidth: 2,
-    height: "100%",
-    top: 0,
-    left: 0,
-    cursor: "pointer",
-    zIndex: 88,
-  }
-
-
-  export const rightResizeStyle = {
-    position: "absolute",
-    width: 24,
-    maxWidth: "20%",
-    minWidth: 2,
-    height: "100%",
-    top: 0,
-    right: 0,
-    cursor: "pointer",
-    zIndex: 88,
-  }
