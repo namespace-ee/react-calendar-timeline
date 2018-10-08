@@ -164,7 +164,8 @@ export default class Item extends Component {
 
   timeFor(e) {
     const ratio = coordinateToTimeRatio(this.props.canvasTimeStart, this.props.canvasTimeEnd, this.props.canvasWidth)
-    const offset = this.props.scrollRef.offsetLeft
+
+    const offset = this.getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = this.getSumScrolls(this.props.scrollRef)
       
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
@@ -178,7 +179,7 @@ export default class Item extends Component {
       }
       let groupDelta = 0
 
-      const offset = this.props.scrollRef.offsetTop
+      const offset = this.getSumOffset(this.props.scrollRef).offsetTop
       const scrolls = this.getSumScrolls(this.props.scrollRef)
       
       for (var key of Object.keys(groupTops)) {
@@ -211,6 +212,18 @@ export default class Item extends Component {
       })
     }
 
+  }
+
+  getSumOffset(node) {
+    if (node === document.body) {
+      return {offsetLeft: 0, offsetTop: 0}
+    } else {
+      const parent = this.getSumOffset(node.offsetParent)
+      return ({
+        offsetLeft: node.offsetLeft + parent.offsetLeft,
+        offsetTop: node.offsetTop + parent.offsetTop
+      })
+    }
   }
 
   resizeTimeDelta(e, resizeEdge) {
