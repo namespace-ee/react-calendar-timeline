@@ -60,9 +60,15 @@ $weekend: rgba(250, 246, 225, 0.5);
 
       &.rct-item-handler-left {
         left: 0;
+        &.rct-item-handler-resize-left {
+          // used by interactjs to select
+        }
       }
       &.rct-item-handler-right {
         right: 0;
+        &.rct-item-handler-resize-right {
+          // used by interactjs to select
+        }
       }
     }
 
