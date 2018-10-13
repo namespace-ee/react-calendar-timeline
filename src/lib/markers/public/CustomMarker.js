@@ -6,16 +6,26 @@ import { TimelineMarkerType } from '../markerType'
 class CustomMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
+    updateMarker: PropTypes.func.isRequired,
     children: PropTypes.func,
     date: PropTypes.number.isRequired
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.date !== this.props.date && this.getMarker) {
+      const marker = this.getMarker()
+      this.props.updateMarker({ ...marker, date: this.props.date })
+    }
+  }
+
   componentDidMount() {
-    this.unsubscribe = this.props.subscribeMarker({
+    const { unsubscribe, getMarker } = this.props.subscribeMarker({
       type: TimelineMarkerType.Custom,
       renderer: this.props.children,
       date: this.props.date
     })
+    this.unsubscribe = unsubscribe
+    this.getMarker = getMarker
   }
 
   componentWillUnmount() {
@@ -34,8 +44,12 @@ class CustomMarker extends React.Component {
 const CustomMarkerWrapper = props => {
   return (
     <TimelineMarkersConsumer>
-      {({ subscribeMarker }) => (
-        <CustomMarker subscribeMarker={subscribeMarker} {...props} />
+      {({ subscribeMarker, updateMarker }) => (
+        <CustomMarker
+          subscribeMarker={subscribeMarker}
+          updateMarker={updateMarker}
+          {...props}
+        />
       )}
     </TimelineMarkersConsumer>
   )
