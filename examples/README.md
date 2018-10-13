@@ -57,3 +57,9 @@ Through group manipulation, you can achieve tree group views.
 [Example Codesandbox](https://codesandbox.io/s/k9qyx9zp2o)
 
 Note that this is the user code manipulating groups to achieve tree group functionality. This example is an illustration of how you can achieve this functionality. This is not a feature that is directly supported by the library.
+
+## Programmatically Scrolling
+
+Using `scrollRef` you can trigger scrolling and create an animation. This is an alternative to setting `visibleStartTime` and `visibleEndTime`.
+
+[Example Codesandbox](https://codesandbox.io/s/mm29lv9kvj)
