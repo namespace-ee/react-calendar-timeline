@@ -77,8 +77,8 @@ $weekend: rgba(250, 246, 225, 0.5);
     overflow-x: hidden;
     z-index: 90;
 
-    .top-header,
-    .bottom-header {
+    .rct-top-header,
+    .rct-bottom-header {
       position: relative;
     }
 
@@ -127,7 +127,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       }
     }
   }
- 
+
   .rct-sidebar-header {
     margin: 0;
     color: $sidebar-color;

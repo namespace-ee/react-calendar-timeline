@@ -232,13 +232,13 @@ export default class TimelineElementsHeader extends Component {
         ref={this.props.scrollHeaderRef}
       >
         <div
-          className="top-header"
+          className="rct-top-header"
           style={{ height: twoHeaders ? headerLabelGroupHeight : 0, width: canvasWidth }}
         >
           {topHeaderLabels}
         </div>
         <div
-          className="bottom-header"
+          className="rct-bottom-header"
           style={{ height: headerLabelHeight, width: canvasWidth }}
         >
           {bottomHeaderLabels}
