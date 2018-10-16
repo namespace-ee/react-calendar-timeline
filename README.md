@@ -607,15 +607,18 @@ An example could look like (see: demo/vertical-classes):
 verticalLineClassNamesForTime = (timeStart, timeEnd) => {
   const currentTimeStart = moment(timeStart)
   const currentTimeEnd = moment(timeEnd)
+  let holidayArray = []
 
   for (let holiday of holidays) {
     if (
       holiday.isSame(currentTimeStart, 'day') &&
       holiday.isSame(currentTimeEnd, 'day')
     ) {
-      return ['holiday']
+      holidayArray.push('holiday')
     }
   }
+
+  return holidayArray
 }
 ```
 
