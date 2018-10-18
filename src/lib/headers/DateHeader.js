@@ -28,9 +28,8 @@ class DateHeader extends React.Component {
       return this.props.unit
     } else if (this.props.primaryHeader) {
       return getNextUnit(this.props.timelineUnit)
-    } else {
-      return this.props.timelineUnit
     }
+    return this.props.timelineUnit
   }
 
   render() {

@@ -1,11 +1,10 @@
-import { render } from 'react-testing-library'
+import { render, cleanup } from 'react-testing-library'
 import Timeline from 'lib/Timeline'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import DateHeader from 'lib/headers/DateHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
 import 'jest-dom/extend-expect'
 
-import 'react-testing-library/cleanup-after-each'
 import React from 'react'
 import moment from 'moment'
 
@@ -39,8 +38,9 @@ const items = [
   }
 ]
 
-describe('TimelineHeader', () => {
-  xit('renders headers correctly', () => {
+describe('TimelineHeader', () => { 
+  afterEach(cleanup)
+  it('renders headers correctly', () => {
     const container = render(
       <Timeline
         groups={groups}
@@ -51,7 +51,7 @@ describe('TimelineHeader', () => {
     )
   })
   it('renders headers in TimelineHeaders correctly', () => {
-    const { getByText, debug, rerender, getByTestId } = render(
+    const { getByText, debug, rerender, queryByTestId } = render(
       <Timeline
         groups={groups}
         items={items}
@@ -74,7 +74,7 @@ describe('TimelineHeader', () => {
       </Timeline>
     )
     expect(getByText('Left')).toBeInTheDocument()
-    expect(getByTestId('right')).toBeInTheDocument()
+    expect(queryByTestId('right')).toBeInTheDocument()
     rerender(
       <Timeline
         groups={groups}
@@ -92,6 +92,6 @@ describe('TimelineHeader', () => {
         </TimelineHeaders>
       </Timeline>
     )
-    expect(getByTestId('right')).toThrowError()
+    expect(queryByTestId('right')).toBeNull()
   })
 })

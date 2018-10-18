@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import createReactContext from 'create-react-context'
 import { noop } from '../utility/generic'
-import { LEFT_SIDEBAR_ID, RIGHT_SIDEBAR_ID } from './constants'
-import { getNextUnit } from '../utility/calendar'
 
 const defaultContextState = {
   registerScroll: () => {

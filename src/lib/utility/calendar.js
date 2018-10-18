@@ -64,7 +64,7 @@ export function iterateTimes(start, end, unit, timeSteps, callback) {
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
     let value = time.get(unit)
-    time.set(unit, value - value % timeSteps[unit])
+    time.set(unit, value - (value % timeSteps[unit]))
   }
 
   while (time.valueOf() < end) {
@@ -148,10 +148,13 @@ export function getNextUnit(unit) {
     minute: 'hour',
     hour: 'day',
     day: 'month',
-    month: 'year'
+    month: 'year',
+    year: 'year'
   }
-
-  return nextUnits[unit] || ''
+  if (!nextUnits[unit]) {
+    throw new Error(`unit ${unit} in not acceptable`)
+  }
+  return nextUnits[unit]
 }
 
 export function calculateDimensions({
@@ -258,7 +261,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
   var groupedItems = getGroupedItems(items, groupOrders)
 
   groupedItems.forEach(function(group) {
-    var groupVal = groups[k++];
+    var groupVal = groups[k++]
 
     // calculate new, non-overlapping positions
     groupTops.push(totalHeight)
@@ -317,7 +320,9 @@ export function stack(items, groupOrders, lineHeight, groups) {
 }
 
 export function nostack(items, groupOrders, lineHeight, groups) {
-  var i, j=0, iMax
+  var i,
+    j = 0,
+    iMax
 
   var totalHeight = 0
 
@@ -327,7 +332,7 @@ export function nostack(items, groupOrders, lineHeight, groups) {
   var groupedItems = getGroupedItems(items, groupOrders)
 
   groupedItems.forEach(function(group) {
-    var groupVal = groups[j++];
+    var groupVal = groups[j++]
 
     // calculate new, non-overlapping positions
     groupTops.push(totalHeight)
@@ -344,8 +349,8 @@ export function nostack(items, groupOrders, lineHeight, groups) {
     }
 
     if (groupVal.height) {
-      groupHeights.push(groupVal.height);
-      totalHeight += groupVal.height;
+      groupHeights.push(groupVal.height)
+      totalHeight += groupVal.height
     } else {
       groupHeights.push(Math.max(groupHeight, lineHeight))
       totalHeight += Math.max(groupHeight, lineHeight)
@@ -361,24 +366,24 @@ export function nostack(items, groupOrders, lineHeight, groups) {
 /**
  * Stack the items that will be visible
  * within the canvas area
- * @param {item[]} items 
- * @param {group[]} groups 
- * @param {number} canvasTimeStart 
- * @param {number} visibleTimeStart 
- * @param {number} visibleTimeEnd 
- * @param {number} width 
- * @param {*} props 
- * @param {*} state 
+ * @param {item[]} items
+ * @param {group[]} groups
+ * @param {number} canvasTimeStart
+ * @param {number} visibleTimeStart
+ * @param {number} visibleTimeEnd
+ * @param {number} width
+ * @param {*} props
+ * @param {*} state
  */
 export function stackItems(
-items,
-groups,
-canvasTimeStart,
-visibleTimeStart,
-visibleTimeEnd,
-width,
-props,
-state
+  items,
+  groups,
+  canvasTimeStart,
+  visibleTimeStart,
+  visibleTimeEnd,
+  width,
+  props,
+  state
 ) {
   // if there are no groups return an empty array of dimensions
   if (groups.length === 0) {
@@ -416,12 +421,10 @@ state
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
 
-
   let dimensionItems = visibleItems.reduce((memo, item) => {
     const itemId = _get(item, keys.itemIdKey)
     const isDragging = itemId === draggingItem
     const isResizing = itemId === resizingItem
-
 
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),
@@ -471,22 +474,23 @@ state
  * Get the the canvas area for a given visible time
  * Will shift the start/end of the canvas if the visible time
  * does not fit within the existing
- * @param {number} visibleTimeStart 
- * @param {number} visibleTimeEnd 
- * @param {boolean} forceUpdateDimensions 
- * @param {*} items 
- * @param {*} groups 
- * @param {*} props 
- * @param {*} state 
+ * @param {number} visibleTimeStart
+ * @param {number} visibleTimeEnd
+ * @param {boolean} forceUpdateDimensions
+ * @param {*} items
+ * @param {*} groups
+ * @param {*} props
+ * @param {*} state
  */
 export function calculateScrollCanvas(
-visibleTimeStart,
-visibleTimeEnd,
-forceUpdateDimensions,
-items,
-groups,
-props,
-state) {
+  visibleTimeStart,
+  visibleTimeEnd,
+  forceUpdateDimensions,
+  items,
+  groups,
+  props,
+  state
+) {
   const oldCanvasTimeStart = state.canvasTimeStart
   const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
 
@@ -498,20 +502,24 @@ state) {
     visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
     visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
     visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
-  
+
   if (!canKeepCanvas || forceUpdateDimensions) {
-    newState.canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
+    newState.canvasTimeStart =
+      visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
     // The canvas cannot be kept, so calculate the new items position
-    Object.assign(newState, stackItems(
-      items,
-      groups,
-      newState.canvasTimeStart,
-      visibleTimeStart,
-      visibleTimeEnd,
-      state.width,
-      props,
-      state
-    ))
+    Object.assign(
+      newState,
+      stackItems(
+        items,
+        groups,
+        newState.canvasTimeStart,
+        visibleTimeStart,
+        visibleTimeEnd,
+        state.width,
+        props,
+        state
+      )
+    )
   }
   return newState
 }
