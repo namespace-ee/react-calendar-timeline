@@ -28,6 +28,6 @@ describe('getNextUnit', () => {
     expect(result).toBe('year')
   })
   it('unknown value to throw error', () => {
-    expect(getNextUnit('foo')).toThrowErrorMatchingSnapshot()
+    expect(() => getNextUnit('foo')).toThrowErrorMatchingSnapshot()
   })
 })
