@@ -47,6 +47,7 @@ class DateHeader extends React.Component {
 
           return (
             <div
+            data-testid="dateHeader"
               className={this.props.className}
               {...getRootProps({ style: this.getRootStyle() })}
             >

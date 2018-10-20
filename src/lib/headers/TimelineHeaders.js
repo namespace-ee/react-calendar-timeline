@@ -71,6 +71,7 @@ class TimelineHeaders extends React.Component {
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
           className={this.props.calendarHeaderClassName}
+          data-testid="headerContainer"
         >
           {calendarHeaders}
         </div>
