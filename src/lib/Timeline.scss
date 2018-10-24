@@ -51,11 +51,10 @@ $weekend: rgba(250, 246, 225, 0.5);
     .rct-item-content {
       position: sticky;
       position: -webkit-sticky;
-      left: 0px;
+      left: 0;
       overflow: hidden;
       display: inline-block;
       border-radius: 2px;
-      left: 0;
       padding: 0 6px;
       height: 100%;
     }
