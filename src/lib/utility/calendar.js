@@ -489,11 +489,13 @@ props,
 state) {
   const oldCanvasTimeStart = state.canvasTimeStart
   const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
+  const newZoom = visibleTimeEnd - visibleTimeStart;
 
   const newState = { visibleTimeStart, visibleTimeEnd }
 
   // Check if the current canvas covers the new times
   const canKeepCanvas =
+    oldZoom !== newZoom ||
     visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
     visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
     visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
