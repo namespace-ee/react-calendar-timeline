@@ -7,6 +7,18 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.21.0
+
+#### fixes
+
+* fix item dimensions not being rendered on zoom in/out @ilaiwi + @acemac
+* correct `right_sidebar` to `rightTitle` in readme @maxlibin
+
+#### breaking changes
+
+* add `rct` to `.top-header` and `.bottom-header` to become `.rct-top-header` and `.rct-bottom-header` @Simek
+* upgrade dev dependance `react@16.3` @acemac
+
 ### 0.20.0
 
 ### improvements

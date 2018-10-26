@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
     "prepublish": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "files": [
     "lib",
