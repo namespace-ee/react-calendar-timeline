@@ -1,18 +1,17 @@
 import { calculateScrollCanvas } from 'lib/utility/calendar'
 import moment from 'moment'
 
-
 const keys = {
-    groupIdKey: 'id',
-    groupTitleKey: 'title',
-    groupRightTitleKey: 'rightTitle',
-    itemIdKey: 'id',
-    itemTitleKey: 'title',
-    itemDivTitleKey: 'title',
-    itemGroupKey: 'group',
-    itemTimeStartKey: 'start',
-    itemTimeEndKey: 'end'
-  }
+  groupIdKey: 'id',
+  groupTitleKey: 'title',
+  groupRightTitleKey: 'rightTitle',
+  itemIdKey: 'id',
+  itemTitleKey: 'title',
+  itemDivTitleKey: 'title',
+  itemGroupKey: 'group',
+  itemTimeStartKey: 'start',
+  itemTimeEndKey: 'end'
+}
 const props = {
   keys,
   lineHeight: 30,
@@ -31,7 +30,7 @@ const state = {
   resizeTime: null,
   newGroupOrder: null,
   canvasTimeStart: moment('2018-10-25T00:00:00.000').valueOf(),
-  visibleTimeEnd: visibleTimeStart.valueOf(),
+  visibleTimeEnd: visibleTimeEnd.valueOf(),
   visibleTimeStart: visibleTimeStart.valueOf()
 }
 
@@ -65,19 +64,69 @@ const items = [
 
 const groups = [{ id: '1' }, { id: '2' }]
 
-
-
 describe('calculateScrollCanvas', () => {
   it('should calculate new scroll state', () => {
+    const newStartTime = visibleTimeStart.clone().add(13, 'h')
+    const newEndTime = visibleTimeEnd.clone().add(13, 'h')
     const result = calculateScrollCanvas(
-      visibleTimeStart.clone().add(12,'h').valueOf(),
-      visibleTimeEnd.clone().add(12,'h').valueOf(),
+      newStartTime.valueOf(),
+      newEndTime.valueOf(),
       false,
       items,
       groups,
       props,
       state
     )
-    expect(result).toMatchSnapshot()
+    expect(result).toHaveProperty('visibleTimeStart')
+    expect(result).toHaveProperty('visibleTimeEnd')
+    expect(result).toHaveProperty('dimensionItems')
+  })
+  it('should skip new calculation if new visible start and visible end in canvas', () => {
+    const newStartTime = visibleTimeStart.clone().add(1, 'h')
+    const newEndTime = visibleTimeEnd.clone().add(1, 'h')
+    const result = calculateScrollCanvas(
+      newStartTime.valueOf(),
+      newEndTime.valueOf(),
+      false,
+      items,
+      groups,
+      props,
+      state
+    )
+    expect(result).toHaveProperty('visibleTimeStart')
+    expect(result).toHaveProperty('visibleTimeEnd')
+    expect(result).not.toHaveProperty('dimensionItems')
+  })
+  it('should force new calculation', () => {
+    const newStartTime = visibleTimeStart.clone().add(1, 'h')
+    const newEndTime = visibleTimeEnd.clone().add(1, 'h')
+    const result = calculateScrollCanvas(
+      newStartTime.valueOf(),
+      newEndTime.valueOf(),
+      true,
+      items,
+      groups,
+      props,
+      state
+    )
+    expect(result).toHaveProperty('visibleTimeStart')
+    expect(result).toHaveProperty('visibleTimeEnd')
+    expect(result).toHaveProperty('dimensionItems')
+  })
+  it('should calculate new state if zoom changed ', () => {
+    const newStartTime = visibleTimeStart.clone()
+    const newEndTime = visibleTimeEnd.clone().add(1, 'h')
+    const result = calculateScrollCanvas(
+      newStartTime.valueOf(),
+      newEndTime.valueOf(),
+      false,
+      items,
+      groups,
+      props,
+      state
+    )
+    expect(result).toHaveProperty('visibleTimeStart')
+    expect(result).toHaveProperty('visibleTimeEnd')
+    expect(result).toHaveProperty('dimensionItems')
   })
 })
