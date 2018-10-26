@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.20.1
+
+* fix item dimensions not being rendered on zoom in/out
+
 ### 0.20.0
 
 ### improvements
