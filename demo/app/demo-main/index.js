@@ -51,38 +51,36 @@ export default class App extends Component {
     }
   }
 
-  handleCanvasClick = (groupId, time) => {
+  handleCanvasClick = (groupId, time, e, group) => {
     console.log('Canvas clicked', groupId, moment(time).format())
   }
 
-  handleCanvasDoubleClick = (groupId, time) => {
+  handleCanvasDoubleClick = (groupId, time, e, group) => {
     console.log('Canvas double clicked', groupId, moment(time).format())
   }
 
-  handleCanvasContextMenu = (group, time) => {
-    console.log('Canvas context menu', group, moment(time).format())
+  handleCanvasContextMenu = (groupId, time, e, group) => {
+    console.log('Canvas context menu', groupId, moment(time).format())
   }
 
-  handleItemClick = (itemId, _, time) => {
+  handleItemClick = (itemId, _, time, item) => {
     console.log('Clicked: ' + itemId, moment(time).format())
   }
 
-  handleItemSelect = (itemId, _, time) => {
+  handleItemSelect = (itemId, _, time, item) => {
     console.log('Selected: ' + itemId, moment(time).format())
   }
 
-  handleItemDoubleClick = (itemId, _, time) => {
+  handleItemDoubleClick = (itemId, _, time, item) => {
     console.log('Double Click: ' + itemId, moment(time).format())
   }
 
-  handleItemContextMenu = (itemId, _, time) => {
+  handleItemContextMenu = (itemId, _, time, item) => {
     console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    const { items, groups } = this.state
-
-    const group = groups[newGroupOrder]
+  handleItemMove = (itemId, dragTime, newGroupOrder, previousGroupOrder, item, group, previousGroup) => {
+    const { items } = this.state
 
     this.setState({
       items: items.map(
@@ -100,7 +98,7 @@ export default class App extends Component {
     console.log('Moved', itemId, dragTime, newGroupOrder)
   }
 
-  handleItemResize = (itemId, time, edge) => {
+  handleItemResize = (itemId, time, edge, item) => {
     const { items } = this.state
 
     this.setState({
@@ -131,14 +129,16 @@ export default class App extends Component {
     }
   }
 
-  moveResizeValidator = (action, item, time) => {
-    if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
-      return newTime
-    }
-
-    return time
+  moveResizeValidator = (action, item, time, edge, newGroupIndex, newGroup, currentGroupIndex, currentGroup) => {
+    const isNewValid = ((newGroupIndex + 1) % 2) === ((currentGroupIndex + 1) % 2)
+    const returnIndex = !isNewValid ? newGroupIndex - 1 : newGroupIndex
+    const newTime = time < new Date().getTime() ?
+      Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000) :
+      time
+    return ({
+      time: newTime,
+      newGroupIndex: returnIndex
+    })
   }
 
   render() {
