@@ -7,6 +7,7 @@ import { _get, deepObjectCompare } from '../utility/generic'
 import { composeEvents } from '../utility/events'
 import { defaultItemRenderer } from './defaultItemRenderer'
 import { coordinateToTimeRatio } from '../utility/calendar'
+import { getSumScroll, getSumOffset } from '../utility/dom-helpers'
 import {
   overridableStyles,
   selectedStyle,
@@ -163,8 +164,8 @@ export default class Item extends Component {
   timeFor(e) {
     const ratio = coordinateToTimeRatio(this.props.canvasTimeStart, this.props.canvasTimeEnd, this.props.canvasWidth)
 
-    const offset = this.getSumOffset(this.props.scrollRef).offsetLeft
-    const scrolls = this.getSumScrolls(this.props.scrollRef)
+    const offset = getSumOffset(this.props.scrollRef).offsetLeft
+    const scrolls = getSumScroll(this.props.scrollRef)
       
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
@@ -177,8 +178,8 @@ export default class Item extends Component {
       }
       let groupDelta = 0
 
-      const offset = this.getSumOffset(this.props.scrollRef).offsetTop
-      const scrolls = this.getSumScrolls(this.props.scrollRef)
+      const offset = getSumOffset(this.props.scrollRef).offsetTop
+      const scrolls = getSumScroll(this.props.scrollRef)
       
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
@@ -196,31 +197,6 @@ export default class Item extends Component {
       }
     } else {
       return 0
-    }
-  }
-
-  getSumScrolls(node) {
-    if (node === document.body) {
-      return {scrollLeft: 0, scrollTop: 0}
-    } else {
-      const parent = this.getSumScrolls(node.parentNode)
-      return ({
-        scrollLeft: node.scrollLeft + parent.scrollLeft,
-        scrollTop: node.scrollTop + parent.scrollTop
-      })
-    }
-
-  }
-
-  getSumOffset(node) {
-    if (node === document.body) {
-      return {offsetLeft: 0, offsetTop: 0}
-    } else {
-      const parent = this.getSumOffset(node.offsetParent)
-      return ({
-        offsetLeft: node.offsetLeft + parent.offsetLeft,
-        offsetTop: node.offsetTop + parent.offsetTop
-      })
     }
   }
 
