@@ -485,6 +485,7 @@ export function calculateScrollCanvas(
   forceUpdateDimensions,
   items,
   groups,
+width,
   props,
   state
 ) {
@@ -513,7 +514,7 @@ export function calculateScrollCanvas(
         newState.canvasTimeStart,
         visibleTimeStart,
         visibleTimeEnd,
-        state.width,
+        width,
         props,
         state
       )
