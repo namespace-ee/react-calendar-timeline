@@ -485,6 +485,7 @@ visibleTimeEnd,
 forceUpdateDimensions,
 items,
 groups,
+width,
 props,
 state) {
   const oldCanvasTimeStart = state.canvasTimeStart
@@ -508,7 +509,7 @@ state) {
       newState.canvasTimeStart,
       visibleTimeStart,
       visibleTimeEnd,
-      state.width,
+      width,
       props,
       state
     ))

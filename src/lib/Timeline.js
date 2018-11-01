@@ -286,8 +286,9 @@ export default class ReactCalendarTimeline extends Component {
       )
     }
 
-    this.state = {
-      width: 1000,
+    const initState = {
+      containerWidth: 200,
+      width: 50,
 
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
@@ -305,25 +306,40 @@ export default class ReactCalendarTimeline extends Component {
     const { dimensionItems, height, groupHeights, groupTops } = stackItems(
       props.items,
       props.groups,
-      this.state.canvasTimeStart,
-      this.state.visibleTimeStart,
-      this.state.visibleTimeEnd,
-      this.state.width,
+      initState.canvasTimeStart,
+      initState.visibleTimeStart,
+      initState.visibleTimeEnd,
+      initState.width,
       this.props,
-      this.state
+      initState
     )
 
-    /* eslint-disable react/no-direct-mutation-state */
-    this.state.dimensionItems = dimensionItems
-    this.state.height = height
-    this.state.groupHeights = groupHeights
-    this.state.groupTops = groupTops
-
-    /* eslint-enable */
+    this.state = {
+      ...initState,
+      dimensionItems,
+      height,
+      groupHeights,
+      groupTops
+    }
   }
 
   componentDidMount() {
-    this.resize(this.props)
+    const newState = this.getResize(this.props)
+
+
+    // Object.assign(newState, 
+    //     stackItems(
+    //       this.state.items, 
+    //       this.state.groups, 
+    //       this.state.canvasTimeStart,
+    //       this.state.visibleTimeStart,
+    //       this.state.visibleTimeEnd,
+    //       newState.width,
+    //       this.props,
+    //       this.state)
+    // )
+
+    this.setState(newState)
 
     if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
       this.props.resizeDetector.addListener(this)
@@ -350,12 +366,17 @@ export default class ReactCalendarTimeline extends Component {
       groups
     } = nextProps
 
+    const width = prevState.containerWidth - nextProps.sidebarWidth - nextProps.rightSidebarWidth
+
     // This is a gross hack pushing items and groups in to state only to allow
     // For the forceUpdate check
-    let derivedState = {items, groups}
+    let derivedState = {items, groups, width}
 
     // if the items or groups have changed we must re-render
-    const forceUpdate = items !== prevState.items || groups !== prevState.groups
+    const forceUpdate =
+      items !== prevState.items ||
+      groups !== prevState.groups ||
+      width !== prevState.width
 
     // We are a controlled component
     if (visibleTimeStart && visibleTimeEnd) {
@@ -367,6 +388,7 @@ export default class ReactCalendarTimeline extends Component {
           forceUpdate,
           items,
           groups,
+          width,
           nextProps,
           prevState
       ))
@@ -378,7 +400,7 @@ export default class ReactCalendarTimeline extends Component {
           prevState.canvasTimeStart,
           prevState.visibleTimeStart,
           prevState.visibleTimeEnd,
-          prevState.width,
+          width,
           nextProps,
           prevState))
     }
@@ -387,10 +409,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.sidebarWidth !== prevProps.sidebarWidth || 
-      this.props.rightSidebarWidth !== prevProps.rightSidebarWidth) {
-      this.resize(this.props)
-    }
     const newZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const oldZoom = prevState.visibleTimeEnd - prevState.visibleTimeStart
     
@@ -416,42 +434,28 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  resize = (props = this.props) => {
+  getResize = (props) => {
     const {
       width: containerWidth,
       top: containerTop
     } = this.container.getBoundingClientRect()
-
-    let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
-    const { headerLabelGroupHeight, headerLabelHeight } = props
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
-
-    const { dimensionItems, height, groupHeights, groupTops } = stackItems(
-      props.items,
-      props.groups,
-      this.state.canvasTimeStart,
-      this.state.visibleTimeStart,
-      this.state.visibleTimeEnd,
-      width,
-      this.props,
-      this.state
-    )
+    const headerHeight = props.headerLabelGroupHeight + props.headerLabelHeight
 
     // this is needed by dragItem since it uses pageY from the drag events
     // if this was in the context of the scrollElement, this would not be necessary
     const topOffset = containerTop + window.pageYOffset + headerHeight
 
-    this.setState({
-      width,
+    return ({
+      containerWidth,
       topOffset,
-      dimensionItems,
-      height,
-      groupHeights,
-      groupTops
     })
+  }
+
+  resize = (props = this.props) => {
+    this.setState(this.getResize(props))
     
-    this.scrollComponent.scrollLeft = width
-    this.headerRef.scrollLeft = width
+    // this.scrollComponent.scrollLeft = width
+    // this.headerRef.scrollLeft = width
   }
   
   onScroll = scrollX => {
@@ -503,6 +507,7 @@ export default class ReactCalendarTimeline extends Component {
         forceUpdateDimensions, 
         items, 
         groups, 
+        this.state.width,
         this.props, 
         this.state))
   }
