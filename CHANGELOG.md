@@ -7,6 +7,34 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### 0.21.0
+
+#### fixes
+
+* fix item dimensions not being rendered on zoom in/out @ilaiwi + @acemac
+* correct `right_sidebar` to `rightTitle` in readme @maxlibin
+
+#### breaking changes
+
+* add `rct` to `.top-header` and `.bottom-header` to become `.rct-top-header` and `.rct-bottom-header` @Simek
+* upgrade dev dependance `react@16.3` @acemac
+
+### 0.20.0
+
+### improvements
+* eliminate extra renders on every scroll - #357 [acemac](https://github.com/acemac)
+
+### Fixed
+* When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline - #421 [kevinmanncito](https://github.com/kevinmanncito) [ilaiwi](https://github.com/ilaiwi)
+* Header has a bounce effect - #311 [acemac](https://github.com/acemac)
+
+####dev
+
+* update to `react-testing-library` version 5
+* remove deprecated `toBeInDom`
+
+
+
 ### 0.19.0
 
 ### Added
