@@ -166,6 +166,10 @@ Width of the right sidebar in pixels. If set to `0`, the right sidebar is not re
 
 Everything passed here will be displayed above the right sidebar. Use this to display small filters or so. Defaults to `null`.
 
+## rightSidebarStack
+
+Add option to allow to stick right sidebar stick with left sidebar.
+
 ## dragSnap
 
 Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When so, the items will snap to 15min intervals when dragging.
