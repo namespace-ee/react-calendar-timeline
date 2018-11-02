@@ -38,6 +38,7 @@ export default class ReactCalendarTimeline extends Component {
     sidebarContent: PropTypes.node,
     rightSidebarWidth: PropTypes.number,
     rightSidebarContent: PropTypes.node,
+    rightSidebarStack: PropTypes.bool,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
     stickyOffset: PropTypes.number,
@@ -162,6 +163,7 @@ export default class ReactCalendarTimeline extends Component {
   static defaultProps = {
     sidebarWidth: 150,
     rightSidebarWidth: 0,
+    rightSidebarStack: false,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
     stickyOffset: 0,
@@ -833,6 +835,7 @@ export default class ReactCalendarTimeline extends Component {
       <Header
         canvasTimeStart={canvasTimeStart}
         hasRightSidebar={this.props.rightSidebarWidth > 0}
+        isRightSidebarStack={this.props.rightSidebarStack}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
         minUnit={minUnit}
@@ -946,6 +949,7 @@ export default class ReactCalendarTimeline extends Component {
       headerLabelHeight,
       sidebarWidth,
       rightSidebarWidth,
+      rightSidebarStack,
       timeSteps,
       traditionalZoom
     } = this.props
@@ -1012,6 +1016,7 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelHeight
             )}
             {sidebarWidth > 0 && this.sidebar(height, groupHeights, headerHeight)}
+            {rightSidebarStack && rightSidebarWidth > 0 && this.rightSidebar(height, groupHeights, headerHeight)}
             <div style={{display: 'inline-block'}}>
 
               <div style={outerComponentStyle} className="rct-outer">
@@ -1068,7 +1073,7 @@ export default class ReactCalendarTimeline extends Component {
               </ScrollElement>
               </div>
             </div>
-            {rightSidebarWidth > 0 && this.rightSidebar(height, groupHeights, headerHeight)}
+            {!rightSidebarStack && rightSidebarWidth > 0 && this.rightSidebar(height, groupHeights, headerHeight)}
           </div>
         </TimelineMarkersProvider>
       </TimelineStateProvider>

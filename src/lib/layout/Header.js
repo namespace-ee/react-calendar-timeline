@@ -34,6 +34,7 @@ class Header extends Component {
       headerRef,
       scrollHeaderRef,
       hasRightSidebar,
+      isRightSidebarStack,
       showPeriod,
       canvasTimeStart,
       canvasTimeEnd,
@@ -82,6 +83,8 @@ class Header extends Component {
         style={headerStyle}
       >
         {leftSidebar}
+
+        {isRightSidebarStack && rightSidebar}
         <div style={{ width }} data-testid="timeline-elements-header-container">
           <TimelineElementsHeader
             data-testid="timeline-elements-header"
@@ -101,7 +104,7 @@ class Header extends Component {
 
           />
         </div>
-        {rightSidebar}
+        {!isRightSidebarStack && rightSidebar}
       </div>
     )
   }

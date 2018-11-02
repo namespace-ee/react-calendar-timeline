@@ -171,6 +171,9 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
+        rightSidebarWidth={150}
+        rightSidebarContent={"right sidebar"}
+        rightSidebarStack={true}
       >
         <TimelineMarkers>
           <TodayMarker />
