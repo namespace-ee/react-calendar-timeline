@@ -1212,13 +1212,13 @@ rightSidebarWidth={150}
 rightSidebarContent={<p>Second filter</p>}
 ```
 
-And add `right_sidebar` prop to the groups objects:
+And add `rightTitle` prop to the groups objects:
 
 ```js
 {
   id: 1,
   title: 'group 1',
-  right_sidebar: 'additional info about group 1'
+  rightTitle: 'additional info about group 1'
 }
 ```
 
