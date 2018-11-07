@@ -15,7 +15,9 @@ import {
   selectedAndCanResizeLeft,
   selectedAndCanResizeLeftAndDragLeft,
   selectedAndCanResizeRight,
-  selectedAndCanResizeRightAndDragRight
+  selectedAndCanResizeRightAndDragRight,
+  leftResizeStyle,
+  rightResizeStyle
 } from './styles'
 export default class Item extends Component {
   // removed prop type check for SPEED!
@@ -542,12 +544,12 @@ export default class Item extends Component {
       left: {
         ref: this.getDragLeftRef,
         className: leftName,
-        style: props.leftStyle
+        style: Object.assign({}, leftResizeStyle, props.leftStyle)
       },
       right: {
         ref: this.getDragRightRef,
         className: rightName,
-        style: props.rightStyle
+        style: Object.assign({}, rightResizeStyle, props.rightStyle)
       }
     }
   }
