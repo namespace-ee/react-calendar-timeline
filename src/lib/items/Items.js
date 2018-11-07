@@ -52,7 +52,6 @@ export default class Items extends Component {
     selected: PropTypes.array,
 
     dimensionItems: PropTypes.array,
-    topOffset: PropTypes.number,
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
     scrollRef: PropTypes.object
@@ -78,8 +77,7 @@ export default class Items extends Component {
       nextProps.canChangeGroup === this.props.canChangeGroup &&
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
-      nextProps.canSelect === this.props.canSelect &&
-      nextProps.topOffset === this.props.topOffset
+      nextProps.canSelect === this.props.canSelect     
     )
   }
 
@@ -152,7 +150,6 @@ export default class Items extends Component {
                   : this.props.canSelect
               }
               useResizeHandle={this.props.useResizeHandle}
-              topOffset={this.props.topOffset}
               groupTops={this.props.groupTops}
               canvasTimeStart={this.props.canvasTimeStart}
               canvasTimeEnd={this.props.canvasTimeEnd}

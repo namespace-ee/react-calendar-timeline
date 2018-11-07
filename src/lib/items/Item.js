@@ -51,7 +51,6 @@ export default class Item extends Component {
 
     itemProps: PropTypes.object,
     canSelect: PropTypes.bool,
-    topOffset: PropTypes.number,
     dimensions: PropTypes.object,
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
@@ -110,7 +109,6 @@ export default class Item extends Component {
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
       nextProps.canSelect !== this.props.canSelect ||
-      nextProps.topOffset !== this.props.topOffset ||
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
