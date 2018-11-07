@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* fix scroll left/right causes item move/edit to be at incorrect time #401 @acemac 
+* now `getResizeProps` take `leftClassName` and `rightClassName` and returns className for left and right props @acemac 
+
 ### 0.21.0
 
 #### fixes
