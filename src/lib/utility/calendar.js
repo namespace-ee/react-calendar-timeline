@@ -64,7 +64,7 @@ export function iterateTimes(start, end, unit, timeSteps, callback) {
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
     let value = time.get(unit)
-    time.set(unit, value - value % timeSteps[unit])
+    time.set(unit, value - (value % timeSteps[unit]))
   }
 
   while (time.valueOf() < end) {
@@ -501,11 +501,12 @@ export function calculateScrollCanvas(
 ) {
   const oldCanvasTimeStart = state.canvasTimeStart
   const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
-
+  const newZoom = visibleTimeEnd - visibleTimeStart
   const newState = { visibleTimeStart, visibleTimeEnd }
 
   // Check if the current canvas covers the new times
   const canKeepCanvas =
+    newZoom === oldZoom &&
     visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
     visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
     visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
