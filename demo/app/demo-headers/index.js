@@ -53,11 +53,12 @@ export default class App extends Component {
       defaultTimeStart,
       defaultTimeEnd,
       format: false,
+      showHeaders: false
     }
   }
 
   handleClick = () => {
-    this.setState({format: true})
+    this.setState({ format: true })
   }
 
   handleCanvasClick = (groupId, time) => {
@@ -150,204 +151,231 @@ export default class App extends Component {
     return time
   }
 
+  handleClickChangeHeaders = () => {
+    this.setState(state => ({
+      showHeaders: !state.showHeaders
+    }))
+  }
+
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
     return (
       <div>
         <button onClick={this.handleClick}>format</button>
-      <Timeline
-        groups={groups}
-        items={items}
-        keys={keys}
-        sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
-        canMove
-        canResize="right"
-        canSelect
-        itemsSorted
-        itemTouchSendsClick={false}
-        stackItems
-        itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
-        onCanvasContextMenu={this.handleCanvasContextMenu}
-        onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
-        onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
-        onItemResize={this.handleItemResize}
-        onItemDoubleClick={this.handleItemDoubleClick}
-        onTimeChange={this.handleTimeChange}
-        moveResizeValidator={this.moveResizeValidator}
-        rightSidebarWidth={150}
-        rightSidebarContent={<div>Above The Right</div>}
-      >
-        <TimelineHeaders className="header-background">
-          <SidebarHeader>
-            {({ getRootProps }) => {
-              console.log('left')
-              return <div {...getRootProps()}>Left</div>
-            }}
-          </SidebarHeader>
-          <SidebarHeader variant="right">
-            {({ getRootProps }) => {
-              return <div {...getRootProps()}>Right</div>
-            }}
-          </SidebarHeader>
-          <DateHeader labelFormat={this.state.format? "d": undefined} primaryHeader />
-          <DateHeader style={{ height: 50 }} />
-          <CustomHeader unit="year" props={{hey: 'you'}}>
-            {({
-              headerContext: { intervals },
-              getRootProps,
-              getIntervalProps,
-              showPeriod
-            }, props) => {
-              console.log("props", props)
-              return (
-                <div {...getRootProps({ style: { height: 30 } })}>
-                  {intervals.map(interval => {
-                    const intervalStyle = {
-                      // height: 30,
-                      lineHeight: '30px',
-                      textAlign: 'center',
-                      borderLeft: '1px solid black',
-                      cursor: 'pointer',
-                      backgroundColor: 'Turquoise',
-                      color: 'white'
-                    }
-                    return (
-                      <div
-                        onClick={() => {
-                          showPeriod(interval.startTime, interval.endTime)
-                        }}
-                        {...getIntervalProps({
-                          interval,
-                          style: intervalStyle
-                        })}
-                      >
-                        <div className="sticky">
-                          {interval.startTime.format('YYYY')}
+        <button onClick={this.handleClickChangeHeaders}>add headers</button>
+        <Timeline
+          groups={groups}
+          items={items}
+          keys={keys}
+          sidebarWidth={150}
+          sidebarContent={<div>Above The Left</div>}
+          canMove
+          canResize="right"
+          canSelect
+          itemsSorted
+          itemTouchSendsClick={false}
+          stackItems
+          itemHeightRatio={0.75}
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+          onCanvasClick={this.handleCanvasClick}
+          onCanvasDoubleClick={this.handleCanvasDoubleClick}
+          onCanvasContextMenu={this.handleCanvasContextMenu}
+          onItemClick={this.handleItemClick}
+          onItemSelect={this.handleItemSelect}
+          onItemContextMenu={this.handleItemContextMenu}
+          onItemMove={this.handleItemMove}
+          onItemResize={this.handleItemResize}
+          onItemDoubleClick={this.handleItemDoubleClick}
+          onTimeChange={this.handleTimeChange}
+          // moveResizeValidator={this.moveResizeValidator}
+          rightSidebarWidth={150}
+          rightSidebarContent={<div>Above The Right</div>}
+        >
+          <TimelineHeaders className="header-background">
+            <SidebarHeader>
+              {({ getRootProps }) => {
+                console.log('left')
+                return <div {...getRootProps()}>Left</div>
+              }}
+            </SidebarHeader>
+            <SidebarHeader variant="right">
+              {({ getRootProps }) => {
+                return <div {...getRootProps()}>Right</div>
+              }}
+            </SidebarHeader>
+            <DateHeader
+              labelFormat={this.state.format ? 'd' : undefined}
+              primaryHeader
+            />
+            <DateHeader style={{ height: 50 }} />
+            <CustomHeader unit="year" props={{ hey: 'you' }}>
+              {(
+                {
+                  headerContext: { intervals },
+                  getRootProps,
+                  getIntervalProps,
+                  showPeriod
+                },
+                props
+              ) => {
+                console.log('props', props)
+                return (
+                  <div {...getRootProps({ style: { height: 30 } })}>
+                    {intervals.map(interval => {
+                      const intervalStyle = {
+                        // height: 30,
+                        lineHeight: '30px',
+                        textAlign: 'center',
+                        borderLeft: '1px solid black',
+                        cursor: 'pointer',
+                        backgroundColor: 'Turquoise',
+                        color: 'white'
+                      }
+                      return (
+                        <div
+                          onClick={() => {
+                            showPeriod(interval.startTime, interval.endTime)
+                          }}
+                          {...getIntervalProps({
+                            interval,
+                            style: intervalStyle
+                          })}
+                        >
+                          <div className="sticky">
+                            {interval.startTime.format('YYYY')}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )
-            }}
-          </CustomHeader>
-          <CustomHeader unit="week">
-            {({
-              headerContext: { intervals },
-              getRootProps,
-              getIntervalProps,
-              showPeriod
-            }) => {
-              return (
-                <div {...getRootProps({ style: { height: 30 } })}>
-                  {intervals.map(interval => {
-                    const intervalStyle = {
-                      // height: 30,
-                      lineHeight: '30px',
-                      textAlign: 'center',
-                      borderLeft: '1px solid black',
-                      cursor: 'pointer',
-                      backgroundColor: 'indianred',
-                      color: 'white'
-                    }
-                    return (
-                      <div
-                        onClick={() => {
-                          showPeriod(interval.startTime, interval.endTime)
-                        }}
-                        {...getIntervalProps({
-                          interval,
-                          style: intervalStyle
-                        })}
-                      >
-                        <div className="sticky">
-                          {interval.startTime.format('MM/DD')}
+                      )
+                    })}
+                  </div>
+                )
+              }}
+            </CustomHeader>
+            <CustomHeader unit="week">
+              {({
+                headerContext: { intervals },
+                getRootProps,
+                getIntervalProps,
+                showPeriod
+              }) => {
+                return (
+                  <div {...getRootProps({ style: { height: 30 } })}>
+                    {intervals.map(interval => {
+                      const intervalStyle = {
+                        // height: 30,
+                        lineHeight: '30px',
+                        textAlign: 'center',
+                        borderLeft: '1px solid black',
+                        cursor: 'pointer',
+                        backgroundColor: 'indianred',
+                        color: 'white'
+                      }
+                      return (
+                        <div
+                          onClick={() => {
+                            showPeriod(interval.startTime, interval.endTime)
+                          }}
+                          {...getIntervalProps({
+                            interval,
+                            style: intervalStyle
+                          })}
+                        >
+                          <div className="sticky">
+                            {interval.startTime.format('MM/DD')}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )
-            }}
-          </CustomHeader>
-          <CustomHeader>
-            {({
-              headerContext: { intervals },
-              getRootProps,
-              getIntervalProps,
-              showPeriod
-            }) => {
-              return (
-                <div {...getRootProps({ style: { height: 30 } })}>
-                  {intervals.map(interval => {
-                    const intervalStyle = {
-                      lineHeight: '30px',
-                      textAlign: 'center',
-                      borderLeft: '1px solid black',
-                      cursor: 'pointer'
-                    }
-                    return (
-                      <div
-                        onClick={() => {
-                          showPeriod(interval.startTime, interval.endTime)
-                        }}
-                        {...getIntervalProps({
-                          interval,
-                          style: intervalStyle
-                        })}
-                      >
-                        {interval.startTime.format('HH')}
-                      </div>
-                    )
-                  })}
-                </div>
-              )
-            }}
-          </CustomHeader>
-          <DateHeader
-            unit="week"
-            labelFormat="MM/DD"
-            style={{ height: 50 }}
-            props={{hey: 'date header'}}
-            intervalRenderer={({ getIntervalProps, intervalContext }, props) => {
-              console.log("intervalRenderer props", props)
-              return <div {...getIntervalProps()}>
-                {intervalContext.intervalText}
-              </div>
-            }}
-          />
-        </TimelineHeaders>
-        <TimelineMarkers>
-          <TodayMarker />
-          <CustomMarker
-            date={
-              moment()
-                .startOf('day')
-                .valueOf() +
-              1000 * 60 * 60 * 2
-            }
-          />
-          <CustomMarker
-            date={moment()
-              .add(3, 'day')
-              .valueOf()}
-          >
-            {({ styles }) => {
-              const newStyles = { ...styles, backgroundColor: 'blue' }
-              return <div style={newStyles} />
-            }}
-          </CustomMarker>
-          <CursorMarker />
-        </TimelineMarkers>
-      </Timeline>
+                      )
+                    })}
+                  </div>
+                )
+              }}
+            </CustomHeader>
+            <CustomHeader>
+              {({
+                headerContext: { intervals },
+                getRootProps,
+                getIntervalProps,
+                showPeriod
+              }) => {
+                return (
+                  <div {...getRootProps({ style: { height: 30 } })}>
+                    {intervals.map(interval => {
+                      const intervalStyle = {
+                        lineHeight: '30px',
+                        textAlign: 'center',
+                        borderLeft: '1px solid black',
+                        cursor: 'pointer'
+                      }
+                      return (
+                        <div
+                          onClick={() => {
+                            showPeriod(interval.startTime, interval.endTime)
+                          }}
+                          {...getIntervalProps({
+                            interval,
+                            style: intervalStyle
+                          })}
+                        >
+                          {interval.startTime.format('HH')}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+              }}
+            </CustomHeader>
+            <DateHeader
+              unit="week"
+              labelFormat="MM/DD"
+              style={{ height: 50 }}
+              props={{ hey: 'date header' }}
+              intervalRenderer={(
+                { getIntervalProps, intervalContext },
+                props
+              ) => {
+                console.log('intervalRenderer props', props)
+                return (
+                  <div {...getIntervalProps()}>
+                    {intervalContext.intervalText}
+                  </div>
+                )
+              }}
+            />
+            {this.state.showHeaders
+              ? [
+                  <DateHeader
+                    labelFormat={this.state.format ? 'd' : undefined}
+                    primaryHeader
+                  />,
+                  <DateHeader style={{ height: 50 }} />
+                ]
+              : null}
+          </TimelineHeaders>
+          <TimelineMarkers>
+            <TodayMarker />
+            <CustomMarker
+              date={
+                moment()
+                  .startOf('day')
+                  .valueOf() +
+                1000 * 60 * 60 * 2
+              }
+            />
+            <CustomMarker
+              date={moment()
+                .add(3, 'day')
+                .valueOf()}
+            >
+              {({ styles }) => {
+                const newStyles = { ...styles, backgroundColor: 'blue' }
+                return <div style={newStyles} />
+              }}
+            </CustomMarker>
+            <CursorMarker />
+          </TimelineMarkers>
+        </Timeline>
       </div>
     )
   }

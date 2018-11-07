@@ -431,11 +431,15 @@ export function stackItems(
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
 
+
   let dimensionItems = visibleItems.reduce((memo, item) => {
     const itemId = _get(item, keys.itemIdKey)
     const isDragging = itemId === draggingItem
     const isResizing = itemId === resizingItem
 
+    if (!groupOrders[_get(item, keys.itemGroupKey)]) {
+      return memo;
+    }
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),
       itemTimeEnd: _get(item, keys.itemTimeEndKey),
