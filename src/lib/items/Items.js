@@ -4,7 +4,7 @@ import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
 import { _get, arraysEqual, keyBy } from '../utility/generic'
-import { getGroupOrders } from '../utility/calendar'
+import { getGroupOrders, getVisibleItems } from '../utility/calendar'
 
 const canResizeLeft = (item, canResize) => {
   const value =
@@ -98,20 +98,31 @@ export default class Items extends Component {
     }
   }
 
+  getVisibleItems(canvasTimeStart, canvasTimeEnd) {
+    const { keys, items } = this.props
+
+    return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
+  }
+
   render() {
     const {
+      canvasTimeStart,
+      canvasTimeEnd,
       dimensionItems,
-      items
     } = this.props
     const { itemIdKey, itemGroupKey } = this.props.keys
 
     const groupOrders = this.getGroupOrders()
-
+    const visibleItems = this.getVisibleItems(
+      canvasTimeStart,
+      canvasTimeEnd,
+      groupOrders
+    )
     const sortedDimensionItems = keyBy(dimensionItems, 'id')
 
     return (
       <div className="rct-items">
-        {items
+        {visibleItems
           .filter(item => sortedDimensionItems[_get(item, itemIdKey)])
           .map(item => (
             <Item
