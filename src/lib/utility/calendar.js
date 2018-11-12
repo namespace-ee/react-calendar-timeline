@@ -256,7 +256,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
   var groupTops = []
 
   var groupedItems = getGroupedItems(items, groupOrders)
-
+  console.log(items, groupOrders, lineHeight, groups, groupedItems)
   groupedItems.forEach(function(group) {
     var groupVal = groups[k++]
 
@@ -418,7 +418,7 @@ export function stackItems(
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
 
-
+  
   let dimensionItems = visibleItems.reduce((memo, item) => {
     const itemId = _get(item, keys.itemIdKey)
     const isDragging = itemId === draggingItem
@@ -454,7 +454,7 @@ export function stackItems(
 
     return memo
   }, [])
-
+  
   const stackingMethod = stackItems ? stack : nostack
   // Get a new array of groupOrders holding the stacked items
   const { height, groupHeights, groupTops } = stackingMethod(
@@ -464,7 +464,6 @@ export function stackItems(
     groups
   )
   
-  console.log(dimensionItems, height, groupHeights, groupTops)
   return { dimensionItems, height, groupHeights, groupTops }
 }
 

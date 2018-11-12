@@ -32,42 +32,44 @@ class ItemHeader extends React.PureComponent {
   }
 
   render() {
-    const {keys, items} = this.props
+    const { keys, items } = this.props
     const order = getGroupOrders(groups, keys)
-    console.log(this.props.items, order)
-    const itemDimensions = this.props.items
-      .map(item =>
-        calculateDimensions({
-          itemTimeStart: _get(item, this.props.keys.itemTimeStartKey),
-          itemTimeEnd: _get(item, this.props.keys.itemTimeEndKey),
-          canvasTimeStart: this.props.canvasTimeStart,
-          canvasTimeEnd: this.props.canvasTimeEnd,
-          canvasWidth: this.props.canvasWidth,
-          dragTime: null,
-          isDragging: false,
-          isResizing: false,
-          resizeTime: null,
-          resizingEdge: null
-        })
-      )
-      .map(item => ({
-        id: _get(item, this.props.keys.itemIdKey),
+    const itemDimensions = this.props.items.map(item => {
+      const itemDimension = calculateDimensions({
+        itemTimeStart: _get(item, this.props.keys.itemTimeStartKey),
+        itemTimeEnd: _get(item, this.props.keys.itemTimeEndKey),
+        canvasTimeStart: this.props.canvasTimeStart,
+        canvasTimeEnd: this.props.canvasTimeEnd,
+        canvasWidth: this.props.canvasWidth,
+        dragTime: null,
+        isDragging: false,
+        isResizing: false,
+        resizeTime: null,
+        resizingEdge: null
+      })
+
+      return {
+        id: _get(item, keys.itemIdKey),
         dimensions: {
-          ...item,
+          ...itemDimension,
           order: 0,
-          top: null
+          top: null,
+          stack : false,
+          height : 30,
+          isDragging : false,
         }
-      }))
+      }
+    })
 
     const stackingMethod = true ? stack : nostack
     //Get a new array of groupOrders holding the stacked items
     const { height, groupHeights, groupTops } = stackingMethod(
       itemDimensions,
       order,
-      60,
-      groups
+      30,
+      groups,
     )
-    console.log(height, groupHeights, groupTops)
+    console.log(itemDimensions, height, groupHeights, groupTops)
     return (
       <CustomHeader>
         {({ getRootProps }) => {

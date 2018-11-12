@@ -39,7 +39,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(2, 5, 1)
+    const { groups, items } = generateFakeData(1, 5, 1)
     const { groups: headerGroup, items: headerItems } = generateFakeData(1, 5, 1)
     console.log(headerGroup)
     const defaultTimeStart = moment()
@@ -179,7 +179,6 @@ export default class App extends Component {
           canSelect
           itemsSorted
           itemTouchSendsClick={false}
-          stackItems
           itemHeightRatio={0.75}
           defaultTimeStart={defaultTimeStart}
           defaultTimeEnd={defaultTimeEnd}
