@@ -437,9 +437,6 @@ export function stackItems(
     const isDragging = itemId === draggingItem
     const isResizing = itemId === resizingItem
 
-    if (!groupOrders[_get(item, keys.itemGroupKey)]) {
-      return memo;
-    }
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),
       itemTimeEnd: _get(item, keys.itemTimeEndKey),
