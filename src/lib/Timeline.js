@@ -983,6 +983,7 @@ export default class ReactCalendarTimeline extends Component {
         showPeriod={this.showPeriod}
         timelineUnit={minUnit}
         timelineWidth={this.state.width}
+        keys={this.props.keys}
       >
         <TimelineMarkersProvider>
           <TimelineHeadersProvider

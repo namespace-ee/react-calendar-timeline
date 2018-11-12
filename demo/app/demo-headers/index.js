@@ -10,7 +10,8 @@ import Timeline, {
   SidebarHeader,
   CustomHeader,
   TimelineHeaders,
-  DateHeader
+  DateHeader,
+  ItemHeader,
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -38,7 +39,9 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData()
+    const { groups, items } = generateFakeData(2, 5, 1)
+    const { groups: headerGroup, items: headerItems } = generateFakeData(1, 5, 1)
+    console.log(headerGroup)
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
@@ -53,7 +56,8 @@ export default class App extends Component {
       defaultTimeStart,
       defaultTimeEnd,
       format: false,
-      showHeaders: false
+      showHeaders: false,
+      headerItems,
     }
   }
 
@@ -196,7 +200,6 @@ export default class App extends Component {
           <TimelineHeaders className="header-background">
             <SidebarHeader>
               {({ getRootProps }) => {
-                console.log('left')
                 return <div {...getRootProps()}>Left</div>
               }}
             </SidebarHeader>
@@ -205,6 +208,7 @@ export default class App extends Component {
                 return <div {...getRootProps()}>Right</div>
               }}
             </SidebarHeader>
+            <ItemHeader items={this.state.headerItems}/>
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
               primaryHeader
@@ -220,7 +224,6 @@ export default class App extends Component {
                 },
                 props
               ) => {
-                console.log('props', props)
                 return (
                   <div {...getRootProps({ style: { height: 30 } })}>
                     {intervals.map(interval => {
@@ -335,7 +338,6 @@ export default class App extends Component {
                 { getIntervalProps, intervalContext },
                 props
               ) => {
-                console.log('intervalRenderer props', props)
                 return (
                   <div {...getIntervalProps()}>
                     {intervalContext.intervalText}

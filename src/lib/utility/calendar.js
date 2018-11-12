@@ -459,7 +459,6 @@ export function stackItems(
   }, [])
 
   const stackingMethod = stackItems ? stack : nostack
-
   // Get a new array of groupOrders holding the stacked items
   const { height, groupHeights, groupTops } = stackingMethod(
     dimensionItems,
@@ -467,7 +466,8 @@ export function stackItems(
     lineHeight,
     groups
   )
-
+  
+  console.log(dimensionItems, height, groupHeights, groupTops)
   return { dimensionItems, height, groupHeights, groupTops }
 }
 
