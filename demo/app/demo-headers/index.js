@@ -39,7 +39,8 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(1, 5, 1)
+    const { groups, items } = generateFakeData()
+    const {items: headerItems } = generateFakeData(2, 5, 1)
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
@@ -54,7 +55,8 @@ export default class App extends Component {
       defaultTimeStart,
       defaultTimeEnd,
       format: false,
-      showHeaders: false
+      showHeaders: false,
+      headerItems,
     }
   }
 
@@ -206,7 +208,7 @@ export default class App extends Component {
               }}
             </SidebarHeader>
             <ItemHeader
-              items={items}
+              items={this.state.headerItems}
               itemRenderer={({ item, getRootProps }) => {
                 return (
                   <div
@@ -222,7 +224,7 @@ export default class App extends Component {
                 )
               }}
             />
-            <ItemHeader items={items} stackItems />
+            <ItemHeader items={this.state.headerItems} stackItems />
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
               primaryHeader

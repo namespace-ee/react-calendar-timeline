@@ -248,7 +248,7 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
 }
 
 export function stack(items, groupOrders, lineHeight, groups) {
-  console.log("stack begin", JSON.stringify(items[0]))
+
   var i, iMax
   var k = 0
   var totalHeight = 0
@@ -310,7 +310,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
       totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
     }
   })
-  console.log("stack", JSON.stringify(groupHeights), JSON.stringify(items[0]))
+  
   return {
     height: totalHeight,
     groupHeights,
@@ -355,7 +355,7 @@ export function nostack(items, groupOrders, lineHeight, groups) {
       totalHeight += Math.max(groupHeight, lineHeight)
     }
   })
-  console.log("nostack")
+
   return {
     height: totalHeight,
     groupHeights,
@@ -456,7 +456,6 @@ export function stackItems(
     return memo
   }, [])
 
-  console.log("util")  
   const stackingMethod = stackItems ? stack : nostack
   // Get a new array of groupOrders holding the stacked items
   const { height, groupHeights, groupTops } = stackingMethod(
