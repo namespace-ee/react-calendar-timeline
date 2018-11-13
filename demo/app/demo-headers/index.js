@@ -11,7 +11,7 @@ import Timeline, {
   CustomHeader,
   TimelineHeaders,
   DateHeader,
-  ItemHeader,
+  ItemHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -40,8 +40,6 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData(1, 5, 1)
-    const { groups: headerGroup, items: headerItems } = generateFakeData(1, 5, 1)
-    console.log(headerGroup)
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
@@ -56,8 +54,7 @@ export default class App extends Component {
       defaultTimeStart,
       defaultTimeEnd,
       format: false,
-      showHeaders: false,
-      headerItems,
+      showHeaders: false
     }
   }
 
@@ -195,6 +192,7 @@ export default class App extends Component {
           // moveResizeValidator={this.moveResizeValidator}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
+          stackItems
         >
           <TimelineHeaders className="header-background">
             <SidebarHeader>
@@ -207,7 +205,24 @@ export default class App extends Component {
                 return <div {...getRootProps()}>Right</div>
               }}
             </SidebarHeader>
-            <ItemHeader items={this.state.headerItems}/>
+            <ItemHeader
+              items={items}
+              itemRenderer={({ item, getRootProps }) => {
+                return (
+                  <div
+                    {...getRootProps({
+                      style: {
+                        border: '1px solid black',
+                        color: 'white'
+                      }
+                    })}
+                  >
+                    {item.title}
+                  </div>
+                )
+              }}
+            />
+            <ItemHeader items={items} stackItems />
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
               primaryHeader

@@ -37,7 +37,7 @@ export default class GroupRows extends Component {
       onRowContextClick,
     } = this.props
     let lines = []
-
+    console.log("GroupRows",JSON.stringify(groupHeights))
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <GroupRow
