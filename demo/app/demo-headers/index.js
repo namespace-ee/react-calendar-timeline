@@ -208,6 +208,10 @@ export default class App extends Component {
               }}
             </SidebarHeader>
             <ItemHeader
+              className="custom-class"
+              style={{
+                backgroundColor: "blue"
+              }}
               items={this.state.headerItems}
               itemRenderer={({ item, getRootProps }) => {
                 return (

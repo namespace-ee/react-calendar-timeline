@@ -128,7 +128,7 @@ class ItemHeader extends React.PureComponent {
       <CustomHeader>
         {({ getRootProps }) => {
           return (
-            <div {...getRootProps({ style: { height: height } })}>
+            <div className={this.props.className} {...getRootProps({ style: this.getRootStyles(height) })}>
               {items.map(item => {
                 const itemId = _get(item, keys.itemIdKey)
                 const dimensions = itemDimensions.find(
@@ -147,6 +147,13 @@ class ItemHeader extends React.PureComponent {
         }}
       </CustomHeader>
     )
+  }
+
+  getRootStyles(height) {
+    return { 
+      ...this.props.style,
+      height, 
+    };
   }
 }
 
