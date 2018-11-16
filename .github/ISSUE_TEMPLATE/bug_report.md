@@ -10,7 +10,7 @@ A clear and concise description of what the bug is.
 
 _Please provide one or both of the following:_
 
-Code (If you have a branch somewhere that shows your issue) or link to codesandbox example. [Here's a base template for this library](https://codesandbox.io/s/lyjr9p0119):
+Code (If you have a branch somewhere that shows your issue) or link to codesandbox example. [Here's a base template for this library](https://codesandbox.io/s/w6xvqzno4w):
 
 OR
 
