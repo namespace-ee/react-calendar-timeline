@@ -9,6 +9,7 @@ var keys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
+  groupLabelKey: 'label',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
@@ -105,7 +106,7 @@ export default class App extends Component {
         sidebarContent={<div>Above The Left</div>}
         rightSidebarWidth={150}
         rightSidebarContent={<div>Above The Right</div>}
-        canMove
+        canMove={true}
         canResize="right"
         canSelect
         itemsSorted

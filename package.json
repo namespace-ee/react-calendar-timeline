@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -49,7 +49,7 @@
       "url": "https://github.com/dkarnutsch"
     },
     {
-      "name":"Alex Maclean",
+      "name": "Alex Maclean",
       "url": "https://github.com/acemac"
     },
     {

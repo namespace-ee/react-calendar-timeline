@@ -7,6 +7,13 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Fixed
+
+* Provided a new key `groupLabelKey` to allow splitting of the key used to render the Sidebar and the InfoLabel visible during drag operations. `groupTitleKey` continues to be used to render the Sidebar. #442 @thiagosatoshi
+* fix scroll left/right causes item move/edit to be at incorrect time #401 @acemac 
+* now `getResizeProps` take `leftClassName` and `rightClassName` and returns className for left and right props @acemac 
+* fix functionality of `itemTitle` and `itemDivTitle` [issue](https://github.com/namespace-ee/react-calendar-timeline/issues/429#issuecomment-426456693) @acemac 
+
 ### 0.21.0
 
 #### fixes

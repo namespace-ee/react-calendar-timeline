@@ -141,12 +141,13 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
+  groupLabelKey: 'title', // key for what to show in `InfoLabel`
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
   itemGroupKey: 'group',
   itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time'
+  itemTimeEndKey: 'end_time',
 }
 ```
 
@@ -511,16 +512,20 @@ Rather than applying props on the element yourself and to avoid your props being
 * `getResizeProps` returns the props you should apply to the left and right resize handlers only if `useResizeHandle` set to true. The returned object has the props for the left element under property `left` and the props to be applied to the right element under `right` :
 
   * left
-    * ref: function to get element referance
+    * ref: function to get element reference
     * style: style to be applied to the left element
+    * className: class names to be applied to left className
   * right
-    * ref: function to get element referance
+    * ref: function to get element reference
     * style: style to be applied to the right element
+    * className: class names to be applied to left className
 
-These properties can be override using the prop argument with proprties:
+These properties can be override using the prop argument with properties:
 
 * leftStyle: style to be added to left style
 * rightStyle: style to be added to right style
+* leftClassName: classes to be added to left handler
+* rightClassName: classes to be added to right handler
 
 example
 
