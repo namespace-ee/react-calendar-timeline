@@ -3,8 +3,7 @@ import { TimelineStateConsumer } from '../../timeline/TimelineStateContext'
 import CustomHeader from '../CustomHeader'
 import PropTypes from 'prop-types'
 import {
-  stack,
-  nostack,
+  stackAll,
   getGroupOrders
 } from '../../utility/calendar'
 import { _get } from '../../utility/generic'
@@ -105,7 +104,7 @@ class ItemHeader extends React.PureComponent {
         id: _get(item, keys.itemIdKey),
         dimensions: {
           ...itemDimension,
-          order: 0,
+          order: {"index":0,"group":groups[0]},          
           top: null,
           stack: stackItems,
           height: itemHeight,
@@ -116,9 +115,7 @@ class ItemHeader extends React.PureComponent {
 
     console.log(itemDimensions)
 
-    const stackingMethod = stackItems ? stack : nostack
-    //Get a new array of groupOrders holding the stacked items
-    const { height } = stackingMethod(itemDimensions, order, itemHeight, groups)
+    const { height } = stackAll(itemDimensions, order, itemHeight, groups)
 
     return (
       <CustomHeader>

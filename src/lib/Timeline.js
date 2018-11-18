@@ -15,8 +15,8 @@ import windowResizeDetector from '../resize-detector/window'
 import {
   getMinUnit,
   stackItems,
-  calculateScrollCanvas,
-  calculateTimeForXPosition
+  calculateTimeForXPosition,
+  calculateScrollCanvas
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -88,6 +88,7 @@ export default class ReactCalendarTimeline extends Component {
     keys: PropTypes.shape({
       groupIdKey: PropTypes.string,
       groupTitleKey: PropTypes.string,
+      groupLabelKey: PropTypes.string,
       groupRightTitleKey: PropTypes.string,
       itemIdKey: PropTypes.string,
       itemTitleKey: PropTypes.string,
@@ -638,7 +639,7 @@ export default class ReactCalendarTimeline extends Component {
       draggingItem: item,
       dragTime: dragTime,
       newGroupOrder: newGroupOrder,
-      dragGroupTitle: newGroup ? _get(newGroup, keys.groupTitleKey) : ''
+      dragGroupTitle: newGroup ? _get(newGroup, keys.groupLabelKey) : ''
     })
   }
 
