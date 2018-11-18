@@ -216,7 +216,7 @@ export function getGroupOrders(groups, keys) {
  * @param {*} items list of all items
  * @param {*} groupOrders the result of getGroupOrders
  */
-function getGroupedItems(items, groupOrders) {
+export function getGroupedItems(items, groupOrders) {
   var groupedItems = {}
   var keys = Object.keys(groupOrders)
   // Initialize with result object for each group

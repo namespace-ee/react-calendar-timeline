@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stackItems work as expected 1`] = `
+Object {
+  "dimensionItems": Array [
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540540000000,
+        "collisionWidth": 6803877,
+        "height": 22.5,
+        "isDragging": false,
+        "left": 4347.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 236.24572916666668,
+      },
+      "id": "0",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540570000000,
+        "collisionWidth": 14875919,
+        "height": 22.5,
+        "isDragging": false,
+        "left": 5388.888888888889,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 516.5249652777778,
+      },
+      "id": "1",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540620000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "isDragging": false,
+        "left": 7125,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 708.2481944444445,
+      },
+      "id": "2",
+    },
+  ],
+  "groupHeights": Array [
+    37.5,
+    30,
+  ],
+  "groupTops": Array [
+    0,
+    37.5,
+  ],
+  "height": 67.5,
+}
+`;

@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stackAll works as expected not stacked 1`] = `
+Object {
+  "groupHeights": Array [
+    60,
+    60,
+  ],
+  "groupTops": Array [
+    0,
+    60,
+  ],
+  "height": 120,
+}
+`;
+
+exports[`stackAll works as expected stacked 1`] = `
+Object {
+  "groupHeights": Array [
+    60,
+    60,
+  ],
+  "groupTops": Array [
+    0,
+    60,
+  ],
+  "height": 120,
+}
+`;
