@@ -154,17 +154,19 @@ export function getNextUnit(unit) {
   return nextUnits[unit] || ''
 }
 
+
 export function calculateDimensions({
   itemTimeStart,
   itemTimeEnd,
-  isDragging,
-  isResizing,
   canvasTimeStart,
   canvasTimeEnd,
   canvasWidth,
+  //TODO: delete all the bellow 
   dragTime,
   resizingEdge,
-  resizeTime
+  resizeTime,
+  isDragging,
+  isResizing,
 }) {
   const itemStart =
     isResizing && resizingEdge === 'left' ? resizeTime : itemTimeStart

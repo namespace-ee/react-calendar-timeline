@@ -1,15 +1,14 @@
 import React from 'react'
-import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
-import CustomHeader from './CustomHeader'
+import { TimelineStateConsumer } from '../../timeline/TimelineStateContext'
+import CustomHeader from '../CustomHeader'
 import PropTypes from 'prop-types'
 import {
-  calculateDimensions,
   stack,
   nostack,
   getGroupOrders
-} from '../utility/calendar'
-import { _get } from '../utility/generic'
-
+} from '../../utility/calendar'
+import { _get } from '../../utility/generic'
+import {calculateItemDimensions} from './utils'
 const groups = [
   {
     id: '1'
@@ -94,17 +93,12 @@ class ItemHeader extends React.PureComponent {
     const items = itemWithNoIds.map(item => ({ ...item, group: '1' }))
     const order = getGroupOrders(groups, keys)
     const itemDimensions = this.props.items.map(item => {
-      const itemDimension = calculateDimensions({
+      const itemDimension = calculateItemDimensions({
         itemTimeStart: _get(item, this.props.keys.itemTimeStartKey),
         itemTimeEnd: _get(item, this.props.keys.itemTimeEndKey),
         canvasTimeStart: this.props.canvasTimeStart,
         canvasTimeEnd: this.props.canvasTimeEnd,
         canvasWidth: this.props.canvasWidth,
-        dragTime: null,
-        isDragging: false,
-        isResizing: false,
-        resizeTime: null,
-        resizingEdge: null
       })
 
       return {
@@ -119,6 +113,8 @@ class ItemHeader extends React.PureComponent {
         }
       }
     })
+
+    console.log(itemDimensions)
 
     const stackingMethod = stackItems ? stack : nostack
     //Get a new array of groupOrders holding the stacked items
@@ -160,14 +156,14 @@ class ItemHeader extends React.PureComponent {
 class Item extends React.PureComponent {
   static propTypes = {
     item: PropTypes.object.isRequired,
-    timelineContext: PropTypes.objectOf({
+    timelineContext: PropTypes.shape({
       timelineWidth: PropTypes.number,
       visibleTimeStart: PropTypes.number,
       visibleTimeEnd: PropTypes.number,
       canvasTimeStart: PropTypes.number,
       canvasTimeEnd: PropTypes.number
     }).isRequired,
-    itemContext: PropTypes.objectOf({
+    itemContext: PropTypes.shape({
       dimensions: PropTypes.object,
       width: PropTypes.number
     }).isRequired,
