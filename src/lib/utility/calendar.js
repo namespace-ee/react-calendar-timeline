@@ -271,7 +271,7 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
  * Calculate the position of a given item for a group that
  * is being stacked
  */
-function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
+export function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
   let verticalMargin = lineHeight - item.dimensions.height
@@ -309,7 +309,7 @@ function groupStack(lineHeight, item, group, groupHeight, totalHeight, i) {
 }
 
 // Calculate the position of this item for a group that is not being stacked
-function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
+export function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
   let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.top === null) {
     item.dimensions.top = totalHeight + verticalMargin
