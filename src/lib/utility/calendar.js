@@ -190,9 +190,8 @@ export function calculateDimensions({
   itemTimeEnd,
   canvasTimeStart,
   canvasTimeEnd,
-  canvasWidth,
+  canvasWidth
 }) {
-
   const itemTimeRange = itemTimeEnd - itemTimeStart
 
   // restrict startTime and endTime to be bounded by canvasTimeStart and canvasTimeEnd
@@ -432,7 +431,6 @@ export function stackItems(
   props,
   state
 ) {
-
   // if there are no groups return an empty array of dimensions
   if (groups.length === 0) {
     return {
@@ -469,46 +467,23 @@ export function stackItems(
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
 
-  let dimensionItems = visibleItems.reduce((memo, item) => {
-    const itemId = _get(item, keys.itemIdKey)
-    const isDragging = itemId === draggingItem
-    const isResizing = itemId === resizingItem
-
-    const [itemTimeStart,itemTimeEnd] = calculateInteractionNewTimes({
-      itemTimeStart: _get(item, keys.itemTimeStartKey),
-      itemTimeEnd: _get(item, keys.itemTimeEndKey),
-      isDragging,
-      isResizing,
-      dragTime,
-      resizingEdge,
-      resizeTime
-    })
-
-    let dimension = calculateDimensions({
-      itemTimeStart,
-      itemTimeEnd,
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-    })
-
-    if (dimension) {
-      dimension.top = null
-      dimension.order = isDragging
-        ? { index: newGroupOrder, group: groups[newGroupOrder] }
-        : groupOrders[_get(item, keys.itemGroupKey)]
-      dimension.stack = !item.isOverlay
-      dimension.height = lineHeight * itemHeightRatio
-      dimension.isDragging = isDragging
-
-      memo.push({
-        id: itemId,
-        dimensions: dimension
-      })
-    }
-
-    return memo
-  }, [])
+  let dimensionItems = getItemsDimensions({
+    items: visibleItems,
+    keys,
+    draggingItem,
+    resizingItem,
+    dragTime,
+    resizingEdge,
+    resizeTime,
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    newGroupOrder,
+    groups,
+    groupOrders,
+    lineHeight,
+    itemHeightRatio
+  })
 
   // Get a new array of groupOrders holding the stacked items
   const { height, groupHeights, groupTops } = stackAll(
@@ -519,6 +494,110 @@ export function stackItems(
   )
 
   return { dimensionItems, height, groupHeights, groupTops }
+}
+
+/**
+ *
+ * @param {*} items
+ * @param {*} keys
+ * @param {*} draggingItem
+ * @param {*} resizingItem
+ * @param {*} dragTime
+ * @param {*} resizingEdge
+ * @param {*} resizeTime
+ * @param {*} canvasTimeStart
+ * @param {*} canvasTimeEnd
+ * @param {*} canvasWidth
+ * @param {*} newGroupOrder
+ * @param {*} groups
+ * @param {*} groupOrders
+ * @param {*} lineHeight
+ * @param {*} itemHeightRatio
+ */
+function getItemsDimensions({
+  items,
+  keys,
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth,
+  lineHeight,
+  itemHeightRatio,
+  groups,
+  groupOrders,
+  //TODO: to be removed
+  draggingItem,
+  resizingItem,
+  dragTime,
+  resizingEdge,
+  resizeTime,
+  newGroupOrder
+}) {
+  return items.reduce((memo, item) => {
+    const newItem = getItemWithInteractions(
+      item,
+      keys,
+      draggingItem,
+      resizingItem,
+      dragTime,
+      resizingEdge,
+      resizeTime,
+      groups,
+      newGroupOrder
+    )
+    const itemId = _get(item, keys.itemIdKey)
+    let dimension = calculateDimensions({
+      itemTimeStart: _get(newItem, keys.itemTimeStartKey),
+      itemTimeEnd: _get(newItem, keys.itemTimeEndKey),
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth
+    })
+    if (dimension) {
+      dimension.top = null
+      dimension.order = groupOrders[_get(newItem, keys.itemGroupKey)]
+      dimension.stack = !newItem.isOverlay
+      dimension.height = lineHeight * itemHeightRatio
+      memo.push({
+        id: itemId,
+        dimensions: dimension
+      })
+    }
+    return memo
+  }, [])
+}
+
+function getItemWithInteractions(
+  item,
+  keys,
+  draggingItem,
+  resizingItem,
+  dragTime,
+  resizingEdge,
+  resizeTime,
+  groups,
+  newGroupOrder
+) {
+  const itemId = _get(item, keys.itemIdKey)
+  const isDragging = itemId === draggingItem
+  const isResizing = itemId === resizingItem
+  const [itemTimeStart, itemTimeEnd] = calculateInteractionNewTimes({
+    itemTimeStart: _get(item, keys.itemTimeStartKey),
+    itemTimeEnd: _get(item, keys.itemTimeEndKey),
+    isDragging,
+    isResizing,
+    dragTime,
+    resizingEdge,
+    resizeTime
+  })
+  const newItem = {
+    ...item,
+    [keys.itemTimeStartKey]: itemTimeStart,
+    [keys.itemTimeEndKey]: itemTimeEnd,
+    [keys.itemGroupKey]: isDragging
+      ? _get(groups[newGroupOrder], keys.groupIdKey)
+      : _get(item, keys.itemGroupKey)
+  }
+  return newItem
 }
 
 /**
