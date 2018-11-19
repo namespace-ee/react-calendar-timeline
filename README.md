@@ -143,12 +143,13 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
+  groupLabelKey: 'title', // key for what to show in `InfoLabel`
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
   itemGroupKey: 'group',
   itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time'
+  itemTimeEndKey: 'end_time',
 }
 ```
 
@@ -513,16 +514,20 @@ Rather than applying props on the element yourself and to avoid your props being
 * `getResizeProps` returns the props you should apply to the left and right resize handlers only if `useResizeHandle` set to true. The returned object has the props for the left element under property `left` and the props to be applied to the right element under `right` :
 
   * left
-    * ref: function to get element referance
+    * ref: function to get element reference
     * style: style to be applied to the left element
+    * className: class names to be applied to left className
   * right
-    * ref: function to get element referance
+    * ref: function to get element reference
     * style: style to be applied to the right element
+    * className: class names to be applied to left className
 
-These properties can be override using the prop argument with proprties:
+These properties can be override using the prop argument with properties:
 
 * leftStyle: style to be added to left style
 * rightStyle: style to be added to right style
+* leftClassName: classes to be added to left handler
+* rightClassName: classes to be added to right handler
 
 example
 
@@ -542,37 +547,26 @@ let items = [
 
 itemRenderer: ({
   item,
-  timelineContext,
   itemContext,
   getItemProps,
-  getResizeProps,
+  getResizeProps
 }) => {
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
   return (
-    <div
-      {...getItemProps(item.itemProps) }
-    >
-      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
-        <div {...leftResizeProps} />
-      ) : (
-          ''
-        )}
+    <div {...getItemProps(item.itemProps)}>
+      {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
 
-      {itemContext.showInnerContentsRender && <div
+      <div
         className="rct-item-content"
-        style={{maxHeight: `${itemContext.dimensions.height}`}}
+        style={{ maxHeight: `${itemContext.dimensions.height}` }}
       >
         {itemContext.title}
-      </div>}
+      </div>
 
-
-      {itemContext.useResizeHandle && itemContext.showInnerContentsRender ? (
-        <div {...rightResizeProps} />
-      ) : (
-          ''
-        )}
+      {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}
     </div>
-  )
+  )}
+
 }
 ```
 
@@ -789,15 +783,8 @@ You need to include the `Timeline.css` file, either via static file reference or
 
 ## How can I have items with different colors?
 
-[Items](https://github.com/namespace-ee/react-calendar-timeline#items) have a "className" parameter. For example if you have "standard" items and "analysis" items, then you can just add an "analysis" class for your analysis items and then change the css backgroundColor property for them.
-
-You will then need to override the default CSS rule:
-
-```css
-.react-calendar-timeline .rct-items .rct-item.analysis {
-  background-color: #68efad;
-}
-```
+Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer). 
+Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering) for a sandbox example
 
 ## How can I add a sidebar on the right?
 
@@ -811,13 +798,13 @@ rightSidebarWidth={150}
 rightSidebarContent={<p>Second filter</p>}
 ```
 
-And add `right_sidebar` prop to the groups objects:
+And add `rightTitle` prop to the groups objects:
 
 ```js
 {
   id: 1,
   title: 'group 1',
-  right_sidebar: 'additional info about group 1'
+  rightTitle: 'additional info about group 1'
 }
 ```
 

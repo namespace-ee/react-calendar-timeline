@@ -1,11 +1,12 @@
 import React from 'react'
-import { render, Simulate } from 'react-testing-library'
+import { render, fireEvent, cleanup } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import CustomMarker from 'lib/markers/public/CustomMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'
 
 describe('CustomMarker', () => {
+  afterEach(cleanup)
   const defaultCustomMarkerTestId = 'default-customer-marker-id'
   it('renders one', () => {
     const { getByTestId } = render(
@@ -16,7 +17,7 @@ describe('CustomMarker', () => {
       </RenderWrapper>
     )
 
-    expect(getByTestId(defaultCustomMarkerTestId)).toBeInTheDOM()
+    expect(getByTestId(defaultCustomMarkerTestId)).toBeInTheDocument()
   })
   it('render multiple', () => {
     const { queryAllByTestId } = render(
@@ -43,7 +44,7 @@ describe('CustomMarker', () => {
       </RenderWrapper>
     )
 
-    expect(getByTestId(customDataIdSelector)).toBeInTheDOM()
+    expect(getByTestId(customDataIdSelector)).toBeInTheDocument()
   })
 
   it('is passed styles with left corresponding to passed in date', () => {
@@ -110,10 +111,26 @@ describe('CustomMarker', () => {
 
     const { queryByTestId, getByText } = render(<RemoveCustomMarker />)
 
-    expect(queryByTestId(defaultCustomMarkerTestId)).toBeInTheDOM()
+    expect(queryByTestId(defaultCustomMarkerTestId)).toBeInTheDocument()
 
-    Simulate.click(getByText('Hide Custom Marker'))
+    fireEvent.click(getByText('Hide Custom Marker'))
 
-    expect(queryByTestId(defaultCustomMarkerTestId)).not.toBeInTheDOM()
+    expect(queryByTestId(defaultCustomMarkerTestId)).not.toBeInTheDocument()
+  })
+  it('updates marker location after passing new date', ()=>{
+    const { getByTestId, rerender } = render(
+      <RenderWrapper>
+        <TimelineMarkers>
+          <CustomMarker date={1000} />
+        </TimelineMarkers>
+      </RenderWrapper>)
+      const positionLeftBeforeChange = getByTestId(defaultCustomMarkerTestId).style.left
+      rerender(<RenderWrapper>
+        <TimelineMarkers>
+          <CustomMarker date={2000} />
+        </TimelineMarkers>
+      </RenderWrapper>)
+      const positionLeftAfterChange = getByTestId(defaultCustomMarkerTestId).style.left
+      expect(positionLeftBeforeChange).not.toEqual(positionLeftAfterChange)
   })
 })

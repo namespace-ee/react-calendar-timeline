@@ -15,6 +15,4 @@ gh-pages
 # code coverage
 coverage
 
-#merge stuff
-.orig
-
+*.orig
