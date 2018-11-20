@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getItemDimensions should evaluate dimensions for an item 1`] = `
+Object {
+  "dimensions": Object {
+    "collisionLeft": 1540540000000,
+    "collisionWidth": 6803877,
+    "height": 60,
+    "left": NaN,
+    "order": Object {
+      "group": Object {
+        "id": "1",
+      },
+      "index": 0,
+    },
+    "stack": true,
+    "top": null,
+    "width": NaN,
+  },
+  "id": "0",
+}
+`;

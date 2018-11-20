@@ -464,41 +464,36 @@ export function stackItems(
     keys
   )
 
+  const visibleItemsWithInteraction = visibleItems.map(item =>
+    getItemWithInteractions({
+      item,
+      keys,
+      draggingItem,
+      resizingItem,
+      dragTime,
+      resizingEdge,
+      resizeTime,
+      groups,
+      newGroupOrder
+    })
+  )
+
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
 
-  let dimensionItems = visibleItems
-    .map(item => {
-      const newItem = getItemWithInteractions({
+  let dimensionItems = visibleItemsWithInteraction
+    .map(item =>
+      getItemDimensions({
         item,
         keys,
-        draggingItem,
-        resizingItem,
-        dragTime,
-        resizingEdge,
-        resizeTime,
-        groups,
-        newGroupOrder
-      })
-      const itemId = _get(item, keys.itemIdKey)
-      let dimension = calculateDimensions({
-        itemTimeStart: _get(newItem, keys.itemTimeStartKey),
-        itemTimeEnd: _get(newItem, keys.itemTimeEndKey),
         canvasTimeStart,
         canvasTimeEnd,
-        canvasWidth
+        canvasWidth,
+        groupOrders,
+        lineHeight,
+        itemHeightRatio
       })
-      if (dimension) {
-        dimension.top = null
-        dimension.order = groupOrders[_get(newItem, keys.itemGroupKey)]
-        dimension.stack = !newItem.isOverlay
-        dimension.height = lineHeight * itemHeightRatio
-        return {
-          id: itemId,
-          dimensions: dimension
-        }
-      }
-    })
+    )
     .filter(item => !!item)
 
   // Get a new array of groupOrders holding the stacked items
@@ -510,6 +505,47 @@ export function stackItems(
   )
 
   return { dimensionItems, height, groupHeights, groupTops }
+}
+
+/**
+ * get item's position, dimensions and collisions 
+ * @param {*} item
+ * @param {*} keys
+ * @param {*} canvasTimeStart
+ * @param {*} canvasTimeEnd
+ * @param {*} canvasWidth
+ * @param {*} groupOrders
+ * @param {*} lineHeight
+ * @param {*} itemHeightRatio
+ */
+export function getItemDimensions({
+  item,
+  keys,
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth,
+  groupOrders,
+  lineHeight,
+  itemHeightRatio
+}) {
+  const itemId = _get(item, keys.itemIdKey)
+  let dimension = calculateDimensions({
+    itemTimeStart: _get(item, keys.itemTimeStartKey),
+    itemTimeEnd: _get(item, keys.itemTimeEndKey),
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth
+  })
+  if (dimension) {
+    dimension.top = null
+    dimension.order = groupOrders[_get(item, keys.itemGroupKey)]
+    dimension.stack = !item.isOverlay
+    dimension.height = lineHeight * itemHeightRatio
+    return {
+      id: itemId,
+      dimensions: dimension
+    }
+  }
 }
 
 /**
@@ -536,7 +572,7 @@ export function getItemWithInteractions({
   groups,
   newGroupOrder
 }) {
-  if(!resizingItem && !draggingItem) return item
+  if (!resizingItem && !draggingItem) return item
   const itemId = _get(item, keys.itemIdKey)
   const isDragging = itemId === draggingItem
   const isResizing = itemId === resizingItem

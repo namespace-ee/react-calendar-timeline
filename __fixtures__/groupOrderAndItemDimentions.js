@@ -19,7 +19,6 @@ export const dimensionItems = [
       collisionLeft: 1540540000000,
       collisionWidth: 6803877,
       height: 22.5,
-      isDragging: false,
       left: 4347.222222222223,
       order: {
         group: {
@@ -38,7 +37,6 @@ export const dimensionItems = [
       collisionLeft: 1540570000000,
       collisionWidth: 14875919,
       height: 22.5,
-      isDragging: false,
       left: 5388.888888888889,
       order: {
         group: {
@@ -57,7 +55,6 @@ export const dimensionItems = [
       collisionLeft: 1540620000000,
       collisionWidth: 20397548,
       height: 22.5,
-      isDragging: false,
       left: 7125,
       order: {
         group: {
