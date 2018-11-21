@@ -1006,64 +1006,67 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelGroupHeight,
               headerLabelHeight
             )}
-            {sidebarWidth > 0 && this.sidebar(height, groupHeights, headerHeight)}
-            <div style={{display: 'inline-block'}}>
 
-              <div style={outerComponentStyle} className="rct-outer">
-              <ScrollElement
-              scrollRef={el => {
-                this.props.scrollRef(el);
-                this.scrollComponent = el
-              }}
-                width={width}
-                height={height}
-                onZoom={this.changeZoom}
-                onWheelZoom={this.handleWheelZoom}
-                traditionalZoom={traditionalZoom}
-                onScroll={this.onScroll}
-                isInteractingWithItem={isInteractingWithItem}
-              >
-              <MarkerCanvas>
-                  {this.items(
-                    canvasTimeStart,
-                    zoom,
-                    canvasTimeEnd,
-                    canvasWidth,
-                    minUnit,
-                    dimensionItems,
-                    groupHeights,
-                    groupTops
-                  )}
-                {this.columns(
-                    canvasTimeStart,
-                    canvasTimeEnd,
-                    canvasWidth,
-                    minUnit,
-                    timeSteps,
-                    height,
-                    headerHeight
-                  )}
-                {this.rows(canvasWidth, groupHeights, groups)}
-                  {this.infoLabel()}
-                  {this.childrenWithProps(
-                    canvasTimeStart,
-                    canvasTimeEnd,
-                    canvasWidth,
-                    dimensionItems,
-                    groupHeights,
-                    groupTops,
-                    height,
-                    headerHeight,
-                    visibleTimeStart,
-                    visibleTimeEnd,
-                    minUnit,
-                    timeSteps
-                  )}
-              </MarkerCanvas>
-              </ScrollElement>
+            <div style={{display: 'flex'}}>
+              {sidebarWidth > 0 && this.sidebar(height, groupHeights, headerHeight)}
+              <div style={{display: 'inline-block'}}>
+
+                <div style={outerComponentStyle} className="rct-outer">
+                <ScrollElement
+                scrollRef={el => {
+                  this.props.scrollRef(el);
+                  this.scrollComponent = el
+                }}
+                  width={width}
+                  height={height}
+                  onZoom={this.changeZoom}
+                  onWheelZoom={this.handleWheelZoom}
+                  traditionalZoom={traditionalZoom}
+                  onScroll={this.onScroll}
+                  isInteractingWithItem={isInteractingWithItem}
+                >
+                <MarkerCanvas>
+                    {this.items(
+                      canvasTimeStart,
+                      zoom,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      minUnit,
+                      dimensionItems,
+                      groupHeights,
+                      groupTops
+                    )}
+                  {this.columns(
+                      canvasTimeStart,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      minUnit,
+                      timeSteps,
+                      height,
+                      headerHeight
+                    )}
+                  {this.rows(canvasWidth, groupHeights, groups)}
+                    {this.infoLabel()}
+                    {this.childrenWithProps(
+                      canvasTimeStart,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      dimensionItems,
+                      groupHeights,
+                      groupTops,
+                      height,
+                      headerHeight,
+                      visibleTimeStart,
+                      visibleTimeEnd,
+                      minUnit,
+                      timeSteps
+                    )}
+                </MarkerCanvas>
+                </ScrollElement>
+                </div>
               </div>
+              {rightSidebarWidth > 0 && this.rightSidebar(height, groupHeights, headerHeight)}
             </div>
-            {rightSidebarWidth > 0 && this.rightSidebar(height, groupHeights, headerHeight)}
           </div>
         </TimelineMarkersProvider>
       </TimelineStateProvider>
