@@ -448,11 +448,11 @@ export function stackItems(
     resizingItem,
     resizingEdge,
     resizeTime,
-    newGroupOrder
+    newGroupOrder,
+    canvasTimeEnd,
   } = state
-  const zoom = visibleTimeEnd - visibleTimeStart
-  const canvasTimeEnd = canvasTimeStart + zoom * 3
   const canvasWidth = width * 3
+
 
   // Find items that fit within canvasTimeStart and canvasTimeEnd
   // this is used when calculating the number of 'lines' each group
@@ -597,6 +597,18 @@ export function getItemWithInteractions({
 }
 
 /**
+ * get canvas start and end time from visible start and end time
+ * @param {number} visibleTimeStart 
+ * @param {number} visibleTimeEnd 
+ */
+export function getCanvasBoundariesFromVisibleTime(visibleTimeStart, visibleTimeEnd) {
+  const zoom = visibleTimeEnd - visibleTimeStart
+  const canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
+  const canvasTimeEnd = canvasTimeStart + zoom * 3
+  return [canvasTimeStart, canvasTimeEnd]
+}
+
+/**
  * Get the the canvas area for a given visible time
  * Will shift the start/end of the canvas if the visible time
  * does not fit within the existing
@@ -631,8 +643,13 @@ export function calculateScrollCanvas(
     visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
 
   if (!canKeepCanvas || forceUpdateDimensions) {
-    newState.canvasTimeStart =
-      visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
+    const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(visibleTimeStart,visibleTimeEnd)
+    newState.canvasTimeStart = canvasTimeStart
+    newState.canvasTimeEnd = canvasTimeEnd
+    const mergedState = {
+      ...state,
+      ...newState,
+    }
     // The canvas cannot be kept, so calculate the new items position
     Object.assign(
       newState,
@@ -644,7 +661,7 @@ export function calculateScrollCanvas(
         visibleTimeEnd,
         state.width,
         props,
-        state
+        mergedState,
       )
     )
   }

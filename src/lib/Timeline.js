@@ -18,7 +18,8 @@ import {
   getNextUnit,
   stackItems,
   calculateTimeForXPosition,
-  calculateScrollCanvas
+  calculateScrollCanvas,
+  getCanvasBoundariesFromVisibleTime,
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -254,10 +255,9 @@ export default class ReactCalendarTimeline extends Component {
       width,
       visibleTimeStart,
       visibleTimeEnd,
-      canvasTimeStart
+      canvasTimeStart,
+      canvasTimeEnd,
     } = this.state
-    const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasTimeEnd = canvasTimeStart + zoom * 3
 
     return {
       timelineWidth: width,
@@ -287,13 +287,15 @@ export default class ReactCalendarTimeline extends Component {
       )
     }
 
+    const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(visibleTimeStart, visibleTimeEnd)
+
     this.state = {
       width: 1000,
 
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
-      canvasTimeStart: visibleTimeStart - (visibleTimeEnd - visibleTimeStart),
-
+      canvasTimeStart: canvasTimeStart,
+      canvasTimeEnd: canvasTimeEnd,
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
@@ -594,16 +596,11 @@ export default class ReactCalendarTimeline extends Component {
     const {
       width,
       canvasTimeStart,
-      visibleTimeStart,
-      visibleTimeEnd
+      canvasTimeEnd,
     } = this.state
     // this gives us distance from left of row element, so event is in
     // context of the row element, not client or page
     const { offsetX } = e.nativeEvent
-
-    // FIXME: DRY up way to calculate canvasTimeEnd
-    const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasTimeEnd = zoom * 3 + canvasTimeStart
 
     let time = calculateTimeForXPosition(
       canvasTimeStart,
@@ -950,12 +947,12 @@ export default class ReactCalendarTimeline extends Component {
       width,
       visibleTimeStart,
       visibleTimeEnd,
-      canvasTimeStart
+      canvasTimeStart,
+      canvasTimeEnd,
     } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
     const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
     const minUnit = getMinUnit(zoom, width, timeSteps)
     const headerHeight = headerLabelGroupHeight + headerLabelHeight

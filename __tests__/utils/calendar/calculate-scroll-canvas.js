@@ -22,6 +22,20 @@ describe('calculateScrollCanvas', () => {
     expect(result).toHaveProperty('visibleTimeEnd')
     expect(result).toHaveProperty('dimensionItems')
   })
+  it('should calculate new scroll state correctly', () => {
+    const newStartTime = visibleTimeStart.clone().add(13, 'h')
+    const newEndTime = visibleTimeEnd.clone().add(13, 'h')
+    const result = calculateScrollCanvas(
+      newStartTime.valueOf(),
+      newEndTime.valueOf(),
+      false,
+      items,
+      groups,
+      props,
+      state
+    )
+    expect(result).toMatchSnapshot()
+  })
   it('should skip new calculation if new visible start and visible end in canvas', () => {
     const newStartTime = visibleTimeStart.clone().add(1, 'h')
     const newEndTime = visibleTimeEnd.clone().add(1, 'h')
@@ -69,5 +83,19 @@ describe('calculateScrollCanvas', () => {
     expect(result).toHaveProperty('visibleTimeStart')
     expect(result).toHaveProperty('visibleTimeEnd')
     expect(result).toHaveProperty('dimensionItems')
+  })
+  it('should calculate new state if zoom changed correctly', () => {
+    const newStartTime = visibleTimeStart.clone()
+    const newEndTime = visibleTimeEnd.clone().add(1, 'h')
+    const result = calculateScrollCanvas(
+      newStartTime.valueOf(),
+      newEndTime.valueOf(),
+      false,
+      items,
+      groups,
+      props,
+      state
+    )
+    expect(result).toMatchSnapshot()
   })
 })

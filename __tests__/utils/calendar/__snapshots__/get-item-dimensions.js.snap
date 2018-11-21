@@ -6,7 +6,7 @@ Object {
     "collisionLeft": 1540540000000,
     "collisionWidth": 6803877,
     "height": 60,
-    "left": NaN,
+    "left": 1449.074074074074,
     "order": Object {
       "group": Object {
         "id": "1",
@@ -15,7 +15,7 @@ Object {
     },
     "stack": true,
     "top": null,
-    "width": NaN,
+    "width": 78.74857638888898,
   },
   "id": "0",
 }
