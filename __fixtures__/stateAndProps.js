@@ -21,7 +21,8 @@ export const state = {
   canvasTimeStart: moment('2018-10-25T00:00:00.000').valueOf(),
   visibleTimeEnd: visibleTimeEnd.valueOf(),
   visibleTimeStart: visibleTimeStart.valueOf(),
-  canvasTimeEnd: 1540674000000
+  canvasTimeEnd: 1540674000000,
+  width: 1000,
 }
 
 //offset 1 hour

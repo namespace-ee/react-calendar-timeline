@@ -10,7 +10,7 @@ Object {
         "collisionLeft": 1540540000000,
         "collisionWidth": 6803877,
         "height": 22.5,
-        "left": NaN,
+        "left": 907.4074074074074,
         "order": Object {
           "group": Object {
             "id": "1",
@@ -19,7 +19,7 @@ Object {
         },
         "stack": true,
         "top": 7.5,
-        "width": NaN,
+        "width": 78.74857638888886,
       },
       "id": "0",
     },
@@ -28,7 +28,7 @@ Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
-        "left": NaN,
+        "left": 1254.6296296296296,
         "order": Object {
           "group": Object {
             "id": "1",
@@ -37,7 +37,7 @@ Object {
         },
         "stack": true,
         "top": 7.5,
-        "width": NaN,
+        "width": 172.1749884259259,
       },
       "id": "1",
     },
@@ -46,7 +46,7 @@ Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
-        "left": NaN,
+        "left": 1833.3333333333333,
         "order": Object {
           "group": Object {
             "id": "1",
@@ -55,7 +55,7 @@ Object {
         },
         "stack": true,
         "top": 7.5,
-        "width": NaN,
+        "width": 236.08273148148123,
       },
       "id": "2",
     },
@@ -84,7 +84,7 @@ Object {
         "collisionLeft": 1540540000000,
         "collisionWidth": 6803877,
         "height": 22.5,
-        "left": NaN,
+        "left": 1431.111111111111,
         "order": Object {
           "group": Object {
             "id": "1",
@@ -93,7 +93,7 @@ Object {
         },
         "stack": true,
         "top": 7.5,
-        "width": NaN,
+        "width": 75.59863333333351,
       },
       "id": "0",
     },
@@ -102,7 +102,7 @@ Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
-        "left": NaN,
+        "left": 1764.4444444444446,
         "order": Object {
           "group": Object {
             "id": "1",
@@ -111,7 +111,7 @@ Object {
         },
         "stack": true,
         "top": 7.5,
-        "width": NaN,
+        "width": 165.28798888888878,
       },
       "id": "1",
     },
@@ -120,7 +120,7 @@ Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
-        "left": NaN,
+        "left": 2320,
         "order": Object {
           "group": Object {
             "id": "1",
@@ -129,7 +129,7 @@ Object {
         },
         "stack": true,
         "top": 7.5,
-        "width": NaN,
+        "width": 226.6394222222225,
       },
       "id": "2",
     },

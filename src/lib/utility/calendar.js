@@ -659,7 +659,7 @@ export function calculateScrollCanvas(
         newState.canvasTimeStart,
         visibleTimeStart,
         visibleTimeEnd,
-        state.width,
+        mergedState.width,
         props,
         mergedState,
       )
