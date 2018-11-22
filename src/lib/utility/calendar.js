@@ -451,7 +451,7 @@ export function stackItems(
     newGroupOrder,
     canvasTimeEnd,
   } = state
-  const canvasWidth = width * 3
+  const canvasWidth = getCanvasWidth(width)
 
 
   // Find items that fit within canvasTimeStart and canvasTimeEnd
@@ -505,6 +505,15 @@ export function stackItems(
   )
 
   return { dimensionItems, height, groupHeights, groupTops }
+}
+
+/**
+ * get canvas width from visible width
+ * @param {*} width 
+ * @param {*} buffer 
+ */
+export function getCanvasWidth(width, buffer = 3) {
+  return width * buffer;
 }
 
 /**

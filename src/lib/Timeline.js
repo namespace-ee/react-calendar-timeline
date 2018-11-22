@@ -20,6 +20,7 @@ import {
   calculateTimeForXPosition,
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
+  getCanvasWidth,
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -291,7 +292,6 @@ export default class ReactCalendarTimeline extends Component {
 
     this.state = {
       width: 1000,
-
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: canvasTimeStart,
@@ -420,7 +420,7 @@ export default class ReactCalendarTimeline extends Component {
     } = this.container.getBoundingClientRect()
 
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
-
+    
     const { dimensionItems, height, groupHeights, groupTops } = stackItems(
       props.items,
       props.groups,
@@ -440,7 +440,7 @@ export default class ReactCalendarTimeline extends Component {
       dimensionItems,
       height,
       groupHeights,
-      groupTops
+      groupTops,
     })
     
     this.scrollComponent.scrollLeft = width
@@ -605,7 +605,7 @@ export default class ReactCalendarTimeline extends Component {
     let time = calculateTimeForXPosition(
       canvasTimeStart,
       canvasTimeEnd,
-      width * 3,
+      getCanvasWidth(width),
       offsetX
     )
     time = Math.floor(time / dragSnap) * dragSnap
@@ -953,7 +953,7 @@ export default class ReactCalendarTimeline extends Component {
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
     const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasWidth = width * 3
+    const canvasWidth = getCanvasWidth(width)
     const minUnit = getMinUnit(zoom, width, timeSteps)
     const headerHeight = headerLabelGroupHeight + headerLabelHeight
 

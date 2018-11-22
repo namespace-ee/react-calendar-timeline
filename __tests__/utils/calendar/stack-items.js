@@ -64,4 +64,23 @@ describe('stackItems', () => {
         )
       ).toMatchSnapshot()
   })
+  it("should return empty dimensions if groups are empty", ()=>{
+    expect(
+      stackItems(
+        items,
+        [],
+        state.canvasTimeStart,
+        stateMoveItem.visibleTimeStart,
+        stateMoveItem.visibleTimeEnd,
+        3000,
+        props,
+        stateResizeItemRight
+      )
+    ).toMatchObject({
+      dimensionItems: [],
+      height: 0,
+      groupHeights: [],
+      groupTops: []
+    })
+  })
 })
