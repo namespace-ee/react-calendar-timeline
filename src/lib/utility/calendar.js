@@ -306,7 +306,7 @@ export function groupStack(
   group,
   groupHeight,
   totalHeight,
-  i
+  itemIndex
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
@@ -317,7 +317,7 @@ export function groupStack(
     do {
       var collidingItem = null
       //Items are placed from i=0 onwards, only check items with index < i
-      for (var j = i - 1, jj = 0; j >= jj; j--) {
+      for (var j = itemIndex - 1, jj = 0; j >= jj; j--) {
         var other = group[j]
         if (
           other.dimensions.top !== null &&
@@ -354,6 +354,10 @@ export function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
   return { groupHeight, verticalMargin: 0 }
 }
 
+function sum(arr=[]) {
+  return arr.reduce((acc, i)=> acc+i,0)
+}
+
 /**
  * Stack all groups
  * @param {*} items items to be stacked
@@ -362,7 +366,7 @@ export function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
  * @param {*} stackItems should items be stacked?
  */
 export function stackAll(items, groupOrders, lineHeight, stackItems) {
-  var i, iMax
+  var itemIndex
   var totalHeight = 0
 
   var groupHeights = []
@@ -373,7 +377,8 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
   for (var index in groupedItems) { 
     const groupItems = groupedItems[index]
     const { items, group } = groupItems
-    groupTops.push(totalHeight)
+    const nextHeight = sum(groupHeights)
+    groupTops.push(nextHeight)
 
     // Is group being stacked?
     const isGroupStacked =
@@ -381,12 +386,12 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
     var groupHeight = 0
     var verticalMargin = 0
     // Find positions for each item in group
-    for (i = 0, iMax = items.length; i < iMax; i++) {
+    for (itemIndex = 0; itemIndex < items.length; itemIndex++) {
       let r = {}
       if (isGroupStacked) {
-        r = groupStack(lineHeight, items[i], items, groupHeight, totalHeight, i)
+        r = groupStack(lineHeight, items[itemIndex], items, groupHeight, nextHeight, itemIndex)
       } else {
-        r = groupNoStack(lineHeight, items[i], groupHeight, totalHeight)
+        r = groupNoStack(lineHeight, items[itemIndex], groupHeight, nextHeight)
       }
       groupHeight = r.groupHeight
       verticalMargin = r.verticalMargin
@@ -396,14 +401,12 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
     // Do this late as item position still needs to be calculated
     if (group.height) {
       groupHeights.push(group.height)
-      totalHeight += group.height
     } else {
       groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
-      totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
     }
   }
   return {
-    height: totalHeight,
+    height: sum(groupTops),
     groupHeights,
     groupTops
   }
