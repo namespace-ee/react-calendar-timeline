@@ -1,80 +1,115 @@
-import { stackItems } from 'lib/utility/calendar'
+import { stackTimelineItems } from 'lib/utility/calendar'
 import { items, groups } from '../../../__fixtures__/itemsAndGroups'
 import {
   props,
   state,
   stateMoveItem,
   stateResizeItemLeft,
-  stateResizeItemRight,
+  stateResizeItemRight
 } from '../../../__fixtures__/stateAndProps'
 describe('stackItems', () => {
   it('work as expected', () => {
     expect(
-      stackItems(
+      stackTimelineItems(
         items,
         groups,
+        9000,
         state.canvasTimeStart,
-        state.visibleTimeStart,
-        state.visibleTimeEnd,
-        3000,
-        props,
-        state
+        state.canvasTimeEnd,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        state.draggingItem,
+        state.resizingItem,
+        state.dragTime,
+        state.resizingEdge,
+        state.resizeTime,
+        state.newGroupOrder
       )
     ).toMatchSnapshot()
   })
   it('should stack items while moving an item', () => {
     expect(
-      stackItems(
+      stackTimelineItems(
         items,
         groups,
-        state.canvasTimeStart,
-        stateMoveItem.visibleTimeStart,
-        stateMoveItem.visibleTimeEnd,
-        3000,
-        props,
-        stateMoveItem
+        9000,
+        stateMoveItem.canvasTimeStart,
+        stateMoveItem.canvasTimeEnd,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        stateMoveItem.draggingItem,
+        stateMoveItem.resizingItem,
+        stateMoveItem.dragTime,
+        stateMoveItem.resizingEdge,
+        stateMoveItem.resizeTime,
+        stateMoveItem.newGroupOrder
       )
     ).toMatchSnapshot()
   })
   it('should stack items while resize item left', () => {
     expect(
-        stackItems(
-          items,
-          groups,
-          state.canvasTimeStart,
-          stateMoveItem.visibleTimeStart,
-          stateMoveItem.visibleTimeEnd,
-          3000,
-          props,
-          stateResizeItemLeft
-        )
-      ).toMatchSnapshot()
+      stackTimelineItems(
+        items,
+        groups,
+        9000,
+        stateResizeItemLeft.canvasTimeStart,
+        stateResizeItemLeft.canvasTimeEnd,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        stateResizeItemLeft.draggingItem,
+        stateResizeItemLeft.resizingItem,
+        stateResizeItemLeft.dragTime,
+        stateResizeItemLeft.resizingEdge,
+        stateResizeItemLeft.resizeTime,
+        stateResizeItemLeft.newGroupOrder
+      )
+    ).toMatchSnapshot()
   })
   it('should stack items while resize item right', () => {
     expect(
-        stackItems(
-          items,
-          groups,
-          state.canvasTimeStart,
-          stateMoveItem.visibleTimeStart,
-          stateMoveItem.visibleTimeEnd,
-          3000,
-          props,
-          stateResizeItemRight
-        )
-      ).toMatchSnapshot()
+      stackTimelineItems(
+        items,
+        groups,
+        9000,
+        stateResizeItemRight.canvasTimeStart,
+        stateResizeItemRight.canvasTimeEnd,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        stateResizeItemRight.draggingItem,
+        stateResizeItemRight.resizingItem,
+        stateResizeItemRight.dragTime,
+        stateResizeItemRight.resizingEdge,
+        stateResizeItemRight.resizeTime,
+        stateResizeItemRight.newGroupOrder
+      )
+    ).toMatchSnapshot()
   })
-  it("should return empty dimensions if groups are empty", ()=>{
+  it('should return empty dimensions if groups are empty', () => {
     expect(
-      stackItems(
+      stackTimelineItems(
         items,
         [],
+        9000,
         state.canvasTimeStart,
-        stateMoveItem.visibleTimeStart,
-        stateMoveItem.visibleTimeEnd,
-        3000,
-        props,
-        stateResizeItemRight
+        state.canvasTimeEnd,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        state.draggingItem,
+        state.resizingItem,
+        state.dragTime,
+        state.resizingEdge,
+        state.resizeTime,
+        state.newGroupOrder
       )
     ).toMatchObject({
       dimensionItems: [],

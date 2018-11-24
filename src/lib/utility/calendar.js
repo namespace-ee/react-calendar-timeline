@@ -414,56 +414,43 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
  * within the canvas area
  * @param {item[]} items
  * @param {group[]} groups
- * @param {number} canvasTimeStart
- * @param {number} visibleTimeStart
- * @param {number} visibleTimeEnd
- * @param {number} width
- * @param {*} props
- * @param {*} state
+ * @param {number} canvasWidth 
+ * @param {number} canvasTimeStart 
+ * @param {number} canvasTimeEnd 
+ * @param {*} keys 
+ * @param {number} lineHeight 
+ * @param {number} itemHeightRatio 
+ * @param {boolean} stackItems 
+ * @param {*} draggingItem 
+ * @param {*} resizingItem 
+ * @param {number} dragTime 
+ * @param {left or right} resizingEdge 
+ * @param {number} resizeTime 
+ * @param {number} newGroupOrder 
  */
-export function stackItems(
+export function stackTimelineItems(
   items,
   groups,
+  canvasWidth,
   canvasTimeStart,
-  visibleTimeStart,
-  visibleTimeEnd,
-  width,
-  props,
-  state
+  canvasTimeEnd,
+  keys,
+  lineHeight,
+  itemHeightRatio,
+  stackItems,
+  draggingItem,
+  resizingItem,
+  dragTime,
+  resizingEdge,
+  resizeTime,
+  newGroupOrder,
 ) {
-  // if there are no groups return an empty array of dimensions
-  if (groups.length === 0) {
-    return {
-      dimensionItems: [],
-      height: 0,
-      groupHeights: [],
-      groupTops: []
-    }
-  }
-
-  const { keys, lineHeight, stackItems, itemHeightRatio } = props
-  const {
-    draggingItem,
-    dragTime,
-    resizingItem,
-    resizingEdge,
-    resizeTime,
-    newGroupOrder,
-    canvasTimeEnd,
-  } = state
-  const canvasWidth = getCanvasWidth(width)
-
-
-  // Find items that fit within canvasTimeStart and canvasTimeEnd
-  // this is used when calculating the number of 'lines' each group
-  // will use.
   const visibleItems = getVisibleItems(
     items,
     canvasTimeStart,
     canvasTimeEnd,
     keys
   )
-
   const visibleItemsWithInteraction = visibleItems.map(item =>
     getItemWithInteractions({
       item,
@@ -478,9 +465,18 @@ export function stackItems(
     })
   )
 
+  // if there are no groups return an empty array of dimensions
+  if (groups.length === 0) {
+    return {
+      dimensionItems: [],
+      height: 0,
+      groupHeights: [],
+      groupTops: []
+    }
+  }
+
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
-
   let dimensionItems = visibleItemsWithInteraction
     .map(item =>
       getItemDimensions({
@@ -495,7 +491,6 @@ export function stackItems(
       })
     )
     .filter(item => !!item)
-
   // Get a new array of groupOrders holding the stacked items
   const { height, groupHeights, groupTops } = stackAll(
     dimensionItems,
@@ -503,21 +498,20 @@ export function stackItems(
     lineHeight,
     stackItems
   )
-
-  return { dimensionItems, height, groupHeights, groupTops }
+  return{ dimensionItems, height, groupHeights, groupTops }
 }
 
 /**
  * get canvas width from visible width
- * @param {*} width 
- * @param {*} buffer 
+ * @param {*} width
+ * @param {*} buffer
  */
 export function getCanvasWidth(width, buffer = 3) {
-  return width * buffer;
+  return width * buffer
 }
 
 /**
- * get item's position, dimensions and collisions 
+ * get item's position, dimensions and collisions
  * @param {*} item
  * @param {*} keys
  * @param {*} canvasTimeStart
@@ -607,10 +601,13 @@ export function getItemWithInteractions({
 
 /**
  * get canvas start and end time from visible start and end time
- * @param {number} visibleTimeStart 
- * @param {number} visibleTimeEnd 
+ * @param {number} visibleTimeStart
+ * @param {number} visibleTimeEnd
  */
-export function getCanvasBoundariesFromVisibleTime(visibleTimeStart, visibleTimeEnd) {
+export function getCanvasBoundariesFromVisibleTime(
+  visibleTimeStart,
+  visibleTimeEnd
+) {
   const zoom = visibleTimeEnd - visibleTimeStart
   const canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
   const canvasTimeEnd = canvasTimeStart + zoom * 3
@@ -652,25 +649,38 @@ export function calculateScrollCanvas(
     visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
 
   if (!canKeepCanvas || forceUpdateDimensions) {
-    const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(visibleTimeStart,visibleTimeEnd)
+    const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
+      visibleTimeStart,
+      visibleTimeEnd
+    )
     newState.canvasTimeStart = canvasTimeStart
     newState.canvasTimeEnd = canvasTimeEnd
     const mergedState = {
       ...state,
-      ...newState,
+      ...newState
     }
+
+    const canvasWidth = getCanvasWidth(mergedState.width)
+
     // The canvas cannot be kept, so calculate the new items position
     Object.assign(
       newState,
-      stackItems(
+      stackTimelineItems(
         items,
         groups,
-        newState.canvasTimeStart,
-        visibleTimeStart,
-        visibleTimeEnd,
-        mergedState.width,
-        props,
-        mergedState,
+        canvasWidth,
+        mergedState.canvasTimeStart,
+        mergedState.canvasTimeEnd,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        mergedState.draggingItem,
+        mergedState.resizingItem,
+        mergedState.dragTime,
+        mergedState.resizingEdge,
+        mergedState.resizeTime,
+        mergedState.newGroupOrder,
       )
     )
   }
