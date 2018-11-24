@@ -25,7 +25,16 @@ export const items = [
       canMove: false,
       canResize: false,
       className: ''
+    },
+    {
+      id: '3',
+      group: '3',
+      start_time: moment('2018-10-27T18:00:00.000').valueOf(),
+      end_time: moment('2018-10-27T23:39:57.548').valueOf(),
+      canMove: false,
+      canResize: false,
+      className: ''
     }
   ]
   
-  export const groups = [{ id: '1' }, { id: '2' }]
+  export const groups = [{ id: '1' }, { id: '2' }, { id: '3' }]

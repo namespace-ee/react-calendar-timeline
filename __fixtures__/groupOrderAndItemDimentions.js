@@ -10,6 +10,12 @@ export const orderedGroups = {
       id: '2'
     },
     index: 1
+  },
+  '3': {
+    group: {
+      id: '3'
+    },
+    index: 2
   }
 }
 
@@ -28,7 +34,7 @@ export const dimensionItems = [
       },
       stack: true,
       top: 7.5,
-      width: 236.24572916666668
+      width: 236.24572916666602
     },
     id: '0'
   },
@@ -46,7 +52,7 @@ export const dimensionItems = [
       },
       stack: true,
       top: 7.5,
-      width: 516.5249652777778
+      width: 516.5249652777784
     },
     id: '1'
   },
@@ -64,8 +70,26 @@ export const dimensionItems = [
       },
       stack: true,
       top: 7.5,
-      width: 708.2481944444445
+      width: 708.2481944444444
     },
     id: '2'
+  },
+  {
+    dimensions: {
+      collisionLeft: 1540656000000,
+      collisionWidth: 20397548,
+      height: 22.5,
+      left: 8375,
+      order: {
+        group: {
+          id: '3'
+        },
+        index: 2
+      },
+      stack: true,
+      top: 75,
+      width: 625
+    },
+    id: '3'
   }
 ]

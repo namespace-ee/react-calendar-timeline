@@ -57,16 +57,36 @@ Object {
       },
       "id": "2",
     },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 75,
+        "width": 625,
+      },
+      "id": "3",
+    },
   ],
   "groupHeights": Array [
     37.5,
     30,
+    37.5,
   ],
   "groupTops": Array [
     0,
     37.5,
+    67.5,
   ],
-  "height": 67.5,
+  "height": 105,
 }
 `;
 
@@ -127,16 +147,36 @@ Object {
       },
       "id": "2",
     },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 75,
+        "width": 625,
+      },
+      "id": "3",
+    },
   ],
   "groupHeights": Array [
     37.5,
     30,
+    37.5,
   ],
   "groupTops": Array [
     0,
     37.5,
+    67.5,
   ],
-  "height": 67.5,
+  "height": 105,
 }
 `;
 
@@ -197,16 +237,36 @@ Object {
       },
       "id": "2",
     },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 75,
+        "width": 625,
+      },
+      "id": "3",
+    },
   ],
   "groupHeights": Array [
     37.5,
     30,
+    37.5,
   ],
   "groupTops": Array [
     0,
     37.5,
+    67.5,
   ],
-  "height": 67.5,
+  "height": 105,
 }
 `;
 
@@ -267,15 +327,35 @@ Object {
       },
       "id": "2",
     },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 75,
+        "width": 625,
+      },
+      "id": "3",
+    },
   ],
   "groupHeights": Array [
     37.5,
     30,
+    37.5,
   ],
   "groupTops": Array [
     0,
     37.5,
+    67.5,
   ],
-  "height": 67.5,
+  "height": 105,
 }
 `;

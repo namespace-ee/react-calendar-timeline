@@ -5,12 +5,14 @@ Object {
   "groupHeights": Array [
     60,
     60,
+    60,
   ],
   "groupTops": Array [
     0,
     60,
+    120,
   ],
-  "height": 120,
+  "height": 180,
 }
 `;
 
@@ -19,11 +21,13 @@ Object {
   "groupHeights": Array [
     60,
     60,
+    60,
   ],
   "groupTops": Array [
     0,
     60,
+    120,
   ],
-  "height": 120,
+  "height": 180,
 }
 `;

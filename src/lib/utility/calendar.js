@@ -370,7 +370,7 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
 
   var groupedItems = getGroupedItems(items, groupOrders)
 
-  for (var index in groupedItems) {
+  for (var index in groupedItems) { 
     const groupItems = groupedItems[index]
     const { items, group } = groupItems
     groupTops.push(totalHeight)

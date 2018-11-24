@@ -22,7 +22,7 @@ Object {
           },
           "stack": true,
           "top": 7.5,
-          "width": 236.24572916666668,
+          "width": 236.24572916666602,
         },
         "id": "0",
       },
@@ -40,7 +40,7 @@ Object {
           },
           "stack": true,
           "top": 7.5,
-          "width": 516.5249652777778,
+          "width": 516.5249652777784,
         },
         "id": "1",
       },
@@ -58,7 +58,7 @@ Object {
           },
           "stack": true,
           "top": 7.5,
-          "width": 708.2481944444445,
+          "width": 708.2481944444444,
         },
         "id": "2",
       },
@@ -70,6 +70,32 @@ Object {
     },
     "index": 1,
     "items": Array [],
+  },
+  "2": Object {
+    "group": Object {
+      "id": "3",
+    },
+    "index": 2,
+    "items": Array [
+      Object {
+        "dimensions": Object {
+          "collisionLeft": 1540656000000,
+          "collisionWidth": 20397548,
+          "height": 22.5,
+          "left": 8375,
+          "order": Object {
+            "group": Object {
+              "id": "3",
+            },
+            "index": 2,
+          },
+          "stack": true,
+          "top": 75,
+          "width": 625,
+        },
+        "id": "3",
+      },
+    ],
   },
 }
 `;

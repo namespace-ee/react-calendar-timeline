@@ -59,16 +59,36 @@ Object {
       },
       "id": "2",
     },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 2250,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 75,
+        "width": 236.08273148148146,
+      },
+      "id": "3",
+    },
   ],
   "groupHeights": Array [
     37.5,
     30,
+    37.5,
   ],
   "groupTops": Array [
     0,
     37.5,
+    67.5,
   ],
-  "height": 67.5,
+  "height": 105,
   "visibleTimeEnd": 1540634400000,
   "visibleTimeStart": 1540548000000,
 }
@@ -133,16 +153,36 @@ Object {
       },
       "id": "2",
     },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 2720,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 75,
+        "width": 226.6394222222225,
+      },
+      "id": "3",
+    },
   ],
   "groupHeights": Array [
     37.5,
     30,
+    37.5,
   ],
   "groupTops": Array [
     0,
     37.5,
+    67.5,
   ],
-  "height": 67.5,
+  "height": 105,
   "visibleTimeEnd": 1540591200000,
   "visibleTimeStart": 1540501200000,
 }
