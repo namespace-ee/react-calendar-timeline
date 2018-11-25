@@ -10,6 +10,24 @@ export const items = [
       canResize: false
     },
     {
+      id: '5',
+      group: '1',
+      start_time: moment('2018-10-26T08:46:40.000').valueOf(),
+      end_time: moment('2018-10-26T14:40:03.877').valueOf(),
+      canMove: false,
+      canResize: false,
+      className: ''
+    },
+    {
+      id: '6',
+      group: '1',
+      start_time: moment('2018-10-26T13:46:40.000').valueOf(),
+      end_time: moment('2018-10-26T20:40:03.877').valueOf(),
+      canMove: false,
+      canResize: false,
+      className: ''
+    },
+    {
       id: '1',
       group: '1',
       start_time: moment('2018-10-26T19:06:40.000').valueOf(),

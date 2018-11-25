@@ -8,6 +8,11 @@ export const props = {
   itemHeightRatio: 0.75
 }
 
+export const propsNoStack = {
+  ...props,
+  stackItems: false,
+}
+
 export const visibleTimeStart = moment('2018-10-26T00:00:00.000')
 export const visibleTimeEnd = moment('2018-10-27T00:00:00.000')
 

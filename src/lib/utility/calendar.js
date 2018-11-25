@@ -341,7 +341,7 @@ export function groupStack(
       }
     } while (collidingItem)
   }
-  return { groupHeight: curHeight, verticalMargin }
+  return { groupHeight: curHeight, verticalMargin, itemTop:  item.dimensions.top}
 }
 
 // Calculate the position of this item for a group that is not being stacked
@@ -351,7 +351,7 @@ export function groupNoStack(lineHeight, item, groupHeight, totalHeight) {
     item.dimensions.top = totalHeight + verticalMargin
     groupHeight = Math.max(groupHeight, lineHeight)
   }
-  return { groupHeight, verticalMargin: 0 }
+  return { groupHeight, verticalMargin: 0, itemTop:  item.dimensions.top}
 }
 
 function sum(arr=[]) {
@@ -367,7 +367,6 @@ function sum(arr=[]) {
  */
 export function stackAll(items, groupOrders, lineHeight, stackItems) {
   var itemIndex
-  var totalHeight = 0
 
   var groupHeights = []
   var groupTops = []
@@ -396,7 +395,6 @@ export function stackAll(items, groupOrders, lineHeight, stackItems) {
       groupHeight = r.groupHeight
       verticalMargin = r.verticalMargin
     }
-
     // If group height is overridden, push new height
     // Do this late as item position still needs to be calculated
     if (group.height) {

@@ -5,7 +5,8 @@ import {
   state,
   stateMoveItem,
   stateResizeItemLeft,
-  stateResizeItemRight
+  stateResizeItemRight,
+  propsNoStack,
 } from '../../../__fixtures__/stateAndProps'
 describe('stackItems', () => {
   it('work as expected', () => {
@@ -20,6 +21,27 @@ describe('stackItems', () => {
         props.lineHeight,
         props.itemHeightRatio,
         props.stackItems,
+        state.draggingItem,
+        state.resizingItem,
+        state.dragTime,
+        state.resizingEdge,
+        state.resizeTime,
+        state.newGroupOrder
+      )
+    ).toMatchSnapshot()
+  })
+  it('work as expected no stack', () => {
+    expect(
+      stackTimelineItems(
+        items,
+        groups,
+        9000,
+        state.canvasTimeStart,
+        state.canvasTimeEnd,
+        propsNoStack.keys,
+        propsNoStack.lineHeight,
+        propsNoStack.itemHeightRatio,
+        propsNoStack.stackItems,
         state.draggingItem,
         state.resizingItem,
         state.dragTime,
