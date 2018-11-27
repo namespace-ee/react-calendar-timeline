@@ -3,17 +3,10 @@ import { TimelineStateConsumer } from '../../timeline/TimelineStateContext'
 import CustomHeader from '../CustomHeader'
 import PropTypes from 'prop-types'
 import {
-  stackAll,
-  getGroupOrders,
-  getItemDimensions
+  getItemDimensions,
+  stackGroup
 } from '../../utility/calendar'
 import { _get } from '../../utility/generic'
-import { calculateItemDimensions } from './utils'
-const groups = [
-  {
-    id: '1'
-  }
-]
 
 const passThroughPropTypes = {
   style: PropTypes.object,
@@ -85,7 +78,7 @@ class ItemHeader extends React.PureComponent {
   render() {
     const {
       keys,
-      items: itemWithNoIds,
+      items,
       itemHeight,
       itemRenderer,
       canvasTimeStart,
@@ -93,35 +86,25 @@ class ItemHeader extends React.PureComponent {
       canvasWidth,
       stackItems
     } = this.props
-    const items = itemWithNoIds.map(item => ({ ...item, group: '1' }))
-    const order = getGroupOrders(groups, keys)
     const itemDimensions = items.map(item => {
-      console.log(
-        JSON.stringify({
-          item,
-          keys,
-          canvasTimeStart,
-          canvasTimeEnd,
-          canvasWidth,
-          groupOrders: order,
-          itemHeight,
-          itemHeightRatio: 1
-        })
-      )
       return getItemDimensions({
         item,
         keys,
         canvasTimeStart,
         canvasTimeEnd,
         canvasWidth,
-        groupOrders: order,
+        groupOrders: {},
         lineHeight: itemHeight,
         itemHeightRatio: 1
       })
     })
 
-    const result = stackAll(itemDimensions, order, itemHeight, stackItems)
-    const { height } = result
+    const { groupHeight: height } = stackGroup(
+      itemDimensions,
+      stackItems,
+      itemHeight,
+      0
+    ) 
     return (
       <CustomHeader>
         {({ getRootProps }) => {
