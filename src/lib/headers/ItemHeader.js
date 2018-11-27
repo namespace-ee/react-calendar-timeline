@@ -1,12 +1,12 @@
 import React from 'react'
-import { TimelineStateConsumer } from '../../timeline/TimelineStateContext'
-import CustomHeader from '../CustomHeader'
+import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import CustomHeader from './CustomHeader'
 import PropTypes from 'prop-types'
 import {
   getItemDimensions,
   stackGroup
-} from '../../utility/calendar'
-import { _get } from '../../utility/generic'
+} from '../utility/calendar'
+import { _get } from '../utility/generic'
 
 const passThroughPropTypes = {
   style: PropTypes.object,
@@ -15,7 +15,7 @@ const passThroughPropTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   itemHeight: PropTypes.number,
   stackItems: PropTypes.bool,
-  itemRenderer: PropTypes.func
+  itemRenderer: PropTypes.func,
 }
 
 class ItemHeader extends React.PureComponent {
@@ -122,6 +122,7 @@ class ItemHeader extends React.PureComponent {
                   <Item
                     key={itemId}
                     itemRenderer={itemRenderer}
+                    props={this.props.props}
                     {...this.getStateAndHelpers(this.props, item, dimensions)}
                   />
                 )
@@ -156,7 +157,8 @@ class Item extends React.PureComponent {
       width: PropTypes.number
     }).isRequired,
     itemRenderer: passThroughPropTypes['itemRenderer'],
-    itemHeight: passThroughPropTypes['itemHeight']
+    itemHeight: passThroughPropTypes['itemHeight'],
+    props: PropTypes.object,
   }
 
   getStyles = (style = {}, dimensions, itemHeight) => {
@@ -183,12 +185,13 @@ class Item extends React.PureComponent {
   }
 
   render() {
-    const { item, timelineContext, itemContext } = this.props
+    const { item, timelineContext, itemContext, props } = this.props
     return this.props.itemRenderer({
       item,
       timelineContext,
       itemContext,
-      getRootProps: this.getRootProps
+      getRootProps: this.getRootProps,
+      props,
     })
   }
 }

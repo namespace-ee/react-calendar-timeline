@@ -1043,9 +1043,123 @@ import Timeline, {
 </Timeline>
 ```
 
+### `ItemHeader`
+
+
+Responsible for rendering group of items in the header.
+
+#### props
+
+| Prop          | type            | description|
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `style`| `object`| applied to the root of the header |
+| `className` | `string`| applied to the root of the header|
+| `itemHeight`| `number` | item height |
+| `stackItems` | `boolean` (`false` by default) | optionally stack items in header |
+| `itemRenderer`| `Function`| render prop to render each interval in the header |
+| `props` | `object` | pass extra props to itemRenderer |
+
+#### itemRenderer
+
+Render prop function used to render a customized item. The function provides multiple parameters that can be used to render each item.
+
+Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
+
+##### item
+
+The object of the item to render
+
+##### timelineContext
+
+timeline context
+
+##### itemContext
+
+item context
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+
+* `getRootProps` The returned props are:
+
+  * style: inline object style
+
+  These properties can be extended using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+const items = [
+  {
+    id: 1,
+    title: 'item 1',
+    start_time: moment(),
+    end_time: moment().add(1, 'hour')
+  },
+  {
+    id: 2,
+    title: 'item 2',
+    start_time: moment().add(-0.5, 'hour'),
+    end_time: moment().add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    title: 'item 3',
+    start_time: moment().add(2, 'hour'),
+    end_time: moment().add(3, 'hour')
+  }
+]
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <ItemHeader
+      className="custom-class"
+      style={{
+        backgroundColor: "blue"
+      }}
+      items={items}
+      itemRenderer={({ item, getRootProps }) => {
+        return (
+          <div
+            {...getRootProps({
+              style: {
+                border: '1px solid black',
+                color: 'white'
+              }
+            })}
+          >
+            {item.title}
+          </div>
+        )
+      }}
+    />
+    <ItemHeader items={items} stackItems />
+
+  </TimelineHeaders>
+</Timeline>
+```
+
 ### `CustomHeader`
 
-Responsible for rendering the headers above calendar part of the timeline. This is the base component for `DateHeader` and offers more control with less features.
+Responsible for rendering the headers above calendar part of the timeline. This is the base component for `DateHeader` and `ItemHeader`. This offers more control with less features.
 
 #### props
 
