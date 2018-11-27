@@ -4,10 +4,11 @@ import CustomHeader from '../CustomHeader'
 import PropTypes from 'prop-types'
 import {
   stackAll,
-  getGroupOrders
+  getGroupOrders,
+  getItemDimensions
 } from '../../utility/calendar'
 import { _get } from '../../utility/generic'
-import {calculateItemDimensions} from './utils'
+import { calculateItemDimensions } from './utils'
 const groups = [
   {
     id: '1'
@@ -85,43 +86,50 @@ class ItemHeader extends React.PureComponent {
     const {
       keys,
       items: itemWithNoIds,
-      stackItems,
       itemHeight,
-      itemRenderer
+      itemRenderer,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      stackItems
     } = this.props
     const items = itemWithNoIds.map(item => ({ ...item, group: '1' }))
     const order = getGroupOrders(groups, keys)
-    const itemDimensions = this.props.items.map(item => {
-      const itemDimension = calculateItemDimensions({
-        itemTimeStart: _get(item, this.props.keys.itemTimeStartKey),
-        itemTimeEnd: _get(item, this.props.keys.itemTimeEndKey),
-        canvasTimeStart: this.props.canvasTimeStart,
-        canvasTimeEnd: this.props.canvasTimeEnd,
-        canvasWidth: this.props.canvasWidth,
+    const itemDimensions = items.map(item => {
+      console.log(
+        JSON.stringify({
+          item,
+          keys,
+          canvasTimeStart,
+          canvasTimeEnd,
+          canvasWidth,
+          groupOrders: order,
+          itemHeight,
+          itemHeightRatio: 1
+        })
+      )
+      return getItemDimensions({
+        item,
+        keys,
+        canvasTimeStart,
+        canvasTimeEnd,
+        canvasWidth,
+        groupOrders: order,
+        lineHeight: itemHeight,
+        itemHeightRatio: 1
       })
-
-      return {
-        id: _get(item, keys.itemIdKey),
-        dimensions: {
-          ...itemDimension,
-          order: {"index":0,"group":groups[0]},          
-          top: null,
-          stack: stackItems,
-          height: itemHeight,
-          isDragging: false
-        }
-      }
     })
 
-    console.log(itemDimensions)
-
-    const { height } = stackAll(itemDimensions, order, itemHeight, groups)
-
+    const result = stackAll(itemDimensions, order, itemHeight, stackItems)
+    const { height } = result
     return (
       <CustomHeader>
         {({ getRootProps }) => {
           return (
-            <div className={this.props.className} {...getRootProps({ style: this.getRootStyles(height) })}>
+            <div
+              className={this.props.className}
+              {...getRootProps({ style: this.getRootStyles(height) })}
+            >
               {items.map(item => {
                 const itemId = _get(item, keys.itemIdKey)
                 const dimensions = itemDimensions.find(
@@ -143,10 +151,10 @@ class ItemHeader extends React.PureComponent {
   }
 
   getRootStyles(height) {
-    return { 
+    return {
       ...this.props.style,
-      height, 
-    };
+      height
+    }
   }
 }
 

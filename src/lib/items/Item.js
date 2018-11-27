@@ -185,7 +185,7 @@ export default class Item extends Component {
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
-          groupDelta = parseInt(key, 10) - order
+          groupDelta = parseInt(key, 10) - order.index
         } else {
           break
         }
