@@ -399,7 +399,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
     }
   }
   return {
-    height: sum(groupTops),
+    height: sum(groupHeights),
     groupHeights,
     groupTops
   }
