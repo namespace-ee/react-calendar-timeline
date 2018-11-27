@@ -172,7 +172,7 @@ export function calculateInteractionNewTimes({
   isDragging,
   isResizing,
   resizingEdge,
-  resizeTime
+  resizeTime,
 }) {
   const originalItemRange = itemTimeEnd - itemTimeStart
   const itemStart =

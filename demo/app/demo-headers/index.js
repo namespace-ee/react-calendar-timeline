@@ -10,7 +10,8 @@ import Timeline, {
   SidebarHeader,
   CustomHeader,
   TimelineHeaders,
-  DateHeader
+  DateHeader,
+  ItemHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -39,6 +40,7 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData()
+    const {items: headerItems } = generateFakeData(2, 5, 1)
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
@@ -53,7 +55,8 @@ export default class App extends Component {
       defaultTimeStart,
       defaultTimeEnd,
       format: false,
-      showHeaders: false
+      showHeaders: false,
+      headerItems,
     }
   }
 
@@ -175,7 +178,6 @@ export default class App extends Component {
           canSelect
           itemsSorted
           itemTouchSendsClick={false}
-          stackItems
           itemHeightRatio={0.75}
           defaultTimeStart={defaultTimeStart}
           defaultTimeEnd={defaultTimeEnd}
@@ -192,11 +194,11 @@ export default class App extends Component {
           // moveResizeValidator={this.moveResizeValidator}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
+          stackItems
         >
           <TimelineHeaders className="header-background">
             <SidebarHeader>
               {({ getRootProps }) => {
-                console.log('left')
                 return <div {...getRootProps()}>Left</div>
               }}
             </SidebarHeader>
@@ -205,6 +207,28 @@ export default class App extends Component {
                 return <div {...getRootProps()}>Right</div>
               }}
             </SidebarHeader>
+            <ItemHeader
+              className="custom-class"
+              style={{
+                backgroundColor: "blue"
+              }}
+              items={this.state.headerItems}
+              itemRenderer={({ item, getRootProps }) => {
+                return (
+                  <div
+                    {...getRootProps({
+                      style: {
+                        border: '1px solid black',
+                        color: 'white'
+                      }
+                    })}
+                  >
+                    {item.title}
+                  </div>
+                )
+              }}
+            />
+            <ItemHeader items={this.state.headerItems} stackItems />
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
               primaryHeader
@@ -220,7 +244,6 @@ export default class App extends Component {
                 },
                 props
               ) => {
-                console.log('props', props)
                 return (
                   <div {...getRootProps({ style: { height: 30 } })}>
                     {intervals.map(interval => {
@@ -335,7 +358,6 @@ export default class App extends Component {
                 { getIntervalProps, intervalContext },
                 props
               ) => {
-                console.log('intervalRenderer props', props)
                 return (
                   <div {...getIntervalProps()}>
                     {intervalContext.intervalText}
