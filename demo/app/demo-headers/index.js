@@ -229,6 +229,7 @@ export default class App extends Component {
               }}
             />
             <ItemHeader items={this.state.headerItems} stackItems />
+            <ItemHeader items={[]} stackItems />
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
               primaryHeader
