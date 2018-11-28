@@ -99,12 +99,14 @@ class ItemHeader extends React.PureComponent {
       })
     })
 
-    const { groupHeight: height } = stackGroup(
+    const { groupHeight } = stackGroup(
       itemDimensions,
       stackItems,
       itemHeight,
       0
-    ) 
+    )
+    const height = Math.max(itemHeight, groupHeight)
+
     return (
       <CustomHeader>
         {({ getRootProps }) => {
