@@ -1,6 +1,6 @@
 {
   "name": "@r365/react-calendar-timeline",
-  "version": "0.24.0",
+  "version": "0.24.1",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
