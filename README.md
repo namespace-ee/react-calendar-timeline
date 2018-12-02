@@ -466,10 +466,12 @@ Paramters provided to the function has two types: context params which have the 
 | `selected`        | `boolean`       | returns if the item is selected.                                                                                                                                          |
 | `dragging`        | `boolean`       | returns if the item is being dragged                                                                                                                                      |
 | `dragStart`       | `object`        | returns `x` and `y` of the start dragging point of the item.                                                                                                              |
+| `dragTime`       | `number`        |  current drag time.                                                                                                              |
 | `dragGroupDelta`  | `number`        | returns number of groups the item moved. if negative, moving was to top. If positive, moving was to down                                                                  |
 | `resizing`        | `boolean`       | returns if the item is being resized.                                                                                                                                     |
 | `resizeEdge`      | `left`, `right` | the side from which the component is being resized form                                                                                                                   |
 | `resizeStart`     | `number`        | returns the x value from where the component start moving                                                                                                                 |
+| `resizeTime`     | `number`        | current resize time                                                                                                                 |
 | `width`           | `boolean`       | returns the width of the item (same as in dimensions)                                                                                                                     |
 
 ##### prop getters functions
