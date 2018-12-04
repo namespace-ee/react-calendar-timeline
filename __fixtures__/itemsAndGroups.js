@@ -1,19 +1,18 @@
-import moment from 'moment'
 
 export const items = [
   {
     id: '0',
     group: '1',
-    start_time: moment('2018-10-26T10:46:40.000').valueOf(),
-    end_time: moment('2018-10-26T12:40:03.877').valueOf(),
+    start_time: 1540540000000,
+    end_time: 1540546803877,
     canMove: false,
     canResize: false
   },
   {
     id: '5',
     group: '1',
-    start_time: moment('2018-10-26T08:46:40.000').valueOf(),
-    end_time: moment('2018-10-26T14:40:03.877').valueOf(),
+    start_time: 1540532800000,
+    end_time: 1540554003877,
     canMove: false,
     canResize: false,
     className: ''
@@ -21,8 +20,8 @@ export const items = [
   {
     id: '6',
     group: '1',
-    start_time: moment('2018-10-26T13:46:40.000').valueOf(),
-    end_time: moment('2018-10-26T20:40:03.877').valueOf(),
+    start_time: 1540550800000,
+    end_time: 1540575603877,
     canMove: false,
     canResize: false,
     className: ''
@@ -30,16 +29,16 @@ export const items = [
   {
     id: '1',
     group: '1',
-    start_time: moment('2018-10-26T19:06:40.000').valueOf(),
-    end_time: moment('2018-10-26T23:14:35.919').valueOf(),
+    start_time: 1540570000000,
+    end_time: 1540584875919,
     canMove: true,
     canResize: 'both'
   },
   {
     id: '2',
     group: '1',
-    start_time: moment('2018-10-27T08:00:00.000').valueOf(),
-    end_time: moment('2018-10-27T13:39:57.548').valueOf(),
+    start_time: 1540620000000,
+    end_time: 1540640397548,
     canMove: false,
     canResize: false,
     className: ''
@@ -47,8 +46,8 @@ export const items = [
   {
     id: '3',
     group: '3',
-    start_time: moment('2018-10-27T18:00:00.000').valueOf(),
-    end_time: moment('2018-10-27T23:39:57.548').valueOf(),
+    start_time: 1540656000000,
+    end_time: 1540676397548,
     canMove: false,
     canResize: false,
     className: ''
