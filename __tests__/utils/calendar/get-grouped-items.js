@@ -1,6 +1,8 @@
-/* eslint-disable */
 import { getGroupedItems } from 'lib/utility/calendar'
+import {orderedGroups, dimensionItems} from '../../../__fixtures__/groupOrderAndItemDimentions'
 
 describe('getGroupedItems', () => {
-  xit('WRITE UNIT TEST HERE', () => {})
+  it('works as expected', () => {
+    expect(getGroupedItems(dimensionItems,orderedGroups)).toMatchSnapshot()
+  })
 })
