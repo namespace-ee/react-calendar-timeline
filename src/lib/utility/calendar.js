@@ -346,6 +346,7 @@ export function groupStack(
     verticalMargin,
     itemTop: item.dimensions.top
   }
+
 }
 
 // Calculate the position of this item for a group that is not being stacked
