@@ -359,15 +359,21 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart,
       visibleTimeEnd,
       items,
-      groups
+      groups,
+      width,
     } = nextProps
+
+    
+    // if the items or groups have changed we must re-render
+    const forceUpdate = items !== prevState.items || groups !== prevState.groups || width!==prevState.width
+    
+    //get width from prop is passed or from state if not passed by user
+    const width = nextProps.width? nextProps.width : prevState.width
 
     // This is a gross hack pushing items and groups in to state only to allow
     // For the forceUpdate check
-    let derivedState = {items, groups}
+    let derivedState = {items, groups, width}
 
-    // if the items or groups have changed we must re-render
-    const forceUpdate = items !== prevState.items || groups !== prevState.groups
 
     // We are a controlled component
     if (visibleTimeStart && visibleTimeEnd) {
@@ -384,7 +390,7 @@ export default class ReactCalendarTimeline extends Component {
       ))
     } else if (forceUpdate) {
       // Calculate new item stack position as canvas may have changed
-      const canvasWidth = getCanvasWidth(prevState.width)
+      const canvasWidth = getCanvasWidth(width)
       Object.assign(derivedState, 
         stackTimelineItems(
           items,
@@ -401,7 +407,7 @@ export default class ReactCalendarTimeline extends Component {
           prevState.dragTime,
           prevState.resizingEdge,
           prevState.resizeTime,
-          prevState.newGroupOrder
+          prevState.newGroupOrder,
         ))
     }
 
