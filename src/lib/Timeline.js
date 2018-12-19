@@ -360,12 +360,11 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd,
       items,
       groups,
-      width,
     } = nextProps
 
     
     // if the items or groups have changed we must re-render
-    const forceUpdate = items !== prevState.items || groups !== prevState.groups || width!==prevState.width
+    const forceUpdate = items !== prevState.items || groups !== prevState.groups || nextProps.width!==prevState.width
     
     //get width from prop is passed or from state if not passed by user
     const width = nextProps.width? nextProps.width : prevState.width
