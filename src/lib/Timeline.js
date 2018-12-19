@@ -336,7 +336,11 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentDidMount() {
-    if(!this.props.width) this.resize(this.props)
+    if(!this.props.width) {this.resize(this.props)}
+    else {
+      this.scrollComponent.scrollLeft = this.props.width
+      this.headerRef.scrollLeft = this.props.width
+    }
 
     if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
       this.props.resizeDetector.addListener(this)
@@ -950,11 +954,15 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+<<<<<<< HEAD
   getScrollElementRef = el => {
     this.props.scrollRef(el)
     this.scrollComponent = el
   }
 
+=======
+  
+>>>>>>> 3bc5eab837189e89ffeb96bc0d60d47fb3ee2236
   render() {
     const {
       items,
