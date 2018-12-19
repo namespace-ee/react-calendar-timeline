@@ -954,15 +954,11 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-<<<<<<< HEAD
   getScrollElementRef = el => {
     this.props.scrollRef(el)
     this.scrollComponent = el
   }
 
-=======
-  
->>>>>>> 3bc5eab837189e89ffeb96bc0d60d47fb3ee2236
   render() {
     const {
       items,
