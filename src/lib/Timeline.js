@@ -160,7 +160,8 @@ export default class ReactCalendarTimeline extends Component {
 
     verticalLineClassNamesForTime: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+    width: PropTypes.number,
   }
 
   static defaultProps = {
@@ -292,7 +293,7 @@ export default class ReactCalendarTimeline extends Component {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(visibleTimeStart, visibleTimeEnd)
 
     this.state = {
-      width: 1000,
+      width: this.props.width? this.props.width: 1000,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: canvasTimeStart,
@@ -335,7 +336,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentDidMount() {
-    this.resize(this.props)
+    if(!this.props.width) this.resize(this.props)
 
     if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
       this.props.resizeDetector.addListener(this)
@@ -355,14 +356,24 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
+    const {
+      visibleTimeStart,
+      visibleTimeEnd,
+      items,
+      groups,
+    } = nextProps
+
+    
+    // if the items or groups have changed we must re-render
+    const forceUpdate = items !== prevState.items || groups !== prevState.groups || nextProps.width!==prevState.width
+    
+    //get width from prop is passed or from state if not passed by user
+    const width = nextProps.width? nextProps.width : prevState.width
 
     // This is a gross hack pushing items and groups in to state only to allow
     // For the forceUpdate check
-    let derivedState = { items, groups }
+    let derivedState = {items, groups, width}
 
-    // if the items or groups have changed we must re-render
-    const forceUpdate = items !== prevState.items || groups !== prevState.groups
 
     // We are a controlled component
     if (visibleTimeStart && visibleTimeEnd) {
@@ -381,7 +392,7 @@ export default class ReactCalendarTimeline extends Component {
       )
     } else if (forceUpdate) {
       // Calculate new item stack position as canvas may have changed
-      const canvasWidth = getCanvasWidth(prevState.width)
+      const canvasWidth = getCanvasWidth(width)
       Object.assign(derivedState, 
         stackTimelineItems(
           items,
@@ -398,7 +409,7 @@ export default class ReactCalendarTimeline extends Component {
           prevState.dragTime,
           prevState.resizingEdge,
           prevState.resizeTime,
-          prevState.newGroupOrder
+          prevState.newGroupOrder,
         ))
     }
 
@@ -445,7 +456,7 @@ export default class ReactCalendarTimeline extends Component {
       width: containerWidth,
     } = this.container.getBoundingClientRect()
 
-    let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    let width = props.width? props.width : containerWidth - props.sidebarWidth - props.rightSidebarWidth
     const canvasWidth = getCanvasWidth(width)
     const { dimensionItems, height, groupHeights, groupTops } = stackTimelineItems(
       props.items,
@@ -1001,6 +1012,8 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
+    console.log("render", width)
+
     return (
       <TimelineStateProvider
         visibleTimeStart={visibleTimeStart}
@@ -1008,6 +1021,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
+        width={width}
         showPeriod={this.showPeriod}
         timelineUnit={minUnit}
         timelineWidth={this.state.width}
