@@ -1,5 +1,4 @@
 import { defaultKeys } from 'lib/default-config'
-import moment from 'moment'
 import {items} from './itemsAndGroups'
 export const props = {
   keys: defaultKeys,
@@ -13,8 +12,8 @@ export const propsNoStack = {
   stackItems: false,
 }
 
-export const visibleTimeStart = moment('2018-10-26T00:00:00.000')
-export const visibleTimeEnd = moment('2018-10-27T00:00:00.000')
+export const visibleTimeStart = 1540501200000
+export const visibleTimeEnd = 1540587600000
 
 export const state = {
   draggingItem: undefined,
@@ -23,9 +22,9 @@ export const state = {
   resizingEdge: null,
   resizeTime: null,
   newGroupOrder: null,
-  canvasTimeStart: moment('2018-10-25T00:00:00.000').valueOf(),
-  visibleTimeEnd: visibleTimeEnd.valueOf(),
-  visibleTimeStart: visibleTimeStart.valueOf(),
+  canvasTimeStart: 1540414800000,
+  visibleTimeEnd: visibleTimeEnd,
+  visibleTimeStart: visibleTimeStart,
   canvasTimeEnd: 1540674000000,
   width: 1000,
 }

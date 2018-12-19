@@ -14,6 +14,7 @@ import windowResizeDetector from '../resize-detector/window'
 
 import {
   getMinUnit,
+  getNextUnit,
   calculateTimeForXPosition,
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
