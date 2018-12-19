@@ -159,7 +159,8 @@ export default class ReactCalendarTimeline extends Component {
 
     verticalLineClassNamesForTime: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+    width: PropTypes.number,
   }
 
   static defaultProps = {
@@ -291,7 +292,7 @@ export default class ReactCalendarTimeline extends Component {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(visibleTimeStart, visibleTimeEnd)
 
     this.state = {
-      width: 1000,
+      width: this.props.width? this.props.width: 1000,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
       canvasTimeStart: canvasTimeStart,
@@ -334,7 +335,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   componentDidMount() {
-    this.resize(this.props)
+    if(!this.props.width) this.resize(this.props)
 
     if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
       this.props.resizeDetector.addListener(this)
@@ -438,7 +439,7 @@ export default class ReactCalendarTimeline extends Component {
       width: containerWidth,
     } = this.container.getBoundingClientRect()
 
-    let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    let width = props.width? props.width : containerWidth - props.sidebarWidth - props.rightSidebarWidth
     const canvasWidth = getCanvasWidth(width)
     const { dimensionItems, height, groupHeights, groupTops } = stackTimelineItems(
       props.items,
@@ -956,6 +957,7 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+  
   render() {
     const {
       items,
