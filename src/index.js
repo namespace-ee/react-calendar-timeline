@@ -12,4 +12,5 @@ export {default as CustomHeader} from './lib/headers/CustomHeader'
 export {default as DateHeader} from './lib/headers/DateHeader'
 export {TimelineStateConsumer} from './lib/timeline/TimelineStateContext'
 export {default as ItemHeader} from './lib/headers/ItemHeader'
+export  {getItemDimensions, stackGroup} from './lib/utility/calendar'
 export default Timeline
