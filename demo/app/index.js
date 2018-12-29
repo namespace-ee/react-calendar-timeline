@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { HashRouter as Router, Route, Link, withRouter } from 'react-router-dom'
 
 const demos = {
+  uffo: require('./demo-uffo').default,
   main: require('./demo-main').default,
   performance: require('./demo-performance').default,
   treeGroups: require('./demo-tree-groups').default,

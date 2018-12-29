@@ -4,6 +4,46 @@ body {
   font-size: 13px;
 }
 
+.dragging-over{
+  background: green !important;
+}
+
+.backlog{
+  max-height: calc(100vh - 35px);
+  // overflow-x: visible;
+  // overflow-y: scroll;
+
+  width: 300px;
+  flex: 1;
+}
+
+.task{
+  padding: 8px;
+  border-radius: 6px;
+  background: white;
+  box-shadow:0 0 1px 1px rgba(0,0,0,0.02), 0px 2px 7px rgba(0,0,0,.04);
+  transform: translate(0px, 0px);
+  margin:8px;
+}
+
+//Some stuff
+.avatar40{
+  border-radius: 50%;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: white;
+}
+.v, .v-center,.center-v{
+  display: flex;
+  align-items: center;
+}
+.h, .h-center,.center-h{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+}
+
 .react-calendar-timeline .rct-item.item-weekend {
   background: #21f32c;
   border-color: #29b31a;
