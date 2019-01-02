@@ -1,0 +1,631 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stackItems should stack items while moving an item 1`] = `
+Object {
+  "dimensionItems": Array [
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540543600000,
+        "collisionWidth": 6803877,
+        "height": 22.5,
+        "left": 4472.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 236.24572916666602,
+      },
+      "id": "0",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540532800000,
+        "collisionWidth": 21203877,
+        "height": 22.5,
+        "left": 4097.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 736.245729166666,
+      },
+      "id": "5",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540550800000,
+        "collisionWidth": 24803877,
+        "height": 22.5,
+        "left": 4722.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 861.245729166666,
+      },
+      "id": "6",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540570000000,
+        "collisionWidth": 14875919,
+        "height": 22.5,
+        "left": 5388.888888888889,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 516.5249652777784,
+      },
+      "id": "1",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540620000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 7125,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 708.2481944444444,
+      },
+      "id": "2",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 105,
+        "width": 625,
+      },
+      "id": "3",
+    },
+  ],
+  "groupHeights": Array [
+    67.5,
+    30,
+    37.5,
+  ],
+  "groupTops": Array [
+    0,
+    67.5,
+    97.5,
+  ],
+  "height": 135,
+}
+`;
+
+exports[`stackItems should stack items while resize item left 1`] = `
+Object {
+  "dimensionItems": Array [
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540543600000,
+        "collisionWidth": 3203877,
+        "height": 22.5,
+        "left": 4472.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 111.24572916666602,
+      },
+      "id": "0",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540532800000,
+        "collisionWidth": 21203877,
+        "height": 22.5,
+        "left": 4097.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 736.245729166666,
+      },
+      "id": "5",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540550800000,
+        "collisionWidth": 24803877,
+        "height": 22.5,
+        "left": 4722.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 861.245729166666,
+      },
+      "id": "6",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540570000000,
+        "collisionWidth": 14875919,
+        "height": 22.5,
+        "left": 5388.888888888889,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 516.5249652777784,
+      },
+      "id": "1",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540620000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 7125,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 708.2481944444444,
+      },
+      "id": "2",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 105,
+        "width": 625,
+      },
+      "id": "3",
+    },
+  ],
+  "groupHeights": Array [
+    67.5,
+    30,
+    37.5,
+  ],
+  "groupTops": Array [
+    0,
+    67.5,
+    97.5,
+  ],
+  "height": 135,
+}
+`;
+
+exports[`stackItems should stack items while resize item right 1`] = `
+Object {
+  "dimensionItems": Array [
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540540000000,
+        "collisionWidth": 10403877,
+        "height": 22.5,
+        "left": 4347.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 361.245729166666,
+      },
+      "id": "0",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540532800000,
+        "collisionWidth": 21203877,
+        "height": 22.5,
+        "left": 4097.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 736.245729166666,
+      },
+      "id": "5",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540550800000,
+        "collisionWidth": 24803877,
+        "height": 22.5,
+        "left": 4722.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 861.245729166666,
+      },
+      "id": "6",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540570000000,
+        "collisionWidth": 14875919,
+        "height": 22.5,
+        "left": 5388.888888888889,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 516.5249652777784,
+      },
+      "id": "1",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540620000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 7125,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 708.2481944444444,
+      },
+      "id": "2",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 105,
+        "width": 625,
+      },
+      "id": "3",
+    },
+  ],
+  "groupHeights": Array [
+    67.5,
+    30,
+    37.5,
+  ],
+  "groupTops": Array [
+    0,
+    67.5,
+    97.5,
+  ],
+  "height": 135,
+}
+`;
+
+exports[`stackItems work as expected 1`] = `
+Object {
+  "dimensionItems": Array [
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540540000000,
+        "collisionWidth": 6803877,
+        "height": 22.5,
+        "left": 4347.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 236.24572916666602,
+      },
+      "id": "0",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540532800000,
+        "collisionWidth": 21203877,
+        "height": 22.5,
+        "left": 4097.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 736.245729166666,
+      },
+      "id": "5",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540550800000,
+        "collisionWidth": 24803877,
+        "height": 22.5,
+        "left": 4722.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 861.245729166666,
+      },
+      "id": "6",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540570000000,
+        "collisionWidth": 14875919,
+        "height": 22.5,
+        "left": 5388.888888888889,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 37.5,
+        "width": 516.5249652777784,
+      },
+      "id": "1",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540620000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 7125,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 7.5,
+        "width": 708.2481944444444,
+      },
+      "id": "2",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 105,
+        "width": 625,
+      },
+      "id": "3",
+    },
+  ],
+  "groupHeights": Array [
+    67.5,
+    30,
+    37.5,
+  ],
+  "groupTops": Array [
+    0,
+    67.5,
+    97.5,
+  ],
+  "height": 135,
+}
+`;
+
+exports[`stackItems work as expected no stack 1`] = `
+Object {
+  "dimensionItems": Array [
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540540000000,
+        "collisionWidth": 6803877,
+        "height": 22.5,
+        "left": 4347.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 3.75,
+        "width": 236.24572916666602,
+      },
+      "id": "0",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540532800000,
+        "collisionWidth": 21203877,
+        "height": 22.5,
+        "left": 4097.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 3.75,
+        "width": 736.245729166666,
+      },
+      "id": "5",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540550800000,
+        "collisionWidth": 24803877,
+        "height": 22.5,
+        "left": 4722.222222222223,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 3.75,
+        "width": 861.245729166666,
+      },
+      "id": "6",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540570000000,
+        "collisionWidth": 14875919,
+        "height": 22.5,
+        "left": 5388.888888888889,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 3.75,
+        "width": 516.5249652777784,
+      },
+      "id": "1",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540620000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 7125,
+        "order": Object {
+          "group": Object {
+            "id": "1",
+          },
+          "index": 0,
+        },
+        "stack": true,
+        "top": 3.75,
+        "width": 708.2481944444444,
+      },
+      "id": "2",
+    },
+    Object {
+      "dimensions": Object {
+        "collisionLeft": 1540656000000,
+        "collisionWidth": 20397548,
+        "height": 22.5,
+        "left": 8375,
+        "order": Object {
+          "group": Object {
+            "id": "3",
+          },
+          "index": 2,
+        },
+        "stack": true,
+        "top": 63.75,
+        "width": 625,
+      },
+      "id": "3",
+    },
+  ],
+  "groupHeights": Array [
+    30,
+    30,
+    30,
+  ],
+  "groupTops": Array [
+    0,
+    30,
+    60,
+  ],
+  "height": 90,
+}
+`;
