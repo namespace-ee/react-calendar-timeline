@@ -34,7 +34,7 @@ const groups = [
   { id: '1', allowDrop:true, title: 'Tia', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/2377d3dbacc009aec666744a0e43614890af7033' },
   { id: '2', allowDrop:true, title: 'Mike', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/9184942b5f3e799ba117cbde235a4ef689baad11?1528382473' },
   { id: '3', allowDrop:true, title: 'Clara', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/7cd097265abbbbce3830ce9b8bb3949a9a5f468a' },
-  { id: 'empty', allowDrop:true, title: '', height: 800 },
+  { id: 'empty', allowDrop:false, title: '', height: 800 },
 ]
 
 const items = [
@@ -46,8 +46,6 @@ const items = [
     end: moment().valueOf(),
     color: '#c9622a',
     bgColor: '#fec2a0',
-    canMove: true,
-    canResize: true,
   },
   {
     id: 2,
@@ -57,9 +55,6 @@ const items = [
     end: moment().add(2, 'days').valueOf(),
     color: '#500093',
     bgColor: '#b972f2',
-    canMove: true,
-    canResize: true,
-    canResizeLeft: true
   },
   {
     id: 3,
@@ -68,10 +63,7 @@ const items = [
     start: moment().add(-20, 'days').valueOf(),
     end: moment().add(-7, 'days').valueOf(),
     color: '#0071b3',
-    bgColor: '#42b9fd',
-    canMove: true,
-    canResize: true,
-    canResizeLeft: true
+    bgColor: '#42b9fd'
   },
   {
     id: 4,
@@ -80,10 +72,7 @@ const items = [
     start: moment().add(-13, 'days').valueOf(),
     end: moment().add(-7, 'days').valueOf(),
     color: '#9e372e',
-    bgColor: '#f2968f',
-    canMove: true,
-    canResize: true,
-    canResizeLeft: true
+    bgColor: '#f2968f'
   },
 ]
 
@@ -205,7 +194,30 @@ export default class App extends Component {
   }
 
   onCanvasClick = (groupId, time, e) => {
-    console.log(groupId, moment(time).format('D/MM'), e)
+    const items = [...this.state.items]
+    const newItemIndex = items.findIndex(item => item.id === 'placeholder')
+    if(newItemIndex !== -1){
+      items.splice(newItemIndex, 1)
+      this.setState({items})
+    } else {
+      console.log(groupId, moment(time).format('D/MM'), e)
+
+      time = moment(time).startOf('day').valueOf()
+      const newItem = {
+        start: time,
+        end: moment(time).add(1, 'days').valueOf(),
+        id:'placeholder',
+        title:'+',
+        color: 'dark-green',
+        bgColor: 'green',
+        group: groupId,
+        canMove: true,
+        canResize: true,
+      }
+
+      this.setState({items: [...items,newItem] })
+    }
+
   }
   onDragEnd = ({source,destination}) => {
     if (!destination) {
@@ -234,10 +246,7 @@ export default class App extends Component {
         canMove: true,
         canResize: true,
       }
-      console.log(item)
       const {items} = this.state
-      // console.log(items[0])
-      // items = items.push(item)
       this.setState({
         items: [...items,item]
       })
@@ -254,7 +263,7 @@ export default class App extends Component {
 		} = this.state
 
 
-		return <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}><div className="v">
+		return <DragDropContext onDragEnd={this.onDragEnd}><div className="v">
 			<Timeline
         ref={this.timelineRef}
 				onItemMove={this.handleItemMove}
@@ -283,7 +292,7 @@ export default class App extends Component {
         useResizeHandle
 				canMove
 				dragSnap={24 * 60 * 60 * 1000}
-				canResize
+				canResize="both"
 				defaultTimeStart={defaultTimeStart}
 				defaultTimeEnd={defaultTimeEnd}
 			>

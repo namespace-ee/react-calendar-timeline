@@ -9,11 +9,21 @@ const TimelineItem = ({
 	getResizeProps,
 }) => {
 	const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-	const backgroundColor = item.bgColor
-	const borderColor = 'transparent'
+	const placeholder = item.id === 'placeholder'
+	const backgroundColor = placeholder ? '#fff' : item.bgColor
+	const borderColor = placeholder ? '#D5DDE6' : 'transparent'
 	const props = getItemProps()
 	const { top, left, width, zIndex, position, lineHeight, height, fontSize, cursor } = props.style
 	const { ref, onContextMenu, onDoubleClick, onMouseDown, onMouseUp, onTouchEnd, onTouchStart, key } = props
+	
+	const style = { top, left, width, zIndex, position, height, fontSize, cursor,
+		backgroundColor,
+		color: placeholder ? '#D5DDE6' : item.color,
+		borderColor,
+		borderStyle: placeholder ? 'dashed' : 'solid',
+		borderWidth: 2,
+		borderRadius: 24 }
+	
 	return (
 		<div
 			className="rct-item"
@@ -25,13 +35,7 @@ const TimelineItem = ({
 			onTouchEnd={onTouchEnd}
 			onTouchStart={onTouchStart}
 			key={key}
-			style={{ top, left, width, zIndex, position, height, fontSize, cursor,
-				backgroundColor,
-				color: item.color,
-				borderColor,
-				borderStyle: 'solid',
-				borderWidth: 6,
-				borderRadius: 24 }}
+			style={style}
 			// onMouseOver={() => hoverSelect(item.id)}
 			// onMouseOut={() => hoverDeselect(item.id)}
 		>

@@ -231,7 +231,20 @@ $weekend: rgba(250, 246, 225, 0.5);
 //  MODERN
 
 .rct-item {
-	border-radius: 10px;
+  border-radius: 10px;
+  // transition: all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation-name: fadeIn;
+  animation-duration: 0.15s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .react-calendar-timeline .rct-items .rct-item {
@@ -258,7 +271,7 @@ $weekend: rgba(250, 246, 225, 0.5);
 }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
-	border-left: 1px solid #fcfcfc;
+	border-left: 1px solid #f2f5f7;
 }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6,
