@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`groupStack works as expected 1`] = `
+Object {
+  "groupHeight": 0,
+  "itemTop": 7.5,
+  "verticalMargin": 37.5,
+}
+`;

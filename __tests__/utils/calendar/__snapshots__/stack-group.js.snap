@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stackGroup should not stack list of items 1`] = `
+Object {
+  "groupHeight": 0,
+  "verticalMargin": 0,
+}
+`;
+
+exports[`stackGroup should stack list of items 1`] = `
+Object {
+  "groupHeight": 0,
+  "verticalMargin": 7.5,
+}
+`;
