@@ -152,7 +152,15 @@
   z-index: 85; }
 
 .rct-item {
-  border-radius: 10px; }
+  border-radius: 10px;
+  animation-name: fadeIn;
+  animation-duration: 0.15s; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
 
 .react-calendar-timeline .rct-items .rct-item {
   background: #e1f2fe;
@@ -174,7 +182,7 @@
   border-bottom: 1px solid #fcfcfc; }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
-  border-left: 1px solid #fcfcfc; }
+  border-left: 1px solid #f2f5f7; }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6,
 .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
