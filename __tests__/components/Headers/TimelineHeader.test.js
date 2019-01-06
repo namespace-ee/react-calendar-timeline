@@ -32,43 +32,22 @@ describe('TimelineHeader', () => {
       expect(getAllByTestId('dateHeader')).toHaveLength(2)
       expect(getByTestId('headerContainer').children).toHaveLength(2)
     })
-    it('renders default sidebar header', () => {})
-    it('renders two default sidebar headers if rightSidebarWidth is passed', () => {})
-    it('renders two dateHeaders one primary and one secondary', () => {})
+    it('renders default sidebar header', () => {
+      const {getByTestId} = renderDefaultTimeline()
+      expect(getByTestId("sidebarHeader")).toBeInTheDocument()
+    })
+    it('renders two default sidebar headers if rightSidebarWidth is passed', () => {
+      let rightSidebarWidth = 150;
+      const {getAllByTestId} = renderDefaultTimeline({rightSidebarWidth});
+      expect(getAllByTestId('sidebarHeader')).toHaveLength(2)
+      expect(getAllByTestId('sidebarHeader')[0]).toBeInTheDocument()
+      expect(getAllByTestId('sidebarHeader')[1]).toBeInTheDocument()
+    })
+    it('renders two dateHeaders one primary and one secondary', () => {
+      const {getAllByTestId} = renderDefaultTimeline()
+      
+    })
   })
-
-  /**
-   * Testing The Compoenets Each One By Its Own
-   */
-
-   describe("Testing SidebarHeader Component", () => {
-    //  Testing The Example In The Docs
-     it("SidebarHeader Will Be Rendered Correctly In The Timeline", () => {})
-     
-     it("passing no variant prop will render it above the left sidebar", () => {})
-     it("passing variant = left prop will render it above the left sidebar", () => {})
-     it("passing variant = right prop will render it above the right sidebar", () => {})
-   })
-
-   describe("Testing DateHeader Component", () => {
-     // Testing The Example In The Docs
-     it("DateHeader Will Be Rendered Correctly In The TimeLine", () => {})
-
-     it("providing a unit will reflect correctly to the date header", () => {})
-     it("The Headers Renderd As Secondary By Default", () => {})
-     it("setting primaryHeader to true will override the secondaryHeader value", () => {})
-     it("Label Format With A Function Will Rendered Correctly In The intervalRenderer", () => {})
-     it("Label Format With An Object Will Rendered Correctly In The intervalRenderer", () => {})
-     it("Label Format With A String Will Rendered Correctly In The intervalRenderer", () => {})
-   })
-
-   describe("Testing ItemHeader Component", () => {
-     // Testing The Example In The Docs
-     it("ItemHeader Will Be Rendered Correctly In The TimeLine", () => {})
-   })
-
-   // TODO: Writing Test Cases For The Custom Headers
-
 
   /**
    * Testing The Example Provided In The Docs
