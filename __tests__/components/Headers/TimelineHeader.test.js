@@ -29,7 +29,7 @@ describe('TimelineHeader', () => {
   describe('renders default headers correctly', () => {
     it('renders two dateHeaders by default', () => {
       const { getAllByTestId, getByTestId } = renderDefaultTimeline()
-      expect(getAllByTestId('dateHeader')).toHaveLength(2)
+      expect(getAllByTestId(new RegExp('dateHeader'))).toHaveLength(2)
       expect(getByTestId('headerContainer').children).toHaveLength(2)
     })
     it('renders default sidebar header', () => {
@@ -44,8 +44,10 @@ describe('TimelineHeader', () => {
       expect(getAllByTestId('sidebarHeader')[1]).toBeInTheDocument()
     })
     it('renders two dateHeaders one primary and one secondary', () => {
-      // TODO
-     })
+      const { getByTestId } = renderDefaultTimeline();
+      expect(getByTestId(new RegExp('primary'))).toBeInTheDocument()
+      expect(getByTestId(new RegExp('secondary'))).toBeInTheDocument()
+    })
 
     it("Will Render A Left SideBar Header When Passed As A child", () => {
       const { getByTestId } = renderTimelineWithLeftSidebar();
@@ -62,17 +64,17 @@ describe('TimelineHeader', () => {
     })
 
     it("Will Not Ovverride The Overflow and Width of the CalendarHeaderStyle", () => {
-      const { getByTestId } = renderTimelineWithLeftAndRightSidebar({calendarHeaderStyle: { overflow: 'unset', width: 0 }});
+      const { getByTestId } = renderTimelineWithLeftAndRightSidebar({ calendarHeaderStyle: { overflow: 'unset', width: 0 } });
       expect(getByTestId('headerContainer').style["overflow"]).not.toBe("unset")
       expect(getByTestId('headerContainer').style["width"]).not.toBe(0)
     })
     it("Will Not Ovverride The display and Width of the RootStyle", () => {
-      const { getByTestId } = renderTimelineWithLeftAndRightSidebar({style: { display: 'unset', width: 0 }});
+      const { getByTestId } = renderTimelineWithLeftAndRightSidebar({ style: { display: 'unset', width: 0 } });
       expect(getByTestId('headerRootDiv').style["display"]).not.toBe("unset")
       expect(getByTestId('headerRootDiv').style["width"]).not.toBe(0)
     })
     it("Will Affect The Calendar Heders When Passing A CalendarHeaderClassName", () => {
-      const { getByTestId } = renderTimelineWithLeftAndRightSidebar({calendarHeaderClassName: "testClassName"});
+      const { getByTestId } = renderTimelineWithLeftAndRightSidebar({ calendarHeaderClassName: "testClassName" });
       expect(getByTestId("headerContainer").className).toMatch("testClassName")
     })
   })
@@ -174,13 +176,13 @@ function renderTimelineWithRightSidebar(props = {}) {
   )
 }
 
-function renderTimelineWithLeftAndRightSidebar({props, calendarHeaderClassName, calendarHeaderStyle, style} = {}) {
-  
+function renderTimelineWithLeftAndRightSidebar({ props, calendarHeaderClassName, calendarHeaderStyle, style } = {}) {
+
   const timelineProps = {
     ...defaultProps,
     ...props
   }
-  
+
   return render(
     <Timeline {...timelineProps}>
       <TimelineHeaders style={style}
