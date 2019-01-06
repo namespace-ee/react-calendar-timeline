@@ -65,7 +65,7 @@ class TimelineHeaders extends React.Component {
       }
     })
     return (
-      <div style={this.getRootStyle()} className={this.props.className}>
+      <div data-testid="headerRootDiv" style={this.getRootStyle()} className={this.props.className}>
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}
