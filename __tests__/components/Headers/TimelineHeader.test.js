@@ -47,6 +47,16 @@ describe('TimelineHeader', () => {
       const {getAllByTestId} = renderDefaultTimeline()
       
     })
+
+    it("Will Render A Left SideBar Header When Passed As A child", () => {})
+    it("Will Render A Right SideBar Header When Passed As A child", () => {})
+    it("Will Render A Left And Right SideBar Headers When The Tow Passed As A children", () => {})
+    it("Will Not Ovverride The overflow and Width of the Timeline default styles", () => {})
+    it("Will Not Ovverride The Overflow and Width of the CalendarHeaderStyle", () => {})
+    it("Will Not Ovverride The display and Width of the RootStyle", () => {})
+
+    it("Will Affect The Calendar Heders When Passing A CalendarHeaderStyle", () => {})
+    it("Will Affect The Calendar Heders When Passing A CalendarHeaderClassName", () => {})
   })
 
   /**
