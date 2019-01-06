@@ -137,7 +137,10 @@ export class CustomHeader extends React.Component {
   getRootProps = (props = {}) => {
     const { style } = props
     return {
-      style: Object.assign({}, style ? style : {}, this.rootProps.style)
+      style: Object.assign({}, style ? style : {}, {
+        position: 'relative',
+        width: this.props.canvasWidth
+      })
     }
   }
 
