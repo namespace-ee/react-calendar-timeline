@@ -9,10 +9,7 @@ import 'jest-dom/extend-expect'
 import moment from 'moment'
 
 import { items, groups } from '../../../__fixtures__/itemsAndGroups'
-import {
-  visibleTimeStart,
-  visibleTimeEnd
-} from '../../../__fixtures__/stateAndProps'
+
 
 const defaultProps = {
   groups,
