@@ -44,9 +44,11 @@ describe('TimelineHeader', () => {
       expect(getAllByTestId('sidebarHeader')[1]).toBeInTheDocument()
     })
     it('renders two dateHeaders one primary and one secondary', () => {
-      const { getByTestId } = renderDefaultTimeline();
+      const { getAllByTestId, getByTestId } = renderDefaultTimeline();
       expect(getByTestId(new RegExp('primary'))).toBeInTheDocument()
       expect(getByTestId(new RegExp('secondary'))).toBeInTheDocument()
+      expect(getAllByTestId(new RegExp('primary'))).toHaveLength(1)
+      expect(getAllByTestId(new RegExp('secondary'))).toHaveLength(1)
     })
 
     it("Will Render A Left SideBar Header When Passed As A child", () => {
@@ -65,7 +67,7 @@ describe('TimelineHeader', () => {
 
     it("Will Not Ovverride The Overflow and Width of the CalendarHeaderStyle", () => {
       const { getByTestId } = renderTimelineWithLeftAndRightSidebar({ calendarHeaderStyle: { overflow: 'unset', width: 0 } });
-      expect(getByTestId('headerContainer').style["overflow"]).not.toBe("unset")
+      expect(getByTestId('headerContainer').style["overflow"]).not.toBe("unset")      
       expect(getByTestId('headerContainer').style["width"]).not.toBe(0)
     })
     it("Will Not Ovverride The display and Width of the RootStyle", () => {
