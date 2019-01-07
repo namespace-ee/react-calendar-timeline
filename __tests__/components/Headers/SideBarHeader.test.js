@@ -74,7 +74,65 @@ describe("Testing SidebarHeader Component", () => {
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
     expect(getByTestId('sidebarHeader').nextElementSibling.getAttribute('data-testid')).toBe('headerContainer')
   })
+  it("passing ${x}Sidebarwidth when variant is ${x} will affect the ${x} sidebarHeader", () => {
+    const { getByTestId } = render(<Timeline
+      {...defaultProps}
+      rightSidebarWidth={300}
+    >
+      <TimelineHeaders>
+        <SidebarHeader variant={"right"}>
+          {({ getRootProps }) => {
+            return <div data-testid="sidebarHeader" {...getRootProps()}>SidebarHeader</div>
+          }}
+        </SidebarHeader>
+        <DateHeader primaryHeader />
+        <DateHeader />
+      </TimelineHeaders>
+    </Timeline>
+    )
 
+    expect(getByTestId('sidebarHeader').style.width).toBe('300px')
+  })
+
+  it("passing ${x}Sidebarwidth when variant is ${y} will not affect the ${x} sidebarHeader", () => {
+    const { getByTestId } = render(<Timeline
+      {...defaultProps}
+      rightSidebarWidth={300}
+    >
+      <TimelineHeaders>
+        <SidebarHeader variant={"left"}>
+          {({ getRootProps }) => {
+            return <div data-testid="sidebarHeader" {...getRootProps()}>SidebarHeader</div>
+          }}
+        </SidebarHeader>
+        <DateHeader primaryHeader />
+        <DateHeader />
+      </TimelineHeaders>
+    </Timeline>
+    )
+
+    expect(getByTestId('sidebarHeader').style.width).not.toBe('300px')
+  })
+
+  it("passing a style to prop getter will override the {x}Sidebarwidth on the sidebarHeader", () => {
+    const { getByTestId } = render(<Timeline
+      {...defaultProps}
+      rightSidebarWidth={300}
+    >
+      <TimelineHeaders>
+        <SidebarHeader variant={"right"} props={{style:{width: 50}}}>
+          {({ getRootProps }, props) => {
+            return <div data-testid="sidebarHeader" {...getRootProps(props)}>SidebarHeader</div>
+          }}
+        </SidebarHeader>
+        <DateHeader primaryHeader />
+        <DateHeader />
+      </TimelineHeaders>
+    </Timeline>
+    )
+
+    expect(getByTestId('sidebarHeader').style.width).toBe('50px')
+  })
 })
 
 
