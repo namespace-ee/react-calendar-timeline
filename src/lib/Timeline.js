@@ -32,6 +32,7 @@ import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
+    droppable: PropTypes.bool,
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     sidebarWidth: PropTypes.number,
@@ -737,6 +738,7 @@ export default class ReactCalendarTimeline extends Component {
   rows(canvasWidth, groupHeights, groups) {
     return (
       <GroupRows
+        droppable={this.props.droppable}
         groups={groups}
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}

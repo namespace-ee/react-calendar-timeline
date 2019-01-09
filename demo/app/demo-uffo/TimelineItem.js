@@ -45,7 +45,6 @@ const TimelineItem = ({
 				style={{
 					paddingLeft: '8px',
 					overflow: 'hidden',
-					paddingLeft: 3,
 					textOverflow: 'ellipsis',
 					whiteSpace: 'nowrap',
 				}}

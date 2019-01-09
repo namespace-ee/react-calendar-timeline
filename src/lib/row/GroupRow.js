@@ -5,6 +5,7 @@ import { Droppable } from 'react-beautiful-dnd'
 
 class GroupRow extends Component {
   static propTypes = {
+    droppable: PropTypes.bool,
     onClick: PropTypes.func.isRequired,
     onDoubleClick: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ class GroupRow extends Component {
       clickTolerance,
       horizontalLineClassNamesForGroup,
       group,
+      droppable
     } = this.props
 
     let classNamesForGroup = [];
@@ -32,9 +34,8 @@ class GroupRow extends Component {
       classNamesForGroup = horizontalLineClassNamesForGroup(group);
     }
 
-    // console.log(group)
-
-    return (
+    if (droppable){
+      return (
       <Droppable droppableId={group.id}>
               {(provided, snapshot) => (<PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}><div
                 ref={provided.innerRef}
@@ -45,6 +46,18 @@ class GroupRow extends Component {
               /></PreventClickOnDrag>)}
       </Droppable>
     )
+    } else {
+      return(
+      <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
+        <div
+          onContextMenu={onContextMenu}
+          onDoubleClick={onDoubleClick}
+          className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
+          style={style}
+        />
+      </PreventClickOnDrag>
+      )
+    }
   }
 }
 

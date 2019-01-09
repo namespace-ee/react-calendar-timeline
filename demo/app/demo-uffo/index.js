@@ -265,6 +265,7 @@ export default class App extends Component {
 
 		return <DragDropContext onDragEnd={this.onDragEnd}><div className="v">
 			<Timeline
+        droppable
         ref={this.timelineRef}
 				onItemMove={this.handleItemMove}
 				onItemResize={this.handleItemResize}

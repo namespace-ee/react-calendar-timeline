@@ -35,12 +35,14 @@ export default class GroupRows extends Component {
       groups,
       horizontalLineClassNamesForGroup,
       onRowContextClick,
+      droppable
     } = this.props
     let lines = []
 
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <GroupRow
+          droppable={droppable}
           clickTolerance={clickTolerance}
           onContextMenu={evt => onRowContextClick(evt, i)}
           onClick={evt => onRowClick(evt, i)}
