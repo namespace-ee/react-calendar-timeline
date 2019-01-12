@@ -6,6 +6,9 @@ class Header extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
+    handleDayClick: PropTypes.func,
+    dayLabelRenderer: PropTypes.func,
+    eventsByDay: PropTypes.object,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
@@ -29,6 +32,9 @@ class Header extends Component {
   render() {
     const {
       width,
+      eventsByDay,
+      handleDayClick,
+      dayLabelRenderer,
       stickyOffset,
       stickyHeader,
       headerRef,
@@ -87,12 +93,15 @@ class Header extends Component {
             data-testid="timeline-elements-header"
             hasRightSidebar={hasRightSidebar}
             showPeriod={showPeriod}
+            handleDayClick={handleDayClick}
+            dayLabelRenderer={dayLabelRenderer}
             canvasTimeStart={canvasTimeStart}
             canvasTimeEnd={canvasTimeEnd}
             canvasWidth={canvasWidth}
             minUnit={minUnit}
             timeSteps={timeSteps}
             width={width}
+            eventsByDay={eventsByDay}
             headerLabelFormats={headerLabelFormats}
             subHeaderLabelFormats={subHeaderLabelFormats}
             headerLabelGroupHeight={headerLabelGroupHeight}

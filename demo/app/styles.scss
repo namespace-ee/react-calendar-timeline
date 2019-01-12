@@ -26,6 +26,61 @@ body {
   margin:8px;
 }
 
+.rct-label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rct-label-group{
+  line-height: 24px !important;
+}
+.alternative-days{
+  &.space-between{
+    width: 100%;
+    padding: 0 12px;
+    justify-content: space-between;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .milestone{
+    box-shadow: 0 0 3px 3px rgba(10,40,123,.02), 0 10px 56px rgba(10,40,123,.11);
+    color: white;
+    position: absolute;
+    top: -20px;
+    padding: 6px 12px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 9;
+    border-radius: 12px;
+    white-space: nowrap;
+
+  }
+  .day-of-week{
+    margin-right: 4px;
+    color: #bfc7d4;
+  }
+  .day-of-month{
+    &.small{
+      width: 18px;
+      height: 18px;
+    }
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &:hover{
+    .day-of-month{
+      background: #e8ecf2;
+
+    }
+  }
+}
+
 //Some stuff
 .avatar40{
   border-radius: 50%;

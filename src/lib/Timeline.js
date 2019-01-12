@@ -43,6 +43,9 @@ export default class ReactCalendarTimeline extends Component {
     minResizeWidth: PropTypes.number,
     stickyOffset: PropTypes.number,
     stickyHeader: PropTypes.bool,
+    eventsByDay: PropTypes.object,
+    dayLabelRenderer: PropTypes.func,
+    handleDayClick: PropTypes.func,
     lineHeight: PropTypes.number,
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
@@ -828,6 +831,9 @@ export default class ReactCalendarTimeline extends Component {
   ) {
     return (
       <Header
+        eventsByDay={this.props.eventsByDay}
+        handleDayClick={this.props.handleDayClick}
+        dayLabelRenderer={this.props.dayLabelRenderer}
         canvasTimeStart={canvasTimeStart}
         hasRightSidebar={this.props.rightSidebarWidth > 0}
         canvasTimeEnd={canvasTimeEnd}

@@ -37,6 +37,21 @@ const groups = [
   { id: 'empty', allowDrop:false, title: '', height: 800 },
 ]
 
+const eventsByDay = {
+  '20190115':[{
+    title: 'App Sumo',
+    color: '#f4699c',
+    bgColor: '#ffe6ee',
+    date: moment("2019-01-15")
+  }],
+  '20190111':[{
+    title: 'Mobile App',
+    color: '#1fa37d',
+    bgColor: '#ccffef',
+    date: moment("2019-01-11")
+  }]
+}
+
 const items = [
   {
     id: 1,
@@ -81,6 +96,20 @@ const GroupRenderer = ({ group }) => (
 		{group.picture && <img className="avatar40" src={group.picture} alt="avatar" />}
 	</div>
 )
+
+const DayLabelRenderer = ({ time,unit,width,events }) => {
+  const weekDay = width > 120 ? time.format('dddd') : time.format('dd')[0]
+  const day = time.format('D')
+
+  console.log(events)
+
+  return <div className={`alternative-days${width > 120 ? ' space-between' : ''}`}>
+      {events && <div className="milestone" style={{background:events[0].color}}>{events[0].title}</div>}
+     {width > 40 && <div className="day-of-week">{weekDay}</div>}
+   <div style={events ? {color:events[0].color, background:events[0].bgColor} : {}} className={`day-of-month${width < 28 ? ' small' : ''}`}>{day}</div>
+  </div>
+}
+
 
 
 
@@ -266,6 +295,8 @@ export default class App extends Component {
 		return <DragDropContext onDragEnd={this.onDragEnd}><div className="v">
 			<Timeline
         droppable
+        eventsByDay={eventsByDay}
+        handleDayClick={(time)=>{console.log(time)}}
         ref={this.timelineRef}
 				onItemMove={this.handleItemMove}
 				onItemResize={this.handleItemResize}
@@ -282,7 +313,8 @@ export default class App extends Component {
 				lineHeight={64}
 				headerLabelGroupHeight={20}
 				headerLabelHeight={20}
-				itemHeightRatio={0.75}
+        itemHeightRatio={0.75}
+        dayLabelRenderer={DayLabelRenderer}
 				itemRenderer={TimelineItem}
 				groupRenderer={GroupRenderer}
 				sidebarContent={<div>Team</div>}

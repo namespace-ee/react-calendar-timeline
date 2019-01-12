@@ -8,12 +8,15 @@ export default class TimelineElementsHeader extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
+    handleDayClick: PropTypes.func,
+    dayLabelRenderer: PropTypes.func,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
+    eventsByDay: PropTypes.object,
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
@@ -64,7 +67,7 @@ export default class TimelineElementsHeader extends Component {
     }
   }
 
-  subHeaderLabel(time, unit, width) {
+  subHeaderLabel(time, unit, width, dayLabelRenderer, events) {
     const { subHeaderLabelFormats: f } = this.props
 
     if (unit === 'year') {
@@ -74,6 +77,8 @@ export default class TimelineElementsHeader extends Component {
         width < 37 ? f.monthShort : width < 85 ? f.monthMedium : f.monthLong
       )
     } else if (unit === 'day') {
+      if(dayLabelRenderer) return dayLabelRenderer({time,unit,width,events})
+
       return time.format(
         width < 47
           ? f.dayShort
@@ -90,7 +95,12 @@ export default class TimelineElementsHeader extends Component {
 
   handlePeriodClick = (time, unit) => {
     if (time && unit) {
-      this.props.showPeriod(moment(time - 0), unit)
+      const {handleDayClick, showPeriod} = this.props
+      if(handleDayClick && unit === 'day'){
+        handleDayClick(time)
+      }else{
+        showPeriod(moment(time - 0), unit)
+      }
     }
   }
 
@@ -113,11 +123,15 @@ export default class TimelineElementsHeader extends Component {
       canvasTimeEnd,
       canvasWidth,
       minUnit,
+      dayLabelRenderer,
+      eventsByDay,
       timeSteps,
       headerLabelGroupHeight,
       headerLabelHeight,
       hasRightSidebar
     } = this.props
+
+    console.log('@@',this.props)
 
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
@@ -184,6 +198,8 @@ export default class TimelineElementsHeader extends Component {
         )
         const leftCorrect = firstOfType ? 1 : 0
 
+        const events = eventsByDay && eventsByDay[time.format('YYYYMMDD')]
+
         bottomHeaderLabels.push(
           <div
             key={`label-${time.valueOf()}`}
@@ -210,7 +226,7 @@ export default class TimelineElementsHeader extends Component {
               cursor: 'pointer'
             }}
           >
-            {this.subHeaderLabel(time, minUnit, labelWidth)}
+            {this.subHeaderLabel(time, minUnit, labelWidth,dayLabelRenderer, events)}
           </div>
         )
       }

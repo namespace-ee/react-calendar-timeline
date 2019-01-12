@@ -188,12 +188,8 @@
 .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
   background: rgba(250, 250, 250, 0.5); }
 
-.rct-header, .rct-bottom-header {
-  padding-top: 8px;
-  padding-bottom: 8px; }
-
 .rct-label {
-  height: 28px !important;
+  height: 44px !important;
   padding-top: 4px;
   line-height: 12px !important; }
 
@@ -201,7 +197,7 @@
   height: 64px !important; }
 
 .rct-bottom-header {
-  height: 28px !important; }
+  height: 36px !important; }
 
 .react-calendar-timeline .rct-header .rct-label-group {
   border-left: 1px solid #f2f5f7;
