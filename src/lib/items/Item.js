@@ -27,7 +27,7 @@ export default class Item extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
-    order: PropTypes.number,
+    order: PropTypes.object,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -104,7 +104,8 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      nextProps.order !== this.props.order ||
+      (nextProps.order ? nextProps.order.index : undefined) !== 
+        (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
@@ -184,14 +185,14 @@ export default class Item extends Component {
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
-          groupDelta = parseInt(key, 10) - order
+          groupDelta = parseInt(key, 10) - order.index
         } else {
           break
         }
       }
 
-      if (this.props.order + groupDelta < 0) {
-        return 0 - this.props.order
+      if (this.props.order.index + groupDelta < 0) {
+        return 0 - this.props.order.index
       } else {
         return groupDelta
       }
@@ -236,7 +237,7 @@ export default class Item extends Component {
           this.props.selected && (this.canResizeLeft() || this.canResizeRight())
       })
       .draggable({
-        enabled: this.props.selected
+        enabled: this.props.selected && this.canMove()
       })
       .styleCursor(false)
       .on('dragstart', e => {
@@ -273,7 +274,7 @@ export default class Item extends Component {
             this.props.onDrag(
               this.itemId,
               dragTime,
-              this.props.order + dragGroupDelta
+              this.props.order.index + dragGroupDelta
             )
           }
 
@@ -299,7 +300,7 @@ export default class Item extends Component {
             this.props.onDrop(
               this.itemId,
               dragTime,
-              this.props.order + this.dragGroupDelta(e)
+              this.props.order.index + this.dragGroupDelta(e)
             )
           }
 
@@ -415,11 +416,11 @@ export default class Item extends Component {
     this.cacheDataFromProps(this.props)
 
     let { interactMounted } = this.state
-    const couldDrag = this.props.selected && this.canMove(this.props)
+    const couldDrag = prevProps.selected && this.canMove(prevProps)
     const couldResizeLeft =
-      this.props.selected && this.canResizeLeft(this.props)
+      prevProps.selected && this.canResizeLeft(prevProps)
     const couldResizeRight =
-      this.props.selected && this.canResizeRight(this.props)
+      prevProps.selected && this.canResizeRight(prevProps)
     const willBeAbleToDrag = this.props.selected && this.canMove(this.props)
     const willBeAbleToResizeLeft =
       this.props.selected && this.canResizeLeft(this.props)
