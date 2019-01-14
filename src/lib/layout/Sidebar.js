@@ -16,11 +16,11 @@ export default class Sidebar extends Component {
 
   shouldComponentUpdate(nextProps) {
     return !(
-      arraysEqual(nextProps.groups, this.props.groups) &&
       nextProps.keys === this.props.keys &&
       nextProps.width === this.props.width &&
-      nextProps.groupHeights === this.props.groupHeights &&
-      nextProps.height === this.props.height
+      nextProps.height === this.props.height &&
+      arraysEqual(nextProps.groups, this.props.groups) &&
+      arraysEqual(nextProps.groupHeights, this.props.groupHeights)
     )
   }
 
