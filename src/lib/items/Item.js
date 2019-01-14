@@ -237,7 +237,7 @@ export default class Item extends Component {
           this.props.selected && (this.canResizeLeft() || this.canResizeRight())
       })
       .draggable({
-        enabled: this.props.selected
+        enabled: this.props.selected && this.canMove()
       })
       .styleCursor(false)
       .on('dragstart', e => {
