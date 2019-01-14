@@ -7,6 +7,14 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.23.0
+
+- improve unit tests coverage #426 - @ilaiwi
+- stack items by group #384 - @acemac
+- fix bug where `canMove` prop gets ignored #484 - @acemac + @ilaiwi
+- fix sidebar re-render when groupHeights do not change #478 - @SDupZ
+
+
 ## 0.22.0
 
 ### Fixed
