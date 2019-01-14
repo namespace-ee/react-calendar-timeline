@@ -14,6 +14,51 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 - fix bug where `canMove` prop gets ignored #484 - @acemac + @ilaiwi
 - fix sidebar re-render when groupHeights do not change #478 - @SDupZ
 
+### Stack per group
+
+now you can stack choose to stack items in individual groups by providing the property `stackItems` in group object. The property in group overrides the timeline prop `stackItems`.
+
+```
+const groups = [{ id: 1, title: 'group 1', stackItems: false }, { id: 2, title: 'group 2', stackItems: true }]
+
+const items = [
+  {
+    id: 1,
+    group: 1,
+    title: 'item 1',
+    start_time: moment(),
+    end_time: moment().add(1, 'hour')
+  },
+  {
+    id: 2,
+    group: 2,
+    title: 'item 2',
+    start_time: moment().add(-0.5, 'hour'),
+    end_time: moment().add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    group: 1,
+    title: 'item 3',
+    start_time: moment().add(2, 'hour'),
+    end_time: moment().add(3, 'hour')
+  }
+]
+
+ReactDOM.render(
+  <div>
+    Rendered by react!
+    <Timeline
+      groups={groups}
+      items={items}
+      defaultTimeStart={moment().add(-12, 'hour')}
+      defaultTimeEnd={moment().add(12, 'hour')}
+    />
+  </div>,
+  document.getElementById('root')
+)
+```
+
 
 ## 0.22.0
 
