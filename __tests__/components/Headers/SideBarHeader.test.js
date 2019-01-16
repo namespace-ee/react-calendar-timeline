@@ -21,7 +21,7 @@ const defaultProps = {
 describe("Testing SidebarHeader Component", () => {
   afterEach(cleanup)
   //  Testing The Example In The Docs
-  it("SidebarHeader Will Be Rendered Correctly In The Timeline", () => {
+  it("Given SidebarHeader When rendered Then it should shown correctly in the timeline", () => {
     const { container } = render(
       <Timeline
         {...defaultProps}
@@ -52,38 +52,61 @@ describe("Testing SidebarHeader Component", () => {
     expect(getByTestId('rightSidebarHeader').previousElementSibling).toHaveAttribute('data-testid', 'headerContainer')
   })
 
-  it("passing no variant prop will render it above the left sidebar", () => {
-    const { getByTestId } = renderSidebarHeaderWithCustomValues()
+  it("Given SidebarHeader When passing no variant prop Then it should rendered above the left sidebar", () => {
+    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues()
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
     expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute('data-testid', 'headerContainer')
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
+
+
   })
-  it("passing variant = left prop will render it above the left sidebar", () => {
-    const { getByTestId } = renderSidebarHeaderWithCustomValues({ variant: "left" })
+  it("Given SidebarHeader When passing variant prop with left value Then it should rendered above the left sidebar", () => {
+    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues({ variant: "left" })
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
     expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute('data-testid', 'headerContainer')
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
   })
-  it("passing variant = right prop will render it above the right sidebar", () => {
-    const { getByTestId } = renderSidebarHeaderWithCustomValues({ variant: "right" })
+  it("Given SidebarHeader When passing variant prop with right value Then it should rendered above the right sidebar", () => {
+    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues({ variant: "right" })
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
     expect(getByTestId('sidebarHeader').previousElementSibling).toHaveAttribute('data-testid', 'headerContainer')
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
   })
 
-  it("passing unusual variant value will render it above the left sidebar by default", () => {
+  it("Given SidebarHeader When passing variant prop with unusual value Then it should rendered above the left sidebar by default", () => {
     const { getByTestId } = renderSidebarHeaderWithCustomValues({ variant: "" })
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
     expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute('data-testid', 'headerContainer')
   })
 
-  it("props getter function works correctly", () => {
+  it("Given SidebarHeader When passing props to the props getter Then it should rendered correctly", () => {
     const { getByTestId } = renderSidebarHeaderWithCustomValues({ props: { style: { width: 250 } } })
     const { width } = getComputedStyle(getByTestId("sidebarHeader"))
     expect(width).toBe("250px")
   })
 
-  it("should rendered the passed children correctly", () => {
+  it("Given SidebarHeader When passing children to it Then it should rendered correctly", () => {
     const { getByText } = renderSidebarHeaderWithCustomValues()
     expect(getByText("Should Be Rendred")).toBeInTheDocument()
   })
+
+  it("Given sidebarheader When pass a variant and props Then it should render both correctly", () => {
+    const { getByTestId } = renderSidebarHeaderWithCustomValues({ props: { style: { width: 250 }, variant: "left" }})
+    const { width } = getComputedStyle(getByTestId("sidebarHeader"))
+    expect(width).toBe("250px")
+    expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute('data-testid', 'headerContainer')
+  })
+
+  it("Given two sidebarheaders When pass a variants and props Then it should render both correctly", () => {
+    const { getByText } = renderTwoSidebarHeadersWithCustomValues({ props: { style: { width: 250 } }})
+    const { width: leftWidth } = getComputedStyle(getByText('LeftSideBar'))
+    const { width: rightWidth } = getComputedStyle(getByText('RightSideBar'))
+    expect(leftWidth).toBe("250px")
+    expect(rightWidth).toBe("250px")
+    expect(getByText('LeftSideBar').nextElementSibling).toHaveAttribute('data-testid', 'headerContainer')
+    expect(getByText('RightSideBar').previousElementSibling).toHaveAttribute('data-testid', 'headerContainer')
+  })
+
 
 })
 
@@ -98,6 +121,33 @@ function renderSidebarHeaderWithCustomValues({ variant = undefined, props, right
         {({ getRootProps }, props) => {
           return <div data-testid="sidebarHeader" {...getRootProps(props)}>SidebarHeader
           <div>Should Be Rendred</div>
+          </div>
+        }}
+      </SidebarHeader>
+      <DateHeader primaryHeader />
+      <DateHeader />
+    </TimelineHeaders>
+  </Timeline>
+  )
+}
+
+
+function renderTwoSidebarHeadersWithCustomValues({ props, rightSidebarWidth } = {}) {
+  return render(<Timeline
+    {...defaultProps}
+    rightSidebarWidth={rightSidebarWidth}
+  >
+    <TimelineHeaders>
+      <SidebarHeader variant={"left"} props={props}>
+        {({ getRootProps }, props) => {
+          return <div {...getRootProps(props)}>LeftSideBar
+          <div>Should Be Rendred</div>
+          </div>
+        }}
+      </SidebarHeader>
+      <SidebarHeader variant={"right"} props={props}>
+        {({ getRootProps }, props) => {
+          return <div  {...getRootProps(props)}>RightSideBar
           </div>
         }}
       </SidebarHeader>

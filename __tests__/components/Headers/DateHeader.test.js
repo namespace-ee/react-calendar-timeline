@@ -34,7 +34,7 @@ describe("Testing DateHeader Component", () => {
   afterEach(cleanup)
 
   // Testing The Example In The Docs
-  it("DateHeader Will Be Rendered Correctly In The TimeLine", () => {
+  it("Given DateHeader When rendered Then it should be rendered correctly in the timeLine", () => {
     const { getAllByTestId } = render(
       <Timeline
         {...defaultProps}
@@ -64,7 +64,7 @@ describe("Testing DateHeader Component", () => {
 
   })
 
-  it("Label Format With A String Will Rendered Correctly In The intervalRenderer", () => {
+  it("Given Dateheader When pass a string typed labelFormat Then it should render the intervals with hte given format", () => {
     const { getAllByTestId } = renderDateHeader({ unit: "day", labelFormat: "MM/DD" });
     expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/25')
     expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/26')
@@ -73,15 +73,15 @@ describe("Testing DateHeader Component", () => {
 
   })
 
-  it("Label Format With An Object Will Rendered Correctly In The intervalRenderer", () => {
-    const { getAllByTestId } = renderDateHeader({ unit: "day", labelFormat: { day: { short: "MM/DD/YYYY", long: "MM/DD/YYYY" } } });
+  it("Given Dateheader When pass an object typed labelFormat Then it should render the intervals with hte given format", () => {
+    const { getAllByTestId } = renderDateHeader({ unit: "day", labelFormat: { day: { long: "MM/DD/YYYY" } } });
 
     expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/25/2018')
     expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/26/2018')
     expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/27/2018')
     expect(getAllByTestId('dateHeader')[0]).toHaveTextContent('Thursday, October 25')
   })
-  it("Label Format With A Function Will Rendered Correctly In The intervalRenderer", () => {
+  it("Given Dateheader When pass a function typed labelFormat Then it should render the intervals with hte given format", () => {
     const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
     const { getAllByTestId } = renderDateHeader({ unit: "day", labelFormat: formatlabel });
 
@@ -94,14 +94,15 @@ describe("Testing DateHeader Component", () => {
     expect(getAllByTestId('dateHeader')[0]).toHaveTextContent('Thursday, October 25')
 
   })
-  it("Label Format With A Function Will Be Called With The Right Parameters", () => {
+  it("Given Dateheader When pass a string typed labelFormat Then it should be called with the right params", () => {
     const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
     renderDateHeader({ unit: "day", labelFormat: formatlabel })
     expect(formatlabel).toHaveBeenCalled()
     expect(formatlabel).toHaveBeenCalledWith(expect.any(Array), "day", expect.any(Number))
   })
+  
 
-  it("Format Will Change When Click On The Primary", async () => {
+  it("Given Dateheader When click on the primary header Then it should change the format", async () => {
 
     const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
     const { getByTestId, getAllByTestId } = renderDateHeader({ unit: "day", labelFormat: formatlabel });
@@ -127,7 +128,7 @@ describe("Testing DateHeader Component", () => {
 
   })
 
-  it("Format Will Change When Click On The Secondary", async () => {
+  it("Given Dateheader When click on the secondary header Then it should change the format", async () => {
 
     const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
     const { getByTestId, getAllByTestId, debug } = renderDateHeader({ unit: "day", labelFormat: formatlabel });
@@ -154,26 +155,40 @@ describe("Testing DateHeader Component", () => {
     expect(secondaryHeaderChildrenBeforeClick).toBeLessThan(seconderyHeader.childElementCount)
     expect(unitHeaderChildrenBeforeClick).toBeGreaterThan(unitHeader.childElementCount)
   })
-  it('ClassName Will Be Applied To DateHeader When Provided', () => {
+  it('Given Dateheader When pass a className Then it should be applied to DateHeader', () => {
     const { getAllByTestId } = renderDateHeader({ labelFormat: "MM/DD/YYYY", className: 'test-class-name' });
     expect(getAllByTestId('dateHeader')[1]).toHaveClass('test-class-name')
   })
-  it('should not ovverride the width/left/position in case of providing interval renderer but it will accept any other style values', () => {
-    const { getAllByTestId } = renderDateHeader({ labelFormat: "MM/DD/YYYY", props: { style: { width: 100, position: 'fixed', display: 'flex' } } });
-    const { width, position, display } = getComputedStyle(getAllByTestId('interval')[0])
-
+  it('Given Interval When pass an ovveride values for (width, left, position) it should not ovverride the default values', () => {
+    const { getAllByTestId } = renderDateHeader({ labelFormat: "MM/DD/YYYY", props: { style: { width: 100, position: 'fixed' } } });
+    const { width, position } = getComputedStyle(getAllByTestId('interval')[0])
     expect(width).not.toBe('100px')
     expect(position).not.toBe('fixed')
+   
+
+  })
+
+  it('Given Interval When pass an override (width, position) Then it should render the default values for it', () => {
+    const { getAllByTestId } = renderDateHeader({ labelFormat: "MM/DD/YYYY", props: { style: { width: 100, position: 'fixed' } } });
+    const { width, position } = getComputedStyle(getAllByTestId('interval')[0])
+    expect(width).toBe('36px')
+    expect(position).toBe('absolute')
+   
+
+  })
+  it('Given Interval When pass any style other than (position, width, left) through the Dateheader Then it should take it', () => {
+    const { getAllByTestId } = renderDateHeader({ labelFormat: "MM/DD/YYYY", props: { style: { display: 'flex' } } });
+    const { display } = getComputedStyle(getAllByTestId('interval')[0])
+    
     expect(display).toBe('flex')
 
   })
-  it('should render the given style correctly in the unit header', () => {
-    const { getAllByTestId } = renderDateHeader({ style: { height: 50 }, labelFormat: "MM/DD/YYYY", props: { style: { width: 100, position: 'fixed', display: 'flex' } } });
+  it('Given unit Dateheader When pass a style Object Then it should render the given style correctly', () => {
+    const { getAllByTestId } = renderDateHeader({ style: { height: 50 }, labelFormat: "MM/DD/YYYY"});
     const { height } = getComputedStyle(getAllByTestId('dateHeader')[1])
 
     expect(height).toBe('50px')
   })
-
 
 })
 
@@ -183,6 +198,7 @@ function renderDateHeader({ labelFormat, unit, props, className, style } = {}) {
 
     <Timeline
       {...defaultProps}
+      timelineUnit="month"
       style={{ width: 1000 }}
     >
       <TimelineHeaders>
