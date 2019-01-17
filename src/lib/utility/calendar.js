@@ -216,7 +216,11 @@ export function calculateDimensions({
     left: left,
     width: Math.max(itemWidth, 3),
     collisionLeft: itemTimeStart,
-    collisionWidth: itemTimeRange
+    collisionWidth: itemTimeRange,
+    effectiveStartTime: effectiveStartTime,
+    effectiveEndTime: effectiveEndTime,
+    itemTimeStart: itemTimeStart,
+    itemEnd: itemEnd
   }
 
   return dimensions
