@@ -267,6 +267,24 @@ Default:
 
 Ref callback that gets a DOM reference to the scroll body element. Can be useful to programmatically scroll.
 
+## ref to the Timeline
+
+Ref callback that gets a reference to the timeline. Can be useful to programmatically zoom.
+
+```js
+<Timeline
+  ref={r => { this.timeline = r; }}
+  ...
+/>
+```
+And calling later the reference
+
+```js
+this.timeline.changeZoom(CUSTOM_ZOOM_FACTOR); // 1 maintains current, <1 zooms in, >1 out
+```
+changeZoom accepts a second parameter to define the zoom position on the x axis, default is 0.5 (in the middle)
+
+
 ## onItemMove(itemId, dragTime, newGroupOrder)
 
 Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
