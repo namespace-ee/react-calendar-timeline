@@ -220,7 +220,7 @@ export function calculateDimensions({
     effectiveStartTime: effectiveStartTime,
     effectiveEndTime: effectiveEndTime,
     itemTimeStart: itemTimeStart,
-    itemEnd: itemEnd
+    itemTimeEnd: itemTimeEnd
   }
 
   return dimensions
