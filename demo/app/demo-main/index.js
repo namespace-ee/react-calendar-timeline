@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { Component } from 'react'
+import React, { Component, Fragment, createRef } from 'react'
 import moment from 'moment'
 
 import Timeline, {
@@ -10,6 +10,12 @@ import Timeline, {
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
+import interact from 'interactjs'
+import { coordinateToTimeRatio } from 'react-calendar-timeline/lib/utility/calendar'
+import {
+  getSumOffset,
+  getSumScroll,
+} from 'react-calendar-timeline/lib/utility/dom-helpers'
 
 var minTime = moment()
   .add(-6, 'months')
@@ -141,60 +147,151 @@ export default class App extends Component {
     return time
   }
 
+  handleItemDrop = e => {
+    const { timelineRef, scrollRef, state: { items } } = this
+    const {
+      visibleTimeStart,
+      visibleTimeEnd,
+      groupTops,
+      width,
+    } = timelineRef.current.state
+    const { offsetTop, offsetLeft } = getSumOffset(scrollRef)
+    const { scrollTop, scrollLeft } = getSumScroll(scrollRef)
+    const { pageX, pageY } = e
+
+    const ratio = coordinateToTimeRatio(visibleTimeStart, visibleTimeEnd, width)
+
+    let groupKey = '0'
+    for (var key of Object.keys(groupTops)) {
+      var groupTop = groupTops[key]
+      if (pageY - offsetTop + scrollTop > groupTop) {
+        groupKey = key
+      } else {
+        break
+      }
+    }
+
+    const canvasTimeStart =
+      visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
+    const start = (pageX - offsetLeft + scrollLeft) * ratio + canvasTimeStart
+    const end = start + 1000 * 60 * 60 * 24
+
+    const startDay = moment(start).day()
+    const endDay = moment(end).day()
+
+    this.setState({
+      items: [
+        ...items,
+        {
+          id: items.length,
+          start,
+          end,
+          group: parseInt(groupKey, 10) + 1,
+          title: 'Drag & drop is working',
+          className:
+            startDay === 6 || startDay === 0 || endDay === 6 || endDay === 0
+              ? 'item-weekend'
+              : '',
+          itemProps: {
+            'data-tip': 'Drag & drop is working',
+          },
+        },
+      ],
+    })
+  }
+
+  componentDidMount = () => {
+    let x, y
+    interact(this.item.current)
+      .draggable({ enabled: true })
+      .on('dragstart', e => {
+        ({ pageX: x, pageY: y } = e)
+      })
+      .on('dragmove', e => {
+        const { pageX, pageY } = e
+        e.target.style.transform = `translate(${pageX - x}px, ${pageY - y}px)`
+      })
+      .on('dragend', e => {
+        e.target.style.transform = ''
+        this.handleItemDrop(e)
+      })
+  }
+  onScrollRef = ref => {
+    this.scrollRef = ref
+  }
+
+  item = createRef()
+  timelineRef = createRef()
+
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
     return (
-      <Timeline
-        groups={groups}
-        items={items}
-        keys={keys}
-        sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
-        canMove
-        canResize="right"
-        canSelect
-        itemsSorted
-        itemTouchSendsClick={false}
-        stackItems
-        itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
-        onCanvasContextMenu={this.handleCanvasContextMenu}
-        onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
-        onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
-        onItemResize={this.handleItemResize}
-        onItemDoubleClick={this.handleItemDoubleClick}
-        onTimeChange={this.handleTimeChange}
-        moveResizeValidator={this.moveResizeValidator}
-      >
-        <TimelineMarkers>
-          <TodayMarker />
-          <CustomMarker
-            date={
-              moment()
-                .startOf('day')
-                .valueOf() +
-              1000 * 60 * 60 * 2
-            }
-          />
-          <CustomMarker
-            date={moment()
-              .add(3, 'day')
-              .valueOf()}
-          >
-            {({ styles }) => {
-              const newStyles = { ...styles, backgroundColor: 'blue' }
-              return <div style={newStyles} />
-            }}
-          </CustomMarker>
-          <CursorMarker />
-        </TimelineMarkers>
-      </Timeline>
+      <Fragment>
+        <div
+          ref={this.item}
+          style={{
+            padding: 10,
+            width: '100px',
+            height: '100px',
+            background: 'lightgray',
+          }}
+        >
+          Drag & drop me onto the timeline
+        </div>
+        <Timeline
+          ref={this.timelineRef}
+          scrollRef={this.onScrollRef}
+          groups={groups}
+          items={items}
+          keys={keys}
+          sidebarWidth={150}
+          sidebarContent={<div>Above The Left</div>}
+          canMove
+          canResize="right"
+          canSelect
+          itemsSorted
+          itemTouchSendsClick={false}
+          stackItems
+          itemHeightRatio={0.75}
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+          onCanvasClick={this.handleCanvasClick}
+          onCanvasDoubleClick={this.handleCanvasDoubleClick}
+          onCanvasContextMenu={this.handleCanvasContextMenu}
+          onItemClick={this.handleItemClick}
+          onItemSelect={this.handleItemSelect}
+          onItemContextMenu={this.handleItemContextMenu}
+          onItemMove={this.handleItemMove}
+          onItemResize={this.handleItemResize}
+          onItemDoubleClick={this.handleItemDoubleClick}
+          onTimeChange={this.handleTimeChange}
+          moveResizeValidator={this.moveResizeValidator}
+        >
+          <TimelineMarkers>
+            <TodayMarker />
+            <CustomMarker
+              date={
+                moment()
+                  .startOf('day')
+                  .valueOf() +
+                1000 * 60 * 60 * 2
+              }
+            />
+            <CustomMarker
+              date={moment()
+                .add(3, 'day')
+                .valueOf()}
+            >
+              {({ styles }) => {
+                const newStyles = { ...styles, backgroundColor: 'blue' }
+                return <div style={newStyles} />
+              }}
+            </CustomMarker>
+            <CursorMarker />
+          </TimelineMarkers>
+        </Timeline>
+      </Fragment>
     )
   }
 }
