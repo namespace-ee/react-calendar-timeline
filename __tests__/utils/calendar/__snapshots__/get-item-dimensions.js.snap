@@ -5,7 +5,11 @@ Object {
   "dimensions": Object {
     "collisionLeft": 1540540000000,
     "collisionWidth": 6803877,
+    "effectiveEndTime": 1540546803877,
+    "effectiveStartTime": 1540540000000,
     "height": 60,
+    "itemTimeEnd": 1540546803877,
+    "itemTimeStart": 1540540000000,
     "left": 1449.074074074074,
     "order": Object {
       "group": Object {

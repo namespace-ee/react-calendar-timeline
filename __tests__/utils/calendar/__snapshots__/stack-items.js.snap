@@ -7,7 +7,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540543600000,
         "collisionWidth": 6803877,
+        "effectiveEndTime": 1540550403877,
+        "effectiveStartTime": 1540543600000,
         "height": 22.5,
+        "itemTimeEnd": 1540550403877,
+        "itemTimeStart": 1540543600000,
         "left": 4472.222222222223,
         "order": Object {
           "group": Object {
@@ -25,7 +29,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
+        "effectiveEndTime": 1540554003877,
+        "effectiveStartTime": 1540532800000,
         "height": 22.5,
+        "itemTimeEnd": 1540554003877,
+        "itemTimeStart": 1540532800000,
         "left": 4097.222222222223,
         "order": Object {
           "group": Object {
@@ -43,7 +51,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
+        "effectiveEndTime": 1540575603877,
+        "effectiveStartTime": 1540550800000,
         "height": 22.5,
+        "itemTimeEnd": 1540575603877,
+        "itemTimeStart": 1540550800000,
         "left": 4722.222222222223,
         "order": Object {
           "group": Object {
@@ -61,7 +73,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
+        "effectiveEndTime": 1540584875919,
+        "effectiveStartTime": 1540570000000,
         "height": 22.5,
+        "itemTimeEnd": 1540584875919,
+        "itemTimeStart": 1540570000000,
         "left": 5388.888888888889,
         "order": Object {
           "group": Object {
@@ -79,7 +95,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540640397548,
+        "effectiveStartTime": 1540620000000,
         "height": 22.5,
+        "itemTimeEnd": 1540640397548,
+        "itemTimeStart": 1540620000000,
         "left": 7125,
         "order": Object {
           "group": Object {
@@ -97,7 +117,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540674000000,
+        "effectiveStartTime": 1540656000000,
         "height": 22.5,
+        "itemTimeEnd": 1540676397548,
+        "itemTimeStart": 1540656000000,
         "left": 8375,
         "order": Object {
           "group": Object {
@@ -133,7 +157,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540543600000,
         "collisionWidth": 3203877,
+        "effectiveEndTime": 1540546803877,
+        "effectiveStartTime": 1540543600000,
         "height": 22.5,
+        "itemTimeEnd": 1540546803877,
+        "itemTimeStart": 1540543600000,
         "left": 4472.222222222223,
         "order": Object {
           "group": Object {
@@ -151,7 +179,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
+        "effectiveEndTime": 1540554003877,
+        "effectiveStartTime": 1540532800000,
         "height": 22.5,
+        "itemTimeEnd": 1540554003877,
+        "itemTimeStart": 1540532800000,
         "left": 4097.222222222223,
         "order": Object {
           "group": Object {
@@ -169,7 +201,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
+        "effectiveEndTime": 1540575603877,
+        "effectiveStartTime": 1540550800000,
         "height": 22.5,
+        "itemTimeEnd": 1540575603877,
+        "itemTimeStart": 1540550800000,
         "left": 4722.222222222223,
         "order": Object {
           "group": Object {
@@ -187,7 +223,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
+        "effectiveEndTime": 1540584875919,
+        "effectiveStartTime": 1540570000000,
         "height": 22.5,
+        "itemTimeEnd": 1540584875919,
+        "itemTimeStart": 1540570000000,
         "left": 5388.888888888889,
         "order": Object {
           "group": Object {
@@ -205,7 +245,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540640397548,
+        "effectiveStartTime": 1540620000000,
         "height": 22.5,
+        "itemTimeEnd": 1540640397548,
+        "itemTimeStart": 1540620000000,
         "left": 7125,
         "order": Object {
           "group": Object {
@@ -223,7 +267,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540674000000,
+        "effectiveStartTime": 1540656000000,
         "height": 22.5,
+        "itemTimeEnd": 1540676397548,
+        "itemTimeStart": 1540656000000,
         "left": 8375,
         "order": Object {
           "group": Object {
@@ -259,7 +307,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540540000000,
         "collisionWidth": 10403877,
+        "effectiveEndTime": 1540550403877,
+        "effectiveStartTime": 1540540000000,
         "height": 22.5,
+        "itemTimeEnd": 1540550403877,
+        "itemTimeStart": 1540540000000,
         "left": 4347.222222222223,
         "order": Object {
           "group": Object {
@@ -277,7 +329,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
+        "effectiveEndTime": 1540554003877,
+        "effectiveStartTime": 1540532800000,
         "height": 22.5,
+        "itemTimeEnd": 1540554003877,
+        "itemTimeStart": 1540532800000,
         "left": 4097.222222222223,
         "order": Object {
           "group": Object {
@@ -295,7 +351,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
+        "effectiveEndTime": 1540575603877,
+        "effectiveStartTime": 1540550800000,
         "height": 22.5,
+        "itemTimeEnd": 1540575603877,
+        "itemTimeStart": 1540550800000,
         "left": 4722.222222222223,
         "order": Object {
           "group": Object {
@@ -313,7 +373,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
+        "effectiveEndTime": 1540584875919,
+        "effectiveStartTime": 1540570000000,
         "height": 22.5,
+        "itemTimeEnd": 1540584875919,
+        "itemTimeStart": 1540570000000,
         "left": 5388.888888888889,
         "order": Object {
           "group": Object {
@@ -331,7 +395,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540640397548,
+        "effectiveStartTime": 1540620000000,
         "height": 22.5,
+        "itemTimeEnd": 1540640397548,
+        "itemTimeStart": 1540620000000,
         "left": 7125,
         "order": Object {
           "group": Object {
@@ -349,7 +417,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540674000000,
+        "effectiveStartTime": 1540656000000,
         "height": 22.5,
+        "itemTimeEnd": 1540676397548,
+        "itemTimeStart": 1540656000000,
         "left": 8375,
         "order": Object {
           "group": Object {
@@ -385,7 +457,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540540000000,
         "collisionWidth": 6803877,
+        "effectiveEndTime": 1540546803877,
+        "effectiveStartTime": 1540540000000,
         "height": 22.5,
+        "itemTimeEnd": 1540546803877,
+        "itemTimeStart": 1540540000000,
         "left": 4347.222222222223,
         "order": Object {
           "group": Object {
@@ -403,7 +479,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
+        "effectiveEndTime": 1540554003877,
+        "effectiveStartTime": 1540532800000,
         "height": 22.5,
+        "itemTimeEnd": 1540554003877,
+        "itemTimeStart": 1540532800000,
         "left": 4097.222222222223,
         "order": Object {
           "group": Object {
@@ -421,7 +501,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
+        "effectiveEndTime": 1540575603877,
+        "effectiveStartTime": 1540550800000,
         "height": 22.5,
+        "itemTimeEnd": 1540575603877,
+        "itemTimeStart": 1540550800000,
         "left": 4722.222222222223,
         "order": Object {
           "group": Object {
@@ -439,7 +523,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
+        "effectiveEndTime": 1540584875919,
+        "effectiveStartTime": 1540570000000,
         "height": 22.5,
+        "itemTimeEnd": 1540584875919,
+        "itemTimeStart": 1540570000000,
         "left": 5388.888888888889,
         "order": Object {
           "group": Object {
@@ -457,7 +545,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540640397548,
+        "effectiveStartTime": 1540620000000,
         "height": 22.5,
+        "itemTimeEnd": 1540640397548,
+        "itemTimeStart": 1540620000000,
         "left": 7125,
         "order": Object {
           "group": Object {
@@ -475,7 +567,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540674000000,
+        "effectiveStartTime": 1540656000000,
         "height": 22.5,
+        "itemTimeEnd": 1540676397548,
+        "itemTimeStart": 1540656000000,
         "left": 8375,
         "order": Object {
           "group": Object {
@@ -511,7 +607,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540540000000,
         "collisionWidth": 6803877,
+        "effectiveEndTime": 1540546803877,
+        "effectiveStartTime": 1540540000000,
         "height": 22.5,
+        "itemTimeEnd": 1540546803877,
+        "itemTimeStart": 1540540000000,
         "left": 4347.222222222223,
         "order": Object {
           "group": Object {
@@ -529,7 +629,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
+        "effectiveEndTime": 1540554003877,
+        "effectiveStartTime": 1540532800000,
         "height": 22.5,
+        "itemTimeEnd": 1540554003877,
+        "itemTimeStart": 1540532800000,
         "left": 4097.222222222223,
         "order": Object {
           "group": Object {
@@ -547,7 +651,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
+        "effectiveEndTime": 1540575603877,
+        "effectiveStartTime": 1540550800000,
         "height": 22.5,
+        "itemTimeEnd": 1540575603877,
+        "itemTimeStart": 1540550800000,
         "left": 4722.222222222223,
         "order": Object {
           "group": Object {
@@ -565,7 +673,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
+        "effectiveEndTime": 1540584875919,
+        "effectiveStartTime": 1540570000000,
         "height": 22.5,
+        "itemTimeEnd": 1540584875919,
+        "itemTimeStart": 1540570000000,
         "left": 5388.888888888889,
         "order": Object {
           "group": Object {
@@ -583,7 +695,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540640397548,
+        "effectiveStartTime": 1540620000000,
         "height": 22.5,
+        "itemTimeEnd": 1540640397548,
+        "itemTimeStart": 1540620000000,
         "left": 7125,
         "order": Object {
           "group": Object {
@@ -601,7 +717,11 @@ Object {
       "dimensions": Object {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
+        "effectiveEndTime": 1540674000000,
+        "effectiveStartTime": 1540656000000,
         "height": 22.5,
+        "itemTimeEnd": 1540676397548,
+        "itemTimeStart": 1540656000000,
         "left": 8375,
         "order": Object {
           "group": Object {

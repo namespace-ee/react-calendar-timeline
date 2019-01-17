@@ -23,7 +23,11 @@ describe('calculateDimensions', () => {
       collisionLeft: 200,
       collisionWidth: 100,
       left: 200,
-      width: 100
+      width: 100,
+      itemTimeStart: 200,
+      itemTimeEnd: 300,
+      effectiveStartTime: 200,
+      effectiveEndTime: 300
     })
   })
 
@@ -42,7 +46,12 @@ describe('calculateDimensions', () => {
       collisionLeft: 0,
       collisionWidth: 300,
       left: 0,
-      width: 200
+      width: 200,
+      itemTimeStart: 0,
+      itemTimeEnd: 300,
+      effectiveStartTime: 100,
+      effectiveEndTime: 300
+
     })
   })
 
@@ -61,7 +70,11 @@ describe('calculateDimensions', () => {
       collisionLeft: 400,
       collisionWidth: 300,
       left: 300,
-      width: 100
+      width: 100,
+      itemTimeStart: 400,
+      itemTimeEnd: 700,
+      effectiveStartTime: 400,
+      effectiveEndTime: 500
     })
   })
   it('item time range completely overlaps canvas time range', () => {
@@ -79,7 +92,11 @@ describe('calculateDimensions', () => {
       collisionLeft: 0,
       collisionWidth: 600,
       left: 0,
-      width: 400
+      width: 400,
+      itemTimeStart: 0,
+      itemTimeEnd: 600,
+      effectiveStartTime: 100,
+      effectiveEndTime: 500
     })
   })
 })
