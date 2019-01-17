@@ -1,4 +1,4 @@
-import { render, cleanup, prettyDOM } from 'react-testing-library'
+import { render, cleanup } from 'react-testing-library'
 import Timeline from 'lib/Timeline'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import DateHeader from 'lib/headers/DateHeader'
@@ -62,7 +62,7 @@ describe('TimelineHeader', () => {
 
     })
     it('Given TimelineHeader When rendered Then it should render a two dateHeadrs default', () => {
-      const { getAllByTestId, getByTestId } = renderDefaultTimeline();
+      const { getAllByTestId } = renderDefaultTimeline();
       const dateHeaders = getAllByTestId("dateHeader")
 
       expect(dateHeaders).toHaveLength(2)

@@ -91,14 +91,14 @@ describe("Testing SidebarHeader Component", () => {
   })
 
   it("Given sidebarheader When pass a variant and props Then it should render both correctly", () => {
-    const { getByTestId } = renderSidebarHeaderWithCustomValues({ props: { style: { width: 250 }, variant: "left" }})
+    const { getByTestId } = renderSidebarHeaderWithCustomValues({ props: { style: { width: 250 }, variant: "left" } })
     const { width } = getComputedStyle(getByTestId("sidebarHeader"))
     expect(width).toBe("250px")
     expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute('data-testid', 'headerContainer')
   })
 
   it("Given two sidebarheaders When pass a variants and props Then it should render both correctly", () => {
-    const { getByText } = renderTwoSidebarHeadersWithCustomValues({ props: { style: { width: 250 } }})
+    const { getByText } = renderTwoSidebarHeadersWithCustomValues({ props: { style: { width: 250 } } })
     const { width: leftWidth } = getComputedStyle(getByText('LeftSideBar'))
     const { width: rightWidth } = getComputedStyle(getByText('RightSideBar'))
     expect(leftWidth).toBe("250px")

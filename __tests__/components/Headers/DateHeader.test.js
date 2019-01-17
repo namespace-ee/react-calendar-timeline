@@ -1,7 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-
-import { render, cleanup, within, queryByAttribute } from 'react-testing-library'
+import { render, cleanup, within } from 'react-testing-library'
 import Timeline from 'lib/Timeline'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
@@ -100,7 +98,7 @@ describe("Testing DateHeader Component", () => {
     expect(formatlabel).toHaveBeenCalled()
     expect(formatlabel).toHaveBeenCalledWith(expect.any(Array), "day", expect.any(Number))
   })
-  
+
 
   it("Given Dateheader When click on the primary header Then it should change the format", async () => {
 
@@ -131,7 +129,7 @@ describe("Testing DateHeader Component", () => {
   it("Given Dateheader When click on the secondary header Then it should change the format", async () => {
 
     const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
-    const { getByTestId, getAllByTestId, debug } = renderDateHeader({ unit: "day", labelFormat: formatlabel });
+    const { getByTestId, getAllByTestId } = renderDateHeader({ unit: "day", labelFormat: formatlabel });
     // Arrange
     const primaryHeader = getByTestId('dateHeader')
     const seconderyHeader = getAllByTestId('dateHeader')[2]
@@ -164,7 +162,7 @@ describe("Testing DateHeader Component", () => {
     const { width, position } = getComputedStyle(getAllByTestId('interval')[0])
     expect(width).not.toBe('100px')
     expect(position).not.toBe('fixed')
-   
+
 
   })
 
@@ -173,18 +171,18 @@ describe("Testing DateHeader Component", () => {
     const { width, position } = getComputedStyle(getAllByTestId('interval')[0])
     expect(width).toBe('36px')
     expect(position).toBe('absolute')
-   
+
 
   })
   it('Given Interval When pass any style other than (position, width, left) through the Dateheader Then it should take it', () => {
     const { getAllByTestId } = renderDateHeader({ labelFormat: "MM/DD/YYYY", props: { style: { display: 'flex' } } });
     const { display } = getComputedStyle(getAllByTestId('interval')[0])
-    
+
     expect(display).toBe('flex')
 
   })
   it('Given unit Dateheader When pass a style Object Then it should render the given style correctly', () => {
-    const { getAllByTestId } = renderDateHeader({ style: { height: 50 }, labelFormat: "MM/DD/YYYY"});
+    const { getAllByTestId } = renderDateHeader({ style: { height: 50 }, labelFormat: "MM/DD/YYYY" });
     const { height } = getComputedStyle(getAllByTestId('dateHeader')[1])
 
     expect(height).toBe('50px')

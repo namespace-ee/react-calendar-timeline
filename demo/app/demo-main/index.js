@@ -4,9 +4,13 @@ import moment from 'moment'
 
 import Timeline, {
   TimelineMarkers,
+  TimelineHeaders,
   TodayMarker,
   CustomMarker,
-  CursorMarker
+  CursorMarker,
+  CustomHeader,
+  SidebarHeader,
+  DateHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -145,56 +149,106 @@ export default class App extends Component {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
     return (
-      <Timeline
-        groups={groups}
-        items={items}
-        keys={keys}
-        sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
-        canMove
-        canResize="right"
-        canSelect
-        itemsSorted
-        itemTouchSendsClick={false}
-        stackItems
-        itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
-        onCanvasContextMenu={this.handleCanvasContextMenu}
-        onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
-        onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
-        onItemResize={this.handleItemResize}
-        onItemDoubleClick={this.handleItemDoubleClick}
-        onTimeChange={this.handleTimeChange}
-        moveResizeValidator={this.moveResizeValidator}
-      >
-        <TimelineMarkers>
-          <TodayMarker />
-          <CustomMarker
-            date={
-              moment()
-                .startOf('day')
-                .valueOf() +
-              1000 * 60 * 60 * 2
-            }
-          />
-          <CustomMarker
-            date={moment()
-              .add(3, 'day')
-              .valueOf()}
-          >
-            {({ styles }) => {
-              const newStyles = { ...styles, backgroundColor: 'blue' }
-              return <div style={newStyles} />
-            }}
-          </CustomMarker>
-          <CursorMarker />
-        </TimelineMarkers>
-      </Timeline>
+      // <Timeline
+      //   groups={groups}
+      //   items={items}
+      //   keys={keys}
+      //   sidebarWidth={150}
+      //   sidebarContent={<div>Above The Left</div>}
+      //   canMove
+      //   canResize="right"
+      //   canSelect
+      //   itemsSorted
+      //   itemTouchSendsClick={false}
+      //   stackItems
+      //   itemHeightRatio={0.75}
+      //   defaultTimeStart={defaultTimeStart}
+      //   defaultTimeEnd={defaultTimeEnd}
+      //   onCanvasClick={this.handleCanvasClick}
+      //   onCanvasDoubleClick={this.handleCanvasDoubleClick}
+      //   onCanvasContextMenu={this.handleCanvasContextMenu}
+      //   onItemClick={this.handleItemClick}
+      //   onItemSelect={this.handleItemSelect}
+      //   onItemContextMenu={this.handleItemContextMenu}
+      //   onItemMove={this.handleItemMove}
+      //   onItemResize={this.handleItemResize}
+      //   onItemDoubleClick={this.handleItemDoubleClick}
+      //   onTimeChange={this.handleTimeChange}
+      //   moveResizeValidator={this.moveResizeValidator}
+      // >
+      //   <TimelineMarkers>
+      //     <TodayMarker />
+      //     <CustomMarker
+      //       date={
+      //         moment()
+      //           .startOf('day')
+      //           .valueOf() +
+      //         1000 * 60 * 60 * 2
+      //       }
+      //     />
+      //     <CustomMarker
+      //       date={moment()
+      //         .add(3, 'day')
+      //         .valueOf()}
+      //     >
+      //       {({ styles }) => {
+      //         const newStyles = { ...styles, backgroundColor: 'blue' }
+      //         return <div style={newStyles} />
+      //       }}
+      //     </CustomMarker>
+      //     <CursorMarker />
+      //   </TimelineMarkers>
+      // </Timeline>
+      <Timeline {...this.state}>
+            <TimelineHeaders>
+                <SidebarHeader>
+                    {({ getRootProps }) => {
+                        return <div {...getRootProps()}>Left</div>
+                    }}
+                </SidebarHeader>
+                <DateHeader primaryHeader />
+                <DateHeader />
+                <CustomHeader unit="month">
+                    {({
+                        headerContext: { intervals },
+                        getRootProps,
+                        getIntervalProps,
+                        showPeriod
+                    }) => {
+                        return (
+                            <div data-testid="customHeader" {...getRootProps({ style: { height: 30 } })}>
+                                {intervals.map(interval => {
+                                    const intervalStyle = {
+                                        // height: 30,
+                                        lineHeight: '30px',
+                                        textAlign: 'center',
+                                        borderLeft: '1px solid black',
+                                        cursor: 'pointer',
+                                        backgroundColor: 'Turquoise',
+                                        color: 'white'
+                                    }
+                                    return (
+                                        <div
+                                            onClick={() => {
+                                                showPeriod(interval.startTime, interval.endTime)
+                                            }}
+                                            {...getIntervalProps({
+                                                interval,
+                                                style: intervalStyle
+                                            })}
+                                        >
+                                            <div className="sticky">
+                                                {interval.startTime.format('MM/DD/YYYY')}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )
+                    }}
+                </CustomHeader>
+            </TimelineHeaders>
+        </Timeline>
     )
   }
 }
