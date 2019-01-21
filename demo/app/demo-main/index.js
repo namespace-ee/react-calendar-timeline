@@ -150,34 +150,40 @@ export default class App extends Component {
   handleItemDrop = e => {
     const { timelineRef, scrollRef, state: { items } } = this
     const {
+      canvasTimeStart,
       visibleTimeStart,
       visibleTimeEnd,
       groupTops,
       width,
     } = timelineRef.current.state
-    const { offsetTop, offsetLeft } = getSumOffset(scrollRef)
-    const { scrollTop, scrollLeft } = getSumScroll(scrollRef)
+
+    const canvasWidth = width * 3
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = zoom * 3 + canvasTimeStart
+    const ratio = coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
+
+    const { offsetLeft, offsetTop } = getSumOffset(scrollRef)
+    const { scrollLeft, scrollTop } = getSumScroll(scrollRef)
     const { pageX, pageY } = e
 
-    const ratio = coordinateToTimeRatio(visibleTimeStart, visibleTimeEnd, width)
+    const x = pageX - offsetLeft + scrollLeft
+    const y = pageY - offsetTop + scrollTop
+
+    const start = x * ratio + canvasTimeStart
+    const end = start + 1000 * 60 * 60 * 24
+
+    const startDay = moment(start).day()
+    const endDay = moment(end).day()
 
     let groupKey = '0'
-    for (var key of Object.keys(groupTops)) {
-      var groupTop = groupTops[key]
-      if (pageY - offsetTop + scrollTop > groupTop) {
+    for (const key of Object.keys(groupTops)) {
+      const groupTop = groupTops[key]
+      if (y > groupTop) {
         groupKey = key
       } else {
         break
       }
     }
-
-    const canvasTimeStart =
-      visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
-    const start = (pageX - offsetLeft + scrollLeft) * ratio + canvasTimeStart
-    const end = start + 1000 * 60 * 60 * 24
-
-    const startDay = moment(start).day()
-    const endDay = moment(end).day()
 
     this.setState({
       items: [
@@ -202,7 +208,7 @@ export default class App extends Component {
 
   componentDidMount = () => {
     let x, y
-    interact(this.item.current)
+    this.interactable = interact(this.item.current)
       .draggable({ enabled: true })
       .on('dragstart', e => {
         ({ pageX: x, pageY: y } = e)
@@ -215,6 +221,9 @@ export default class App extends Component {
         e.target.style.transform = ''
         this.handleItemDrop(e)
       })
+  }
+  componentWillUnmount() {
+    this.interactable.unset()
   }
   onScrollRef = ref => {
     this.scrollRef = ref
