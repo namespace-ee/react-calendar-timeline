@@ -247,7 +247,7 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
   )
 }
 
-export function stack(items, groupOrders, lineHeight, groups) {
+export function stack(items, groupOrders, lineHeight, groups, groupMargin = 0) {
   var i, iMax
   var k = 0
   var totalHeight = 0
@@ -301,13 +301,9 @@ export function stack(items, groupOrders, lineHeight, groups) {
       }
     }
 
-    if (groupVal.height) {
-      groupHeights.push(groupVal.height)
-      totalHeight += groupVal.height
-    } else {
-      groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
-      totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
-    }
+    const height = groupVal.height || Math.max(groupHeight + verticalMargin, lineHeight)
+    groupHeights.push(height)
+    totalHeight += groupMargin + height
   })
   return {
     height: totalHeight,
@@ -316,7 +312,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
   }
 }
 
-export function nostack(items, groupOrders, lineHeight, groups) {
+export function nostack(items, groupOrders, lineHeight, groups, groupMargin = 0) {
   var i,
     j = 0,
     iMax
@@ -345,13 +341,9 @@ export function nostack(items, groupOrders, lineHeight, groups) {
       }
     }
 
-    if (groupVal.height) {
-      groupHeights.push(groupVal.height)
-      totalHeight += groupVal.height
-    } else {
-      groupHeights.push(Math.max(groupHeight, lineHeight))
-      totalHeight += Math.max(groupHeight, lineHeight)
-    }
+    const height = groupVal.height || Math.max(groupHeight, lineHeight)
+    groupHeights.push(height)
+    totalHeight += groupMargin + height
   })
   return {
     height: totalHeight,
@@ -392,7 +384,7 @@ export function stackItems(
     }
   }
 
-  const { keys, lineHeight, stackItems, itemHeightRatio } = props
+  const { keys, lineHeight, stackItems, itemHeightRatio, groupMargin } = props
   const {
     draggingItem,
     dragTime,
@@ -462,7 +454,8 @@ export function stackItems(
     dimensionItems,
     groupOrders,
     lineHeight,
-    groups
+    groups,
+    groupMargin
   )
 
   return { dimensionItems, height, groupHeights, groupTops }
