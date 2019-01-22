@@ -132,6 +132,14 @@ describe('CustomHeader Component Test', () => {
         expect(cursor).toBe('pointer')
         expect(color).toBe('white')
     })
+    it('Given a DateHeader When pass a jsx as a children Then it Should be rendered Correctly', () => {
+        const {getByText} = render(getCustomHeadersInTimeline())
+        expect(getByText('Should Be Rendered')).toBeInTheDocument()
+    })
+    it('Given a DateHeader When not pass any unit prop Then it Should take the default timeline unit (year)', () => {
+        const {getByTestId} = render(getCustomHeadersInTimeline())
+        expect(getByTestId('customHeader')).toHaveTextContent('01/01/2018')
+    })
 })
 
 function getCustomHeadersInTimeline({ unit = "year", props, intervalStyle } = {}) {
@@ -172,7 +180,11 @@ function getCustomHeadersInTimeline({ unit = "year", props, intervalStyle } = {}
                                         </div>
                                     )
                                 })}
+                                <div>
+                                    Should Be Rendered
+                                </div>
                             </div>
+
                         )
                     }}
                 </CustomHeader>
