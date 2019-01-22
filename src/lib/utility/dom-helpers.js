@@ -25,7 +25,7 @@ export function getParentPosition(element) {
 }
 
 export function getSumScroll(node) {
-  if (node === document.body) {
+  if (!node || node === document.body) {
     return {scrollLeft: 0, scrollTop: 0}
   } else {
     const parent = getSumScroll(node.parentNode)
@@ -37,7 +37,7 @@ export function getSumScroll(node) {
 }
 
 export function getSumOffset(node) {
-  if (node === document.body) {
+  if (!node || node === document.body) {
     return {offsetLeft: 0, offsetTop: 0}
   } else {
     const parent = getSumOffset(node.offsetParent)
