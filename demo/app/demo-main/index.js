@@ -16,6 +16,91 @@ import {
   getSumOffset,
   getSumScroll,
 } from 'react-calendar-timeline/lib/utility/dom-helpers'
+import PropTypes from 'prop-types'
+
+class Draggable extends Component {
+  static propTypes = {
+    handleItemDrop: PropTypes.func,
+    timelineRef: PropTypes.object,
+    scrollRef: PropTypes.shape({
+      current: PropTypes.object,
+    }),
+    children: PropTypes.node,
+    data: PropTypes.object,
+  }
+  handleItemDrop = e => {
+    const {
+      props: { timelineRef, scrollRef: { current: scrollRef }, data },
+    } = this
+    const {
+      canvasTimeStart,
+      visibleTimeStart,
+      visibleTimeEnd,
+      groupTops,
+      width,
+    } = timelineRef.current.state
+
+    const canvasWidth = width * 3
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = zoom * 3 + canvasTimeStart
+    const ratio = coordinateToTimeRatio(
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+    )
+
+    const { offsetLeft, offsetTop } = getSumOffset(scrollRef)
+    const { scrollLeft, scrollTop } = getSumScroll(scrollRef)
+    const { pageX, pageY } = e
+
+    const x = pageX - offsetLeft + scrollLeft
+    const y = pageY - offsetTop + scrollTop
+
+    const start = x * ratio + canvasTimeStart
+
+    let groupKey = ''
+    for (const key of Object.keys(groupTops)) {
+      const groupTop = groupTops[key]
+      if (y > groupTop) {
+        groupKey = key
+      } else {
+        break
+      }
+    }
+
+    if (groupKey === '' || pageX < offsetLeft || pageX > offsetLeft + width) {
+      return
+    }
+
+    this.props.handleItemDrop({ data, start, groupKey })
+  }
+
+  componentDidMount = () => {
+    let x, y
+    this.interactable = interact(this.item.current)
+      .draggable({ enabled: true })
+      .on('dragstart', e => {
+        ({ pageX: x, pageY: y } = e)
+      })
+      .on('dragmove', e => {
+        const { pageX, pageY } = e
+        e.target.style.transform = `translate(${pageX - x}px, ${pageY - y}px)`
+      })
+      .on('dragend', e => {
+        e.target.style.transform = ''
+        this.handleItemDrop(e)
+      })
+  }
+  componentWillUnmount() {
+    this.interactable.unset()
+  }
+
+  item = createRef()
+
+  render() {
+    return <div ref={this.item}>{this.props.children}</div>
+  }
+}
 
 var minTime = moment()
   .add(-6, 'months')
@@ -147,48 +232,11 @@ export default class App extends Component {
     return time
   }
 
-  handleItemDrop = e => {
-    const { timelineRef, scrollRef, state: { items } } = this
-    const {
-      canvasTimeStart,
-      visibleTimeStart,
-      visibleTimeEnd,
-      groupTops,
-      width,
-    } = timelineRef.current.state
-
-    const canvasWidth = width * 3
-    const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasTimeEnd = zoom * 3 + canvasTimeStart
-    const ratio = coordinateToTimeRatio(canvasTimeStart, canvasTimeEnd, canvasWidth)
-
-    const { offsetLeft, offsetTop } = getSumOffset(scrollRef)
-    const { scrollLeft, scrollTop } = getSumScroll(scrollRef)
-    const { pageX, pageY } = e
-
-    const x = pageX - offsetLeft + scrollLeft
-    const y = pageY - offsetTop + scrollTop
-
-    const start = x * ratio + canvasTimeStart
+  handleItemDrop = ({ data: { title }, start, groupKey }) => {
     const end = start + 1000 * 60 * 60 * 24
-
     const startDay = moment(start).day()
     const endDay = moment(end).day()
-
-    let groupKey = ''
-    for (const key of Object.keys(groupTops)) {
-      const groupTop = groupTops[key]
-      if (y > groupTop) {
-        groupKey = key
-      } else {
-        break
-      }
-    }
-
-    if (groupKey === '' || pageX < offsetLeft) {
-      return
-    }
-
+    const items = this.state.items
     this.setState({
       items: [
         ...items,
@@ -197,7 +245,7 @@ export default class App extends Component {
           start,
           end,
           group: parseInt(groupKey, 10) + 1,
-          title: 'Drag & drop is working',
+          title,
           className:
             startDay === 6 || startDay === 0 || endDay === 6 || endDay === 0
               ? 'item-weekend'
@@ -210,30 +258,12 @@ export default class App extends Component {
     })
   }
 
-  componentDidMount = () => {
-    let x, y
-    this.interactable = interact(this.item.current)
-      .draggable({ enabled: true })
-      .on('dragstart', e => {
-        ({ pageX: x, pageY: y } = e)
-      })
-      .on('dragmove', e => {
-        const { pageX, pageY } = e
-        e.target.style.transform = `translate(${pageX - x}px, ${pageY - y}px)`
-      })
-      .on('dragend', e => {
-        e.target.style.transform = ''
-        this.handleItemDrop(e)
-      })
-  }
-  componentWillUnmount() {
-    this.interactable.unset()
+  scrollObj = {
+    current: null,
   }
   onScrollRef = ref => {
-    this.scrollRef = ref
+    this.scrollObj.current = ref
   }
-
-  item = createRef()
   timelineRef = createRef()
 
   render() {
@@ -241,17 +271,23 @@ export default class App extends Component {
 
     return (
       <Fragment>
-        <div
-          ref={this.item}
-          style={{
-            padding: 10,
-            width: '100px',
-            height: '100px',
-            background: 'lightgray',
-          }}
+        <Draggable
+          handleItemDrop={this.handleItemDrop}
+          timelineRef={this.timelineRef}
+          scrollRef={this.scrollObj}
+          data={{ title: 'Drag & drop works' }}
         >
-          Drag & drop me onto the timeline
-        </div>
+          <div
+            style={{
+              padding: 10,
+              width: '100px',
+              height: '100px',
+              background: 'lightgray',
+            }}
+          >
+            Drag & drop me onto the timeline
+          </div>
+        </Draggable>
         <Timeline
           ref={this.timelineRef}
           scrollRef={this.onScrollRef}
