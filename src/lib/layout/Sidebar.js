@@ -12,6 +12,7 @@ export default class Sidebar extends Component {
     keys: PropTypes.object.isRequired,
     groupRenderer: PropTypes.func,
     isRightSidebar: PropTypes.bool,
+    horizontalSidebarLineClassNamesForGroup: PropTypes.func
   }
 
   shouldComponentUpdate(nextProps) {
@@ -36,7 +37,7 @@ export default class Sidebar extends Component {
   }
 
   render() {
-    const { width, groupHeights, height, isRightSidebar } = this.props
+    const { width, groupHeights, height, isRightSidebar, horizontalSidebarLineClassNamesForGroup } = this.props
 
     const { groupIdKey, groupTitleKey, groupRightTitleKey } = this.props.keys
 
@@ -55,11 +56,16 @@ export default class Sidebar extends Component {
         lineHeight: `${groupHeights[index] - 1}px`
       }
 
+      let classNamesForGroup = [];
+      if (horizontalSidebarLineClassNamesForGroup) {
+        classNamesForGroup = horizontalSidebarLineClassNamesForGroup(group);
+      }
+
       return (
         <div
           key={_get(group, groupIdKey)}
           className={
-            'rct-sidebar-row rct-sidebar-row-' + (index % 2 === 0 ? 'even' : 'odd')
+            'rct-sidebar-row rct-sidebar-row-' + (index % 2 === 0 ? 'even ' : 'odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')
           }
           style={elementStyle}
         >

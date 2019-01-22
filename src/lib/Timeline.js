@@ -67,6 +67,7 @@ export default class ReactCalendarTimeline extends Component {
     itemTouchSendsClick: PropTypes.bool,
 
     horizontalLineClassNamesForGroup: PropTypes.func,
+    horizontalSidebarLineClassNamesForGroup: PropTypes.func,
 
     onItemMove: PropTypes.func,
     onItemResize: PropTypes.func,
@@ -190,6 +191,7 @@ export default class ReactCalendarTimeline extends Component {
     traditionalZoom: false,
 
     horizontalLineClassNamesForGroup: null,
+    horizontalSidebarLineClassNamesForGroup: null,
 
     onItemMove: null,
     onItemResize: null,
@@ -371,7 +373,7 @@ export default class ReactCalendarTimeline extends Component {
     // We are a controlled component
     if (visibleTimeStart && visibleTimeEnd) {
       // Get the new canvas position
-      Object.assign(derivedState, 
+      Object.assign(derivedState,
         calculateScrollCanvas(
           visibleTimeStart,
           visibleTimeEnd,
@@ -384,7 +386,7 @@ export default class ReactCalendarTimeline extends Component {
     } else if (forceUpdate) {
       // Calculate new item stack position as canvas may have changed
       const canvasWidth = getCanvasWidth(prevState.width)
-      Object.assign(derivedState, 
+      Object.assign(derivedState,
         stackTimelineItems(
           items,
           groups,
@@ -517,12 +519,12 @@ export default class ReactCalendarTimeline extends Component {
   ) => {
     this.setState(
       calculateScrollCanvas(
-        visibleTimeStart, 
-        visibleTimeEnd, 
-        forceUpdateDimensions, 
-        items, 
-        groups, 
-        this.props, 
+        visibleTimeStart,
+        visibleTimeEnd,
+        forceUpdateDimensions,
+        items,
+        groups,
+        this.props,
         this.state))
   }
 
@@ -880,6 +882,7 @@ export default class ReactCalendarTimeline extends Component {
       <Sidebar
         groups={this.props.groups}
         groupRenderer={this.props.groupRenderer}
+        horizontalSidebarLineClassNamesForGroup={this.props.horizontalSidebarLineClassNamesForGroup}
         keys={this.props.keys}
         width={sidebarWidth}
         groupHeights={groupHeights}
@@ -897,6 +900,7 @@ export default class ReactCalendarTimeline extends Component {
         groups={this.props.groups}
         keys={this.props.keys}
         groupRenderer={this.props.groupRenderer}
+        horizontalSidebarLineClassNamesForGroup={this.props.horizontalSidebarLineClassNamesForGroup}
         isRightSidebar
         width={rightSidebarWidth}
         groupHeights={groupHeights}

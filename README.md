@@ -657,6 +657,15 @@ An example could look like:
 horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
 
+## horizontalSidebarLineClassNamesForGroup(group)
+
+This function is called when for the sidebar the horizontal line is rendered. `group` is the group which will be rendered into the current row. The function should return an array of strings containing the classNames which should be applied to the row. This makes it possible to visually highlight categories or important items.
+An example could look like:
+
+```jsx
+horizontalSidebarLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
+```
+
 # Timeline Markers
 
 Timeline markers are markers that are overlayed on the canvas at specific datepoints.
