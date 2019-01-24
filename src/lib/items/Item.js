@@ -427,13 +427,13 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
-    if (this.props.selected && !interactMounted) {
+    if (this.props.selected && !interactMounted && !!this.item) {
       this.mountInteract()
       interactMounted = true
     }
 
     if (
-      interactMounted &&
+      interactMounted && !!this.item &&
       (couldResizeLeft !== willBeAbleToResizeLeft ||
         couldResizeRight !== willBeAbleToResizeRight)
     ) {
@@ -450,7 +450,7 @@ export default class Item extends Component {
         }
       })
     }
-    if (interactMounted && couldDrag !== willBeAbleToDrag) {
+    if (interactMounted && !!this.item && couldDrag !== willBeAbleToDrag) {
       interact(this.item).draggable({ enabled: willBeAbleToDrag })
     }
   }
