@@ -237,7 +237,7 @@ export default class Item extends Component {
           this.props.selected && (this.canResizeLeft() || this.canResizeRight())
       })
       .draggable({
-        enabled: this.props.selected
+        enabled: this.props.selected && this.canMove()
       })
       .styleCursor(false)
       .on('dragstart', e => {
@@ -416,24 +416,24 @@ export default class Item extends Component {
     this.cacheDataFromProps(this.props)
 
     let { interactMounted } = this.state
-    const couldDrag = this.props.selected && this.canMove(this.props)
+    const couldDrag = prevProps.selected && this.canMove(prevProps)
     const couldResizeLeft =
-      this.props.selected && this.canResizeLeft(this.props)
+      prevProps.selected && this.canResizeLeft(prevProps)
     const couldResizeRight =
-      this.props.selected && this.canResizeRight(this.props)
+      prevProps.selected && this.canResizeRight(prevProps)
     const willBeAbleToDrag = this.props.selected && this.canMove(this.props)
     const willBeAbleToResizeLeft =
       this.props.selected && this.canResizeLeft(this.props)
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
-    if (this.props.selected && !interactMounted) {
+    if (this.props.selected && !interactMounted && !!this.item) {
       this.mountInteract()
       interactMounted = true
     }
 
     if (
-      interactMounted &&
+      interactMounted && !!this.item &&
       (couldResizeLeft !== willBeAbleToResizeLeft ||
         couldResizeRight !== willBeAbleToResizeRight)
     ) {
@@ -450,7 +450,7 @@ export default class Item extends Component {
         }
       })
     }
-    if (interactMounted && couldDrag !== willBeAbleToDrag) {
+    if (interactMounted && !!this.item && couldDrag !== willBeAbleToDrag) {
       interact(this.item).draggable({ enabled: willBeAbleToDrag })
     }
   }
