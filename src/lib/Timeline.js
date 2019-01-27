@@ -162,6 +162,7 @@ export default class ReactCalendarTimeline extends Component {
 
     children: PropTypes.node,
     width: PropTypes.number,
+    onUpdateMove: PropTypes.func,
   }
 
   static defaultProps = {
@@ -238,7 +239,8 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelFormats: defaultHeaderLabelFormats,
     subHeaderLabelFormats: defaultSubHeaderLabelFormats,
 
-    selected: null
+    selected: null,
+    onUpdateMove: null,
   }
 
   static childContextTypes = {
@@ -673,7 +675,9 @@ export default class ReactCalendarTimeline extends Component {
   dragItem = (item, dragTime, newGroupOrder) => {
     let newGroup = this.props.groups[newGroupOrder]
     const keys = this.props.keys
-
+    if(this.props.onUpdateMove){
+      this.props.onUpdateMove(item, dragTime, newGroupOrder, 'move')
+    }
     this.setState({
       draggingItem: item,
       dragTime: dragTime,
@@ -690,6 +694,9 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resizingItem = (item, resizeTime, edge) => {
+    if(this.props.onUpdateMove){
+      this.props.onUpdateMove(item, resizeTime, undefined, 'resize', edge)
+    }
     this.setState({
       resizingItem: item,
       resizingEdge: edge,

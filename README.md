@@ -332,6 +332,11 @@ function (action, item, time, resizeEdge) {
 }
 ```
 
+## onUpdateMove(itemId, time, newGroup, action,resizeEdge) 
+
+this function is called after moveResizeValidator on every drag update
+
+
 ## headerLabelFormats and subHeaderLabelFormats
 
 The formats passed to moment to render times in the header and subheader. Defaults to these:

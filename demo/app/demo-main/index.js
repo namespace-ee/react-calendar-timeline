@@ -141,6 +141,10 @@ export default class App extends Component {
     return time
   }
 
+  handleMoveUpdate= (...args)=> {
+    console.log(args)
+  }
+
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
@@ -172,6 +176,7 @@ export default class App extends Component {
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
         width={1000}
+        onUpdateMove={this.handleMoveUpdate}
       >
         <TimelineMarkers>
           <TodayMarker />
