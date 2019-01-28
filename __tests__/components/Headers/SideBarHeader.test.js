@@ -107,6 +107,10 @@ describe("Testing SidebarHeader Component", () => {
     expect(getByText('RightSideBar').previousElementSibling).toHaveAttribute('data-testid', 'headerContainer')
   })
 
+  it('Given SidebarHeader When Pass an props obj to props renderer Then it should render it correctly', () => {
+    const { getByTestId } = renderSidebarHeaderWithCustomValues({ props: { 'aria-hidden': false } })
+    expect(getByTestId("sidebarHeader")).toHaveAttribute('aria-hidden')
+  })
 
 })
 
@@ -118,8 +122,8 @@ function renderSidebarHeaderWithCustomValues({ variant = undefined, props, right
   >
     <TimelineHeaders>
       <SidebarHeader variant={variant} props={props}>
-        {({ getRootProps }, props) => {
-          return <div data-testid="sidebarHeader" {...getRootProps(props)}>SidebarHeader
+        {({ getRootProps }, extraProps) => {
+          return <div data-testid="sidebarHeader" {...getRootProps(props)} {...extraProps}>SidebarHeader
           <div>Should Be Rendred</div>
           </div>
         }}
@@ -139,8 +143,8 @@ function renderTwoSidebarHeadersWithCustomValues({ props, rightSidebarWidth } = 
   >
     <TimelineHeaders>
       <SidebarHeader variant={"left"} props={props}>
-        {({ getRootProps }, props) => {
-          return <div {...getRootProps(props)}>LeftSideBar
+        {({ getRootProps }) => {
+          return <div {...getRootProps(props)} >LeftSideBar
           <div>Should Be Rendred</div>
           </div>
         }}

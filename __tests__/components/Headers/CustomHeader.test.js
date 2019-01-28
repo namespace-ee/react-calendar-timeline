@@ -1,12 +1,14 @@
 import React from 'react'
-import { render, cleanup } from 'react-testing-library'
+import { render, cleanup, prettyDOM } from 'react-testing-library'
 import Timeline from 'lib/Timeline'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
 import CustomHeader from 'lib/headers/CustomHeader'
+
 import 'jest-dom/extend-expect'
 import moment from 'moment'
+
 import { items, groups } from '../../../__fixtures__/itemsAndGroups'
 import { visibleTimeEnd, visibleTimeStart } from '../../../__fixtures__/stateAndProps'
 
@@ -18,6 +20,7 @@ const defaultProps = {
 }
 
 describe('CustomHeader Component Test', () => {
+    
     afterEach(cleanup)
     // Render The Example In The Docs
     it('Given CustomHeader When render Then it should renderd Correctly in the timeline', () => {
@@ -107,7 +110,6 @@ describe('CustomHeader Component Test', () => {
                 width: 0,
                 position: 'fixed',
                 left: 0
-
             }
         }));
         const { width, position, left } = getComputedStyle(getByTestId('customHeaderInterval'))
@@ -132,14 +134,46 @@ describe('CustomHeader Component Test', () => {
         expect(cursor).toBe('pointer')
         expect(color).toBe('white')
     })
-    it('Given a DateHeader When pass a jsx as a children Then it Should be rendered Correctly', () => {
-        const {getByText} = render(getCustomHeadersInTimeline())
+    it('Given a CustomHeader When pass a jsx as a children Then it Should be rendered Correctly', () => {
+        const { getByText } = render(getCustomHeadersInTimeline())
         expect(getByText('Should Be Rendered')).toBeInTheDocument()
     })
-    it('Given a DateHeader When not pass any unit prop Then it Should take the default timeline unit (year)', () => {
-        const {getByTestId} = render(getCustomHeadersInTimeline())
+    it('Given a CustomHeader When not pass any unit prop Then it Should take the default timeline unit (year)', () => {
+        const { getByTestId } = render(getCustomHeadersInTimeline())
         expect(getByTestId('customHeader')).toHaveTextContent('01/01/2018')
     })
+    it('Given DateHeader When Rendered with day unit Then getIntervalStyle function shuold be act correctly', () => {
+        const props = getIntervalStyle({ startTime: moment("2018-10-27T21:00:00.000"), canvasTimeStart: 1540414800000, ratio: 0.5, unit: 'month', labelWidth: 150 })
+        expect(props).toEqual({
+            left: 124200000,
+            width: 150,
+            position: 'absolute'
+        })
+    })
+    it('Given CustomHeader When pass a style in props obj to props renderer Then it should not override correctly render it', () => {
+        const { getByTestId } = render(getCustomHeadersInTimeline({props: {'aria-hidden': false}}))
+        expect(getByTestId('customHeader')).toHaveAttribute('aria-hidden')
+
+    })
+    describe('Testing Diffrent Unit Values', () => {
+        it('Given CustomHeader When pass a year unit then it should render it correctly', () => {
+            const { getByTestId } = render(getCustomHeadersInTimeline({ unit: 'year' }));
+            expect(getByTestId('customHeader')).toHaveTextContent('01/01/2018')
+        })
+        it('Given CustomHeader When pass a month unit then it should render it correctly', () => {
+            const { getByTestId } = render(getCustomHeadersInTimeline({ unit: 'month' }));
+            expect(getByTestId('customHeader')).toHaveTextContent('10/01/2018')
+        })
+        it('Given CustomHeader When pass a day unit then it should render it correctly', () => {
+            const { getByTestId } = render(getCustomHeadersInTimeline({ unit: 'day' }));
+            expect(getByTestId('customHeader')).toHaveTextContent('10/25/2018')
+        })
+        it('Given CustomHeader When pass a hour unit then it should render it correctly', () => {
+            const { getByTestId } = render(getCustomHeadersInTimeline({ unit: 'hour' }));
+            expect(getByTestId('customHeader')).toHaveTextContent('10/25/2018')
+        })
+    })
+    
 })
 
 function getCustomHeadersInTimeline({ unit = "year", props, intervalStyle } = {}) {
@@ -160,9 +194,9 @@ function getCustomHeadersInTimeline({ unit = "year", props, intervalStyle } = {}
                         getRootProps,
                         getIntervalProps,
                         showPeriod
-                    }) => {
+                    }, extraProps) => {
                         return (
-                            <div data-testid="customHeader" {...getRootProps(props)}>
+                            <div data-testid="customHeader" {...getRootProps(props)} {...extraProps}>
                                 {intervals.map(interval => {
                                     return (
                                         <div data-testid="customHeaderInterval"
@@ -190,5 +224,19 @@ function getCustomHeadersInTimeline({ unit = "year", props, intervalStyle } = {}
                 </CustomHeader>
             </TimelineHeaders>
         </Timeline>
-    )
+    )       
+}
+
+
+const getIntervalStyle = ({ startTime, canvasTimeStart, ratio, unit, labelWidth, style }) => {
+    const left = Math.round((startTime.valueOf() - canvasTimeStart) * ratio)
+    const unitValue = startTime.get(unit === 'day' ? 'date' : unit)
+    const firstOfType = unitValue === (unit === 'day' ? 1 : 0)
+    const leftCorrect = firstOfType ? 1 : 0
+    return {
+        ...style,
+        left: left - leftCorrect,
+        width: labelWidth,
+        position: 'absolute'
+    }
 }
