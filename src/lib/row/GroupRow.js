@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
+import { Droppable } from 'react-beautiful-dnd'
 
 class GroupRow extends Component {
   static propTypes = {
+    droppable: PropTypes.bool,
     onClick: PropTypes.func.isRequired,
     onDoubleClick: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
@@ -23,7 +25,8 @@ class GroupRow extends Component {
       onClick,
       clickTolerance,
       horizontalLineClassNamesForGroup,
-      group
+      group,
+      droppable
     } = this.props
 
     let classNamesForGroup = [];
@@ -31,7 +34,20 @@ class GroupRow extends Component {
       classNamesForGroup = horizontalLineClassNamesForGroup(group);
     }
 
-    return (
+    if (droppable){
+      return (
+      <Droppable droppableId={group.id}>
+              {(provided, snapshot) => (<PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}><div
+                ref={provided.innerRef}
+                onContextMenu={onContextMenu}
+                onDoubleClick={onDoubleClick}
+                className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '') + (snapshot.isDraggingOver ? ' dragging-over' : '')}
+                style={style}
+              /></PreventClickOnDrag>)}
+      </Droppable>
+    )
+    } else {
+      return(
       <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
         <div
           onContextMenu={onContextMenu}
@@ -40,7 +56,8 @@ class GroupRow extends Component {
           style={style}
         />
       </PreventClickOnDrag>
-    )
+      )
+    }
   }
 }
 

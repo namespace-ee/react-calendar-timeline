@@ -225,3 +225,124 @@ $weekend: rgba(250, 246, 225, 0.5);
     z-index: 85;
   }
 }
+
+
+
+//  MODERN
+
+.rct-item {
+  border-radius: 10px;
+  // transition: all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation-name: fadeIn;
+  animation-duration: 0.15s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.react-calendar-timeline .rct-items .rct-item {
+	background: #e1f2fe;
+	border: none;
+	color: #00a0fc;
+}
+
+.rct-item.clipped-left {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.rct-item.clipped-right {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-odd{
+	background: inherit;
+}
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd{
+	border-bottom: 1px solid #fcfcfc;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl {
+	border-left: 1px solid #f2f5f7;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6,
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
+	background: rgba(250, 250, 250, 0.5)
+}
+
+.rct-header,.rct-bottom-header{
+
+}
+
+.rct-label{
+	height: 44px !important;
+	padding-top: 4px;
+	line-height: 12px !important;
+}
+
+.rct-header{
+	height: 64px !important;
+}
+
+.rct-bottom-header{
+	height: 36px !important;
+}
+
+.react-calendar-timeline .rct-header .rct-label-group {
+
+	border-left: 1px solid #f2f5f7;
+	border-bottom: none;
+	background: white;
+	color: #919bb0;
+}
+
+.react-calendar-timeline .rct-header .rct-label {
+	border-left: 1px solid transparent;
+	border-bottom: 1px solid #f2f5f7;
+	background: white;
+	color: #919bb0;
+}
+
+.react-calendar-timeline .rct-header .rct-label.rct-first-of-type {
+	border-left: 1px solid #f2f5f7;
+}
+
+.react-calendar-timeline .rct-today {
+	background: #ff94a8;
+}
+
+.react-calendar-timeline .rct-sidebar-header{
+	background-color: inherit;
+	padding: 8px;
+	color: inherit;
+	border-right: 1px solid #f2f5f7;
+	border-bottom: 1px solid #f2f5f7;
+}
+
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row{
+	border-bottom: 1px solid #f2f5f7;
+}
+
+.react-calendar-timeline .rct-sidebar{
+	border-right: 1px solid #f2f5f7;
+}
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-odd{
+	background-color: inherit;
+}
+
+.rct-item-handler-left{
+  cursor: ew-resize !important;
+}
+.rct-item-handler-right{
+  cursor: ew-resize !important;
+}
+
