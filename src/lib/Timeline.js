@@ -338,10 +338,6 @@ export default class ReactCalendarTimeline extends Component {
     this.lastTouchDistance = null
   }
 
-  update() {
-    this.forceUpdate()
-  }
-
   componentWillUnmount() {
     if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
       this.props.resizeDetector.removeListener(this)
