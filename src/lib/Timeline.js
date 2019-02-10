@@ -355,15 +355,17 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart,
       visibleTimeEnd,
       items,
-      groups
+      groups,
+      sidebarWidth
     } = nextProps
 
     // This is a gross hack pushing items and groups in to state only to allow
     // For the forceUpdate check
-    let derivedState = {items, groups}
+    let derivedState = {items, groups, sidebarWidth}
 
+    // console.log(sidebarWidth,prevState.sidebarWidth)
     // if the items or groups have changed we must re-render
-    const forceUpdate = items !== prevState.items || groups !== prevState.groups
+    const forceUpdate = items !== prevState.items || groups !== prevState.groups || sidebarWidth !== prevState.sidebarWidth
 
     // We are a controlled component
     if (visibleTimeStart && visibleTimeEnd) {
