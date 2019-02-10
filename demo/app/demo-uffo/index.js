@@ -127,16 +127,8 @@ export default class App extends Component {
       items,
       groups,
 			defaultTimeStart,
-      defaultTimeEnd,
-      sidebarWidth: 64
+			defaultTimeEnd,
 		}
-  }
-
-  changeWidth = () => {
-    const sidebarWidth = this.state.sidebarWidth === 64 ? 128: 64
-    this.setState({
-      sidebarWidth
-    })
   }
 
   handleCanvasClick = (groupId, time, event) => {
@@ -317,7 +309,7 @@ export default class App extends Component {
         onCanvasClick={this.onCanvasClick}
         onCanvasDoubleClick={this.onCanvasClick}
 				selected={selected}
-				sidebarWidth={this.state.sidebarWidth}
+				sidebarWidth={68}
 				lineHeight={64}
 				headerLabelGroupHeight={20}
 				headerLabelHeight={20}
@@ -325,7 +317,7 @@ export default class App extends Component {
         dayLabelRenderer={DayLabelRenderer}
 				itemRenderer={TimelineItem}
 				groupRenderer={GroupRenderer}
-				sidebarContent={<div onClick={this.changeWidth}>Team</div>}
+				sidebarContent={<div>Team</div>}
 				itemsSorted
 				itemTouchSendsClick
 				stackItems
