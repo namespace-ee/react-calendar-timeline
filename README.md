@@ -711,10 +711,10 @@ const twoSeconds = 2000
 
 <TodayMarker>
   {({ styles, date }) =>
-  // date is value of current date. Use this to render special styles for the marker
-  // or any other custom logic based on date:
-  // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-  return <div style={styles} />
+    // date is value of current date. Use this to render special styles for the marker
+    // or any other custom logic based on date:
+    // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+    <div style={styles} />
   }
 </TodayMarker>
 ```
@@ -737,9 +737,7 @@ const today = Date.now()
 
 //custom renderer
 <CustomMarker date={today}>
-  {({ styles, date }) =>
-  return <div style={styles} />
-  }
+  {({ styles, date }) => <div style={styles} />}
 </CustomMarker>
 
 // multiple CustomMarkers
@@ -769,10 +767,10 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
 //custom renderer
 <CursorMarker>
   {({ styles, date }) =>
-  // date is value of current date. Use this to render special styles for the marker
-  // or any other custom logic based on date:
-  // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-  return <div style={styles} />
+    // date is value of current date. Use this to render special styles for the marker
+    // or any other custom logic based on date:
+    // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+    <div style={styles} />
   }
 </CursorMarker>
 ```
@@ -785,7 +783,7 @@ You need to include the `Timeline.css` file, either via static file reference or
 
 ## How can I have items with different colors?
 
-Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer). 
+Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer).
 Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering) for a sandbox example
 
 ## How can I add a sidebar on the right?
