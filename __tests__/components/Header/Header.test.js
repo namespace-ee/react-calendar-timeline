@@ -22,6 +22,7 @@ const defaultProps = {
   stickyHeader: true,
   headerLabelGroupHeight: 15,
   headerLabelHeight: 15,
+  utcOffset: 0,
   scrollHeaderRef: () => {},
   headerRef: () => {}
 }

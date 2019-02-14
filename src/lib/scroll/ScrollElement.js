@@ -33,9 +33,8 @@ class ScrollElement extends Component {
   }
 
   handleWheel = e => {
+    // FIXME: should be used somewhere... 
     const { traditionalZoom } = this.props
-
-    
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {

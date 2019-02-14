@@ -130,6 +130,10 @@ The exact viewport of the calendar. When these are specified, scrolling in the c
 
 **Note that you need to provide either `defaultTimeStart/End` or `visibleTimeStart/End` for the timeline to function**
 
+## utcOffset
+
+Define the offset you want to apply from UTC. Defaults value is your local timezone offset (e.g. moment().utcOffset())
+
 ## selected
 
 An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click.
@@ -696,6 +700,10 @@ Marker that is placed on the current date/time.
 > interval: number | default: 10000
 
 How often the TodayMarker refreshes. Value represents milliseconds.
+
+> applyLocalOffset: boolean | default: true
+
+If you want to apply the local timezone offset when you display some informations (e.g. the today marker). This option is often correlated with `utcOffset` option, and should be provided to the `<Timeline>` component.
 
 > children: function({styles: object, date: number}) => JSX.Element
 

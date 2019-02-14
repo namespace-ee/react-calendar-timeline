@@ -171,6 +171,8 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
+        // utcOffset={0} // set all the calendar timeline as UTC calendar
+        // applyLocalOffset={true} // keep the TodayMarker in the local reference
       >
         <TimelineMarkers>
           <TodayMarker />

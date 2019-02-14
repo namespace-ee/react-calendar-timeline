@@ -16,6 +16,7 @@ const defaultProps = {
   subHeaderLabelFormats: {},
   headerLabelGroupHeight: 0,
   headerLabelHeight: 0,
+  utcOffset: 0,
   scrollHeaderRef: () => {}
 }
 

@@ -18,7 +18,8 @@ export default class TimelineElementsHeader extends Component {
     subHeaderLabelFormats: PropTypes.object.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
-    scrollHeaderRef: PropTypes.func.isRequired
+    scrollHeaderRef: PropTypes.func.isRequired,
+    utcOffset: PropTypes.number.isRequired
   }
 
   constructor(props) {
@@ -116,7 +117,8 @@ export default class TimelineElementsHeader extends Component {
       timeSteps,
       headerLabelGroupHeight,
       headerLabelHeight,
-      hasRightSidebar
+      hasRightSidebar,
+      utcOffset
     } = this.props
 
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
@@ -131,6 +133,7 @@ export default class TimelineElementsHeader extends Component {
         canvasTimeStart,
         canvasTimeEnd,
         nextUnit,
+        utcOffset,
         timeSteps,
         (time, nextTime) => {
           const left = Math.round((time.valueOf() - canvasTimeStart) * ratio)
@@ -174,6 +177,7 @@ export default class TimelineElementsHeader extends Component {
       canvasTimeStart,
       canvasTimeEnd,
       minUnit,
+      utcOffset,
       timeSteps,
       (time, nextTime) => {
         const left = Math.round((time.valueOf() - canvasTimeStart) * ratio)

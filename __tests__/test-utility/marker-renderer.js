@@ -15,7 +15,9 @@ export const RenderWrapper = ({ children, timelineState }) => {
     canvasTimeStart: visibleTimeStart - oneDay,
     canvasTimeEnd: visibleTimeEnd + oneDay,
     canvasWidth: 3000,
-    visibleWidth: 1000
+    visibleWidth: 1000,
+    utcOffset: 0,
+    applyLocalOffset: false
   }
 
   timelineState = timelineState != null ? timelineState : defaultTimelineState

@@ -10,7 +10,7 @@ import CursorMarker from './implementations/CursorMarker'
 const TimelineMarkersRenderer = () => {
   return (
     <TimelineStateConsumer>
-      {({ getLeftOffsetFromDate }) => (
+      {({ getLeftOffsetFromDate, utcOffset, applyLocalOffset }) => (
         <TimelineMarkersConsumer>
           {({ markers }) => {
             return markers.map(marker => {
@@ -22,6 +22,8 @@ const TimelineMarkersRenderer = () => {
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
                       renderer={marker.renderer}
                       interval={marker.interval}
+                      utcOffset={utcOffset}
+                      applyLocalOffset={applyLocalOffset}
                     />
                   )
                 case TimelineMarkerType.Custom:
@@ -31,6 +33,7 @@ const TimelineMarkersRenderer = () => {
                       renderer={marker.renderer}
                       date={marker.date}
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
+                      utcOffset={utcOffset}
                     />
                   )
                 case TimelineMarkerType.Cursor:
@@ -39,6 +42,7 @@ const TimelineMarkersRenderer = () => {
                       key={marker.id}
                       renderer={marker.renderer}
                       getLeftOffsetFromDate={getLeftOffsetFromDate}
+                      utcOffset={utcOffset}
                     />
                   )
                 default:

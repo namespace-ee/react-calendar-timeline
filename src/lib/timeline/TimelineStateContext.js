@@ -37,7 +37,9 @@ export class TimelineStateProvider extends React.Component {
     visibleTimeEnd: PropTypes.number.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
-    canvasWidth: PropTypes.number.isRequired
+    canvasWidth: PropTypes.number.isRequired,
+    utcOffset: PropTypes.number.isRequired,
+    applyLocalOffset: PropTypes.bool.isRequired
   }
 
   constructor(props) {
@@ -47,14 +49,14 @@ export class TimelineStateProvider extends React.Component {
       timelineContext: {
         getTimelineState: this.getTimelineState,
         getLeftOffsetFromDate: this.getLeftOffsetFromDate,
-        getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition
+        getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition,
+        utcOffset: this.props.utcOffset,
+        applyLocalOffset: this.props.applyLocalOffset
       }
     }
   }
 
-  getTimelineState = () => {
-    return this.state.timelineState // REVIEW: return copy or object.freeze?
-  }
+  getTimelineState = () => ({ ...this.state })
 
   getLeftOffsetFromDate = date => {
     const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props

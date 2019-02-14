@@ -14,15 +14,20 @@ class TodayMarker extends React.Component {
   static propTypes = {
     getLeftOffsetFromDate: PropTypes.func.isRequired,
     renderer: PropTypes.func,
-    interval: PropTypes.number.isRequired
+    interval: PropTypes.number.isRequired,
+    applyLocalOffset: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
     renderer: defaultRenderer
   }
 
-  state = {
-    date: Date.now()
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      date: this.getDate()
+    }
   }
 
   componentDidMount() {
@@ -39,10 +44,15 @@ class TodayMarker extends React.Component {
   createIntervalUpdater(interval) {
     return setInterval(() => {
       this.setState({
-        date: Date.now() // FIXME: use date utils pass in as props
+        date: this.getDate()
       });
     }, interval);
   }
+
+  // FIXME: use date utils pass in as props
+  getDate = () => this.props.applyLocalOffset
+    ? Date.now() - (new Date().getTimezoneOffset() * 60 * 1000)
+    : Date.now()
 
   componentWillUnmount() {
     clearInterval(this.intervalToken)

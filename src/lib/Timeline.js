@@ -41,6 +41,9 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: PropTypes.number,
     rightSidebarContent: PropTypes.node,
     dragSnap: PropTypes.number,
+    utcOffset: PropTypes.number,
+    applyLocalOffset: PropTypes.bool,
+    infoLabelFormat: PropTypes.string,
     minResizeWidth: PropTypes.number,
     stickyOffset: PropTypes.number,
     stickyHeader: PropTypes.bool,
@@ -166,6 +169,9 @@ export default class ReactCalendarTimeline extends Component {
     sidebarWidth: 150,
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
+    utcOffset: moment().utcOffset(),
+    applyLocalOffset: false,
+    infoLabelFormat: 'LLL',
     minResizeWidth: 20,
     stickyOffset: 0,
     stickyHeader: true,
@@ -710,6 +716,7 @@ export default class ReactCalendarTimeline extends Component {
         timeSteps={timeSteps}
         height={height}
         verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
+        utcOffset={this.props.utcOffset}
       />
     )
   }
@@ -817,16 +824,15 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   infoLabel() {
-    let label = null
-
-    if (this.state.dragTime) {
-      label = `${moment(this.state.dragTime).format('LLL')}, 
-        ${this.state.dragGroupTitle}`
-    } else if (this.state.resizeTime) {
-      label = moment(this.state.resizeTime).format('LLL')
-    }
+    const {
+      props: { utcOffset, infoLabelFormat },
+      state: { dragTime, resizeTime, dragGroupTitle }
+    } = this
+    const label = dragTime || resizeTime
+    const labelComplement = dragTime ? ` - ${dragGroupTitle}` : ''
+    const computedLabel = moment(label).utcOffset(utcOffset).format(infoLabelFormat) + labelComplement
     
-    return label ? <InfoLabel label={label} /> : undefined
+    return label && <InfoLabel label={computedLabel} />
   }
 
   handleHeaderRef = el => {
@@ -869,6 +875,7 @@ export default class ReactCalendarTimeline extends Component {
         rightSidebarWidth={this.props.rightSidebarWidth}
         leftSidebarHeader={this.props.sidebarContent}
         rightSidebarHeader={this.props.rightSidebarContent}
+        utcOffset={this.props.utcOffset}
       />
     )
   }
@@ -1020,6 +1027,8 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
+        utcOffset={this.props.utcOffset}
+        applyLocalOffset={this.props.applyLocalOffset}
       >
         <TimelineMarkersProvider>
           <div
