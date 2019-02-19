@@ -69,7 +69,8 @@ export function iterateTimes(start, end, unit, timeSteps, callback) {
 
   while (time.valueOf() < end) {
     let nextTime = moment(time).add(timeSteps[unit] || 1, `${unit}s`)
-    callback(time, nextTime)
+    let endTime = moment(time).endOf(`${unit}s`)
+    callback(time, endTime)
     time = nextTime
   }
 }
@@ -172,7 +173,7 @@ export function calculateInteractionNewTimes({
   isDragging,
   isResizing,
   resizingEdge,
-  resizeTime
+  resizeTime,
 }) {
   const originalItemRange = itemTimeEnd - itemTimeStart
   const itemStart =

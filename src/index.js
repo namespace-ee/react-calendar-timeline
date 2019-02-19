@@ -6,5 +6,11 @@ export {
 export { default as TodayMarker } from './lib/markers/public/TodayMarker'
 export { default as CustomMarker } from './lib/markers/public/CustomMarker'
 export { default as CursorMarker } from './lib/markers/public/CursorMarker'
-
+export { default as TimelineHeaders } from './lib/headers/TimelineHeaders'
+export {default as SidebarHeader} from './lib/headers/SidebarHeader'
+export {default as CustomHeader} from './lib/headers/CustomHeader'
+export {default as DateHeader} from './lib/headers/DateHeader'
+export {TimelineStateConsumer} from './lib/timeline/TimelineStateContext'
+export {default as ItemHeader} from './lib/headers/ItemHeader'
+export  * from './lib/utility/calendar'
 export default Timeline

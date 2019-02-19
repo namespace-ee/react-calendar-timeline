@@ -1,29 +1,36 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
 
-class GroupRow extends Component {
+class GroupRow extends PureComponent {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
     onDoubleClick: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
     isEvenRow: PropTypes.bool.isRequired,
-    style: PropTypes.object.isRequired,
     clickTolerance: PropTypes.number.isRequired,
     group: PropTypes.object.isRequired,
-    horizontalLineClassNamesForGroup: PropTypes.func
+    horizontalLineClassNamesForGroup: PropTypes.func,
+    order: PropTypes.number.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+
   }
+
+  onGroupRowContextMenuClick = evt => this.props.onContextMenu(evt, this.props.order);
+
+  onGroupRowClick = evt => this.props.onClick(evt, this.props.order)
+
+  onGroupRowDoubleClick =evt => this.props.onDoubleClick(evt, this.props.order)
 
   render() {
     const {
-      onContextMenu,
-      onDoubleClick,
       isEvenRow,
-      style,
-      onClick,
       clickTolerance,
       horizontalLineClassNamesForGroup,
-      group
+      group,
+      canvasWidth,
+      height,
     } = this.props
 
     let classNamesForGroup = [];
@@ -32,12 +39,15 @@ class GroupRow extends Component {
     }
 
     return (
-      <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
+      <PreventClickOnDrag clickTolerance={clickTolerance} onClick={this.onGroupRowClick}>
         <div
-          onContextMenu={onContextMenu}
-          onDoubleClick={onDoubleClick}
+          onContextMenu={this.onGroupRowContextMenuClick}
+          onDoubleClick={this.onGroupRowDoubleClick}
           className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
-          style={style}
+          style={{
+            width: canvasWidth,
+            height: height - 1
+          }}
         />
       </PreventClickOnDrag>
     )

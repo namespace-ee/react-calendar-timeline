@@ -17,7 +17,7 @@ const staticStyles = {
  * Renders registered markers and exposes a mouse over listener for
  * CursorMarkers to subscribe to
  */
-class MarkerCanvas extends React.Component {
+class MarkerCanvas extends React.PureComponent {
   static propTypes = {
     getDateFromLeftOffsetPosition: PropTypes.func.isRequired,
     children: PropTypes.node
