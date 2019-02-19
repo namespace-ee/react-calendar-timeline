@@ -3,7 +3,7 @@ import {items} from './itemsAndGroups'
 export const props = {
   keys: defaultKeys,
   lineHeight: 30,
-  stackItems: true,
+  stackItems: 'space',
   itemHeightRatio: 0.75
 }
 

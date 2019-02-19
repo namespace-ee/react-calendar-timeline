@@ -69,7 +69,7 @@ export default class App extends Component {
             canSelect
             itemsSorted
             itemTouchSendsClick={false}
-            stackItems
+            stackItems="space"
             itemHeightRatio={0.75}
             resizeDetector={containerResizeDetector}
             defaultTimeStart={defaultTimeStart}
