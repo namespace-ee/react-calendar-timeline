@@ -194,8 +194,8 @@ export default class App extends Component {
           // moveResizeValidator={this.moveResizeValidator}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
-          stackItems
-        >
+          stackItems="space"
+          >
           <TimelineHeaders className="header-background">
             <SidebarHeader>
               {({ getRootProps }) => {

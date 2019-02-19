@@ -34,15 +34,151 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData()
-    const defaultTimeStart = moment()
-      .startOf('day')
-      .toDate()
-    const defaultTimeEnd = moment()
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
+    const items = [
+      // {
+      //   id: '4',
+      //   group: '1',
+      //   title:
+      //     '4',
+      //   start: 1550538000000,
+      //   end: 1550560702870,
+      //   canResize: false,
+      //   className: '',
+      //   bgColor: 'rgba(209, 154, 237, 0.6)',
+      //   selectedBgColor: 'rgba(209, 154, 237, 1)',
+      //   color: '#55077c',
+      //   itemProps: {
+      //     'data-tip':
+      //       'The AGP bus is down, calculate the multi-byte alarm so we can generate the THX driver!'
+      //   }
+      // },
+      // {
+      //   id: '5',
+      //   group: '1',
+      //   title:
+      //     '5',
+      //   start: 1550549700000,
+      //   end: 1550569678295,
+      //   canMove: true,
+      //   canResize: 'both',
+      //   className: '',
+      //   bgColor: 'rgba(235, 171, 242, 0.6)',
+      //   selectedBgColor: 'rgba(235, 171, 242, 1)',
+      //   color: '#ad0fbf',
+      //   itemProps: {
+      //     'data-tip':
+      //       "I'll parse the virtual AI monitor, that should microchip the SDD circuit!"
+      //   }
+      // },
+      {
+        id: '1',
+        group: '1',
+        title:
+          '1',
+        start: 1550562300000,
+        end: 1550566800000,
+        canMove: true,
+        canResize: 'both',
+        className: '',
+        bgColor: 'rgba(119, 126, 249, 0.6)',
+        selectedBgColor: 'rgba(119, 126, 249, 1)',
+        color: '#010887',
+        itemProps: {
+          'data-tip':
+            'The IB alarm is down, parse the virtual driver so we can copy the COM bus!'
+        }
+      },
+      {
+        id: '3',
+        group: '2',
+        title: '3',
+        start: 1550538000000,
+        end: 1550557157371,
+        canResize: false,
+        className: '',
+        bgColor: 'rgba(184, 141, 239, 0.6)',
+        selectedBgColor: 'rgba(184, 141, 239, 1)',
+        color: '#3c0584',
+        itemProps: {
+          'data-tip':
+            'Try to synthesize the AI circuit, maybe it will calculate the cross-platform interface!'
+        }
+      },
+     
+      
+      {
+        id: '6',
+        group: '2',
+        title: '6',
+        start: 1550551500000,
+        end: 1550571478295,
+        canResize: false,
+        className: '',
+        bgColor: 'rgba(252, 191, 243, 0.6)',
+        selectedBgColor: 'rgba(252, 191, 243, 1)',
+        color: '#ea15ca',
+        itemProps: {
+          'data-tip': 'We need to input the haptic USB panel!'
+        }
+      },
+      {
+        id: '7',
+        group: '2',
+        title:
+          "7",
+        start: 1550539800000,
+        end: 1550559571292,
+        canResize: false,
+        className: '',
+        bgColor: 'rgba(247, 116, 197, 0.6)',
+        selectedBgColor: 'rgba(247, 116, 197, 1)',
+        color: '#db0288',
+        itemProps: {
+          'data-tip':
+            "bypassing the driver won't do anything, we need to compress the haptic XML monitor!"
+        }
+      },
+      {
+        id: '8',
+        group: '2',
+        title: '8',
+        start: 1550535300000,
+        end: 1550550380987,
+        canResize: false,
+        className: '',
+        bgColor: 'rgba(244, 129, 173, 0.6)',
+        selectedBgColor: 'rgba(244, 129, 173, 1)',
+        color: '#99043d',
+        itemProps: {
+          'data-tip':
+            "copying the system won't do anything, we need to quantify the neural SCSI protocol!"
+        }
+      }
+    ]
 
+    const groups = [
+      {
+        id: '1',
+        title: 'Dee',
+        rightTitle: 'Kuhn',
+        label: 'Label Amari',
+        bgColor: '#c0d0f9'
+      },
+      {
+        id: '2',
+        title: 'Brennon',
+        rightTitle: 'Cronin',
+        label: 'Label Maude',
+        bgColor: '#777ef9'
+      }
+    ]
+
+    const defaultTimeStart = moment('19/2/2019', 'dd/mm/yyyy')
+      .startOf('day')
+      .toDate()
+    const defaultTimeEnd = moment('19/2/2019', 'dd/mm/yyyy')
+      .endOf('day')
+      .toDate()
     this.state = {
       groups,
       items,
@@ -160,7 +296,7 @@ export default class App extends Component {
         canSelect
         itemsSorted
         itemTouchSendsClick={false}
-        stackItems
+        stackItems='lines'
         itemHeightRatio={0.75}
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}

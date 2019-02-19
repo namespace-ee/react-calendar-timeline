@@ -83,7 +83,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
   id: 1,
   title: 'group 1',
   rightTitle: 'title in the right sidebar',
-  stackItems?: true,
+  stackItems?: false or 'space' or  'line',
   height?: 30
 }
 ```
@@ -237,6 +237,11 @@ Append a special `.rct-drag-right` handle to the elements and only resize if dra
 ### stackItems
 
 Stack items under each other, so there is no visual overlap when times collide.  Can be overridden in the `groups` array. Defaults to `false`.
+
+can be assigned to 
+- false
+- space (saves space in stacking)
+- line (stack each item in a line)
 
 ## traditionalZoom
 

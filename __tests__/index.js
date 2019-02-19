@@ -132,7 +132,7 @@ xdescribe('Timeline', () => {
       <Timeline
         groups={[]}
         items={items}
-        stackItems
+        stackItems="space"
         defaultTimeStart={moment('1995-12-25').add(-12, 'hour')}
         defaultTimeEnd={moment('1995-12-25').add(12, 'hour')}
       >

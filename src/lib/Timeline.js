@@ -61,7 +61,7 @@ export default class ReactCalendarTimeline extends Component {
     useResizeHandle: PropTypes.bool,
     canSelect: PropTypes.bool,
 
-    stackItems: PropTypes.bool,
+    stackItems: PropTypes.oneOf([false,'space', 'lines']),
 
     traditionalZoom: PropTypes.bool,
 
