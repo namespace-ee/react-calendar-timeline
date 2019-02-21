@@ -166,7 +166,7 @@ export default class Item extends Component {
 
     const offset = getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef)
-      
+
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
 
@@ -180,7 +180,7 @@ export default class Item extends Component {
 
       const offset = getSumOffset(this.props.scrollRef).offsetTop
       const scrolls = getSumScroll(this.props.scrollRef)
-      
+
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
@@ -244,7 +244,7 @@ export default class Item extends Component {
           const clickTime = this.timeFor(e);
           this.setState({
             dragging: true,
-            dragStart: { 
+            dragStart: {
               x: e.pageX,
               y: e.pageY,
             offset: this.itemTimeStart - clickTime },
@@ -508,6 +508,7 @@ export default class Item extends Component {
   getDragRightRef = el => (this.dragRight = el)
 
   getItemProps = (props = {}) => {
+    console.log(props);
     //TODO: maybe shouldnt include all of these classes
     const classNames =
       'rct-item' +
@@ -524,7 +525,7 @@ export default class Item extends Component {
       onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
       onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
       onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
-      style: Object.assign({}, this.getItemStyle(props))
+      style: Object.assign({}, this.getItemStyle(this.props.item))
     }
   }
 
