@@ -166,7 +166,6 @@ export default class Item extends Component {
 
     const offset = getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef)
-
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
 
@@ -180,7 +179,6 @@ export default class Item extends Component {
 
       const offset = getSumOffset(this.props.scrollRef).offsetTop
       const scrolls = getSumScroll(this.props.scrollRef)
-
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
@@ -508,7 +506,6 @@ export default class Item extends Component {
   getDragRightRef = el => (this.dragRight = el)
 
   getItemProps = (props = {}) => {
-    console.log(props);
     //TODO: maybe shouldnt include all of these classes
     const classNames =
       'rct-item' +
