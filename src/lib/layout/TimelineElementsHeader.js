@@ -132,8 +132,6 @@ export default class TimelineElementsHeader extends Component {
       hasRightSidebar
     } = this.props
 
-    console.log('@@',this.props)
-
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
 
