@@ -37,18 +37,23 @@ const groups = [
   { id: 'empty', allowDrop:false, title: '', height: 800 },
 ]
 
-const eventsByDay = {
-  '20190115':[{
+const eventsByDay2 = {
+  '20190215':[{
     title: 'App Sumo',
     color: '#f4699c',
-    bgColor: '#ffe6ee',
-    date: moment("2019-01-15")
+    bgColor: '#ffe6ee'
   }],
-  '20190111':[{
+  '20190211':[{
     title: 'Mobile App',
     color: '#1fa37d',
-    bgColor: '#ccffef',
-    date: moment("2019-01-11")
+    bgColor: '#ccffef'
+  }]
+}
+const eventsByDay = {
+  '20190211':[{
+    title: 'Mobile App',
+    color: '#1fa37d',
+    bgColor: '#ccffef'
   }]
 }
 
@@ -126,9 +131,14 @@ export default class App extends Component {
 		this.state = {
       items,
       groups,
+      eventsByDay,
 			defaultTimeStart,
 			defaultTimeEnd,
-		}
+    }
+    setTimeout(()=>{
+      this.setState({eventsByDay:eventsByDay2})
+      console.log('New events')
+    },3000)
   }
 
   handleCanvasClick = (groupId, time, event) => {
@@ -295,7 +305,7 @@ export default class App extends Component {
 		return <DragDropContext onDragEnd={this.onDragEnd}><div className="v">
 			<Timeline
         droppable
-        eventsByDay={eventsByDay}
+        eventsByDay={this.state.eventsByDay}
         handleDayClick={(time)=>{console.log(time)}}
         ref={this.timelineRef}
 				onItemMove={this.handleItemMove}
