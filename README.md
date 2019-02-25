@@ -236,7 +236,7 @@ Append a special `.rct-drag-right` handle to the elements and only resize if dra
 
 ### stackItems
 
-Stack items under each other, so there is no visual overlap when times collide.  Can be overridden in the `groups` array. Defaults to `false`.
+Stack items under each other, so there is no visual overlap when times collide. Can be overridden in the `groups` array. Defaults to `false`.
 
 ## traditionalZoom
 
@@ -468,12 +468,12 @@ Paramters provided to the function has two types: context params which have the 
 | `selected`        | `boolean`       | returns if the item is selected.                                                                                                                                          |
 | `dragging`        | `boolean`       | returns if the item is being dragged                                                                                                                                      |
 | `dragStart`       | `object`        | returns `x` and `y` of the start dragging point of the item.                                                                                                              |
-| `dragTime`       | `number`        |  current drag time.                                                                                                              |
+| `dragTime`        | `number`        | current drag time.                                                                                                                                                        |
 | `dragGroupDelta`  | `number`        | returns number of groups the item moved. if negative, moving was to top. If positive, moving was to down                                                                  |
 | `resizing`        | `boolean`       | returns if the item is being resized.                                                                                                                                     |
 | `resizeEdge`      | `left`, `right` | the side from which the component is being resized form                                                                                                                   |
 | `resizeStart`     | `number`        | returns the x value from where the component start moving                                                                                                                 |
-| `resizeTime`     | `number`        | current resize time                                                                                                                 |
+| `resizeTime`      | `number`        | current resize time                                                                                                                                                       |
 | `width`           | `boolean`       | returns the width of the item (same as in dimensions)                                                                                                                     |
 
 ##### prop getters functions
@@ -593,6 +593,35 @@ groupRenderer = ({ group }) => {
       <p className="tip">{group.tip}</p>
     </div>
   )
+}
+```
+
+## infoLabelRenderer(action, itemId, time, newGroupOrderOrResizingEdge)
+
+React component that will be used to render the content of infoLabel while moving or resizing items.
+
+The argument `action` is one of `move` or `resize`.
+
+The argument `time` describes the proposed new time for either the start time of the item (for move) or the start or end time (for resize).
+
+The argument `newGroupOrderOrResizingEdge` is the group order (for move), or one of `left` or `right` (for resize).
+
+The function should return a string or a react component, or `null` for disabling infoLabel.
+
+For example, use this code:
+
+```jsx
+infoLabelRenderer = (action, itemId, time, newGroupOrderOrResizingEdge) => {
+  let label = null
+  if (action == 'move') {
+    let newGroup = this.state.groups[newGroupOrderOrResizingEdge]
+    const groupLabel = newGroup ? newGroup.title : ''
+    label = `${moment(this.state.dragTime).format('LLL')},
+        ${groupLabel}`
+  } else if (action == 'resize') {
+    label = `${moment(time).format('LLL')}, ${newGroupOrderOrResizingEdge}`
+  }
+  return label
 }
 ```
 
@@ -785,7 +814,7 @@ You need to include the `Timeline.css` file, either via static file reference or
 
 ## How can I have items with different colors?
 
-Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer). 
+Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer).
 Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering) for a sandbox example
 
 ## How can I add a sidebar on the right?

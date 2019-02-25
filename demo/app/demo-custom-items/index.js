@@ -16,6 +16,7 @@ var maxTime = moment()
 var keys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
+  groupLabelKey: 'title',
   groupRightTitleKey: 'rightTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
@@ -155,7 +156,7 @@ export default class App extends Component {
             borderLeftWidth: itemContext.selected ? 3 : 1,
             borderRightWidth: itemContext.selected ? 3 : 1,
           }
-        }) }
+        })}
       >
         {itemContext.useResizeHandle ? (
           <div {...leftResizeProps} />
@@ -165,7 +166,7 @@ export default class App extends Component {
           style={{
             height: itemContext.dimensions.height,
             overflow: 'hidden',
-            paddingLeft:3,
+            paddingLeft: 3,
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}
@@ -188,6 +189,20 @@ export default class App extends Component {
   //     </div>
   //   )
   // }
+
+  infoLabelRenderer = (action, itemId, time, newGroupOrderOrResizingEdge) => {
+    let label = null
+    if (action == 'move') {
+      let newGroup = this.state.groups[newGroupOrderOrResizingEdge]
+      const groupLabel = newGroup ? newGroup.title : ''
+      label = `${moment(this.state.dragTime).format('LLL')},
+        ${groupLabel}`
+    } else if (action == 'resize') {
+      label = `${moment(time).format('LLL')}, ${newGroupOrderOrResizingEdge}`
+    }
+    return label
+  }
+
 
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
@@ -217,6 +232,7 @@ export default class App extends Component {
         defaultTimeEnd={defaultTimeEnd}
         itemRenderer={this.itemRenderer}
         // groupRenderer={this.groupRenderer}
+        infoLabelRenderer={this.infoLabelRenderer}
 
         onCanvasClick={this.handleCanvasClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
