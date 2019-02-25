@@ -9,10 +9,11 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## 0.23.0
 
-- improve unit tests coverage #426 - @ilaiwi
-- stack items by group #384 - @acemac
-- fix bug where `canMove` prop gets ignored #484 - @acemac + @ilaiwi
-- fix sidebar re-render when groupHeights do not change #478 - @SDupZ
+* improve unit tests coverage #426 - @ilaiwi
+* stack items by group #384 - @acemac
+* fix bug where `canMove` prop gets ignored #484 - @acemac + @ilaiwi
+* fix sidebar re-render when groupHeights do not change #478 - @SDupZ
+* add props `infoLabelRenderer(action, itemId, time, newGroupOrderOrResizingEdge)`
 
 ### Stack per group
 
@@ -59,15 +60,14 @@ ReactDOM.render(
 )
 ```
 
-
 ## 0.22.0
 
 ### Fixed
 
 * Provided a new key `groupLabelKey` to allow splitting of the key used to render the Sidebar and the InfoLabel visible during drag operations. `groupTitleKey` continues to be used to render the Sidebar. #442 @thiagosatoshi
-* fix scroll left/right causes item move/edit to be at incorrect time #401 @acemac 
-* now `getResizeProps` take `leftClassName` and `rightClassName` and returns className for left and right props @acemac 
-* fix functionality of `itemTitle` and `itemDivTitle` [issue](https://github.com/namespace-ee/react-calendar-timeline/issues/429#issuecomment-426456693) @acemac 
+* fix scroll left/right causes item move/edit to be at incorrect time #401 @acemac
+* now `getResizeProps` take `leftClassName` and `rightClassName` and returns className for left and right props @acemac
+* fix functionality of `itemTitle` and `itemDivTitle` [issue](https://github.com/namespace-ee/react-calendar-timeline/issues/429#issuecomment-426456693) @acemac
 
 ### 0.21.0
 
@@ -84,9 +84,11 @@ ReactDOM.render(
 ### 0.20.0
 
 ### improvements
+
 * eliminate extra renders on every scroll - #357 [acemac](https://github.com/acemac)
 
 ### Fixed
+
 * When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline - #421 [kevinmanncito](https://github.com/kevinmanncito) [ilaiwi](https://github.com/ilaiwi)
 * Header has a bounce effect - #311 [acemac](https://github.com/acemac)
 
@@ -94,8 +96,6 @@ ReactDOM.render(
 
 * update to `react-testing-library` version 5
 * remove deprecated `toBeInDom`
-
-
 
 ### 0.19.0
 
@@ -135,7 +135,7 @@ ReactDOM.render(
 
 ### Breaking
 
-* Removed support for React 15 and lower.  This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
+* Removed support for React 15 and lower. This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
 * removed `showCursorLine` prop in favor of using the `CursorMarker` component. See `TimelineMarkers` section of README for documentation.
 
 ```diff
@@ -159,6 +159,7 @@ from 'react-calendar-timeline'
 ### 0.17.3
 
 ### Added
+
 * fix issue with single row header - #359
 
 ### 0.17.2
