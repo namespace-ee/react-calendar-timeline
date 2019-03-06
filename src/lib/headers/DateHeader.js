@@ -28,9 +28,8 @@ class DateHeader extends React.PureComponent {
       return this.props.unit
     } else if (this.props.primaryHeader) {
       return getNextUnit(this.props.timelineUnit)
-    } else {
-      return this.props.timelineUnit
     }
+    return this.props.timelineUnit
   }
 
   render() {
@@ -48,6 +47,7 @@ class DateHeader extends React.PureComponent {
 
           return (
             <div
+            data-testid={`dateHeader`}
               className={this.props.className}
               {...getRootProps({ style: this.getRootStyle() })}
             >

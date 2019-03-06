@@ -149,10 +149,13 @@ export function getNextUnit(unit) {
     minute: 'hour',
     hour: 'day',
     day: 'month',
-    month: 'year'
+    month: 'year',
+    year: 'year'
   }
-
-  return nextUnits[unit] || ''
+  if (!nextUnits[unit]) {
+    throw new Error(`unit ${unit} in not acceptable`)
+  }
+  return nextUnits[unit]
 }
 
 /**

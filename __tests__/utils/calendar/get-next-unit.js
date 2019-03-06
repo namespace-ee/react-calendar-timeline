@@ -23,12 +23,11 @@ describe('getNextUnit', () => {
     const result = getNextUnit('month')
     expect(result).toBe('year')
   })
-  it('year to empty string', () => {
+  it('year to year', () => {
     const result = getNextUnit('year')
-    expect(result).toBe('')
+    expect(result).toBe('year')
   })
-  it('unknown value to empty string', () => {
-    const result = getNextUnit('foo')
-    expect(result).toBe('')
+  it('unknown value to throw error', () => {
+    expect(() => getNextUnit('foo')).toThrowErrorMatchingSnapshot()
   })
 })

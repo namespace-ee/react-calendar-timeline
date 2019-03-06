@@ -67,12 +67,13 @@ class TimelineHeaders extends React.PureComponent {
       }
     })
     return (
-      <div style={this.getRootStyle()} className={this.props.className}>
+      <div data-testid="headerRootDiv" style={this.getRootStyle()} className={this.props.className}>
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
           className={this.props.calendarHeaderClassName}
+          data-testid="headerContainer"
         >
           {calendarHeaders}
         </div>
