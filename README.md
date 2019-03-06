@@ -915,3 +915,6 @@ npm version patch
 ```
 
 -->
+
+## License
+[MIT licensed](/LICENSE.md).
