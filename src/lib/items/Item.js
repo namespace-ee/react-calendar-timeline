@@ -261,7 +261,6 @@ export default class Item extends Component {
         if (this.state.dragging) {
           let dragTime = this.dragTime(e)
           let dragGroupDelta = this.dragGroupDelta(e)
-          console.log(dragGroupDelta)
           if (this.props.moveResizeValidator) {
             dragTime = this.props.moveResizeValidator(
               'move',
@@ -384,7 +383,9 @@ export default class Item extends Component {
         }
       })
       .on('tap', e => {
-        this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
+        if(e.pointerType !== 'mouse'){
+          this.actualClick(e, 'touch')
+        }
       })
 
     this.setState({
@@ -462,20 +463,6 @@ export default class Item extends Component {
 
   }
 
-  onMouseDown = e => {
-    if (!this.state.interactMounted) {
-      e.preventDefault()
-      this.startedClicking = true
-    }
-  }
-
-  onMouseUp = e => {
-    if (!this.state.interactMounted && this.startedClicking) {
-      this.startedClicking = false
-      this.actualClick(e, 'click')
-    }
-  }
-
   onTouchStart = e => {
     if (!this.state.interactMounted) {
       e.preventDefault()
@@ -526,13 +513,12 @@ export default class Item extends Component {
       ref: this.getItemRef,
       title: this.itemDivTitle,
       className: classNames + ` ${props.className ? props.className : ''}`,
-      onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
-      onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
       onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
       onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
       onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
       onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
-      style: Object.assign({}, this.getItemStyle(props))
+      style: Object.assign({}, this.getItemStyle(props)),
+      onClick : (e) => {this.actualClick(e, 'click')}
     }
   }
 

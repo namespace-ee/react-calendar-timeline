@@ -65,6 +65,9 @@ export default class App extends Component {
   }
 
   handleCanvasClick = (groupId, time) => {
+    this.setState(state => ({
+      groups: state.groups
+    }))
     console.log('Canvas clicked', groupId, moment(time).format())
   }
 
@@ -82,6 +85,9 @@ export default class App extends Component {
 
   handleItemSelect = (itemId, _, time) => {
     console.log('Selected: ' + itemId, moment(time).format())
+    this.setState((state)=>({
+      groups: state.groups.filter(_ => Math.random() > 0.5 )
+    }))
   }
 
   handleItemDoubleClick = (itemId, _, time) => {
