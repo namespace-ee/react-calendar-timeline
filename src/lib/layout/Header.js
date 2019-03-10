@@ -56,6 +56,11 @@ class Header extends Component {
 
     const headerClass = stickyHeader ? 'header-sticky' : ''
 
+    const elementsHeaderContainerStyle = {
+      width,
+      ...(!leftSidebarHeader && {left: `${leftSidebarWidth}px`})
+    }
+
     const leftSidebar = leftSidebarHeader && leftSidebarWidth > 0 && (
       <div
         className="rct-sidebar-header"
@@ -82,7 +87,7 @@ class Header extends Component {
         style={headerStyle}
       >
         {leftSidebar}
-        <div style={{ width }} data-testid="timeline-elements-header-container">
+        <div style={elementsHeaderContainerStyle} className={`rct-header-elements-container`} data-testid="timeline-elements-header-container">
           <TimelineElementsHeader
             data-testid="timeline-elements-header"
             hasRightSidebar={hasRightSidebar}

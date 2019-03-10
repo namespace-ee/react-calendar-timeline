@@ -7,7 +7,6 @@ class ScrollElement extends Component {
     children: PropTypes.element.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    traditionalZoom: PropTypes.bool.isRequired,
     scrollRef: PropTypes.func.isRequired,
     isInteractingWithItem: PropTypes.bool.isRequired,
     onZoom: PropTypes.func.isRequired,
@@ -33,10 +32,6 @@ class ScrollElement extends Component {
   }
 
   handleWheel = e => {
-    const { traditionalZoom } = this.props
-
-    
-
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
       e.preventDefault()
