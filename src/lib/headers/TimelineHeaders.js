@@ -50,22 +50,22 @@ class TimelineHeaders extends React.Component {
       ? this.props.children.filter(c => c)
       : [this.props.children]
     React.Children.map(children, child => {
-      if (
-        child.type === SidebarHeader &&
-        child.props.variant === RIGHT_VARIANT
-      ) {
-        rightSidebarHeader = child
-      } else if (
-        child.type === SidebarHeader &&
-        child.props.variant === LEFT_VARIANT
-      ) {
-        leftSidebarHeader = child
+      if (child.type === SidebarHeader) {
+        if (child.props.variant === RIGHT_VARIANT) {
+          rightSidebarHeader = child
+        } else {
+          leftSidebarHeader = child
+        }
       } else {
         calendarHeaders.push(child)
       }
     })
     return (
-      <div data-testid="headerRootDiv" style={this.getRootStyle()} className={this.props.className}>
+      <div
+        data-testid="headerRootDiv"
+        style={this.getRootStyle()}
+        className={this.props.className}
+      >
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}

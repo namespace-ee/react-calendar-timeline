@@ -13,8 +13,8 @@ import { TimelineHeadersProvider } from 'lib/headers/HeadersContext'
 const defaultProps = {
   groups,
   items,
-  defaultTimeStart: moment(visibleTimeStart, 'x'),
-  defaultTimeEnd: moment(visibleTimeEnd, 'x'),
+  defaultTimeStart: moment.utc(visibleTimeStart, 'x'),
+  defaultTimeEnd: moment.utc(visibleTimeEnd, 'x'),
 }
 
 describe("Testing DateHeader Component", () => {
@@ -82,7 +82,7 @@ describe("Testing DateHeader Component", () => {
     expect(getAllByTestId('dateHeader')[0]).toHaveTextContent('Thursday, October 25')
   })
   it("Given Dateheader When pass a function typed labelFormat Then it should render the intervals with hte given format", () => {
-    const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
+    const formatlabel = jest.fn((interval) => interval[0].format("MM/DD/YYYY"))
     const { getAllByTestId } = render(dateHeaderComponent({ unit: "day", labelFormat: formatlabel }));
 
     expect(formatlabel).toHaveBeenCalled()
@@ -96,7 +96,7 @@ describe("Testing DateHeader Component", () => {
   })
 
   it("Given Dateheader When pass a string typed labelFormat Then it should be called with the right params", () => {
-    const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
+    const formatlabel = jest.fn((interval) => interval[0].format("MM/DD/YYYY"))
     render(dateHeaderComponent({ unit: "day", labelFormat: formatlabel }))
     expect(formatlabel).toHaveBeenCalled()
     expect(formatlabel).toHaveBeenCalledWith(expect.any(Array), "day", expect.any(Number))
@@ -106,7 +106,7 @@ describe("Testing DateHeader Component", () => {
 
   it("Given Dateheader When click on the primary header Then it should change the unit", async () => {
 
-    const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
+    const formatlabel = jest.fn((interval) => interval[0].format("MM/DD/YYYY"))
     const { getByTestId, getAllByTestId } = render(dateHeaderComponent({ unit: "day", labelFormat: formatlabel }));
     // Arrange
     const primaryHeader = getByTestId('dateHeader')
@@ -125,7 +125,7 @@ describe("Testing DateHeader Component", () => {
 
   it("Given Dateheader When click on the secondary header Then it should change the unit", async () => {
 
-    const formatlabel = jest.fn((interval, unit, labelWidth) => interval[0].format("MM/DD/YYYY"))
+    const formatlabel = jest.fn((interval,) => interval[0].format("MM/DD/YYYY"))
     const { getByTestId, getAllByTestId } = render(dateHeaderComponent({ unit: "day", labelFormat: formatlabel }));
     // Arrange
     const primaryHeader = getByTestId('dateHeader')
@@ -149,7 +149,7 @@ describe("Testing DateHeader Component", () => {
   it('Given DateHeadr When click on primary or secondary Then onTimeChange function should be called with the right params', () => {
     const handleTimeChange = jest.fn((visibleTimeStart, visibleTimeEnd, updateScrollCanvas) =>
       updateScrollCanvas(visibleTimeStart, visibleTimeEnd))
-    const { getByTestId, getAllByTestId, debug } = render(dateHeaderComponent({ unit: "day", handleTimeChange: handleTimeChange }));
+    const { getByTestId, getAllByTestId } = render(dateHeaderComponent({ unit: "day", handleTimeChange: handleTimeChange }));
     const primaryHeader = within(getByTestId('dateHeader')).getByText('Friday, October 26, 2018').parentElement
     primaryHeader.click()
     const secondaryHeader = within(getAllByTestId('dateHeader')[1]).getByText('1').parentElement
@@ -177,10 +177,10 @@ describe("Testing DateHeader Component", () => {
     expect(position).not.toBe('fixed')
   })
 
-  it('Given Interval When pass an override (width, position) Then it should render the default values for it', () => {
-    const { getAllByTestId } = render(dateHeaderComponent({ labelFormat: "MM/DD/YYYY", props: { style: { width: 100, position: 'fixed' } } }));
+  it('Given Interval When pass an override (width, position) Then it should ignore these values', () => {
+    const { getAllByTestId, debug } = render(dateHeaderComponent({ labelFormat: "MM/DD/YYYY", props: { style: { width: 100, position: 'fixed' } } }));
     const { width, position } = getComputedStyle(getAllByTestId('interval')[0])
-    expect(width).toBe('36px')
+    expect(width).not.toBe('1000px')
     expect(position).toBe('absolute')
 
 
@@ -362,15 +362,14 @@ function dateHeaderWithIntervalRenderer({ intervalRenderer, props } = {}) {
 
 function renderDateHeaderWithContext({unit, children} = {})
 {
-  const oneDay = 1000 * 60 * 60 * 24
-  const now = Date.now()
-  const visibleTimeStart = now - oneDay
-  const visibleTimeEnd = now + oneDay
+  const date = moment.utc('21/1/2019', 'DD/MM/YYYY')
+  const visibleTimeStart = date.clone().subtract(1, 'd')
+  const visibleTimeEnd = date.clone().add(1, 'd')
   const defaultTimelineState = {
-    visibleTimeStart,
-    visibleTimeEnd,
-    canvasTimeStart: visibleTimeStart - oneDay,
-    canvasTimeEnd: visibleTimeEnd + oneDay,
+    visibleTimeStart: visibleTimeStart.valueOf(),
+    visibleTimeEnd: visibleTimeEnd.valueOf(),
+    canvasTimeStart: visibleTimeStart.clone().subtract(1, 'd').valueOf(),
+    canvasTimeEnd: visibleTimeEnd.clone().add(1, 'd').valueOf(),
     canvasWidth: 3000,
     visibleWidth: 1000,
     showPeriod:()=>{},

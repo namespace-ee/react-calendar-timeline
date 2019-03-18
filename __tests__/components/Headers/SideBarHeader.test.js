@@ -14,8 +14,8 @@ import { items, groups } from '../../../__fixtures__/itemsAndGroups'
 const defaultProps = {
   groups,
   items,
-  defaultTimeStart: moment('1995-12-25').add(-12, 'hour'),
-  defaultTimeEnd: moment('1995-12-25').add(12, 'hour')
+  defaultTimeStart: moment.utc('1995-12-25').add(-12, 'hour'),
+  defaultTimeEnd: moment.utc('1995-12-25').add(12, 'hour')
 }
 
 describe("Testing SidebarHeader Component", () => {
