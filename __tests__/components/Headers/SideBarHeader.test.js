@@ -9,46 +9,6 @@ import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 
 describe('Testing SidebarHeader Component', () => {
   afterEach(cleanup)
-  //  Testing The Example In The Docs
-  it('Given SidebarHeader When rendered Then it should shown correctly in the timeline', () => {
-    const { getByTestId } = render(
-      <RenderHeadersWrapper>
-        <TimelineHeaders>
-          <SidebarHeader>
-            {({ getRootProps }) => {
-              return (
-                <div data-testid="leftSidebarHeader" {...getRootProps()}>
-                  Left
-                </div>
-              )
-            }}
-          </SidebarHeader>
-          <SidebarHeader variant="right">
-            {({ getRootProps }) => {
-              return (
-                <div data-testid="rightSidebarHeader" {...getRootProps()}>
-                  Right
-                </div>
-              )
-            }}
-          </SidebarHeader>
-          <DateHeader primaryHeader />
-          <DateHeader />
-        </TimelineHeaders>
-      </RenderHeadersWrapper>
-    )
-
-    expect(getByTestId('leftSidebarHeader')).toBeInTheDocument()
-    expect(getByTestId('rightSidebarHeader')).toBeInTheDocument()
-
-    expect(getByTestId('leftSidebarHeader').nextElementSibling).toHaveAttribute(
-      'data-testid',
-      'headerContainer'
-    )
-    expect(
-      getByTestId('rightSidebarHeader').previousElementSibling
-    ).toHaveAttribute('data-testid', 'headerContainer')
-  })
 
   it('Given SidebarHeader When passing no variant prop Then it should rendered above the left sidebar', () => {
     const {
@@ -94,17 +54,13 @@ describe('Testing SidebarHeader Component', () => {
     )
   })
 
+  //TODO: rename test
   it('Given SidebarHeader When passing props to the props getter Then it should rendered correctly', () => {
     const { getByTestId } = renderSidebarHeaderWithCustomValues({
       props: { style: { width: 250 } }
     })
     const { width } = getComputedStyle(getByTestId('sidebarHeader'))
     expect(width).toBe('250px')
-  })
-
-  it('Given SidebarHeader When passing children to it Then it should rendered correctly', () => {
-    const { getByText } = renderSidebarHeaderWithCustomValues()
-    expect(getByText('Should Be Rendred')).toBeInTheDocument()
   })
 
   it('Given sidebarheader When pass a variant and props Then it should render both correctly', () => {
@@ -119,6 +75,7 @@ describe('Testing SidebarHeader Component', () => {
     )
   })
 
+  //TODO shouldnt override width?
   it('Given two sidebarheaders When pass a variants and props Then it should render both correctly', () => {
     const { getByText } = renderTwoSidebarHeadersWithCustomValues({
       props: { style: { width: 250 } }
@@ -137,12 +94,55 @@ describe('Testing SidebarHeader Component', () => {
     )
   })
 
+  //TODO: use to have been called with and mock the renderer
   it('Given SidebarHeader When Pass an props obj to props renderer Then it should render it correctly', () => {
     const { getByTestId } = renderSidebarHeaderWithCustomValues({
       props: { 'aria-hidden': false }
     })
     expect(getByTestId('sidebarHeader')).toHaveAttribute('aria-hidden')
   })
+
+    //  Testing The Example In The Docs
+    it('Given SidebarHeader When rendered Then it should shown correctly in the timeline', () => {
+      const { getByTestId } = render(
+        <RenderHeadersWrapper>
+          <TimelineHeaders>
+            <SidebarHeader>
+              {({ getRootProps }) => {
+                return (
+                  <div data-testid="leftSidebarHeader" {...getRootProps()}>
+                    Left
+                  </div>
+                )
+              }}
+            </SidebarHeader>
+            <SidebarHeader variant="right">
+              {({ getRootProps }) => {
+                return (
+                  <div data-testid="rightSidebarHeader" {...getRootProps()}>
+                    Right
+                  </div>
+                )
+              }}
+            </SidebarHeader>
+            <DateHeader primaryHeader />
+            <DateHeader />
+          </TimelineHeaders>
+        </RenderHeadersWrapper>
+      )
+  
+      expect(getByTestId('leftSidebarHeader')).toBeInTheDocument()
+      expect(getByTestId('rightSidebarHeader')).toBeInTheDocument()
+  
+      expect(getByTestId('leftSidebarHeader').nextElementSibling).toHaveAttribute(
+        'data-testid',
+        'headerContainer'
+      )
+      expect(
+        getByTestId('rightSidebarHeader').previousElementSibling
+      ).toHaveAttribute('data-testid', 'headerContainer')
+    })
+
 })
 
 function renderSidebarHeaderWithCustomValues({

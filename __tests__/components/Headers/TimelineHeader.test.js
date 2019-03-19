@@ -9,6 +9,9 @@ import React from 'react'
 
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 
+//TODO add style and calendarHeaderStyle tests
+//TODO add style doesn't override default styles
+//TODO test left right variants correctly
 describe('TimelineHeader', () => {
   it('Given TimelineHeader When pass a left sidebar as a child Then it should render a left sidebar', () => {
     const { getByTestId, getAllByTestId } = renderTimelineWithVariantSidebar({
@@ -30,7 +33,7 @@ describe('TimelineHeader', () => {
     expect(getByTestId('right-header')).toBeInTheDocument()
   })
 
-  it('Given TimelineHeader When pass calendarHeaderStyle with overrided (overflow, width) Then it should not override the deaful values', () => {
+  it('Given TimelineHeader When pass calendarHeaderStyle with overridden (overflow, width) Then it should not override the default values', () => {
     const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
       calendarHeaderStyle: { overflow: 'unset', width: 0 }
     })
@@ -40,7 +43,7 @@ describe('TimelineHeader', () => {
     expect(overflow).not.toBe('unset')
     expect(width).not.toBe('0px')
   })
-  it('Given TimelineHeader When pass rootStyle with overrided (display, width) Then it should not override the deaful values', () => {
+  it('Given TimelineHeader When pass rootStyle with overridden (display, width) Then it should not override the default values', () => {
     const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
       style: { display: 'none', width: 0 }
     })
