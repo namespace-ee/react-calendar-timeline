@@ -8,25 +8,13 @@ import 'react-testing-library/cleanup-after-each'
 import React from 'react'
 
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
+import {
+  renderSidebarHeaderWithCustomValues,
+  renderTimelineWithVariantSidebar,
+  renderTimelineWithLeftAndRightSidebar
+} from '../../test-utility/headerRenderers'
 
-//TODO add style and calendarHeaderStyle tests
-//TODO add style doesn't override default styles
-//TODO test left right variants correctly
 describe('TimelineHeader', () => {
-  it('Given TimelineHeader When pass a left sidebar as a child Then it should render a left sidebar', () => {
-    const { getByTestId, getAllByTestId } = renderTimelineWithVariantSidebar({
-      variant: 'left'
-    })
-    expect(getByTestId('sidebarHeader')).toBeInTheDocument()
-    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
-  })
-  it('Given TimelineHeader When pass a right sidebar as a child Then it should render a right sidebar', () => {
-    const { getByTestId, getAllByTestId } = renderTimelineWithVariantSidebar({
-      variant: 'right'
-    })
-    expect(getByTestId('sidebarHeader')).toBeInTheDocument()
-    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
-  })
   it('Given TimelineHeader When pass a left and right sidebars as children Then it should render a left and right sidebars', () => {
     const { getByTestId } = renderTimelineWithLeftAndRightSidebar()
     expect(getByTestId('left-header')).toBeInTheDocument()
@@ -43,7 +31,17 @@ describe('TimelineHeader', () => {
     expect(overflow).not.toBe('unset')
     expect(width).not.toBe('0px')
   })
-  it('Given TimelineHeader When pass rootStyle with overridden (display, width) Then it should not override the default values', () => {
+  it('Given TimelineHeader When pass calendarHeaderStyle Then it be added to styles', () => {
+    const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
+      calendarHeaderStyle: { color: 'white', background: 'black' }
+    })
+    const headerContainer = getByTestId('headerContainer')
+    const { color, background } = getComputedStyle(headerContainer)
+
+    expect(color).toBe('white')
+    expect(background).toBe('black')
+  })
+  it('Given TimelineHeader When pass style with overridden (display, width) Then it should not override the default values', () => {
     const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
       style: { display: 'none', width: 0 }
     })
@@ -53,11 +51,28 @@ describe('TimelineHeader', () => {
     expect(display).not.toBe('none')
     expect(width).not.toBe('0px')
   })
+  it('Given TimelineHeader When pass style Then it should it be added to root`s styles', () => {
+    const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
+      style: { color: 'white', background: 'black' }
+    })
+    const rootDiv = getByTestId('headerRootDiv')
+    const { color, background } = getComputedStyle(rootDiv)
+
+    expect(color).toBe('white')
+    expect(background).toBe('black')
+  })
   it('Given TimelineHeader When pass calendarHeaderClassName Then it should be applied to the date header container', () => {
     const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
       calendarHeaderClassName: 'testClassName'
     })
     expect(getByTestId('headerContainer')).toHaveClass('testClassName')
+  })
+
+  it('Given TimelineHeader When pass className Then it should be applied to the root header container', () => {
+    const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
+      className: 'testClassName'
+    })
+    expect(getByTestId('headerRootDiv')).toHaveClass('testClassName')
   })
 
   it('Given TimelineHeader When rendered Then it should render the default styles of the date header container', () => {
@@ -75,6 +90,50 @@ describe('TimelineHeader', () => {
 
     expect(display).toBe('flex')
     expect(width).toBe('100%')
+  })
+
+  it('Given SidebarHeader When passing no variant prop Then it should rendered above the left sidebar', () => {
+    const {
+      getByTestId,
+      getAllByTestId
+    } = renderSidebarHeaderWithCustomValues()
+    expect(getByTestId('sidebarHeader')).toBeInTheDocument()
+    expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute(
+      'data-testid',
+      'headerContainer'
+    )
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
+  })
+  it('Given SidebarHeader When passing variant prop with left value Then it should rendered above the left sidebar', () => {
+    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues(
+      { variant: 'left' }
+    )
+    expect(getByTestId('sidebarHeader')).toBeInTheDocument()
+    expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute(
+      'data-testid',
+      'headerContainer'
+    )
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
+  })
+  it('Given SidebarHeader When passing variant prop with right value Then it should rendered above the right sidebar', () => {
+    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues(
+      { variant: 'right' }
+    )
+    expect(getByTestId('sidebarHeader')).toBeInTheDocument()
+    expect(getByTestId('sidebarHeader').previousElementSibling).toHaveAttribute(
+      'data-testid',
+      'headerContainer'
+    )
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
+  })
+
+  it('Given SidebarHeader When passing variant prop with unusual value Then it should rendered above the left sidebar by default', () => {
+    const { getByTestId } = renderSidebarHeaderWithCustomValues({ variant: '' })
+    expect(getByTestId('sidebarHeader')).toBeInTheDocument()
+    expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute(
+      'data-testid',
+      'headerContainer'
+    )
   })
 
   /**
@@ -119,68 +178,3 @@ describe('TimelineHeader', () => {
     expect(queryByText('Right')).toBeNull()
   })
 })
-
-function renderTimelineWithLeftAndRightSidebar({
-  calendarHeaderClassName,
-  calendarHeaderStyle,
-  style,
-  timelineState,
-  headersState
-} = {}) {
-  return render(
-    <RenderHeadersWrapper
-      timelineState={timelineState}
-      headersState={headersState}
-    >
-      <TimelineHeaders
-        style={style}
-        calendarHeaderStyle={calendarHeaderStyle}
-        calendarHeaderClassName={calendarHeaderClassName}
-      >
-        <SidebarHeader variant="right">
-          {({ getRootProps }) => {
-            return (
-              <div data-testid="right-header" {...getRootProps()}>
-                Right
-              </div>
-            )
-          }}
-        </SidebarHeader>
-        <SidebarHeader variant="left">
-          {({ getRootProps }) => {
-            return (
-              <div data-testid="left-header" {...getRootProps()}>
-                Left
-              </div>
-            )
-          }}
-        </SidebarHeader>
-      </TimelineHeaders>
-    </RenderHeadersWrapper>
-  )
-}
-
-function renderTimelineWithVariantSidebar({
-  variant,
-  timelineState,
-  headersState
-} = {}) {
-  return render(
-    <RenderHeadersWrapper
-      timelineState={timelineState}
-      headersState={headersState}
-    >
-      <TimelineHeaders>
-        <SidebarHeader variant={variant}>
-          {({ getRootProps }) => {
-            return (
-              <div data-testid="sidebarHeader" {...getRootProps()}>
-                Header
-              </div>
-            )
-          }}
-        </SidebarHeader>
-      </TimelineHeaders>
-    </RenderHeadersWrapper>
-  )
-}

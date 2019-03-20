@@ -20,8 +20,8 @@ class SidebarHeader extends React.PureComponent {
         : this.props.leftSidebarWidth
     return {
       style: {
+        ...style,
         width,
-        ...style
       }
     }
   }
