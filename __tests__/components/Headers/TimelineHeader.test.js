@@ -136,6 +136,11 @@ describe('TimelineHeader', () => {
     )
   })
 
+  //TODO: implement this
+  it("Given TimelineHeader When passing only calendar headers it should render empty sidebar header", ()=> {
+    expect(false).toBeTruthy()
+  })
+
   /**
    * Testing The Example Provided In The Docs
    */

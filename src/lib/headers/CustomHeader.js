@@ -9,8 +9,8 @@ export class CustomHeader extends React.Component {
     //component props
     children: PropTypes.func.isRequired,
     unit: PropTypes.string.isRequired,
-    timeSteps: PropTypes.object.isRequired,
     //Timeline context
+    timeSteps: PropTypes.object.isRequired,
     visibleTimeStart: PropTypes.number.isRequired,
     visibleTimeEnd: PropTypes.number.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
@@ -18,7 +18,7 @@ export class CustomHeader extends React.Component {
     canvasWidth: PropTypes.number.isRequired,
     showPeriod: PropTypes.func.isRequired,
     props: PropTypes.object,
-    getLeftOffsetFromDate: PropTypes.func.isRequired,
+    getLeftOffsetFromDate: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
@@ -29,13 +29,9 @@ export class CustomHeader extends React.Component {
       unit,
       timeSteps,
       showPeriod,
-      getLeftOffsetFromDate,
+      getLeftOffsetFromDate
     } = props
-    const ratio = this.calculateRatio(
-      canvasWidth,
-      canvasTimeEnd,
-      canvasTimeStart
-    )
+
     const intervals = this.getHeaderIntervals({
       canvasTimeStart,
       canvasTimeEnd,
@@ -43,12 +39,11 @@ export class CustomHeader extends React.Component {
       unit,
       timeSteps,
       showPeriod,
-      getLeftOffsetFromDate,
+      getLeftOffsetFromDate
     })
 
     this.state = {
-      intervals,
-      ratio
+      intervals
     }
   }
 
@@ -83,13 +78,9 @@ export class CustomHeader extends React.Component {
         unit,
         timeSteps,
         showPeriod,
-        getLeftOffsetFromDate,
+        getLeftOffsetFromDate
       } = nextProps
-      const ratio = this.calculateRatio(
-        canvasWidth,
-        canvasTimeEnd,
-        canvasTimeStart
-      )
+
       const intervals = this.getHeaderIntervals({
         canvasTimeStart,
         canvasTimeEnd,
@@ -97,10 +88,10 @@ export class CustomHeader extends React.Component {
         unit,
         timeSteps,
         showPeriod,
-        getLeftOffsetFromDate,
+        getLeftOffsetFromDate
       })
 
-      this.setState({ intervals, ratio })
+      this.setState({ intervals })
     }
   }
 
@@ -109,7 +100,7 @@ export class CustomHeader extends React.Component {
     canvasTimeEnd,
     unit,
     timeSteps,
-    getLeftOffsetFromDate,
+    getLeftOffsetFromDate
   }) => {
     const intervals = []
     iterateTimes(
@@ -120,12 +111,12 @@ export class CustomHeader extends React.Component {
       (startTime, endTime) => {
         const left = getLeftOffsetFromDate(startTime.valueOf())
         const right = getLeftOffsetFromDate(endTime.valueOf())
-        const width = right-left
+        const width = right - left
         intervals.push({
           startTime,
           endTime,
           labelWidth: width,
-          left,
+          left
         })
       }
     )
@@ -150,7 +141,8 @@ export class CustomHeader extends React.Component {
 
   getIntervalProps = (props = {}) => {
     const { interval, style } = props
-    if (!interval) throw new Error("you should provide interval to the prop getter")
+    if (!interval)
+      throw new Error('you should provide interval to the prop getter')
     const { startTime, labelWidth, left } = interval
     return {
       style: this.getIntervalStyle({
@@ -159,19 +151,13 @@ export class CustomHeader extends React.Component {
         labelWidth,
         canvasTimeStart: this.props.canvasTimeStart,
         unit: this.props.unit,
-        ratio: this.state.ratio,
-        left,
+        left
       }),
       key: `label-${startTime.valueOf()}`
     }
   }
 
-  calculateRatio(canvasWidth, canvasTimeEnd, canvasTimeStart) {
-    return canvasWidth / (canvasTimeEnd - canvasTimeStart)
-  }
-
-  getIntervalStyle = ({ startTime, canvasTimeStart, ratio, unit, left,labelWidth, style, }) => {
-
+  getIntervalStyle = ({ left, labelWidth, style }) => {
     return {
       ...style,
       left,
@@ -241,7 +227,7 @@ const CustomHeaderWrapper = ({ children, unit, props }) => (
 CustomHeaderWrapper.propTypes = {
   children: PropTypes.func.isRequired,
   unit: PropTypes.string,
-  props: PropTypes.object,
+  props: PropTypes.object
 }
 
 export default CustomHeaderWrapper

@@ -3,6 +3,8 @@ import { render } from 'react-testing-library';
 import DateHeader from 'lib/headers/DateHeader';
 import SidebarHeader from 'lib/headers/SidebarHeader';
 import TimelineHeaders from 'lib/headers/TimelineHeaders';
+import CustomHeader from 'lib/headers/CustomHeader'
+
 import { RenderHeadersWrapper } from './header-renderer';
 export function renderSidebarHeaderWithCustomValues({ variant = undefined, props, timelineState, headersState, extraProps } = {}) {
   return render(<RenderHeadersWrapper timelineState={timelineState} headersState={headersState}>
@@ -104,6 +106,58 @@ export function renderTimelineWithVariantSidebar({
             )
           }}
         </SidebarHeader>
+      </TimelineHeaders>
+    </RenderHeadersWrapper>
+  )
+}
+
+export function getCustomHeadersInTimeline({
+  unit,
+  props,
+  intervalStyle,
+  timelineState,
+  headersState
+} = {}) {
+  return (
+    <RenderHeadersWrapper
+      timelineState={timelineState}
+      headersState={headersState}
+    >
+      <TimelineHeaders>
+        <CustomHeader unit={unit} props={props}>
+          {(
+            {
+              headerContext: { intervals },
+              getRootProps,
+              getIntervalProps,
+              showPeriod
+            },
+            extraProps = { style: { height: 30 } }
+          ) => {
+            return (
+              <div data-testid="customHeader" {...getRootProps(extraProps)}>
+                {intervals.map(interval => {
+                  return (
+                    <div
+                      data-testid="customHeaderInterval"
+                      onClick={() => {
+                        showPeriod(interval.startTime, interval.endTime)
+                      }}
+                      {...getIntervalProps({
+                        interval,
+                        style: intervalStyle
+                      })}
+                    >
+                      <div className="sticky">
+                        {interval.startTime.format('DD/MM/YYYY')}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          }}
+        </CustomHeader>
       </TimelineHeaders>
     </RenderHeadersWrapper>
   )
