@@ -71,6 +71,7 @@ class Interval extends React.PureComponent {
       }, props)
     return (
       <div
+        data-testid="dateHeaderInterval"
         {...this.getIntervalProps({
           style: this.getIntervalStyle()
         })}

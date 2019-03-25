@@ -194,17 +194,7 @@ export default class App extends Component {
           rightSidebarContent={<div>Above The Right</div>}
         >
           <TimelineHeaders className="header-background">
-            <SidebarHeader>
-              {({ getRootProps }) => {
-                console.log('left')
-                return <div {...getRootProps()}>Left</div>
-              }}
-            </SidebarHeader>
-            <SidebarHeader variant="right">
-              {({ getRootProps }) => {
-                return <div {...getRootProps()}>Right</div>
-              }}
-            </SidebarHeader>
+            
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
               primaryHeader
