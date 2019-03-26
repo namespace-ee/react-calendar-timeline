@@ -46,8 +46,6 @@ export default class ReactCalendarTimeline extends Component {
     stickyOffset: PropTypes.number,
     stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
-    headerLabelGroupHeight: PropTypes.number,
-    headerLabelHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
 
     minZoom: PropTypes.number,
@@ -171,8 +169,6 @@ export default class ReactCalendarTimeline extends Component {
     stickyOffset: 0,
     stickyHeader: true,
     lineHeight: 30,
-    headerLabelGroupHeight: 30,
-    headerLabelHeight: 30,
     itemHeightRatio: 0.65,
 
     minZoom: 60 * 60 * 1000, // 1 hour
@@ -623,6 +619,7 @@ export default class ReactCalendarTimeline extends Component {
 
     let time = calculateTimeForXPosition(
       canvasTimeStart,
+      
       canvasTimeEnd,
       getCanvasWidth(width),
       offsetX
@@ -871,7 +868,6 @@ export default class ReactCalendarTimeline extends Component {
     groupHeights,
     groupTops,
     height,
-    headerHeight,
     visibleTimeStart,
     visibleTimeEnd,
     minUnit,
@@ -903,7 +899,6 @@ export default class ReactCalendarTimeline extends Component {
           ? [this.state.selectedItem]
           : this.props.selected || [],
       height: height,
-      headerHeight: headerHeight,
       minUnit: minUnit,
       timeSteps: timeSteps
     }
@@ -948,8 +943,6 @@ export default class ReactCalendarTimeline extends Component {
     const {
       items,
       groups,
-      headerLabelGroupHeight,
-      headerLabelHeight,
       sidebarWidth,
       rightSidebarWidth,
       timeSteps,
@@ -969,7 +962,6 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasWidth = getCanvasWidth(width)
     const minUnit = getMinUnit(zoom, width, timeSteps)
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
 
     const isInteractingWithItem = !!draggingItem || !!resizingItem
 
@@ -1055,7 +1047,6 @@ export default class ReactCalendarTimeline extends Component {
                       minUnit,
                       timeSteps,
                       height,
-                      headerHeight
                     )}
                     {this.rows(canvasWidth, groupHeights, groups)}
                     {this.infoLabel()}
@@ -1067,7 +1058,6 @@ export default class ReactCalendarTimeline extends Component {
                       groupHeights,
                       groupTops,
                       height,
-                      headerHeight,
                       visibleTimeStart,
                       visibleTimeEnd,
                       minUnit,
