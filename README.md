@@ -182,14 +182,6 @@ The minimum width, in pixels, of a timeline entry when it's possible to resize. 
 At what height from the top of the screen should we start "sticking" the header (i.e. position: sticky)? This is useful if for example you already have
 a sticky navbar and want to push the timeline header down further. Defaults `0`.
 
-## stickyHeader
-
-Specify whether you want the timeline header to be "sticky". Pass `false` if you want the header to fix at top of element and not fix when you scroll down the page. Defaults to `true`
-
-## headerRef
-
-Ref callback that gets a DOM reference to the header element. See [FAQ below](#the-timeline-header-doesnt-fix-to-the-top-of-the-container-when-i-scroll-down).
-
 ## lineHeight
 
 Height of one line in the calendar in pixels. Default `30`
@@ -826,7 +818,7 @@ Is the core component wrapper component for custom headers
 | `className` | `string`| applied to the root component of the headers|
 | `calendarHeaderStyle`| `object`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
 | `calendarHeaderClassName`| `string`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
-
+| `headerRef` | `function` | used to get the ref of the header element
 
 ### `SidebarHeader`
 
@@ -1233,31 +1225,8 @@ And add `rightTitle` prop to the groups objects:
 
 ## The timeline header doesn't fix to the top of the container when I scroll down.
 
-There are two causes of this:
+you need to add sticky to the header like [this example](https://github.com/FoothillSolutions/react-calendar-timeline/tree/dest-build/examples#sticky-header).
 
-* you are passing `stickyHeader={false}` to the timeline component. The header by default has sticky behavior unless you tell it not to using this prop.
-* the browser you are viewing the timeline in doesn't support `position: sticky`. In this scenario, you will need to polyfill this behavior using the `headerRef`.
-
-In this example, we use [stickyfill](https://github.com/wilddeer/stickyfill) as our sticky polyfill
-
-```jsx
-// add a handler in your parent component that accepts a DOM element
-// with this element, pass the element into a polyfill library
-
-handleHeaderRef = (el) => {
-  // polyfill dom element with stickyfill
-  Stickyfill.addOne(el)
-}
-
-// in render, pass this handler to the `headerRef` prop:
-
-render() {
-  <Timeline
-  //other props
-  headerRef={this.handleHeaderRef}
-
-  />
-}
 ```
 
 ## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events

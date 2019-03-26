@@ -11,7 +11,8 @@ class TimelineHeaders extends React.Component {
     style: PropTypes.object,
     className: PropTypes.string,
     calendarHeaderStyle: PropTypes.object,
-    calendarHeaderClassName: PropTypes.string
+    calendarHeaderClassName: PropTypes.string,
+    headerRef: PropTypes.func,
   }
 
   constructor(props) {
@@ -42,6 +43,12 @@ class TimelineHeaders extends React.Component {
     }
   }
 
+  handleRootRef = (element) => {
+    if(this.props.headerRef){
+      this.props.headerRef(element)
+    }
+  }
+
   render() {
     let rightSidebarHeader
     let leftSidebarHeader
@@ -62,6 +69,7 @@ class TimelineHeaders extends React.Component {
     })
     return (
       <div
+        ref={this.handleRootRef}
         data-testid="headerRootDiv"
         style={this.getRootStyle()}
         className={this.props.className}
@@ -110,7 +118,8 @@ TimelineHeadersWrapper.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   calendarHeaderStyle: PropTypes.object,
-  calendarHeaderClassName: PropTypes.string
+  calendarHeaderClassName: PropTypes.string,
+  headerRef: PropTypes.func,
 }
 
 export default TimelineHeadersWrapper

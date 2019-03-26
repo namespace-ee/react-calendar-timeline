@@ -63,3 +63,9 @@ Note that this is the user code manipulating groups to achieve tree group functi
 Using `scrollRef` you can trigger scrolling and create an animation. This is an alternative to setting `visibleStartTime` and `visibleEndTime`.
 
 [Example Codesandbox](https://codesandbox.io/s/3kq2503y8p)
+
+## Sticky header
+
+Using `Timeline Header` you can make the header stick to the top of the page while scrolling down
+
+[Example Codesandbox](https://codesandbox.io/s/w6xvqzno4w)
