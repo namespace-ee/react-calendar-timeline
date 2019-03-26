@@ -58,7 +58,7 @@ describe('CustomHeader Component Test', () => {
         intervalStyle: {
           width: 0,
           position: 'fixed',
-          left: 0
+          left: 1222222
         }
       })
     )
@@ -67,7 +67,7 @@ describe('CustomHeader Component Test', () => {
     )
     expect(width).not.toBe('0px')
     expect(position).not.toBe('fixed')
-    expect(left).not.toBe('0px')
+    expect(left).not.toBe('1222222px')
   })
   it('Given CustomHeader When pass an interval style other than (width, position and left) Then it should rendered correctly', () => {
     const { getByTestId } = render(
@@ -221,18 +221,20 @@ describe('CustomHeader Component Test', () => {
         return <div>header</div>
       })
       render(
-        <RenderHeadersWrapper>
+        <RenderHeadersWrapper timelineState={{timelineUnit: 'hour'}}>
           <TimelineHeaders>
             <CustomHeader>{renderer}</CustomHeader>
           </TimelineHeaders>
         </RenderHeadersWrapper>
       )
+
       const headerContext = renderer.mock.calls[0][0].headerContext
       const intervals = headerContext.intervals
       const widths = intervals.map(interval => interval.labelWidth)
       for (let index = 0; index < widths.length - 1; index++) {
         const a = widths[index]
         const b = widths[index + 1]
+
         expect(Math.abs(b - a)).toBeLessThan(0.1)
       }
     })

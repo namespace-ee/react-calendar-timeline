@@ -216,10 +216,10 @@ describe('Testing DateHeader Component', () => {
     })
     it('Given DateHeader When passing a unit then the date header unit should be same as unit passed', () => {
       const { getAllByTestId } = render(
-        <RenderHeadersWrapper timelineState={{ timelineUnit: 'day' }}>
+        <RenderHeadersWrapper timelineState={{ timelineUnit: 'month' }}>
           <TimelineHeaders>
             <DateHeader
-              unit="hour"
+              unit="day"
               labelFormat={interval => interval[0].format(format)}
             />
           </TimelineHeaders>
@@ -234,7 +234,7 @@ describe('Testing DateHeader Component', () => {
 
         const timeStampA = moment(a, format)
         const timeStampB = moment(b, format)
-        const diff = timeStampB.diff(timeStampA, 'hour')
+        const diff = timeStampB.diff(timeStampA, 'day')
         expect(diff).toBe(1)
       }
       expect(intervals).toMatchSnapshot()
