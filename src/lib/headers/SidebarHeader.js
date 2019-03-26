@@ -20,8 +20,8 @@ class SidebarHeader extends React.PureComponent {
         : this.props.leftSidebarWidth
     return {
       style: {
+        ...style,
         width,
-        ...style
       }
     }
   }
@@ -62,7 +62,7 @@ SidebarWrapper.propTypes = {
 
 SidebarWrapper.defaultProps = {
   variant: LEFT_VARIANT,
-  children: ({ getRootProps }) => <div {...getRootProps()} />
+  children: ({ getRootProps }) => <div data-testid="sidebarHeader" {...getRootProps()} />
 }
 
 export default SidebarWrapper
