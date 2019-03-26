@@ -40,7 +40,9 @@ You can restrict the moving and resizing of items at the item level by providing
 
 ## Right Sidebar
 
-Adding a right sidebar is as easy as passing in a couple of props `rightSidebarWidth` and `rightSidebarContent`. Content in the right column is populated from the `rightTitle` property on the group.
+Adding a right sidebar is as easy as passing `rightSidebarWidth`. Content in the right column is populated from the `rightTitle` property on the group. 
+
+Note: If you are using Custom Headers then you need to add them with `SidebarHeader` with variant "right"
 
 [Example Codesandbox](https://codesandbox.io/s/j3wrw6rl4v)
 

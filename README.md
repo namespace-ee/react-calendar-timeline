@@ -1206,11 +1206,10 @@ Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeli
 The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
 
-To use it, you need to add two props to the `<Timeline />` component:
+To use it, you need to add a props to the `<Timeline />` component:
 
 ```jsx
 rightSidebarWidth={150}
-rightSidebarContent={<p>Second filter</p>}
 ```
 
 And add `rightTitle` prop to the groups objects:
@@ -1222,6 +1221,8 @@ And add `rightTitle` prop to the groups objects:
   rightTitle: 'additional info about group 1'
 }
 ```
+
+If you are using Custom Headers then you need to add `SidebarHeader` component under `TimelineHeader` with variant `right`
 
 ## The timeline header doesn't fix to the top of the container when I scroll down.
 
