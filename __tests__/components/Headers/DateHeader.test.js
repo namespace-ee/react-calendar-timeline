@@ -110,8 +110,8 @@ describe('Testing DateHeader Component', () => {
     primaryFirstClick.click()
     expect(showPeriod).toBeCalled()
     const [start, end] = showPeriod.mock.calls[0]
-    expect(start.format()).toBe('2018-01-01T00:00:00+02:00')
-    expect(end.format()).toBe('2018-12-31T23:59:59+02:00')
+    expect(start.format("DD/MM/YYYY hh:mm a")).toBe('01/01/2018 12:00 am')
+    expect(end.format("DD/MM/YYYY hh:mm a")).toBe('31/12/2018 11:59 pm')
   })
 
   it('Given Dateheader When pass a className Then it should be applied to DateHeader', () => {
@@ -212,7 +212,6 @@ describe('Testing DateHeader Component', () => {
         const diff = timeStampB.diff(timeStampA, 'day')
         expect(diff).toBe(1)
       }
-      expect(intervals).toMatchSnapshot()
     })
     it('Given DateHeader When passing a unit then the date header unit should be same as unit passed', () => {
       const { getAllByTestId } = render(
@@ -237,7 +236,6 @@ describe('Testing DateHeader Component', () => {
         const diff = timeStampB.diff(timeStampA, 'day')
         expect(diff).toBe(1)
       }
-      expect(intervals).toMatchSnapshot()
     })
 
     it('Given DateHeader When passing primaryHeader Then the header unit should be bigger the timeline unit', () => {
@@ -263,7 +261,6 @@ describe('Testing DateHeader Component', () => {
         const diff = timeStampB.diff(timeStampA, 'month')
         expect(diff).toBe(1)
       }
-      expect(intervals).toMatchSnapshot()
     })
 
     it('Given DateHeader When passing secondaryHeader Then the header unit should be same as the timeline unit', () => {
@@ -289,7 +286,6 @@ describe('Testing DateHeader Component', () => {
         const diff = timeStampB.diff(timeStampA, 'day')
         expect(diff).toBe(1)
       }
-      expect(intervals).toMatchSnapshot()
     })
   })
 
