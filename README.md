@@ -186,14 +186,6 @@ a sticky navbar and want to push the timeline header down further. Defaults `0`.
 
 Height of one line in the calendar in pixels. Default `30`
 
-## headerLabelGroupHeight
-
-Height of the top header line. Default `30`
-
-## headerLabelHeight
-
-Height of the bottom header line. Default `30`
-
 ## itemHeightRatio
 
 What percentage of the height of the line is taken by the item? Default `0.65`

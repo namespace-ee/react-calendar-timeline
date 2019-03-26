@@ -13,10 +13,6 @@ $border-width: 1px;
 $thick-border-width: 2px;
 $sidebar-color: #ffffff;
 $sidebar-background-color: #c52020;
-$header-color: #ffffff;
-$header-background-color: #c52020;
-$lower-header-color: #333333;
-$lower-header-background-color: #f0f0f0;
 $list-item-padding: 0 4px;
 $weekend: rgba(250, 246, 225, 0.5);
 
@@ -57,17 +53,6 @@ $weekend: rgba(250, 246, 225, 0.5);
       border-radius: 2px;
       padding: 0 6px;
       height: 100%;
-    }
-  }
-
-  .rct-header-container {
-    z-index: 90;
-    display: flex;
-    overflow: hidden;
-
-    &.header-sticky {
-      position: sticky;
-      position: -webkit-sticky;
     }
   }
 
