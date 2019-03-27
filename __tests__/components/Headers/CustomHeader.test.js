@@ -287,7 +287,7 @@ describe('CustomHeader Component Test', () => {
               return <div {...getRootProps()}>Left</div>
             }}
           </SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
           <CustomHeader unit="year">
             {({

@@ -789,7 +789,7 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    <DateHeader primaryHeader />
+    <DateHeader unit="primaryHeader" />
     <DateHeader />
   </TimelineHeaders>
 <Timeline>
@@ -864,7 +864,7 @@ import Timeline, {
         return <div {...getRootProps()}>Right</div>
       }}
     </SidebarHeader>
-    <DateHeader primaryHeader />
+    <DateHeader unit="primaryHeader" />
     <DateHeader />
   </TimelineHeaders>
 <Timeline>
@@ -881,19 +881,19 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `style`| `object`| applied to the root of the header |
 | `className` | `string`| applied to the root of the header|
-| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` | intervals between columns |
-| `primaryHeader`| `boolean` | main header with interval unit larger than timeline unit by 1 |
-| `secondaryHeader` | `boolean` (`true` by default) | sub header with interval equal to timeline unit |
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` or `primaryHeader` | intervals between columns |
 | `labelFormat` | `Function` or `object` or `string`| controls the how to format the interval label |
 | `intervalRenderer`| `Function`| render prop to render each interval in the header |
 
+_Note_: passing `primaryHeader` to unit the header will act as the main header with interval unit larger than timeline unit by 1
+
 #### Interval unit
 
-intervals are decided through three props: `unit`, `primaryHeader` and `secondaryHeader` (default true). `secondaryHeader` is the default if no prop are set. The unit of the intervals will be the same the timeline and a special style is matches the default style of the secondary header from when no custom headers are applied. 
+intervals are decided through the prop: `unit`. By default, the unit of the intervals will be the same the timeline.
 
-If `primaryHeader` is set to true, it will override `secondaryHeader` and the unit if the timeline will be larger by 1 of the timeline unit. The default style will match the primary header from when no custom headers are applied.
+If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit. 
 
-If `unit` is set, it will override both `primaryHeader` and `secondaryHeader`. The unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. The default style will match the primary header from when no custom headers are applied.
+If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. 
 
 #### Label format
 
@@ -1013,7 +1013,7 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    <DateHeader primaryHeader />
+    <DateHeader unit="primaryHeader" />
     <DateHeader />
     <DateHeader
       unit="day"
@@ -1137,7 +1137,7 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    <DateHeader primaryHeader />
+    <DateHeader unit="primaryHeader" />
     <DateHeader />
     <CustomHeader unit="year">
       {({

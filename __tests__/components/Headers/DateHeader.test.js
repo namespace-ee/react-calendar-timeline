@@ -23,7 +23,7 @@ describe('Testing DateHeader Component', () => {
               return <div {...getRootProps()}>Left</div>
             }}
           </SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
           <DateHeader
             unit="day"
@@ -243,7 +243,7 @@ describe('Testing DateHeader Component', () => {
         <RenderHeadersWrapper timelineState={{ timelineUnit: 'day' }}>
           <TimelineHeaders>
             <DateHeader
-              primaryHeader
+              unit="primaryHeader"
               labelFormat={interval => interval[0].format(format)}
             />
           </TimelineHeaders>
@@ -263,12 +263,11 @@ describe('Testing DateHeader Component', () => {
       }
     })
 
-    it('Given DateHeader When passing secondaryHeader Then the header unit should be same as the timeline unit', () => {
+    it('Given DateHeader When not passing unit Then the header unit should be same as the timeline unit', () => {
       const { getAllByTestId } = render(
         <RenderHeadersWrapper timelineState={{ timelineUnit: 'day' }}>
           <TimelineHeaders>
             <DateHeader
-              secondaryHeader
               labelFormat={interval => interval[0].format(format)}
             />
           </TimelineHeaders>
@@ -387,7 +386,7 @@ function dateHeaderComponent({
             return <div {...getRootProps()}>Left</div>
           }}
         </SidebarHeader>
-        <DateHeader primaryHeader />
+        <DateHeader unit="primaryHeader" />
         <DateHeader
           unit={unit}
           labelFormat={labelFormat}
@@ -417,7 +416,7 @@ function dateHeaderWithIntervalRenderer({ intervalRenderer, props } = {}) {
             return <div {...getRootProps()}>Left</div>
           }}
         </SidebarHeader>
-        <DateHeader primaryHeader />
+        <DateHeader unit="primaryHeader" />
         <DateHeader
           unit={'day'}
           labelFormat={'MM/DD/YYYY'}

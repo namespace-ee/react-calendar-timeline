@@ -194,10 +194,10 @@ export default class App extends Component {
           rightSidebarContent={<div>Above The Right</div>}
         >
           <TimelineHeaders className="header-background">
-            
+            <SidebarHeader/>
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
-              primaryHeader
+              unit= "primaryHeader"
             />
             <DateHeader style={{ height: 50 }} />
             <CustomHeader unit="year" props={{ hey: 'you' }}>
@@ -337,7 +337,7 @@ export default class App extends Component {
               ? [
                   <DateHeader
                     labelFormat={this.state.format ? 'd' : undefined}
-                    primaryHeader
+                    unit = "primaryHeader"
                   />,
                   <DateHeader style={{ height: 50 }} />
                 ]

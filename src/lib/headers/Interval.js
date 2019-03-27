@@ -11,7 +11,6 @@ class Interval extends React.PureComponent {
     showPeriod: PropTypes.func.isRequired,
     intervalText: PropTypes.string.isRequired,
     primaryHeader: PropTypes.bool.isRequired,
-    secondaryHeader: PropTypes.bool.isRequired,
     getIntervalProps: PropTypes.func.isRequired,
     props: PropTypes.object
   }
@@ -21,10 +20,9 @@ class Interval extends React.PureComponent {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor:
-        this.props.secondaryHeader && !this.props.primaryHeader
-          ? 'rgb(240, 240, 240)'
-          : 'initial',
+      backgroundColor: this.props.primaryHeader
+        ? 'initial'
+        : 'rgb(240, 240, 240)',
       height: '100%',
       borderLeft: this.props.primaryHeader
         ? '1px solid #bbb'
@@ -49,7 +47,7 @@ class Interval extends React.PureComponent {
     }
   }
 
-  getIntervalProps = (props={}) => {
+  getIntervalProps = (props = {}) => {
     return {
       ...this.props.getIntervalProps({
         interval: this.props.interval,
@@ -62,13 +60,16 @@ class Interval extends React.PureComponent {
   render() {
     const { intervalText, interval, intervalRenderer, props } = this.props
     if (intervalRenderer)
-      return intervalRenderer({
-        getIntervalProps: this.getIntervalProps,
-        intervalContext: {
-          interval,
-          intervalText
-        }
-      }, props)
+      return intervalRenderer(
+        {
+          getIntervalProps: this.getIntervalProps,
+          intervalContext: {
+            interval,
+            intervalText
+          }
+        },
+        props
+      )
     return (
       <div
         data-testid="dateHeaderInterval"
