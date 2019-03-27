@@ -8,8 +8,6 @@ import Interval from './Interval'
 
 class DateHeader extends React.Component {
   static propTypes = {
-    primaryHeader: PropTypes.bool,
-    secondaryHeader: PropTypes.bool,
     unit: PropTypes.string,
     style: PropTypes.object,
     className: PropTypes.string,
@@ -24,10 +22,10 @@ class DateHeader extends React.Component {
   }
 
   getHeaderUnit = () => {
-    if (this.props.unit) {
-      return this.props.unit
-    } else if (this.props.primaryHeader) {
+    if (this.props.unit === 'primaryHeader') {
       return getNextUnit(this.props.timelineUnit)
+    } else if (this.props.unit) {
+      return this.props.unit
     }
     return this.props.timelineUnit
   }
@@ -64,8 +62,7 @@ class DateHeader extends React.Component {
                     interval={interval}
                     showPeriod={showPeriod}
                     intervalText={intervalText}
-                    primaryHeader={!!this.props.primaryHeader}
-                    secondaryHeader={!!this.props.secondaryHeader}
+                    primaryHeader={this.props.unit === "primaryHeader"}
                     getIntervalProps={getIntervalProps}
                     intervalRenderer={this.props.intervalRenderer}
                     props={props}
@@ -102,8 +99,6 @@ class DateHeader extends React.Component {
 }
 
 const DateHeaderWrapper = ({
-  primaryHeader,
-  secondaryHeader,
   unit,
   labelFormat,
   style,
@@ -117,8 +112,6 @@ const DateHeaderWrapper = ({
       return (
         <DateHeader
           timelineUnit={timelineState.timelineUnit}
-          primaryHeader={primaryHeader}
-          secondaryHeader={secondaryHeader}
           unit={unit}
           labelFormat={labelFormat}
           style={style}
@@ -134,8 +127,6 @@ const DateHeaderWrapper = ({
 DateHeaderWrapper.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
-  primaryHeader: PropTypes.bool,
-  secondaryHeader: PropTypes.bool,
   unit: PropTypes.string,
   labelFormat: PropTypes.oneOfType([
     PropTypes.func,
@@ -147,7 +138,6 @@ DateHeaderWrapper.propTypes = {
 }
 
 DateHeaderWrapper.defaultProps = {
-  secondaryHeader: true,
   labelFormat: formatLabel
 }
 
