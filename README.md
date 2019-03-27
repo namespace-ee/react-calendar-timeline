@@ -887,7 +887,8 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | `className` | `string`| applied to the root of the header|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` or `primaryHeader` | intervals between columns |
 | `labelFormat` | `Function` or `object` or `string`| controls the how to format the interval label |
-| `intervalRenderer`| `Function`| render prop to render each interval in the header |
+| `intervalRenderer`| `Function`| render prop to render each interval in the header 
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 
 _Note_: passing `primaryHeader` to unit the header will act as the main header with interval unit larger than timeline unit by 1
 
@@ -972,6 +973,8 @@ Render prop function used to render a customized interval. The function provides
 
 Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
+_Note_ : the renderProp can be a component or a function for convenience 
+
 ##### interval context
 
 An object contains the following properties:
@@ -1001,6 +1004,10 @@ Rather than applying props on the element yourself and to avoid your props being
   * style: extra inline styles to be applied to the component
   * onClick: extra click handler added to the normal `showPeriod callback`
 
+##### data
+
+data passed through headerData 
+
 #### example
 
 ```jsx
@@ -1023,9 +1030,11 @@ import Timeline, {
       unit="day"
       labelFormat="MM/DD"
       style={{ height: 50 }}
-      intervalRenderer={({ getIntervalProps, intervalContext }) => {
+      data={{someData: 'example'}}
+      intervalRenderer={({ getIntervalProps, intervalContext, data }) => {
         return <div {...getIntervalProps()}>
           {intervalContext.intervalText}
+          {data.example}
         </div>
       }}
     />
@@ -1043,6 +1052,7 @@ Responsible for rendering the headers above calendar part of the timeline. This 
 | ----------------- | --------------- | ---|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
 | `children` | `Function`| function as a child component to render the header|
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 
 #### unit
 
@@ -1053,6 +1063,8 @@ The unit of the header will be the unit passed though the prop and can be any `u
 Function as a child component to render the header
 
 Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
+
+_Note_ : the Child function renderer can be a component or a function for convenience 
 
 ```
 ({
@@ -1069,7 +1081,9 @@ Paramters provided to the function has three types: context params which have th
   },
   getRootProps: this.getRootProps,
   getIntervalProps: this.getIntervalProps,
-  showPeriod
+  showPeriod,
+  //contextual data passed through headerData
+  data,
 })=> React.Node
 ```
 
@@ -1123,7 +1137,9 @@ Rather than applying props on the element yourself and to avoid your props being
 | ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `showPeriod`   | `function(props={})` | returns the props you should apply to the root div element.|
 
+##### data:
 
+pass through the `headerData` prop content 
 
 #### example
 
@@ -1143,12 +1159,13 @@ import Timeline, {
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
     <DateHeader />
-    <CustomHeader unit="year">
+    <CustomHeader headerData={{someData: 'data'}} unit="year">
       {({
         headerContext: { intervals },
         getRootProps,
         getIntervalProps,
-        showPeriod
+        showPeriod,
+        data,
       }) => {
         return (
           <div {...getRootProps({ style: { height: 30 } })}>

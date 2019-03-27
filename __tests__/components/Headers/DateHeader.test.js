@@ -110,8 +110,8 @@ describe('Testing DateHeader Component', () => {
     primaryFirstClick.click()
     expect(showPeriod).toBeCalled()
     const [start, end] = showPeriod.mock.calls[0]
-    expect(start.format("DD/MM/YYYY hh:mm a")).toBe('01/01/2018 12:00 am')
-    expect(end.format("DD/MM/YYYY hh:mm a")).toBe('31/12/2018 11:59 pm')
+    expect(start.format('DD/MM/YYYY hh:mm a')).toBe('01/01/2018 12:00 am')
+    expect(end.format('DD/MM/YYYY hh:mm a')).toBe('31/12/2018 11:59 pm')
   })
 
   it('Given Dateheader When pass a className Then it should be applied to DateHeader', () => {
@@ -164,7 +164,7 @@ describe('Testing DateHeader Component', () => {
 
   it('Given DateHeader component When pass an intervalRenderer prop then it should be called with the right params', () => {
     const intervalRenderer = jest.fn(
-      ({ getIntervalProps, intervalContext }, props) => (
+      ({ getIntervalProps, intervalContext, data }) => (
         <div data-testid="myAwesomeInterval">
           {intervalContext.intervalText}
         </div>
@@ -185,10 +185,10 @@ describe('Testing DateHeader Component', () => {
     }
     expect(intervalRenderer).toBeCalled()
     expect(intervalRenderer).toReturn()
-    expect(intervalRenderer).toBeCalledWith(
-      expect.objectContaining(bluePrint),
-      props
-    )
+    expect(intervalRenderer.mock.calls[0][0].data).toBe(props)
+    expect(intervalRenderer.mock.calls[0][0].getIntervalProps).toEqual(expect.any(Function))
+    expect(intervalRenderer.mock.calls[0][0].intervalContext).toEqual(expect.any(Object))
+
   })
 
   describe('DateHeader Unit Values', () => {
@@ -267,9 +267,7 @@ describe('Testing DateHeader Component', () => {
       const { getAllByTestId } = render(
         <RenderHeadersWrapper timelineState={{ timelineUnit: 'day' }}>
           <TimelineHeaders>
-            <DateHeader
-              labelFormat={interval => interval[0].format(format)}
-            />
+            <DateHeader labelFormat={interval => interval[0].format(format)} />
           </TimelineHeaders>
         </RenderHeadersWrapper>
       )
@@ -295,10 +293,11 @@ describe('Testing DateHeader Component', () => {
         <RenderHeadersWrapper>
           <TimelineHeaders>
             <DateHeader
-              intervalRenderer={(
-                { getIntervalProps, intervalContext },
-                props
-              ) => {
+              intervalRenderer={({
+                getIntervalProps,
+                intervalContext,
+                data
+              }) => {
                 return (
                   <div
                     data-testid="interval"
@@ -321,10 +320,7 @@ describe('Testing DateHeader Component', () => {
         <RenderHeadersWrapper>
           <TimelineHeaders>
             <DateHeader
-              intervalRenderer={(
-                { getIntervalProps, intervalContext },
-                props
-              ) => {
+              intervalRenderer={({ getIntervalProps, intervalContext }) => {
                 return (
                   <div data-testid="interval" {...getIntervalProps()}>
                     {intervalContext.intervalText}
@@ -338,15 +334,13 @@ describe('Testing DateHeader Component', () => {
       expect(getByTestId('interval')).toBeInTheDocument()
     })
     it("Given DateHeader When passing interval renderer Then it should called with interval's context", () => {
-      const renderer = jest.fn(
-        ({ getIntervalProps, intervalContext }, props) => {
-          return (
-            <div data-testid="interval" {...getIntervalProps()}>
-              {intervalContext.intervalText}
-            </div>
-          )
-        }
-      )
+      const renderer = jest.fn(({ getIntervalProps, intervalContext }) => {
+        return (
+          <div data-testid="interval" {...getIntervalProps()}>
+            {intervalContext.intervalText}
+          </div>
+        )
+      })
       render(
         <RenderHeadersWrapper>
           <TimelineHeaders>
@@ -354,16 +348,79 @@ describe('Testing DateHeader Component', () => {
           </TimelineHeaders>
         </RenderHeadersWrapper>
       )
-      expect(renderer.mock.calls[0][0].intervalContext).toEqual(expect.objectContaining({
-        interval: expect.objectContaining({
-          startTime:expect.any(moment),
-          endTime:expect.any(moment),
-          labelWidth:expect.any(Number),
-          left: expect.any(Number)
-        }),
-        intervalText: expect.any(String)
-      }))
+      expect(renderer.mock.calls[0][0].intervalContext).toEqual(
+        expect.objectContaining({
+          interval: expect.objectContaining({
+            startTime: expect.any(moment),
+            endTime: expect.any(moment),
+            labelWidth: expect.any(Number),
+            left: expect.any(Number)
+          }),
+          intervalText: expect.any(String)
+        })
+      )
     })
+  })
+  it('Given DateHeader When passing a stateless react component to interval renderer Then it should render', () => {
+    const Renderer = ({ getIntervalProps, intervalContext }) => {
+      return (
+        <div data-testid="interval-a" {...getIntervalProps()}>
+          {intervalContext.intervalText}
+        </div>
+      )
+    }
+    const { getByTestId } = render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <SidebarHeader>
+            {({ getRootProps }) => {
+              return <div {...getRootProps()}>Left</div>
+            }}
+          </SidebarHeader>
+          <DateHeader unit="primaryHeader" />
+          <DateHeader />
+          <DateHeader
+            unit="day"
+            style={{ height: 50 }}
+            intervalRenderer={Renderer}
+          />
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+
+    expect(getByTestId('interval-a')).toBeInTheDocument()
+  })
+  it('Given DateHeader When passing a react component to interval renderer Then it should render', () => {
+    class Renderer extends React.Component {
+      render() {
+        const { getIntervalProps, intervalContext } = this.props
+        return (
+          <div data-testid="interval-a" {...getIntervalProps()}>
+            {intervalContext.intervalText}
+          </div>
+        )
+      }
+    }
+    const { getByTestId } = render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <SidebarHeader>
+            {({ getRootProps }) => {
+              return <div {...getRootProps()}>Left</div>
+            }}
+          </SidebarHeader>
+          <DateHeader unit="primaryHeader" />
+          <DateHeader />
+          <DateHeader
+            unit="day"
+            style={{ height: 50 }}
+            intervalRenderer={Renderer}
+          />
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+
+    expect(getByTestId('interval-a')).toBeInTheDocument()
   })
 })
 
@@ -390,12 +447,12 @@ function dateHeaderComponent({
         <DateHeader
           unit={unit}
           labelFormat={labelFormat}
-          props={props}
+          headerData={props}
           style={style}
           className={className}
-          intervalRenderer={({ getIntervalProps, intervalContext }, props) => {
+          intervalRenderer={({ getIntervalProps, intervalContext, data }) => {
             return (
-              <div data-testid="interval" {...getIntervalProps(props)}>
+              <div data-testid="interval" {...getIntervalProps(data)}>
                 {intervalContext.intervalText}
               </div>
             )
@@ -420,7 +477,7 @@ function dateHeaderWithIntervalRenderer({ intervalRenderer, props } = {}) {
         <DateHeader
           unit={'day'}
           labelFormat={'MM/DD/YYYY'}
-          props={props}
+          headerData={props}
           intervalRenderer={intervalRenderer}
         />
         <DateHeader />

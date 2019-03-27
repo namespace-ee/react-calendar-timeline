@@ -221,7 +221,7 @@ describe('CustomHeader Component Test', () => {
         return <div>header</div>
       })
       render(
-        <RenderHeadersWrapper timelineState={{timelineUnit: 'hour'}}>
+        <RenderHeadersWrapper timelineState={{ timelineUnit: 'hour' }}>
           <TimelineHeaders>
             <CustomHeader>{renderer}</CustomHeader>
           </TimelineHeaders>
@@ -271,11 +271,11 @@ describe('CustomHeader Component Test', () => {
     render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
-          <CustomHeader props={props}>{renderer}</CustomHeader>
+          <CustomHeader headerData={props}>{renderer}</CustomHeader>
         </TimelineHeaders>
       </RenderHeadersWrapper>
     )
-    expect(renderer).toHaveBeenCalledWith(expect.anything(), props)
+    expect(renderer.mock.calls[0][0].data).toBe(props)
   })
   // Render The Example In The Docs
   it('Given CustomHeader When render Then it should render Correctly in the timeline', () => {
@@ -336,5 +336,36 @@ describe('CustomHeader Component Test', () => {
     )
 
     expect(getByTestId('customHeader')).toBeInTheDocument()
+  })
+  it('Given Custom Header When passing react stateless component to render prop Then it should render', () => {
+    const Renderer = props => {
+      return <div>header</div>
+    }
+
+    const { getByText } = render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <CustomHeader>{Renderer}</CustomHeader>
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+    expect(getByText('header')).toBeInTheDocument()
+  })
+
+  it('Given Custom Header When passing react component to render prop Then it should render', () => {
+    class Renderer extends React.Component {
+      render() {
+        return <div>header</div>
+      }
+    }
+
+    const { getByText } = render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <CustomHeader>{Renderer}</CustomHeader>
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+    expect(getByText('header')).toBeInTheDocument()
   })
 })

@@ -124,18 +124,18 @@ export function getCustomHeadersInTimeline({
       headersState={headersState}
     >
       <TimelineHeaders>
-        <CustomHeader unit={unit} props={props}>
+        <CustomHeader unit={unit} headerData={props}>
           {(
             {
               headerContext: { intervals },
               getRootProps,
               getIntervalProps,
-              showPeriod
+              showPeriod,
+              data = { style: { height: 30 } }
             },
-            extraProps = { style: { height: 30 } }
           ) => {
             return (
-              <div data-testid="customHeader" {...getRootProps(extraProps)}>
+              <div data-testid="customHeader" {...getRootProps(data)}>
                 {intervals.map(interval => {
                   return (
                     <div

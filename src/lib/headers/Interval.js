@@ -12,7 +12,7 @@ class Interval extends React.PureComponent {
     intervalText: PropTypes.string.isRequired,
     primaryHeader: PropTypes.bool.isRequired,
     getIntervalProps: PropTypes.func.isRequired,
-    props: PropTypes.object
+    headerData: PropTypes.object
   }
 
   getIntervalStyle = () => {
@@ -58,18 +58,21 @@ class Interval extends React.PureComponent {
   }
 
   render() {
-    const { intervalText, interval, intervalRenderer, props } = this.props
-    if (intervalRenderer)
-      return intervalRenderer(
-        {
-          getIntervalProps: this.getIntervalProps,
-          intervalContext: {
+    const { intervalText, interval, intervalRenderer, headerData } = this.props
+    const Renderer = intervalRenderer
+    if (Renderer) {
+      return (
+        <Renderer
+          getIntervalProps={this.getIntervalProps}
+          intervalContext={{
             interval,
             intervalText
-          }
-        },
-        props
+          }}
+          data={headerData}
+        />
       )
+    }
+
     return (
       <div
         data-testid="dateHeaderInterval"
