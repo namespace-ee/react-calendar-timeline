@@ -822,6 +822,7 @@ Responsible for rendering the headers above the left and right sidebars.
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`| `left` (default), `right`| renders above the left or right sidebar |
 | `children` | `Function`| function as a child component to render the header|
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 
 #### Child function renderer
 
@@ -834,6 +835,7 @@ Rather than applying props on the element yourself and to avoid your props being
 | property         | type                 | description|
 | ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+| `data`   | `any` | Contextual data passed by `headerData` prop|
 
 * `getRootProps` The returned props are:
 
@@ -859,9 +861,9 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    <SidebarHeader variant="right">
-      {({ getRootProps }) => {
-        return <div {...getRootProps()}>Right</div>
+    <SidebarHeader variant="right" headerData={{someData: 'extra'}}>
+      {({ getRootProps, data }) => {
+        return <div {...getRootProps()}>Right {data.someData}</div>
       }}
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
@@ -869,6 +871,8 @@ import Timeline, {
   </TimelineHeaders>
 <Timeline>
 ```
+
+_Note_ : the Child function renderer can be a component or a function for convenience 
 
 ### `DateHeader`
 

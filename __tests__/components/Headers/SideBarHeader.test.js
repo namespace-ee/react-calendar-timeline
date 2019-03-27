@@ -65,14 +65,14 @@ describe('Testing SidebarHeader Component', () => {
     const { getByTestId } = render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
-          <SidebarHeader props={extraProps}>{renderer}</SidebarHeader>
+          <SidebarHeader headerData={extraProps}>{renderer}</SidebarHeader>
           <DateHeader primaryHeader />
           <DateHeader />
         </TimelineHeaders>
       </RenderHeadersWrapper>
     )
     expect(renderer).toHaveBeenCalled()
-    expect(renderer).toBeCalledWith(expect.anything(), extraProps)
+    expect(renderer.mock.calls[0][0].data).toBe(extraProps)
   })
 
   //  Testing The Example In The Docs
@@ -114,5 +114,46 @@ describe('Testing SidebarHeader Component', () => {
     expect(
       getByTestId('rightSidebarHeader').previousElementSibling
     ).toHaveAttribute('data-testid', 'headerContainer')
+  })
+  it('Given SideBarHeader When passing a react stateless component as a child Then it should render', () => {
+    const Renderer = ({ getRootProps }) => {
+      return (
+        <div data-testid="leftSidebarHeader" {...getRootProps()}>
+          Left
+        </div>
+      )
+    }
+    const { getByText } = render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <SidebarHeader>{Renderer}</SidebarHeader>
+          <DateHeader primaryHeader />
+          <DateHeader />
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+    expect(getByText('Left')).toBeInTheDocument()
+  })
+  it('Given SideBarHeader When passing a react stateful component as a child Then it should render', () => {
+    class Renderer extends React.Component {
+      render() {
+        const { getRootProps } = this.props
+        return (
+          <div data-testid="leftSidebarHeader" {...getRootProps()}>
+            Left
+          </div>
+        )
+      }
+    }
+    const { getByText } = render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <SidebarHeader>{Renderer}</SidebarHeader>
+          <DateHeader primaryHeader />
+          <DateHeader />
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+    expect(getByText('Left')).toBeInTheDocument()
   })
 })

@@ -9,8 +9,8 @@ import { RenderHeadersWrapper } from './header-renderer';
 export function renderSidebarHeaderWithCustomValues({ variant = undefined, props, timelineState, headersState, extraProps } = {}) {
   return render(<RenderHeadersWrapper timelineState={timelineState} headersState={headersState}>
     <TimelineHeaders>
-      <SidebarHeader variant={variant} props={extraProps}>
-        {({ getRootProps }, extraProps) => {
+      <SidebarHeader variant={variant} headerData={extraProps}>
+        {({ getRootProps }) => {
           return (<div data-testid="sidebarHeader" {...getRootProps(props)}>
             SidebarHeader
                 <div>Should Be Rendred</div>
@@ -25,7 +25,7 @@ export function renderSidebarHeaderWithCustomValues({ variant = undefined, props
 export function renderTwoSidebarHeadersWithCustomValues({ props, timelineState, headersState } = {}) {
   return render(<RenderHeadersWrapper timelineState={timelineState} headersState={headersState}>
     <TimelineHeaders>
-      <SidebarHeader variant={'left'} props={props}>
+      <SidebarHeader variant={'left'} headerData={props}>
         {({ getRootProps }) => {
           return (<div {...getRootProps(props)}>
             LeftSideBar
@@ -33,9 +33,9 @@ export function renderTwoSidebarHeadersWithCustomValues({ props, timelineState, 
           </div>);
         }}
       </SidebarHeader>
-      <SidebarHeader variant={'right'} props={props}>
-        {({ getRootProps }, props) => {
-          return <div {...getRootProps(props)}>RightSideBar</div>;
+      <SidebarHeader variant={'right'} headerData={props}>
+        {({ getRootProps, data }) => {
+          return <div {...getRootProps(data)}>RightSideBar</div>;
         }}
       </SidebarHeader>
       <DateHeader primaryHeader />
