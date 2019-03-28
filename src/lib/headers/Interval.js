@@ -15,26 +15,6 @@ class Interval extends React.PureComponent {
     headerData: PropTypes.object
   }
 
-  getIntervalStyle = () => {
-    return {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: this.props.primaryHeader
-        ? 'initial'
-        : 'rgb(240, 240, 240)',
-      height: '100%',
-      borderLeft: this.props.primaryHeader
-        ? '1px solid #bbb'
-        : '2px solid #bbb',
-      borderRight: this.props.primaryHeader ? '1px solid #bbb' : 'none',
-      borderBottom: '1px solid #bbb',
-      color: this.props.primaryHeader ? '#fff' : 'initial',
-      cursor: 'pointer',
-      fontSize: '14px'
-    }
-  }
-
   onIntervalClick = () => {
     const { primaryHeader, interval, unit, showPeriod } = this.props
     if (primaryHeader) {
@@ -77,8 +57,8 @@ class Interval extends React.PureComponent {
       <div
         data-testid="dateHeaderInterval"
         {...this.getIntervalProps({
-          style: this.getIntervalStyle()
         })}
+        className={`rct-dateHeader ${this.props.primaryHeader? 'rct-dateHeader-primary' : ''}`}
       >
         <span>{intervalText}</span>
       </div>

@@ -134,8 +134,39 @@ $weekend: rgba(250, 246, 225, 0.5);
     background: rgba(0, 0, 0, 0.5);
     color: white;
     padding: 10px;
+    
     font-size: 20px;
     border-radius: 5px;
     z-index: 85;
   }
+
+  .rct-dateHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-bottom: 1px solid #bbb;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: rgb(240, 240, 240);
+    border-left:  2px solid #bbb;
+  }
+
+  .rct-dateHeader-primary {
+    background-color: initial;
+    border-left:  1px solid #bbb;
+    border-right: 1px solid #bbb;
+    color: #fff
+  }
+
+  .rct-header-root {
+    background: #c52020;
+    border-bottom: 1px solid #bbb;
+  }
+
+  .rct-calendar-header {
+    border: 1px solid #bbb,
+
+  }
+
 }

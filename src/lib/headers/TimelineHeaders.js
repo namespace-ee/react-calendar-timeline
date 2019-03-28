@@ -21,8 +21,6 @@ class TimelineHeaders extends React.Component {
 
   getRootStyle = () => {
     return {
-      background: '#c52020',
-      borderBottom: '1px solid #bbb',
       ...this.props.style,
       display: 'flex',
       width: '100%'
@@ -36,7 +34,6 @@ class TimelineHeaders extends React.Component {
       calendarHeaderStyle
     } = this.props
     return {
-      border: '1px solid #bbb',
       ...calendarHeaderStyle,
       overflow: 'hidden',
       width: `calc(100% - ${leftSidebarWidth + rightSidebarWidth}px)`
@@ -72,13 +69,13 @@ class TimelineHeaders extends React.Component {
         ref={this.handleRootRef}
         data-testid="headerRootDiv"
         style={this.getRootStyle()}
-        className={this.props.className}
+        className={`rct-header-root ${this.props.className}`}
       >
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
-          className={this.props.calendarHeaderClassName}
+          className={`rct-calendar-header ${this.props.calendarHeaderClassName}`}
           data-testid="headerContainer"
         >
           {calendarHeaders}
