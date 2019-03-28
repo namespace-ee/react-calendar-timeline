@@ -18,7 +18,7 @@ class DateHeader extends React.Component {
       PropTypes.string
     ]).isRequired,
     intervalRenderer: PropTypes.func,
-    headerData: PropTypes.object,
+    headerData: PropTypes.object
   }
 
   getHeaderUnit = () => {
@@ -30,9 +30,28 @@ class DateHeader extends React.Component {
     return this.props.timelineUnit
   }
 
+  getRootStyle = () => {
+    return {
+      height: 30,
+      ...this.props.style
+    }
+  }
+
+  getLabelFormat(interval, unit, labelWidth) {
+    const { labelFormat } = this.props
+    if (typeof labelFormat === 'string') {
+      const startTime = interval[0]
+      return startTime.format(labelFormat)
+    } else if (typeof labelFormat === 'function') {
+      return labelFormat(interval, unit, labelWidth)
+    } else {
+      throw new Error('labelFormat should be function or string')
+    }
+  }
+
   render() {
     const unit = this.getHeaderUnit()
-    const {headerData} = this.props;
+    const { headerData } = this.props
     return (
       <CustomHeader unit={unit} headerData={headerData}>
         {({
@@ -46,7 +65,7 @@ class DateHeader extends React.Component {
 
           return (
             <div
-            data-testid={`dateHeader`}
+              data-testid={`dateHeader`}
               className={this.props.className}
               {...getRootProps({ style: this.getRootStyle() })}
             >
@@ -63,7 +82,7 @@ class DateHeader extends React.Component {
                     interval={interval}
                     showPeriod={showPeriod}
                     intervalText={intervalText}
-                    primaryHeader={this.props.unit === "primaryHeader"}
+                    primaryHeader={this.props.unit === 'primaryHeader'}
                     getIntervalProps={getIntervalProps}
                     intervalRenderer={this.props.intervalRenderer}
                     headerData={data}
@@ -76,27 +95,6 @@ class DateHeader extends React.Component {
       </CustomHeader>
     )
   }
-
-  getRootStyle = () => {
-    return {
-      height: 30,
-      ...this.props.style
-    }
-  }
-
-  getLabelFormat(interval, unit, labelWidth) {
-    const { labelFormat } = this.props
-    if (typeof labelFormat === 'string') {
-      const startTime = interval[0]
-      return startTime.format(labelFormat)
-    } else if (typeof labelFormat === 'object') {
-      return formatLabel(interval, unit, labelWidth, labelFormat)
-    } else if (typeof labelFormat === 'function') {
-      return labelFormat(interval, unit, labelWidth)
-    } else {
-      throw new Error('labelFormat should be function, object or string')
-    }
-  }
 }
 
 const DateHeaderWrapper = ({
@@ -105,7 +103,7 @@ const DateHeaderWrapper = ({
   style,
   className,
   intervalRenderer,
-  headerData,
+  headerData
 }) => (
   <TimelineStateConsumer>
     {({ getTimelineState }) => {
@@ -135,7 +133,7 @@ DateHeaderWrapper.propTypes = {
     PropTypes.string
   ]),
   intervalRenderer: PropTypes.func,
-  headerData: PropTypes.object,
+  headerData: PropTypes.object
 }
 
 DateHeaderWrapper.defaultProps = {

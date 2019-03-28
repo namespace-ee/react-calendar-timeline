@@ -44,6 +44,8 @@ describe('Testing DateHeader Component', () => {
   })
 
   describe('DateHeader labelFormat', () => {
+    afterEach(cleanup)
+
     it('Given Dateheader When pass a string typed labelFormat Then it should render the intervals with the given format', () => {
       const { getAllByTestId } = render(
         dateHeaderComponent({ unit: 'day', labelFormat: 'MM/DD' })
@@ -53,18 +55,6 @@ describe('Testing DateHeader Component', () => {
       expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/27')
     })
 
-    it('Given Dateheader When pass an object typed labelFormat Then it should render the intervals with the given format', () => {
-      const { getAllByTestId } = render(
-        dateHeaderComponent({
-          unit: 'day',
-          labelFormat: { day: { long: 'MM/DD/YYYY' } }
-        })
-      )
-
-      expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/25/2018')
-      expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/26/2018')
-      expect(getAllByTestId('dateHeader')[1]).toHaveTextContent('10/27/2018')
-    })
     it('Given Dateheader When pass a function typed labelFormat Then it should render the intervals with the given format', () => {
       const formatlabel = jest.fn(interval => interval[0].format('MM/DD/YYYY'))
       const { getAllByTestId } = render(
@@ -186,9 +176,12 @@ describe('Testing DateHeader Component', () => {
     expect(intervalRenderer).toBeCalled()
     expect(intervalRenderer).toReturn()
     expect(intervalRenderer.mock.calls[0][0].data).toBe(props)
-    expect(intervalRenderer.mock.calls[0][0].getIntervalProps).toEqual(expect.any(Function))
-    expect(intervalRenderer.mock.calls[0][0].intervalContext).toEqual(expect.any(Object))
-
+    expect(intervalRenderer.mock.calls[0][0].getIntervalProps).toEqual(
+      expect.any(Function)
+    )
+    expect(intervalRenderer.mock.calls[0][0].intervalContext).toEqual(
+      expect.any(Object)
+    )
   })
 
   describe('DateHeader Unit Values', () => {
