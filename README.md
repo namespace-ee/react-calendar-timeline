@@ -177,11 +177,6 @@ Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When s
 
 The minimum width, in pixels, of a timeline entry when it's possible to resize. If not reached, you must zoom in to resize more. Default to `20`.
 
-## stickyOffset
-
-At what height from the top of the screen should we start "sticking" the header (i.e. position: sticky)? This is useful if for example you already have
-a sticky navbar and want to push the timeline header down further. Defaults `0`.
-
 ## lineHeight
 
 Height of one line in the calendar in pixels. Default `30`
@@ -830,7 +825,7 @@ If `unit` is set, the unit of the header will be the unit passed though the prop
 
 #### Label format
 
-To format each interval label you can use 3 types of props to format which are:
+To format each interval label you can use 2 types of props to format which are:
 
 - `string`: if a string was passed it will be passed to `startTime` method `format` which is a `momentjs` object  .
 
@@ -905,7 +900,7 @@ An object contains the following properties:
 
 | property           | type     | description                                          |
 | ------------------ | -------- | ---------------------------------------------------- |
-| `interval`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `interval`    | `object : {startTime, endTime, labelWidth, left}` | an object containing data related to the interval|
 | `intervalText` | `string` | the string returned from `labelFormat` prop |
 
 
@@ -1020,11 +1015,11 @@ An object contains context for `timeline` and `header`:
 
 | property           | type     | description                                          |
 | ------------------ | -------- | ---------------------------------------------------- |
-| `timelineWidth`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
-| `visibleTimeStart` | `string` | the string returned from `labelFormat` prop |
-| `visibleTimeEnd`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
-| `canvasTimeStart` | `string` | the string returned from `labelFormat` prop |
-| `canvasTimeEnd`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `timelineWidth`    | `number` | width of timeline|
+| `visibleTimeStart` | `number` | unix milliseconds of start visible time |
+| `visibleTimeEnd`    | `number` | unix milliseconds of end visible time|
+| `canvasTimeStart` | `number` | unix milliseconds of start buffer time |
+| `canvasTimeEnd`    | `number` |unix milliseconds of end buffer time|
 
 ###### Header context
 
