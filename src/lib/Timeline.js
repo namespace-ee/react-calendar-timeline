@@ -35,6 +35,7 @@ export default class ReactCalendarTimeline extends Component {
     droppable: PropTypes.bool,
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+    connections: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     sidebarWidth: PropTypes.number,
     sidebarContent: PropTypes.node,
     rightSidebarWidth: PropTypes.number,
@@ -773,6 +774,7 @@ export default class ReactCalendarTimeline extends Component {
         dimensionItems={dimensionItems}
         groupTops={groupTops}
         items={this.props.items}
+        connections={this.props.connections}
         groups={this.props.groups}
         keys={this.props.keys}
         selectedItem={this.state.selectedItem}
@@ -922,6 +924,7 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeEnd: visibleTimeEnd,
       dimensionItems,
       items: this.props.items,
+      connections: this.props.connections,
       groups: this.props.groups,
       keys: this.props.keys,
       groupHeights: groupHeights,

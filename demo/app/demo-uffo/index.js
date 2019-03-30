@@ -57,11 +57,29 @@ const eventsByDay = {
   }]
 }
 
+const connections = [
+  {
+    id: 32,
+    start: 3,
+    end: 2
+  },
+  {
+    id: 47,
+    start: 4,
+    end: 1
+  },
+  {
+    id: 66,
+    start: 6,
+    end: 5
+  },
+]
+
 const items = [
   {
     id: 1,
     group: 1,
-    title: 'dsadasdasda',
+    title: 'My Blocked task',
     start: moment().add(-3, 'days').valueOf(),
     end: moment().valueOf(),
     color: '#c9622a',
@@ -70,16 +88,16 @@ const items = [
   {
     id: 2,
     group: 2,
-    title: 'aaaaaaaaaa',
-    start: moment().add(-2, 'days').valueOf(),
-    end: moment().add(2, 'days').valueOf(),
+    title: 'Delivers',
+    start: moment().add(-6, 'days').valueOf(),
+    end: moment().add(-2, 'days').valueOf(),
     color: '#500093',
     bgColor: '#b972f2',
   },
   {
     id: 3,
     group: 1,
-    title: 'dasda da sd asd',
+    title: 'This needs to be done first',
     start: moment().add(-20, 'days').valueOf(),
     end: moment().add(-7, 'days').valueOf(),
     color: '#0071b3',
@@ -88,9 +106,27 @@ const items = [
   {
     id: 4,
     group: 2,
-    title: 'dasda da sd asd',
-    start: moment().add(-13, 'days').valueOf(),
-    end: moment().add(-7, 'days').valueOf(),
+    title: 'Prepare design then do other task',
+    start: moment().add(-16, 'days').valueOf(),
+    end: moment().add(-10, 'days').valueOf(),
+    color: '#9e372e',
+    bgColor: '#f2968f'
+  },
+  {
+    id: 5,
+    group: 3,
+    title: 'Prepare design then do other task',
+    start: moment().add(-77, 'days').valueOf(),
+    end: moment().add(-70, 'days').valueOf(),
+    color: '#9e372e',
+    bgColor: '#f2968f'
+  },
+  {
+    id: 6,
+    group: 3,
+    title: 'Prepare design then do other task',
+    start: moment().add(-87, 'days').valueOf(),
+    end: moment().add(-80, 'days').valueOf(),
     color: '#9e372e',
     bgColor: '#f2968f'
   },
@@ -312,7 +348,8 @@ export default class App extends Component {
 				onItemResize={this.handleItemResize}
 				onTimeChange={this.handleTimeChangeFirst}
 				groups={groups}
-				items={items}
+        items={items}
+        connections={connections}
 				keys={keys}
 				fixedHeader="fixed"
         fullUpdate
