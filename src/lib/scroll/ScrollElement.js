@@ -180,7 +180,6 @@ class ScrollElement extends Component {
         className="rct-scroll"
         style={scrollComponentStyle}
         onScroll={this.handleScroll}
-        onWheel={this.handleWheel}
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
@@ -193,6 +192,14 @@ class ScrollElement extends Component {
       </div>
 
     )
+  }
+
+  componentDidMount() {
+    this.scrollComponent.addEventListener('wheel', this.handleWheel)
+  }
+
+  componentWillUnmount() {
+    this.scrollComponent.removeEventListener('wheel', this.handleWheel)
   }
 }
 
