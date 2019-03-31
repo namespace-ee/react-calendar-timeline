@@ -36,7 +36,7 @@ class GroupRow extends Component {
 
     if (droppable){
       return (
-      <Droppable droppableId={group.id}>
+      <Droppable droppableId={group.id} key={group.id}>
               {(provided, snapshot) => (<PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}><div
                 ref={provided.innerRef}
                 onContextMenu={onContextMenu}
