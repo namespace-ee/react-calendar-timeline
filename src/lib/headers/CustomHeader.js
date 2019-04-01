@@ -18,7 +18,8 @@ export class CustomHeader extends React.Component {
     canvasWidth: PropTypes.number.isRequired,
     showPeriod: PropTypes.func.isRequired,
     headerData: PropTypes.object,
-    getLeftOffsetFromDate: PropTypes.func.isRequired
+    getLeftOffsetFromDate: PropTypes.func.isRequired,
+    height: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props)
@@ -124,18 +125,13 @@ export class CustomHeader extends React.Component {
     return intervals
   }
 
-  rootProps = {
-    style: {
-      position: 'relative'
-    }
-  }
-
   getRootProps = (props = {}) => {
     const { style } = props
     return {
       style: Object.assign({}, style ? style : {}, {
         position: 'relative',
-        width: this.props.canvasWidth
+        width: this.props.canvasWidth,
+        height: this.props.height,
       })
     }
   }
@@ -205,7 +201,7 @@ export class CustomHeader extends React.Component {
   }
 }
 
-const CustomHeaderWrapper = ({ children, unit, headerData }) => (
+const CustomHeaderWrapper = ({ children, unit, headerData, height }) => (
   <TimelineStateConsumer>
     {({ getTimelineState, showPeriod, getLeftOffsetFromDate }) => {
       const timelineState = getTimelineState()
@@ -220,6 +216,7 @@ const CustomHeaderWrapper = ({ children, unit, headerData }) => (
               {...timelineState}
               headerData={headerData}
               getLeftOffsetFromDate={getLeftOffsetFromDate}
+              height={height}
             />
           )}
         </TimelineHeadersConsumer>
@@ -231,7 +228,12 @@ const CustomHeaderWrapper = ({ children, unit, headerData }) => (
 CustomHeaderWrapper.propTypes = {
   children: PropTypes.func.isRequired,
   unit: PropTypes.string,
-  headerData: PropTypes.object
+  headerData: PropTypes.object,
+  height: PropTypes.number,
+}
+
+CustomHeaderWrapper.defaultProps = {
+  height: 30,
 }
 
 export default CustomHeaderWrapper

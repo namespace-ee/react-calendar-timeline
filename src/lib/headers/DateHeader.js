@@ -18,7 +18,8 @@ class DateHeader extends React.Component {
       PropTypes.string
     ]).isRequired,
     intervalRenderer: PropTypes.func,
-    headerData: PropTypes.object
+    headerData: PropTypes.object,
+    height: PropTypes.number,
   }
 
   getHeaderUnit = () => {
@@ -51,9 +52,9 @@ class DateHeader extends React.Component {
 
   render() {
     const unit = this.getHeaderUnit()
-    const { headerData } = this.props
+    const { headerData, height } = this.props
     return (
-      <CustomHeader unit={unit} headerData={headerData}>
+      <CustomHeader unit={unit} height={height} headerData={headerData}>
         {({
           headerContext: { intervals },
           getRootProps,
@@ -103,7 +104,8 @@ const DateHeaderWrapper = ({
   style,
   className,
   intervalRenderer,
-  headerData
+  headerData,
+  height,
 }) => (
   <TimelineStateConsumer>
     {({ getTimelineState }) => {
@@ -117,6 +119,7 @@ const DateHeaderWrapper = ({
           className={className}
           intervalRenderer={intervalRenderer}
           headerData={headerData}
+          height={height}
         />
       )
     }}
@@ -133,7 +136,8 @@ DateHeaderWrapper.propTypes = {
     PropTypes.string
   ]),
   intervalRenderer: PropTypes.func,
-  headerData: PropTypes.object
+  headerData: PropTypes.object,
+  height: PropTypes.number,
 }
 
 DateHeaderWrapper.defaultProps = {

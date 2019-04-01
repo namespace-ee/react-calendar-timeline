@@ -812,6 +812,7 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | `labelFormat` | `Function` or `string`| controls the how to format the interval label |
 | `intervalRenderer`| `Function`| render prop to render each interval in the header 
 | `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+| `height` | `number` default (30)|  height of the header in pixels |
 
 _Note_: passing `primaryHeader` to unit the header will act as the main header with interval unit larger than timeline unit by 1
 
@@ -972,6 +973,7 @@ Responsible for rendering the headers above calendar part of the timeline. This 
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
 | `children` | `Function`| function as a child component to render the header|
 | `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+| `height` | `number` default (30)|  height of the header in pixels |
 
 #### unit
 
