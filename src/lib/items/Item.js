@@ -224,6 +224,8 @@ export default class Item extends Component {
     const leftResize = this.props.useResizeHandle ? ".rct-item-handler-resize-left" : true
     const rightResize = this.props.useResizeHandle ? ".rct-item-handler-resize-right" : true
 
+    if (!this.item) return
+
     interact(this.item)
       .resizable({
         edges: {
