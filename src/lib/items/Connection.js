@@ -12,7 +12,7 @@ function arrow(endPoint){
     ${bottom}`
 }
 
-const Connection = ({startPoint, controlPoint, controlPoint2, endPoint, selected, onClick, onMouseOver}) => <path onClick={onClick} onMouseOver={onMouseOver}
+const Connection = ({startPoint, controlPoint, controlPoint2, endPoint, selected,warning, onClick, onMouseOver}) => <path onClick={onClick} onMouseOver={onMouseOver}
     d={`
       M ${startPoint}
       C ${controlPoint}
@@ -20,7 +20,7 @@ const Connection = ({startPoint, controlPoint, controlPoint2, endPoint, selected
       ${arrow(endPoint)}
     `}
     fill="none"
-    stroke={selected ? '#00a0fc' : '#d5dbe6'}
+    stroke={warning ? `#FF534D` : selected ? '#00a0fc' : '#d5dbe6'}
     strokeWidth={2}
 />
 

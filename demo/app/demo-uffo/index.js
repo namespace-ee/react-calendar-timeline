@@ -71,7 +71,8 @@ const connections = [
   {
     id: 66,
     start: 6,
-    end: 5
+    end: 5,
+    warning:true
   },
 ]
 
@@ -89,8 +90,8 @@ const items = [
     id: 2,
     group: 2,
     title: 'Delivers',
-    start: moment().add(-6, 'days').valueOf(),
-    end: moment().add(-2, 'days').valueOf(),
+    start: moment().add(-18, 'days').valueOf(),
+    end: moment().add(-16, 'days').valueOf(),
     color: '#500093',
     bgColor: '#b972f2',
   },

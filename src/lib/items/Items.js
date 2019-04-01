@@ -108,7 +108,7 @@ export default class Items extends Component {
   }
 
   calcDimensionConnections(items,connections){
-    function calculate(id, start, end){
+    function calculate(id, start, end, warning){
       const { top: st, left: sl, width: sw, height: sh } = start.dimensions
       const { top: et, left: el, height: eh } = end.dimensions
 
@@ -131,12 +131,13 @@ export default class Items extends Component {
         controlPoint,
         controlPoint2,
         endPoint,
+        warning,
       }
     }
     const lines = []
     for (const line of connections){
       if(!items[line.start] || !items[line.end]) continue
-      lines.push(calculate(line.id, items[line.start], items[line.end]))
+      lines.push(calculate(line.id, items[line.start], items[line.end],line.warning))
     }
     return lines
 
