@@ -25,7 +25,7 @@ class TimelineHeaders extends React.PureComponent {
     return {
       ...this.props.style,
       display: 'flex',
-      // width: 'max-content'
+      width: 'max-content'
     }
   }
 
