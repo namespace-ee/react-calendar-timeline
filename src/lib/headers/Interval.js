@@ -11,30 +11,8 @@ class Interval extends React.PureComponent {
     showPeriod: PropTypes.func.isRequired,
     intervalText: PropTypes.string.isRequired,
     primaryHeader: PropTypes.bool.isRequired,
-    secondaryHeader: PropTypes.bool.isRequired,
     getIntervalProps: PropTypes.func.isRequired,
-    props: PropTypes.object
-  }
-
-  getIntervalStyle = () => {
-    return {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor:
-        this.props.secondaryHeader && !this.props.primaryHeader
-          ? 'rgb(240, 240, 240)'
-          : 'initial',
-      height: '100%',
-      borderLeft: this.props.primaryHeader
-        ? '1px solid #bbb'
-        : '2px solid #bbb',
-      borderRight: this.props.primaryHeader ? '1px solid #bbb' : 'none',
-      borderBottom: '1px solid #bbb',
-      color: this.props.primaryHeader ? '#fff' : 'initial',
-      cursor: 'pointer',
-      fontSize: '14px'
-    }
+    headerData: PropTypes.object
   }
 
   onIntervalClick = () => {
@@ -49,7 +27,7 @@ class Interval extends React.PureComponent {
     }
   }
 
-  getIntervalProps = (props={}) => {
+  getIntervalProps = (props = {}) => {
     return {
       ...this.props.getIntervalProps({
         interval: this.props.interval,
@@ -60,20 +38,27 @@ class Interval extends React.PureComponent {
   }
 
   render() {
-    const { intervalText, interval, intervalRenderer, props } = this.props
-    if (intervalRenderer)
-      return intervalRenderer({
-        getIntervalProps: this.getIntervalProps,
-        intervalContext: {
-          interval,
-          intervalText
-        }
-      }, props)
+    const { intervalText, interval, intervalRenderer, headerData } = this.props
+    const Renderer = intervalRenderer
+    if (Renderer) {
+      return (
+        <Renderer
+          getIntervalProps={this.getIntervalProps}
+          intervalContext={{
+            interval,
+            intervalText
+          }}
+          data={headerData}
+        />
+      )
+    }
+
     return (
       <div
+        data-testid="dateHeaderInterval"
         {...this.getIntervalProps({
-          style: this.getIntervalStyle()
         })}
+        className={`rct-dateHeader ${this.props.primaryHeader? 'rct-dateHeader-primary' : ''}`}
       >
         <span>{intervalText}</span>
       </div>

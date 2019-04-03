@@ -40,7 +40,9 @@ You can restrict the moving and resizing of items at the item level by providing
 
 ## Right Sidebar
 
-Adding a right sidebar is as easy as passing in a couple of props `rightSidebarWidth` and `rightSidebarContent`. Content in the right column is populated from the `rightTitle` property on the group.
+Adding a right sidebar is as easy as passing `rightSidebarWidth`. Content in the right column is populated from the `rightTitle` property on the group. 
+
+Note: If you are using Custom Headers then you need to add them with `SidebarHeader` with variant "right"
 
 [Example Codesandbox](https://codesandbox.io/s/j3wrw6rl4v)
 
@@ -63,3 +65,9 @@ Note that this is the user code manipulating groups to achieve tree group functi
 Using `scrollRef` you can trigger scrolling and create an animation. This is an alternative to setting `visibleStartTime` and `visibleEndTime`.
 
 [Example Codesandbox](https://codesandbox.io/s/3kq2503y8p)
+
+## Sticky header
+
+Using `Timeline Header` you can make the header stick to the top of the page while scrolling down
+
+[Example Codesandbox](https://codesandbox.io/s/w6xvqzno4w)

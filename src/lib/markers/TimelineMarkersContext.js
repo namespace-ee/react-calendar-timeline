@@ -42,7 +42,7 @@ export class TimelineMarkersProvider extends React.Component {
       unsubscribe: () => {
         this.setState(state => {
           return {
-            markers: state.markers.filter(marker => marker !== newMarker)
+            markers: state.markers.filter(marker => marker.id !== newMarker.id)
           }
         })
       },

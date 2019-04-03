@@ -13,7 +13,8 @@ class TimelineHeaders extends React.PureComponent {
     className: PropTypes.string,
     calendarHeaderStyle: PropTypes.object,
     calendarHeaderClassName: PropTypes.string,
-    width: PropTypes.number.isRequired
+    width: PropTypes.number.isRequired,
+    headerRef: PropTypes.func,
   }
 
   constructor(props) {
@@ -22,11 +23,9 @@ class TimelineHeaders extends React.PureComponent {
 
   getRootStyle = () => {
     return {
-      background: '#c52020',
-      borderBottom: '1px solid #bbb',
       ...this.props.style,
       display: 'flex',
-      width: 'max-content'
+      // width: 'max-content'
     }
   }
 
@@ -37,10 +36,15 @@ class TimelineHeaders extends React.PureComponent {
       calendarHeaderStyle
     } = this.props
     return {
-      border: '1px solid #bbb',
       ...calendarHeaderStyle,
       overflow: 'hidden',
       width: this.props.width
+    }
+  }
+
+  handleRootRef = (element) => {
+    if(this.props.headerRef){
+      this.props.headerRef(element)
     }
   }
 
@@ -52,27 +56,28 @@ class TimelineHeaders extends React.PureComponent {
       ? this.props.children.filter(c => c)
       : [this.props.children]
     React.Children.map(children, child => {
-      if (
-        child.type === SidebarHeader &&
-        child.props.variant === RIGHT_VARIANT
-      ) {
-        rightSidebarHeader = child
-      } else if (
-        child.type === SidebarHeader &&
-        child.props.variant === LEFT_VARIANT
-      ) {
-        leftSidebarHeader = child
+      if (child.type === SidebarHeader) {
+        if (child.props.variant === RIGHT_VARIANT) {
+          rightSidebarHeader = child
+        } else {
+          leftSidebarHeader = child
+        }
       } else {
         calendarHeaders.push(child)
       }
     })
     return (
-      <div data-testid="headerRootDiv" style={this.getRootStyle()} className={this.props.className}>
+      <div
+        ref={this.handleRootRef}
+        data-testid="headerRootDiv"
+        style={this.getRootStyle()}
+        className={`rct-header-root ${this.props.className}`}
+      >
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
-          className={this.props.calendarHeaderClassName}
+          className={`rct-calendar-header ${this.props.calendarHeaderClassName}`}
           data-testid="headerContainer"
         >
           {calendarHeaders}
@@ -120,7 +125,8 @@ TimelineHeadersWrapper.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   calendarHeaderStyle: PropTypes.object,
-  calendarHeaderClassName: PropTypes.string
+  calendarHeaderClassName: PropTypes.string,
+  headerRef: PropTypes.func,
 }
 
 export default TimelineHeadersWrapper
