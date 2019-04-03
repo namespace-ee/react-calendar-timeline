@@ -14,6 +14,7 @@ class TimelineHeaders extends React.Component {
     calendarHeaderClassName: PropTypes.string,
     headerRef: PropTypes.func,
   }
+  
 
   constructor(props) {
     super(props)
