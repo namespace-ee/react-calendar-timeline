@@ -1080,7 +1080,7 @@ import Timeline, {
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
     <DateHeader />
-    <CustomHeader headerData={{someData: 'data'}} unit="year">
+    <CustomHeader height={50} headerData={{someData: 'data'}} unit="year">
       {({
         headerContext: { intervals },
         getRootProps,
@@ -1089,10 +1089,9 @@ import Timeline, {
         data,
       }) => {
         return (
-          <div {...getRootProps({ style: { height: 30 } })}>
+          <div {...getRootProps()}>
             {intervals.map(interval => {
               const intervalStyle = {
-                // height: 30,
                 lineHeight: '30px',
                 textAlign: 'center',
                 borderLeft: '1px solid black',

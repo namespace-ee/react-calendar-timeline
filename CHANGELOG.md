@@ -7,6 +7,80 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Custom Headers
+
+This new feature gives more control to dev to create customizable headers to provide better UI. Now user have more control through a set of new components to render headers. This new feature came with a breaking change though.
+
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader unit="primaryHeader" />
+    <DateHeader />
+    <CustomHeader height={50} headerData={{someData: 'data'}} unit="year">
+      {({
+        headerContext: { intervals },
+        getRootProps,
+        getIntervalProps,
+        showPeriod,
+        data,
+      }) => {
+        return (
+          <div {...getRootProps()}>
+            {intervals.map(interval => {
+              const intervalStyle = {
+                lineHeight: '30px',
+                textAlign: 'center',
+                borderLeft: '1px solid black',
+                cursor: 'pointer',
+                backgroundColor: 'Turquoise',
+                color: 'white'
+              }
+              return (
+                <div
+                  onClick={() => {
+                    showPeriod(interval.startTime, interval.endTime)
+                  }}
+                  {...getIntervalProps({
+                    interval,
+                    style: intervalStyle
+                  })}
+                >
+                  <div className="sticky">
+                    {interval.startTime.format('YYYY')}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )
+      }}
+    </CustomHeader>
+  </TimelineHeaders>
+</Timeline>
+```
+
+Check out the new docs before please [here](https://github.com/namespace-ee/react-calendar-timeline/tree/custom-headers#timeline-headers)
+
+#### removed props
+- `stickyOffset` and `stickyHeader` now you can make your header sticky by following this [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering)
+- `headerRef` to get the headerRef you need to pass ref callback to `TimelineHeader` component
+- `headerLabelGroupHeight` and `headerLabelHeight` now you can pass a `height` prop to both `CustomHeader` and `DateHeader`
+- `headerLabelFormats` and `subHeaderLabelFormats` not you can pass `formatLabel` function to `DateHeader` with label width and start and end time of intervals
+
+
+
 ## 0.23.0
 
 - improve unit tests coverage #426 - @ilaiwi
