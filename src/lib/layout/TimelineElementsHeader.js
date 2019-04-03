@@ -4,6 +4,16 @@ import moment from 'moment'
 
 import { iterateTimes, getNextUnit } from '../utility/calendar'
 
+function handleHeaderMouseDown({ nativeEvent: event }) {
+  event.target.originalCoordinates = { x: event.clientX, y: event.clientY }
+}
+
+function checkCoordinates(event) {
+  const xMatches = event.clientX === event.target.originalCoordinates.x
+  const yMatches = event.clientY === event.target.originalCoordinates.y
+  return xMatches && yMatches
+}
+
 export default class TimelineElementsHeader extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
@@ -31,12 +41,6 @@ export default class TimelineElementsHeader extends Component {
       touchTarget: null,
       touchActive: false
     }
-  }
-
-  handleHeaderMouseDown(evt) {
-    //dont bubble so that we prevent our scroll component
-    //from knowing about it
-    evt.stopPropagation()
   }
 
   headerLabel(time, unit, width) {
@@ -164,13 +168,13 @@ export default class TimelineElementsHeader extends Component {
               className={`rct-label-group${
                 hasRightSidebar ? ' rct-has-right-sidebar' : ''
               }`}
-              onClick={() => this.handlePeriodClick(time, nextUnit)}
+              onClick={(event) => (checkCoordinates(event.nativeEvent) && this.handlePeriodClick(time, nextUnit))}
+              onMouseDown={handleHeaderMouseDown}
               style={{
                 left: `${left - 1}px`,
                 width: `${labelWidth}px`,
                 height: `${headerLabelGroupHeight}px`,
                 lineHeight: `${headerLabelGroupHeight}px`,
-                cursor: 'pointer'
               }}
             >
               <span style={{ width: contentWidth, display: 'block' }}>
@@ -205,7 +209,8 @@ export default class TimelineElementsHeader extends Component {
             className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
               firstOfType ? 'rct-first-of-type' : ''
             } ${minUnit !== 'month' ? `rct-day-${time.day()}` : ''} `}
-            onClick={() => this.handlePeriodClick(time, minUnit)}
+            onClick={(event) => (checkCoordinates(event.nativeEvent) && this.handlePeriodClick(time, minUnit))}
+            onMouseDown={handleHeaderMouseDown}
             style={{
               left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,
@@ -222,7 +227,6 @@ export default class TimelineElementsHeader extends Component {
               fontSize: `${
                 labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
               }px`,
-              cursor: 'pointer'
             }}
           >
             {this.subHeaderLabel(time, minUnit, labelWidth,dayLabelRenderer, events)}
@@ -240,7 +244,6 @@ export default class TimelineElementsHeader extends Component {
         key="header"
         data-testid="header"
         className="rct-header"
-        onMouseDown={this.handleHeaderMouseDown}
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
         style={headerStyle}

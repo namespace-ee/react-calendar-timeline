@@ -17,8 +17,6 @@ class Header extends Component {
     width: PropTypes.number.isRequired,
     headerLabelFormats: PropTypes.object.isRequired,
     subHeaderLabelFormats: PropTypes.object.isRequired,
-    stickyOffset: PropTypes.number,
-    stickyHeader: PropTypes.bool.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
     leftSidebarHeader: PropTypes.node,
@@ -35,8 +33,6 @@ class Header extends Component {
       eventsByDay,
       handleDayClick,
       dayLabelRenderer,
-      stickyOffset,
-      stickyHeader,
       headerRef,
       scrollHeaderRef,
       hasRightSidebar,
@@ -55,12 +51,6 @@ class Header extends Component {
       leftSidebarWidth,
       rightSidebarWidth
     } = this.props
-
-    const headerStyle = {
-      top: stickyHeader ? stickyOffset || 0 : 0
-    }
-
-    const headerClass = stickyHeader ? 'header-sticky' : ''
 
     const leftSidebar = leftSidebarHeader && leftSidebarWidth > 0 && (
       <div
@@ -82,10 +72,9 @@ class Header extends Component {
 
     return (
       <div
-        className={`rct-header-container ${headerClass}`}
+        className="rct-header-container"
         data-testid="timeline-elements-container"
         ref={headerRef}
-        style={headerStyle}
       >
         {leftSidebar}
         <div style={{ width }} data-testid="timeline-elements-header-container">

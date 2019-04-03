@@ -169,7 +169,6 @@ class ScrollElement extends Component {
     const scrollComponentStyle = {
       width: `${width}px`,
       height: `${height + 20}px`, //20px to push the scroll element down off screen...?
-      cursor: isDragging ? 'move' : 'default',
       position: 'relative'
     }
 
@@ -177,7 +176,7 @@ class ScrollElement extends Component {
       <div
         ref={this.refHandler}
         data-testid="scroll-element"
-        className="rct-scroll"
+        className={`rct-scroll ${isDragging ? 'move' : ''}`}
         style={scrollComponentStyle}
         onScroll={this.handleScroll}
         onMouseDown={this.handleMouseDown}

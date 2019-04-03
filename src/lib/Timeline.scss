@@ -39,6 +39,15 @@ $weekend: rgba(250, 246, 225, 0.5);
     overflow-y: hidden;
     -ms-touch-action: none;
     touch-action: none;
+
+    &.move {
+      cursor: move;
+      .rct-header {
+        .rct-top-header .rct-label-group, .rct-bottom-header .rct-label {
+          cursor: move;
+        }
+      }
+    }
   }
 
   .rct-item {
@@ -64,11 +73,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     z-index: 90;
     display: flex;
     overflow: hidden;
-
-    &.header-sticky {
-      position: sticky;
-      position: -webkit-sticky;
-    }
+    position: fixed;
+    left: 0;
+    top: 35px !important;
+    user-select: none;
+    background-color: white;
   }
 
   .rct-header {
@@ -87,7 +96,6 @@ $weekend: rgba(250, 246, 225, 0.5);
       top: 0;
       font-size: 14px;
       text-align: center;
-      cursor: pointer;
       border-left: $thick-border-width solid $border-color;
       color: $header-color;
       background: $header-background-color;
@@ -150,6 +158,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: relative;
     box-sizing: border-box;
     border-right: $border-width solid $border-color;
+    padding-top: 64px;
 
     &.rct-sidebar-right {
       border-right: 0;
