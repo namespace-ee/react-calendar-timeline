@@ -177,11 +177,6 @@ Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When s
 
 The minimum width, in pixels, of a timeline entry when it's possible to resize. If not reached, you must zoom in to resize more. Default to `20`.
 
-## stickyOffset
-
-At what height from the top of the screen should we start "sticking" the header (i.e. position: sticky)? This is useful if for example you already have
-a sticky navbar and want to push the timeline header down further. Defaults `0`.
-
 ## lineHeight
 
 Height of one line in the calendar in pixels. Default `30`
@@ -316,78 +311,6 @@ function (action, item, time, resizeEdge) {
 }
 ```
 
-## headerLabelFormats and subHeaderLabelFormats
-
-The formats passed to moment to render times in the header and subheader. Defaults to these:
-
-```js
-import {
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
-} from 'react-calendar-timeline'
-
-defaultHeaderLabelFormats ==
-  {
-    yearShort: 'YY',
-    yearLong: 'YYYY',
-    monthShort: 'MM/YY',
-    monthMedium: 'MM/YYYY',
-    monthMediumLong: 'MMM YYYY',
-    monthLong: 'MMMM YYYY',
-    dayShort: 'L',
-    dayLong: 'dddd, LL',
-    hourShort: 'HH',
-    hourMedium: 'HH:00',
-    hourMediumLong: 'L, HH:00',
-    hourLong: 'dddd, LL, HH:00',
-    time: 'LLL'
-  }
-
-defaultSubHeaderLabelFormats ==
-  {
-    yearShort: 'YY',
-    yearLong: 'YYYY',
-    monthShort: 'MM',
-    monthMedium: 'MMM',
-    monthLong: 'MMMM',
-    dayShort: 'D',
-    dayMedium: 'dd D',
-    dayMediumLong: 'ddd, Do',
-    dayLong: 'dddd, Do',
-    hourShort: 'HH',
-    hourLong: 'HH:00',
-    minuteShort: 'mm',
-    minuteLong: 'HH:mm'
-  }
-```
-
-For US time formats (AM/PM), use these:
-
-```js
-import {
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
-} from 'react-calendar-timeline'
-
-const usHeaderLabelFormats = Object.assign({}, defaultSubHeaderLabelFormats, {
-  hourShort: 'h A',
-  hourMedium: 'h A',
-  hourMediumLong: 'L, h A',
-  hourLong: 'dddd, LL, h A'
-})
-
-const usSubHeaderLabelFormats = Object.assign(
-  {},
-  defaultSubHeaderLabelFormats,
-  {
-    hourShort: 'h A',
-    hourLong: 'h A',
-    minuteLong: 'h:mm A'
-  }
-)
-```
-
-... and then pass these as `headerLabelFormats` and `subHeaderLabelFormats`
 
 ## onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
 
@@ -822,6 +745,7 @@ Responsible for rendering the headers above the left and right sidebars.
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`| `left` (default), `right`| renders above the left or right sidebar |
 | `children` | `Function`| function as a child component to render the header|
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 
 #### Child function renderer
 
@@ -834,6 +758,7 @@ Rather than applying props on the element yourself and to avoid your props being
 | property         | type                 | description|
 | ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+| `data`   | `any` | Contextual data passed by `headerData` prop|
 
 * `getRootProps` The returned props are:
 
@@ -859,9 +784,9 @@ import Timeline, {
         return <div {...getRootProps()}>Left</div>
       }}
     </SidebarHeader>
-    <SidebarHeader variant="right">
-      {({ getRootProps }) => {
-        return <div {...getRootProps()}>Right</div>
+    <SidebarHeader variant="right" headerData={{someData: 'extra'}}>
+      {({ getRootProps, data }) => {
+        return <div {...getRootProps()}>Right {data.someData}</div>
       }}
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
@@ -869,6 +794,8 @@ import Timeline, {
   </TimelineHeaders>
 <Timeline>
 ```
+
+_Note_ : the Child function renderer can be a component or a function for convenience 
 
 ### `DateHeader`
 
@@ -882,8 +809,10 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | `style`| `object`| applied to the root of the header |
 | `className` | `string`| applied to the root of the header|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` or `primaryHeader` | intervals between columns |
-| `labelFormat` | `Function` or `object` or `string`| controls the how to format the interval label |
-| `intervalRenderer`| `Function`| render prop to render each interval in the header |
+| `labelFormat` | `Function` or `string`| controls the how to format the interval label |
+| `intervalRenderer`| `Function`| render prop to render each interval in the header 
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+| `height` | `number` default (30)|  height of the header in pixels |
 
 _Note_: passing `primaryHeader` to unit the header will act as the main header with interval unit larger than timeline unit by 1
 
@@ -897,23 +826,29 @@ If `unit` is set, the unit of the header will be the unit passed though the prop
 
 #### Label format
 
-To format each interval label you can use 3 types of props to format which are:
+To format each interval label you can use 2 types of props to format which are:
 
 - `string`: if a string was passed it will be passed to `startTime` method `format` which is a `momentjs` object  .
 
-- `object`: this will give you more flexibility to format the label with respect to `labelWidth`. Internally the `startTime` will be formated with the string corresponding to `formatObject[unit][range]`
 
-  The object will be in the following type: 
+- `Function`: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
+
   ```typescript
-  type unit = `second` | `minute` | `hour` | `day` | `week` | `month` | `year`
-  interface LabelFormat {
-    [unit]: {
-      long: string,
-      mediumLong: string,
-      medium: string,
-      short: string
-    }
-  }
+    type Unit = `second` | `minute` | `hour` | `day` | `month` | `year`
+  ([startTime, endTime] : [Moment, Moment], unit: Unit, labelWidth: number, formatOptions: LabelFormat = defaultFormat ) => string
+  ```
+##### Default format
+
+by default we provide a responsive format for the dates based on the label width. it follows the following rules:
+
+  The `long`, `mediumLong`, `medium` and `short` will be be decided through the `labelWidth` value according to where it lays upon the following scale:
+
+  ```
+  |-----`short`-----50px-----`medium`-----100px-----`mediumLong`-----150px--------`long`-----
+  ```
+
+
+  ```typescript
   // default format object
   const format : LabelFormat = {
     year: {
@@ -949,18 +884,8 @@ To format each interval label you can use 3 types of props to format which are:
   }
   ```
 
-  The `long`, `mediumLong`, `medium` and `short` will be be decided through the `labelWidth` value according to where it lays upon the following scale:
+_Note_: this is only an implementation of the function param. You can do this on your own easily
 
-  ```
-  |-----`short`-----50px-----`medium`-----100px-----`mediumLong`-----150px--------`long`-----
-  ```
-
-- `Function`: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
-
-  ```typescript
-    type Unit = `second` | `minute` | `hour` | `day` | `month` | `year`
-  ([startTime, endTime] : [Moment, Moment], unit: Unit, labelWidth: number, formatOptions: LabelFormat = defaultFormat ) => string
-  ```
 
 #### intervalRenderer
 
@@ -968,13 +893,15 @@ Render prop function used to render a customized interval. The function provides
 
 Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
+_Note_ : the renderProp can be a component or a function for convenience 
+
 ##### interval context
 
 An object contains the following properties:
 
 | property           | type     | description                                          |
 | ------------------ | -------- | ---------------------------------------------------- |
-| `interval`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `interval`    | `object : {startTime, endTime, labelWidth, left}` | an object containing data related to the interval|
 | `intervalText` | `string` | the string returned from `labelFormat` prop |
 
 
@@ -996,6 +923,10 @@ Rather than applying props on the element yourself and to avoid your props being
 
   * style: extra inline styles to be applied to the component
   * onClick: extra click handler added to the normal `showPeriod callback`
+
+##### data
+
+data passed through headerData 
 
 #### example
 
@@ -1019,9 +950,11 @@ import Timeline, {
       unit="day"
       labelFormat="MM/DD"
       style={{ height: 50 }}
-      intervalRenderer={({ getIntervalProps, intervalContext }) => {
+      data={{someData: 'example'}}
+      intervalRenderer={({ getIntervalProps, intervalContext, data }) => {
         return <div {...getIntervalProps()}>
           {intervalContext.intervalText}
+          {data.example}
         </div>
       }}
     />
@@ -1039,6 +972,8 @@ Responsible for rendering the headers above calendar part of the timeline. This 
 | ----------------- | --------------- | ---|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
 | `children` | `Function`| function as a child component to render the header|
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+| `height` | `number` default (30)|  height of the header in pixels |
 
 #### unit
 
@@ -1049,6 +984,8 @@ The unit of the header will be the unit passed though the prop and can be any `u
 Function as a child component to render the header
 
 Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
+
+_Note_ : the Child function renderer can be a component or a function for convenience 
 
 ```
 ({
@@ -1065,7 +1002,9 @@ Paramters provided to the function has three types: context params which have th
   },
   getRootProps: this.getRootProps,
   getIntervalProps: this.getIntervalProps,
-  showPeriod
+  showPeriod,
+  //contextual data passed through headerData
+  data,
 })=> React.Node
 ```
 
@@ -1078,11 +1017,11 @@ An object contains context for `timeline` and `header`:
 
 | property           | type     | description                                          |
 | ------------------ | -------- | ---------------------------------------------------- |
-| `timelineWidth`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
-| `visibleTimeStart` | `string` | the string returned from `labelFormat` prop |
-| `visibleTimeEnd`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
-| `canvasTimeStart` | `string` | the string returned from `labelFormat` prop |
-| `canvasTimeEnd`    | `array : [Moment, Moment]` | an tuple array conating two moment object the first `startTime` and the second `endTime`|
+| `timelineWidth`    | `number` | width of timeline|
+| `visibleTimeStart` | `number` | unix milliseconds of start visible time |
+| `visibleTimeEnd`    | `number` | unix milliseconds of end visible time|
+| `canvasTimeStart` | `number` | unix milliseconds of start buffer time |
+| `canvasTimeEnd`    | `number` |unix milliseconds of end buffer time|
 
 ###### Header context
 
@@ -1119,7 +1058,9 @@ Rather than applying props on the element yourself and to avoid your props being
 | ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `showPeriod`   | `function(props={})` | returns the props you should apply to the root div element.|
 
+##### data:
 
+pass through the `headerData` prop content 
 
 #### example
 
@@ -1139,12 +1080,13 @@ import Timeline, {
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
     <DateHeader />
-    <CustomHeader unit="year">
+    <CustomHeader headerData={{someData: 'data'}} unit="year">
       {({
         headerContext: { intervals },
         getRootProps,
         getIntervalProps,
-        showPeriod
+        showPeriod,
+        data,
       }) => {
         return (
           <div {...getRootProps({ style: { height: 30 } })}>

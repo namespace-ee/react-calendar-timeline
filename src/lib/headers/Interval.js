@@ -12,27 +12,7 @@ class Interval extends React.PureComponent {
     intervalText: PropTypes.string.isRequired,
     primaryHeader: PropTypes.bool.isRequired,
     getIntervalProps: PropTypes.func.isRequired,
-    props: PropTypes.object
-  }
-
-  getIntervalStyle = () => {
-    return {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: this.props.primaryHeader
-        ? 'initial'
-        : 'rgb(240, 240, 240)',
-      height: '100%',
-      borderLeft: this.props.primaryHeader
-        ? '1px solid #bbb'
-        : '2px solid #bbb',
-      borderRight: this.props.primaryHeader ? '1px solid #bbb' : 'none',
-      borderBottom: '1px solid #bbb',
-      color: this.props.primaryHeader ? '#fff' : 'initial',
-      cursor: 'pointer',
-      fontSize: '14px'
-    }
+    headerData: PropTypes.object
   }
 
   onIntervalClick = () => {
@@ -58,24 +38,27 @@ class Interval extends React.PureComponent {
   }
 
   render() {
-    const { intervalText, interval, intervalRenderer, props } = this.props
-    if (intervalRenderer)
-      return intervalRenderer(
-        {
-          getIntervalProps: this.getIntervalProps,
-          intervalContext: {
+    const { intervalText, interval, intervalRenderer, headerData } = this.props
+    const Renderer = intervalRenderer
+    if (Renderer) {
+      return (
+        <Renderer
+          getIntervalProps={this.getIntervalProps}
+          intervalContext={{
             interval,
             intervalText
-          }
-        },
-        props
+          }}
+          data={headerData}
+        />
       )
+    }
+
     return (
       <div
         data-testid="dateHeaderInterval"
         {...this.getIntervalProps({
-          style: this.getIntervalStyle()
         })}
+        className={`rct-dateHeader ${this.props.primaryHeader? 'rct-dateHeader-primary' : ''}`}
       >
         <span>{intervalText}</span>
       </div>

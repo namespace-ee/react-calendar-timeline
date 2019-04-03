@@ -43,7 +43,6 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: PropTypes.number,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    stickyOffset: PropTypes.number,
     stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
@@ -166,7 +165,6 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
     minResizeWidth: 20,
-    stickyOffset: 0,
     stickyHeader: true,
     lineHeight: 30,
     itemHeightRatio: 0.65,
