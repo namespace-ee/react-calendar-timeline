@@ -46,10 +46,10 @@ describe('CustomHeader Component Test', () => {
 
   it('Given CustomHeader When pass a style props other than (width, position) Then it should rendered Correctly', () => {
     const { getByTestId } = render(
-      getCustomHeadersInTimeline({ props: { style: { height: 150 } } })
+      getCustomHeadersInTimeline({ props: { style: { color: 'white' } } })
     )
-    const { height } = getComputedStyle(getByTestId('customHeader'))
-    expect(height).toBe('150px')
+    const { color } = getComputedStyle(getByTestId('customHeader'))
+    expect(color).toBe('white')
   })
 
   it('Given CustomHeader When pass an interval style with (width, position and left) Then it should not override the default values', () => {
