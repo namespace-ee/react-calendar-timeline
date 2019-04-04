@@ -924,10 +924,8 @@ export default class ReactCalendarTimeline extends Component {
     }
     return (
       <TimelineHeaders>
-        <SidebarHeader />
         <DateHeader unit="primaryHeader" />
         <DateHeader />
-        {this.props.rightSidebarWidth ? <SidebarHeader variant="right"/> : null}
       </TimelineHeaders>
     )
   }

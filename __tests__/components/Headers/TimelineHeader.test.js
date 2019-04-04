@@ -116,15 +116,15 @@ describe('TimelineHeader', () => {
     expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
   })
   it('Given SidebarHeader When passing variant prop with right value Then it should rendered above the right sidebar', () => {
-    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues(
+    const { getByTestId, getAllByTestId, debug } = renderSidebarHeaderWithCustomValues(
       { variant: 'right' }
     )
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
-    expect(getByTestId('sidebarHeader').previousElementSibling).toHaveAttribute(
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(2)
+    expect(getAllByTestId('sidebarHeader')[1].previousElementSibling).toHaveAttribute(
       'data-testid',
       'headerContainer'
     )
-    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
   })
 
   it('Given SidebarHeader When passing variant prop with unusual value Then it should rendered above the left sidebar by default', () => {

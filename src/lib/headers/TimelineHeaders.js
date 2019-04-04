@@ -64,6 +64,12 @@ class TimelineHeaders extends React.Component {
         calendarHeaders.push(child)
       }
     })
+    if(!leftSidebarHeader){
+      leftSidebarHeader= <SidebarHeader/>
+    }
+    if(!rightSidebarHeader && this.props.rightSidebarWidth){
+      rightSidebarHeader = <SidebarHeader variant="right"/>
+    }
     return (
       <div
         ref={this.handleRootRef}
