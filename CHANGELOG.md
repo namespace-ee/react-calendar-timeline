@@ -7,6 +7,11 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.23.1
+
+- fix height calculation of stacked items is off if no item is visible in a line @Felix-N
+- fix Unsubscribing markers correctly when unmounted @gaston-niglia
+
 ## 0.23.0
 
 - improve unit tests coverage #426 - @ilaiwi
