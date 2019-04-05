@@ -212,6 +212,9 @@ export default class Items extends Component {
               moveResizeValidator={this.props.moveResizeValidator}
               onDrag={this.props.itemDrag}
               onDrop={this.props.itemDrop}
+              onPointEnter={this.props.onPointEnter}
+              onPointDrop={this.props.onPointDrop}
+              onPointLeave={this.props.onPointLeave}
               onItemDoubleClick={this.props.onItemDoubleClick}
               onContextMenu={this.props.onItemContextMenu}
               onSelect={this.props.itemSelect}
@@ -220,6 +223,7 @@ export default class Items extends Component {
             />
           ))}
           <svg
+            id="svg-canvas"
             width="3000"
             viewBox={`0 0 3000 800`}
             style={{ zIndex: 70 ,position:'relative'}}

@@ -237,6 +237,20 @@ export default class Item extends Component {
         enabled:
           this.props.selected && (this.canResizeLeft() || this.canResizeRight())
       })
+      .dropzone({
+        accept: '.dragged-point',
+        overlap: 0.75,
+        ondragenter: (event) => {
+          this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
+        },
+        ondrop: (event) => {
+          this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
+        },
+        ondragleave: (event) => {
+          this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
+        }
+      })
+
       .draggable({
         enabled: this.props.selected
       })

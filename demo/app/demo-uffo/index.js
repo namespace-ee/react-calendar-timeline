@@ -10,7 +10,14 @@ import tasks from './tasks'
 
 import DragItem from './DragItem';
 
+function isRelationAllowed(event,sourceId,targetId){
+  console.log(event,sourceId,targetId)
+  return true
+}
 
+function onConnect(event,sourceId,targetId){
+  console.log(event,sourceId,targetId)
+}
 var minTime = moment()
   .add(-6, 'months')
   .valueOf()
@@ -351,6 +358,11 @@ export default class App extends Component {
 				groups={groups}
         items={items}
         connections={connections}
+
+        onPointEnter={isRelationAllowed}
+        onPointDrop={onConnect}
+        onPointLeave={()=>{}}
+
 				keys={keys}
 				fixedHeader="fixed"
         fullUpdate

@@ -1,4 +1,5 @@
 import React from 'react'
+import Point from './Point';
 // import store from './TimelineStore'
 
 const TimelineItem = ({
@@ -7,6 +8,7 @@ const TimelineItem = ({
 	itemContext,
 	getItemProps,
 	getResizeProps,
+	getPointProps
 }) => {
 	const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
 	const placeholder = item.id === 'placeholder'
@@ -39,6 +41,7 @@ const TimelineItem = ({
 			// onMouseOver={() => hoverSelect(item.id)}
 			// onMouseOut={() => hoverDeselect(item.id)}
 		>
+			<Point id={`point-${item.id}`} itemId={item.id} dimensions={itemContext.dimensions} />
 			{itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
 
 			<div
@@ -53,6 +56,7 @@ const TimelineItem = ({
 			</div>
 
 			{itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
+			<Point end id={`point-${item.id}-end`} itemId={item.id} dimensions={itemContext.dimensions} />
 		</div>
 	)
 }
