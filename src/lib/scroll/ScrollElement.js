@@ -4,7 +4,7 @@ import { getParentPosition } from '../utility/dom-helpers'
 
 class ScrollElement extends Component {
   static propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     traditionalZoom: PropTypes.bool.isRequired,

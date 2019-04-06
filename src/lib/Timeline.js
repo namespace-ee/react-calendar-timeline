@@ -1037,6 +1037,7 @@ export default class ReactCalendarTimeline extends Component {
                   headerLabelGroupHeight,
                   headerLabelHeight
                 )}
+                <div style={{height: 64}} />
                 <MarkerCanvas>
                   {this.items(
                     canvasTimeStart,

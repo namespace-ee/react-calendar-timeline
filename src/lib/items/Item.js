@@ -575,7 +575,7 @@ export default class Item extends Component {
       position: 'absolute',
       boxSizing: 'border-box',
       left: `${dimensions.left}px`,
-      top: `${dimensions.top}px`,
+      top: `${dimensions.top + 64}px`,
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`
