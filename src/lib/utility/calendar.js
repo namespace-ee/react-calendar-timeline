@@ -402,6 +402,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
+  
   return {
     height: sum(groupHeights),
     groupHeights,
