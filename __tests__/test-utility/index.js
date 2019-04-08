@@ -9,3 +9,7 @@ export function sel(selectorString) {
 }
 
 export function noop() {}
+
+export function parsePxToNumbers(value) {
+  return +value.replace('px', '')
+}
