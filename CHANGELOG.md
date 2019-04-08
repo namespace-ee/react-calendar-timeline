@@ -80,6 +80,10 @@ Check out the new docs before please [here](https://github.com/namespace-ee/reac
 - `headerLabelFormats` and `subHeaderLabelFormats` not you can pass `formatLabel` function to `DateHeader` with label width and start and end time of intervals
 
 
+## 0.23.1
+
+- fix height calculation of stacked items is off if no item is visible in a line @Felix-N
+- fix Unsubscribing markers correctly when unmounted @gaston-niglia
 
 ## 0.23.0
 
