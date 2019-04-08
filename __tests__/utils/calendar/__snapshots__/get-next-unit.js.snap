@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getNextUnit unknown value to throw error 1`] = `"unit foo in not acceptable"`;

@@ -20,6 +20,40 @@ export const defaultTimeSteps = {
   year: 1
 }
 
+export const defaultHeaderFormats = {
+  year: {
+    long: 'YYYY',
+    mediumLong: 'YYYY',
+    medium: 'YYYY',
+    short: 'YY'
+  },
+  month: {
+    long: 'MMMM YYYY',
+    mediumLong: 'MMMM',
+    medium: 'MMMM',
+    short: 'MM/YY'
+  },
+  day: {
+    long: 'dddd, LL',
+    mediumLong: 'dddd, LL',
+    medium: 'dd D',
+    short: 'D'
+  },
+  hour: {
+    long: 'dddd, LL, HH:00',
+    mediumLong: 'L, HH:00',
+    medium: 'HH:00',
+    short: 'HH'
+  },
+  minute: {
+    long: 'HH:mm',
+    mediumLong: 'HH:mm',
+    medium: 'HH:mm',
+    short: 'mm',
+  }
+}
+
+//TODO: delete this
 export const defaultHeaderLabelFormats = {
   yearShort: 'YY',
   yearLong: 'YYYY',
@@ -36,6 +70,7 @@ export const defaultHeaderLabelFormats = {
   time: 'LLL'
 }
 
+//TODO: delete this
 export const defaultSubHeaderLabelFormats = {
   yearShort: 'YY',
   yearLong: 'YYYY',

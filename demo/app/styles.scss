@@ -65,3 +65,17 @@ body {
   z-index: 999;
   background-color: darkgray !important;
 }
+
+.sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  left: 45%;
+  display: inline-block;
+  border-radius: 2px;
+  padding: 0 6px;
+  height: 100%;
+}
+
+.header-background {
+  background: azure;
+}

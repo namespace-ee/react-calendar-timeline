@@ -2,17 +2,23 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 import { iterateTimes } from '../utility/calendar'
+import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
-export default class Columns extends Component {
+const passThroughPropTypes = {
+  canvasTimeStart: PropTypes.number.isRequired,
+  canvasTimeEnd: PropTypes.number.isRequired,
+  canvasWidth: PropTypes.number.isRequired,
+  lineCount: PropTypes.number.isRequired,
+  minUnit: PropTypes.string.isRequired,
+  timeSteps: PropTypes.object.isRequired,
+  height: PropTypes.number.isRequired,
+  verticalLineClassNamesForTime: PropTypes.func
+}
+
+class Columns extends Component {
   static propTypes = {
-    canvasTimeStart: PropTypes.number.isRequired,
-    canvasTimeEnd: PropTypes.number.isRequired,
-    canvasWidth: PropTypes.number.isRequired,
-    lineCount: PropTypes.number.isRequired,
-    minUnit: PropTypes.string.isRequired,
-    timeSteps: PropTypes.object.isRequired,
-    height: PropTypes.number.isRequired,
-    verticalLineClassNamesForTime: PropTypes.func
+    ...passThroughPropTypes,
+    getLeftOffsetFromDate: PropTypes.func.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
@@ -37,7 +43,8 @@ export default class Columns extends Component {
       minUnit,
       timeSteps,
       height,
-      verticalLineClassNamesForTime
+      verticalLineClassNamesForTime,
+      getLeftOffsetFromDate
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
@@ -49,13 +56,8 @@ export default class Columns extends Component {
       minUnit,
       timeSteps,
       (time, nextTime) => {
-        const left = Math.round((time.valueOf() - canvasTimeStart) * ratio, -2)
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
-        const lineWidth = firstOfType ? 2 : 1
-        const labelWidth =
-          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
-        const leftPush = firstOfType ? -1 : 0
 
         let classNamesForTime = []
         if (verticalLineClassNamesForTime) {
@@ -74,6 +76,8 @@ export default class Columns extends Component {
             : '') +
           classNamesForTime.join(' ')
 
+        const left = getLeftOffsetFromDate(time.valueOf())
+        const right = getLeftOffsetFromDate(nextTime.valueOf())
         lines.push(
           <div
             key={`line-${time.valueOf()}`}
@@ -81,8 +85,8 @@ export default class Columns extends Component {
             style={{
               pointerEvents: 'none',
               top: '0px',
-              left: `${left + leftPush}px`,
-              width: `${labelWidth}px`,
+              left: `${left}px`,
+              width: `${right - left}px`,
               height: `${height}px`
             }}
           />
@@ -93,3 +97,19 @@ export default class Columns extends Component {
     return <div className="rct-vertical-lines">{lines}</div>
   }
 }
+
+const ColumnsWrapper = ({ ...props }) => {
+  return (
+    <TimelineStateConsumer>
+      {({ getLeftOffsetFromDate }) => (
+        <Columns getLeftOffsetFromDate={getLeftOffsetFromDate} {...props} />
+      )}
+    </TimelineStateConsumer>
+  )
+}
+
+ColumnsWrapper.defaultProps = {
+  ...passThroughPropTypes
+}
+
+export default ColumnsWrapper
