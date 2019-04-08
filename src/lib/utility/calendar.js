@@ -313,7 +313,7 @@ export function groupStack(
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
-  let verticalMargin = lineHeight - item.dimensions.height
+  let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.stack && item.dimensions.top === null) {
     item.dimensions.top = groupTop + verticalMargin
     curHeight = Math.max(curHeight, lineHeight)
@@ -339,7 +339,7 @@ export function groupStack(
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top + item.dimensions.height - groupTop
+          item.dimensions.top + item.dimensions.height + verticalMargin - groupTop
         )
       }
     } while (collidingItem)
@@ -399,7 +399,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
     if (group.height) {
       groupHeights.push(group.height)
     } else {
-      groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
+      groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
   
