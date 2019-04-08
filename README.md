@@ -177,29 +177,9 @@ Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When s
 
 The minimum width, in pixels, of a timeline entry when it's possible to resize. If not reached, you must zoom in to resize more. Default to `20`.
 
-## stickyOffset
-
-At what height from the top of the screen should we start "sticking" the header (i.e. position: sticky)? This is useful if for example you already have a sticky navbar and want to push the timeline header down further. Defaults `0`.
-
-## stickyHeader
-
-Specify whether you want the timeline header to be "sticky". Pass `false` if you want the header to fix at top of element and not fix when you scroll down the page. Defaults to `true`
-
-## headerRef
-
-Ref callback that gets a DOM reference to the header element. See [FAQ below](#the-timeline-header-doesnt-fix-to-the-top-of-the-container-when-i-scroll-down).
-
 ## lineHeight
 
 Height of one line in the calendar in pixels. Default `30`
-
-## headerLabelGroupHeight
-
-Height of the top header line. Default `30`
-
-## headerLabelHeight
-
-Height of the bottom header line. Default `30`
 
 ## itemHeightRatio
 
@@ -331,78 +311,6 @@ function (action, item, time, resizeEdge) {
 }
 ```
 
-## headerLabelFormats and subHeaderLabelFormats
-
-The formats passed to moment to render times in the header and subheader. Defaults to these:
-
-```js
-import {
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
-} from 'react-calendar-timeline'
-
-defaultHeaderLabelFormats ==
-  {
-    yearShort: 'YY',
-    yearLong: 'YYYY',
-    monthShort: 'MM/YY',
-    monthMedium: 'MM/YYYY',
-    monthMediumLong: 'MMM YYYY',
-    monthLong: 'MMMM YYYY',
-    dayShort: 'L',
-    dayLong: 'dddd, LL',
-    hourShort: 'HH',
-    hourMedium: 'HH:00',
-    hourMediumLong: 'L, HH:00',
-    hourLong: 'dddd, LL, HH:00',
-    time: 'LLL'
-  }
-
-defaultSubHeaderLabelFormats ==
-  {
-    yearShort: 'YY',
-    yearLong: 'YYYY',
-    monthShort: 'MM',
-    monthMedium: 'MMM',
-    monthLong: 'MMMM',
-    dayShort: 'D',
-    dayMedium: 'dd D',
-    dayMediumLong: 'ddd, Do',
-    dayLong: 'dddd, Do',
-    hourShort: 'HH',
-    hourLong: 'HH:00',
-    minuteShort: 'mm',
-    minuteLong: 'HH:mm'
-  }
-```
-
-For US time formats (AM/PM), use these:
-
-```js
-import {
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
-} from 'react-calendar-timeline'
-
-const usHeaderLabelFormats = Object.assign({}, defaultSubHeaderLabelFormats, {
-  hourShort: 'h A',
-  hourMedium: 'h A',
-  hourMediumLong: 'L, h A',
-  hourLong: 'dddd, LL, h A'
-})
-
-const usSubHeaderLabelFormats = Object.assign(
-  {},
-  defaultSubHeaderLabelFormats,
-  {
-    hourShort: 'h A',
-    hourLong: 'h A',
-    minuteLong: 'h:mm A'
-  }
-)
-```
-
-... and then pass these as `headerLabelFormats` and `subHeaderLabelFormats`
 
 ## onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
 
@@ -774,6 +682,445 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
 </CursorMarker>
 ```
 
+# Timeline Headers
+
+Timeline headers are the section above the timeline which consist of two main parts: First, the calender header which is a scrolable div containing the dates of the calendar called `DateHeader`. Second, is the headers for the sidebars, called `SidebarHeader`, the left one and optionally the right one.
+
+## Default usage
+
+For the default case, two `DateHeader`s are rendered above the timeline, one `primary` and `secondary`. The secondary has the same date unit as the timeline and a `primary` which has a unit larger than the timeline unit by one.
+
+For the `SidebarHeader`s an empty `SidebarHeader` will be render for the left and optionally an empty right sidebar header if `rightSidebarWith` exists.
+
+## Overview
+
+To provide any custom headers for `DateHeader` or `SidebarHeader`. You need to provide basic usage to provide any custom headers. These Custom headers should be always included inside `TimelineHeaders` component in the component's children.
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader unit="primaryHeader" />
+    <DateHeader />
+  </TimelineHeaders>
+<Timeline>
+```
+## Components
+
+Custom headers are implemented through a set of component with mostly [function as a child component](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) pattern, designed to give the user the most control on how to render the headers.
+
+### `TimelineHeader`
+
+Is the core component wrapper component for custom headers
+
+#### props
+
+| Prop          | type            | description                                                                                                                                                               |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `style`| `object`| applied to the root component of headers |
+| `className` | `string`| applied to the root component of the headers|
+| `calendarHeaderStyle`| `object`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
+| `calendarHeaderClassName`| `string`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
+| `headerRef` | `function` | used to get the ref of the header element
+
+### `SidebarHeader`
+
+Responsible for rendering the headers above the left and right sidebars.
+
+#### props
+
+| Prop          | type            | description                                                                                                                                                               |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`| `left` (default), `right`| renders above the left or right sidebar |
+| `children` | `Function`| function as a child component to render the header|
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+
+#### Child function renderer
+
+a Function provides multiple parameters that can be used to render the sidebar headers
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+| `data`   | `any` | Contextual data passed by `headerData` prop|
+
+* `getRootProps` The returned props are:
+
+  * style: inline object style
+
+  These properties can be override using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <SidebarHeader variant="right" headerData={{someData: 'extra'}}>
+      {({ getRootProps, data }) => {
+        return <div {...getRootProps()}>Right {data.someData}</div>
+      }}
+    </SidebarHeader>
+    <DateHeader unit="primaryHeader" />
+    <DateHeader />
+  </TimelineHeaders>
+<Timeline>
+```
+
+_Note_ : the Child function renderer can be a component or a function for convenience 
+
+### `DateHeader`
+
+
+Responsible for rendering the headers above calendar part of the timeline. Consists of time intervals dividing the headers in columns.
+
+#### props
+
+| Prop          | type            | description|
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `style`| `object`| applied to the root of the header |
+| `className` | `string`| applied to the root of the header|
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` or `primaryHeader` | intervals between columns |
+| `labelFormat` | `Function` or `string`| controls the how to format the interval label |
+| `intervalRenderer`| `Function`| render prop to render each interval in the header 
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+| `height` | `number` default (30)|  height of the header in pixels |
+
+_Note_: passing `primaryHeader` to unit the header will act as the main header with interval unit larger than timeline unit by 1
+
+#### Interval unit
+
+intervals are decided through the prop: `unit`. By default, the unit of the intervals will be the same the timeline.
+
+If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit. 
+
+If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. 
+
+#### Label format
+
+To format each interval label you can use 2 types of props to format which are:
+
+- `string`: if a string was passed it will be passed to `startTime` method `format` which is a `momentjs` object  .
+
+
+- `Function`: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
+
+  ```typescript
+    type Unit = `second` | `minute` | `hour` | `day` | `month` | `year`
+  ([startTime, endTime] : [Moment, Moment], unit: Unit, labelWidth: number, formatOptions: LabelFormat = defaultFormat ) => string
+  ```
+##### Default format
+
+by default we provide a responsive format for the dates based on the label width. it follows the following rules:
+
+  The `long`, `mediumLong`, `medium` and `short` will be be decided through the `labelWidth` value according to where it lays upon the following scale:
+
+  ```
+  |-----`short`-----50px-----`medium`-----100px-----`mediumLong`-----150px--------`long`-----
+  ```
+
+
+  ```typescript
+  // default format object
+  const format : LabelFormat = {
+    year: {
+    long: 'YYYY',
+    mediumLong: 'YYYY',
+    medium: 'YYYY',
+    short: 'YY'
+    },
+    month: {
+      long: 'MMMM YYYY',
+      mediumLong: 'MMMM',
+      medium: 'MMMM',
+      short: 'MM/YY'
+    },
+    day: {
+      long: 'dddd, LL',
+      mediumLong: 'dddd, LL',
+      medium: 'dd D',
+      short: 'D'
+    },
+    hour: {
+      long: 'dddd, LL, HH:00',
+      mediumLong: 'L, HH:00',
+      medium: 'HH:00',
+      short: 'HH'
+    },
+    minute: {
+      long: 'HH:mm',
+      mediumLong: 'HH:mm',
+      medium: 'HH:mm',
+      short: 'mm',
+    }
+  }
+  ```
+
+_Note_: this is only an implementation of the function param. You can do this on your own easily
+
+
+#### intervalRenderer
+
+Render prop function used to render a customized interval. The function provides multiple parameters that can be used to render each interval.
+
+Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
+
+_Note_ : the renderProp can be a component or a function for convenience 
+
+##### interval context
+
+An object contains the following properties:
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `interval`    | `object : {startTime, endTime, labelWidth, left}` | an object containing data related to the interval|
+| `intervalText` | `string` | the string returned from `labelFormat` prop |
+
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getIntervalProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+
+* `getIntervalProps` The returned props are:
+
+  * style: inline object style
+  * onClick: event handler
+  * key
+
+  These properties can be extended using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+  * onClick: extra click handler added to the normal `showPeriod callback`
+
+##### data
+
+data passed through headerData 
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader unit="primaryHeader" />
+    <DateHeader />
+    <DateHeader
+      unit="day"
+      labelFormat="MM/DD"
+      style={{ height: 50 }}
+      data={{someData: 'example'}}
+      intervalRenderer={({ getIntervalProps, intervalContext, data }) => {
+        return <div {...getIntervalProps()}>
+          {intervalContext.intervalText}
+          {data.example}
+        </div>
+      }}
+    />
+  </TimelineHeaders>
+</Timeline>
+```
+
+### `CustomHeader`
+
+Responsible for rendering the headers above calendar part of the timeline. This is the base component for `DateHeader` and offers more control with less features.
+
+#### props
+
+| Prop          | type            | description|
+| ----------------- | --------------- | ---|
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
+| `children` | `Function`| function as a child component to render the header|
+| `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
+| `height` | `number` default (30)|  height of the header in pixels |
+
+#### unit
+
+The unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. The default value for unit is `timelineUnit`
+
+#### Children
+
+Function as a child component to render the header
+
+Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
+
+_Note_ : the Child function renderer can be a component or a function for convenience 
+
+```
+({
+  timelineContext: {
+    timelineWidth,
+    visibleTimeStart,
+    visibleTimeEnd,
+    canvasTimeStart,
+    canvasTimeEnd
+  },
+  headerContext: {
+    unit,
+    intervals: this.state.intervals
+  },
+  getRootProps: this.getRootProps,
+  getIntervalProps: this.getIntervalProps,
+  showPeriod,
+  //contextual data passed through headerData
+  data,
+})=> React.Node
+```
+
+##### context
+
+An object contains context for `timeline` and `header`:
+
+
+###### Timeline context
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `timelineWidth`    | `number` | width of timeline|
+| `visibleTimeStart` | `number` | unix milliseconds of start visible time |
+| `visibleTimeEnd`    | `number` | unix milliseconds of end visible time|
+| `canvasTimeStart` | `number` | unix milliseconds of start buffer time |
+| `canvasTimeEnd`    | `number` |unix milliseconds of end buffer time|
+
+###### Header context
+
+| property           | type     | description                                          |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `intervals`    | `array` | an array with all intervals|
+| `unit` | `string` | unit passed or timelineUnit |
+
+** `interval`: `[startTime: Moment, endTime: Moment]`
+
+##### Prop getters functions
+
+Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
+| `getIntervalProps`   | `function(props={})` | returns the props you should apply to the interval div element.|
+
+* `getIntervalProps` The returned props are:
+
+  * style: inline object style
+  * onClick: event handler
+  * key
+
+  These properties can be extended using the prop argument with properties:
+
+  * style: extra inline styles to be applied to the component
+  * onClick: extra click handler added to the normal `showPeriod callback`
+
+##### helpers:
+
+| property         | type                 | description|
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `showPeriod`   | `function(props={})` | returns the props you should apply to the root div element.|
+
+##### data:
+
+pass through the `headerData` prop content 
+
+#### example
+
+```jsx
+import Timeline, {
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader
+} from 'react-calendar-timeline'
+
+<Timeline>
+  <TimelineHeaders>
+    <SidebarHeader>
+      {({ getRootProps }) => {
+        return <div {...getRootProps()}>Left</div>
+      }}
+    </SidebarHeader>
+    <DateHeader unit="primaryHeader" />
+    <DateHeader />
+    <CustomHeader height={50} headerData={{someData: 'data'}} unit="year">
+      {({
+        headerContext: { intervals },
+        getRootProps,
+        getIntervalProps,
+        showPeriod,
+        data,
+      }) => {
+        return (
+          <div {...getRootProps()}>
+            {intervals.map(interval => {
+              const intervalStyle = {
+                lineHeight: '30px',
+                textAlign: 'center',
+                borderLeft: '1px solid black',
+                cursor: 'pointer',
+                backgroundColor: 'Turquoise',
+                color: 'white'
+              }
+              return (
+                <div
+                  onClick={() => {
+                    showPeriod(interval.startTime, interval.endTime)
+                  }}
+                  {...getIntervalProps({
+                    interval,
+                    style: intervalStyle
+                  })}
+                >
+                  <div className="sticky">
+                    {interval.startTime.format('YYYY')}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )
+      }}
+    </CustomHeader>
+  </TimelineHeaders>
+</Timeline>
+```
+
 # FAQ
 
 ## My timeline is unstyled
@@ -790,11 +1137,10 @@ Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeli
 The library supports right sidebar.
 ![right sidebar demo](doc/right-sidebar.png)
 
-To use it, you need to add two props to the `<Timeline />` component:
+To use it, you need to add a props to the `<Timeline />` component:
 
 ```jsx
 rightSidebarWidth={150}
-rightSidebarContent={<p>Second filter</p>}
 ```
 
 And add `rightTitle` prop to the groups objects:
@@ -807,33 +1153,12 @@ And add `rightTitle` prop to the groups objects:
 }
 ```
 
+If you are using Custom Headers then you need to add `SidebarHeader` component under `TimelineHeader` with variant `right`
+
 ## The timeline header doesn't fix to the top of the container when I scroll down.
 
-There are two causes of this:
+you need to add sticky to the header like [this example](https://github.com/FoothillSolutions/react-calendar-timeline/tree/dest-build/examples#sticky-header).
 
-* you are passing `stickyHeader={false}` to the timeline component. The header by default has sticky behavior unless you tell it not to using this prop.
-* the browser you are viewing the timeline in doesn't support `position: sticky`. In this scenario, you will need to polyfill this behavior using the `headerRef`.
-
-In this example, we use [stickyfill](https://github.com/wilddeer/stickyfill) as our sticky polyfill
-
-```jsx
-// add a handler in your parent component that accepts a DOM element
-// with this element, pass the element into a polyfill library
-
-handleHeaderRef = (el) => {
-  // polyfill dom element with stickyfill
-  Stickyfill.addOne(el)
-}
-
-// in render, pass this handler to the `headerRef` prop:
-
-render() {
-  <Timeline
-  //other props
-  headerRef={this.handleHeaderRef}
-
-  />
-}
 ```
 
 ## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
