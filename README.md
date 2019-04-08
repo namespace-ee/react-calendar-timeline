@@ -1,6 +1,6 @@
 # React Calendar Timeline
 
-A modern and responsive react timeline component.
+A modern and responsive React timeline component.
 
 ![calendar demo](https://raw.githubusercontent.com/namespace-ee/react-calendar-timeline/master/demo.gif)
 
@@ -16,7 +16,7 @@ yarn add react-calendar-timeline
 npm install --save react-calendar-timeline
 ```
 
-`react-calendar-timeline` has `react`, `react-dom`, [`moment`](http://momentjs.com/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
+`react-calendar-timeline` has [react](https://reactjs.org/), [react-dom](https://reactjs.org/docs/react-dom.html), [`moment`](http://momentjs.com/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
 
 # Usage
 
@@ -88,7 +88,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 }
 ```
 
-If you use right sidebar, you can pass optional `rightTitle` property here.
+If you use the right sidebar, you can pass optional `rightTitle` property here.
 If you want to overwrite the calculated height with a custom height, you can pass a `height` property as an int in pixels here. This can be very useful for categorized groups.
 
 ## items
@@ -118,7 +118,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 }
 ```
 
-The preferred (fastest) option is to give unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript Date or moment()) will also work, but will be a lot slower.
+The preferred (fastest) option is to give Unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript `Date` or `moment()`) will also work, but will be a lot slower.
 
 ## defaultTimeStart and defaultTimeEnd
 
@@ -126,7 +126,7 @@ Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the 
 
 ## visibleTimeStart and visibleTimeEnd
 
-The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a unix timestamp in milliseconds.
+The exact viewport of the calendar. When these are specified, scrolling in the calendar must be orchestrated by the `onTimeChange` function. This parameter expects a Unix timestamp in milliseconds.
 
 **Note that you need to provide either `defaultTimeStart/End` or `visibleTimeStart/End` for the timeline to function**
 
@@ -195,7 +195,7 @@ Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 864
 
 ## clickTolerance
 
-How many pixels we can drag the background for it to be counted as a click on the background. Defualt: `3`
+How many pixels we can drag the background for it to be counted as a click on the background. Default `3`
 
 ## canMove
 
@@ -342,9 +342,9 @@ Called when the bounds in the calendar's canvas change. Use it for example to lo
 
 ## itemRenderer
 
-Render prop function used to render a customized item. The function provides multiple paramerters that can be used to render each item.
+Render prop function used to render a customized item. The function provides multiple parameters that can be used to render each item.
 
-Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
+Parameters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
 #### Render props params
 
@@ -397,7 +397,7 @@ Rather than applying props on the element yourself and to avoid your props being
 * `getItemProps` returns the props you should apply to the root item element. The returned props are:
 
   * key: item id
-  * ref: function to get item referance
+  * ref: function to get item reference
   * className: classnames to be applied to the item
   * onMouseDown: event handler
   * onMouseUp: event handler
@@ -407,9 +407,9 @@ Rather than applying props on the element yourself and to avoid your props being
   * onContextMenu: event handler
   * style: inline object style
 
-  \*\* _the given styles will only override the styles that are not a requirement for postioning the item. Other styles like `color`, `radius` and others_
+  \*\* _the given styles will only override the styles that are not a requirement for positioning the item. Other styles like `color`, `radius` and others_
 
-  These properties can be override using the prop argument with proprties:
+  These properties can be override using the prop argument with properties:
 
   * className: class names to be added
   * onMouseDown: event handler will be called after the component's event handler
@@ -618,10 +618,10 @@ const twoSeconds = 2000
 
 <TodayMarker>
   {({ styles, date }) =>
-  // date is value of current date. Use this to render special styles for the marker
-  // or any other custom logic based on date:
-  // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-  return <div style={styles} />
+    // date is value of current date. Use this to render special styles for the marker
+    // or any other custom logic based on date:
+    // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+    <div style={styles} />
   }
 </TodayMarker>
 ```
@@ -644,9 +644,7 @@ const today = Date.now()
 
 //custom renderer
 <CustomMarker date={today}>
-  {({ styles, date }) =>
-  return <div style={styles} />
-  }
+  {({ styles, date }) => <div style={styles} />}
 </CustomMarker>
 
 // multiple CustomMarkers
@@ -676,10 +674,10 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
 //custom renderer
 <CursorMarker>
   {({ styles, date }) =>
-  // date is value of current date. Use this to render special styles for the marker
-  // or any other custom logic based on date:
-  // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-  return <div style={styles} />
+    // date is value of current date. Use this to render special styles for the marker
+    // or any other custom logic based on date:
+    // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+    <div style={styles} />
   }
 </CursorMarker>
 ```
@@ -1080,7 +1078,7 @@ import Timeline, {
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
     <DateHeader />
-    <CustomHeader headerData={{someData: 'data'}} unit="year">
+    <CustomHeader height={50} headerData={{someData: 'data'}} unit="year">
       {({
         headerContext: { intervals },
         getRootProps,
@@ -1089,10 +1087,9 @@ import Timeline, {
         data,
       }) => {
         return (
-          <div {...getRootProps({ style: { height: 30 } })}>
+          <div {...getRootProps()}>
             {intervals.map(interval => {
               const intervalStyle = {
-                // height: 30,
                 lineHeight: '30px',
                 textAlign: 'center',
                 borderLeft: '1px solid black',
@@ -1132,7 +1129,7 @@ You need to include the `Timeline.css` file, either via static file reference or
 
 ## How can I have items with different colors?
 
-Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer). 
+Now you can use item renderer for rendering items with different colors [itemRenderer](https://github.com/namespace-ee/react-calendar-timeline#itemrenderer).
 Please refer to [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering) for a sandbox example
 
 ## How can I add a sidebar on the right?
@@ -1242,3 +1239,6 @@ npm version patch
 ```
 
 -->
+
+## License
+[MIT licensed](/LICENSE.md).
