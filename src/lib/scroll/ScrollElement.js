@@ -25,6 +25,7 @@ class ScrollElement extends Component {
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
+    this.el.addEventListener('wheel', this.handleWheel), {passive: false};
   }
 
   handleScroll = () => {
@@ -162,6 +163,10 @@ class ScrollElement extends Component {
     }
   }
 
+  componentWillUnmount(){
+    this.componentRef.current.removeEventListener('wheel', this.handleWheel);
+  }
+
   render() {
     const { width, height, children } = this.props
     const { isDragging } = this.state
@@ -180,7 +185,6 @@ class ScrollElement extends Component {
         className="rct-scroll"
         style={scrollComponentStyle}
         onScroll={this.handleScroll}
-        onWheel={this.handleWheel}
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
