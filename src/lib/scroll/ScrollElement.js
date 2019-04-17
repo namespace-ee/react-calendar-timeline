@@ -25,7 +25,9 @@ class ScrollElement extends Component {
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
-    this.el.addEventListener('wheel', this.handleWheel), {passive: false};
+    if(el){
+      el.addEventListener('wheel', this.handleWheel, {passive: false});
+    }
   }
 
   handleScroll = () => {
@@ -164,7 +166,9 @@ class ScrollElement extends Component {
   }
 
   componentWillUnmount(){
-    this.componentRef.current.removeEventListener('wheel', this.handleWheel);
+    if(this.scrollComponent){
+      this.scrollComponent.removeEventListener('wheel', this.handleWheel);
+    }
   }
 
   render() {
