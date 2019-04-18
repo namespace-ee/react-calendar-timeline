@@ -12,7 +12,8 @@
     "prepublish": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "files": [
     "lib",
@@ -76,6 +77,14 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 61,
+        "branches": 42,
+        "functions": 71,
+        "lines": 61
+      }
+    },
     "modulePaths": [
       "<rootDir>/src/",
       "<rootDir>/__tests__"
