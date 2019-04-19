@@ -12,7 +12,8 @@ const originalAddEventListener = document.addEventListener.bind()
 
 const originalRemoveEventListener = document.removeEventListener.bind()
 
-if (document) {
+// checking window for server side rendering
+if (typeof window !== 'undefined') {
   document.addEventListener = (type, listener, options, wantsUntrusted) => {
     let modOptions = options
     if (EVENTS_TO_MODIFY.includes(type)) {
