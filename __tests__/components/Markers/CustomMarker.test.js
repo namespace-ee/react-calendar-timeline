@@ -67,7 +67,10 @@ describe('CustomMarker', () => {
       visibleTimeEnd,
       canvasTimeStart: visibleTimeStart - oneDay,
       canvasTimeEnd: visibleTimeEnd + oneDay,
-      canvasWidth
+      canvasWidth,
+      showPeriod: () => {},
+      timelineWidth: 1000,
+      timelineUnit: 'day'
     }
 
     const markerDate = now + oneDay / 2

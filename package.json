@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.23.0",
+  "version": "0.25.0",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -126,7 +126,7 @@
     "eslint-plugin-standard": "^2.0.1",
     "faker": "^4.1.0",
     "interactjs": "^1.3.4",
-    "jest": "^23.1.0",
+    "jest": "^23.6.0",
     "jest-dom": "^1.12.1",
     "jest-watch-typeahead": "^0.1.0",
     "jsdom": "^11.5.1",
@@ -139,7 +139,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.1.1",
-    "react-testing-library": "^5.1.0",
+    "react-testing-library": "^6.0.3",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.3",
     "style-loader": "~0.13.0",
