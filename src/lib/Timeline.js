@@ -267,10 +267,6 @@ export default class ReactCalendarTimeline extends Component {
   constructor(props) {
     super(props)
 
-    this.getSelected = this.getSelected.bind(this)
-    this.hasSelectedItem = this.hasSelectedItem.bind(this)
-    this.isItemSelected= this.isItemSelected.bind(this)
-
     let visibleTimeStart = null
     let visibleTimeEnd = null
 
@@ -573,7 +569,7 @@ export default class ReactCalendarTimeline extends Component {
 
   selectItem = (item, clickType, e) => {
     if (
-      this.isItemSelected(item) ||
+      this.state.selectedItem === item ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
       if (item && this.props.onItemClick) {
@@ -708,7 +704,7 @@ export default class ReactCalendarTimeline extends Component {
 
   handleRowClick = (e, rowIndex) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
-    if (this.hasSelectedItem()) {
+    if (this.state.selectedItem) {
       this.selectItem(null)
     }
 
@@ -896,7 +892,10 @@ export default class ReactCalendarTimeline extends Component {
       keys: this.props.keys,
       groupHeights: groupHeights,
       groupTops: groupTops,
-      selected: this.getSelected(),
+      selected:
+        this.state.selectedItem && !this.props.selected
+          ? [this.state.selectedItem]
+          : this.props.selected || [],
       height: height,
       minUnit: minUnit,
       timeSteps: timeSteps

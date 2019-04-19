@@ -413,6 +413,7 @@ export default class Item extends Component {
 
   componentDidUpdate(prevProps) {
     this.cacheDataFromProps(this.props)
+
     let { interactMounted } = this.state
     const couldDrag = prevProps.selected && this.canMove(prevProps)
     const couldResizeLeft =
@@ -425,40 +426,32 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
-    if(!!this.item){
-      if (this.props.selected && !interactMounted) {
-        this.mountInteract()
-        interactMounted = true
-      }
-      if (
-        interactMounted &&
-        (couldResizeLeft !== willBeAbleToResizeLeft ||
-          couldResizeRight !== willBeAbleToResizeRight)
-      ) {
-        const leftResize = this.props.useResizeHandle ? this.dragLeft : true
-        const rightResize = this.props.useResizeHandle ? this.dragRight : true
-  
-        interact(this.item).resizable({
-          enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
-          edges: {
-            top: false,
-            bottom: false,
-            left: willBeAbleToResizeLeft && leftResize,
-            right: willBeAbleToResizeRight && rightResize
-          }
-        })
-      }
-      if (interactMounted && couldDrag !== willBeAbleToDrag) {
-        interact(this.item).draggable({ enabled: willBeAbleToDrag })
-      }
+    if (this.props.selected && !interactMounted) {
+      this.mountInteract()
+      interactMounted = true
     }
-    else{
-      interactMounted= false;
-    }
-    this.setState({
-      interactMounted,
-    })
 
+    if (
+      interactMounted &&
+      (couldResizeLeft !== willBeAbleToResizeLeft ||
+        couldResizeRight !== willBeAbleToResizeRight)
+    ) {
+      const leftResize = this.props.useResizeHandle ? this.dragLeft : true
+      const rightResize = this.props.useResizeHandle ? this.dragRight : true
+
+      interact(this.item).resizable({
+        enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
+        edges: {
+          top: false,
+          bottom: false,
+          left: willBeAbleToResizeLeft && leftResize,
+          right: willBeAbleToResizeRight && rightResize
+        }
+      })
+    }
+    if (interactMounted && couldDrag !== willBeAbleToDrag) {
+      interact(this.item).draggable({ enabled: willBeAbleToDrag })
+    }
   }
 
   onMouseDown = e => {
