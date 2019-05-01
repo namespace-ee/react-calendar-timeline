@@ -33,6 +33,12 @@ export const defaultHeaderFormats = {
     medium: 'MMMM',
     short: 'MM/YY'
   },
+  week: {
+    long: 'w',
+    mediumLong: 'w',
+    medium: 'w',
+    short: 'w'
+  },
   day: {
     long: 'dddd, LL',
     mediumLong: 'dddd, LL',

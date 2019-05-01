@@ -793,7 +793,7 @@ import Timeline, {
 <Timeline>
 ```
 
-_Note_ : the Child function renderer can be a component or a function for convenience 
+_Note_ : the Child function renderer can be a component or a function for convenience
 
 ### `DateHeader`
 
@@ -808,7 +808,7 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | `className` | `string`| applied to the root of the header|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` or `primaryHeader` | intervals between columns |
 | `labelFormat` | `Function` or `string`| controls the how to format the interval label |
-| `intervalRenderer`| `Function`| render prop to render each interval in the header 
+| `intervalRenderer`| `Function`| render prop to render each interval in the header
 | `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 | `height` | `number` default (30)|  height of the header in pixels |
 
@@ -818,9 +818,9 @@ _Note_: passing `primaryHeader` to unit the header will act as the main header w
 
 intervals are decided through the prop: `unit`. By default, the unit of the intervals will be the same the timeline.
 
-If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit. 
+If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit.
 
-If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. 
+If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`.
 
 #### Label format
 
@@ -849,37 +849,43 @@ by default we provide a responsive format for the dates based on the label width
   ```typescript
   // default format object
   const format : LabelFormat = {
-    year: {
+  year: {
     long: 'YYYY',
     mediumLong: 'YYYY',
     medium: 'YYYY',
     short: 'YY'
-    },
-    month: {
-      long: 'MMMM YYYY',
-      mediumLong: 'MMMM',
-      medium: 'MMMM',
-      short: 'MM/YY'
-    },
-    day: {
-      long: 'dddd, LL',
-      mediumLong: 'dddd, LL',
-      medium: 'dd D',
-      short: 'D'
-    },
-    hour: {
-      long: 'dddd, LL, HH:00',
-      mediumLong: 'L, HH:00',
-      medium: 'HH:00',
-      short: 'HH'
-    },
-    minute: {
-      long: 'HH:mm',
-      mediumLong: 'HH:mm',
-      medium: 'HH:mm',
-      short: 'mm',
-    }
+  },
+  month: {
+    long: 'MMMM YYYY',
+    mediumLong: 'MMMM',
+    medium: 'MMMM',
+    short: 'MM/YY'
+  },
+  week: {
+    long: 'w',
+    mediumLong: 'w',
+    medium: 'w',
+    short: 'w'
+  },
+  day: {
+    long: 'dddd, LL',
+    mediumLong: 'dddd, LL',
+    medium: 'dd D',
+    short: 'D'
+  },
+  hour: {
+    long: 'dddd, LL, HH:00',
+    mediumLong: 'L, HH:00',
+    medium: 'HH:00',
+    short: 'HH'
+  },
+  minute: {
+    long: 'HH:mm',
+    mediumLong: 'HH:mm',
+    medium: 'HH:mm',
+    short: 'mm',
   }
+}
   ```
 
 _Note_: this is only an implementation of the function param. You can do this on your own easily
@@ -891,7 +897,7 @@ Render prop function used to render a customized interval. The function provides
 
 Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
-_Note_ : the renderProp can be a component or a function for convenience 
+_Note_ : the renderProp can be a component or a function for convenience
 
 ##### interval context
 
@@ -924,7 +930,7 @@ Rather than applying props on the element yourself and to avoid your props being
 
 ##### data
 
-data passed through headerData 
+data passed through headerData
 
 #### example
 
@@ -968,7 +974,7 @@ Responsible for rendering the headers above calendar part of the timeline. This 
 
 | Prop          | type            | description|
 | ----------------- | --------------- | ---|
-| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals |
 | `children` | `Function`| function as a child component to render the header|
 | `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 | `height` | `number` default (30)|  height of the header in pixels |
@@ -983,7 +989,7 @@ Function as a child component to render the header
 
 Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
 
-_Note_ : the Child function renderer can be a component or a function for convenience 
+_Note_ : the Child function renderer can be a component or a function for convenience
 
 ```
 ({
@@ -1058,7 +1064,7 @@ Rather than applying props on the element yourself and to avoid your props being
 
 ##### data:
 
-pass through the `headerData` prop content 
+pass through the `headerData` prop content
 
 #### example
 
