@@ -6,6 +6,16 @@ A modern and responsive React timeline component.
 
 Checkout the [examples here](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples)!
 
+# Contents
+
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [API](#api)
+- [Timeline Markers](#timeline-markers)
+- [Timeline Headers](#timeline-headers)
+- [FAQ](#faq)
+- [Contribute](#contribute)
+
 # Getting started
 
 ```bash
@@ -1221,7 +1231,7 @@ meta + mousewheel = zoom in/out 3x faster (win or cmd + mousewheel)
 Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch points).
 The pinch gesture on a trackpad (not a touch device) works in Chrome and Firefox (v55+) because these browsers map the gesture to `ctrl + mousewheel`.
 
-## Contribute
+# Contribute
 
 If you like to improve React Calendar Timeline fork the repo and get started by running the following:
 
