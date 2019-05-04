@@ -8,6 +8,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 - fix error when using `week` unit causing format error in `DateHeader` #562 @dkarnutsch
+- fix Wheel/Mousewheel Event errors on chrome 73 #541 @ilaiwi
 
 ## 0.25.0
 
