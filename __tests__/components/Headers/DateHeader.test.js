@@ -415,6 +415,15 @@ describe('Testing DateHeader Component', () => {
 
     expect(getByTestId('interval-a')).toBeInTheDocument()
   })
+  it('#562 Given DateHeader when passing week as a unit then header should render without error', ()=>{
+    render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <DateHeader unit="week" />
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
+  })
 })
 
 function dateHeaderComponent({
