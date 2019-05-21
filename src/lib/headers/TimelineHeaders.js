@@ -2,7 +2,7 @@ import React from 'react'
 import { TimelineHeadersConsumer } from './HeadersContext'
 import PropTypes from 'prop-types'
 import SidebarHeader from './SidebarHeader'
-import { RIGHT_VARIANT, LEFT_VARIANT } from './constants'
+import { RIGHT_VARIANT } from './constants'
 class TimelineHeaders extends React.Component {
   static propTypes = {
     registerScroll: PropTypes.func.isRequired,
@@ -13,6 +13,7 @@ class TimelineHeaders extends React.Component {
     calendarHeaderStyle: PropTypes.object,
     calendarHeaderClassName: PropTypes.string,
     headerRef: PropTypes.func,
+    children: PropTypes.array
   }
 
   constructor(props) {
@@ -40,8 +41,8 @@ class TimelineHeaders extends React.Component {
     }
   }
 
-  handleRootRef = (element) => {
-    if(this.props.headerRef){
+  handleRootRef = element => {
+    if (this.props.headerRef) {
       this.props.headerRef(element)
     }
   }
@@ -64,11 +65,11 @@ class TimelineHeaders extends React.Component {
         calendarHeaders.push(child)
       }
     })
-    if(!leftSidebarHeader){
-      leftSidebarHeader= <SidebarHeader/>
+    if (!leftSidebarHeader) {
+      leftSidebarHeader = <SidebarHeader />
     }
-    if(!rightSidebarHeader && this.props.rightSidebarWidth){
-      rightSidebarHeader = <SidebarHeader variant="right"/>
+    if (!rightSidebarHeader && this.props.rightSidebarWidth) {
+      rightSidebarHeader = <SidebarHeader variant="right" />
     }
     return (
       <div
@@ -81,7 +82,9 @@ class TimelineHeaders extends React.Component {
         <div
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
-          className={`rct-calendar-header ${this.props.calendarHeaderClassName}`}
+          className={`rct-calendar-header ${
+            this.props.calendarHeaderClassName
+          }`}
           data-testid="headerContainer"
         >
           {calendarHeaders}
@@ -106,12 +109,13 @@ const TimelineHeadersWrapper = ({
           leftSidebarWidth={leftSidebarWidth}
           rightSidebarWidth={rightSidebarWidth}
           registerScroll={registerScroll}
-          children={children}
           style={style}
           className={className}
           calendarHeaderStyle={calendarHeaderStyle}
           calendarHeaderClassName={calendarHeaderClassName}
-        />
+        >
+          {children}
+        </TimelineHeaders>
       )
     }}
   </TimelineHeadersConsumer>
@@ -122,7 +126,7 @@ TimelineHeadersWrapper.propTypes = {
   className: PropTypes.string,
   calendarHeaderStyle: PropTypes.object,
   calendarHeaderClassName: PropTypes.string,
-  headerRef: PropTypes.func,
+  children: PropTypes.any
 }
 
 export default TimelineHeadersWrapper

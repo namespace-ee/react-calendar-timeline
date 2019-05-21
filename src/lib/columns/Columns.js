@@ -7,7 +7,6 @@ import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 const passThroughPropTypes = {
   canvasTimeStart: PropTypes.number.isRequired,
   canvasTimeEnd: PropTypes.number.isRequired,
-  canvasWidth: PropTypes.number.isRequired,
   lineCount: PropTypes.number.isRequired,
   minUnit: PropTypes.string.isRequired,
   timeSteps: PropTypes.object.isRequired,
@@ -25,7 +24,6 @@ class Columns extends Component {
     return !(
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
-      nextProps.canvasWidth === this.props.canvasWidth &&
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
@@ -39,14 +37,12 @@ class Columns extends Component {
     const {
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth,
       minUnit,
       timeSteps,
       height,
       verticalLineClassNamesForTime,
       getLeftOffsetFromDate
     } = this.props
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
 
