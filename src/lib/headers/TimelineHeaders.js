@@ -17,10 +17,6 @@ class TimelineHeaders extends React.Component {
     headerRef: PropTypes.func
   }
 
-  constructor(props) {
-    super(props)
-  }
-
   getRootStyle = () => {
     return {
       ...this.props.style,
