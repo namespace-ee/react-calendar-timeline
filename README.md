@@ -1175,8 +1175,6 @@ If you are using Custom Headers then you need to add `SidebarHeader` component u
 
 you need to add sticky to the header like [this example](https://github.com/FoothillSolutions/react-calendar-timeline/tree/dest-build/examples#sticky-header).
 
-```
-
 ## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
 
 These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
