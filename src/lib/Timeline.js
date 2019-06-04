@@ -427,11 +427,8 @@ export default class ReactCalendarTimeline extends Component {
     )
     const componentScrollLeft = Math.round(this.scrollComponent.scrollLeft);
     if (componentScrollLeft !== scrollLeft) {
-      this.scrollComponent.scrollLeft = scrollLeft
-    }
-
-    if (componentScrollLeft !== scrollLeft) {
-      this.scrollHeaderRef.scrollLeft = scrollLeft
+      this.scrollComponent.scrollLeft = scrollLeft;
+      this.scrollHeaderRef.scrollLeft = scrollLeft;
     }
   }
 
