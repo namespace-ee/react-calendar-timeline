@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.25.2
+
+- Fixed the auto-scroll right bug in a scaled browser. #528 @cw196
+
 ## 0.25.1
 
 - fix error when using `week` unit causing format error in `DateHeader` #562 @dkarnutsch
