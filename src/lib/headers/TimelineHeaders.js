@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames';
+import classNames from 'classnames'
 import { TimelineHeadersConsumer } from './HeadersContext'
 import PropTypes from 'prop-types'
 import SidebarHeader from './SidebarHeader'
@@ -14,7 +14,7 @@ class TimelineHeaders extends React.Component {
     className: PropTypes.string,
     calendarHeaderStyle: PropTypes.object,
     calendarHeaderClassName: PropTypes.string,
-    headerRef: PropTypes.func,
+    headerRef: PropTypes.func
   }
 
   constructor(props) {
@@ -42,8 +42,8 @@ class TimelineHeaders extends React.Component {
     }
   }
 
-  handleRootRef = (element) => {
-    if(this.props.headerRef){
+  handleRootRef = element => {
+    if (this.props.headerRef) {
       this.props.headerRef(element)
     }
   }
@@ -66,11 +66,11 @@ class TimelineHeaders extends React.Component {
         calendarHeaders.push(child)
       }
     })
-    if(!leftSidebarHeader){
-      leftSidebarHeader= <SidebarHeader/>
+    if (!leftSidebarHeader) {
+      leftSidebarHeader = <SidebarHeader />
     }
-    if(!rightSidebarHeader && this.props.rightSidebarWidth){
-      rightSidebarHeader = <SidebarHeader variant="right"/>
+    if (!rightSidebarHeader && this.props.rightSidebarWidth) {
+      rightSidebarHeader = <SidebarHeader variant="right" />
     }
     return (
       <div
@@ -128,7 +128,7 @@ TimelineHeadersWrapper.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   calendarHeaderStyle: PropTypes.object,
-  calendarHeaderClassName: PropTypes.string,
+  calendarHeaderClassName: PropTypes.string
 }
 
 export default TimelineHeadersWrapper
