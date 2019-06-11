@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames';
 import { TimelineHeadersConsumer } from './HeadersContext'
 import PropTypes from 'prop-types'
 import SidebarHeader from './SidebarHeader'
@@ -75,13 +76,16 @@ class TimelineHeaders extends React.Component {
         ref={this.handleRootRef}
         data-testid="headerRootDiv"
         style={this.getRootStyle()}
-        className={`rct-header-root ${this.props.className}`}
+        className={classNames('rct-header-root', this.props.className)}
       >
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
-          className={`rct-calendar-header ${this.props.calendarHeaderClassName}`}
+          className={classNames(
+            'rct-calendar-header',
+            this.props.calendarHeaderClassName
+          )}
           data-testid="headerContainer"
         >
           {calendarHeaders}
