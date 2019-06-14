@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.26.0
+
+- **BREAKING CHANGE** Changed build output directory to `dist` from `lib` @trevdor
+
 ## 0.25.3
 
 - Fixed the `undefined` classnames in TimelineHeaders #566 @trevdor

@@ -1,3 +1,3 @@
-import Timeline from './lib/lib/Timeline'
+import Timeline from './dist/lib/Timeline'
 
 export default Timeline
