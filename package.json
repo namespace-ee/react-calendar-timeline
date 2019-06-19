@@ -90,6 +90,7 @@
     ]
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "create-react-context": "^0.2.2",
     "element-resize-detector": "^1.1.12",
     "lodash.isequal": "^4.5.0"
@@ -112,7 +113,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "^6.5.0",
-    "classnames": "^2.2.6",
     "cross-env": "^5.1.4",
     "css-loader": "~0.26.0",
     "enzyme": "^3.3.0",
