@@ -1,9 +1,5 @@
 {
-  "plugins": [
-    "react",
-    "jest",
-    "prettier"
-  ],
+  "plugins": ["react", "jest", "prettier"],
   "env": {
     "jest/globals": true,
     "browser": true,
@@ -30,5 +26,10 @@
       "jsx": true
     },
     "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

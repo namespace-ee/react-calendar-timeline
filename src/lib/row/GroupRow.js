@@ -26,9 +26,9 @@ class GroupRow extends Component {
       group
     } = this.props
 
-    let classNamesForGroup = [];
+    let classNamesForGroup = []
     if (horizontalLineClassNamesForGroup) {
-      classNamesForGroup = horizontalLineClassNamesForGroup(group);
+      classNamesForGroup = horizontalLineClassNamesForGroup(group)
     }
 
     return (
@@ -36,7 +36,10 @@ class GroupRow extends Component {
         <div
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
-          className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
+          className={
+            (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') +
+            (classNamesForGroup ? classNamesForGroup.join(' ') : '')
+          }
           style={style}
         />
       </PreventClickOnDrag>
