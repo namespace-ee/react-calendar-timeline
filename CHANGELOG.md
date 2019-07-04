@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.25.4
+
+- Move `classnames` to a production dependency
+
 ## 0.25.3
 
 - Fixed the `undefined` classnames in TimelineHeaders #566 @trevdor
