@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.25.5
+
+- Upgrade to Babel 7.5.0, Jest 24.8.0, Enzyme 3.10.0 @trevdor
+
 ## 0.25.4
 
 - Move `classnames` to a production dependency
