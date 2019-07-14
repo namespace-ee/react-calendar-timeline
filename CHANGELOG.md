@@ -7,33 +7,41 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.26.0
+
+#### Added
+
+* Add `onItemDrag` prop to `<Timeline />` #517 @bettymakes
+
+#### Breaking
+
+* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label.
 ## 0.25.5
 
 - Upgrade to Babel 7.5.0, Jest 24.8.0, Enzyme 3.10.0 @trevdor
 
 ## 0.25.4
 
-- Move `classnames` to a production dependency
+* Move `classnames` to a production dependency
 
 ## 0.25.3
 
-- Fixed the `undefined` classnames in TimelineHeaders #566 @trevdor
+* Fixed the `undefined` classnames in TimelineHeaders #566 @trevdor
 
 ## 0.25.2
 
-- Fixed the auto-scroll right bug in a scaled browser. #528 @cw196
+* Fixed the auto-scroll right bug in a scaled browser. #528 @cw196
 
 ## 0.25.1
 
-- fix error when using `week` unit causing format error in `DateHeader` #562 @dkarnutsch
-- fix Wheel/Mousewheel Event errors on chrome 73 #541 @ilaiwi
+* fix error when using `week` unit causing format error in `DateHeader` #562 @dkarnutsch
+* fix Wheel/Mousewheel Event errors on chrome 73 #541 @ilaiwi
 
 ## 0.25.0
 
 ### Custom Headers
 
 This new feature gives more control to dev to create customizable headers to provide better UI. Now user have more control through a set of new components to render headers. This new feature came with a breaking change though.
-
 
 ```jsx
 import Timeline, {
@@ -97,23 +105,23 @@ import Timeline, {
 Check out the new docs before please [here](https://github.com/namespace-ee/react-calendar-timeline/tree/custom-headers#timeline-headers)
 
 #### removed props
-- `stickyOffset` and `stickyHeader` now you can make your header sticky by following this [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering)
-- `headerRef` to get the headerRef you need to pass ref callback to `TimelineHeader` component
-- `headerLabelGroupHeight` and `headerLabelHeight` now you can pass a `height` prop to both `CustomHeader` and `DateHeader`
-- `headerLabelFormats` and `subHeaderLabelFormats` not you can pass `formatLabel` function to `DateHeader` with label width and start and end time of intervals
 
+* `stickyOffset` and `stickyHeader` now you can make your header sticky by following this [examples](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples#custom-item-rendering)
+* `headerRef` to get the headerRef you need to pass ref callback to `TimelineHeader` component
+* `headerLabelGroupHeight` and `headerLabelHeight` now you can pass a `height` prop to both `CustomHeader` and `DateHeader`
+* `headerLabelFormats` and `subHeaderLabelFormats` not you can pass `formatLabel` function to `DateHeader` with label width and start and end time of intervals
 
 ## 0.23.1
 
-- fix height calculation of stacked items is off if no item is visible in a line @Felix-N
-- fix Unsubscribing markers correctly when unmounted @gaston-niglia
+* fix height calculation of stacked items is off if no item is visible in a line @Felix-N
+* fix Unsubscribing markers correctly when unmounted @gaston-niglia
 
 ## 0.23.0
 
-- improve unit tests coverage #426 - @ilaiwi
-- stack items by group #384 - @acemac
-- fix bug where `canMove` prop gets ignored #484 - @acemac + @ilaiwi
-- fix sidebar re-render when groupHeights do not change #478 - @SDupZ
+* improve unit tests coverage #426 - @ilaiwi
+* stack items by group #384 - @acemac
+* fix bug where `canMove` prop gets ignored #484 - @acemac + @ilaiwi
+* fix sidebar re-render when groupHeights do not change #478 - @SDupZ
 
 ### Stack per group
 
@@ -160,7 +168,6 @@ ReactDOM.render(
 )
 ```
 
-
 ## 0.22.0
 
 ### Fixed
@@ -185,9 +192,11 @@ ReactDOM.render(
 ### 0.20.0
 
 ### improvements
+
 * eliminate extra renders on every scroll - #357 [acemac](https://github.com/acemac)
 
 ### Fixed
+
 * When the `date` prop on a `CustomMarker` changes the marker will now move on the timeline - #421 [kevinmanncito](https://github.com/kevinmanncito) [ilaiwi](https://github.com/ilaiwi)
 * Header has a bounce effect - #311 [acemac](https://github.com/acemac)
 
@@ -195,8 +204,6 @@ ReactDOM.render(
 
 * update to `react-testing-library` version 5
 * remove deprecated `toBeInDom`
-
-
 
 ### 0.19.0
 
@@ -236,7 +243,7 @@ ReactDOM.render(
 
 ### Breaking
 
-* Removed support for React 15 and lower.  This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
+* Removed support for React 15 and lower. This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
 * removed `showCursorLine` prop in favor of using the `CursorMarker` component. See `TimelineMarkers` section of README for documentation.
 
 ```diff
@@ -260,6 +267,7 @@ from 'react-calendar-timeline'
 ### 0.17.3
 
 ### Added
+
 * fix issue with single row header - #359
 
 ### 0.17.2
