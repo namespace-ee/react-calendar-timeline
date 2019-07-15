@@ -153,7 +153,6 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
-  groupLabelKey: 'title', // key for what to show in `InfoLabel`
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
@@ -255,6 +254,19 @@ Default:
 ## scrollRef
 
 Ref callback that gets a DOM reference to the scroll body element. Can be useful to programmatically scroll.
+
+## onItemDrag(itemDragObject)
+
+Called when an item is moving or resizing. Returns an object with the following properties:
+
+| property           | type     | description                                                            |
+| ------------------ | -------- | ---------------------------------------------------------------------- |
+| `eventType`        | `string` | retuns either `move` or `resize`                                       |
+| `itemId`           | `number` | ID of the item being moved or resized                                  |
+| `time`             | `number` | UNIX timestamp in milliseconds                                         |
+| `edge`             | `string` | on `resize`, returns a value of either `left` or `right`               |
+| `newGroupOrder`    | `number` | on `move`, index position of the new group that the item is moving to  |
+
 
 ## onItemMove(itemId, dragTime, newGroupOrder)
 

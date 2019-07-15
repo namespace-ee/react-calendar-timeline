@@ -15,6 +15,7 @@ const demos = {
   verticalClasses: require('./demo-vertical-classes').default,
   customItems: require('./demo-custom-items').default,
   customHeaders: require('./demo-headers').default,
+  customInfoLabel: require('./demo-custom-info-label').default
 }
 
 // A simple component that shows the pathname of the current location

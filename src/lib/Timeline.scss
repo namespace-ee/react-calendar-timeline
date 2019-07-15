@@ -127,18 +127,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     z-index: 51;
   }
 
-  .rct-infolabel {
-    position: fixed;
-    left: 100px;
-    bottom: 50px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 10px;
-    
-    font-size: 20px;
-    border-radius: 5px;
-    z-index: 85;
-  }
 
   .rct-dateHeader {
     display: flex;
