@@ -71,3 +71,9 @@ Using `scrollRef` you can trigger scrolling and create an animation. This is an 
 Using `Timeline Header` you can make the header stick to the top of the page while scrolling down
 
 [Example Codesandbox](https://codesandbox.io/s/w6xvqzno4w)
+
+## InfoLabel 
+
+Native info label was removed with 0.26.0 and now the responsibility to render to render the Info Label is on the user. The example bellow has InfoLabel that matches exactly the removed label
+
+[Example Codesandbox](https://codesandbox.io/s/timeline-demo-info-label-neec9)

@@ -153,7 +153,6 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
-  groupLabelKey: 'title', // key for what to show in `InfoLabel`
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)

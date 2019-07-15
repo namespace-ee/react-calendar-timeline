@@ -12,13 +12,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 #### Added
 
 * Add `onItemDrag` prop to `<Timeline />` #517 @bettymakes
+* Upgrade to Babel 7.5.0, Jest 24.8.0, Enzyme 3.10.0 @trevdor
 
 #### Breaking
 
-* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label.
-## 0.25.5
+* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label or [this example](https://codesandbox.io/s/timeline-demo-info-label-neec9). 
 
-- Upgrade to Babel 7.5.0, Jest 24.8.0, Enzyme 3.10.0 @trevdor
 
 ## 0.25.4
 
