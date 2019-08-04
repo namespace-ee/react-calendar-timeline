@@ -7,6 +7,23 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.26.1
+
+* fix issue where mouse down gets stuck when scrolling the timeline #526 @KhalidArdah
+
+you can as well solve the issue without upgrading by adding the following style
+
+```
+.react-calendar-timeline .rct-horizontal-lines {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+```
+
+[as here](https://codesandbox.io/s/timeline-demo-sticky-header-w6s5f)
+
 ## 0.26.0
 
 #### Added
