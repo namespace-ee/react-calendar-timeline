@@ -8,6 +8,7 @@ import Columns from './columns/Columns'
 import GroupRows from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
+import Rows from './rows'
 
 import windowResizeDetector from '../resize-detector/window'
 
@@ -18,7 +19,8 @@ import {
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
   getCanvasWidth,
-  stackTimelineItems
+  stackTimelineItems,
+  getItemWithInteractions
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -801,6 +803,7 @@ export default class ReactCalendarTimeline extends Component {
     groupHeights,
     groupTops
   ) {
+    return null
     return (
       <Items
         canvasTimeStart={canvasTimeStart}
@@ -957,7 +960,12 @@ export default class ReactCalendarTimeline extends Component {
       sidebarWidth,
       rightSidebarWidth,
       timeSteps,
-      traditionalZoom
+      traditionalZoom,
+      itemRenderer,
+      keys,
+      lineHeight,
+      itemHeightRatio,
+      stackItems,
     } = this.props
     const {
       draggingItem,
@@ -999,6 +1007,20 @@ export default class ReactCalendarTimeline extends Component {
       groupHeights = stackResults.groupHeights
       groupTops = stackResults.groupTops
     }
+    const itemsWithInteraction =  isInteractingWithItem? items.map(item => getItemWithInteractions({
+      item,
+      keys,
+      groups,
+      draggingItem: this.state.draggingItem,
+      resizingItem: this.state.resizingItem,
+      dragTime: this.state.draggingItem,
+      resizingEdge: this.state.resizingItem,
+      resizeTime: this.state.resizeTime,
+      newGroupOrder: this.state.newGroupOrder,
+    }))
+    : items
+
+    console.log(isInteractingWithItem, itemsWithInteraction.map(i => i.start))
 
     const outerComponentStyle = {
       height: `${height}px`
@@ -1014,6 +1036,7 @@ export default class ReactCalendarTimeline extends Component {
         showPeriod={this.showPeriod}
         timelineUnit={minUnit}
         timelineWidth={this.state.width}
+        keys={keys}
       >
         <TimelineMarkersProvider>
           <TimelineHeadersProvider
@@ -1059,7 +1082,7 @@ export default class ReactCalendarTimeline extends Component {
                       timeSteps,
                       height
                     )}
-                    {this.rows(canvasWidth, groupHeights, groups)}
+                    {/* {this.rows(canvasWidth, groupHeights, groups)} */}
                     {this.childrenWithProps(
                       canvasTimeStart,
                       canvasTimeEnd,
@@ -1073,6 +1096,34 @@ export default class ReactCalendarTimeline extends Component {
                       minUnit,
                       timeSteps
                     )}
+                    <Rows
+                      groupHeights={groupHeights}
+                      canvasWidth={canvasWidth}
+                      items={itemsWithInteraction}
+                      groups={groups}
+                      itemRenderer={itemRenderer}
+                      lineHeight={lineHeight}
+                      itemHeightRatio={itemHeightRatio}
+                      stackItems={stackItems}
+                      canChangeGroup={this.props.canChangeGroup}
+                      canMove={this.props.canMove}
+                      canResize={this.props.canResize}
+                      canSelect={this.props.canSelect}
+                      useResizeHandle={this.props.useResizeHandle}
+                      groupTops={groupTops}
+                      dragSnap={this.props.dragSnap}
+                      minResizeWidth={this.props.minResizeWidth}
+                      itemResized={this.resizedItem}
+                      moveResizeValidator={this.props.moveResizeValidator}
+                      itemSelect={this.selectItem}
+                      itemDrag={this.dragItem}
+                      itemDrop={this.dropItem}
+                      onItemDoubleClick={this.doubleClickItem}
+                      onItemContextMenu={this.contextMenuClickItem}
+                      scrollRef={this.scrollComponent}
+                      selected={this.props.selected}
+                      selectedItem={this.state.selectedItem}
+                    />
                   </MarkerCanvas>
                 </ScrollElement>
                 {rightSidebarWidth > 0

@@ -38,7 +38,8 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData()
+    const { groups, items } = generateFakeData(3,2,1)
+    console.log(items)
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
