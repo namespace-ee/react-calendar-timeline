@@ -17,15 +17,63 @@ Omit this section if it's not applicable.
 - remove plugin system (undocumented)
 - more test coverage 
 - inversion of control (solve a lot of issues with examples rather than adding code into the library)
-- maybe? move to faster transofrm posioning instead of absolute postining which is faster and can be animated
+- maybe? move to faster transofrm posioning instead of absolute positioning which is faster and can be animated
 
 # Detailed design
 
-This is the bulk of the RFC. Explain the design in enough detail for somebody
+<!-- This is the bulk of the RFC. Explain the design in enough detail for somebody
 familiar with React to understand, and for somebody familiar with the
 implementation to implement. This should get into specifics and corner-cases,
 and include examples of how the feature is used. Any new terminology should be
-defined here.
+defined here. -->
+
+This RFC will change how we render the *calendar* part of the component.
+
+_*Old approach*_
+
+The old apporach deals with The calendar part as a group of layers postioned on top of each other using absolute positioning to place items, rows and rows using `top` and `left` properties with relative to the whole calendar `div`
+
+```
+<Calendar>
+    <Columns/>
+    <Rows/>
+    <Items/>
+</Calendar>
+```
+
+_*New approach*_
+
+The new approach with `rowRenderers` here would split the Calendar part to rows instead of layers and each row here would consist of an item layer, colums layer and any other layer the user would like to add. This will make the postining of the layers relative to the row `div` and not the whole calendar `div`.
+
+```
+<Calendar>
+    <FirstRow>
+        <RowItems/>
+        <Columns/>
+    </FirstRow>
+</Calendar>
+```
+
+## API
+
+I will be presenting different approaches here of how would we implement the `rowRendererProp`
+
+_please not that both approaches would give helper methods for calculating postions like `getXPostionFromTime`, `getTimeFromXPostion` and `getItemAbslouteLocation`_
+
+### Prop getters
+
+```
+<Timeline
+/>
+```
+
+
+### Compostion
+
+## Use cases 
+- Drag and drop from outside to the calendar to inside (specific target or anywhere in the row).
+- Placeholder Items thought the scheduler.
+- Gantt.
 
 # Drawbacks
 
