@@ -803,7 +803,6 @@ export default class ReactCalendarTimeline extends Component {
     groupHeights,
     groupTops
   ) {
-    return null
     return (
       <Items
         canvasTimeStart={canvasTimeStart}
@@ -1013,15 +1012,12 @@ export default class ReactCalendarTimeline extends Component {
       groups,
       draggingItem: this.state.draggingItem,
       resizingItem: this.state.resizingItem,
-      dragTime: this.state.draggingItem,
+      dragTime: this.state.dragTime,
       resizingEdge: this.state.resizingItem,
       resizeTime: this.state.resizeTime,
       newGroupOrder: this.state.newGroupOrder,
     }))
     : items
-
-    console.log(isInteractingWithItem, itemsWithInteraction.map(i => i.start))
-
     const outerComponentStyle = {
       height: `${height}px`
     }
@@ -1064,7 +1060,7 @@ export default class ReactCalendarTimeline extends Component {
                   isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>
-                    {this.items(
+                    {/* {this.items(
                       canvasTimeStart,
                       zoom,
                       canvasTimeEnd,
@@ -1073,15 +1069,15 @@ export default class ReactCalendarTimeline extends Component {
                       dimensionItems,
                       groupHeights,
                       groupTops
-                    )}
-                    {this.columns(
+                    )} */}
+                    {/* {this.columns(
                       canvasTimeStart,
                       canvasTimeEnd,
                       canvasWidth,
                       minUnit,
                       timeSteps,
                       height
-                    )}
+                    )} */}
                     {/* {this.rows(canvasWidth, groupHeights, groups)} */}
                     {this.childrenWithProps(
                       canvasTimeStart,
@@ -1123,6 +1119,9 @@ export default class ReactCalendarTimeline extends Component {
                       scrollRef={this.scrollComponent}
                       selected={this.props.selected}
                       selectedItem={this.state.selectedItem}
+                      verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
+                      timeSteps={timeSteps}
+                      minUnit={minUnit}
                     />
                   </MarkerCanvas>
                 </ScrollElement>

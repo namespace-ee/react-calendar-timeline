@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import TimelineStateContext from '../timeline/TimelineStateContext'
+import Columns from '../columns/Columns'
 import {
   getVisibleItems,
   getGroupOrders,
   getItemDimensions,
   stackGroup
 } from '../utility/calendar'
-import { _get } from '../utility/generic'
+import { _get, _length } from '../utility/generic'
 import Item from '../items/Item'
 
 export default ({
@@ -36,6 +37,9 @@ export default ({
   itemResized,
   selected,
   selectedItem,
+  verticalLineClassNamesForTime,
+  timeSteps,
+  minUnit,
 }) => {
   const {
     getTimelineState,
@@ -86,57 +90,74 @@ export default ({
               position: 'relative'
             }}
           >
-            {group.items.map((item, y) => {
-              return (
-                <Item
-                  key={_get(item, keys.itemIdKey)}
-                  item={item}
-                  keys={keys}
-                  order={groupOrders[_get(item, keys.itemGroupKey)]}
-                  dimensions={
-                    group.itemDimensions.find(
-                      itemDimension =>
-                        itemDimension.id === _get(item, keys.itemIdKey)
-                    ).dimensions
-                  }
-                  canChangeGroup={
-                    _get(item, 'canChangeGroup') !== undefined
-                      ? _get(item, 'canChangeGroup')
-                      : canChangeGroup
-                  }
-                  canMove={
-                    _get(item, 'canMove') !== undefined
-                      ? _get(item, 'canMove')
-                      : canMove
-                  }
-                  canResizeLeft={canResizeLeft(item, canResize)}
-                  canResizeRight={canResizeRight(item, canResize)}
-                  canSelect={
-                    _get(item, 'canSelect') !== undefined
-                      ? _get(item, 'canSelect')
-                      : canSelect
-                  }
-                  useResizeHandle={useResizeHandle}
-                  groupTops={groupTops}
-                  canvasTimeStart={canvasTimeStart}
-                  canvasTimeEnd={canvasTimeEnd}
-                  canvasWidth={canvasWidth}
-                  dragSnap={dragSnap}
-                  minResizeWidth={minResizeWidth}
-                  onResizing={itemResizing}
-                  onResized={itemResized}
-                  moveResizeValidator={moveResizeValidator}
-                  onDrag={itemDrag}
-                  onDrop={itemDrop}
-                  onItemDoubleClick={onItemDoubleClick}
-                  onContextMenu={onItemContextMenu}
-                  onSelect={itemSelect}
-                  itemRenderer={itemRenderer}
-                  scrollRef={scrollRef}
-                  selected={isSelected(item, keys.itemIdKey, selectedItem, selected)}
-                />
-              )
-            })}
+            <React.Fragment>
+              <Columns
+                canvasTimeStart={canvasTimeStart}
+                canvasTimeEnd={canvasTimeEnd}
+                canvasWidth={canvasWidth}
+                lineCount={_length(groups)}
+                minUnit={minUnit}
+                timeSteps={timeSteps}
+                height={groupHeight}
+                verticalLineClassNamesForTime={verticalLineClassNamesForTime}
+              />
+              {group.items.map((item, y) => {
+                return (
+                  <Item
+                    key={_get(item, keys.itemIdKey)}
+                    item={item}
+                    keys={keys}
+                    order={groupOrders[_get(item, keys.itemGroupKey)]}
+                    dimensions={
+                      group.itemDimensions.find(
+                        itemDimension =>
+                          itemDimension.id === _get(item, keys.itemIdKey)
+                      ).dimensions
+                    }
+                    canChangeGroup={
+                      _get(item, 'canChangeGroup') !== undefined
+                        ? _get(item, 'canChangeGroup')
+                        : canChangeGroup
+                    }
+                    canMove={
+                      _get(item, 'canMove') !== undefined
+                        ? _get(item, 'canMove')
+                        : canMove
+                    }
+                    canResizeLeft={canResizeLeft(item, canResize)}
+                    canResizeRight={canResizeRight(item, canResize)}
+                    canSelect={
+                      _get(item, 'canSelect') !== undefined
+                        ? _get(item, 'canSelect')
+                        : canSelect
+                    }
+                    useResizeHandle={useResizeHandle}
+                    groupTops={groupTops}
+                    canvasTimeStart={canvasTimeStart}
+                    canvasTimeEnd={canvasTimeEnd}
+                    canvasWidth={canvasWidth}
+                    dragSnap={dragSnap}
+                    minResizeWidth={minResizeWidth}
+                    onResizing={itemResizing}
+                    onResized={itemResized}
+                    moveResizeValidator={moveResizeValidator}
+                    onDrag={itemDrag}
+                    onDrop={itemDrop}
+                    onItemDoubleClick={onItemDoubleClick}
+                    onContextMenu={onItemContextMenu}
+                    onSelect={itemSelect}
+                    itemRenderer={itemRenderer}
+                    scrollRef={scrollRef}
+                    selected={isSelected(
+                      item,
+                      keys.itemIdKey,
+                      selectedItem,
+                      selected
+                    )}
+                  />
+                )
+              })}
+            </React.Fragment>
           </div>
         )
       })}

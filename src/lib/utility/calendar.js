@@ -607,6 +607,7 @@ export function getItemWithInteractions({
   groups,
   newGroupOrder
 }) {
+  //TODO: remove from here. This shouldn't be this function's responsibility
   if (!resizingItem && !draggingItem) return item
   const itemId = _get(item, keys.itemIdKey)
   const isDragging = itemId === draggingItem

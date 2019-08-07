@@ -175,7 +175,7 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
-        moveResizeValidator={this.moveResizeValidator}
+        // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>
           <TodayMarker />
