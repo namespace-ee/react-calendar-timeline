@@ -64,11 +64,31 @@ _please not that both approaches would give helper methods for calculating posti
 
 ```
 <Timeline
+    rowRenderer={({getRootProps, itemLayer, columnLayer, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
+        <div {...getRootProps()}>
+            {itemLayer}
+            {columnLayer}
+            <div>
+                droppable layer
+            </div>
+        </div>
+    }}
 />
 ```
 
-
 ### Compostion
+
+```
+<Timeline
+    rowRenderer={({getRootProps, getItemsLayerProps, getColumnsLayerProps, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
+        <div {...getRootProps()}>
+            <Items {...getItemsLayerProps()}>
+            <Columns {...getColumnsLayerProps()}>
+            <Layer getLayerProps>droppable aread</Layer>
+        </div>
+    }}
+/>
+```
 
 ## Use cases 
 - Drag and drop from outside to the calendar to inside (specific target or anywhere in the row).
@@ -91,21 +111,32 @@ There are tradeoffs to choosing any path. Attempt to identify them here.
 
 # Alternatives
 
-- keep the plugin system
+- keep the plugin system (undocumented)
 
 # Adoption strategy
 
-If we implement this proposal, how will existing React developers adopt it? Is
+<!-- If we implement this proposal, how will existing React developers adopt it? Is
 this a breaking change? Can we write a codemod? Should we coordinate with
-other projects or libraries?
+other projects or libraries? -->
 
-# How we teach this
+- Documentation on the new features
+- Codesandox examples
+- Migration guide
 
-- examples
-- documentations
+<!-- # How we teach this
 
-# issues to be resolved
+What names and terminology work best for these concepts and why? How is this
+idea best presented? As a continuation of existing React patterns?
 
+- Documentation on the new features
+- Codesandox examples
+- Migration guide -->
+
+# Issues to be resolved
+
+- [#623](https://github.com/namespace-ee/react-calendar-timeline/issues/623)
+- [#338](https://github.com/namespace-ee/react-calendar-timeline/issues/338)
+- [#156](https://github.com/namespace-ee/react-calendar-timeline/issues/156)
 
 # Unresolved questions
 
