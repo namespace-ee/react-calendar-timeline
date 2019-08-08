@@ -11,13 +11,13 @@ Omit this section if it's not applicable.
 
 - get rid of extra of the whole calendar when we move an item
 - add custom layers like unavailable slots, drag and drop into the calendar and gantt.
-- get rid of the top postion of the item be based on the whole calendar part not per row
+- get rid of the top position of the item be based on the whole calendar part not per row
 - enable row virtual scrolling
 - hide implementation details
 - remove plugin system (undocumented)
 - more test coverage 
 - inversion of control (solve a lot of issues with examples rather than adding code into the library)
-- maybe? move to faster transofrm posioning instead of absolute positioning which is faster and can be animated
+- maybe? move to faster transform positioning instead of absolute positioning which is faster and can be animated
 
 # Detailed design
 
@@ -31,26 +31,26 @@ This RFC will change how we render the *calendar* part of the component.
 
 _*Old approach*_
 
-The old apporach deals with The calendar part as a group of layers postioned on top of each other using absolute positioning to place items, rows and rows using `top` and `left` properties with relative to the whole calendar `div`
+The old approach deals with The calendar part as a group of layers positioned on top of each other using absolute positioning to place items, rows and rows using `top` and `left` properties with relative to the whole calendar `div`
 
 ```
 <Calendar>
-    <Columns/>
-    <Rows/>
-    <Items/>
+ <Columns/>
+ <Rows/>
+ <Items/>
 </Calendar>
 ```
 
 _*New approach*_
 
-The new approach with `rowRenderers` here would split the Calendar part to rows instead of layers and each row here would consist of an item layer, colums layer and any other layer the user would like to add. This will make the postining of the layers relative to the row `div` and not the whole calendar `div`.
+The new approach with `rowRenderers` here would split the Calendar part to rows instead of layers and each row here would consist of an item layer, columns layer and any other layer the user would like to add. This will make the positioning of the layers relative to the row `div` and not the whole calendar `div`.
 
 ```
 <Calendar>
-    <FirstRow>
-        <RowItems/>
-        <Columns/>
-    </FirstRow>
+ <FirstRow>
+ <RowItems/>
+ <Columns/>
+ </FirstRow>
 </Calendar>
 ```
 
@@ -64,15 +64,15 @@ _please not that both approaches would give helper methods for calculating posti
 
 ```
 <Timeline
-    rowRenderer={({getRootProps, itemLayer, columnLayer, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
-        <div {...getRootProps()}>
-            {itemLayer}
-            {columnLayer}
-            <div>
-                droppable layer
-            </div>
+ rowRenderer={({getRootProps, itemLayer, columnLayer, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation, getLayerProps})=>{
+    <div {...getRootProps()}>
+        {itemLayer}
+        {columnLayer}
+        <div {...getLayerProps()}>
+        droppable layer
         </div>
-    }}
+    </div>
+ }}
 />
 ```
 
@@ -80,15 +80,34 @@ _please not that both approaches would give helper methods for calculating posti
 
 ```
 <Timeline
-    rowRenderer={({getRootProps, getItemsLayerProps, getColumnsLayerProps, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
-        <div {...getRootProps()}>
-            <Items {...getItemsLayerProps()}>
-            <Columns {...getColumnsLayerProps()}>
-            <Layer getLayerProps>droppable aread</Layer>
-        </div>
-    }}
+ rowRenderer={({getRootProps, getItemsLayerProps, getColumnsLayerProps, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
+    <div {...getRootProps()}>
+        <Items {...getItemsLayerProps()}>
+        <Columns {...getColumnsLayerProps()}>
+        <Layer {...getLayerProps()}>droppable area</Layer>
+        <Layer {...getLayerProps()}>machine downtime</Layer>
+    </div>
+ }}
 />
 ```
+
+### Limit control to `rowRender`
+
+This approach will render the extra layers you pass to the row renderer but the rowRenderer will not be responsible for rendering the items and the columns layers.
+
+
+```
+<Timeline
+ rowRenderer={({getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
+    <React.Fragment>
+        <div {...getdivProps()}>droppable area</div>
+        <div {...getdivProps()}>machine downtime</div>
+    <React.Fragment>
+}}
+/>
+```
+
+the result of the render function will be rendered bellow the two other layers. This will limit the user from maybe rendering the core layers incorrectly but will limit the inversion of control they own and we will need to keep some props to that are being passed to the timeline instead of taking advantage of the prop getters for the column and items layer
 
 ## Use cases 
 - Drag and drop from outside to the calendar to inside (specific target or anywhere in the row).
@@ -101,9 +120,9 @@ _please not that both approaches would give helper methods for calculating posti
 - changes the mental image of how the library renders
 - need a lot of testing
 - removes plugins
-- might have some issues aligning everything espically vertical lines
+- might have some issues aligning everything especially vertical lines
 - remove some props (TODO: get the props which will change)
-- add complixity to library usage for custom changes
+- add complexity to library usage for custom changes
 - render vertical components that could cover more than 1 row
 - added layers might block some actions
 
