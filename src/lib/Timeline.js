@@ -159,7 +159,10 @@ export default class ReactCalendarTimeline extends Component {
 
     verticalLineClassNamesForTime: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+
+    rowRenderer: PropTypes.func,
+    rowData: PropTypes.object,
   }
 
   static defaultProps = {
@@ -234,7 +237,10 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelFormats: defaultHeaderLabelFormats,
     subHeaderLabelFormats: defaultSubHeaderLabelFormats,
 
-    selected: null
+    selected: null,
+
+    rowRenderer: ()=>null,
+    rowData: {},
   }
 
   static childContextTypes = {
@@ -1122,6 +1128,8 @@ export default class ReactCalendarTimeline extends Component {
                       verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
                       timeSteps={timeSteps}
                       minUnit={minUnit}
+                      rowRenderer={this.props.rowRenderer}
+                      rowData={this.props.rowData}
                     />
                   </MarkerCanvas>
                 </ScrollElement>

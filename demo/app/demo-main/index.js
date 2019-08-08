@@ -38,7 +38,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(3,2,1)
+    const { groups, items } = generateFakeData(3, 2, 1)
     console.log(items)
     const defaultTimeStart = moment()
       .startOf('day')
@@ -175,6 +175,19 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
+        rowRenderer={({ rowData, helpers, getLayerRootProps }) => {
+
+          return (
+            <>
+              <div {...getLayerRootProps()}>
+                <div style={{position: 'absolute',left: helpers.getLeftOffsetFromDate(moment().valueOf())}}>
+                  {rowData.name}
+                </div>
+              </div>
+            </>
+          )
+        }}
+        rowData={{ name: 'ahmad' }}
         // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>

@@ -40,6 +40,8 @@ export default ({
   verticalLineClassNamesForTime,
   timeSteps,
   minUnit,
+  rowRenderer:Layers,
+  rowData
 }) => {
   const {
     getTimelineState,
@@ -75,6 +77,12 @@ export default ({
     canvasWidth
   )
 
+  function getLayerRootProps() {
+    return {style: {
+      height: '100%'
+    }}
+  }
+
   return (
     <div style={{ position: 'absolute', top: 0 }}>
       {groupHeights.map((groupHeight, i) => {
@@ -101,62 +109,68 @@ export default ({
                 height={groupHeight}
                 verticalLineClassNamesForTime={verticalLineClassNamesForTime}
               />
-              {group.items.map((item, y) => {
-                return (
-                  <Item
-                    key={_get(item, keys.itemIdKey)}
-                    item={item}
-                    keys={keys}
-                    order={groupOrders[_get(item, keys.itemGroupKey)]}
-                    dimensions={
-                      group.itemDimensions.find(
-                        itemDimension =>
-                          itemDimension.id === _get(item, keys.itemIdKey)
-                      ).dimensions
-                    }
-                    canChangeGroup={
-                      _get(item, 'canChangeGroup') !== undefined
-                        ? _get(item, 'canChangeGroup')
-                        : canChangeGroup
-                    }
-                    canMove={
-                      _get(item, 'canMove') !== undefined
-                        ? _get(item, 'canMove')
-                        : canMove
-                    }
-                    canResizeLeft={canResizeLeft(item, canResize)}
-                    canResizeRight={canResizeRight(item, canResize)}
-                    canSelect={
-                      _get(item, 'canSelect') !== undefined
-                        ? _get(item, 'canSelect')
-                        : canSelect
-                    }
-                    useResizeHandle={useResizeHandle}
-                    groupTops={groupTops}
-                    canvasTimeStart={canvasTimeStart}
-                    canvasTimeEnd={canvasTimeEnd}
-                    canvasWidth={canvasWidth}
-                    dragSnap={dragSnap}
-                    minResizeWidth={minResizeWidth}
-                    onResizing={itemResizing}
-                    onResized={itemResized}
-                    moveResizeValidator={moveResizeValidator}
-                    onDrag={itemDrag}
-                    onDrop={itemDrop}
-                    onItemDoubleClick={onItemDoubleClick}
-                    onContextMenu={onItemContextMenu}
-                    onSelect={itemSelect}
-                    itemRenderer={itemRenderer}
-                    scrollRef={scrollRef}
-                    selected={isSelected(
-                      item,
-                      keys.itemIdKey,
-                      selectedItem,
-                      selected
-                    )}
-                  />
-                )
-              })}
+              <div>
+                {group.items.map((item, y) => {
+                  return (
+                    <Item
+                      key={_get(item, keys.itemIdKey)}
+                      item={item}
+                      keys={keys}
+                      order={groupOrders[_get(item, keys.itemGroupKey)]}
+                      dimensions={
+                        group.itemDimensions.find(
+                          itemDimension =>
+                            itemDimension.id === _get(item, keys.itemIdKey)
+                        ).dimensions
+                      }
+                      canChangeGroup={
+                        _get(item, 'canChangeGroup') !== undefined
+                          ? _get(item, 'canChangeGroup')
+                          : canChangeGroup
+                      }
+                      canMove={
+                        _get(item, 'canMove') !== undefined
+                          ? _get(item, 'canMove')
+                          : canMove
+                      }
+                      canResizeLeft={canResizeLeft(item, canResize)}
+                      canResizeRight={canResizeRight(item, canResize)}
+                      canSelect={
+                        _get(item, 'canSelect') !== undefined
+                          ? _get(item, 'canSelect')
+                          : canSelect
+                      }
+                      useResizeHandle={useResizeHandle}
+                      groupTops={groupTops}
+                      canvasTimeStart={canvasTimeStart}
+                      canvasTimeEnd={canvasTimeEnd}
+                      canvasWidth={canvasWidth}
+                      dragSnap={dragSnap}
+                      minResizeWidth={minResizeWidth}
+                      onResizing={itemResizing}
+                      onResized={itemResized}
+                      moveResizeValidator={moveResizeValidator}
+                      onDrag={itemDrag}
+                      onDrop={itemDrop}
+                      onItemDoubleClick={onItemDoubleClick}
+                      onContextMenu={onItemContextMenu}
+                      onSelect={itemSelect}
+                      itemRenderer={itemRenderer}
+                      scrollRef={scrollRef}
+                      selected={isSelected(
+                        item,
+                        keys.itemIdKey,
+                        selectedItem,
+                        selected
+                      )}
+                    />
+                  )
+                })}
+              </div>
+              <Layers getLayerRootProps={getLayerRootProps} helpers={{
+                getLeftOffsetFromDate,
+                getDateFromLeftOffsetPosition,
+              }} rowData={rowData}/>
             </React.Fragment>
           </div>
         )
