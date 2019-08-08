@@ -35,9 +35,9 @@ The old approach deals with The calendar part as a group of layers positioned on
 
 ```
 <Calendar>
- <Columns/>
- <Rows/>
- <Items/>
+    <Columns/>
+    <Rows/>
+    <Items/>
 </Calendar>
 ```
 
@@ -47,10 +47,18 @@ The new approach with `rowRenderers` here would split the Calendar part to rows 
 
 ```
 <Calendar>
- <FirstRow>
- <RowItems/>
- <Columns/>
- </FirstRow>
+    <FirstRow>
+        <RowItems/>
+        <Columns/>
+        <PlaceholderLayer/>
+        <GanttLayer/>
+    </FirstRow>
+    <SecondRow>
+        <RowItems/>
+        <Columns/>
+        <PlaceholderLayer/>
+        <GanttLayer/>
+    </SecondRow>
 </Calendar>
 ```
 
