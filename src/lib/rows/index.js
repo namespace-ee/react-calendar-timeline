@@ -170,7 +170,7 @@ export default ({
               <Layers getLayerRootProps={getLayerRootProps} helpers={{
                 getLeftOffsetFromDate,
                 getDateFromLeftOffsetPosition,
-              }} rowData={rowData}/>
+              }} rowData={rowData} group={group.group}/>
             </React.Fragment>
           </div>
         )

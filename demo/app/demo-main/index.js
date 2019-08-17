@@ -12,6 +12,7 @@ import Timeline, {
   SidebarHeader,
   DateHeader
 } from 'react-calendar-timeline'
+import {useDrag, useDrop} from 'react-dnd'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -52,7 +53,81 @@ export default class App extends Component {
       groups,
       items,
       defaultTimeStart,
-      defaultTimeEnd
+      defaultTimeEnd,
+      itemsToDrag: [
+        {
+          title: 'print',
+          id: '0',
+          slots: [
+            {
+              groupId: '0',
+              startTime: moment()
+                .startOf('day')
+                .add(2, 'h'),
+              endTime: moment()
+                .startOf('day')
+                .add(4, 'h')
+            },
+            {
+              groupId: '2',
+              startTime: moment()
+                .startOf('day')
+                .add(8, 'h'),
+              endTime: moment()
+                .startOf('day')
+                .add(16, 'h')
+            }
+          ]
+        },
+        {
+          title: 'cut',
+          id: '1',
+          slots: [
+            {
+              groupId: '1',
+              startTime: moment()
+                .startOf('day')
+                .add(9, 'h'),
+              endTime: moment()
+                .startOf('day')
+                .add(18, 'h')
+            },
+            {
+              groupId: '2',
+              startTime: moment()
+                .startOf('day')
+                .add(2, 'h'),
+              endTime: moment()
+                .startOf('day')
+                .add(10, 'h')
+            }
+          ]
+        },
+        {
+          title: 'fold',
+          id: '2',
+          slots: [
+            {
+              groupId: '2',
+              startTime: moment()
+                .startOf('day')
+                .add(9, 'h'),
+              endTime: moment()
+                .startOf('day')
+                .add(18, 'h')
+            },
+            {
+              groupId: '2',
+              startTime: moment()
+                .startOf('day')
+                .add(2, 'h'),
+              endTime: moment()
+                .startOf('day')
+                .add(8, 'h')
+            }
+          ]
+        }
+      ]
     }
   }
 
@@ -146,6 +221,20 @@ export default class App extends Component {
     return time
   }
 
+  handleDrop = (item, slot) => {
+    const fullItem = this.state.itemsToDrag.find(i => i.id === item.id)
+    this.setState(state => ({
+      itemsToDrag: state.itemsToDrag.filter( i => item.id !== i.id),
+      items: [...state.items, {
+        title: fullItem.title,
+        id: item.id,
+        group: slot.groupId,
+        start: slot.startTime.valueOf(),
+        end: slot.endTime.valueOf()
+      }]
+    }))
+  }
+
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
@@ -175,21 +264,100 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
-        rowRenderer={({ rowData, helpers, getLayerRootProps }) => {
-
+        rowRenderer={({ rowData, helpers, getLayerRootProps, group }) => {
+          const { itemsToDrag } = rowData
           return (
             <>
               <div {...getLayerRootProps()}>
-                <div style={{position: 'absolute',left: helpers.getLeftOffsetFromDate(moment().valueOf())}}>
-                  {rowData.name}
-                </div>
+                {itemsToDrag.map(item => {
+                  return item.slots
+                    .filter(slot => slot.groupId === group.id)
+                    .map(slot => {
+                      const left = helpers.getLeftOffsetFromDate(
+                        slot.startTime.valueOf()
+                      )
+                      const right = helpers.getLeftOffsetFromDate(
+                        slot.endTime.valueOf()
+                      )
+                      return (
+                        <Droppable
+                          style={{
+                            position: 'absolute',
+                            left: left,
+                            width: right - left,
+                            backgroundColor: 'purple',
+                            height: '100%'
+                          }}
+                          itemIdAccepts={item.id}
+                          slot={slot}
+                          onDrop={this.handleDrop}
+                        >
+                          {item.title}
+                        </Droppable>
+                      )
+                    })
+                })}
               </div>
             </>
           )
         }}
-        rowData={{ name: 'ahmad' }}
+        rowData={{ itemsToDrag: this.state.itemsToDrag }}
         // moveResizeValidator={this.moveResizeValidator}
       >
+        <TimelineHeaders>
+          <DateHeader />
+          <CustomHeader
+            headerData={{
+              itemsToDrag: this.state.itemsToDrag
+            }}
+          >
+            {({
+              headerContext: { intervals },
+              getRootProps,
+              getIntervalProps,
+              showPeriod,
+              getLeftOffsetFromDate,
+              data: { itemsToDrag }
+            }) => {
+              return (
+                <div {...getRootProps()}>
+                  <div
+                    style={{
+                      height: '100%',
+                      position: 'absolute',
+                      left: getLeftOffsetFromDate(
+                        moment()
+                          .startOf('day')
+                          .valueOf()
+                      ),
+                      display: 'flex'
+                    }}
+                  >
+                    {itemsToDrag.map(dragItem => {
+                      return (
+                        <Draggable
+                          key={dragItem.id}
+                          id={dragItem.id}
+                          style={{
+                            height: '100%',
+                            width: 100,
+                            background: 'white',
+                            marginLeft: 15,
+                            border: '1px solid white'
+                          }}
+                          onDragEnd={(item)=>console.log('dragEnd',item)}
+                          onDragStart={(item)=>console.log('dragStart',item)}
+                        >
+                          {dragItem.title}
+                        </Draggable>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            }}
+          </CustomHeader>
+        </TimelineHeaders>
         <TimelineMarkers>
           <TodayMarker />
           <CustomMarker
@@ -215,4 +383,39 @@ export default class App extends Component {
       </Timeline>
     )
   }
+}
+
+function Droppable({children, itemIdAccepts, style, slot, onDrop, ...rest}) {
+  const [collected, droppableRef] = useDrop({
+    drop: (item, monitor) => {
+      onDrop(item, slot)
+    },
+    accept: itemIdAccepts,
+    collect: (monitor) => ({
+      canDrop: monitor.canDrop()
+    })
+  })
+  const isVisable = collected.canDrop 
+  return <div style={{
+    ...style,
+    display: isVisable? 'initial': 'none'
+  }} ref={droppableRef} {...rest}>
+    {children}
+  </div>
+}
+
+function Draggable({id, children, onDragStart, onDragEnd, ...rest}) {
+  const [collectedProps, dragRef] = useDrag({
+    item: { id, type: id },
+    begin: (monitor) => {
+      onDragStart(id)
+    },
+    end: (item, monitor) => {
+      console.log(monitor)
+      onDragEnd(item)
+    }
+  })
+  return <div {...rest} ref={dragRef} >
+    {children}
+  </div>
 }
