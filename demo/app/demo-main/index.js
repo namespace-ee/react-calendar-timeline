@@ -12,7 +12,7 @@ import Timeline, {
   SidebarHeader,
   DateHeader
 } from 'react-calendar-timeline'
-import {useDrag, useDrop} from 'react-dnd'
+import { useDrag, useDrop } from 'react-dnd'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -39,7 +39,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData(3, 2, 1)
+    const { groups, items } = generateFakeData(8, 15, 1)
     console.log(items)
     const defaultTimeStart = moment()
       .startOf('day')
@@ -57,10 +57,10 @@ export default class App extends Component {
       itemsToDrag: [
         {
           title: 'print',
-          id: '0',
+          id: '0a',
           slots: [
             {
-              groupId: '0',
+              groupId: '1',
               startTime: moment()
                 .startOf('day')
                 .add(2, 'h'),
@@ -81,10 +81,10 @@ export default class App extends Component {
         },
         {
           title: 'cut',
-          id: '1',
+          id: '1a',
           slots: [
             {
-              groupId: '1',
+              groupId: '2',
               startTime: moment()
                 .startOf('day')
                 .add(9, 'h'),
@@ -93,7 +93,7 @@ export default class App extends Component {
                 .add(18, 'h')
             },
             {
-              groupId: '2',
+              groupId: '5',
               startTime: moment()
                 .startOf('day')
                 .add(2, 'h'),
@@ -105,10 +105,10 @@ export default class App extends Component {
         },
         {
           title: 'fold',
-          id: '2',
+          id: '2a',
           slots: [
             {
-              groupId: '2',
+              groupId: '4',
               startTime: moment()
                 .startOf('day')
                 .add(9, 'h'),
@@ -117,7 +117,7 @@ export default class App extends Component {
                 .add(18, 'h')
             },
             {
-              groupId: '2',
+              groupId: '6',
               startTime: moment()
                 .startOf('day')
                 .add(2, 'h'),
@@ -127,7 +127,43 @@ export default class App extends Component {
             }
           ]
         }
-      ]
+      ],
+      unavailableSlots: {
+        '1': [
+          {
+            id: '0',
+            groupId: '0',
+            startTime: moment()
+              .startOf('day')
+              .add(9, 'h'),
+            endTime: moment()
+              .startOf('day')
+              .add(11, 'h')
+          }
+        ],
+        '2': [
+          {
+            id: '1',
+            groupId: '2',
+            startTime: moment()
+              .startOf('day')
+              .add(4, 'h'),
+            endTime: moment()
+              .startOf('day')
+              .add(8, 'h')
+          },
+          {
+            id: '2',
+            groupId: '2',
+            startTime: moment()
+              .startOf('day')
+              .add(10, 'h'),
+            endTime: moment()
+              .startOf('day')
+              .add(12.5, 'h')
+          }
+        ]
+      }
     }
   }
 
@@ -212,26 +248,36 @@ export default class App extends Component {
   }
 
   moveResizeValidator = (action, item, time) => {
-    if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
-      return newTime
+    const unavailableSlots = this.state.unavailableSlots[item.group]
+    const originalItem = this.state.items.find(i => i.id === item.id)
+    const startTimeInMoment = moment(time, 'x')
+    if (unavailableSlots) {
+      const violation = unavailableSlots.find(slot => {
+        const { startTime, endTime } = slot
+        return (
+          startTimeInMoment.isAfter(startTime) &&
+          startTimeInMoment.isBefore(endTime)
+        )
+      })
+      if (violation) return originalItem.start
     }
-
     return time
   }
 
   handleDrop = (item, slot) => {
     const fullItem = this.state.itemsToDrag.find(i => i.id === item.id)
     this.setState(state => ({
-      itemsToDrag: state.itemsToDrag.filter( i => item.id !== i.id),
-      items: [...state.items, {
-        title: fullItem.title,
-        id: item.id,
-        group: slot.groupId,
-        start: slot.startTime.valueOf(),
-        end: slot.endTime.valueOf()
-      }]
+      itemsToDrag: state.itemsToDrag.filter(i => item.id !== i.id),
+      items: [
+        ...state.items,
+        {
+          title: fullItem.title,
+          id: item.id,
+          group: slot.groupId,
+          start: slot.startTime.valueOf(),
+          end: slot.endTime.valueOf()
+        }
+      ]
     }))
   }
 
@@ -265,44 +311,32 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         rowRenderer={({ rowData, helpers, getLayerRootProps, group }) => {
-          const { itemsToDrag } = rowData
+          const { itemsToDrag, unavailableSlots } = rowData
+          const groupUnavailableSlots = unavailableSlots[group.id]
+            ? unavailableSlots[group.id]
+            : []
           return (
             <>
-              <div {...getLayerRootProps()}>
-                {itemsToDrag.map(item => {
-                  return item.slots
-                    .filter(slot => slot.groupId === group.id)
-                    .map(slot => {
-                      const left = helpers.getLeftOffsetFromDate(
-                        slot.startTime.valueOf()
-                      )
-                      const right = helpers.getLeftOffsetFromDate(
-                        slot.endTime.valueOf()
-                      )
-                      return (
-                        <Droppable
-                          style={{
-                            position: 'absolute',
-                            left: left,
-                            width: right - left,
-                            backgroundColor: 'purple',
-                            height: '100%'
-                          }}
-                          itemIdAccepts={item.id}
-                          slot={slot}
-                          onDrop={this.handleDrop}
-                        >
-                          {item.title}
-                        </Droppable>
-                      )
-                    })
-                })}
-              </div>
+              <UnavailableLayyer
+                getLayerRootProps={getLayerRootProps}
+                getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
+                groupUnavailableSlots={groupUnavailableSlots}
+              />
+              <DroppablesLayer
+                getLayerRootProps={getLayerRootProps}
+                itemsToDrag={itemsToDrag}
+                getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
+                handleDrop={this.handleDrop}
+                group={group}
+              />
             </>
           )
         }}
-        rowData={{ itemsToDrag: this.state.itemsToDrag }}
-        // moveResizeValidator={this.moveResizeValidator}
+        rowData={{
+          itemsToDrag: this.state.itemsToDrag,
+          unavailableSlots: this.state.unavailableSlots
+        }}
+        moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineHeaders>
           <DateHeader />
@@ -345,8 +379,8 @@ export default class App extends Component {
                             marginLeft: 15,
                             border: '1px solid white'
                           }}
-                          onDragEnd={(item)=>console.log('dragEnd',item)}
-                          onDragStart={(item)=>console.log('dragStart',item)}
+                          onDragEnd={item => console.log('dragEnd', item)}
+                          onDragStart={item => console.log('dragStart', item)}
                         >
                           {dragItem.title}
                         </Draggable>
@@ -385,29 +419,35 @@ export default class App extends Component {
   }
 }
 
-function Droppable({children, itemIdAccepts, style, slot, onDrop, ...rest}) {
+function Droppable({ children, itemIdAccepts, style, slot, onDrop, ...rest }) {
   const [collected, droppableRef] = useDrop({
     drop: (item, monitor) => {
       onDrop(item, slot)
     },
     accept: itemIdAccepts,
-    collect: (monitor) => ({
+    collect: monitor => ({
       canDrop: monitor.canDrop()
     })
   })
-  const isVisable = collected.canDrop 
-  return <div style={{
-    ...style,
-    display: isVisable? 'initial': 'none'
-  }} ref={droppableRef} {...rest}>
-    {children}
-  </div>
+  const isVisable = collected.canDrop
+  return (
+    <div
+      style={{
+        ...style,
+        display: isVisable ? 'initial' : 'none'
+      }}
+      ref={droppableRef}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
 }
 
-function Draggable({id, children, onDragStart, onDragEnd, ...rest}) {
+function Draggable({ id, children, onDragStart, onDragEnd, ...rest }) {
   const [collectedProps, dragRef] = useDrag({
     item: { id, type: id },
-    begin: (monitor) => {
+    begin: monitor => {
       onDragStart(id)
     },
     end: (item, monitor) => {
@@ -415,7 +455,79 @@ function Draggable({id, children, onDragStart, onDragEnd, ...rest}) {
       onDragEnd(item)
     }
   })
-  return <div {...rest} ref={dragRef} >
-    {children}
-  </div>
+  return (
+    <div {...rest} ref={dragRef}>
+      {children}
+    </div>
+  )
+}
+
+function DroppablesLayer({
+  getLayerRootProps,
+  itemsToDrag,
+  getLeftOffsetFromDate,
+  handleDrop,
+  group
+}) {
+  return (
+    <div {...getLayerRootProps()}>
+      {itemsToDrag.map((item, index) => {
+        return item.slots
+          .filter(slot => slot.groupId === group.id)
+          .map(slot => {
+            const left = getLeftOffsetFromDate(slot.startTime.valueOf())
+            const right = getLeftOffsetFromDate(slot.endTime.valueOf())
+            return (
+              <Droppable
+                key={index}
+                style={{
+                  position: 'absolute',
+                  left: left,
+                  width: right - left,
+                  backgroundColor: 'purple',
+                  height: '100%'
+                }}
+                itemIdAccepts={item.id}
+                slot={slot}
+                onDrop={handleDrop}
+              >
+                {item.title}
+              </Droppable>
+            )
+          })
+      })}
+    </div>
+  )
+}
+
+function UnavailableLayyer({
+  getLayerRootProps,
+  groupUnavailableSlots,
+  getLeftOffsetFromDate
+}) {
+  return (
+    <div {...getLayerRootProps()}>
+      {groupUnavailableSlots.map(slot => {
+        const left = getLeftOffsetFromDate(slot.startTime.valueOf())
+        const right = getLeftOffsetFromDate(slot.endTime.valueOf())
+        return (
+          <div
+            key={slot.id}
+            style={{
+              position: 'absolute',
+              left: left,
+              width: right - left,
+              backgroundColor: '#ECF0F1',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <span style={{ height: 12 }}>machine unavailable</span>
+          </div>
+        )
+      })}
+    </div>
+  )
 }

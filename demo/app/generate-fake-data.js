@@ -1,9 +1,9 @@
 import faker from 'faker'
 import randomColor from 'randomcolor'
 import moment from 'moment'
-
+faker.seed(123);
 export default function (groupCount = 30, itemCount = 1000, daysInPast = 30) {
-  let randomSeed = Math.floor(Math.random() * 1000)
+  let randomSeed = 80
   let groups = []
   for (let i = 0; i < groupCount; i++) {
     groups.push({

@@ -79,7 +79,7 @@ export default ({
 
   function getLayerRootProps() {
     return {style: {
-      height: '100%'
+      // height: '100%'
     }}
   }
 
