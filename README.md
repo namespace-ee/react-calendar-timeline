@@ -379,8 +379,8 @@ Parameters provided to the function has two types: context params which have the
 | property           | type     | description                                          |
 | ------------------ | -------- | ---------------------------------------------------- |
 | `timelineWidth`    | `number` | returns the full width of the timeline.              |
-| `visibleTimeStart` | `number` | returns the exact start of view port of the calender |
-| `visibleTimeEnd`   | `number` | returns the exact end of view port of the calender.  |
+| `visibleTimeStart` | `number` | returns the exact start of view port of the calendar |
+| `visibleTimeEnd`   | `number` | returns the exact end of view port of the calendar.  |
 | `canvasTimeStart`  | `number` | denotes the start time in ms of the canvas timeline  |
 | `canvasTimeEnd`    | `number` | denotes the end time in ms of the canvas timeline    |
 
@@ -431,7 +431,7 @@ Rather than applying props on the element yourself and to avoid your props being
 
   \*\* _the given styles will only override the styles that are not a requirement for positioning the item. Other styles like `color`, `radius` and others_
 
-  These properties can be override using the prop argument with properties:
+  These properties can be overriden using the prop argument with properties:
 
   * className: class names to be added
   * onMouseDown: event handler will be called after the component's event handler
