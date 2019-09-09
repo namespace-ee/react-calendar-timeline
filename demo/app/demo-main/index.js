@@ -135,32 +135,32 @@ export default class App extends Component {
             groupId: '0',
             startTime: moment()
               .startOf('day')
-              .add(9, 'h'),
+              .add(16, 'h'),
             endTime: moment()
               .startOf('day')
-              .add(11, 'h')
+              .add(20, 'h')
           }
         ],
-        '2': [
+        '3': [
           {
             id: '1',
-            groupId: '2',
+            groupId: '3',
             startTime: moment()
               .startOf('day')
-              .add(4, 'h'),
+              .add(13, 'h'),
             endTime: moment()
               .startOf('day')
-              .add(8, 'h')
+              .add(15, 'h')
           },
           {
             id: '2',
-            groupId: '2',
+            groupId: '3',
             startTime: moment()
               .startOf('day')
-              .add(10, 'h'),
+              .add(22, 'h'),
             endTime: moment()
               .startOf('day')
-              .add(12.5, 'h')
+              .add(24, 'h')
           }
         ]
       }
@@ -251,15 +251,18 @@ export default class App extends Component {
     const unavailableSlots = this.state.unavailableSlots[item.group]
     const originalItem = this.state.items.find(i => i.id === item.id)
     const startTimeInMoment = moment(time, 'x')
+    const endTimeInMoment = moment((item.end - item.start ) + time, 'x')
     if (unavailableSlots) {
       const violation = unavailableSlots.find(slot => {
         const { startTime, endTime } = slot
+        console.log(endTimeInMoment.format(), startTime.format())
         return (
-          startTimeInMoment.isAfter(startTime) &&
-          startTimeInMoment.isBefore(endTime)
+          (startTimeInMoment.isAfter(startTime) &&
+          startTimeInMoment.isBefore(endTime)) ||
+          (endTimeInMoment.isAfter(startTime) && endTimeInMoment.isBefore(endTime))
         )
       })
-      if (violation) return originalItem.start
+      if (violation) return violation.startTime.valueOf() - (originalItem.end - originalItem.start)
     }
     return time
   }
