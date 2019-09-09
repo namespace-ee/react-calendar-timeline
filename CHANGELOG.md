@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.26.2
+
+* render the items layer after columns and rows for layring @ilaiwi
+
 ## 0.26.1
 
 * fix issue where mouse down gets stuck when scrolling the timeline #526 @KhalidArdah
