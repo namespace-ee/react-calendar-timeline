@@ -1041,6 +1041,15 @@ export default class ReactCalendarTimeline extends Component {
                   isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>
+                    {this.columns(
+                      canvasTimeStart,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      minUnit,
+                      timeSteps,
+                      height
+                    )}
+                    {this.rows(canvasWidth, groupHeights, groups)}
                     {this.items(
                       canvasTimeStart,
                       zoom,
@@ -1051,15 +1060,6 @@ export default class ReactCalendarTimeline extends Component {
                       groupHeights,
                       groupTops
                     )}
-                    {this.columns(
-                      canvasTimeStart,
-                      canvasTimeEnd,
-                      canvasWidth,
-                      minUnit,
-                      timeSteps,
-                      height
-                    )}
-                    {this.rows(canvasWidth, groupHeights, groups)}
                     {this.childrenWithProps(
                       canvasTimeStart,
                       canvasTimeEnd,
