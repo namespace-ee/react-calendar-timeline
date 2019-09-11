@@ -1,12 +1,14 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.23.0",
+  "version": "0.26.2",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run build:lib",
-    "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
-    "build:lib": "echo '!!! Building Library' && rimraf lib && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
+    "build:demo":
+      "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
+    "build:lib":
+      "echo '!!! Building Library' && rimraf lib && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
     "lint": "eslint --ext .js --ext .jsx ./src",
     "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
     "prepublish": "npm run build:lib",
@@ -14,10 +16,7 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "files": [
-    "lib",
-    "src"
-  ],
+  "files": ["lib", "src"],
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
@@ -58,12 +57,7 @@
     }
   ],
   "license": "MIT",
-  "keywords": [
-    "react",
-    "reactjs",
-    "react-component",
-    "timeline"
-  ],
+  "keywords": ["react", "reactjs", "react-component", "timeline"],
   "standard": {
     "parser": "babel-eslint"
   },
@@ -72,7 +66,9 @@
     "testMatch": [
       "**/__tests__/**/*.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/config/jest-setup.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/jest-setup.js"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ],
@@ -90,6 +86,7 @@
     ]
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "create-react-context": "^0.2.2",
     "element-resize-detector": "^1.1.12",
     "lodash.isequal": "^4.5.0"
@@ -102,20 +99,20 @@
     "react-dom": ">=16.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-core": "6.26.3",
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.2",
+    "@babel/preset-env": "^7.5.2",
+    "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^7.1.1",
-    "babel-jest": "^22.0.6",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-react-remove-properties": "^0.2.5",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "^6.5.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-react-remove-properties": "^0.3.0",
     "cross-env": "^5.1.4",
     "css-loader": "~0.26.0",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^4.16.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^6.2.1",
@@ -126,9 +123,9 @@
     "eslint-plugin-standard": "^2.0.1",
     "faker": "^4.1.0",
     "interactjs": "^1.3.4",
-    "jest": "^23.1.0",
-    "jest-dom": "^1.12.1",
-    "jest-watch-typeahead": "^0.1.0",
+    "jest": "^24.8.0",
+    "jest-dom": "^3.5.0",
+    "jest-watch-typeahead": "^0.3.1",
     "jsdom": "^11.5.1",
     "moment": "^2.11.1",
     "node-sass": "^4.9.2",
@@ -139,7 +136,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.1.1",
-    "react-testing-library": "^5.1.0",
+    "react-testing-library": "^6.0.3",
+    "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.3",
     "style-loader": "~0.13.0",

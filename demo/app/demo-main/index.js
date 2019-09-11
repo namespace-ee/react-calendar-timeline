@@ -4,9 +4,13 @@ import moment from 'moment'
 
 import Timeline, {
   TimelineMarkers,
+  TimelineHeaders,
   TodayMarker,
   CustomMarker,
-  CursorMarker
+  CursorMarker,
+  CustomHeader,
+  SidebarHeader,
+  DateHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'

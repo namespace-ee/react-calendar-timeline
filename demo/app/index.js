@@ -11,10 +11,11 @@ const demos = {
   treeGroups: require('./demo-tree-groups').default,
   linkedTimelines: require('./demo-linked-timelines').default,
   elementResize: require('./demo-element-resize').default,
-  stickyHeader: require('./demo-sticky-header').default,
   renderers: require('./demo-renderers').default,
   verticalClasses: require('./demo-vertical-classes').default,
-  customItems: require('./demo-custom-items').default
+  customItems: require('./demo-custom-items').default,
+  customHeaders: require('./demo-headers').default,
+  customInfoLabel: require('./demo-custom-info-label').default
 }
 
 // A simple component that shows the pathname of the current location

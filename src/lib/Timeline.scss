@@ -13,10 +13,6 @@ $border-width: 1px;
 $thick-border-width: 2px;
 $sidebar-color: #ffffff;
 $sidebar-background-color: #c52020;
-$header-color: #ffffff;
-$header-background-color: #c52020;
-$lower-header-color: #333333;
-$lower-header-background-color: #f0f0f0;
 $list-item-padding: 0 4px;
 $weekend: rgba(250, 246, 225, 0.5);
 
@@ -60,88 +56,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     }
   }
 
-  .rct-header-container {
-    z-index: 90;
-    display: flex;
-    overflow: hidden;
-
-    &.header-sticky {
-      position: sticky;
-      position: -webkit-sticky;
-    }
-  }
-
-  .rct-header {
-    margin: 0;
-    overflow-x: hidden;
-    z-index: 90;
-
-    .rct-top-header,
-    .rct-bottom-header {
-      position: relative;
-    }
-
-    .rct-label-group {
-      padding: 0 5px;
-      position: absolute;
-      top: 0;
-      font-size: 14px;
-      text-align: center;
-      cursor: pointer;
-      border-left: $thick-border-width solid $border-color;
-      color: $header-color;
-      background: $header-background-color;
-      border-bottom: $border-width solid $border-color;
-      cursor: pointer;
-      &.rct-has-right-sidebar {
-        border-right: ($thick-border-width / 2) solid $border-color;
-        border-left: ($thick-border-width / 2) solid $border-color;
-      }
-
-      & > span {
-        position: sticky;
-        left: 5px;
-        right: 5px;
-      }
-    }
-
-    .rct-label {
-      position: absolute;
-      // overflow: hidden;
-      text-align: center;
-      cursor: pointer;
-      border-left: $border-width solid $border-color;
-      color: $lower-header-color;
-      background: $lower-header-background-color;
-      border-bottom: $border-width solid $border-color;
-      cursor: pointer;
-
-      &.rct-label-only {
-        color: $header-color;
-        background: $header-background-color;
-      }
-
-      &.rct-first-of-type {
-        border-left: $thick-border-width solid $border-color;
-      }
-    }
-  }
-
-  .rct-sidebar-header {
-    margin: 0;
-    color: $sidebar-color;
-    background: $sidebar-background-color;
-    border-right: $border-width solid $border-color;
-    box-sizing: border-box;
-    border-bottom: $border-width solid $border-color;
-    overflow: hidden;
-
-    &.rct-sidebar-right {
-      border-right: 0;
-      border-left: $border-width solid $border-color;
-    }
-  }
-
   .rct-sidebar {
     overflow: hidden;
     white-space: normal; // was set to nowrap in .rct-outer
@@ -161,7 +75,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      box-sizing: content-box;
+      box-sizing: border-box;
       margin: 0;
       border-bottom: $border-width solid $border-color;
 
@@ -192,10 +106,15 @@ $weekend: rgba(250, 246, 225, 0.5);
   }
 
   .rct-horizontal-lines {
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+
     .rct-hl-even,
     .rct-hl-odd {
       border-bottom: $border-width solid $border-color;
-      box-sizing: content-box;
+      box-sizing: border-box;
       z-index: 40;
     }
     .rct-hl-odd {
@@ -213,15 +132,34 @@ $weekend: rgba(250, 246, 225, 0.5);
     z-index: 51;
   }
 
-  .rct-infolabel {
-    position: fixed;
-    left: 100px;
-    bottom: 50px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 10px;
-    font-size: 20px;
-    border-radius: 5px;
-    z-index: 85;
+
+  .rct-dateHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-bottom: 1px solid #bbb;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: rgb(240, 240, 240);
+    border-left:  2px solid #bbb;
   }
+
+  .rct-dateHeader-primary {
+    background-color: initial;
+    border-left:  1px solid #bbb;
+    border-right: 1px solid #bbb;
+    color: #fff
+  }
+
+  .rct-header-root {
+    background: #c52020;
+    border-bottom: 1px solid #bbb;
+  }
+
+  .rct-calendar-header {
+    border: 1px solid #bbb,
+
+  }
+
 }

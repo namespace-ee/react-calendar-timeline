@@ -149,7 +149,6 @@ xdescribe('Timeline', () => {
     expect(typeof pluginProps.visibleTimeStart).toBe('number')
     expect(typeof pluginProps.visibleTimeEnd).toBe('number')
     expect(typeof pluginProps.height).toBe('number')
-    expect(typeof pluginProps.headerHeight).toBe('number')
 
     expect(typeof pluginProps.minUnit).toBe('string')
 
