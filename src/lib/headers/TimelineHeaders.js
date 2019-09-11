@@ -48,6 +48,15 @@ class TimelineHeaders extends React.Component {
     }
   }
 
+  /**
+   * check if child of type SidebarHeader
+   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
+   */
+  isSidebarHeader = (child) => {
+    if(child.type === undefined) return false
+    return child.type.secretKey ===SidebarHeader.secretKey
+  }
+
   render() {
     let rightSidebarHeader
     let leftSidebarHeader
@@ -56,7 +65,7 @@ class TimelineHeaders extends React.Component {
       ? this.props.children.filter(c => c)
       : [this.props.children]
     React.Children.map(children, child => {
-      if (child.type === SidebarHeader) {
+      if (this.isSidebarHeader(child)) {
         if (child.props.variant === RIGHT_VARIANT) {
           rightSidebarHeader = child
         } else {
@@ -130,5 +139,7 @@ TimelineHeadersWrapper.propTypes = {
   calendarHeaderStyle: PropTypes.object,
   calendarHeaderClassName: PropTypes.string
 }
+
+TimelineHeadersWrapper.secretKey = "TimelineHeaders"
 
 export default TimelineHeadersWrapper
