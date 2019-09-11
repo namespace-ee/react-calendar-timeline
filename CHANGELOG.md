@@ -7,6 +7,16 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.26.3
+
+* add documentation for `onItemDeselect` #350 @ilaiwi
+* solve a bug where `onItemDeselect` is not triggered as expected for several item clicks #350 @ilaiwi
+* fix row height on browser scaling #615 @gaston-niglia 
+
+### Packages
+
+update to `node-sass@4.12.0` for newer versions of node. 
+
 ## 0.26.2
 
 * render the items layer after columns and rows for layring @ilaiwi
