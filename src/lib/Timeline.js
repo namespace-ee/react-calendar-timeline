@@ -276,6 +276,10 @@ export default class ReactCalendarTimeline extends Component {
   constructor(props) {
     super(props)
 
+    this.getSelected = this.getSelected.bind(this)
+    this.hasSelectedItem = this.hasSelectedItem.bind(this)
+    this.isItemSelected= this.isItemSelected.bind(this)
+
     let visibleTimeStart = null
     let visibleTimeEnd = null
 
@@ -589,7 +593,7 @@ export default class ReactCalendarTimeline extends Component {
 
   selectItem = (item, clickType, e) => {
     if (
-      this.state.selectedItem === item ||
+      this.isItemSelected(item) ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
       if (item && this.props.onItemClick) {
@@ -740,7 +744,7 @@ export default class ReactCalendarTimeline extends Component {
 
   handleRowClick = (e, rowIndex) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
-    if (this.state.selectedItem) {
+    if (this.hasSelectedItem()) {
       this.selectItem(null)
     }
 
@@ -880,7 +884,15 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  groups
+  /**
+   * check if child of type TimelineHeader
+   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
+   */
+  isTimelineHeader = (child) => {
+    if(child.type === undefined) return false
+    return child.type.secretKey ===TimelineHeaders.secretKey
+  }
+  
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,
@@ -915,17 +927,14 @@ export default class ReactCalendarTimeline extends Component {
       keys: this.props.keys,
       groupHeights: groupHeights,
       groupTops: groupTops,
-      selected:
-        this.state.selectedItem && !this.props.selected
-          ? [this.state.selectedItem]
-          : this.props.selected || [],
+      selected: this.getSelected(),
       height: height,
       minUnit: minUnit,
       timeSteps: timeSteps
     }
 
     return React.Children.map(childArray, child => {
-      if (child.type !== TimelineHeaders) {
+      if (!this.isTimelineHeader(child)) {
         return React.cloneElement(child, childProps)
       } else {
         return null
@@ -937,7 +946,7 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.children) {
       let headerRenderer
       React.Children.map(this.props.children, child => {
-        if (child.type === TimelineHeaders) {
+        if (this.isTimelineHeader(child)) {
           headerRenderer = child
         }
       })
@@ -953,6 +962,21 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+  getSelected() {
+    return this.state.selectedItem && !this.props.selected
+      ? [this.state.selectedItem]
+      : this.props.selected || [];
+  }
+
+  hasSelectedItem(){
+    if(!Array.isArray(this.props.selected)) return !!this.state.selectedItem
+    return this.props.selected.length > 0
+  }
+
+  isItemSelected(itemId){
+    const selectedItems = this.getSelected()
+    return selectedItems.some(i => i === itemId)
+  }
   getScrollElementRef = el => {
     this.props.scrollRef(el)
     this.scrollComponent = el
@@ -1068,7 +1092,6 @@ export default class ReactCalendarTimeline extends Component {
                   <MarkerCanvas>
                     {/* {this.items(
                       canvasTimeStart,
-                      zoom,
                       canvasTimeEnd,
                       canvasWidth,
                       minUnit,
@@ -1078,6 +1101,7 @@ export default class ReactCalendarTimeline extends Component {
                     )} */}
                     {/* {this.columns(
                       canvasTimeStart,
+                      zoom,
                       canvasTimeEnd,
                       canvasWidth,
                       minUnit,

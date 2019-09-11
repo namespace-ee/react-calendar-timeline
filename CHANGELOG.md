@@ -7,6 +7,41 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+# 0.26.4
+
+* fix `react-calendar-timeline` not working with `react-hot-loader` #607 @ilaiwi + @westn
+
+## 0.26.3
+
+* add documentation for `onItemDeselect` #350 @ilaiwi
+* solve a bug where `onItemDeselect` is not triggered as expected for several item clicks #350 @ilaiwi
+* fix row height on browser scaling #615 @gaston-niglia 
+
+### Packages
+
+update to `node-sass@4.12.0` for newer versions of node. 
+
+## 0.26.2
+
+* render the items layer after columns and rows for layring @ilaiwi
+
+## 0.26.1
+
+* fix issue where mouse down gets stuck when scrolling the timeline #526 @KhalidArdah
+
+you can as well solve the issue without upgrading by adding the following style
+
+```
+.react-calendar-timeline .rct-horizontal-lines {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+```
+
+[as here](https://codesandbox.io/s/timeline-demo-sticky-header-w6s5f)
+
 ## 0.26.0
 
 #### Added

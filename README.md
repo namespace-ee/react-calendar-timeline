@@ -142,7 +142,7 @@ The exact viewport of the calendar. When these are specified, scrolling in the c
 
 ## selected
 
-An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click.
+An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's and use `onItemDeselect` handler to clear selection. This overwrites the default behaviour of selecting one item on click.
 
 ## keys
 
@@ -279,6 +279,10 @@ Callback when an item is resized. Returns 1) the item's ID, 2) the new start or 
 ## onItemSelect(itemId, e, time)
 
 Called when an item is selected. This is sent on the first click on an item. `time` is the time that corresponds to where you click/select on the item in the timeline.
+
+## onItemDeselect(e)
+
+Called when deselecting an item. Used to clear controlled selected prop.
 
 ## onItemClick(itemId, e, time)
 
