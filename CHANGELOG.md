@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+# 0.26.4
+
+* fix `react-calendar-timeline` not working with `react-hot-loader` #607 @ilaiwi + @westn
+
 ## 0.26.3
 
 * add documentation for `onItemDeselect` #350 @ilaiwi

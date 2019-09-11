@@ -67,4 +67,6 @@ SidebarWrapper.defaultProps = {
   children: ({ getRootProps }) => <div data-testid="sidebarHeader" {...getRootProps()} />
 }
 
+SidebarWrapper.secretKey = "SidebarHeader"
+
 export default SidebarWrapper
