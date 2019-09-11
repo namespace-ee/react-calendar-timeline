@@ -268,6 +268,10 @@ export default class ReactCalendarTimeline extends Component {
   constructor(props) {
     super(props)
 
+    this.getSelected = this.getSelected.bind(this)
+    this.hasSelectedItem = this.hasSelectedItem.bind(this)
+    this.isItemSelected= this.isItemSelected.bind(this)
+
     let visibleTimeStart = null
     let visibleTimeEnd = null
 
@@ -581,7 +585,7 @@ export default class ReactCalendarTimeline extends Component {
 
   selectItem = (item, clickType, e) => {
     if (
-      this.state.selectedItem === item ||
+      this.isItemSelected(item) ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
       if (item && this.props.onItemClick) {
@@ -732,7 +736,7 @@ export default class ReactCalendarTimeline extends Component {
 
   handleRowClick = (e, rowIndex) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
-    if (this.state.selectedItem) {
+    if (this.hasSelectedItem()) {
       this.selectItem(null)
     }
 
@@ -907,10 +911,7 @@ export default class ReactCalendarTimeline extends Component {
       keys: this.props.keys,
       groupHeights: groupHeights,
       groupTops: groupTops,
-      selected:
-        this.state.selectedItem && !this.props.selected
-          ? [this.state.selectedItem]
-          : this.props.selected || [],
+      selected: this.getSelected(),
       height: height,
       minUnit: minUnit,
       timeSteps: timeSteps
@@ -945,6 +946,21 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
+  getSelected() {
+    return this.state.selectedItem && !this.props.selected
+      ? [this.state.selectedItem]
+      : this.props.selected || [];
+  }
+
+  hasSelectedItem(){
+    if(!Array.isArray(this.props.selected)) return !!this.state.selectedItem
+    return this.props.selected.length > 0
+  }
+
+  isItemSelected(itemId){
+    const selectedItems = this.getSelected()
+    return selectedItems.some(i => i === itemId)
+  }
   getScrollElementRef = el => {
     this.props.scrollRef(el)
     this.scrollComponent = el
