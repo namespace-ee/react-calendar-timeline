@@ -8,7 +8,6 @@ import Columns from './columns/Columns'
 import GroupRows from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
-
 import windowResizeDetector from '../resize-detector/window'
 
 import {
@@ -876,7 +875,15 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  groups
+  /**
+   * check if child of type TimelineHeader
+   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
+   */
+  isTimelineHeader = (child) => {
+    if(child.type === undefined) return false
+    return child.type.secretKey ===TimelineHeaders.secretKey
+  }
+  
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,
@@ -918,7 +925,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     return React.Children.map(childArray, child => {
-      if (child.type !== TimelineHeaders) {
+      if (!this.isTimelineHeader(child)) {
         return React.cloneElement(child, childProps)
       } else {
         return null
@@ -930,7 +937,7 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.children) {
       let headerRenderer
       React.Children.map(this.props.children, child => {
-        if (child.type === TimelineHeaders) {
+        if (this.isTimelineHeader(child)) {
           headerRenderer = child
         }
       })
