@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { TimelineHeadersConsumer } from './HeadersContext'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
-import { iterateTimes, calculateXPositionForTime } from '../utility/calendar'
+import { iterateTimes } from '../utility/calendar'
 
 export class CustomHeader extends React.Component {
   static propTypes = {
@@ -64,7 +64,7 @@ export class CustomHeader extends React.Component {
     return false
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
