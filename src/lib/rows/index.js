@@ -83,6 +83,20 @@ export default ({
     }}
   }
 
+
+  function getItemAbslouteLocation(item) {
+    const itemId = _get(item, keys.itemIdKey)
+    const groupId = _get(item, keys.itemGroupKey)
+    const groupIndex = groupOrders[groupId].index
+    const group = groupsWithItems[groupIndex]
+    const itemDimensions= group.itemDimensions.find(i => i.id === itemId)
+    const groupTop = groupHeights.reduce((acc, height, index)=>{if(index < groupIndex) return acc+height; else return acc}, 0)
+    return {
+      left: itemDimensions.dimensions.left,
+      top: groupTop + itemDimensions.dimensions.top
+    }
+  }
+
   return (
     <div style={{ position: 'absolute', top: 0 }}>
       {groupHeights.map((groupHeight, i) => {
@@ -170,6 +184,7 @@ export default ({
               <Layers getLayerRootProps={getLayerRootProps} helpers={{
                 getLeftOffsetFromDate,
                 getDateFromLeftOffsetPosition,
+                getItemAbslouteLocation,
               }} rowData={rowData} group={group.group}/>
             </React.Fragment>
           </div>

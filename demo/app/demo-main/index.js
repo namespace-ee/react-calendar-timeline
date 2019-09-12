@@ -13,6 +13,7 @@ import Timeline, {
   DateHeader
 } from 'react-calendar-timeline'
 import { useDrag, useDrop } from 'react-dnd'
+import * as d3 from 'd3'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -251,18 +252,23 @@ export default class App extends Component {
     const unavailableSlots = this.state.unavailableSlots[item.group]
     const originalItem = this.state.items.find(i => i.id === item.id)
     const startTimeInMoment = moment(time, 'x')
-    const endTimeInMoment = moment((item.end - item.start ) + time, 'x')
+    const endTimeInMoment = moment(item.end - item.start + time, 'x')
     if (unavailableSlots) {
       const violation = unavailableSlots.find(slot => {
         const { startTime, endTime } = slot
         console.log(endTimeInMoment.format(), startTime.format())
         return (
           (startTimeInMoment.isAfter(startTime) &&
-          startTimeInMoment.isBefore(endTime)) ||
-          (endTimeInMoment.isAfter(startTime) && endTimeInMoment.isBefore(endTime))
+            startTimeInMoment.isBefore(endTime)) ||
+          (endTimeInMoment.isAfter(startTime) &&
+            endTimeInMoment.isBefore(endTime))
         )
       })
-      if (violation) return violation.startTime.valueOf() - (originalItem.end - originalItem.start)
+      if (violation)
+        return (
+          violation.startTime.valueOf() -
+          (originalItem.end - originalItem.start)
+        )
     }
     return time
   }
@@ -318,6 +324,8 @@ export default class App extends Component {
           const groupUnavailableSlots = unavailableSlots[group.id]
             ? unavailableSlots[group.id]
             : []
+
+          const timelineLink = [items[7], items[3]]
           return (
             <>
               <UnavailableLayyer
@@ -331,6 +339,12 @@ export default class App extends Component {
                 getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
                 handleDrop={this.handleDrop}
                 group={group}
+              />
+              <Links
+                timelineLinks={[timelineLink]}
+                helpers={helpers}
+                group={group}
+                getLayerRootProps={getLayerRootProps}
               />
             </>
           )
@@ -420,6 +434,54 @@ export default class App extends Component {
       </Timeline>
     )
   }
+}
+
+function Link({ timelineLink, helpers, group }) {
+  const [start, end] = timelineLink
+  const { getItemAbslouteLocation } = helpers
+  if (start.group !== group.id) return null
+  const startItemDimensions = getItemAbslouteLocation(start)
+  const endItemDimensions = getItemAbslouteLocation(end)
+  let startLink = [startItemDimensions.left, startItemDimensions.top]
+  let endLink = [endItemDimensions.left, endItemDimensions.top]
+  const isEndLinkBeforeStart =
+    endLink[0] <= startLink[0] || endLink[1] <= startLink[1]
+  let itemLink = isEndLinkBeforeStart
+    ? [endLink, startLink]
+    : [startLink, endLink]
+  const lineGenerator = d3.line()
+  const [startLk, endLk] = itemLink
+  const endPoint = [endLk[0] - startLk[0], endLk[1] - startLk[1]]
+  return (
+      <svg
+        style={{
+          position: 'absolute',
+          left: startLk[0],
+          zIndex: 200,
+          top: startLk[1],
+          height: endPoint[1],
+          //handle case where endPoint is 0
+          width: endPoint[0] > 2 ? endPoint[0] : 2,
+          pointerEvents: 'none'
+        }}
+      >
+        <path
+          d={lineGenerator([[0, 0], endPoint])}
+          stroke="red"
+          strokeWidth="2"
+          fill="none"
+        />
+      </svg>
+  )
+
+}
+
+function Links({timelineLinks, helpers, group, getLayerRootProps}) {
+  return <div {...getLayerRootProps()}>
+    {timelineLinks.map((timelineLink, i) =>{
+      return <Link timelineLink={timelineLink} helpers={helpers} group={group} />
+    })}
+  </div>
 }
 
 function Droppable({ children, itemIdAccepts, style, slot, onDrop, ...rest }) {
