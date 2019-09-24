@@ -49,12 +49,12 @@ export default class App extends Component {
       .startOf('day')
       .add(1, 'day')
       .toDate()
-
     this.state = {
       groups,
       items,
       defaultTimeStart,
       defaultTimeEnd,
+      timelineLinks: [],
       itemsToDrag: [
         {
           title: 'print',
@@ -180,11 +180,27 @@ export default class App extends Component {
     console.log('Canvas context menu', group, moment(time).format())
   }
 
+  findItemById = (itemId) => {
+    return this.state.items.find(i => i.id === itemId)
+  }
+
+  tempItemId = undefined;
+
   handleItemClick = (itemId, _, time) => {
     console.log('Clicked: ' + itemId, moment(time).format())
   }
 
   handleItemSelect = (itemId, _, time) => {
+    if(!this.tempItemId){
+      this.tempItemId = itemId
+    }
+    else {
+      this.setState(state => ({
+        timelineLinks: [...state.timelineLinks, [this.findItemById(this.tempItemId), this.findItemById(itemId)]]
+      }), ()=> {
+        this.tempItemId=undefined;
+      })
+    }
     console.log('Selected: ' + itemId, moment(time).format())
   }
 
@@ -320,12 +336,10 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         rowRenderer={({ rowData, helpers, getLayerRootProps, group }) => {
-          const { itemsToDrag, unavailableSlots } = rowData
+          const { itemsToDrag, unavailableSlots, timelineLinks } = rowData
           const groupUnavailableSlots = unavailableSlots[group.id]
             ? unavailableSlots[group.id]
             : []
-
-          const timelineLink = [items[7], items[3]]
           return (
             <>
               <UnavailableLayyer
@@ -341,7 +355,7 @@ export default class App extends Component {
                 group={group}
               />
               <Links
-                timelineLinks={[timelineLink]}
+                timelineLinks={timelineLinks}
                 helpers={helpers}
                 group={group}
                 getLayerRootProps={getLayerRootProps}
@@ -351,7 +365,8 @@ export default class App extends Component {
         }}
         rowData={{
           itemsToDrag: this.state.itemsToDrag,
-          unavailableSlots: this.state.unavailableSlots
+          unavailableSlots: this.state.unavailableSlots,
+          timelineLinks: this.state.timelineLinks,
         }}
         moveResizeValidator={this.moveResizeValidator}
       >
@@ -452,36 +467,40 @@ function Link({ timelineLink, helpers, group }) {
   const lineGenerator = d3.line()
   const [startLk, endLk] = itemLink
   const endPoint = [endLk[0] - startLk[0], endLk[1] - startLk[1]]
+  const itemDimensions = helpers.getItemDimensions(start)
   return (
-      <svg
-        style={{
-          position: 'absolute',
-          left: startLk[0],
-          zIndex: 200,
-          top: startLk[1],
-          height: endPoint[1],
-          //handle case where endPoint is 0
-          width: endPoint[0] > 2 ? endPoint[0] : 2,
-          pointerEvents: 'none'
-        }}
-      >
-        <path
-          d={lineGenerator([[0, 0], endPoint])}
-          stroke="red"
-          strokeWidth="2"
-          fill="none"
-        />
-      </svg>
+    <svg
+      style={{
+        position: 'absolute',
+        left: startLk[0],
+        zIndex: 200,
+        top: itemDimensions.top,
+        height: endPoint[1],
+        //handle case where endPoint is 0
+        width: endPoint[0] > 2 ? endPoint[0] : 2,
+        pointerEvents: 'none'
+      }}
+    >
+      <path
+        d={lineGenerator([[0, 0], endPoint])}
+        stroke="red"
+        strokeWidth="2"
+        fill="none"
+      />
+    </svg>
   )
-
 }
 
-function Links({timelineLinks, helpers, group, getLayerRootProps}) {
-  return <div {...getLayerRootProps()}>
-    {timelineLinks.map((timelineLink, i) =>{
-      return <Link timelineLink={timelineLink} helpers={helpers} group={group} />
-    })}
-  </div>
+function Links({ timelineLinks, helpers, group, getLayerRootProps }) {
+  return (
+    <div {...getLayerRootProps()}>
+      {timelineLinks.map((timelineLink, i) => {
+        return (
+          <Link timelineLink={timelineLink} key={i} helpers={helpers} group={group} />
+        )
+      })}
+    </div>
+  )
 }
 
 function Droppable({ children, itemIdAccepts, style, slot, onDrop, ...rest }) {

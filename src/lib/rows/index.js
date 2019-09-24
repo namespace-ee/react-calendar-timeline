@@ -40,7 +40,7 @@ export default ({
   verticalLineClassNamesForTime,
   timeSteps,
   minUnit,
-  rowRenderer:Layers,
+  rowRenderer: Layers,
   rowData
 }) => {
   const {
@@ -78,19 +78,33 @@ export default ({
   )
 
   function getLayerRootProps() {
-    return {style: {
-      // height: '100%'
-    }}
+    return {
+      style: {
+        // height: '100%'
+      }
+    }
   }
 
+  function getItemDimensionsHelper(item){
+    const itemId = _get(item, keys.itemIdKey)
+    const groupId = _get(item, keys.itemGroupKey)
+    const groupIndex = groupOrders[groupId].index
+    const group = groupsWithItems[groupIndex]
+    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+    if(itemDimensions) return itemDimensions.dimensions
+    else return undefined;
+  }
 
   function getItemAbslouteLocation(item) {
     const itemId = _get(item, keys.itemIdKey)
     const groupId = _get(item, keys.itemGroupKey)
     const groupIndex = groupOrders[groupId].index
     const group = groupsWithItems[groupIndex]
-    const itemDimensions= group.itemDimensions.find(i => i.id === itemId)
-    const groupTop = groupHeights.reduce((acc, height, index)=>{if(index < groupIndex) return acc+height; else return acc}, 0)
+    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+    const groupTop = groupHeights.reduce((acc, height, index) => {
+      if (index < groupIndex) return acc + height
+      else return acc
+    }, 0)
     return {
       left: itemDimensions.dimensions.left,
       top: groupTop + itemDimensions.dimensions.top
@@ -181,11 +195,17 @@ export default ({
                   )
                 })}
               </div>
-              <Layers getLayerRootProps={getLayerRootProps} helpers={{
-                getLeftOffsetFromDate,
-                getDateFromLeftOffsetPosition,
-                getItemAbslouteLocation,
-              }} rowData={rowData} group={group.group}/>
+              <Layers
+                getLayerRootProps={getLayerRootProps}
+                helpers={{
+                  getLeftOffsetFromDate,
+                  getDateFromLeftOffsetPosition,
+                  getItemAbslouteLocation,
+                  getItemDimensions: getItemDimensionsHelper,
+                }}
+                rowData={rowData}
+                group={group.group}
+              />
             </React.Fragment>
           </div>
         )
