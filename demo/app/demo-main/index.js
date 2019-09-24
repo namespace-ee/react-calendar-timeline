@@ -608,7 +608,7 @@ function UnavailableLayyer({
               justifyContent: 'center'
             }}
           >
-            <span style={{ height: 12 }}>machine unavailable</span>
+            <span style={{ height: 12 }}>unavailable</span>
           </div>
         )
       })}

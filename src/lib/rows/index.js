@@ -121,7 +121,7 @@ export default ({
             style={{
               height: groupHeight,
               width: canvasWidth,
-              background: 'yellow',
+              background: 'lightgray',
               border: '1px solid blue',
               position: 'relative'
             }}
