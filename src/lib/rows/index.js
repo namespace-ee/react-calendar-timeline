@@ -82,6 +82,8 @@ export default ({
     canvasWidth
   )
 
+  console.log(groupsWithItemsDimensions)
+
   function getLayerRootProps() {
     return {
       style: {

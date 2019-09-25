@@ -787,7 +787,7 @@ export function getOrderedGroupsWithItems(groups, items, keys) {
   // Initialize with result object for each group
   for (let i = 0; i < groupKeys.length; i++) {
     const groupOrder = groupOrders[groupKeys[i]]
-    groupsWithItems[i] = {
+    groupsWithItems[groupKeys[i]] = {
       index: groupOrder.index,
       group: groupOrder.group,
       items: groupedItems[_get(groupOrder.group, keys.groupIdKey)] || []
