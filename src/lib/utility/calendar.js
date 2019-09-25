@@ -781,6 +781,7 @@ export function groupItemsByKey(items, key) {
 
 export function getOrderedGroupsWithItems(groups, items, keys) {
   const groupOrders = getGroupOrders(groups, keys)
+  console.log(groupOrders)
   const groupsWithItems = {}
   const groupKeys = Object.keys(groupOrders)
   const groupedItems = groupItemsByKey(items, keys.itemGroupKey)
@@ -806,9 +807,9 @@ export function getGroupsWithItemDimensions(
   canvasWidth
 ) {
   const groupKeys = Object.keys(groupsWithItems)
-  return groupKeys.map(groupKey => {
+  return groupKeys.reduce((acc, groupKey) => {
     const group = groupsWithItems[groupKey]
-    return getGroupWithItemDimensions(
+    acc[groupKey] = getGroupWithItemDimensions(
       group,
       keys,
       canvasTimeStart,
@@ -818,5 +819,6 @@ export function getGroupsWithItemDimensions(
       itemHeightRatio,
       stackItems
     )
-  })
+    return acc
+  }, {})
 }

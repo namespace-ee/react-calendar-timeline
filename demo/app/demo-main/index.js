@@ -353,12 +353,12 @@ export default class App extends Component {
                 handleDrop={this.handleDrop}
                 group={group}
               />
-              <Links
+              {/* <Links
                 timelineLinks={timelineLinks}
                 helpers={helpers}
                 group={group}
                 getLayerRootProps={getLayerRootProps}
-              />
+              /> */}
             </>
           )
         }}
@@ -367,7 +367,7 @@ export default class App extends Component {
           unavailableSlots: this.state.unavailableSlots,
           timelineLinks: this.state.timelineLinks,
         }}
-        moveResizeValidator={this.moveResizeValidator}
+        // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineHeaders>
           <DateHeader />

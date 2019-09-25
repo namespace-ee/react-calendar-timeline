@@ -51,10 +51,11 @@ export default class Items extends Component {
     itemRenderer: PropTypes.func,
     selected: PropTypes.array,
 
-    dimensionItems: PropTypes.array,
+    groupDimensions: PropTypes.object,
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
-    scrollRef: PropTypes.object
+    scrollRef: PropTypes.object,
+    order: PropTypes.object,
   }
 
   static defaultProps = {
@@ -65,7 +66,7 @@ export default class Items extends Component {
     return !(
       arraysEqual(nextProps.groups, this.props.groups) &&
       arraysEqual(nextProps.items, this.props.items) &&
-      arraysEqual(nextProps.dimensionItems, this.props.dimensionItems) &&
+      nextProps.groupDimensions === this.props.groupDimensions &&
       nextProps.keys === this.props.keys &&
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
@@ -90,43 +91,28 @@ export default class Items extends Component {
     }
   }
 
-  getVisibleItems(canvasTimeStart, canvasTimeEnd) {
-    const { keys, items } = this.props
-
-    return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
-  }
-
   render() {
     const {
       canvasTimeStart,
       canvasTimeEnd,
       dimensionItems,
       keys,
-      groups
+      groups,
+      groupDimensions,
+      order,
     } = this.props
     const { itemIdKey, itemGroupKey } = keys
 
-    const groupOrders = getGroupOrders(groups, keys)
-    const visibleItems = this.getVisibleItems(
-      canvasTimeStart,
-      canvasTimeEnd,
-      groupOrders
-    )
-    const sortedDimensionItems = keyBy(dimensionItems, 'id')
-
     return (
       <div className="rct-items">
-        {visibleItems
-          .filter(item => sortedDimensionItems[_get(item, itemIdKey)])
-          .map(item => (
+        {groupDimensions.items
+          .map((item, i) => (
             <Item
               key={_get(item, itemIdKey)}
               item={item}
               keys={this.props.keys}
-              order={groupOrders[_get(item, itemGroupKey)]}
-              dimensions={
-                sortedDimensionItems[_get(item, itemIdKey)].dimensions
-              }
+              order={order}
+              dimensions={groupDimensions.itemDimensions[i].dimensions}
               selected={this.isSelected(item, itemIdKey)}
               canChangeGroup={
                 _get(item, 'canChangeGroup') !== undefined

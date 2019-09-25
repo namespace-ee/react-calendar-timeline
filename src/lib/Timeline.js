@@ -19,7 +19,10 @@ import {
   getCanvasBoundariesFromVisibleTime,
   getCanvasWidth,
   stackTimelineItems,
-  getItemWithInteractions
+  getItemWithInteractions,
+  getVisibleItems,
+  getOrderedGroupsWithItems,
+  getGroupsWithItemDimensions,
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -668,7 +671,7 @@ export default class ReactCalendarTimeline extends Component {
   dragItem = (item, dragTime, newGroupOrder) => {
     let newGroup = this.props.groups[newGroupOrder]
     const keys = this.props.keys
-
+    console.log("dragItem", dragTime, newGroupOrder)
     this.setState({
       draggingItem: item,
       dragTime: dragTime,
@@ -965,7 +968,24 @@ export default class ReactCalendarTimeline extends Component {
     }))
     : items
 
-    
+    const visibleItems = getVisibleItems(
+      itemsWithInteraction,
+      canvasTimeStart,
+      canvasTimeEnd,
+      keys
+    )
+
+    const groupsWithItems = getOrderedGroupsWithItems(groups, visibleItems, keys)
+    const groupsWithItemsDimensions = getGroupsWithItemDimensions(
+      groupsWithItems,
+      keys,
+      lineHeight,
+      itemHeightRatio,
+      stackItems,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth
+    )
 
     const outerComponentStyle = {
       height: `${height}px`
@@ -1062,6 +1082,7 @@ export default class ReactCalendarTimeline extends Component {
                         this.props.horizontalLineClassNamesForGroup
                       }
                       onRowContextClick={this.handleScrollContextMenu}
+                      groupsWithItemsDimensions={groupsWithItemsDimensions}
                     />
                   </MarkerCanvas>
                 </ScrollElement>
