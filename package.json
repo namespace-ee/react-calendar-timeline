@@ -94,7 +94,6 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "create-react-context": "^0.2.2",
-    "d3": "^5.12.0",
     "element-resize-detector": "^1.1.12",
     "lodash.isequal": "^4.5.0"
   },
@@ -118,6 +117,7 @@
     "babel-plugin-react-remove-properties": "^0.3.0",
     "cross-env": "^5.1.4",
     "css-loader": "~0.26.0",
+    "d3": "^5.12.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^4.16.0",

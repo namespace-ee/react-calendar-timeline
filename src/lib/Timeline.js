@@ -5,7 +5,6 @@ import moment from 'moment'
 import Items from './items/Items'
 import Sidebar from './layout/Sidebar'
 import Columns from './columns/Columns'
-import GroupRows from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
 import Rows from './rows'
@@ -720,28 +719,6 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  columns(
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    minUnit,
-    timeSteps,
-    height
-  ) {
-    return (
-      <Columns
-        canvasTimeStart={canvasTimeStart}
-        canvasTimeEnd={canvasTimeEnd}
-        canvasWidth={canvasWidth}
-        lineCount={_length(this.props.groups)}
-        minUnit={minUnit}
-        timeSteps={timeSteps}
-        height={height}
-        verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
-      />
-    )
-  }
-
   handleRowClick = (e, rowIndex) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
     if (this.hasSelectedItem()) {
@@ -783,67 +760,6 @@ export default class ReactCalendarTimeline extends Component {
       e.preventDefault()
       this.props.onCanvasContextMenu(groupId, timePosition, e)
     }
-  }
-
-  rows(canvasWidth, groupHeights, groups) {
-    return (
-      <GroupRows
-        groups={groups}
-        canvasWidth={canvasWidth}
-        lineCount={_length(this.props.groups)}
-        groupHeights={groupHeights}
-        clickTolerance={this.props.clickTolerance}
-        onRowClick={this.handleRowClick}
-        onRowDoubleClick={this.handleRowDoubleClick}
-        horizontalLineClassNamesForGroup={
-          this.props.horizontalLineClassNamesForGroup
-        }
-        onRowContextClick={this.handleScrollContextMenu}
-      />
-    )
-  }
-
-  items(
-    canvasTimeStart,
-    zoom,
-    canvasTimeEnd,
-    canvasWidth,
-    minUnit,
-    dimensionItems,
-    groupHeights,
-    groupTops
-  ) {
-    return (
-      <Items
-        canvasTimeStart={canvasTimeStart}
-        canvasTimeEnd={canvasTimeEnd}
-        canvasWidth={canvasWidth}
-        dimensionItems={dimensionItems}
-        groupTops={groupTops}
-        items={this.props.items}
-        groups={this.props.groups}
-        keys={this.props.keys}
-        selectedItem={this.state.selectedItem}
-        dragSnap={this.props.dragSnap}
-        minResizeWidth={this.props.minResizeWidth}
-        canChangeGroup={this.props.canChangeGroup}
-        canMove={this.props.canMove}
-        canResize={this.props.canResize}
-        useResizeHandle={this.props.useResizeHandle}
-        canSelect={this.props.canSelect}
-        moveResizeValidator={this.props.moveResizeValidator}
-        itemSelect={this.selectItem}
-        itemDrag={this.dragItem}
-        itemDrop={this.dropItem}
-        onItemDoubleClick={this.doubleClickItem}
-        onItemContextMenu={this.contextMenuClickItem}
-        itemResizing={this.resizingItem}
-        itemResized={this.resizedItem}
-        itemRenderer={this.props.itemRenderer}
-        selected={this.props.selected}
-        scrollRef={this.scrollComponent}
-      />
-    )
   }
 
   handleHeaderRef = el => {
@@ -1043,7 +959,7 @@ export default class ReactCalendarTimeline extends Component {
       draggingItem: this.state.draggingItem,
       resizingItem: this.state.resizingItem,
       dragTime: this.state.dragTime,
-      resizingEdge: this.state.resizingItem,
+      resizingEdge: this.state.resizingEdge,
       resizeTime: this.state.resizeTime,
       newGroupOrder: this.state.newGroupOrder,
     }))
@@ -1090,25 +1006,6 @@ export default class ReactCalendarTimeline extends Component {
                   isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>
-                    {/* {this.items(
-                      canvasTimeStart,
-                      canvasTimeEnd,
-                      canvasWidth,
-                      minUnit,
-                      dimensionItems,
-                      groupHeights,
-                      groupTops
-                    )} */}
-                    {/* {this.columns(
-                      canvasTimeStart,
-                      zoom,
-                      canvasTimeEnd,
-                      canvasWidth,
-                      minUnit,
-                      timeSteps,
-                      height
-                    )} */}
-                    {/* {this.rows(canvasWidth, groupHeights, groups)} */}
                     {this.childrenWithProps(
                       canvasTimeStart,
                       canvasTimeEnd,
@@ -1140,6 +1037,7 @@ export default class ReactCalendarTimeline extends Component {
                       dragSnap={this.props.dragSnap}
                       minResizeWidth={this.props.minResizeWidth}
                       itemResized={this.resizedItem}
+                      itemResizing={this.resizedItem}
                       moveResizeValidator={this.props.moveResizeValidator}
                       itemSelect={this.selectItem}
                       itemDrag={this.dragItem}
