@@ -120,6 +120,9 @@ _please note that both approaches would give helper methods for calculating post
 />
 ```
 
+#### cons
+- no control over rendered items,columns...
+
 ### Compostion
 
 ```javascript
@@ -153,6 +156,10 @@ This approach will render the extra layers you pass to the row renderer but the 
 
 the result of the render function will be rendered bellow the two other layers. This will limit the user from maybe rendering the core layers incorrectly but will limit the inversion of control they own and we will need to keep some props to that are being passed to the timeline instead of taking advantage of the prop getters for the column and items layer
 
+#### Cons
+- can't control z-index
+- can't control row root div (might be important for virtual scrolling)
+
 ## Use cases 
 
 - Drag and drop from outside to the calendar to inside (specific target or anywhere in the row).
@@ -171,6 +178,7 @@ the result of the render function will be rendered bellow the two other layers. 
 - add complexity to library usage for custom changes
 - render vertical components that could cover more than 1 row
 - added layers might block some actions
+- adding stop propagation for item events (or any other layers)
 
 There are tradeoffs to choosing any path. Attempt to identify them here.
 

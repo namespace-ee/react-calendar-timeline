@@ -1154,6 +1154,13 @@ export default class ReactCalendarTimeline extends Component {
                       minUnit={minUnit}
                       rowRenderer={this.props.rowRenderer}
                       rowData={this.props.rowData}
+                      clickTolerance={this.props.clickTolerance}
+                      onRowClick={this.handleRowClick}
+                      onRowDoubleClick={this.handleRowDoubleClick}
+                      horizontalLineClassNamesForGroup={
+                        this.props.horizontalLineClassNamesForGroup
+                      }
+                      onRowContextClick={this.handleScrollContextMenu}
                     />
                   </MarkerCanvas>
                 </ScrollElement>

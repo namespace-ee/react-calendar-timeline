@@ -23,7 +23,8 @@ class GroupRow extends Component {
       onClick,
       clickTolerance,
       horizontalLineClassNamesForGroup,
-      group
+      group,
+      children,
     } = this.props
 
     let classNamesForGroup = [];
@@ -38,7 +39,9 @@ class GroupRow extends Component {
           onDoubleClick={onDoubleClick}
           className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
           style={style}
-        />
+        >
+          {children}
+        </div>
       </PreventClickOnDrag>
     )
   }

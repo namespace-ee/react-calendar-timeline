@@ -241,6 +241,7 @@ export default class Item extends Component {
       })
       .styleCursor(false)
       .on('dragstart', e => {
+        e.stopPropagation()
         if (this.props.selected) {
           const clickTime = this.timeFor(e);
           this.setState({
@@ -258,6 +259,7 @@ export default class Item extends Component {
         }
       })
       .on('dragmove', e => {
+        e.stopPropagation()
         if (this.state.dragging) {
           let dragTime = this.dragTime(e)
           let dragGroupDelta = this.dragGroupDelta(e)
@@ -284,6 +286,7 @@ export default class Item extends Component {
         }
       })
       .on('dragend', e => {
+        e.stopPropagation()
         if (this.state.dragging) {
           if (this.props.onDrop) {
             let dragTime = this.dragTime(e)
@@ -313,6 +316,7 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', e => {
+        e.stopPropagation()
         if (this.props.selected) {
           this.setState({
             resizing: true,
@@ -325,6 +329,7 @@ export default class Item extends Component {
         }
       })
       .on('resizemove', e => {
+        e.stopPropagation()
         if (this.state.resizing) {
           let resizeEdge = this.state.resizeEdge
 
@@ -383,6 +388,7 @@ export default class Item extends Component {
         }
       })
       .on('tap', e => {
+        e.stopPropagation()
         this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
       })
 
@@ -462,6 +468,7 @@ export default class Item extends Component {
   }
 
   onMouseDown = e => {
+    e.stopPropagation()
     if (!this.state.interactMounted) {
       e.preventDefault()
       this.startedClicking = true
@@ -469,6 +476,7 @@ export default class Item extends Component {
   }
 
   onMouseUp = e => {
+    e.stopPropagation()
     if (!this.state.interactMounted && this.startedClicking) {
       this.startedClicking = false
       this.actualClick(e, 'click')
@@ -476,6 +484,7 @@ export default class Item extends Component {
   }
 
   onTouchStart = e => {
+    e.stopPropagation()
     if (!this.state.interactMounted) {
       e.preventDefault()
       this.startedTouching = true
@@ -483,6 +492,7 @@ export default class Item extends Component {
   }
 
   onTouchEnd = e => {
+    e.stopPropagation()
     if (!this.state.interactMounted && this.startedTouching) {
       this.startedTouching = false
       this.actualClick(e, 'touch')
@@ -497,6 +507,7 @@ export default class Item extends Component {
   }
 
   handleContextMenu = e => {
+    e.stopPropagation()
     if (this.props.onContextMenu) {
       e.preventDefault()
       e.stopPropagation()
@@ -505,9 +516,14 @@ export default class Item extends Component {
   }
 
   actualClick(e, clickType) {
+    e.stopPropagation()
     if (this.props.canSelect && this.props.onSelect) {
       this.props.onSelect(this.itemId, clickType, e)
     }
+  }
+
+  handleOnClick = e => {
+    e.stopPropagation()
   }
 
   getItemRef = el => (this.item = el)
@@ -531,6 +547,7 @@ export default class Item extends Component {
       onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
       onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
       onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
+      onClick: (e) => composeEvents(this.handleOnClick, props.onClick),
       style: Object.assign({}, this.getItemStyle(props))
     }
   }

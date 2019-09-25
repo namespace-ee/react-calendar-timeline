@@ -9,6 +9,7 @@ import {
 } from '../utility/calendar'
 import { _get, _length } from '../utility/generic'
 import Item from '../items/Item'
+import GroupRow from '../row/GroupRow'
 
 export default ({
   groupHeights,
@@ -41,7 +42,13 @@ export default ({
   timeSteps,
   minUnit,
   rowRenderer: Layers,
-  rowData
+  rowData,
+  //row props
+  clickTolerance,
+  onRowClick,
+  onRowDoubleClick,
+  horizontalLineClassNamesForGroup,
+  onRowContextClick
 }) => {
   const {
     getTimelineState,
@@ -85,14 +92,14 @@ export default ({
     }
   }
 
-  function getItemDimensionsHelper(item){
+  function getItemDimensionsHelper(item) {
     const itemId = _get(item, keys.itemIdKey)
     const groupId = _get(item, keys.itemGroupKey)
     const groupIndex = groupOrders[groupId].index
     const group = groupsWithItems[groupIndex]
     const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-    if(itemDimensions) return itemDimensions.dimensions
-    else return undefined;
+    if (itemDimensions) return itemDimensions.dimensions
+    else return undefined
   }
 
   function getItemAbslouteLocation(item) {
@@ -116,98 +123,105 @@ export default ({
       {groupHeights.map((groupHeight, i) => {
         const group = groupsWithItems[i]
         return (
-          <div
-            key={i}
+          <GroupRow
+            clickTolerance={clickTolerance}
+            onContextMenu={evt => onRowContextClick(evt, i)}
+            onClick={evt => onRowClick(evt, i)}
+            onDoubleClick={evt => onRowDoubleClick(evt, i)}
+            key={`horizontal-line-${i}`}
+            isEvenRow={i % 2 === 0}
+            group={groups[i]}
+            horizontalLineClassNamesForGroup={horizontalLineClassNamesForGroup}
             style={{
-              height: groupHeight,
               width: canvasWidth,
+              height: groupHeight,
               background: 'lightgray',
               border: '1px solid blue',
               position: 'relative'
             }}
           >
-            <React.Fragment>
-              <Columns
-                canvasTimeStart={canvasTimeStart}
-                canvasTimeEnd={canvasTimeEnd}
-                canvasWidth={canvasWidth}
-                lineCount={_length(groups)}
-                minUnit={minUnit}
-                timeSteps={timeSteps}
-                height={groupHeight}
-                verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-              />
-              <div>
-                {group.items.map((item, y) => {
-                  return (
-                    <Item
-                      key={_get(item, keys.itemIdKey)}
-                      item={item}
-                      keys={keys}
-                      order={groupOrders[_get(item, keys.itemGroupKey)]}
-                      dimensions={
-                        group.itemDimensions.find(
-                          itemDimension =>
-                            itemDimension.id === _get(item, keys.itemIdKey)
-                        ).dimensions
-                      }
-                      canChangeGroup={
-                        _get(item, 'canChangeGroup') !== undefined
-                          ? _get(item, 'canChangeGroup')
-                          : canChangeGroup
-                      }
-                      canMove={
-                        _get(item, 'canMove') !== undefined
-                          ? _get(item, 'canMove')
-                          : canMove
-                      }
-                      canResizeLeft={canResizeLeft(item, canResize)}
-                      canResizeRight={canResizeRight(item, canResize)}
-                      canSelect={
-                        _get(item, 'canSelect') !== undefined
-                          ? _get(item, 'canSelect')
-                          : canSelect
-                      }
-                      useResizeHandle={useResizeHandle}
-                      groupTops={groupTops}
-                      canvasTimeStart={canvasTimeStart}
-                      canvasTimeEnd={canvasTimeEnd}
-                      canvasWidth={canvasWidth}
-                      dragSnap={dragSnap}
-                      minResizeWidth={minResizeWidth}
-                      onResizing={itemResizing}
-                      onResized={itemResized}
-                      moveResizeValidator={moveResizeValidator}
-                      onDrag={itemDrag}
-                      onDrop={itemDrop}
-                      onItemDoubleClick={onItemDoubleClick}
-                      onContextMenu={onItemContextMenu}
-                      onSelect={itemSelect}
-                      itemRenderer={itemRenderer}
-                      scrollRef={scrollRef}
-                      selected={isSelected(
-                        item,
-                        keys.itemIdKey,
-                        selectedItem,
-                        selected
-                      )}
-                    />
-                  )
-                })}
-              </div>
-              <Layers
-                getLayerRootProps={getLayerRootProps}
-                helpers={{
-                  getLeftOffsetFromDate,
-                  getDateFromLeftOffsetPosition,
-                  getItemAbslouteLocation,
-                  getItemDimensions: getItemDimensionsHelper,
-                }}
-                rowData={rowData}
-                group={group.group}
-              />
-            </React.Fragment>
-          </div>
+              <React.Fragment>
+                <Columns
+                  canvasTimeStart={canvasTimeStart}
+                  canvasTimeEnd={canvasTimeEnd}
+                  canvasWidth={canvasWidth}
+                  lineCount={_length(groups)}
+                  minUnit={minUnit}
+                  timeSteps={timeSteps}
+                  height={groupHeight}
+                  verticalLineClassNamesForTime={verticalLineClassNamesForTime}
+                />
+                <div>
+                  {group.items.map((item, y) => {
+                    return (
+                      <Item
+                        key={_get(item, keys.itemIdKey)}
+                        item={item}
+                        keys={keys}
+                        order={groupOrders[_get(item, keys.itemGroupKey)]}
+                        dimensions={
+                          group.itemDimensions.find(
+                            itemDimension =>
+                              itemDimension.id === _get(item, keys.itemIdKey)
+                          ).dimensions
+                        }
+                        canChangeGroup={
+                          _get(item, 'canChangeGroup') !== undefined
+                            ? _get(item, 'canChangeGroup')
+                            : canChangeGroup
+                        }
+                        canMove={
+                          _get(item, 'canMove') !== undefined
+                            ? _get(item, 'canMove')
+                            : canMove
+                        }
+                        canResizeLeft={canResizeLeft(item, canResize)}
+                        canResizeRight={canResizeRight(item, canResize)}
+                        canSelect={
+                          _get(item, 'canSelect') !== undefined
+                            ? _get(item, 'canSelect')
+                            : canSelect
+                        }
+                        useResizeHandle={useResizeHandle}
+                        groupTops={groupTops}
+                        canvasTimeStart={canvasTimeStart}
+                        canvasTimeEnd={canvasTimeEnd}
+                        canvasWidth={canvasWidth}
+                        dragSnap={dragSnap}
+                        minResizeWidth={minResizeWidth}
+                        onResizing={itemResizing}
+                        onResized={itemResized}
+                        moveResizeValidator={moveResizeValidator}
+                        onDrag={itemDrag}
+                        onDrop={itemDrop}
+                        onItemDoubleClick={onItemDoubleClick}
+                        onContextMenu={onItemContextMenu}
+                        onSelect={itemSelect}
+                        itemRenderer={itemRenderer}
+                        scrollRef={scrollRef}
+                        selected={isSelected(
+                          item,
+                          keys.itemIdKey,
+                          selectedItem,
+                          selected
+                        )}
+                      />
+                    )
+                  })}
+                </div>
+                <Layers
+                  getLayerRootProps={getLayerRootProps}
+                  helpers={{
+                    getLeftOffsetFromDate,
+                    getDateFromLeftOffsetPosition,
+                    getItemAbslouteLocation,
+                    getItemDimensions: getItemDimensionsHelper
+                  }}
+                  rowData={rowData}
+                  group={group.group}
+                />
+              </React.Fragment>
+          </GroupRow>
         )
       })}
     </div>
