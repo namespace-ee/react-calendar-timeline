@@ -964,6 +964,9 @@ export default class ReactCalendarTimeline extends Component {
       newGroupOrder: this.state.newGroupOrder,
     }))
     : items
+
+    
+
     const outerComponentStyle = {
       height: `${height}px`
     }

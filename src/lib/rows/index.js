@@ -3,9 +3,8 @@ import TimelineStateContext from '../timeline/TimelineStateContext'
 import Columns from '../columns/Columns'
 import {
   getVisibleItems,
-  getGroupOrders,
-  getItemDimensions,
-  stackGroup
+  getOrderedGroupsWithItems,
+  getGroupsWithItemDimensions
 } from '../utility/calendar'
 import { _get, _length } from '../utility/generic'
 import Item from '../items/Item'
@@ -65,16 +64,15 @@ export default ({
     timelineWidth,
     keys
   } = getTimelineState()
-  const visableItems = getVisibleItems(
+  const visibleItems = getVisibleItems(
     items,
     canvasTimeStart,
     canvasTimeEnd,
     keys
   )
-  const groupOrders = getGroupOrders(groups, keys)
-  const groupsWithItems = getGroupsWithItemDimensions(
-    groupOrders,
-    visableItems,
+  const groupsWithItems = getOrderedGroupsWithItems(groups, items, keys)
+  const groupsWithItemsDimensions = getGroupsWithItemDimensions(
+    groupsWithItems,
     keys,
     lineHeight,
     itemHeightRatio,
@@ -95,8 +93,8 @@ export default ({
   function getItemDimensionsHelper(item) {
     const itemId = _get(item, keys.itemIdKey)
     const groupId = _get(item, keys.itemGroupKey)
-    const groupIndex = groupOrders[groupId].index
-    const group = groupsWithItems[groupIndex]
+    const groupIndex = groupsWithItems[groupId].index
+    const group = groupsWithItemsDimensions[groupIndex]
     const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
     if (itemDimensions) return itemDimensions.dimensions
     else return undefined
@@ -105,8 +103,8 @@ export default ({
   function getItemAbslouteLocation(item) {
     const itemId = _get(item, keys.itemIdKey)
     const groupId = _get(item, keys.itemGroupKey)
-    const groupIndex = groupOrders[groupId].index
-    const group = groupsWithItems[groupIndex]
+    const groupIndex = groupsWithItems[groupId].index
+    const group = groupsWithItemsDimensions[groupIndex]
     const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
     const groupTop = groupHeights.reduce((acc, height, index) => {
       if (index < groupIndex) return acc + height
@@ -121,7 +119,7 @@ export default ({
   return (
     <div style={{ position: 'absolute', top: 0 }}>
       {groupHeights.map((groupHeight, i) => {
-        const group = groupsWithItems[i]
+        const group = groupsWithItemsDimensions[i]
         return (
           <GroupRow
             clickTolerance={clickTolerance}
@@ -140,153 +138,87 @@ export default ({
               position: 'relative'
             }}
           >
-              <React.Fragment>
-                <Columns
-                  canvasTimeStart={canvasTimeStart}
-                  canvasTimeEnd={canvasTimeEnd}
-                  canvasWidth={canvasWidth}
-                  lineCount={_length(groups)}
-                  minUnit={minUnit}
-                  timeSteps={timeSteps}
-                  height={groupHeight}
-                  verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-                />
-                <div>
-                  {group.items.map((item, y) => {
-                    return (
-                      <Item
-                        key={_get(item, keys.itemIdKey)}
-                        item={item}
-                        keys={keys}
-                        order={groupOrders[_get(item, keys.itemGroupKey)]}
-                        dimensions={
-                          group.itemDimensions.find(
-                            itemDimension =>
-                              itemDimension.id === _get(item, keys.itemIdKey)
-                          ).dimensions
-                        }
-                        canChangeGroup={
-                          _get(item, 'canChangeGroup') !== undefined
-                            ? _get(item, 'canChangeGroup')
-                            : canChangeGroup
-                        }
-                        canMove={
-                          _get(item, 'canMove') !== undefined
-                            ? _get(item, 'canMove')
-                            : canMove
-                        }
-                        canResizeLeft={canResizeLeft(item, canResize)}
-                        canResizeRight={canResizeRight(item, canResize)}
-                        canSelect={
-                          _get(item, 'canSelect') !== undefined
-                            ? _get(item, 'canSelect')
-                            : canSelect
-                        }
-                        useResizeHandle={useResizeHandle}
-                        groupTops={groupTops}
-                        canvasTimeStart={canvasTimeStart}
-                        canvasTimeEnd={canvasTimeEnd}
-                        canvasWidth={canvasWidth}
-                        dragSnap={dragSnap}
-                        minResizeWidth={minResizeWidth}
-                        onResizing={itemResizing}
-                        onResized={itemResized}
-                        moveResizeValidator={moveResizeValidator}
-                        onDrag={itemDrag}
-                        onDrop={itemDrop}
-                        onItemDoubleClick={onItemDoubleClick}
-                        onContextMenu={onItemContextMenu}
-                        onSelect={itemSelect}
-                        itemRenderer={itemRenderer}
-                        scrollRef={scrollRef}
-                        selected={isSelected(
-                          item,
-                          keys.itemIdKey,
-                          selectedItem,
-                          selected
-                        )}
-                      />
-                    )
-                  })}
-                </div>
-                <Layers
-                  getLayerRootProps={getLayerRootProps}
-                  helpers={{
-                    getLeftOffsetFromDate,
-                    getDateFromLeftOffsetPosition,
-                    getItemAbslouteLocation,
-                    getItemDimensions: getItemDimensionsHelper
-                  }}
-                  rowData={rowData}
-                  group={group.group}
-                />
-              </React.Fragment>
+            <React.Fragment>
+              <Columns
+                canvasTimeStart={canvasTimeStart}
+                canvasTimeEnd={canvasTimeEnd}
+                canvasWidth={canvasWidth}
+                lineCount={_length(groups)}
+                minUnit={minUnit}
+                timeSteps={timeSteps}
+                height={groupHeight}
+                verticalLineClassNamesForTime={verticalLineClassNamesForTime}
+              />
+              <div>
+                {group.items.map((item, y) => {
+                  return (
+                    <Item
+                      key={_get(item, keys.itemIdKey)}
+                      item={item}
+                      keys={keys}
+                      order={groupsWithItems[_get(item, keys.itemGroupKey)]}
+                      dimensions={group.itemDimensions[y].dimensions}
+                      canChangeGroup={
+                        _get(item, 'canChangeGroup') !== undefined
+                          ? _get(item, 'canChangeGroup')
+                          : canChangeGroup
+                      }
+                      canMove={
+                        _get(item, 'canMove') !== undefined
+                          ? _get(item, 'canMove')
+                          : canMove
+                      }
+                      canResizeLeft={canResizeLeft(item, canResize)}
+                      canResizeRight={canResizeRight(item, canResize)}
+                      canSelect={
+                        _get(item, 'canSelect') !== undefined
+                          ? _get(item, 'canSelect')
+                          : canSelect
+                      }
+                      useResizeHandle={useResizeHandle}
+                      groupTops={groupTops}
+                      canvasTimeStart={canvasTimeStart}
+                      canvasTimeEnd={canvasTimeEnd}
+                      canvasWidth={canvasWidth}
+                      dragSnap={dragSnap}
+                      minResizeWidth={minResizeWidth}
+                      onResizing={itemResizing}
+                      onResized={itemResized}
+                      moveResizeValidator={moveResizeValidator}
+                      onDrag={itemDrag}
+                      onDrop={itemDrop}
+                      onItemDoubleClick={onItemDoubleClick}
+                      onContextMenu={onItemContextMenu}
+                      onSelect={itemSelect}
+                      itemRenderer={itemRenderer}
+                      scrollRef={scrollRef}
+                      selected={isSelected(
+                        item,
+                        keys.itemIdKey,
+                        selectedItem,
+                        selected
+                      )}
+                    />
+                  )
+                })}
+              </div>
+              <Layers
+                getLayerRootProps={getLayerRootProps}
+                helpers={{
+                  getLeftOffsetFromDate,
+                  getDateFromLeftOffsetPosition,
+                  getItemAbslouteLocation,
+                  getItemDimensions: getItemDimensionsHelper
+                }}
+                rowData={rowData}
+                group={group.group}
+              />
+            </React.Fragment>
           </GroupRow>
         )
       })}
     </div>
   )
-}
-
-function getGroupsWithItems(groupOrders, items, keys) {
-  const groupedItems = {}
-  const groupKeys = Object.keys(groupOrders)
-  // Initialize with result object for each group
-  for (let i = 0; i < groupKeys.length; i++) {
-    const groupOrder = groupOrders[groupKeys[i]]
-    groupedItems[i] = {
-      index: groupOrder.index,
-      group: groupOrder.group,
-      items: items.filter(
-        item =>
-          _get(item, keys.itemGroupKey) ===
-          _get(groupOrder.group, keys.groupIdKey)
-      )
-    }
-  }
-  return groupedItems
-}
-
-function getGroupsWithItemDimensions(
-  groupOrders,
-  items,
-  keys,
-  lineHeight,
-  itemHeightRatio,
-  stackItems,
-  canvasTimeStart,
-  canvasTimeEnd,
-  canvasWidth
-) {
-  const groupsWithItems = getGroupsWithItems(groupOrders, items, keys)
-  const groupKeys = Object.keys(groupsWithItems)
-  return groupKeys.map(groupKey => {
-    const group = groupsWithItems[groupKey]
-    const itemDimensions = group.items.map(item => {
-      return getItemDimensions({
-        item,
-        keys,
-        canvasTimeStart,
-        canvasTimeEnd,
-        canvasWidth,
-        groupOrders: {},
-        lineHeight,
-        itemHeightRatio
-      })
-    })
-
-    const { groupHeight } = stackGroup(
-      itemDimensions,
-      stackItems,
-      lineHeight,
-      0
-    )
-    return {
-      ...group,
-      itemDimensions: itemDimensions,
-      height: groupHeight
-    }
-  })
 }
 
 function canResizeLeft(item, canResize) {

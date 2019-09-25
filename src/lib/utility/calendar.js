@@ -417,7 +417,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
  * @param {*} lineHeight 
  * @param {*} groupTop 
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
+export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop = 0) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -718,4 +718,105 @@ export function calculateScrollCanvas(
     )
   }
   return newState
+}
+
+/**
+ * get item dimensions of a group
+ * @param {*} groupWithItems
+ * @param {*} keys
+ * @param {*} canvasTimeStart
+ * @param {*} canvasTimeEnd
+ * @param {*} canvasWidth
+ * @param {*} lineHeight
+ * @param {*} itemHeightRatio
+ * @param {*} stackItems
+ */
+export function getGroupWithItemDimensions(
+  groupWithItems,
+  keys,
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth,
+  lineHeight,
+  itemHeightRatio,
+  stackItems
+) {
+  const itemDimensions = groupWithItems.items.map(item => {
+    return getItemDimensions({
+      item,
+      keys,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      groupOrders: {},
+      lineHeight,
+      itemHeightRatio
+    })
+  })
+  const { groupHeight } = stackGroup(itemDimensions, stackItems, lineHeight)
+  return {
+    ...groupWithItems,
+    itemDimensions: itemDimensions,
+    height: groupHeight
+  }
+}
+
+/**
+ * group timeline items by key
+ * returns a key/array pair object
+ * @param {*} items 
+ * @param {*} key 
+ */
+export function groupItemsByKey(items, key) {
+  return items.reduce((acc, item) => {
+    const itemKey = _get(item, key)
+    if (acc[itemKey]) {
+      acc[itemKey].push(item)
+    } else {
+      acc[itemKey] = [item]
+    }
+    return acc
+  }, {})
+}
+
+export function getOrderedGroupsWithItems(groups, items, keys) {
+  const groupOrders = getGroupOrders(groups, keys)
+  const groupsWithItems = {}
+  const groupKeys = Object.keys(groupOrders)
+  const groupedItems = groupItemsByKey(items, keys.itemGroupKey)
+  // Initialize with result object for each group
+  for (let i = 0; i < groupKeys.length; i++) {
+    const groupOrder = groupOrders[groupKeys[i]]
+    groupsWithItems[i] = {
+      index: groupOrder.index,
+      group: groupOrder.group,
+      items: groupedItems[_get(groupOrder.group, keys.groupIdKey)] || []
+    }
+  }
+  return groupsWithItems
+}
+export function getGroupsWithItemDimensions(
+  groupsWithItems,
+  keys,
+  lineHeight,
+  itemHeightRatio,
+  stackItems,
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth
+) {
+  const groupKeys = Object.keys(groupsWithItems)
+  return groupKeys.map(groupKey => {
+    const group = groupsWithItems[groupKey]
+    return getGroupWithItemDimensions(
+      group,
+      keys,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      lineHeight,
+      itemHeightRatio,
+      stackItems
+    )
+  })
 }
