@@ -387,7 +387,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
     // Is group being stacked?
     const isGroupStacked =
       group.stackItems !== undefined ? group.stackItems : stackItems
-    const { groupHeight, verticalMargin } = stackGroup(
+    const { groupHeight } = stackGroup(
       itemsDimensions,
       isGroupStacked,
       lineHeight,
@@ -402,7 +402,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
-  
+
   return {
     height: sum(groupHeights),
     groupHeights,
@@ -411,11 +411,11 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
  */
 export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
   var groupHeight = 0

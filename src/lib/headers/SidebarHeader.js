@@ -47,10 +47,11 @@ const SidebarWrapper = ({ children, variant, headerData }) => (
         <SidebarHeader
           leftSidebarWidth={leftSidebarWidth}
           rightSidebarWidth={rightSidebarWidth}
-          children={children}
           variant={variant}
           headerData={headerData}
-        />
+        >
+          {children}
+        </SidebarHeader>
       )
     }}
   </TimelineHeadersConsumer>
