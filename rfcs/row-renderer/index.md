@@ -108,7 +108,7 @@ _please note that both approaches would give helper methods for calculating post
 
 ```javascript
 <Timeline
- rowRenderer={({getRootProps, itemLayer, columnLayer, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation, getLayerProps})=>{
+ rowRenderer={({getRootProps, itemLayer, columnLayer, getXPostionFromTime, getTimeFromXPostion, getItemAbsoluteLocation, getLayerProps})=>{
     <div {...getRootProps()}>
         {itemLayer}
         {columnLayer}
@@ -127,7 +127,7 @@ _please note that both approaches would give helper methods for calculating post
 
 ```javascript
 <Timeline
- rowRenderer={({getRootProps, getItemsLayerProps, getColumnsLayerProps, getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
+ rowRenderer={({getRootProps, getItemsLayerProps, getColumnsLayerProps, getXPostionFromTime, getTimeFromXPostion, getItemAbsoluteLocation})=>{
     <div {...getRootProps()}>
         <Items {...getItemsLayerProps()}>
         <Columns {...getColumnsLayerProps()}>
@@ -145,7 +145,7 @@ This approach will render the extra layers you pass to the row renderer but the 
 
 ```javascript
 <Timeline
- rowRenderer={({getXPostionFromTime, getTimeFromXPostion, getItemAbslouteLocation})=>{
+ rowRenderer={({getXPostionFromTime, getTimeFromXPostion, getItemAbsoluteLocation})=>{
     <React.Fragment>
         <div {...getdivProps()}>droppable area</div>
         <div {...getdivProps()}>machine downtime</div>

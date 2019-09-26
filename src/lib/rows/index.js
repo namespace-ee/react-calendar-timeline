@@ -78,7 +78,7 @@ export default ({
     else return undefined
   }
 
-  function getItemAbslouteLocation(item) {
+  function getItemAbsoluteLocation(item) {
     const itemId = _get(item, keys.itemIdKey)
     const groupId = _get(item, keys.itemGroupKey)
     const group = groupsWithItemsDimensions[groupId]
@@ -163,7 +163,7 @@ export default ({
                 helpers={{
                   getLeftOffsetFromDate,
                   getDateFromLeftOffsetPosition,
-                  getItemAbslouteLocation,
+                  getItemAbsoluteLocation,
                   getItemDimensions: getItemDimensionsHelper
                 }}
                 rowData={rowData}

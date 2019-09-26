@@ -452,10 +452,10 @@ export default class App extends Component {
 
 function Link({ timelineLink, helpers, group }) {
   const [start, end] = timelineLink
-  const { getItemAbslouteLocation } = helpers
+  const { getItemAbsoluteLocation } = helpers
   if (start.group !== group.id) return null
-  const startItemDimensions = getItemAbslouteLocation(start)
-  const endItemDimensions = getItemAbslouteLocation(end)
+  const startItemDimensions = getItemAbsoluteLocation(start)
+  const endItemDimensions = getItemAbsoluteLocation(end)
   let startLink = [startItemDimensions.left, startItemDimensions.top]
   let endLink = [endItemDimensions.left, endItemDimensions.top]
   const isEndLinkBeforeStart =
