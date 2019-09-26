@@ -31,13 +31,6 @@ class DateHeader extends React.Component {
     return this.props.timelineUnit
   }
 
-  getRootStyle = () => {
-    return {
-      height: 30,
-      ...this.props.style
-    }
-  }
-
   getLabelFormat(interval, unit, labelWidth) {
     const { labelFormat } = this.props
     if (typeof labelFormat === 'string') {
@@ -68,7 +61,7 @@ class DateHeader extends React.Component {
             <div
               data-testid={`dateHeader`}
               className={this.props.className}
-              {...getRootProps({ style: this.getRootStyle() })}
+              {...getRootProps({ style: this.props.style })}
             >
               {intervals.map(interval => {
                 const intervalText = this.getLabelFormat(
@@ -145,7 +138,7 @@ DateHeaderWrapper.defaultProps = {
 }
 
 function formatLabel(
-  [timeStart, timeEnd],
+  [timeStart],
   unit,
   labelWidth,
   formatOptions = defaultHeaderFormats

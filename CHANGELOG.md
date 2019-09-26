@@ -10,16 +10,18 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 # 0.26.4
 
 * fix `react-calendar-timeline` not working with `react-hot-loader` #607 @ilaiwi + @westn
+* move savely overridable styles to `Timeline.scss`, allowing easy style customization
+* remove use of `composeEvents()` to prevent new function creation on each render
 
 ## 0.26.3
 
 * add documentation for `onItemDeselect` #350 @ilaiwi
 * solve a bug where `onItemDeselect` is not triggered as expected for several item clicks #350 @ilaiwi
-* fix row height on browser scaling #615 @gaston-niglia 
+* fix row height on browser scaling #615 @gaston-niglia
 
 ### Packages
 
-update to `node-sass@4.12.0` for newer versions of node. 
+update to `node-sass@4.12.0` for newer versions of node.
 
 ## 0.26.2
 
@@ -31,7 +33,7 @@ update to `node-sass@4.12.0` for newer versions of node.
 
 you can as well solve the issue without upgrading by adding the following style
 
-```
+``` css
 .react-calendar-timeline .rct-horizontal-lines {
   -webkit-user-select: none;
   -moz-user-select: -moz-none;
@@ -51,7 +53,7 @@ you can as well solve the issue without upgrading by adding the following style
 
 #### Breaking
 
-* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label or [this example](https://codesandbox.io/s/timeline-demo-info-label-neec9). 
+* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label or [this example](https://codesandbox.io/s/timeline-demo-info-label-neec9).
 
 
 ## 0.25.4

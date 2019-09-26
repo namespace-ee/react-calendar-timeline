@@ -4,13 +4,9 @@ import moment from 'moment'
 
 import Timeline, {
   TimelineMarkers,
-  TimelineHeaders,
   TodayMarker,
   CustomMarker,
   CursorMarker,
-  CustomHeader,
-  SidebarHeader,
-  DateHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -157,6 +153,7 @@ export default class App extends Component {
         sidebarContent={<div>Above The Left</div>}
         canMove
         canResize="right"
+        useResizeHandle
         canSelect
         itemsSorted
         itemTouchSendsClick={false}

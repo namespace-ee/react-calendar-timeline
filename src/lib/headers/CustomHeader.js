@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { TimelineHeadersConsumer } from './HeadersContext'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
-import { iterateTimes, calculateXPositionForTime } from '../utility/calendar'
+import { iterateTimes } from '../utility/calendar'
 
 export class CustomHeader extends React.Component {
   static propTypes = {
@@ -16,6 +16,7 @@ export class CustomHeader extends React.Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
+    timelineWidth: PropTypes.number.isRequired,
     showPeriod: PropTypes.func.isRequired,
     headerData: PropTypes.object,
     getLeftOffsetFromDate: PropTypes.func.isRequired,
@@ -64,7 +65,7 @@ export class CustomHeader extends React.Component {
     return false
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
@@ -209,7 +210,6 @@ const CustomHeaderWrapper = ({ children, unit, headerData, height }) => (
         <TimelineHeadersConsumer>
           {({ timeSteps }) => (
             <CustomHeader
-              children={children}
               timeSteps={timeSteps}
               showPeriod={showPeriod}
               unit={unit ? unit : timelineState.timelineUnit}
@@ -217,7 +217,9 @@ const CustomHeaderWrapper = ({ children, unit, headerData, height }) => (
               headerData={headerData}
               getLeftOffsetFromDate={getLeftOffsetFromDate}
               height={height}
-            />
+            >
+              {children}
+            </CustomHeader>
           )}
         </TimelineHeadersConsumer>
       )

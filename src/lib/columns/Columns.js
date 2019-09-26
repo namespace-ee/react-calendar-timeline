@@ -39,14 +39,12 @@ class Columns extends Component {
     const {
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth,
       minUnit,
       timeSteps,
       height,
       verticalLineClassNamesForTime,
       getLeftOffsetFromDate
     } = this.props
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
 
