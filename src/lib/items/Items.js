@@ -20,7 +20,6 @@ const canResizeRight = (item, canResize) => {
 
 export default class Items extends Component {
   static propTypes = {
-    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 
     canvasTimeStart: PropTypes.number.isRequired,
@@ -64,7 +63,6 @@ export default class Items extends Component {
 
   shouldComponentUpdate(nextProps) {
     return !(
-      arraysEqual(nextProps.groups, this.props.groups) &&
       arraysEqual(nextProps.items, this.props.items) &&
       nextProps.groupDimensions === this.props.groupDimensions &&
       nextProps.keys === this.props.keys &&
@@ -97,15 +95,15 @@ export default class Items extends Component {
       canvasTimeEnd,
       dimensionItems,
       keys,
-      groups,
       groupDimensions,
       order,
+      items
     } = this.props
     const { itemIdKey, itemGroupKey } = keys
 
     return (
       <div className="rct-items">
-        {groupDimensions.items
+        {items
           .map((item, i) => (
             <Item
               key={_get(item, itemIdKey)}

@@ -497,40 +497,51 @@ export function stackTimelineItems(
     })
   )
 
+  
   // if there are no groups return an empty array of dimensions
   if (groups.length === 0) {
     return {
-      dimensionItems: [],
+      groupsWithItemsDimensions: {},
       height: 0,
       groupHeights: [],
       groupTops: []
     }
   }
-
-  // Get the order of groups based on their id key
-  const groupOrders = getGroupOrders(groups, keys)
-  let dimensionItems = visibleItemsWithInteraction
-    .map(item =>
-      getItemDimensions({
-        item,
-        keys,
-        canvasTimeStart,
-        canvasTimeEnd,
-        canvasWidth,
-        groupOrders,
-        lineHeight,
-        itemHeightRatio
-      })
-    )
-    .filter(item => !!item)
-  // Get a new array of groupOrders holding the stacked items
-  const { height, groupHeights, groupTops } = stackAll(
-    dimensionItems,
-    groupOrders,
+  
+  const groupsWithItems = getOrderedGroupsWithItems(groups, visibleItemsWithInteraction, keys)
+  const groupsWithItemsDimensions = getGroupsWithItemDimensions(
+    groupsWithItems,
+    keys,
     lineHeight,
-    stackItems
+    itemHeightRatio,
+    stackItems,
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth
   )
-  return { dimensionItems, height, groupHeights, groupTops }
+
+  
+  const groupHeights = groups.map((group)=>{
+    const groupKey = _get(group, keys.groupIdKey)
+    const groupsWithItemDimensions = groupsWithItemsDimensions[groupKey]
+    return groupsWithItemDimensions.height
+  })
+
+  const groupTops = groupHeights.reduce((acc, height)=>{
+    const lastIndex = acc.length - 1;
+    if(lastIndex > -1) {
+      const lastTop = acc[lastIndex]
+      acc.push(lastTop+height)
+    }
+    else{
+      acc.push(height)
+    }
+    return acc
+  },[])
+  
+  const height = groupHeights.reduce((acc, height)=> acc+height,0)
+
+  return { groupsWithItemsDimensions, height, groupHeights, groupTops }
 }
 
 /**
@@ -781,7 +792,6 @@ export function groupItemsByKey(items, key) {
 
 export function getOrderedGroupsWithItems(groups, items, keys) {
   const groupOrders = getGroupOrders(groups, keys)
-  console.log(groupOrders)
   const groupsWithItems = {}
   const groupKeys = Object.keys(groupOrders)
   const groupedItems = groupItemsByKey(items, keys.itemGroupKey)

@@ -7,7 +7,6 @@ import Items from '../items/Items'
 
 export default ({
   groupHeights,
-  items,
   groups,
   itemRenderer,
   lineHeight,
@@ -94,6 +93,8 @@ export default ({
     }
   }
 
+  console.log(groups)
+
   return (
     <div style={{ position: 'absolute', top: 0 }}>
       {groupHeights.map((groupHeight, i) => {
@@ -129,8 +130,8 @@ export default ({
                 verticalLineClassNamesForTime={verticalLineClassNamesForTime}
               />
               <Items
-                groups={groups}
-                items={items}
+                //TODO: fix groups with no items
+                items={group.items || []}
                 canvasTimeStart={canvasTimeStart}
                 canvasTimeEnd={canvasTimeEnd}
                 canvasWidth={canvasWidth}

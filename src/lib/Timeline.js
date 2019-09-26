@@ -22,7 +22,7 @@ import {
   getItemWithInteractions,
   getVisibleItems,
   getOrderedGroupsWithItems,
-  getGroupsWithItemDimensions,
+  getgroupsWithItemsDimensions,
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -320,7 +320,7 @@ export default class ReactCalendarTimeline extends Component {
     const canvasWidth = getCanvasWidth(this.state.width)
 
     const {
-      dimensionItems,
+      groupsWithItemsDimensions,
       height,
       groupHeights,
       groupTops
@@ -343,7 +343,7 @@ export default class ReactCalendarTimeline extends Component {
     )
 
     /* eslint-disable react/no-direct-mutation-state */
-    this.state.dimensionItems = dimensionItems
+    this.state.groupsWithItemsDimensions = groupsWithItemsDimensions
     this.state.height = height
     this.state.groupHeights = groupHeights
     this.state.groupTops = groupTops
@@ -463,7 +463,7 @@ export default class ReactCalendarTimeline extends Component {
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
     const canvasWidth = getCanvasWidth(width)
     const {
-      dimensionItems,
+      groupsWithItemsDimensions,
       height,
       groupHeights,
       groupTops
@@ -490,7 +490,7 @@ export default class ReactCalendarTimeline extends Component {
 
     this.setState({
       width,
-      dimensionItems,
+      groupsWithItemsDimensions,
       height,
       groupHeights,
       groupTops
@@ -816,7 +816,7 @@ export default class ReactCalendarTimeline extends Component {
     canvasTimeStart,
     canvasTimeEnd,
     canvasWidth,
-    dimensionItems,
+    groupsWithItemsDimensions,
     groupHeights,
     groupTops,
     height,
@@ -840,7 +840,7 @@ export default class ReactCalendarTimeline extends Component {
       canvasWidth,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
-      dimensionItems,
+      groupsWithItemsDimensions,
       items: this.props.items,
       groups: this.props.groups,
       keys: this.props.keys,
@@ -924,7 +924,7 @@ export default class ReactCalendarTimeline extends Component {
       canvasTimeStart,
       canvasTimeEnd
     } = this.state
-    let { dimensionItems, height, groupHeights, groupTops } = this.state
+    let { groupsWithItemsDimensions, height, groupHeights, groupTops } = this.state
 
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasWidth = getCanvasWidth(width)
@@ -950,43 +950,14 @@ export default class ReactCalendarTimeline extends Component {
         this.state.resizeTime,
         this.state.newGroupOrder
       )
-      dimensionItems = stackResults.dimensionItems
+      groupsWithItemsDimensions = stackResults.groupsWithItemsDimensions
       height = stackResults.height
       groupHeights = stackResults.groupHeights
       groupTops = stackResults.groupTops
     }
-    const itemsWithInteraction =  isInteractingWithItem? items.map(item => getItemWithInteractions({
-      item,
-      keys,
-      groups,
-      draggingItem: this.state.draggingItem,
-      resizingItem: this.state.resizingItem,
-      dragTime: this.state.dragTime,
-      resizingEdge: this.state.resizingEdge,
-      resizeTime: this.state.resizeTime,
-      newGroupOrder: this.state.newGroupOrder,
-    }))
-    : items
 
-    const visibleItems = getVisibleItems(
-      itemsWithInteraction,
-      canvasTimeStart,
-      canvasTimeEnd,
-      keys
-    )
-
-    const groupsWithItems = getOrderedGroupsWithItems(groups, visibleItems, keys)
-    const groupsWithItemsDimensions = getGroupsWithItemDimensions(
-      groupsWithItems,
-      keys,
-      lineHeight,
-      itemHeightRatio,
-      stackItems,
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth
-    )
-
+    console.log(groupsWithItemsDimensions)
+    
     const outerComponentStyle = {
       height: `${height}px`
     }
@@ -1033,7 +1004,7 @@ export default class ReactCalendarTimeline extends Component {
                       canvasTimeStart,
                       canvasTimeEnd,
                       canvasWidth,
-                      dimensionItems,
+                      groupsWithItemsDimensions,
                       groupHeights,
                       groupTops,
                       height,
@@ -1045,8 +1016,6 @@ export default class ReactCalendarTimeline extends Component {
                     <Rows
                       groupHeights={groupHeights}
                       canvasWidth={canvasWidth}
-                      items={itemsWithInteraction}
-                      groups={groups}
                       itemRenderer={itemRenderer}
                       lineHeight={lineHeight}
                       itemHeightRatio={itemHeightRatio}
@@ -1083,6 +1052,7 @@ export default class ReactCalendarTimeline extends Component {
                       }
                       onRowContextClick={this.handleScrollContextMenu}
                       groupsWithItemsDimensions={groupsWithItemsDimensions}
+                      groups={groups}
                     />
                   </MarkerCanvas>
                 </ScrollElement>
