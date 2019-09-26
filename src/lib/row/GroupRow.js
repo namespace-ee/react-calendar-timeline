@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
+import interact from 'interactjs'
+import { _get } from '../utility/generic'
 
 class GroupRow extends Component {
   static propTypes = {
@@ -11,7 +13,17 @@ class GroupRow extends Component {
     style: PropTypes.object.isRequired,
     clickTolerance: PropTypes.number.isRequired,
     group: PropTypes.object.isRequired,
-    horizontalLineClassNamesForGroup: PropTypes.func
+    horizontalLineClassNamesForGroup: PropTypes.func,
+    keys: PropTypes.object
+  }
+
+  ref= React.createRef()
+
+  componentDidMount(){
+    interact(this.ref.current).dropzone({
+      accept: '.rct-item',
+      overlap: 'pointer'
+    })
   }
 
   render() {
@@ -25,8 +37,9 @@ class GroupRow extends Component {
       horizontalLineClassNamesForGroup,
       group,
       children,
+      keys,
     } = this.props
-
+    // console.log(group)
     let classNamesForGroup = [];
     if (horizontalLineClassNamesForGroup) {
       classNamesForGroup = horizontalLineClassNamesForGroup(group);
@@ -35,10 +48,12 @@ class GroupRow extends Component {
     return (
       <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
         <div
+          ref={this.ref}
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
-          className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
+          className={'rct-hl '+ (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
           style={style}
+          data-groupid={_get(group, keys.groupIdKey)}
         >
           {children}
         </div>

@@ -93,8 +93,6 @@ export default ({
     }
   }
 
-  console.log(groups)
-
   return (
     <div style={{ position: 'absolute', top: 0 }}>
       {groupHeights.map((groupHeight, i) => {
@@ -117,6 +115,7 @@ export default ({
               border: '1px solid blue',
               position: 'relative'
             }}
+            keys={keys}
           >
             <React.Fragment>
               <Columns
@@ -154,7 +153,6 @@ export default ({
                 itemRenderer={itemRenderer}
                 selected={selected}
                 groupDimensions={group}
-                groupTops={groupTops}
                 useResizeHandle={useResizeHandle}
                 scrollRef={scrollRef}
                 order={group}

@@ -458,7 +458,7 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
  * @param {number} dragTime
  * @param {left or right} resizingEdge
  * @param {number} resizeTime
- * @param {number} newGroupOrder
+ * @param {number} newGroupId
  */
 export function stackTimelineItems(
   items,
@@ -475,7 +475,7 @@ export function stackTimelineItems(
   dragTime,
   resizingEdge,
   resizeTime,
-  newGroupOrder
+  newGroupId
 ) {
   const visibleItems = getVisibleItems(
     items,
@@ -483,6 +483,7 @@ export function stackTimelineItems(
     canvasTimeEnd,
     keys
   )
+
   const visibleItemsWithInteraction = visibleItems.map(item =>
     getItemWithInteractions({
       item,
@@ -493,7 +494,7 @@ export function stackTimelineItems(
       resizingEdge,
       resizeTime,
       groups,
-      newGroupOrder
+      newGroupId
     })
   )
 
@@ -604,7 +605,7 @@ export function getItemDimensions({
  * @param {*} resizingEdge
  * @param {*} resizeTime
  * @param {*} groups
- * @param {*} newGroupOrder
+ * @param {*} newGroupId
  */
 export function getItemWithInteractions({
   item,
@@ -615,7 +616,7 @@ export function getItemWithInteractions({
   resizingEdge,
   resizeTime,
   groups,
-  newGroupOrder
+  newGroupId
 }) {
   //TODO: remove from here. This shouldn't be this function's responsibility
   if (!resizingItem && !draggingItem) return item
@@ -631,12 +632,13 @@ export function getItemWithInteractions({
     resizingEdge,
     resizeTime
   })
+
   const newItem = {
     ...item,
     [keys.itemTimeStartKey]: itemTimeStart,
     [keys.itemTimeEndKey]: itemTimeEnd,
     [keys.itemGroupKey]: isDragging
-      ? _get(groups[newGroupOrder], keys.groupIdKey)
+      ? newGroupId
       : _get(item, keys.itemGroupKey)
   }
   return newItem
@@ -723,7 +725,7 @@ export function calculateScrollCanvas(
         mergedState.dragTime,
         mergedState.resizingEdge,
         mergedState.resizeTime,
-        mergedState.newGroupOrder
+        mergedState.newGroupId
       )
     )
   }

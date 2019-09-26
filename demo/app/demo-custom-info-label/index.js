@@ -44,10 +44,10 @@ export default class App extends Component {
     }
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+  handleItemMove = (itemId, dragTime, newGroupId) => {
     const { items, groups } = this.state
 
-    const group = groups[newGroupOrder]
+    const group = groups.find(i => i.id === newGroupId)
 
     this.setState({
       items: items.map(
@@ -83,8 +83,8 @@ export default class App extends Component {
     })
   }
 
-  handleItemDrag = ({ eventType, itemId, time, edge, newGroupOrder }) => {
-    const group = this.state.groups[newGroupOrder]
+  handleItemDrag = ({ eventType, itemId, time, edge, newGroupId }) => {
+    const group = this.state.groups.find(i => i.id === newGroupId)
     const infoLabelGroupTitle = group ? group.title : ''
     const infoLabelTime = moment(time).format('dddd, MMMM Do YYYY')
     let heading = ''

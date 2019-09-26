@@ -339,7 +339,7 @@ export default class ReactCalendarTimeline extends Component {
       this.state.dragTime,
       this.state.resizingEdge,
       this.state.resizeTime,
-      this.state.newGroupOrder
+      this.state.newGroupId
     )
 
     /* eslint-disable react/no-direct-mutation-state */
@@ -416,7 +416,7 @@ export default class ReactCalendarTimeline extends Component {
           prevState.dragTime,
           prevState.resizingEdge,
           prevState.resizeTime,
-          prevState.newGroupOrder
+          prevState.newGroupId
         )
       )
     }
@@ -482,7 +482,7 @@ export default class ReactCalendarTimeline extends Component {
       this.state.dragTime,
       this.state.resizingEdge,
       this.state.resizeTime,
-      this.state.newGroupOrder
+      this.state.newGroupId
     )
 
     // this is needed by dragItem since it uses pageY from the drag events
@@ -668,14 +668,13 @@ export default class ReactCalendarTimeline extends Component {
     return time
   }
 
-  dragItem = (item, dragTime, newGroupOrder) => {
-    let newGroup = this.props.groups[newGroupOrder]
+  dragItem = (item, dragTime, newGroupId) => {
+    let newGroup = this.props.groups.find(i => _get(i, this.props.keys.groupIdKey)===newGroupId)
     const keys = this.props.keys
-    console.log("dragItem", dragTime, newGroupOrder)
     this.setState({
       draggingItem: item,
       dragTime: dragTime,
-      newGroupOrder: newGroupOrder,
+      newGroupId: newGroupId,
       dragGroupTitle: newGroup ? _get(newGroup, keys.groupLabelKey) : ''
     })
 
@@ -683,14 +682,14 @@ export default class ReactCalendarTimeline extends Component {
       eventType: 'move',
       itemId: item,
       time: dragTime,
-      newGroupOrder
+      newGroupId
     })
   }
 
-  dropItem = (item, dragTime, newGroupOrder) => {
+  dropItem = (item, dragTime, newGroupId) => {
     this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
     if (this.props.onItemMove) {
-      this.props.onItemMove(item, dragTime, newGroupOrder)
+      this.props.onItemMove(item, dragTime, newGroupId)
     }
   }
 
@@ -716,9 +715,9 @@ export default class ReactCalendarTimeline extends Component {
     }
   }
 
-  updatingItem = ({ eventType, itemId, time, edge, newGroupOrder }) => {
+  updatingItem = ({ eventType, itemId, time, edge, newGroupId }) => {
     if (this.props.onItemDrag) {
-      this.props.onItemDrag({ eventType, itemId, time, edge, newGroupOrder })
+      this.props.onItemDrag({ eventType, itemId, time, edge, newGroupId })
     }
   }
 
@@ -948,7 +947,7 @@ export default class ReactCalendarTimeline extends Component {
         this.state.dragTime,
         this.state.resizingEdge,
         this.state.resizeTime,
-        this.state.newGroupOrder
+        this.state.newGroupId
       )
       groupsWithItemsDimensions = stackResults.groupsWithItemsDimensions
       height = stackResults.height
@@ -956,8 +955,6 @@ export default class ReactCalendarTimeline extends Component {
       groupTops = stackResults.groupTops
     }
 
-    console.log(groupsWithItemsDimensions)
-    
     const outerComponentStyle = {
       height: `${height}px`
     }

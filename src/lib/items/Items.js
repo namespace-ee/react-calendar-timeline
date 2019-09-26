@@ -51,7 +51,6 @@ export default class Items extends Component {
     selected: PropTypes.array,
 
     groupDimensions: PropTypes.object,
-    groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
     scrollRef: PropTypes.object,
     order: PropTypes.object,
@@ -130,7 +129,6 @@ export default class Items extends Component {
                   : this.props.canSelect
               }
               useResizeHandle={this.props.useResizeHandle}
-              groupTops={this.props.groupTops}
               canvasTimeStart={this.props.canvasTimeStart}
               canvasTimeEnd={this.props.canvasTimeEnd}
               canvasWidth={this.props.canvasWidth}

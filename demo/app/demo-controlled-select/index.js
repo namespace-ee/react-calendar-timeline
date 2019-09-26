@@ -91,10 +91,10 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+  handleItemMove = (itemId, dragTime, newGroupId) => {
     const { items, groups } = this.state
 
-    const group = groups[newGroupOrder]
+    const group = groups.find(i => i.id === newGroupId)
 
     this.setState({
       items: items.map(
@@ -109,7 +109,7 @@ export default class App extends Component {
       )
     })
 
-    console.log('Moved', itemId, dragTime, newGroupOrder)
+    console.log('Moved', itemId, dragTime, newGroupId)
   }
 
   handleItemResize = (itemId, time, edge) => {
