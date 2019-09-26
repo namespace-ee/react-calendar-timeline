@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import moment from 'moment'
 
 import Items from './items/Items'
 import Sidebar from './layout/Sidebar'
@@ -12,7 +11,6 @@ import windowResizeDetector from '../resize-detector/window'
 
 import {
   getMinUnit,
-  getNextUnit,
   calculateTimeForXPosition,
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
@@ -31,7 +29,6 @@ import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 import { TimelineHeadersProvider } from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
-import SidebarHeader from './headers/SidebarHeader'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -41,7 +38,7 @@ export default class ReactCalendarTimeline extends Component {
     rightSidebarWidth: PropTypes.number,
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
-    stickyHeader: PropTypes.bool,
+    // stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
 
@@ -877,13 +874,13 @@ export default class ReactCalendarTimeline extends Component {
 
   /**
    * check if child of type TimelineHeader
-   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
+   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types
    */
   isTimelineHeader = (child) => {
     if(child.type === undefined) return false
     return child.type.secretKey ===TimelineHeaders.secretKey
   }
-  
+
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,

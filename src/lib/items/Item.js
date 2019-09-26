@@ -4,21 +4,10 @@ import interact from 'interactjs'
 import moment from 'moment'
 
 import { _get, deepObjectCompare } from '../utility/generic'
-import { composeEvents } from '../utility/events'
 import { defaultItemRenderer } from './defaultItemRenderer'
 import { coordinateToTimeRatio } from '../utility/calendar'
 import { getSumScroll, getSumOffset } from '../utility/dom-helpers'
-import {
-  overridableStyles,
-  selectedStyle,
-  selectedAndCanMove,
-  selectedAndCanResizeLeft,
-  selectedAndCanResizeLeftAndDragLeft,
-  selectedAndCanResizeRight,
-  selectedAndCanResizeRightAndDragRight,
-  leftResizeStyle,
-  rightResizeStyle
-} from './styles'
+
 export default class Item extends Component {
   // removed prop type check for SPEED!
   // they are coming from a trusted component anyway
@@ -104,7 +93,7 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      (nextProps.order ? nextProps.order.index : undefined) !== 
+      (nextProps.order ? nextProps.order.index : undefined) !==
         (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
@@ -167,7 +156,7 @@ export default class Item extends Component {
 
     const offset = getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef)
-      
+
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
 
@@ -181,7 +170,7 @@ export default class Item extends Component {
 
       const offset = getSumOffset(this.props.scrollRef).offsetTop
       const scrolls = getSumScroll(this.props.scrollRef)
-      
+
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
@@ -245,7 +234,7 @@ export default class Item extends Component {
           const clickTime = this.timeFor(e);
           this.setState({
             dragging: true,
-            dragStart: { 
+            dragStart: {
               x: e.pageX,
               y: e.pageY,
             offset: this.itemTimeStart - clickTime },
@@ -348,7 +337,8 @@ export default class Item extends Component {
           }
 
           this.setState({
-            resizeTime
+            resizeEdge,
+            resizeTime,
           })
         }
       })
@@ -385,10 +375,6 @@ export default class Item extends Component {
       .on('tap', e => {
         this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
       })
-
-    this.setState({
-      interactMounted: true
-    })
   }
 
   canResizeLeft(props = this.props) {
@@ -425,7 +411,7 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
-    if(!!this.item){
+    if (this.item){
       if (this.props.selected && !interactMounted) {
         this.mountInteract()
         interactMounted = true
@@ -437,7 +423,7 @@ export default class Item extends Component {
       ) {
         const leftResize = this.props.useResizeHandle ? this.dragLeft : true
         const rightResize = this.props.useResizeHandle ? this.dragRight : true
-  
+
         interact(this.item).resizable({
           enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
           edges: {
@@ -466,12 +452,18 @@ export default class Item extends Component {
       e.preventDefault()
       this.startedClicking = true
     }
+    if (this.props.item.itemProps.onMouseDown) {
+      this.props.item.itemProps.onMouseDown(e);
+    }
   }
 
   onMouseUp = e => {
     if (!this.state.interactMounted && this.startedClicking) {
       this.startedClicking = false
       this.actualClick(e, 'click')
+    }
+    if (this.props.item.itemProps.onMouseUp) {
+      this.props.item.itemProps.onMouseUp(e);
     }
   }
 
@@ -480,12 +472,18 @@ export default class Item extends Component {
       e.preventDefault()
       this.startedTouching = true
     }
+    if (this.props.item.itemProps.onTouchStart) {
+      this.props.item.itemProps.onTouchStart(e);
+    }
   }
 
   onTouchEnd = e => {
     if (!this.state.interactMounted && this.startedTouching) {
       this.startedTouching = false
       this.actualClick(e, 'touch')
+    }
+    if (this.props.item.itemProps.onTouchEnd) {
+      this.props.item.itemProps.onTouchEnd(e);
     }
   }
 
@@ -494,6 +492,9 @@ export default class Item extends Component {
     if (this.props.onItemDoubleClick) {
       this.props.onItemDoubleClick(this.itemId, e)
     }
+    if (this.props.item.itemProps.onDoubleClick) {
+      this.props.item.itemProps.onDoubleClick(e);
+    }
   }
 
   handleContextMenu = e => {
@@ -501,6 +502,9 @@ export default class Item extends Component {
       e.preventDefault()
       e.stopPropagation()
       this.props.onContextMenu(this.itemId, e)
+    }
+    if (this.props.item.itemProps.onContextMenu) {
+      this.props.item.itemProps.onContextMenu(e);
     }
   }
 
@@ -516,21 +520,26 @@ export default class Item extends Component {
 
   getItemProps = (props = {}) => {
     //TODO: maybe shouldnt include all of these classes
-    const classNames =
-      'rct-item' +
-      (this.props.item.className ? ` ${this.props.item.className}` : '')
+    const classNames = [
+      'rct-item',
+      this.props.item.className ? this.props.item.className : 'default-theme',
+      this.props.selected ? 'selected' : '',
+      this.canMove(this.props) ? 'movable' : '',
+      this.canResizeLeft(this.props) ? 'resizable-left' : '',
+      this.canResizeRight(this.props) ? 'resizable-right' : '',
+    ].filter(c => c).join(' ');
 
     return {
       key: this.itemId,
       ref: this.getItemRef,
       title: this.itemDivTitle,
-      className: classNames + ` ${props.className ? props.className : ''}`,
-      onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
-      onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
-      onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
-      onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
-      onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
-      onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
+      className: classNames,
+      onMouseDown: this.onMouseDown,
+      onMouseUp: this.onMouseUp,
+      onTouchStart: this.onTouchStart,
+      onTouchEnd: this.onTouchEnd,
+      onDoubleClick: this.handleDoubleClick,
+      onContextMenu: this.handleContextMenu,
       style: Object.assign({}, this.getItemStyle(props))
     }
   }
@@ -549,12 +558,12 @@ export default class Item extends Component {
       left: {
         ref: this.getDragLeftRef,
         className: leftName,
-        style: Object.assign({}, leftResizeStyle, props.leftStyle)
+        style: props.leftStyle,
       },
       right: {
         ref: this.getDragRightRef,
         className: rightName,
-        style: Object.assign({}, rightResizeStyle, props.rightStyle)
+        style: props.rightStyle,
       }
     }
   }
@@ -563,8 +572,6 @@ export default class Item extends Component {
     const dimensions = this.props.dimensions
 
     const baseStyles = {
-      position: 'absolute',
-      boxSizing: 'border-box',
       left: `${dimensions.left}px`,
       top: `${dimensions.top}px`,
       width: `${dimensions.width}px`,
@@ -574,23 +581,22 @@ export default class Item extends Component {
 
     const finalStyle = Object.assign(
       {},
-      overridableStyles,
-      this.props.selected ? selectedStyle : {},
-      this.props.selected & this.canMove(this.props) ? selectedAndCanMove : {},
-      this.props.selected & this.canResizeLeft(this.props)
-        ? selectedAndCanResizeLeft
-        : {},
-      this.props.selected & this.canResizeLeft(this.props) & this.state.dragging
-        ? selectedAndCanResizeLeftAndDragLeft
-        : {},
-      this.props.selected & this.canResizeRight(this.props)
-        ? selectedAndCanResizeRight
-        : {},
-      this.props.selected &
-      this.canResizeRight(this.props) &
-      this.state.dragging
-        ? selectedAndCanResizeRightAndDragRight
-        : {},
+      // this.props.selected ? selectedStyle : {},
+      // this.props.selected & this.canMove(this.props) ? selectedAndCanMove : {},
+      // this.props.selected & this.canResizeLeft(this.props)
+      //   ? selectedAndCanResizeLeft
+      //   : {},
+      // this.props.selected & this.canResizeLeft(this.props) & this.state.dragging
+      //   ? selectedAndCanResizeLeftAndDragLeft
+      //   : {},
+      // this.props.selected & this.canResizeRight(this.props)
+      //   ? selectedAndCanResizeRight
+      //   : {},
+      // this.props.selected &
+      // this.canResizeRight(this.props) &
+      // this.state.dragging
+      //   ? selectedAndCanResizeRightAndDragRight
+      //   : {},
       props.style,
       baseStyles
     )

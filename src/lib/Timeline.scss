@@ -1,18 +1,32 @@
-$item-color: white;
-$item-background: #2196f3;
-$item-border: 1px solid #1a6fb3;
-$item-selected-color: white;
-$item-selected-background: #ffc107;
-$item-selected-border: 1px solid #ff9800;
-
-$row-background-even: transparent;
-$row-background-odd: rgba(0, 0, 0, 0.05);
+$header-primary-background-color: #c52020;
+$header-secondary-background-color: rgb(240, 240, 240);
+$primary-color: #ffffff;
 
 $border-color: #bbb;
 $border-width: 1px;
-$thick-border-width: 2px;
-$sidebar-color: #ffffff;
-$sidebar-background-color: #c52020;
+$border-width-thick: 2px;
+$border-width-resize: 3px;
+
+$border: $border-width solid $border-color;
+
+$item-color: white;
+$item-background: #2196f3;
+$item-border-color: #1a6fb3;
+$item-border: $border-width solid $item-border-color;
+$item-color-selected: white;
+$item-background-selected: #ffc107;
+$item-border-selected: $border-width solid #ff9800;
+$item-zindex: 80;
+$item-zindex-selected: 82;
+$item-zindex-hover: 88;
+
+$row-height: 30px;
+$row-background-even: transparent;
+$row-background-odd: rgba(0, 0, 0, 0.05);
+
+$sidebar-color: $primary-color;
+$sidebar-background-color: $header-primary-background-color;
+
 $list-item-padding: 0 4px;
 $weekend: rgba(250, 246, 225, 0.5);
 
@@ -38,10 +52,66 @@ $weekend: rgba(250, 246, 225, 0.5);
   }
 
   .rct-item {
+    position: absolute;
+    box-sizing: border-box;
 
+    font-size: 12px;
+    color: $item-color;
+    cursor: pointer;
+
+    &.selected {
+      z-index: $item-zindex-selected;
+
+      &.movable {
+        cursor: move;
+      }
+      &.resizable-left {
+        border-left-width: 3px;
+        .rct-item-handler-left {
+          cursor: w-resize;
+        }
+      }
+      &.resizable-right {
+        border-right-width: 3px;
+        .rct-item-handler-right {
+          cursor: e-resize;
+        }
+      }
+    }
 
     &:hover {
-      z-index: 88;
+      z-index: $item-zindex-hover;
+    }
+
+    &.default-theme {
+      background-color: $item-background;
+      border: $item-border;
+      z-index: $item-zindex;
+
+      &.selected {
+        background-color: $item-background-selected;
+        border: $item-border-color
+      }
+    }
+
+    @mixin item-handler {
+      position: absolute;
+      width: 24px;
+      max-width: 20%;
+      min-width: 2px;
+      height: 100%;
+      top: 0;
+      cursor: pointer;
+      z-index: $item-zindex-hover;
+    }
+
+    .rct-item-handler-left {
+      @include item-handler();
+      left: 0;
+    }
+    .rct-item-handler-right {
+      @include item-handler();
+      right: 0;
     }
 
     .rct-item-content {
@@ -63,11 +133,11 @@ $weekend: rgba(250, 246, 225, 0.5);
     vertical-align: top;
     position: relative;
     box-sizing: border-box;
-    border-right: $border-width solid $border-color;
+    border-right: $border;
 
     &.rct-sidebar-right {
       border-right: 0;
-      border-left: $border-width solid $border-color;
+      border-left: $border;
     }
 
     .rct-sidebar-row {
@@ -77,7 +147,14 @@ $weekend: rgba(250, 246, 225, 0.5);
       text-overflow: ellipsis;
       box-sizing: border-box;
       margin: 0;
-      border-bottom: $border-width solid $border-color;
+      border-bottom: $border;
+
+      &:nth-child(odd) {
+        background: $row-background-odd;
+      }
+      &:nth-child(even) {
+        background: $row-background-even;
+      }
 
       &.rct-sidebar-row-odd {
         background: $row-background-odd;
@@ -93,10 +170,10 @@ $weekend: rgba(250, 246, 225, 0.5);
   .rct-vertical-lines {
     .rct-vl {
       position: absolute;
-      border-left: 1px solid $border-color;
+      border-left: $border;
       z-index: 30;
       &.rct-vl-first {
-        border-left-width: 2px;
+        border-left-width: $border-width-thick;
       }
       &.rct-day-6,
       &.rct-day-0 {
@@ -113,10 +190,18 @@ $weekend: rgba(250, 246, 225, 0.5);
 
     .rct-hl-even,
     .rct-hl-odd {
-      border-bottom: $border-width solid $border-color;
+      border-bottom: $border;
       box-sizing: border-box;
       z-index: 40;
+
+      &:nth-child(odd) {
+        background: $row-background-odd;
+      }
+      &:nth-child(even) {
+        background: $row-background-even;
+      }
     }
+
     .rct-hl-odd {
       background: $row-background-odd;
     }
@@ -132,33 +217,39 @@ $weekend: rgba(250, 246, 225, 0.5);
     z-index: 51;
   }
 
-
   .rct-dateHeader {
+    position: relative;
+    height: $row-height;
+  }
+
+  .rct-dateHeader-interval {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    border-bottom: 1px solid #bbb;
+    position: relative;
+    height: 30px;
+    border-bottom: $border;
     cursor: pointer;
     font-size: 14px;
-    background-color: rgb(240, 240, 240);
-    border-left:  2px solid #bbb;
+    background-color: $header-secondary-background-color;
+    border-left: $border;
+    border-right: $border;
   }
 
   .rct-dateHeader-primary {
     background-color: initial;
-    border-left:  1px solid #bbb;
-    border-right: 1px solid #bbb;
-    color: #fff
+    border-left:  $border;
+    border-right: $border;
+    color: $primary-color;
   }
 
   .rct-header-root {
-    background: #c52020;
-    border-bottom: 1px solid #bbb;
+    background: $header-primary-background-color;
+    border-bottom: $border;
   }
 
   .rct-calendar-header {
-    border: 1px solid #bbb,
+    border: $border,
 
   }
 
