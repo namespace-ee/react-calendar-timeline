@@ -438,7 +438,7 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
     groupHeight = r.groupHeight
     verticalMargin = r.verticalMargin
   }
-  return { groupHeight, verticalMargin }
+  return { groupHeight: groupHeight || lineHeight, verticalMargin }
 }
 
 /**
@@ -497,7 +497,6 @@ export function stackTimelineItems(
     })
   )
 
-  
   // if there are no groups return an empty array of dimensions
   if (groups.length === 0) {
     return {
@@ -507,8 +506,12 @@ export function stackTimelineItems(
       groupTops: []
     }
   }
-  
-  const groupsWithItems = getOrderedGroupsWithItems(groups, visibleItemsWithInteraction, keys)
+
+  const groupsWithItems = getOrderedGroupsWithItems(
+    groups,
+    visibleItemsWithInteraction,
+    keys
+  )
   const groupsWithItemsDimensions = getGroupsWithItemDimensions(
     groupsWithItems,
     keys,
@@ -519,27 +522,23 @@ export function stackTimelineItems(
     canvasTimeEnd,
     canvasWidth
   )
-
-  
-  const groupHeights = groups.map((group)=>{
+  const groupHeights = groups.map(group => {
     const groupKey = _get(group, keys.groupIdKey)
     const groupsWithItemDimensions = groupsWithItemsDimensions[groupKey]
     return groupsWithItemDimensions.height
   })
 
-  const groupTops = groupHeights.reduce((acc, height)=>{
-    const lastIndex = acc.length - 1;
-    if(lastIndex > -1) {
+  const groupTops = groupHeights.reduce(
+    (acc, height) => {
+      const lastIndex = acc.length - 1
       const lastTop = acc[lastIndex]
-      acc.push(lastTop+height)
-    }
-    else{
-      acc.push(height)
-    }
-    return acc
-  },[])
-  
-  const height = groupHeights.reduce((acc, height)=> acc+height,0)
+      acc.push(lastTop + height)
+
+      return acc
+    },
+    [0]
+  )
+  const height = groupHeights.reduce((acc, height) => acc + height, 0)
 
   return { groupsWithItemsDimensions, height, groupHeights, groupTops }
 }
