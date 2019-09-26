@@ -410,6 +410,15 @@ export default class Item extends Component {
 
   }
 
+  componentDidMount(){
+    if(!!this.item){
+      if (this.props.selected && !this.state.interactMounted) {
+        this.mountInteract()
+        this.setState({interactMounted: true})
+      }
+    }
+  }
+
   onMouseDown = e => {
     e.stopPropagation()
     if (!this.state.interactMounted) {
