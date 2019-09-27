@@ -56,7 +56,17 @@ export default class Item extends Component {
     moveResizeValidator: PropTypes.func,
     onItemDoubleClick: PropTypes.func,
 
-    scrollRef: PropTypes.object
+    scrollRef: PropTypes.object,
+
+    dragging: PropTypes.bool.isRequired,
+    resizing: PropTypes.bool.isRequired,
+    dragOffset: PropTypes.number.isRequired,
+    resizeEdge: PropTypes.oneOf(PropTypes.oneOfType('left', 'right'), null).isRequired,
+    resizeStart: PropTypes.oneOf(PropTypes.number, null).isRequired,
+  
+    onDragStart: PropTypes.func.isRequired,
+    onDragEnd : PropTypes.func.isRequired,
+    onResizeStart: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -73,29 +83,15 @@ export default class Item extends Component {
 
     this.cacheDataFromProps(props)
 
-    this.state = {
-      interactMounted: false,
-
-      dragging: null,
-      dragStart: null,
-      preDragPosition: null,
-      dragTime: null,
-      newGroupId: null,
-
-      resizing: null,
-      resizeEdge: null,
-      resizeStart: null,
-      resizeTime: null
-    }
+    console.log("mount ", props.item.id)
   }
+
+  interactMounted = false;
 
   shouldComponentUpdate(nextProps, nextState) {
     var shouldUpdate =
-      nextState.dragging !== this.state.dragging ||
-      nextState.dragTime !== this.state.dragTime ||
-      nextState.newGroupId !== this.state.newGroupId ||
-      nextState.resizing !== this.state.resizing ||
-      nextState.resizeTime !== this.state.resizeTime ||
+      nextProps.dragging !== this.props.dragging ||
+      nextProps.resizing !== this.props.resizing ||
       nextProps.keys !== this.props.keys ||
       !deepObjectCompare(nextProps.itemProps, this.props.itemProps) ||
       nextProps.selected !== this.props.selected ||
@@ -124,6 +120,7 @@ export default class Item extends Component {
       : this.itemTitle
     this.itemTimeStart = _get(props.item, props.keys.itemTimeStartKey)
     this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
+    this.itemGroupId = _get(props.item, props.keys.itemGroupKey)
   }
 
   getTimeRatio() {
@@ -154,8 +151,8 @@ export default class Item extends Component {
   dragTime(e) {
     const startTime = moment(this.itemTimeStart)
 
-    if (this.state.dragging) {
-      return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart.offset, true)
+    if (this.props.dragging) {
+      return this.dragTimeSnap(this.timeFor(e) + this.props.dragOffset, true)
     } else {
       return startTime
     }
@@ -173,7 +170,7 @@ export default class Item extends Component {
   resizeTimeDelta(e, resizeEdge) {
     const length = this.itemTimeEnd - this.itemTimeStart
     const timeDelta = this.dragTimeSnap(
-      (e.pageX - this.state.resizeStart) * this.getTimeRatio()
+      (e.pageX - this.props.resizeStart) * this.getTimeRatio()
     )
 
     if (
@@ -212,30 +209,20 @@ export default class Item extends Component {
         e.stopPropagation()
         if (this.props.selected) {
           const clickTime = this.timeFor(e)
-          this.setState({
-            dragging: true,
-            dragStart: {
-              x: e.pageX,
-              y: e.pageY,
-              offset: this.itemTimeStart - clickTime
-            },
-            preDragPosition: {
-              x: e.target.offsetLeft,
-              y: e.target.offsetTop
-            },
-            dragTime: this.itemTimeStart,
-            newGroupId: 0
-          })
+          // this.setState({
+          //   dragging: true,
+          //   dragOffset : this.itemTimeStart - clickTime,
+          // })
+          this.props.onDragStart(true, this.itemTimeStart - clickTime, this.itemId)
         } else {
           return false
         }
       })
       .on('dragmove', e => {
         e.stopPropagation()
-        if (this.state.dragging) {
+        if (this.props.dragging) {
           if (e.dropzone) {
             const newGroupId = e.dropzone.target.dataset.groupid
-            console.log(newGroupId)
             let dragTime = this.dragTime(e)
             if (this.props.moveResizeValidator) {
               dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
@@ -244,14 +231,12 @@ export default class Item extends Component {
             if (this.props.onDrag) {
               this.props.onDrag(this.itemId, dragTime, newGroupId)
             }
-
-            this.setState({ dragTime: dragTime, newGroupId: newGroupId })
           }
         }
       })
       .on('dragend', e => {
         e.stopPropagation()
-        if (this.state.dragging) {
+        if (this.props.dragging) {
           if(e.dropzone){
 
             const newGroupId = e.dropzone.target.dataset.groupid
@@ -266,36 +251,34 @@ export default class Item extends Component {
             }
             
           }
-          this.setState({
-            dragging: false,
-            dragStart: null,
-            preDragPosition: null,
-            dragTime: null,
-            newGroupId: null
-          })
+          // this.setState({
+          //   dragging: false,
+          //   dragOffset: 0,
+          //   dragTime: null,
+          // })
+          this.props.onDragEnd()
         }
       })
       .on('resizestart', e => {
         e.stopPropagation()
         if (this.props.selected) {
-          this.setState({
-            resizing: true,
-            resizeEdge: null, // we don't know yet
-            resizeStart: e.pageX,
-            resizeTime: 0
-          })
+          // this.setState({
+          //   resizing: true,
+          //   resizeEdge: null, // we don't know yet
+          //   resizeStart: e.pageX,
+          // })
+          this.props.onResizeStart(true, null, e.pageX, this.itemId);
         } else {
           return false
         }
       })
       .on('resizemove', e => {
         e.stopPropagation()
-        if (this.state.resizing) {
-          let resizeEdge = this.state.resizeEdge
+        if (this.props.resizing) {
+          let resizeEdge = this.props.resizeEdge
 
           if (!resizeEdge) {
             resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right'
-            this.setState({ resizeEdge })
           }
           let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
@@ -306,13 +289,11 @@ export default class Item extends Component {
           if (this.props.onResizing) {
             this.props.onResizing(this.itemId, resizeTime, resizeEdge)
           }
-
-          this.setState({ resizeTime })
         }
       })
       .on('resizeend', e => {
-        if (this.state.resizing) {
-          const { resizeEdge } = this.state
+        if (this.props.resizing) {
+          const { resizeEdge } = this.props
           let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
           if (this.props.moveResizeValidator) {
@@ -322,12 +303,6 @@ export default class Item extends Component {
           if (this.props.onResized) {
             this.props.onResized(this.itemId, resizeTime, resizeEdge, this.resizeTimeDelta(e, resizeEdge))
           }
-          this.setState({
-            resizing: null,
-            resizeStart: null,
-            resizeEdge: null,
-            resizeTime: null
-          })
         }
       })
       .on('tap', e => {
@@ -335,9 +310,7 @@ export default class Item extends Component {
         this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
       })
 
-    this.setState({
-      interactMounted: true
-    })
+    this.interactMounted=true;
   }
 
   canResizeLeft(props = this.props) {
@@ -362,7 +335,7 @@ export default class Item extends Component {
 
   componentDidUpdate(prevProps) {
     this.cacheDataFromProps(this.props)
-    let { interactMounted } = this.state
+    let { interactMounted } = this
     const couldDrag = prevProps.selected && this.canMove(prevProps)
     const couldResizeLeft =
       prevProps.selected && this.canResizeLeft(prevProps)
@@ -404,24 +377,28 @@ export default class Item extends Component {
     else{
       interactMounted= false;
     }
-    this.setState({
-      interactMounted,
-    })
+    this.interactMounted = interactMounted
 
   }
 
   componentDidMount(){
     if(!!this.item){
-      if (this.props.selected && !this.state.interactMounted) {
+      if (this.props.selected && !this.interactMounted) {
         this.mountInteract()
-        this.setState({interactMounted: true})
+        this.interactMounted =true;
       }
     }
   }
 
+  componentWillUnmount(){
+    console.log('unmount item ', this.props.item.id)
+    //clear parent state on unmointing
+    this.props.onDragEnd()
+  }
+
   onMouseDown = e => {
     e.stopPropagation()
-    if (!this.state.interactMounted) {
+    if (!this.interactMounted) {
       e.preventDefault()
       this.startedClicking = true
     }
@@ -429,7 +406,7 @@ export default class Item extends Component {
 
   onMouseUp = e => {
     e.stopPropagation()
-    if (!this.state.interactMounted && this.startedClicking) {
+    if (!this.interactMounted && this.startedClicking) {
       this.startedClicking = false
       this.actualClick(e, 'click')
     }
@@ -437,7 +414,7 @@ export default class Item extends Component {
 
   onTouchStart = e => {
     e.stopPropagation()
-    if (!this.state.interactMounted) {
+    if (!this.interactMounted) {
       e.preventDefault()
       this.startedTouching = true
     }
@@ -445,7 +422,7 @@ export default class Item extends Component {
 
   onTouchEnd = e => {
     e.stopPropagation()
-    if (!this.state.interactMounted && this.startedTouching) {
+    if (!this.interactMounted && this.startedTouching) {
       this.startedTouching = false
       this.actualClick(e, 'touch')
     }
@@ -549,7 +526,7 @@ export default class Item extends Component {
       this.props.selected & this.canResizeLeft(this.props)
         ? selectedAndCanResizeLeft
         : {},
-      this.props.selected & this.canResizeLeft(this.props) & this.state.dragging
+      this.props.selected & this.canResizeLeft(this.props) & this.props.dragging
         ? selectedAndCanResizeLeftAndDragLeft
         : {},
       this.props.selected & this.canResizeRight(this.props)
@@ -557,7 +534,7 @@ export default class Item extends Component {
         : {},
       this.props.selected &
       this.canResizeRight(this.props) &
-      this.state.dragging
+      this.props.dragging
         ? selectedAndCanResizeRightAndDragRight
         : {},
       props.style,
@@ -580,14 +557,18 @@ export default class Item extends Component {
       canResizeLeft: this.canResizeLeft(this.props),
       canResizeRight: this.canResizeRight(this.props),
       selected: this.props.selected,
-      dragging: this.state.dragging,
-      dragStart: this.state.dragStart,
-      dragTime: this.state.dragTime,
-      newGroupId: this.state.newGroupId,
-      resizing: this.state.resizing,
-      resizeEdge: this.state.resizeEdge,
-      resizeStart: this.state.resizeStart,
-      resizeTime: this.state.resizeTime,
+      dragging: this.props.dragging,
+      dragOffset: this.props.dragOffset,
+      dragTime: this.itemTimeStart,
+      newGroupId: this.itemGroupId,
+      resizing: this.props.resizing,
+      resizeEdge: this.props.resizeEdge,
+      resizeStart: this.props.resizeStart,
+      resizeTime: this.props.resizeEdge !== null ?
+        this.props.resizeEdge === 'right'? 
+          this.itemTimeEnd
+          : this.itemTimeStart
+        : null ,
       width: this.props.dimensions.width
     }
 
