@@ -2,7 +2,7 @@ import React from 'react'
 import TimelineStateContext from '../timeline/TimelineStateContext'
 import Columns from '../columns/Columns'
 import { _get, _length } from '../utility/generic'
-import GroupRow from '../row/GroupRow'
+import GroupRow from './GroupRow'
 import Items from '../items/Items'
 
 class Rows extends React.Component {

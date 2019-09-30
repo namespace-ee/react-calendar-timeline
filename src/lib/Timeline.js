@@ -7,7 +7,7 @@ import Sidebar from './layout/Sidebar'
 import Columns from './columns/Columns'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
-import Rows from './rows'
+import Rows from './rows/Rows'
 
 import windowResizeDetector from '../resize-detector/window'
 

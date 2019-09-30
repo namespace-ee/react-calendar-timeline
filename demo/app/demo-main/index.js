@@ -341,7 +341,7 @@ export default class App extends Component {
             : []
           return (
             <>
-              <UnavailableLayyer
+              <UnavailableLayer
                 getLayerRootProps={getLayerRootProps}
                 getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
                 groupUnavailableSlots={groupUnavailableSlots}
@@ -353,13 +353,13 @@ export default class App extends Component {
                 handleDrop={this.handleDrop}
                 group={group}
               />
-              <Links
+              {/* <Links
                 timelineLinks={timelineLinks}
                 helpers={helpers}
                 group={group}
                 getLayerRootProps={getLayerRootProps}
                 items={itemsWithInteractions}
-              />
+              /> */}
             </>
           )
         }}
@@ -587,7 +587,7 @@ function DroppablesLayer({
   )
 }
 
-function UnavailableLayyer({
+function UnavailableLayer({
   getLayerRootProps,
   groupUnavailableSlots,
   getLeftOffsetFromDate
