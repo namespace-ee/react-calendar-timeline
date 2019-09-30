@@ -811,19 +811,7 @@ export default class ReactCalendarTimeline extends Component {
     return child.type.secretKey ===TimelineHeaders.secretKey
   }
   
-  childrenWithProps(
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    groupsWithItemsDimensions,
-    groupHeights,
-    groupTops,
-    height,
-    visibleTimeStart,
-    visibleTimeEnd,
-    minUnit,
-    timeSteps
-  ) {
+  childrenWithProps() {
     if (!this.props.children) {
       return null
     }
@@ -833,27 +821,9 @@ export default class ReactCalendarTimeline extends Component {
       ? this.props.children.filter(c => c)
       : [this.props.children]
 
-    const childProps = {
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-      visibleTimeStart: visibleTimeStart,
-      visibleTimeEnd: visibleTimeEnd,
-      groupsWithItemsDimensions,
-      items: this.props.items,
-      groups: this.props.groups,
-      keys: this.props.keys,
-      groupHeights: groupHeights,
-      groupTops: groupTops,
-      selected: this.getSelected(),
-      height: height,
-      minUnit: minUnit,
-      timeSteps: timeSteps
-    }
-
     return React.Children.map(childArray, child => {
       if (!this.isTimelineHeader(child)) {
-        return React.cloneElement(child, childProps)
+        return child
       } else {
         return null
       }
@@ -997,6 +967,7 @@ export default class ReactCalendarTimeline extends Component {
                   isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>
+                    {this.childrenWithProps()}
                     <Rows
                       groupHeights={groupHeights}
                       canvasWidth={canvasWidth}
@@ -1042,7 +1013,6 @@ export default class ReactCalendarTimeline extends Component {
                       resizeTime={this.state.resizeTime}
                       keys={keys}
                     />
-                    {this.props.children}
                   </MarkerCanvas>
                 </ScrollElement>
                 {rightSidebarWidth > 0
