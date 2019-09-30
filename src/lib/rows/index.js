@@ -42,7 +42,8 @@ export default ({
   onRowClick,
   onRowDoubleClick,
   horizontalLineClassNamesForGroup,
-  onRowContextClick
+  onRowContextClick,
+  items
 }) => {
   const {
     getTimelineState,
@@ -67,21 +68,27 @@ export default ({
       }
     }
   }
-  
-  function getItemDimensionsHelper(item) {
-    const itemId = _get(item, keys.itemIdKey)
+
+  //TODO: make this faster
+  function getGroupByItemId(itemId) {
+    const item = items.find(i => _get(i, keys.itemIdKey) === itemId)
     const groupId = _get(item, keys.itemGroupKey)
+    return groupId
+  }
+
+  function getItemDimensionsHelper(itemId) {
+    const groupId = getGroupByItemId(itemId)
     const group = groupsWithItemsDimensions[groupId]
     const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
     if (itemDimensions) return itemDimensions.dimensions
     else return undefined
   }
 
-  function getItemAbsoluteLocation(item) {
-    const itemId = _get(item, keys.itemIdKey)
-    const groupId = _get(item, keys.itemGroupKey)
+  function getItemAbsoluteLocation(itemId) {
+    const groupId = getGroupByItemId(itemId)
     const group = groupsWithItemsDimensions[groupId]
     const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+    if (!itemDimensions) return
     const groupIndex = group.index
     const groupTop = groupHeights.reduce((acc, height, index) => {
       if (index < groupIndex) return acc + height
@@ -167,6 +174,7 @@ export default ({
                 }}
                 rowData={rowData}
                 group={group.group}
+                itemsWithInteractions={items}
               />
             </React.Fragment>
           </GroupRow>

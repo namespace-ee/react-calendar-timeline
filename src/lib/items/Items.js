@@ -65,8 +65,8 @@ export default class Items extends Component {
     resizing: false,
     dragOffset: 0,
     //TODO: exist in Timeline but needs to be passed here through prop drilling (might consider)
-    resizeEdge: null,
-    resizeStart: null,
+    resizeEdge: undefined,
+    resizeStart: 0,
     interactingItemId: undefined,
   }
 
@@ -203,9 +203,9 @@ export default class Items extends Component {
             scrollRef={this.props.scrollRef}
             dragging={isInteractingItem && this.state.dragging}
             resizing={isInteractingItem && this.state.resizing}
-            dragOffset={isInteractingItem && this.state.dragOffset}
-            resizeEdge={isInteractingItem && this.state.resizeEdge}
-            resizeStart={isInteractingItem && this.state.resizeStart}
+            dragOffset={isInteractingItem ? this.state.dragOffset: 0}
+            resizeEdge={isInteractingItem ? this.state.resizeEdge: undefined}
+            resizeStart={isInteractingItem ? this.state.resizeStart: 0}
             onDragStart={this.handleDragStart}
             onDragEnd={this.handleDragEnd}
             onResizeStart={this.handleResizeStart}

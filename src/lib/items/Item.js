@@ -61,8 +61,8 @@ export default class Item extends Component {
     dragging: PropTypes.bool.isRequired,
     resizing: PropTypes.bool.isRequired,
     dragOffset: PropTypes.number.isRequired,
-    resizeEdge: PropTypes.oneOf(PropTypes.oneOfType('left', 'right'), null).isRequired,
-    resizeStart: PropTypes.oneOf(PropTypes.number, null).isRequired,
+    resizeEdge: PropTypes.oneOf(['left', 'right']),
+    resizeStart: PropTypes.number,
   
     onDragStart: PropTypes.func.isRequired,
     onDragEnd : PropTypes.func.isRequired,
@@ -82,8 +82,6 @@ export default class Item extends Component {
     super(props)
 
     this.cacheDataFromProps(props)
-
-    console.log("mount ", props.item.id)
   }
 
   interactMounted = false;
@@ -209,10 +207,6 @@ export default class Item extends Component {
         e.stopPropagation()
         if (this.props.selected) {
           const clickTime = this.timeFor(e)
-          // this.setState({
-          //   dragging: true,
-          //   dragOffset : this.itemTimeStart - clickTime,
-          // })
           this.props.onDragStart(true, this.itemTimeStart - clickTime, this.itemId)
         } else {
           return false
@@ -251,23 +245,13 @@ export default class Item extends Component {
             }
             
           }
-          // this.setState({
-          //   dragging: false,
-          //   dragOffset: 0,
-          //   dragTime: null,
-          // })
           this.props.onDragEnd()
         }
       })
       .on('resizestart', e => {
         e.stopPropagation()
         if (this.props.selected) {
-          // this.setState({
-          //   resizing: true,
-          //   resizeEdge: null, // we don't know yet
-          //   resizeStart: e.pageX,
-          // })
-          this.props.onResizeStart(true, null, e.pageX, this.itemId);
+          this.props.onResizeStart(true, undefined, e.pageX, this.itemId);
         } else {
           return false
         }
@@ -391,7 +375,6 @@ export default class Item extends Component {
   }
 
   componentWillUnmount(){
-    console.log('unmount item ', this.props.item.id)
     //clear parent state on unmointing
     this.props.onDragEnd()
   }
@@ -564,7 +547,7 @@ export default class Item extends Component {
       resizing: this.props.resizing,
       resizeEdge: this.props.resizeEdge,
       resizeStart: this.props.resizeStart,
-      resizeTime: this.props.resizeEdge !== null ?
+      resizeTime: this.props.resizeEdge !== undefined ?
         this.props.resizeEdge === 'right'? 
           this.itemTimeEnd
           : this.itemTimeStart

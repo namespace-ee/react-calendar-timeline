@@ -195,7 +195,7 @@ export default class App extends Component {
     }
     else {
       this.setState(state => ({
-        timelineLinks: [...state.timelineLinks, [this.findItemById(this.tempItemId), this.findItemById(itemId)]]
+        timelineLinks: [...state.timelineLinks, [this.tempItemId, itemId]]
       }), ()=> {
         this.tempItemId=undefined;
       })
@@ -334,7 +334,7 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
-        rowRenderer={({ rowData, helpers, getLayerRootProps, group }) => {
+        rowRenderer={({ rowData, helpers, getLayerRootProps, group, itemsWithInteractions }) => {
           const { itemsToDrag, unavailableSlots, timelineLinks } = rowData
           const groupUnavailableSlots = unavailableSlots[group.id]
             ? unavailableSlots[group.id]
@@ -353,12 +353,13 @@ export default class App extends Component {
                 handleDrop={this.handleDrop}
                 group={group}
               />
-              {/* <Links
+              <Links
                 timelineLinks={timelineLinks}
                 helpers={helpers}
                 group={group}
                 getLayerRootProps={getLayerRootProps}
-              /> */}
+                items={itemsWithInteractions}
+              />
             </>
           )
         }}
@@ -450,23 +451,25 @@ export default class App extends Component {
   }
 }
 
-function Link({ timelineLink, helpers, group }) {
-  const [start, end] = timelineLink
+function Link({ timelineLink, helpers, group, items }) {
+  const [startId, endId] = timelineLink
   const { getItemAbsoluteLocation } = helpers
-  if (start.group !== group.id) return null
-  const startItemDimensions = getItemAbsoluteLocation(start)
-  const endItemDimensions = getItemAbsoluteLocation(end)
+  const startItem = items.find(i => i.id === startId)
+  if (startItem.group !== group.id) return null
+  const startItemDimensions = getItemAbsoluteLocation(startId) || {left: 0, top:0}
+  const endItemDimensions = getItemAbsoluteLocation(endId) || {left: 0, top:0}
   let startLink = [startItemDimensions.left, startItemDimensions.top]
   let endLink = [endItemDimensions.left, endItemDimensions.top]
   const isEndLinkBeforeStart =
-    endLink[0] <= startLink[0] || endLink[1] <= startLink[1]
+  endLink[0] <= startLink[0] || endLink[1] <= startLink[1]
   let itemLink = isEndLinkBeforeStart
-    ? [endLink, startLink]
-    : [startLink, endLink]
+  ? [endLink, startLink]
+  : [startLink, endLink]
   const lineGenerator = d3.line()
   const [startLk, endLk] = itemLink
   const endPoint = [endLk[0] - startLk[0], endLk[1] - startLk[1]]
-  const itemDimensions = helpers.getItemDimensions(start)
+  const itemDimensions = helpers.getItemDimensions(startId)
+  console.log("render link", startLk[0], itemDimensions.top )
   return (
     <svg
       style={{
@@ -490,12 +493,13 @@ function Link({ timelineLink, helpers, group }) {
   )
 }
 
-function Links({ timelineLinks, helpers, group, getLayerRootProps }) {
+function Links({ timelineLinks, helpers, group, getLayerRootProps, items }) {
   return (
     <div {...getLayerRootProps()}>
       {timelineLinks.map((timelineLink, i) => {
+        const [startId, endId] = timelineLink
         return (
-          <Link timelineLink={timelineLink} key={i} helpers={helpers} group={group} />
+          <Link timelineLink={timelineLink} key={`${startId}${endId}`} helpers={helpers} group={group} items={items} />
         )
       })}
     </div>

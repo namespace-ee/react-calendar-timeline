@@ -1050,6 +1050,7 @@ export default class ReactCalendarTimeline extends Component {
                       onRowContextClick={this.handleScrollContextMenu}
                       groupsWithItemsDimensions={groupsWithItemsDimensions}
                       groups={groups}
+                      items={items}
                     />
                   </MarkerCanvas>
                 </ScrollElement>
