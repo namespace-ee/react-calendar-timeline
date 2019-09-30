@@ -10,6 +10,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 # 0.26.4
 
 * fix `react-calendar-timeline` not working with `react-hot-loader` #607 @ilaiwi + @westn
+* add documentation for `stackItems` format #661 @tyson-kubota
 
 ## 0.26.3
 
