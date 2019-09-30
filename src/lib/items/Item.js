@@ -251,7 +251,7 @@ export default class Item extends Component {
       .on('resizestart', e => {
         e.stopPropagation()
         if (this.props.selected) {
-          this.props.onResizeStart(true, undefined, e.pageX, this.itemId);
+          this.props.onResizeStart(true, this.itemId);
         } else {
           return false
         }
@@ -374,10 +374,6 @@ export default class Item extends Component {
     }
   }
 
-  componentWillUnmount(){
-    //clear parent state on unmointing
-    this.props.onDragEnd()
-  }
 
   onMouseDown = e => {
     e.stopPropagation()

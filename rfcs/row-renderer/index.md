@@ -179,6 +179,7 @@ the result of the render function will be rendered bellow the two other layers. 
 - render vertical components that could cover more than 1 row
 - added layers might block some actions
 - adding stop propagation for item events (or any other layers)
+- item can't keep its state because of re-parenting
 
 There are tradeoffs to choosing any path. Attempt to identify them here.
 

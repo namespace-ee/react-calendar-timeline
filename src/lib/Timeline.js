@@ -312,9 +312,9 @@ export default class ReactCalendarTimeline extends Component {
       selectedItem: null,
       dragTime: null,
       dragGroupTitle: null,
-      resizeTime: null,
       resizingItem: null,
-      resizingEdge: null
+      resizeTime: undefined,
+      resizingEdge: undefined
     }
 
     const canvasWidth = getCanvasWidth(this.state.width)
@@ -1051,6 +1051,8 @@ export default class ReactCalendarTimeline extends Component {
                       groupsWithItemsDimensions={groupsWithItemsDimensions}
                       groups={groups}
                       items={items}
+                      resizingEdge={this.state.resizingEdge}
+                      resizeTime={this.state.resizeTime}
                     />
                   </MarkerCanvas>
                 </ScrollElement>

@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 import Item from './Item'
 // import ItemGroup from './ItemGroup'
 
-import { _get, arraysEqual, keyBy } from '../utility/generic'
-import { getGroupOrders, getVisibleItems } from '../utility/calendar'
+import { _get, arraysEqual } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
   const value =
@@ -53,61 +52,23 @@ export default class Items extends Component {
     groupDimensions: PropTypes.object,
     useResizeHandle: PropTypes.bool,
     scrollRef: PropTypes.object,
-    order: PropTypes.object
+    order: PropTypes.object,
+
+    onDragStart: PropTypes.func.isRequired,
+    onDragEnd: PropTypes.func.isRequired,
+    onResizeStart:  PropTypes.func.isRequired,
+    dragging: PropTypes.bool.isRequired,
+    dragOffset: PropTypes.number.isRequired,
+    interactingItemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    resizeEdge: PropTypes.oneOf(['right', 'left']),
+    resizeTime: PropTypes.number
   }
 
   static defaultProps = {
     selected: []
   }
 
-  initState = {
-    dragging: false,
-    resizing: false,
-    dragOffset: 0,
-    //TODO: exist in Timeline but needs to be passed here through prop drilling (might consider)
-    resizeEdge: undefined,
-    resizeStart: 0,
-    interactingItemId: undefined,
-  }
-
-  state = this.initState
-
-  handleDragStart = (dragging, dragOffset, itemId) => {
-    this.setState({
-      dragging,
-      dragOffset,
-      interactingItemId: itemId
-    })
-  }
-
-  clearState = () => {
-    this.setState(this.initState)
-  }
-
-  handleResizeStart = (resizing, resizeEdge, resizeStart, itemId) => {
-    this.setState({
-      resizing,
-      resizeEdge,
-      resizeStart,
-      interactingItemId: itemId
-    })
-  }
-
-  handleResizeMove = (itemId, resizeTime, resizeEdge) =>{
-    this.props.itemResizing(itemId, resizeTime, resizeEdge)
-    this.setState({resizeEdge})
-  }
-
-  handleResizeEnd = (itemId, resizeTime, resizeEdge, timeDelta) => {
-    this.props.itemResized(itemId, resizeTime, resizeEdge, timeDelta)
-    this.clearState()
-  }
-
-  handleDragEnd = () => {
-    this.clearState()
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return !(
       arraysEqual(nextProps.items, this.props.items) &&
       nextProps.groupDimensions === this.props.groupDimensions &&
@@ -122,12 +83,12 @@ export default class Items extends Component {
       nextProps.canChangeGroup === this.props.canChangeGroup &&
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
-      nextState.canSelect === this.state.canSelect &&
-      nextState.dragging === this.state.dragging &&
-      nextState.resizing === this.state.resizing &&
-      nextState.resizeEdge === this.state.resizeEdge &&
-      nextState.resizeStart === this.state.resizeStart &&
-      nextState.interactingItemId === this.state.interactingItemId
+      nextProps.canSelect === this.props.canSelect &&
+      nextProps.dragging === this.props.dragging &&
+      nextProps.resizing === this.props.resizing &&
+      nextProps.resizeEdge === this.props.resizeEdge &&
+      nextProps.resizeTime === this.props.resizeTime &&
+      nextProps.interactingItemId === this.props.interactingItemId
     )
   }
 
@@ -141,7 +102,7 @@ export default class Items extends Component {
   }
 
   isInteractingItem = (item) => {
-    return this.state.interactingItemId === _get(item, this.props.keys.itemIdKey)
+    return this.props.interactingItemId === _get(item, this.props.keys.itemIdKey)
   }
 
   render() {
@@ -191,7 +152,7 @@ export default class Items extends Component {
             canvasWidth={this.props.canvasWidth}
             dragSnap={this.props.dragSnap}
             minResizeWidth={this.props.minResizeWidth}
-            onResizing={this.handleResizeMove}
+            onResizing={this.props.itemResizing}
             onResized={this.handleResizeEnd}
             moveResizeValidator={this.props.moveResizeValidator}
             onDrag={this.props.itemDrag}
@@ -201,14 +162,14 @@ export default class Items extends Component {
             onSelect={this.props.itemSelect}
             itemRenderer={this.props.itemRenderer}
             scrollRef={this.props.scrollRef}
-            dragging={isInteractingItem && this.state.dragging}
-            resizing={isInteractingItem && this.state.resizing}
-            dragOffset={isInteractingItem ? this.state.dragOffset: 0}
-            resizeEdge={isInteractingItem ? this.state.resizeEdge: undefined}
-            resizeStart={isInteractingItem ? this.state.resizeStart: 0}
-            onDragStart={this.handleDragStart}
-            onDragEnd={this.handleDragEnd}
-            onResizeStart={this.handleResizeStart}
+            dragging={isInteractingItem && this.props.dragging}
+            resizing={isInteractingItem && this.props.resizing}
+            dragOffset={isInteractingItem ? this.props.dragOffset: 0}
+            resizeEdge={isInteractingItem ? this.props.resizeEdge: undefined}
+            resizeTime={isInteractingItem ? this.props.resizeTime: 0}
+            onDragStart={this.props.onDragStart}
+            onDragEnd={this.props.onDragEnd}
+            onResizeStart={this.props.onResizeStart}
           />
         )})}
       </div>
