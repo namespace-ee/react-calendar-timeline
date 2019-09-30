@@ -45,6 +45,49 @@ class Rows extends React.Component {
     })
   }
 
+  //TODO: make this faster
+  getGroupByItemId= (itemId) => {
+    const {items, keys} = this.props
+    const item = items.find(i => _get(i, keys.itemIdKey) === itemId)
+    const groupId = _get(item, keys.itemGroupKey)
+    return groupId
+  }
+
+  getItemDimensionsHelper = (itemId) => {
+    const { groupsWithItemsDimensions } = this.props
+    const groupId = this.getGroupByItemId(itemId)
+    const group = groupsWithItemsDimensions[groupId]
+    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+    if (itemDimensions) return itemDimensions.dimensions
+    else return undefined
+  }
+
+  getItemAbsoluteLocation = (itemId) => {
+    const { groupsWithItemsDimensions } = this.props
+    const {groupHeights} = this.props;
+    const groupId = this.getGroupByItemId(itemId)
+    const group = groupsWithItemsDimensions[groupId]
+    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+    if (!itemDimensions) return
+    const groupIndex = group.index
+    const groupTop = groupHeights.reduce((acc, height, index) => {
+      if (index < groupIndex) return acc + height
+      else return acc
+    }, 0)
+    return {
+      left: itemDimensions.dimensions.left,
+      top: groupTop + itemDimensions.dimensions.top
+    }
+  }
+
+  getLayerRootProps = () => {
+    return {
+      style: {
+        // height: '100%'
+      }
+    }
+  }
+
   render() {
     const {
       groupHeights,
@@ -84,7 +127,8 @@ class Rows extends React.Component {
       onRowDoubleClick,
       horizontalLineClassNamesForGroup,
       onRowContextClick,
-      items
+      items,
+      keys
     } = this.props
     const {
       getTimelineState,
@@ -99,50 +143,12 @@ class Rows extends React.Component {
       canvasWidth,
       timelineUnit,
       timelineWidth,
-      keys,
       resizeEdge,
       resizeTime,
 
     } = getTimelineState()
 
-    function getLayerRootProps() {
-      return {
-        style: {
-          // height: '100%'
-        }
-      }
-    }
 
-    //TODO: make this faster
-    function getGroupByItemId(itemId) {
-      const item = items.find(i => _get(i, keys.itemIdKey) === itemId)
-      const groupId = _get(item, keys.itemGroupKey)
-      return groupId
-    }
-
-    function getItemDimensionsHelper(itemId) {
-      const groupId = getGroupByItemId(itemId)
-      const group = groupsWithItemsDimensions[groupId]
-      const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-      if (itemDimensions) return itemDimensions.dimensions
-      else return undefined
-    }
-
-    function getItemAbsoluteLocation(itemId) {
-      const groupId = getGroupByItemId(itemId)
-      const group = groupsWithItemsDimensions[groupId]
-      const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-      if (!itemDimensions) return
-      const groupIndex = group.index
-      const groupTop = groupHeights.reduce((acc, height, index) => {
-        if (index < groupIndex) return acc + height
-        else return acc
-      }, 0)
-      return {
-        left: itemDimensions.dimensions.left,
-        top: groupTop + itemDimensions.dimensions.top
-      }
-    }
     return (
       <div style={{ position: 'absolute', top: 0 }}>
         {groupHeights.map((groupHeight, i) => {
@@ -219,12 +225,12 @@ class Rows extends React.Component {
                   interactingItemId={this.state.interactingItemId}
                 />
                 <Layers
-                  getLayerRootProps={getLayerRootProps}
+                  getLayerRootProps={this.getLayerRootProps}
                   helpers={{
-                    getLeftOffsetFromDate,
-                    getDateFromLeftOffsetPosition,
-                    getItemAbsoluteLocation,
-                    getItemDimensions: getItemDimensionsHelper
+                    getLeftOffsetFromDate: getLeftOffsetFromDate,
+                    getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition,
+                    getItemAbsoluteLocation: this.getItemAbsoluteLocation,
+                    getItemDimensions: this.getItemDimensionsHelper
                   }}
                   rowData={rowData}
                   group={group.group}
