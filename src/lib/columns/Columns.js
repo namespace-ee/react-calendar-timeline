@@ -1,23 +1,18 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-
 import { iterateTimes } from '../utility/calendar'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import { ColumnsConsumer } from './ColumnsContext'
 
-const passThroughPropTypes = {
-  canvasTimeStart: PropTypes.number.isRequired,
-  canvasTimeEnd: PropTypes.number.isRequired,
-  canvasWidth: PropTypes.number.isRequired,
-  lineCount: PropTypes.number.isRequired,
-  minUnit: PropTypes.string.isRequired,
-  timeSteps: PropTypes.object.isRequired,
-  height: PropTypes.number.isRequired,
-  verticalLineClassNamesForTime: PropTypes.func
-}
-
-class Columns extends Component {
+export class Columns extends Component {
   static propTypes = {
-    ...passThroughPropTypes,
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    lineCount: PropTypes.number.isRequired,
+    minUnit: PropTypes.string.isRequired,
+    timeSteps: PropTypes.object.isRequired,
+    height: PropTypes.number.isRequired,
+    verticalLineClassNamesForTime: PropTypes.func,
     getLeftOffsetFromDate: PropTypes.func.isRequired
   }
 
@@ -25,7 +20,6 @@ class Columns extends Component {
     return !(
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
-      nextProps.canvasWidth === this.props.canvasWidth &&
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
@@ -39,14 +33,12 @@ class Columns extends Component {
     const {
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth,
       minUnit,
       timeSteps,
       height,
       verticalLineClassNamesForTime,
       getLeftOffsetFromDate
     } = this.props
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
 
@@ -98,18 +90,32 @@ class Columns extends Component {
   }
 }
 
-const ColumnsWrapper = ({ ...props }) => {
+const ColumnsWrapper = () => {
   return (
     <TimelineStateConsumer>
-      {({ getLeftOffsetFromDate }) => (
-        <Columns getLeftOffsetFromDate={getLeftOffsetFromDate} {...props} />
-      )}
+      {({ getLeftOffsetFromDate, getTimelineState }) => {
+        const { canvasTimeStart, canvasTimeEnd } = getTimelineState()
+        return (
+          <ColumnsConsumer>
+            {({lineCount, minUnit, timeSteps, height, verticalLineClassNamesForTime}) => (
+              <Columns
+                getLeftOffsetFromDate={getLeftOffsetFromDate}
+                canvasTimeStart={canvasTimeStart}
+                canvasTimeEnd={canvasTimeEnd}
+                lineCount={lineCount}
+                minUnit={minUnit}
+                timeSteps={timeSteps}
+                height={height}
+                verticalLineClassNamesForTime={verticalLineClassNamesForTime}
+              />
+            )}
+          </ColumnsConsumer>
+        )
+      }}
     </TimelineStateConsumer>
   )
 }
 
-ColumnsWrapper.defaultProps = {
-  ...passThroughPropTypes
-}
+ColumnsWrapper.propTypes = {}
 
 export default ColumnsWrapper

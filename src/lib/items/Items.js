@@ -107,15 +107,12 @@ export default class Items extends Component {
 
   render() {
     const {
-      canvasTimeStart,
-      canvasTimeEnd,
-      dimensionItems,
       keys,
       groupDimensions,
       order,
       items
     } = this.props
-    const { itemIdKey, itemGroupKey } = keys
+    const { itemIdKey } = keys
 
     return (
       <div className="rct-items">
@@ -153,7 +150,7 @@ export default class Items extends Component {
             dragSnap={this.props.dragSnap}
             minResizeWidth={this.props.minResizeWidth}
             onResizing={this.props.itemResizing}
-            onResized={this.handleResizeEnd}
+            onResized={this.props.itemResized}
             moveResizeValidator={this.props.moveResizeValidator}
             onDrag={this.props.itemDrag}
             onDrop={this.props.itemDrop}

@@ -10,7 +10,8 @@ import Timeline, {
   CursorMarker,
   CustomHeader,
   SidebarHeader,
-  DateHeader
+  DateHeader,
+  RowColumns,
 } from 'react-calendar-timeline'
 import { useDrag, useDrop } from 'react-dnd'
 import * as d3 from 'd3'
@@ -341,6 +342,7 @@ export default class App extends Component {
             : []
           return (
             <>
+              <RowColumns/>
               <UnavailableLayer
                 getLayerRootProps={getLayerRootProps}
                 getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}

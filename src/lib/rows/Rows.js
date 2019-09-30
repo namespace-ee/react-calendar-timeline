@@ -1,6 +1,7 @@
 import React from 'react'
 import TimelineStateContext from '../timeline/TimelineStateContext'
 import Columns from '../columns/Columns'
+import { ColumnsContextProvider } from '../columns/ColumnsContext'
 import { _get, _length } from '../utility/generic'
 import GroupRow from './GroupRow'
 import Items from '../items/Items'
@@ -46,14 +47,14 @@ class Rows extends React.Component {
   }
 
   //TODO: make this faster
-  getGroupByItemId= (itemId) => {
-    const {items, keys} = this.props
+  getGroupByItemId = itemId => {
+    const { items, keys } = this.props
     const item = items.find(i => _get(i, keys.itemIdKey) === itemId)
     const groupId = _get(item, keys.itemGroupKey)
     return groupId
   }
 
-  getItemDimensionsHelper = (itemId) => {
+  getItemDimensionsHelper = itemId => {
     const { groupsWithItemsDimensions } = this.props
     const groupId = this.getGroupByItemId(itemId)
     const group = groupsWithItemsDimensions[groupId]
@@ -62,9 +63,9 @@ class Rows extends React.Component {
     else return undefined
   }
 
-  getItemAbsoluteLocation = (itemId) => {
+  getItemAbsoluteLocation = itemId => {
     const { groupsWithItemsDimensions } = this.props
-    const {groupHeights} = this.props;
+    const { groupHeights } = this.props
     const groupId = this.getGroupByItemId(itemId)
     const group = groupsWithItemsDimensions[groupId]
     const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
@@ -144,10 +145,8 @@ class Rows extends React.Component {
       timelineUnit,
       timelineWidth,
       resizeEdge,
-      resizeTime,
-
+      resizeTime
     } = getTimelineState()
-
 
     return (
       <div style={{ position: 'absolute', top: 0 }}>
@@ -175,17 +174,13 @@ class Rows extends React.Component {
               }}
               keys={keys}
             >
-              <React.Fragment>
-                <Columns
-                  canvasTimeStart={canvasTimeStart}
-                  canvasTimeEnd={canvasTimeEnd}
-                  canvasWidth={canvasWidth}
-                  lineCount={_length(groups)}
-                  minUnit={minUnit}
-                  timeSteps={timeSteps}
-                  height={groupHeight}
-                  verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-                />
+              <ColumnsContextProvider
+                lineCount={_length(groups)}
+                minUnit={minUnit}
+                timeSteps={timeSteps}
+                height={groupHeight}
+                verticalLineClassNamesForTime={verticalLineClassNamesForTime}
+              >
                 <Items
                   //TODO: fix groups with no items
                   items={group.items || []}
@@ -228,7 +223,8 @@ class Rows extends React.Component {
                   getLayerRootProps={this.getLayerRootProps}
                   helpers={{
                     getLeftOffsetFromDate: getLeftOffsetFromDate,
-                    getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition,
+                    getDateFromLeftOffsetPosition: this
+                      .getDateFromLeftOffsetPosition,
                     getItemAbsoluteLocation: this.getItemAbsoluteLocation,
                     getItemDimensions: this.getItemDimensionsHelper
                   }}
@@ -236,7 +232,7 @@ class Rows extends React.Component {
                   group={group.group}
                   itemsWithInteractions={items}
                 />
-              </React.Fragment>
+              </ColumnsContextProvider>
             </GroupRow>
           )
         })}
