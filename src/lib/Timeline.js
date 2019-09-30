@@ -997,19 +997,6 @@ export default class ReactCalendarTimeline extends Component {
                   isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>
-                    {this.childrenWithProps(
-                      canvasTimeStart,
-                      canvasTimeEnd,
-                      canvasWidth,
-                      groupsWithItemsDimensions,
-                      groupHeights,
-                      groupTops,
-                      height,
-                      visibleTimeStart,
-                      visibleTimeEnd,
-                      minUnit,
-                      timeSteps
-                    )}
                     <Rows
                       groupHeights={groupHeights}
                       canvasWidth={canvasWidth}
@@ -1055,6 +1042,7 @@ export default class ReactCalendarTimeline extends Component {
                       resizeTime={this.state.resizeTime}
                       keys={keys}
                     />
+                    {this.props.children}
                   </MarkerCanvas>
                 </ScrollElement>
                 {rightSidebarWidth > 0

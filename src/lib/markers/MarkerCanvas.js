@@ -71,8 +71,8 @@ class MarkerCanvas extends React.Component {
           onMouseLeave={this.handleMouseLeave}
           ref={el => (this.containerEl = el)}
         >
-          <TimelineMarkersRenderer />
           {this.props.children}
+          <TimelineMarkersRenderer />
         </div>
       </MarkerCanvasProvider>
     )
