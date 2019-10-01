@@ -13,7 +13,8 @@ export class Columns extends Component {
     timeSteps: PropTypes.object.isRequired,
     height: PropTypes.number.isRequired,
     verticalLineClassNamesForTime: PropTypes.func,
-    getLeftOffsetFromDate: PropTypes.func.isRequired
+    getLeftOffsetFromDate: PropTypes.func.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -25,12 +26,11 @@ export class Columns extends Component {
       nextProps.timeSteps === this.props.timeSteps &&
       nextProps.height === this.props.height &&
       nextProps.verticalLineClassNamesForTime ===
-        this.props.verticalLineClassNamesForTime
+      this.props.verticalLineClassNamesForTime &&
+      //TODO: delete canvasWidth prop
+      //needed to trigger renderer because getLeftOffsetFromDate is dependant on canvasWidth
+      nextProps.canvasWidth === this.props.canvasWidth
     )
-  }
-
-  componentWillUnmount(){
-    console.log("unmount column")
   }
 
   render() {
@@ -94,32 +94,39 @@ export class Columns extends Component {
   }
 }
 
-const ColumnsWrapper = () => {
-  return (
-    <TimelineStateConsumer>
-      {({ getLeftOffsetFromDate, getTimelineState }) => {
-        const { canvasTimeStart, canvasTimeEnd } = getTimelineState()
-        return (
-          <ColumnsConsumer>
-            {({lineCount, minUnit, timeSteps, height, verticalLineClassNamesForTime}) => (
-              <Columns
-                getLeftOffsetFromDate={getLeftOffsetFromDate}
-                canvasTimeStart={canvasTimeStart}
-                canvasTimeEnd={canvasTimeEnd}
-                lineCount={lineCount}
-                minUnit={minUnit}
-                timeSteps={timeSteps}
-                height={height}
-                verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-              />
-            )}
-          </ColumnsConsumer>
-        )
-      }}
-    </TimelineStateConsumer>
-  )
+class ColumnsWrapper extends Component {
+  render() {
+    return (
+      <TimelineStateConsumer>
+        {({ getLeftOffsetFromDate, getTimelineState }) => {
+          const { canvasTimeStart, canvasTimeEnd, canvasWidth } = getTimelineState()
+          return (
+            <ColumnsConsumer>
+              {({
+                lineCount,
+                minUnit,
+                timeSteps,
+                height,
+                verticalLineClassNamesForTime
+              }) => (
+                <Columns
+                  getLeftOffsetFromDate={getLeftOffsetFromDate}
+                  canvasTimeStart={canvasTimeStart}
+                  canvasTimeEnd={canvasTimeEnd}
+                  canvasWidth={canvasWidth}
+                  lineCount={lineCount}
+                  minUnit={minUnit}
+                  timeSteps={timeSteps}
+                  height={height}
+                  verticalLineClassNamesForTime={verticalLineClassNamesForTime}
+                />
+              )}
+            </ColumnsConsumer>
+          )
+        }}
+      </TimelineStateConsumer>
+    )
+  }
 }
-
-ColumnsWrapper.propTypes = {}
 
 export default ColumnsWrapper

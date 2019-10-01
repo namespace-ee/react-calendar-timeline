@@ -1,4 +1,4 @@
-import React, { useEffect, Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 const defaultContextState = {
@@ -39,49 +39,43 @@ const ItemsContext = React.createContext(defaultContextState)
 
 const { Consumer, Provider } = ItemsContext
 
-export class ItemsContextProvider extends Component {
-
-  componentWillUnmount(){
-    console.log("unmount ItemsContextProvider")
+export class ItemsContextProvider extends PureComponent {
+  static propTypes = {
+    items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+    dragSnap: PropTypes.number,
+    minResizeWidth: PropTypes.number,
+    selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    canChangeGroup: PropTypes.bool.isRequired,
+    canMove: PropTypes.bool.isRequired,
+    canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+    canSelect: PropTypes.bool,
+    moveResizeValidator: PropTypes.func,
+    itemSelect: PropTypes.func,
+    itemDrag: PropTypes.func,
+    itemDrop: PropTypes.func,
+    itemResizing: PropTypes.func,
+    itemResized: PropTypes.func,
+    onItemDoubleClick: PropTypes.func,
+    onItemContextMenu: PropTypes.func,
+    itemRenderer: PropTypes.func,
+    selected: PropTypes.array,
+    groupDimensions: PropTypes.object,
+    useResizeHandle: PropTypes.bool,
+    scrollRef: PropTypes.object,
+    order: PropTypes.object,
+    onDragStart: PropTypes.func.isRequired,
+    onDragEnd: PropTypes.func.isRequired,
+    onResizeStart: PropTypes.func.isRequired,
+    dragging: PropTypes.bool.isRequired,
+    dragOffset: PropTypes.number.isRequired,
+    interactingItemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    resizeEdge: PropTypes.oneOf(['right', 'left']),
+    resizeTime: PropTypes.number
   }
-
   render(){
     const {children,...rest} = this.props
     return <Provider value={rest}>{children}</Provider>
   }
-}
-
-ItemsContextProvider.propTypes = {
-  items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  dragSnap: PropTypes.number,
-  minResizeWidth: PropTypes.number,
-  selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  canChangeGroup: PropTypes.bool.isRequired,
-  canMove: PropTypes.bool.isRequired,
-  canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
-  canSelect: PropTypes.bool,
-  moveResizeValidator: PropTypes.func,
-  itemSelect: PropTypes.func,
-  itemDrag: PropTypes.func,
-  itemDrop: PropTypes.func,
-  itemResizing: PropTypes.func,
-  itemResized: PropTypes.func,
-  onItemDoubleClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  itemRenderer: PropTypes.func,
-  selected: PropTypes.array,
-  groupDimensions: PropTypes.object,
-  useResizeHandle: PropTypes.bool,
-  scrollRef: PropTypes.object,
-  order: PropTypes.object,
-  onDragStart: PropTypes.func.isRequired,
-  onDragEnd: PropTypes.func.isRequired,
-  onResizeStart: PropTypes.func.isRequired,
-  dragging: PropTypes.bool.isRequired,
-  dragOffset: PropTypes.number.isRequired,
-  interactingItemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  resizeEdge: PropTypes.oneOf(['right', 'left']),
-  resizeTime: PropTypes.number
 }
 
 export const ItemsConsumer = Consumer

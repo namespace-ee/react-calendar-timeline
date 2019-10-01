@@ -307,6 +307,38 @@ export default class App extends Component {
     }))
   }
 
+  rowRenderer = ({ rowData, helpers, getLayerRootProps, group, itemsWithInteractions }) => {
+    const { itemsToDrag, unavailableSlots, timelineLinks } = rowData
+    const groupUnavailableSlots = unavailableSlots[group.id]
+      ? unavailableSlots[group.id]
+      : []
+    return (
+      <>
+        <RowColumns/>
+        <RowItems/>
+        <UnavailableLayer
+          getLayerRootProps={getLayerRootProps}
+          getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
+          groupUnavailableSlots={groupUnavailableSlots}
+        />
+        <DroppablesLayer
+          getLayerRootProps={getLayerRootProps}
+          itemsToDrag={itemsToDrag}
+          getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
+          handleDrop={this.handleDrop}
+          group={group}
+        />
+        {/* <Links
+          timelineLinks={timelineLinks}
+          helpers={helpers}
+          group={group}
+          getLayerRootProps={getLayerRootProps}
+          items={itemsWithInteractions}
+        /> */}
+      </>
+    )
+  }
+
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
@@ -336,37 +368,7 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
-        rowRenderer={({ rowData, helpers, getLayerRootProps, group, itemsWithInteractions }) => {
-          const { itemsToDrag, unavailableSlots, timelineLinks } = rowData
-          const groupUnavailableSlots = unavailableSlots[group.id]
-            ? unavailableSlots[group.id]
-            : []
-          return (
-            <>
-              {/* <RowColumns/> */}
-              <RowItems/>
-              <UnavailableLayer
-                getLayerRootProps={getLayerRootProps}
-                getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
-                groupUnavailableSlots={groupUnavailableSlots}
-              />
-              <DroppablesLayer
-                getLayerRootProps={getLayerRootProps}
-                itemsToDrag={itemsToDrag}
-                getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
-                handleDrop={this.handleDrop}
-                group={group}
-              />
-              {/* <Links
-                timelineLinks={timelineLinks}
-                helpers={helpers}
-                group={group}
-                getLayerRootProps={getLayerRootProps}
-                items={itemsWithInteractions}
-              /> */}
-            </>
-          )
-        }}
+        rowRenderer={this.rowRenderer}
         rowData={{
           itemsToDrag: this.state.itemsToDrag,
           unavailableSlots: this.state.unavailableSlots,

@@ -105,10 +105,6 @@ export class Items extends Component {
     return this.props.interactingItemId === _get(item, this.props.keys.itemIdKey)
   }
 
-  componentWillUnmount(){
-    console.log("unmount items")
-  }
-
   render() {
     const {
       keys,
@@ -117,7 +113,6 @@ export class Items extends Component {
       items
     } = this.props
     const { itemIdKey } = keys
-
     return (
       <div className="rct-items">
         {items.map((item, i) => {
@@ -178,27 +173,34 @@ export class Items extends Component {
   }
 }
 
-const ItemsWrapper = () => {
-  return (
-    <TimelineStateConsumer>
-      {({ getTimelineState }) => {
-        const { canvasTimeStart, canvasTimeEnd, canvasWidth, keys } = getTimelineState()
-        return (
-          <ItemsConsumer>
-            {(props) => (
-              <Items
-                canvasTimeStart={canvasTimeStart}
-                canvasTimeEnd={canvasTimeEnd}
-                canvasWidth={canvasWidth}
-                keys={keys}
-                {...props}
-              />
-            )}
-          </ItemsConsumer>
-        )
-      }}
-    </TimelineStateConsumer>
-  )
+class ItemsWrapper extends Component {
+  render() {
+    return (
+      <TimelineStateConsumer>
+        {({ getTimelineState }) => {
+          const {
+            canvasTimeStart,
+            canvasTimeEnd,
+            canvasWidth,
+            keys
+          } = getTimelineState()
+          return (
+            <ItemsConsumer>
+              {props => (
+                <Items
+                  canvasTimeStart={canvasTimeStart}
+                  canvasTimeEnd={canvasTimeEnd}
+                  canvasWidth={canvasWidth}
+                  keys={keys}
+                  {...props}
+                />
+              )}
+            </ItemsConsumer>
+          )
+        }}
+      </TimelineStateConsumer>
+    )
+  }
 }
 
 export default ItemsWrapper

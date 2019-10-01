@@ -174,13 +174,13 @@ class Rows extends React.Component {
               }}
               keys={keys}
             >
-              {/* <ColumnsContextProvider
+              <ColumnsContextProvider
                 lineCount={_length(groups)}
                 minUnit={minUnit}
                 timeSteps={timeSteps}
                 height={groupHeight}
                 verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-              > */}
+              >
                 <ItemsContextProvider
                   //TODO: fix groups with no items
                   items={group.items || []}
@@ -229,7 +229,7 @@ class Rows extends React.Component {
                     itemsWithInteractions={items}
                   />
                 </ItemsContextProvider>
-              {/* </ColumnsContextProvider> */}
+              </ColumnsContextProvider>
             </GroupRow>
           )
         })}
