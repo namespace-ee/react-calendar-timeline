@@ -343,7 +343,7 @@ export default class App extends Component {
             : []
           return (
             <>
-              <RowColumns/>
+              {/* <RowColumns/> */}
               <RowItems/>
               <UnavailableLayer
                 getLayerRootProps={getLayerRootProps}

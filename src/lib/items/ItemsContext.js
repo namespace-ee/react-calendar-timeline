@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Component } from 'react'
 import PropTypes from 'prop-types'
 
 const defaultContextState = {
@@ -39,13 +39,16 @@ const ItemsContext = React.createContext(defaultContextState)
 
 const { Consumer, Provider } = ItemsContext
 
-export function ItemsContextProvider({ children, ...rest }) {
-  useEffect(()=>{
-    return () =>{
-      console.log("unmount ItemsContextProvider")
-    }
-  })
-  return <Provider value={rest}>{children}</Provider>
+export class ItemsContextProvider extends Component {
+
+  componentWillUnmount(){
+    console.log("unmount ItemsContextProvider")
+  }
+
+  render(){
+    const {children,...rest} = this.props
+    return <Provider value={rest}>{children}</Provider>
+  }
 }
 
 ItemsContextProvider.propTypes = {
