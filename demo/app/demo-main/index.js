@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import moment from 'moment'
 
 import Timeline, {
@@ -12,6 +12,7 @@ import Timeline, {
   SidebarHeader,
   DateHeader,
   RowColumns,
+  RowItems,
 } from 'react-calendar-timeline'
 import { useDrag, useDrop } from 'react-dnd'
 import * as d3 from 'd3'
@@ -343,6 +344,7 @@ export default class App extends Component {
           return (
             <>
               <RowColumns/>
+              <RowItems/>
               <UnavailableLayer
                 getLayerRootProps={getLayerRootProps}
                 getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
@@ -594,6 +596,11 @@ function UnavailableLayer({
   groupUnavailableSlots,
   getLeftOffsetFromDate
 }) {
+  useEffect(()=>{
+    return () => {
+      console.log("unmount UnavailableLayer")
+    }
+  })
   return (
     <div {...getLayerRootProps()}>
       {groupUnavailableSlots.map(slot => {

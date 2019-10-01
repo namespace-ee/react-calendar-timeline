@@ -29,6 +29,10 @@ export class Columns extends Component {
     )
   }
 
+  componentWillUnmount(){
+    console.log("unmount column")
+  }
+
   render() {
     const {
       canvasTimeStart,

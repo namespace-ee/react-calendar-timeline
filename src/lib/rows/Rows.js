@@ -4,7 +4,7 @@ import Columns from '../columns/Columns'
 import { ColumnsContextProvider } from '../columns/ColumnsContext'
 import { _get, _length } from '../utility/generic'
 import GroupRow from './GroupRow'
-import Items from '../items/Items'
+import { ItemsContextProvider } from '../items/ItemsContext'
 
 class Rows extends React.Component {
   static contextType = TimelineStateContext
@@ -181,12 +181,9 @@ class Rows extends React.Component {
                 height={groupHeight}
                 verticalLineClassNamesForTime={verticalLineClassNamesForTime}
               >
-                <Items
+                <ItemsContextProvider
                   //TODO: fix groups with no items
                   items={group.items || []}
-                  canvasTimeStart={canvasTimeStart}
-                  canvasTimeEnd={canvasTimeEnd}
-                  canvasWidth={canvasWidth}
                   dragSnap={dragSnap}
                   minResizeWidth={minResizeWidth}
                   selectedItem={selectedItem}
@@ -194,7 +191,6 @@ class Rows extends React.Component {
                   canMove={canMove}
                   canResize={canResize}
                   canSelect={canSelect}
-                  keys={keys}
                   moveResizeValidator={moveResizeValidator}
                   itemSelect={itemSelect}
                   itemDrag={itemDrag}
@@ -218,20 +214,21 @@ class Rows extends React.Component {
                   resizing={this.state.resizing}
                   dragOffset={this.state.dragOffset}
                   interactingItemId={this.state.interactingItemId}
-                />
-                <Layers
-                  getLayerRootProps={this.getLayerRootProps}
-                  helpers={{
-                    getLeftOffsetFromDate: getLeftOffsetFromDate,
-                    getDateFromLeftOffsetPosition: this
-                      .getDateFromLeftOffsetPosition,
-                    getItemAbsoluteLocation: this.getItemAbsoluteLocation,
-                    getItemDimensions: this.getItemDimensionsHelper
-                  }}
-                  rowData={rowData}
-                  group={group.group}
-                  itemsWithInteractions={items}
-                />
+                >
+                  <Layers
+                    getLayerRootProps={this.getLayerRootProps}
+                    helpers={{
+                      getLeftOffsetFromDate: getLeftOffsetFromDate,
+                      getDateFromLeftOffsetPosition: this
+                        .getDateFromLeftOffsetPosition,
+                      getItemAbsoluteLocation: this.getItemAbsoluteLocation,
+                      getItemDimensions: this.getItemDimensionsHelper
+                    }}
+                    rowData={rowData}
+                    group={group.group}
+                    itemsWithInteractions={items}
+                  />
+                </ItemsContextProvider>
               </ColumnsContextProvider>
             </GroupRow>
           )

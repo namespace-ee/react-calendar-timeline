@@ -1,31 +1,85 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 const defaultContextState = {
-  lineCount: undefined,
-  minUnit: undefined,
-  timeSteps: undefined,
-  height: undefined,
-  verticalLineClassNamesForTime: undefined
+  items: undefined,
+  dragSnap: undefined,
+  minResizeWidth: undefined,
+  selectedItem: undefined,
+  canChangeGroup: undefined,
+  canMove: undefined,
+  canResize: undefined,
+  canSelect: undefined,
+  moveResizeValidator: undefined,
+  itemSelect: undefined,
+  itemDrag: undefined,
+  itemDrop: undefined,
+  itemResizing: undefined,
+  itemResized: undefined,
+  onItemDoubleClick: undefined,
+  onItemContextMenu: undefined,
+  itemRenderer: undefined,
+  selected: undefined,
+  groupDimensions: undefined,
+  useResizeHandle: undefined,
+  scrollRef: undefined,
+  order: undefined,
+  onDragStart: undefined,
+  onDragEnd: undefined,
+  onResizeStart: undefined,
+  resizeEdge: undefined,
+  resizeTime: undefined,
+  dragging: undefined,
+  resizing: undefined,
+  dragOffset: undefined,
+  interactingItemId: undefined,
 }
 
-const ItemContext = React.createContext(defaultContextState)
+const ItemsContext = React.createContext(defaultContextState)
 
-const { Consumer, Provider } = ItemContext
+const { Consumer, Provider } = ItemsContext
 
-export function ItemContextProvider({children,...rest}) {
-    return <Provider value={rest}>
-        {children}
-    </Provider>
+export function ItemsContextProvider({ children, ...rest }) {
+  useEffect(()=>{
+    return () =>{
+      console.log("unmount ItemsContextProvider")
+    }
+  })
+  return <Provider value={rest}>{children}</Provider>
 }
 
-ItemContextProvider.propTypes={
-    lineCount: PropTypes.number.isRequired,
-    minUnit: PropTypes.string.isRequired,
-    timeSteps: PropTypes.object.isRequired,
-    height: PropTypes.number.isRequired,
-    verticalLineClassNamesForTime: PropTypes.func,
+ItemsContextProvider.propTypes = {
+  items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  dragSnap: PropTypes.number,
+  minResizeWidth: PropTypes.number,
+  selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  canChangeGroup: PropTypes.bool.isRequired,
+  canMove: PropTypes.bool.isRequired,
+  canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
+  canSelect: PropTypes.bool,
+  moveResizeValidator: PropTypes.func,
+  itemSelect: PropTypes.func,
+  itemDrag: PropTypes.func,
+  itemDrop: PropTypes.func,
+  itemResizing: PropTypes.func,
+  itemResized: PropTypes.func,
+  onItemDoubleClick: PropTypes.func,
+  onItemContextMenu: PropTypes.func,
+  itemRenderer: PropTypes.func,
+  selected: PropTypes.array,
+  groupDimensions: PropTypes.object,
+  useResizeHandle: PropTypes.bool,
+  scrollRef: PropTypes.object,
+  order: PropTypes.object,
+  onDragStart: PropTypes.func.isRequired,
+  onDragEnd: PropTypes.func.isRequired,
+  onResizeStart: PropTypes.func.isRequired,
+  dragging: PropTypes.bool.isRequired,
+  dragOffset: PropTypes.number.isRequired,
+  interactingItemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  resizeEdge: PropTypes.oneOf(['right', 'left']),
+  resizeTime: PropTypes.number
 }
 
-export const ItemConsumer = Consumer;
-export default ItemContext;
+export const ItemsConsumer = Consumer
+export default ItemsContext

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import Item from './Item'
-// import ItemGroup from './ItemGroup'
-
+import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import {ItemsConsumer} from './ItemsContext'
 import { _get, arraysEqual } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
@@ -17,7 +17,7 @@ const canResizeRight = (item, canResize) => {
   return value === 'right' || value === 'both' || value === true
 }
 
-export default class Items extends Component {
+export class Items extends Component {
   static propTypes = {
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 
@@ -105,6 +105,10 @@ export default class Items extends Component {
     return this.props.interactingItemId === _get(item, this.props.keys.itemIdKey)
   }
 
+  componentWillUnmount(){
+    console.log("unmount items")
+  }
+
   render() {
     const {
       keys,
@@ -173,3 +177,28 @@ export default class Items extends Component {
     )
   }
 }
+
+const ItemsWrapper = () => {
+  return (
+    <TimelineStateConsumer>
+      {({ getTimelineState }) => {
+        const { canvasTimeStart, canvasTimeEnd, canvasWidth, keys } = getTimelineState()
+        return (
+          <ItemsConsumer>
+            {(props) => (
+              <Items
+                canvasTimeStart={canvasTimeStart}
+                canvasTimeEnd={canvasTimeEnd}
+                canvasWidth={canvasWidth}
+                keys={keys}
+                {...props}
+              />
+            )}
+          </ItemsConsumer>
+        )
+      }}
+    </TimelineStateConsumer>
+  )
+}
+
+export default ItemsWrapper
