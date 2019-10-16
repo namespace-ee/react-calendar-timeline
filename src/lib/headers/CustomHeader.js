@@ -19,7 +19,7 @@ export class CustomHeader extends React.Component {
     showPeriod: PropTypes.func.isRequired,
     headerData: PropTypes.object,
     getLeftOffsetFromDate: PropTypes.func.isRequired,
-    height: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
   }
   constructor(props) {
     super(props)
@@ -131,7 +131,7 @@ export class CustomHeader extends React.Component {
       style: Object.assign({}, style ? style : {}, {
         position: 'relative',
         width: this.props.canvasWidth,
-        height: this.props.height,
+        height: this.props.height
       })
     }
   }
@@ -172,7 +172,7 @@ export class CustomHeader extends React.Component {
       timelineWidth,
       visibleTimeStart,
       visibleTimeEnd,
-      headerData,
+      headerData
     } = this.props
     //TODO: only evaluate on changing params
     return {
@@ -190,50 +190,53 @@ export class CustomHeader extends React.Component {
       getRootProps: this.getRootProps,
       getIntervalProps: this.getIntervalProps,
       showPeriod,
-      data: headerData,
+      data: headerData
     }
   }
 
   render() {
     const props = this.getStateAndHelpers()
     const Renderer = this.props.children
-    return <Renderer {...props}/>
+    return <Renderer {...props} />
   }
 }
 
-const CustomHeaderWrapper = ({ children, unit, headerData, height }) => (
-  <TimelineStateConsumer>
-    {({ getTimelineState, showPeriod, getLeftOffsetFromDate }) => {
-      const timelineState = getTimelineState()
-      return (
-        <TimelineHeadersConsumer>
-          {({ timeSteps }) => (
-            <CustomHeader
-              children={children}
-              timeSteps={timeSteps}
-              showPeriod={showPeriod}
-              unit={unit ? unit : timelineState.timelineUnit}
-              {...timelineState}
-              headerData={headerData}
-              getLeftOffsetFromDate={getLeftOffsetFromDate}
-              height={height}
-            />
-          )}
-        </TimelineHeadersConsumer>
-      )
-    }}
-  </TimelineStateConsumer>
-)
-
-CustomHeaderWrapper.propTypes = {
-  children: PropTypes.func.isRequired,
-  unit: PropTypes.string,
-  headerData: PropTypes.object,
-  height: PropTypes.number,
-}
-
-CustomHeaderWrapper.defaultProps = {
-  height: 30,
+class CustomHeaderWrapper extends React.Component {
+  static propTypes = {
+    children: PropTypes.func.isRequired,
+    unit: PropTypes.string,
+    headerData: PropTypes.object,
+    height: PropTypes.number
+  }
+  static defaultProps = {
+    height: 30
+  }
+  render() {
+    const { children, unit, headerData, height } = this.props
+    return (
+      <TimelineStateConsumer>
+        {({ getTimelineState, showPeriod, getLeftOffsetFromDate }) => {
+          const timelineState = getTimelineState()
+          return (
+            <TimelineHeadersConsumer>
+              {({ timeSteps }) => (
+                <CustomHeader
+                  children={children}
+                  timeSteps={timeSteps}
+                  showPeriod={showPeriod}
+                  unit={unit ? unit : timelineState.timelineUnit}
+                  {...timelineState}
+                  headerData={headerData}
+                  getLeftOffsetFromDate={getLeftOffsetFromDate}
+                  height={height}
+                />
+              )}
+            </TimelineHeadersConsumer>
+          )
+        }}
+      </TimelineStateConsumer>
+    )
+  }
 }
 
 export default CustomHeaderWrapper

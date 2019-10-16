@@ -439,7 +439,11 @@ export default class ReactCalendarTimeline extends Component {
         (this.state.visibleTimeStart - this.state.canvasTimeStart) /
         newZoom
     )
-    const componentScrollLeft = Math.round(this.scrollComponent.scrollLeft)
+    const componentScrollLeft = Math.round(
+      prevState.width *
+        (prevState.visibleTimeStart - prevState.canvasTimeStart) /
+        oldZoom
+    )
     if (componentScrollLeft !== scrollLeft) {
       this.scrollComponent.scrollLeft = scrollLeft
       this.scrollHeaderRef.scrollLeft = scrollLeft
