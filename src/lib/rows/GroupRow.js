@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
 import interact from 'interactjs'
 import { _get } from '../utility/generic'
+import { GroupRowConsumer } from './GroupRowContext'
+import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
 class GroupRow extends Component {
   static propTypes = {
@@ -10,16 +12,17 @@ class GroupRow extends Component {
     onDoubleClick: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
     isEvenRow: PropTypes.bool.isRequired,
-    style: PropTypes.object.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    groupHeight: PropTypes.number.isRequired,
     clickTolerance: PropTypes.number.isRequired,
     group: PropTypes.object.isRequired,
     horizontalLineClassNamesForGroup: PropTypes.func,
     keys: PropTypes.object
   }
 
-  ref= React.createRef()
+  ref = React.createRef()
 
-  componentDidMount(){
+  componentDidMount() {
     interact(this.ref.current).dropzone({
       accept: '.rct-item',
       overlap: 'pointer'
@@ -31,18 +34,18 @@ class GroupRow extends Component {
       onContextMenu,
       onDoubleClick,
       isEvenRow,
-      style,
       onClick,
       clickTolerance,
       horizontalLineClassNamesForGroup,
       group,
       children,
       keys,
+      canvasWidth,
+      groupHeight
     } = this.props
-    // console.log(group)
-    let classNamesForGroup = [];
+    let classNamesForGroup = []
     if (horizontalLineClassNamesForGroup) {
-      classNamesForGroup = horizontalLineClassNamesForGroup(group);
+      classNamesForGroup = horizontalLineClassNamesForGroup(group)
     }
 
     return (
@@ -51,8 +54,18 @@ class GroupRow extends Component {
           ref={this.ref}
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
-          className={'rct-hl '+ (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
-          style={style}
+          className={
+            'rct-hl ' +
+            (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') +
+            (classNamesForGroup ? classNamesForGroup.join(' ') : '')
+          }
+          style={{
+            width: canvasWidth,
+            height: groupHeight,
+            background: 'lightgray',
+            border: '1px solid blue',
+            position: 'relative'
+          }}
           data-groupid={_get(group, keys.groupIdKey)}
         >
           {children}
@@ -62,4 +75,36 @@ class GroupRow extends Component {
   }
 }
 
-export default GroupRow
+class GroupRowWrapper extends Component {
+  constructor(props) {
+    super(props)
+    console.log('mount GroupRowWrapper')
+  }
+  componentDidMount() {
+    console.log('unmount GroupRowWrapper')
+  }
+  render() {
+    return (
+      <TimelineStateConsumer>
+        {({ getTimelineState }) => {
+          const { canvasWidth, keys } = getTimelineState()
+          return (
+            <GroupRowConsumer>
+              {props => (
+                <GroupRow
+                  canvasWidth={canvasWidth}
+                  keys={keys}
+                  canvasWidth={canvasWidth}
+                  {...props}
+                  children={this.props.children}
+                />
+              )}
+            </GroupRowConsumer>
+          )
+        }}
+      </TimelineStateConsumer>
+    )
+  }
+}
+
+export default GroupRowWrapper

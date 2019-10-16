@@ -174,6 +174,13 @@ export class Items extends Component {
 }
 
 class ItemsWrapper extends Component {
+  constructor(props){
+    super(props);
+    console.log('mount ItemsWrapper')
+  }
+  componentDidMount(){
+    console.log('unmount ItemsWrapper')
+  }
   render() {
     return (
       <TimelineStateConsumer>

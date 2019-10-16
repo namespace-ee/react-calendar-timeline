@@ -13,6 +13,7 @@ import Timeline, {
   DateHeader,
   RowColumns,
   RowItems,
+  GroupRow,
 } from 'react-calendar-timeline'
 import { useDrag, useDrop } from 'react-dnd'
 import * as d3 from 'd3'
@@ -313,7 +314,7 @@ export default class App extends Component {
       ? unavailableSlots[group.id]
       : []
     return (
-      <>
+      <GroupRow>
         <RowColumns/>
         <RowItems/>
         <UnavailableLayer
@@ -335,7 +336,7 @@ export default class App extends Component {
           getLayerRootProps={getLayerRootProps}
           items={itemsWithInteractions}
         /> */}
-      </>
+      </GroupRow>
     )
   }
 

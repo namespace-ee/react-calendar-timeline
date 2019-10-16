@@ -1,10 +1,10 @@
 import React from 'react'
 import TimelineStateContext from '../timeline/TimelineStateContext'
-import Columns from '../columns/Columns'
 import { ColumnsContextProvider } from '../columns/ColumnsContext'
 import { _get, _length } from '../utility/generic'
 import GroupRow from './GroupRow'
 import { ItemsContextProvider } from '../items/ItemsContext'
+import { GroupRowContextProvider } from './GroupRowContext'
 
 class Rows extends React.Component {
   static contextType = TimelineStateContext
@@ -154,25 +154,18 @@ class Rows extends React.Component {
           const groupId = _get(groups[i], keys.groupIdKey)
           const group = groupsWithItemsDimensions[groupId]
           return (
-            <GroupRow
+            <GroupRowContextProvider
+              key={`horizontal-line-${groupId}`}
               clickTolerance={clickTolerance}
               onContextMenu={evt => onRowContextClick(evt, i)}
               onClick={evt => onRowClick(evt, i)}
               onDoubleClick={evt => onRowDoubleClick(evt, i)}
-              key={`horizontal-line-${groupId}`}
               isEvenRow={i % 2 === 0}
               group={groups[i]}
               horizontalLineClassNamesForGroup={
                 horizontalLineClassNamesForGroup
               }
-              style={{
-                width: canvasWidth,
-                height: groupHeight,
-                background: 'lightgray',
-                border: '1px solid blue',
-                position: 'relative'
-              }}
-              keys={keys}
+              groupHeight={groupHeight}
             >
               <ColumnsContextProvider
                 lineCount={_length(groups)}
@@ -230,7 +223,7 @@ class Rows extends React.Component {
                   />
                 </ItemsContextProvider>
               </ColumnsContextProvider>
-            </GroupRow>
+            </GroupRowContextProvider>
           )
         })}
       </div>
