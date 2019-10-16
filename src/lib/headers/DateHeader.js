@@ -4,8 +4,8 @@ import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import CustomHeader from './CustomHeader'
 import { getNextUnit } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
-import Interval from './Interval'
 import memoize from 'memoize-one'
+import { CustomDateHeader } from './CustomDateHeader'
 
 class DateHeader extends React.Component {
   static propTypes = {
@@ -86,7 +86,7 @@ class DateHeader extends React.Component {
           this.props.unit,
           this.props.headerData
         )}
-        children={Header}
+        children={CustomDateHeader}
       />
     )
   }
@@ -141,50 +141,6 @@ class DateHeaderWrapper extends React.Component {
       </TimelineStateConsumer>
     )
   }
-}
-
-function Header({
-  headerContext: { intervals, unit },
-  getRootProps,
-  getIntervalProps,
-  showPeriod,
-  data: {
-    style,
-    intervalRenderer,
-    className,
-    getLabelFormat,
-    unitProp,
-    ...restData
-  }
-}) {
-  return (
-    <div
-      data-testid={`dateHeader`}
-      className={className}
-      {...getRootProps({ style })}
-    >
-      {intervals.map(interval => {
-        const intervalText = getLabelFormat(
-          [interval.startTime, interval.endTime],
-          unit,
-          interval.labelWidth
-        )
-        return (
-          <Interval
-            key={`label-${interval.startTime.valueOf()}`}
-            unit={unit}
-            interval={interval}
-            showPeriod={showPeriod}
-            intervalText={intervalText}
-            primaryHeader={unitProp === 'primaryHeader'}
-            getIntervalProps={getIntervalProps}
-            intervalRenderer={intervalRenderer}
-            headerData={restData}
-          />
-        )
-      })}
-    </div>
-  )
 }
 
 function formatLabel(
