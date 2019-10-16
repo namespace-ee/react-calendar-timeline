@@ -193,7 +193,6 @@ export class CustomHeader extends React.Component {
       data: headerData
     }
   }
-
   render() {
     const props = this.getStateAndHelpers()
     const Renderer = this.props.children

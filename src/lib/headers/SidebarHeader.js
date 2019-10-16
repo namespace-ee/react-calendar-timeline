@@ -32,7 +32,6 @@ class SidebarHeader extends React.PureComponent {
       data: this.props.headerData
     }
   }
-
   render() {
     const props = this.getStateAndHelpers()
     const Renderer = this.props.children

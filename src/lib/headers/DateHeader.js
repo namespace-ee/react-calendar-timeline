@@ -5,6 +5,7 @@ import CustomHeader from './CustomHeader'
 import { getNextUnit } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
 import Interval from './Interval'
+import memoize from 'memoize-one'
 
 class DateHeader extends React.Component {
   static propTypes = {
@@ -31,14 +32,14 @@ class DateHeader extends React.Component {
     return this.props.timelineUnit
   }
 
-  getRootStyle = () => {
+  getRootStyle = memoize(style => {
     return {
       height: 30,
-      ...this.props.style
+      ...style
     }
-  }
+  })
 
-  getLabelFormat(interval, unit, labelWidth) {
+  getLabelFormat = (interval, unit, labelWidth) => {
     const { labelFormat } = this.props
     if (typeof labelFormat === 'string') {
       const startTime = interval[0]
@@ -50,50 +51,43 @@ class DateHeader extends React.Component {
     }
   }
 
+  getHeaderData = memoize(
+    (
+      intervalRenderer,
+      style,
+      className,
+      getLabelFormat,
+      unitProp,
+      headerData
+    ) => {
+      return {
+        intervalRenderer,
+        style,
+        className,
+        getLabelFormat,
+        unitProp,
+        headerData
+      }
+    }
+  )
+
   render() {
     const unit = this.getHeaderUnit()
     const { headerData, height } = this.props
     return (
-      <CustomHeader unit={unit} height={height} headerData={headerData}>
-        {({
-          headerContext: { intervals },
-          getRootProps,
-          getIntervalProps,
-          showPeriod,
-          data
-        }) => {
-          const unit = this.getHeaderUnit()
-
-          return (
-            <div
-              data-testid={`dateHeader`}
-              className={this.props.className}
-              {...getRootProps({ style: this.getRootStyle() })}
-            >
-              {intervals.map(interval => {
-                const intervalText = this.getLabelFormat(
-                  [interval.startTime, interval.endTime],
-                  unit,
-                  interval.labelWidth
-                )
-                return (
-                  <Interval
-                    key={`label-${interval.startTime.valueOf()}`}
-                    unit={unit}
-                    interval={interval}
-                    showPeriod={showPeriod}
-                    intervalText={intervalText}
-                    primaryHeader={this.props.unit === 'primaryHeader'}
-                    getIntervalProps={getIntervalProps}
-                    intervalRenderer={this.props.intervalRenderer}
-                    headerData={data}
-                  />
-                )
-              })}
-            </div>
-          )
-        }}
-      </CustomHeader>
+      <CustomHeader
+        unit={unit}
+        height={height}
+        headerData={this.getHeaderData(
+          this.props.intervalRenderer,
+          this.getRootStyle(this.props.style),
+          this.props.className,
+          this.getLabelFormat,
+          this.props.unit,
+          this.props.headerData
+        )}
+        children={Header}
+      />
     )
   }
 }
@@ -116,6 +110,7 @@ class DateHeaderWrapper extends React.Component {
   static defaultProps = {
     labelFormat: formatLabel
   }
+
   render() {
     const {
       unit,
@@ -146,6 +141,50 @@ class DateHeaderWrapper extends React.Component {
       </TimelineStateConsumer>
     )
   }
+}
+
+function Header({
+  headerContext: { intervals, unit },
+  getRootProps,
+  getIntervalProps,
+  showPeriod,
+  data: {
+    style,
+    intervalRenderer,
+    className,
+    getLabelFormat,
+    unitProp,
+    ...restData
+  }
+}) {
+  return (
+    <div
+      data-testid={`dateHeader`}
+      className={className}
+      {...getRootProps({ style })}
+    >
+      {intervals.map(interval => {
+        const intervalText = getLabelFormat(
+          [interval.startTime, interval.endTime],
+          unit,
+          interval.labelWidth
+        )
+        return (
+          <Interval
+            key={`label-${interval.startTime.valueOf()}`}
+            unit={unit}
+            interval={interval}
+            showPeriod={showPeriod}
+            intervalText={intervalText}
+            primaryHeader={unitProp === 'primaryHeader'}
+            getIntervalProps={getIntervalProps}
+            intervalRenderer={intervalRenderer}
+            headerData={restData}
+          />
+        )
+      })}
+    </div>
+  )
 }
 
 function formatLabel(

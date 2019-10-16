@@ -56,7 +56,6 @@ class TimelineHeaders extends React.Component {
     if (child.type === undefined) return false
     return child.type.secretKey === SidebarHeader.secretKey
   }
-
   render() {
     let rightSidebarHeader
     let leftSidebarHeader

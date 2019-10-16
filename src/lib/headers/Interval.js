@@ -36,7 +36,6 @@ class Interval extends React.PureComponent {
       onClick: composeEvents(this.onIntervalClick, props.onClick)
     }
   }
-
   render() {
     const { intervalText, interval, intervalRenderer, headerData } = this.props
     const Renderer = intervalRenderer
