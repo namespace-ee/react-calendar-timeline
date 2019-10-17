@@ -7,7 +7,7 @@ import { defaultHeaderFormats } from '../default-config'
 import memoize from 'memoize-one'
 import { CustomDateHeader } from './CustomDateHeader'
 
-class DateHeader extends React.Component {
+class DateHeader extends React.PureComponent {
   static propTypes = {
     unit: PropTypes.string,
     style: PropTypes.object,
