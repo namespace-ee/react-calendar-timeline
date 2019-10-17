@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import moment from 'moment'
 
-import Items from './items/Items'
 import Sidebar from './layout/Sidebar'
-import Columns from './columns/Columns'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
 import Rows from './rows/Rows'
@@ -13,16 +10,11 @@ import windowResizeDetector from '../resize-detector/window'
 
 import {
   getMinUnit,
-  getNextUnit,
   calculateTimeForXPosition,
-  calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
   getCanvasWidth,
+  calculateScrollCanvas,
   stackTimelineItems,
-  getItemWithInteractions,
-  getVisibleItems,
-  getOrderedGroupsWithItems,
-  getgroupsWithItemsDimensions,
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
 import {
@@ -36,7 +28,6 @@ import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 import { TimelineHeadersProvider } from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
-import SidebarHeader from './headers/SidebarHeader'
 import DefaultLayer from './rows/DefaultLayer'
 
 export default class ReactCalendarTimeline extends Component {

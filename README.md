@@ -1153,6 +1153,22 @@ import Timeline, {
 </Timeline>
 ```
 
+### Row renderer
+
+description
+
+#### example
+
+#### API
+
+##### GroupRow
+
+##### ItemsRow
+
+##### columnsRow
+
+##### Custom Layers
+
 # FAQ
 
 ## My timeline is unstyled
