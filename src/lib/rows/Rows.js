@@ -5,7 +5,7 @@ import { _get, _length } from '../utility/generic'
 import { ItemsContextProvider } from '../items/ItemsContext'
 import { GroupRowContextProvider } from './GroupRowContext'
 
-class Rows extends React.Component {
+class Rows extends React.PureComponent {
   static contextType = TimelineStateContext
 
   initState = {
@@ -108,7 +108,6 @@ class Rows extends React.Component {
       onItemContextMenu,
       itemSelect,
       scrollRef,
-      itemResized,
       selected,
       selectedItem,
       verticalLineClassNamesForTime,

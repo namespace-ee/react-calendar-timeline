@@ -37,6 +37,7 @@ import { TimelineHeadersProvider } from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
 import SidebarHeader from './headers/SidebarHeader'
+import DefaultLayer from './rows/DefaultLayer'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -241,7 +242,7 @@ export default class ReactCalendarTimeline extends Component {
 
     selected: null,
 
-    rowRenderer: ()=>null,
+    rowRenderer: DefaultLayer,
     rowData: {},
   }
 
