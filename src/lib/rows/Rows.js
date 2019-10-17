@@ -2,7 +2,6 @@ import React from 'react'
 import TimelineStateContext from '../timeline/TimelineStateContext'
 import { ColumnsContextProvider } from '../columns/ColumnsContext'
 import { _get, _length } from '../utility/generic'
-import GroupRow from './GroupRow'
 import { ItemsContextProvider } from '../items/ItemsContext'
 import { GroupRowContextProvider } from './GroupRowContext'
 
@@ -94,15 +93,11 @@ class Rows extends React.Component {
       groupHeights,
       groups,
       itemRenderer,
-      lineHeight,
-      itemHeightRatio,
-      stackItems,
       canChangeGroup,
       canMove,
       canResize,
       canSelect,
       useResizeHandle,
-      groupTops,
       dragSnap,
       minResizeWidth,
       itemResizing,
@@ -131,22 +126,8 @@ class Rows extends React.Component {
       items,
       keys
     } = this.props
-    const {
-      getTimelineState,
-      getLeftOffsetFromDate,
-      getDateFromLeftOffsetPosition
-    } = this.context
-    const {
-      visibleTimeStart,
-      visibleTimeEnd,
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-      timelineUnit,
-      timelineWidth,
-      resizeEdge,
-      resizeTime
-    } = getTimelineState()
+    const { getTimelineState, getLeftOffsetFromDate } = this.context
+    const { resizeEdge, resizeTime } = getTimelineState()
 
     return (
       <div style={{ position: 'absolute', top: 0 }}>
@@ -157,15 +138,16 @@ class Rows extends React.Component {
             <GroupRowContextProvider
               key={`horizontal-line-${groupId}`}
               clickTolerance={clickTolerance}
-              onContextMenu={evt => onRowContextClick(evt, i)}
-              onClick={evt => onRowClick(evt, i)}
-              onDoubleClick={evt => onRowDoubleClick(evt, i)}
+              onContextMenu={onRowContextClick}
+              onClick={onRowClick}
+              onDoubleClick={onRowDoubleClick}
               isEvenRow={i % 2 === 0}
               group={groups[i]}
               horizontalLineClassNamesForGroup={
                 horizontalLineClassNamesForGroup
               }
               groupHeight={groupHeight}
+              groupIndex={i}
             >
               <ColumnsContextProvider
                 lineCount={_length(groups)}
@@ -177,6 +159,7 @@ class Rows extends React.Component {
                 <ItemsContextProvider
                   //TODO: fix groups with no items
                   items={group.items || []}
+                  groupDimensions={group}
                   dragSnap={dragSnap}
                   minResizeWidth={minResizeWidth}
                   selectedItem={selectedItem}
@@ -194,7 +177,6 @@ class Rows extends React.Component {
                   onItemContextMenu={onItemContextMenu}
                   itemRenderer={itemRenderer}
                   selected={selected}
-                  groupDimensions={group}
                   useResizeHandle={useResizeHandle}
                   scrollRef={scrollRef}
                   order={group}

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import { iterateTimes } from '../utility/calendar'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import { ColumnsConsumer } from './ColumnsContext'
@@ -94,7 +94,7 @@ export class Columns extends Component {
   }
 }
 
-class ColumnsWrapper extends Component {
+class ColumnsWrapper extends PureComponent {
   render() {
     return (
       <TimelineStateConsumer>

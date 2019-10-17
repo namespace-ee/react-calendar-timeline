@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
 import interact from 'interactjs'
@@ -75,14 +75,7 @@ class GroupRow extends Component {
   }
 }
 
-class GroupRowWrapper extends Component {
-  constructor(props) {
-    super(props)
-    console.log('mount GroupRowWrapper')
-  }
-  componentDidMount() {
-    console.log('unmount GroupRowWrapper')
-  }
+class GroupRowWrapper extends PureComponent {
   render() {
     return (
       <TimelineStateConsumer>

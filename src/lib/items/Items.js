@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React, { PureComponent, Component } from 'react'
 import Item from './Item'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import {ItemsConsumer} from './ItemsContext'
@@ -173,14 +173,7 @@ export class Items extends Component {
   }
 }
 
-class ItemsWrapper extends Component {
-  constructor(props){
-    super(props);
-    console.log('mount ItemsWrapper')
-  }
-  componentDidMount(){
-    console.log('unmount ItemsWrapper')
-  }
+class ItemsWrapper extends PureComponent {
   render() {
     return (
       <TimelineStateConsumer>

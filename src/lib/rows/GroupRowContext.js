@@ -25,11 +25,27 @@ export class GroupRowContextProvider extends PureComponent {
     isEvenRow: PropTypes.bool.isRequired,
     group: PropTypes.object.isRequired,
     horizontalLineClassNamesForGroup: PropTypes.func,
-    groupHeight: PropTypes.number.isRequired
+    groupHeight: PropTypes.number.isRequired,
+    groupIndex: PropTypes.number.isRequired,
+  }
+  handleContextMenu = (e) => {
+    this.props.onContextMenu(e, this.props.groupIndex)
+  }
+  handleClick = (e) => {
+    this.props.onClick(e, this.props.groupIndex)
+  }
+  handleDoubleClick = (e) => {
+    this.props.onDoubleClick(e, this.props.groupIndex)
   }
   render() {
-    const { children, ...rest } = this.props
-    return <Provider value={rest}>{children}</Provider>
+    const { children, onContextMenu, onClick, onDoubleClick, ...rest } = this.props
+    const value = {
+      ...rest,
+      onContextMenu: this.handleContextMenu,
+      onClick: this.handleClick,
+      onDoubleClick: this.handleDoubleClick
+    }
+    return <Provider value={value}>{children}</Provider>
   }
 }
 

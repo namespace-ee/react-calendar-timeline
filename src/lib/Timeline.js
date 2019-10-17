@@ -974,17 +974,12 @@ export default class ReactCalendarTimeline extends Component {
                     {this.childrenWithProps()}
                     <Rows
                       groupHeights={groupHeights}
-                      canvasWidth={canvasWidth}
                       itemRenderer={itemRenderer}
-                      lineHeight={lineHeight}
-                      itemHeightRatio={itemHeightRatio}
-                      stackItems={stackItems}
                       canChangeGroup={this.props.canChangeGroup}
                       canMove={this.props.canMove}
                       canResize={this.props.canResize}
                       canSelect={this.props.canSelect}
                       useResizeHandle={this.props.useResizeHandle}
-                      groupTops={groupTops}
                       dragSnap={this.props.dragSnap}
                       minResizeWidth={this.props.minResizeWidth}
                       itemResized={this.resizedItem}
@@ -1013,8 +1008,6 @@ export default class ReactCalendarTimeline extends Component {
                       groupsWithItemsDimensions={groupsWithItemsDimensions}
                       groups={groups}
                       items={items}
-                      resizingEdge={this.state.resizingEdge}
-                      resizeTime={this.state.resizeTime}
                       keys={keys}
                     />
                   </MarkerCanvas>
