@@ -96,7 +96,8 @@
     "classnames": "^2.2.6",
     "create-react-context": "^0.2.2",
     "element-resize-detector": "^1.1.12",
-    "lodash.isequal": "^4.5.0"
+    "lodash.isequal": "^4.5.0",
+    "memoize-one": "^5.1.1"
   },
   "peerDependencies": {
     "interactjs": "^1.3.4",
@@ -141,10 +142,10 @@
     "prettier-eslint-cli": "^4.7.0",
     "prop-types": "^15.6.2",
     "randomcolor": "^0.5.3",
-    "react": "^16.8.6",
+    "react": "^16.10.2",
     "react-dnd": "^9.3.4",
     "react-dnd-html5-backend": "^9.3.4",
-    "react-dom": "^16.8.6",
+    "react-dom": "^16.10.2",
     "react-router-dom": "^4.1.1",
     "react-testing-library": "^6.0.3",
     "regenerator-runtime": "^0.13.2",

@@ -4,7 +4,8 @@ import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import CustomHeader from './CustomHeader'
 import { getNextUnit } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
-import Interval from './Interval'
+import memoize from 'memoize-one'
+import { CustomDateHeader } from './CustomDateHeader'
 
 class DateHeader extends React.Component {
   static propTypes = {
@@ -19,7 +20,7 @@ class DateHeader extends React.Component {
     ]).isRequired,
     intervalRenderer: PropTypes.func,
     headerData: PropTypes.object,
-    height: PropTypes.number,
+    height: PropTypes.number
   }
 
   getHeaderUnit = () => {
@@ -31,14 +32,14 @@ class DateHeader extends React.Component {
     return this.props.timelineUnit
   }
 
-  getRootStyle = () => {
+  getRootStyle = memoize(style => {
     return {
       height: 30,
-      ...this.props.style
+      ...style
     }
-  }
+  })
 
-  getLabelFormat(interval, unit, labelWidth) {
+  getLabelFormat = (interval, unit, labelWidth) => {
     const { labelFormat } = this.props
     if (typeof labelFormat === 'string') {
       const startTime = interval[0]
@@ -50,50 +51,43 @@ class DateHeader extends React.Component {
     }
   }
 
+  getHeaderData = memoize(
+    (
+      intervalRenderer,
+      style,
+      className,
+      getLabelFormat,
+      unitProp,
+      headerData
+    ) => {
+      return {
+        intervalRenderer,
+        style,
+        className,
+        getLabelFormat,
+        unitProp,
+        headerData
+      }
+    }
+  )
+
   render() {
     const unit = this.getHeaderUnit()
     const { headerData, height } = this.props
     return (
-      <CustomHeader unit={unit} height={height} headerData={headerData}>
-        {({
-          headerContext: { intervals },
-          getRootProps,
-          getIntervalProps,
-          showPeriod,
-          data
-        }) => {
-          const unit = this.getHeaderUnit()
-
-          return (
-            <div
-              data-testid={`dateHeader`}
-              className={this.props.className}
-              {...getRootProps({ style: this.getRootStyle() })}
-            >
-              {intervals.map(interval => {
-                const intervalText = this.getLabelFormat(
-                  [interval.startTime, interval.endTime],
-                  unit,
-                  interval.labelWidth
-                )
-                return (
-                  <Interval
-                    key={`label-${interval.startTime.valueOf()}`}
-                    unit={unit}
-                    interval={interval}
-                    showPeriod={showPeriod}
-                    intervalText={intervalText}
-                    primaryHeader={this.props.unit === 'primaryHeader'}
-                    getIntervalProps={getIntervalProps}
-                    intervalRenderer={this.props.intervalRenderer}
-                    headerData={data}
-                  />
-                )
-              })}
-            </div>
-          )
-        }}
-      </CustomHeader>
+      <CustomHeader
+        unit={unit}
+        height={height}
+        headerData={this.getHeaderData(
+          this.props.intervalRenderer,
+          this.getRootStyle(this.props.style),
+          this.props.className,
+          this.getLabelFormat,
+          this.props.unit,
+          this.props.headerData
+        )}
+        children={CustomDateHeader}
+      />
     )
   }
 }
@@ -105,7 +99,7 @@ const DateHeaderWrapper = ({
   className,
   intervalRenderer,
   headerData,
-  height,
+  height
 }) => (
   <TimelineStateConsumer>
     {({ getTimelineState }) => {
@@ -137,7 +131,7 @@ DateHeaderWrapper.propTypes = {
   ]),
   intervalRenderer: PropTypes.func,
   headerData: PropTypes.object,
-  height: PropTypes.number,
+  height: PropTypes.number
 }
 
 DateHeaderWrapper.defaultProps = {
