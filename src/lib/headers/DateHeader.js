@@ -92,55 +92,50 @@ class DateHeader extends React.Component {
   }
 }
 
-class DateHeaderWrapper extends React.Component {
-  static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
-    unit: PropTypes.string,
-    labelFormat: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
-      PropTypes.string
-    ]),
-    intervalRenderer: PropTypes.func,
-    headerData: PropTypes.object,
-    height: PropTypes.number
-  }
+const DateHeaderWrapper = ({
+  unit,
+  labelFormat,
+  style,
+  className,
+  intervalRenderer,
+  headerData,
+  height
+}) => (
+  <TimelineStateConsumer>
+    {({ getTimelineState }) => {
+      const timelineState = getTimelineState()
+      return (
+        <DateHeader
+          timelineUnit={timelineState.timelineUnit}
+          unit={unit}
+          labelFormat={labelFormat}
+          style={style}
+          className={className}
+          intervalRenderer={intervalRenderer}
+          headerData={headerData}
+          height={height}
+        />
+      )
+    }}
+  </TimelineStateConsumer>
+)
 
-  static defaultProps = {
-    labelFormat: formatLabel
-  }
+DateHeaderWrapper.propTypes = {
+  style: PropTypes.object,
+  className: PropTypes.string,
+  unit: PropTypes.string,
+  labelFormat: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
+    PropTypes.string
+  ]),
+  intervalRenderer: PropTypes.func,
+  headerData: PropTypes.object,
+  height: PropTypes.number
+}
 
-  render() {
-    const {
-      unit,
-      labelFormat,
-      style,
-      className,
-      intervalRenderer,
-      headerData,
-      height
-    } = this.props
-    return (
-      <TimelineStateConsumer>
-        {({ getTimelineState }) => {
-          const timelineState = getTimelineState()
-          return (
-            <DateHeader
-              timelineUnit={timelineState.timelineUnit}
-              unit={unit}
-              labelFormat={labelFormat}
-              style={style}
-              className={className}
-              intervalRenderer={intervalRenderer}
-              headerData={headerData}
-              height={height}
-            />
-          )
-        }}
-      </TimelineStateConsumer>
-    )
-  }
+DateHeaderWrapper.defaultProps = {
+  labelFormat: formatLabel
 }
 
 function formatLabel(
