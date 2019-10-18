@@ -1161,6 +1161,8 @@ description
 
 #### API
 
+#### `rowRenderer` prop
+
 ##### GroupRow
 
 ##### ItemsRow
