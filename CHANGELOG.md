@@ -7,7 +7,13 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-# 0.26.4
+## 0.26.5
+
+* improve performance by:
+  - eliminate extra call of layout on state update @ilaiwi
+  - eliminate unmounting and mounting of Interval Component @ilaiwi
+
+## 0.26.4
 
 * fix `react-calendar-timeline` not working with `react-hot-loader` #607 @ilaiwi + @westn
 * add documentation for `stackItems` format #661 @tyson-kubota
