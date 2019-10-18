@@ -1153,6 +1153,10 @@ import Timeline, {
 </Timeline>
 ```
 
+### `rowData` prop
+
+Data to be passed to `rowRenderer`'s  `rowData` param. Changing this prop will cause rerender of the `rowRenderer`
+
 ### Row renderer
 
 This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
@@ -1279,17 +1283,161 @@ function UnavailableLayer({
 
 #### API
 
+`rowRenderer` follow the render prop pattern with some prebuilt components to display the rows, items and columns.
 
+_Note_ : the renderProp can be a component or a function for convenience
 
 #### `rowRenderer` prop
 
+```typescript
+interface params {
+  getLayerRootProps: (props: React.HTMLProps<HTMLElement>) => React.HTMLProps<HTMLElement>;
+  helpers: {
+    getLeftOffsetFromDate: (x: number) => number;
+    getDateFromLeftOffsetPosition: (x: number) => number;
+    getItemAbsoluteLocation: (itemId: string | number) => {left: number, top: number};
+    getItemDimensions: (itemId) => {left: number, top: number};
+  };
+  rowData : any;
+  group: Group;
+  itemsWithInteractions: Items[];
+}
+type rowRenderer = (args: Params) => React.Node
+```
+
+##### getLayerRootProps
+
+These functions are used to apply props to the layer that you want to render. This gives you maximum flexibility to render what, when, and wherever you like. 
+
+##### Helpers
+
+- `getLeftOffsetFromDate(x: milliseconds): number`: This function is used to get the left position of the custom layer to render. This functions accepts time in milliseconds and returns a number that should be passed to `style.left` to be displayed.
+
+example: 
+
+```typescript
+<div {...getLayerRootProps()}>
+  {groupUnavailableSlots.map(slot => {
+    const left = getLeftOffsetFromDate(slot.startTime.valueOf());
+    const right = getLeftOffsetFromDate(slot.endTime.valueOf());
+    return (
+      <div
+        key={slot.id}
+        style={{
+          position: "absolute",
+          left: left,
+          width: right - left,
+          height: "100%",
+        }}
+      >
+        <span style={{ height: 12 }}>unavailable</span>
+      </div>
+    );
+  })}
+</div>
+```
+
+here you calculate `left` and `right` using `getLeftOffsetFromDate` and use it to render the slot in the right place in the calendar.
+
+- `getDateFromLeftOffsetPosition(left: number): milliseconds`: This method is opposite of `getLeftOffsetFromDate` where you give it a left value and it will give you back the time in millisecond relative to the timeline.
+
+- `getItemDimensions(itemId: string|number): dimensions`. Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same group.
+
+- `getItemAbsoluteLocation(itemId: string|number): dimensions`. Given a item id, It will return back the left and top of the item relative to the calendar container. This is useful to know the position of items in different rows relative to each other.
+
+##### `rowData`
+
+object passed by the `rowData` prop.
+
+
+#### group
+
+current group being rendered in the row.
+
+#### items
+
+items to be rendered in the row. These items respect visibility and interaction. This means that the items you will get back are only the items in the visible + buffer zone and if dragging/resizing is happening you will get the items the start/end time with the interaction.  
+
+#### Components
+
+Row renderer comes with some components needed to render the rows and the default layers (columns and rows). The default value for the row renderer is:
+
+```typescript
+import React from 'react';
+import {GroupRow, RowColumns, RowItems} from '../../index'
+
+const DefaultRowRenderer = () => {
+    return <GroupRow>
+        <RowColumns/>
+        <RowItems/>
+    </GroupRow>
+}
+```
+
 ##### GroupRow
+
+renders the row's root div.
 
 ##### ItemsRow
 
+renders the row's items
+
 ##### columnsRow
 
+renders the row's columns
+
 ##### Custom Layers
+
+To render custom layers you need to implement the row renderer with the necessary layers
+
+```typescript
+import React from 'react';
+import {GroupRow, RowColumns, RowItems} from '../../index'
+
+const rowRenderer = ({
+  helpers: { getLeftOffsetFromDate },
+  getLayerRootProps,
+  group,
+  itemsWithInteractions
+}) => {
+  return (
+    <GroupRow>
+      <RowColumns />
+      <RowItems />
+      <div {...getLayerRootProps()}>
+        <div
+          style={{
+            left: getLeftOffsetFromDate(moment().valueOf()),
+            width: 200,
+            background: "lightblue",
+            position: "absolute",
+            height: '100%'
+          }}
+        >
+          {`group id: ${group.id} renders ${itemsWithInteractions.length} items`}
+        </div>
+      </div>
+      <div {...getLayerRootProps()}>
+        <div
+          style={{
+            left: getLeftOffsetFromDate(moment().add(5,'h').valueOf()),
+            width: 200,
+            background: "lightblue",
+            position: "absolute",
+            height: '100%'
+          }}
+        >
+          some other layer
+        </div>
+      </div>
+    </GroupRow>
+  );
+}
+```
+
+##### order
+
+You can switch the order between `RowColumns`, `RowItems` and custom layers. This will change what renders above what. So if you had `RowItems` in the bottom all the other layer will render in top of it
 
 # FAQ
 
