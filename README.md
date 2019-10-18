@@ -1155,11 +1155,131 @@ import Timeline, {
 
 ### Row renderer
 
-description
+This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
 
 #### example
 
+[CodeSandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-doc-example-66pvw)
+
+```javascript
+import Timeline, {
+  RowColumns,
+  RowItems,
+  GroupRow
+} from "react-calendar-timeline";
+
+import moment from 'moment'
+
+const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
+
+const items = [
+  {
+    id: 1,
+    group: 1,
+    title: 'item 1',
+    start_time: moment(),
+    end_time: moment().add(1, 'hour')
+  },
+  {
+    id: 2,
+    group: 2,
+    title: 'item 2',
+    start_time: moment().add(-0.5, 'hour'),
+    end_time: moment().add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    group: 1,
+    title: 'item 3',
+    start_time: moment().add(2, 'hour'),
+    end_time: moment().add(3, 'hour')
+  }
+]
+ReactDOM.render(
+  <Timeline
+    groups={groups}
+    items={items}
+    stackItems
+    defaultTimeStart={defaultTimeStart}
+    defaultTimeEnd={defaultTimeEnd}
+    rowRenderer={({
+      rowData,
+      helpers: { getLeftOffsetFromDate },
+      getLayerRootProps,
+      group
+    }) => {
+      const { unavailableSlots } = rowData;
+      const groupUnavailableSlots = unavailableSlots[group.id]
+        ? unavailableSlots[group.id]
+        : [];
+      return (
+        <GroupRow>
+          <RowColumns />
+          <RowItems />
+          <UnavailableLayer
+            getLayerRootProps={getLayerRootProps}
+            getLeftOffsetFromDate={getLeftOffsetFromDate}
+            groupUnavailableSlots={groupUnavailableSlots}
+          />
+        </GroupRow>
+      );
+    }}
+    rowData={{
+      //keys here are groupIds
+      unavailableSlots: {
+         "1": [
+            {
+              id: "0",
+              groupId: "0",
+              startTime: moment()
+                .startOf("day")
+                .add(16, "h"),
+              endTime: moment()
+                .startOf("day")
+                .add(20, "h")
+            }
+        ]
+      }
+    }}
+  />
+)
+
+function UnavailableLayer({
+  getLayerRootProps,
+  groupUnavailableSlots,
+  getLeftOffsetFromDate
+}) {
+  return (
+    <div {...getLayerRootProps()}>
+      {groupUnavailableSlots.map(slot => {
+        const left = getLeftOffsetFromDate(slot.startTime.valueOf());
+        const right = getLeftOffsetFromDate(slot.endTime.valueOf());
+        return (
+          <div
+            key={slot.id}
+            style={{
+              position: "absolute",
+              left: left,
+              width: right - left,
+              backgroundColor: "#ECF0F1",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <span style={{ height: 12 }}>unavailable</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+```
+
 #### API
+
+
 
 #### `rowRenderer` prop
 
