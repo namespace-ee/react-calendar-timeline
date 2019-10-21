@@ -281,7 +281,6 @@ export default class Item extends Component {
       })
       .on('resizeend', e => {
         if (this.props.resizing) {
-          console.log("resizeend")
           const { resizeEdge } = this.props
           let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 

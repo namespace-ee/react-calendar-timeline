@@ -123,11 +123,11 @@ class Rows extends React.PureComponent {
       horizontalLineClassNamesForGroup,
       onRowContextClick,
       items,
-      keys
+      keys,
+      resizeTime,
+      resizeEdge,
     } = this.props
-    const { getTimelineState, getLeftOffsetFromDate } = this.context
-    const { resizeEdge, resizeTime } = getTimelineState()
-
+    const { getLeftOffsetFromDate } = this.context
     return (
       <div style={{ position: 'absolute', top: 0 }}>
         {groupHeights.map((groupHeight, i) => {
@@ -234,7 +234,7 @@ class Group extends React.PureComponent {
       getLeftOffsetFromDate,
       rowData,
       items,
-      handleResizeEnd,
+      itemResized,
       onDragStart,
       onDragEnd,
       onResizeStart,
@@ -283,7 +283,7 @@ class Group extends React.PureComponent {
             itemDrag={itemDrag}
             itemDrop={itemDrop}
             itemResizing={itemResizing}
-            itemResized={handleResizeEnd}
+            itemResized={itemResized}
             onItemDoubleClick={onItemDoubleClick}
             onItemContextMenu={onItemContextMenu}
             itemRenderer={itemRenderer}
