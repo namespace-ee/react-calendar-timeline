@@ -1,5 +1,6 @@
 import moment from 'moment'
-import { _get } from './generic'
+import { _get, arraysEqual } from './generic'
+import memoize from 'memoize-one';
 
 /**
  * Calculate the ms / pixel ratio of the timeline state
@@ -441,6 +442,8 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
   return { groupHeight: groupHeight || lineHeight, verticalMargin }
 }
 
+const aa= [{a: {}}, {b: {}}, {c: {}}]
+
 /**
  * Stack the items that will be visible
  * within the canvas area
@@ -521,7 +524,8 @@ export function stackTimelineItems(
     stackItems,
     canvasTimeStart,
     canvasTimeEnd,
-    canvasWidth
+    canvasWidth,
+    groups,
   )
   const groupHeights = groups.map(group => {
     const groupKey = _get(group, keys.groupIdKey)
@@ -623,6 +627,8 @@ export function getItemWithInteractions({
   const itemId = _get(item, keys.itemIdKey)
   const isDragging = itemId === draggingItem
   const isResizing = itemId === resizingItem
+  //return item if is not being dragged or resized
+  if(!isResizing && !isDragging) return item
   const [itemTimeStart, itemTimeEnd] = calculateInteractionNewTimes({
     itemTimeStart: _get(item, keys.itemTimeStartKey),
     itemTimeEnd: _get(item, keys.itemTimeEndKey),
@@ -807,6 +813,48 @@ export function getOrderedGroupsWithItems(groups, items, keys) {
   }
   return groupsWithItems
 }
+
+/**
+ * shallow compare ordered groups with items
+ * if index or group changed reference compare then not equal
+ * if new/old group's items changed array shallow equality then not equal
+ * @param {*} newGroup 
+ * @param {*} oldGroup 
+ */
+function shallowIsEqualOrderedGroup(newGroup, oldGroup){
+  if(newGroup.group !== oldGroup.group) return false
+  if(newGroup.index !== oldGroup.index) return false
+  return arraysEqual(newGroup.items, oldGroup.items)
+}
+
+/**
+ * compare getGroupWithItemDimensions params. All params are compared via reference equality
+ * only groups are checked via a custom shallow equality
+ * @param {*} newArgs 
+ * @param {*} oldArgs 
+ */
+const isEqualItemWithDimensions = (newArgs, oldArgs) => {
+  const [newGroup, ...newRest] = newArgs;
+  const [oldGroup, ...oldRest] = oldArgs;
+  //shallow equality
+  if(!arraysEqual(newRest, oldRest)) return false;
+  return shallowIsEqualOrderedGroup(newGroup, oldGroup)
+}
+
+/**
+ * returns a cache in the form of dictionary ([groupId]: cachedMethod) for calculating getGroupWithItemDimensions
+ * the cache is cleared if groups or keys changed in reference
+ * @param {*} groups 
+ * @param {*} keys 
+ */
+const getGroupsCache = memoize((groups, keys)=>{
+  return groups.reduce((acc, group) => {
+    const id = _get(group, keys.groupIdKey);
+    acc[id] = memoize(getGroupWithItemDimensions, isEqualItemWithDimensions)
+    return acc
+  }, {})
+})
+
 export function getGroupsWithItemDimensions(
   groupsWithItems,
   keys,
@@ -815,12 +863,15 @@ export function getGroupsWithItemDimensions(
   stackItems,
   canvasTimeStart,
   canvasTimeEnd,
-  canvasWidth
+  canvasWidth, 
+  groups,
 ) {
+  const cache = getGroupsCache(groups, keys)
   const groupKeys = Object.keys(groupsWithItems)
   return groupKeys.reduce((acc, groupKey) => {
     const group = groupsWithItems[groupKey]
-    acc[groupKey] = getGroupWithItemDimensions(
+    const cachedGetGroupWithItemDimensions = cache[groupKey];
+    acc[groupKey] = cachedGetGroupWithItemDimensions(
       group,
       keys,
       canvasTimeStart,
