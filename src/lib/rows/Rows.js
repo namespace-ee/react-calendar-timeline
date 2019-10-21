@@ -124,7 +124,6 @@ class Rows extends React.PureComponent {
       onRowContextClick,
       items,
       keys,
-      resizeTime,
       resizeEdge,
     } = this.props
     const { getLeftOffsetFromDate } = this.context
@@ -169,7 +168,6 @@ class Rows extends React.PureComponent {
               useResizeHandle={useResizeHandle}
               scrollRef={scrollRef}
               resizeEdge={resizeEdge}
-              resizeTime={resizeTime}
               Layers={Layers}
               getLeftOffsetFromDate={getLeftOffsetFromDate}
               rowData={rowData}
@@ -229,7 +227,6 @@ class Group extends React.PureComponent {
       useResizeHandle,
       scrollRef,
       resizeEdge,
-      resizeTime,
       Layers,
       getLeftOffsetFromDate,
       rowData,
@@ -295,7 +292,6 @@ class Group extends React.PureComponent {
             onDragEnd={onDragEnd}
             onResizeStart={onResizeStart}
             resizeEdge={resizeEdge}
-            resizeTime={resizeTime}
             dragging={dragging}
             resizing={resizing}
             dragOffset={dragOffset}

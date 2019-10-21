@@ -28,7 +28,6 @@ const defaultContextState = {
   onDragEnd: undefined,
   onResizeStart: undefined,
   resizeEdge: undefined,
-  resizeTime: undefined,
   dragging: undefined,
   resizing: undefined,
   dragOffset: undefined,
@@ -70,7 +69,6 @@ export class ItemsContextProvider extends PureComponent {
     dragOffset: PropTypes.number.isRequired,
     interactingItemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     resizeEdge: PropTypes.oneOf(['right', 'left']),
-    resizeTime: PropTypes.number
   }
   render(){
     const {children,...rest} = this.props

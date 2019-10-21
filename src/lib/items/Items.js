@@ -61,7 +61,6 @@ export class Items extends Component {
     dragOffset: PropTypes.number.isRequired,
     interactingItemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     resizeEdge: PropTypes.oneOf(['right', 'left']),
-    resizeTime: PropTypes.number
   }
 
   static defaultProps = {
@@ -87,7 +86,6 @@ export class Items extends Component {
       nextProps.dragging === this.props.dragging &&
       nextProps.resizing === this.props.resizing &&
       nextProps.resizeEdge === this.props.resizeEdge &&
-      nextProps.resizeTime === this.props.resizeTime &&
       nextProps.interactingItemId === this.props.interactingItemId
     )
   }
@@ -162,7 +160,6 @@ export class Items extends Component {
             resizing={isInteractingItem && this.props.resizing}
             dragOffset={isInteractingItem ? this.props.dragOffset: 0}
             resizeEdge={isInteractingItem ? this.props.resizeEdge: undefined}
-            resizeTime={isInteractingItem ? this.props.resizeTime: 0}
             onDragStart={this.props.onDragStart}
             onDragEnd={this.props.onDragEnd}
             onResizeStart={this.props.onResizeStart}

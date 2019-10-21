@@ -1002,7 +1002,6 @@ export default class ReactCalendarTimeline extends Component {
                       items={items}
                       keys={keys}
                       resizeEdge={this.state.resizingEdge}
-                      resizeTime={this.state.resizeTime}
                     />
                   </MarkerCanvas>
                 </ScrollElement>
