@@ -122,7 +122,7 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
     onDoubleClick: () => { console.log('You clicked double!') },
     className: 'weekend',
     style: {
-      backgroundColor: 'fuchsia'
+      background: 'fuchsia'
     }
   }
 }
