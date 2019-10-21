@@ -351,7 +351,7 @@ export default class App extends Component {
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}
         canMove
-        canResize="right"
+        canResize="both"
         canSelect
         itemsSorted
         itemTouchSendsClick={false}
@@ -601,7 +601,7 @@ function UnavailableLayer({
 }) {
   useEffect(()=>{
     return () => {
-      console.log("unmount UnavailableLayer")
+      // console.log("unmount UnavailableLayer")
     }
   })
   return (

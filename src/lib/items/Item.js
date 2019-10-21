@@ -218,14 +218,16 @@ export default class Item extends Component {
           if (e.dropzone) {
             const newGroupId = e.dropzone.target.dataset.groupid
             let dragTime = this.dragTime(e)
-            if (this.props.moveResizeValidator) {
-              dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
+            // if(dragTime !== _get(this.props.item, this.props.keys.itemTimeStartKey)){
+              if (this.props.moveResizeValidator) {
+                dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
+              }
+  
+              if (this.props.onDrag) {
+                this.props.onDrag(this.itemId, dragTime, newGroupId)
+              }
             }
-
-            if (this.props.onDrag) {
-              this.props.onDrag(this.itemId, dragTime, newGroupId)
-            }
-          }
+          // }
         }
       })
       .on('dragend', e => {
@@ -265,18 +267,21 @@ export default class Item extends Component {
             resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right'
           }
           let resizeTime = this.resizeTimeSnap(this.timeFor(e))
-
-          if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator('resize', this.props.item, resizeTime, resizeEdge)
-          }
-
-          if (this.props.onResizing) {
-            this.props.onResizing(this.itemId, resizeTime, resizeEdge)
+          const isResizeTimeChangedRight = resizeEdge === 'right' &&  resizeTime !== _get(this.props.item, this.props.keys.itemTimeEndKey)
+          const isResizeTimeChangedLeft = resizeEdge === 'left' &&  resizeTime !== _get(this.props.item, this.props.keys.itemTimeStartKey)
+          if(isResizeTimeChangedRight || isResizeTimeChangedLeft){
+            if (this.props.moveResizeValidator) {
+              resizeTime = this.props.moveResizeValidator('resize', this.props.item, resizeTime, resizeEdge)
+            }
+            if (this.props.onResizing) {
+              this.props.onResizing(this.itemId, resizeTime, resizeEdge)
+            }
           }
         }
       })
       .on('resizeend', e => {
         if (this.props.resizing) {
+          console.log("resizeend")
           const { resizeEdge } = this.props
           let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
@@ -520,6 +525,10 @@ export default class Item extends Component {
       baseStyles
     )
     return finalStyle
+  }
+
+  componentWillUnmount(){
+    console.log("unmount item")
   }
 
   render() {
