@@ -975,7 +975,7 @@ export default class ReactCalendarTimeline extends Component {
                       dragSnap={this.props.dragSnap}
                       minResizeWidth={this.props.minResizeWidth}
                       itemResized={this.resizedItem}
-                      itemResizing={this.resizedItem}
+                      itemResizing={this.resizingItem}
                       moveResizeValidator={this.props.moveResizeValidator}
                       itemSelect={this.selectItem}
                       itemDrag={this.dragItem}
