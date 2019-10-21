@@ -329,13 +329,13 @@ export default class App extends Component {
           handleDrop={this.handleDrop}
           group={group}
         />
-        {/* <Links
+        <Links
           timelineLinks={timelineLinks}
           helpers={helpers}
           group={group}
           getLayerRootProps={getLayerRootProps}
           items={itemsWithInteractions}
-        /> */}
+        />
       </GroupRow>
     )
   }

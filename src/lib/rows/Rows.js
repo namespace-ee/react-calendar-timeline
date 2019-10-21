@@ -126,7 +126,7 @@ class Rows extends React.PureComponent {
       keys,
       resizeEdge,
     } = this.props
-    const { getLeftOffsetFromDate } = this.context
+    const { getLeftOffsetFromDate, getDateFromLeftOffsetPosition } = this.context
     return (
       <div style={{ position: 'absolute', top: 0 }}>
         {groupHeights.map((groupHeight, i) => {
@@ -181,7 +181,7 @@ class Rows extends React.PureComponent {
               dragOffset={this.state.dragOffset}
               interactingItemId={this.state.interactingItemId}
               getLayerRootProps={this.getLayerRootProps}
-              getDateFromLeftOffsetPosition={this.getDateFromLeftOffsetPosition}
+              getDateFromLeftOffsetPosition={getDateFromLeftOffsetPosition}
               getItemAbsoluteLocation={this.getItemAbsoluteLocation}
               getItemDimensions={this.getItemDimensionsHelper}
             />
@@ -242,7 +242,7 @@ class Group extends React.PureComponent {
       getLayerRootProps,
       getDateFromLeftOffsetPosition,
       getItemAbsoluteLocation,
-      getItemDimensionsHelper
+      getItemDimensions
     } = this.props
 
     return (
@@ -303,7 +303,7 @@ class Group extends React.PureComponent {
                 getLeftOffsetFromDate: getLeftOffsetFromDate,
                 getDateFromLeftOffsetPosition: getDateFromLeftOffsetPosition,
                 getItemAbsoluteLocation: getItemAbsoluteLocation,
-                getItemDimensions: getItemDimensionsHelper
+                getItemDimensions: getItemDimensions
               }}
               rowData={rowData}
               group={group.group}
