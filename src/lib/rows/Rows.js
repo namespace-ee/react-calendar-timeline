@@ -1,6 +1,5 @@
 import React from 'react'
 import TimelineStateContext from '../timeline/TimelineStateContext'
-import { ColumnsContextProvider } from '../columns/ColumnsContext'
 import { _get, _length } from '../utility/generic'
 import { ItemsContextProvider } from '../items/ItemsContext'
 import { GroupRowContextProvider } from './GroupRowContext'
@@ -257,13 +256,6 @@ class Group extends React.PureComponent {
         groupHeight={groupHeight}
         groupIndex={index}
       >
-        <ColumnsContextProvider
-          lineCount={_length(groups)}
-          minUnit={minUnit}
-          timeSteps={timeSteps}
-          height={groupHeight}
-          verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-        >
           <ItemsContextProvider
             //TODO: fix groups with no items
             items={group.items || []}
@@ -310,7 +302,6 @@ class Group extends React.PureComponent {
               itemsWithInteractions={items}
             />
           </ItemsContextProvider>
-        </ColumnsContextProvider>
       </GroupRowContextProvider>
     )
   }

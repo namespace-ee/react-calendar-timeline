@@ -315,7 +315,6 @@ export default class App extends Component {
       : []
     return (
       <GroupRow>
-        <RowColumns/>
         <RowItems/>
         <UnavailableLayer
           getLayerRootProps={getLayerRootProps}
@@ -397,12 +396,11 @@ export default class App extends Component {
                   <div
                     style={{
                       height: '100%',
-                      position: 'absolute',
-                      left: getLeftOffsetFromDate(
+                      transform: `translateX(${getLeftOffsetFromDate(
                         moment()
                           .startOf('day')
                           .valueOf()
-                      ),
+                      )}px)`,
                       display: 'flex'
                     }}
                   >
@@ -431,7 +429,7 @@ export default class App extends Component {
             }}
           </CustomHeader>
         </TimelineHeaders>
-        <TimelineMarkers>
+        {/* <TimelineMarkers>
           <TodayMarker />
           <CustomMarker
             date={
@@ -452,7 +450,7 @@ export default class App extends Component {
             }}
           </CustomMarker>
           <CursorMarker />
-        </TimelineMarkers>
+        </TimelineMarkers> */}
       </Timeline>
     )
   }

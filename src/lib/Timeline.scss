@@ -95,6 +95,7 @@ $weekend: rgba(250, 246, 225, 0.5);
   // TODO: rename or remove once we make breaking change to rename vertical lines
   // to columns
   .rct-vertical-lines {
+    height: 100%;
     .rct-vl {
       position: absolute;
       border-left: 1px solid $border-color;

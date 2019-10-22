@@ -29,6 +29,7 @@ import { TimelineHeadersProvider } from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
 import DefaultLayer from './rows/DefaultLayer'
+import Columns from './columns/Columns'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -157,6 +158,7 @@ export default class ReactCalendarTimeline extends Component {
 
     rowRenderer: PropTypes.func,
     rowData: PropTypes.object,
+    hideHorizontalLines : PropTypes.bool,
   }
 
   static defaultProps = {
@@ -235,6 +237,7 @@ export default class ReactCalendarTimeline extends Component {
 
     rowRenderer: DefaultLayer,
     rowData: {},
+    hideHorizontalLines: false,
   }
 
   static childContextTypes = {
@@ -876,9 +879,7 @@ export default class ReactCalendarTimeline extends Component {
       traditionalZoom,
       itemRenderer,
       keys,
-      lineHeight,
-      itemHeightRatio,
-      stackItems,
+      hideHorizontalLines,
     } = this.props
     const {
       draggingItem,
@@ -1003,6 +1004,15 @@ export default class ReactCalendarTimeline extends Component {
                       keys={keys}
                       resizeEdge={this.state.resizingEdge}
                     />
+                    { hideHorizontalLines? null : <Columns 
+                      lineCount={_length(groups)}
+                      minUnit={minUnit}
+                      timeSteps={timeSteps}
+                      verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
+                      canvasTimeStart={canvasTimeStart}
+                      canvasTimeEnd={canvasTimeEnd}
+                      canvasWidth={canvasWidth}
+                    /> }
                   </MarkerCanvas>
                 </ScrollElement>
                 {rightSidebarWidth > 0
