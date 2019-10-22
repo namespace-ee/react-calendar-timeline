@@ -14,6 +14,7 @@ import Timeline, {
   RowColumns,
   RowItems,
   GroupRow,
+  HelpersContext
 } from 'react-calendar-timeline'
 import { useDrag, useDrop } from 'react-dnd'
 import * as d3 from 'd3'
@@ -182,26 +183,28 @@ export default class App extends Component {
     console.log('Canvas context menu', group, moment(time).format())
   }
 
-  findItemById = (itemId) => {
+  findItemById = itemId => {
     return this.state.items.find(i => i.id === itemId)
   }
 
-  tempItemId = undefined;
+  tempItemId = undefined
 
   handleItemClick = (itemId, _, time) => {
     console.log('Clicked: ' + itemId, moment(time).format())
   }
 
   handleItemSelect = (itemId, _, time) => {
-    if(!this.tempItemId){
+    if (!this.tempItemId) {
       this.tempItemId = itemId
-    }
-    else {
-      this.setState(state => ({
-        timelineLinks: [...state.timelineLinks, [this.tempItemId, itemId]]
-      }), ()=> {
-        this.tempItemId=undefined;
-      })
+    } else {
+      this.setState(
+        state => ({
+          timelineLinks: [...state.timelineLinks, [this.tempItemId, itemId]]
+        }),
+        () => {
+          this.tempItemId = undefined
+        }
+      )
     }
     console.log('Selected: ' + itemId, moment(time).format())
   }
@@ -308,14 +311,20 @@ export default class App extends Component {
     }))
   }
 
-  rowRenderer = ({ rowData, helpers, getLayerRootProps, group, itemsWithInteractions }) => {
+  rowRenderer = ({
+    rowData,
+    getLayerRootProps,
+    group,
+    itemsWithInteractions
+  }) => {
+    const helpers = React.useContext(HelpersContext)
     const { itemsToDrag, unavailableSlots, timelineLinks } = rowData
     const groupUnavailableSlots = unavailableSlots[group.id]
       ? unavailableSlots[group.id]
       : []
     return (
       <GroupRow>
-        <RowItems/>
+        <RowItems />
         <UnavailableLayer
           getLayerRootProps={getLayerRootProps}
           getLeftOffsetFromDate={helpers.getLeftOffsetFromDate}
@@ -330,7 +339,8 @@ export default class App extends Component {
         />
         <Links
           timelineLinks={timelineLinks}
-          helpers={helpers}
+          getItemAbsoluteLocation={helpers.getItemAbsoluteLocation}
+          getItemDimensions={helpers.getItemDimensions}
           group={group}
           getLayerRootProps={getLayerRootProps}
           items={itemsWithInteractions}
@@ -372,7 +382,7 @@ export default class App extends Component {
         rowData={{
           itemsToDrag: this.state.itemsToDrag,
           unavailableSlots: this.state.unavailableSlots,
-          timelineLinks: this.state.timelineLinks,
+          timelineLinks: this.state.timelineLinks
         }}
         // moveResizeValidator={this.moveResizeValidator}
       >
@@ -456,25 +466,35 @@ export default class App extends Component {
   }
 }
 
-function Link({ timelineLink, helpers, group, items }) {
+function Link({
+  timelineLink,
+  getItemAbsoluteLocation,
+  getItemDimensions,
+  group,
+  items
+}) {
   const [startId, endId] = timelineLink
-  const { getItemAbsoluteLocation } = helpers
   const startItem = items.find(i => i.id === startId)
   if (startItem.group !== group.id) return null
-  const startItemDimensions = getItemAbsoluteLocation(startId) || {left: 0, top:0}
-  const endItemDimensions = getItemAbsoluteLocation(endId) || {left: 0, top:0}
+  const startItemDimensions = getItemAbsoluteLocation(startId) || {
+    left: 0,
+    top: 0
+  }
+  const endItemDimensions = getItemAbsoluteLocation(endId) || {
+    left: 0,
+    top: 0
+  }
   let startLink = [startItemDimensions.left, startItemDimensions.top]
   let endLink = [endItemDimensions.left, endItemDimensions.top]
   const isEndLinkBeforeStart =
-  endLink[0] <= startLink[0] || endLink[1] <= startLink[1]
+    endLink[0] <= startLink[0] || endLink[1] <= startLink[1]
   let itemLink = isEndLinkBeforeStart
-  ? [endLink, startLink]
-  : [startLink, endLink]
+    ? [endLink, startLink]
+    : [startLink, endLink]
   const lineGenerator = d3.line()
   const [startLk, endLk] = itemLink
   const endPoint = [endLk[0] - startLk[0], endLk[1] - startLk[1]]
-  const itemDimensions = helpers.getItemDimensions(startId)
-  console.log("render link", startLk[0], itemDimensions.top )
+  const itemDimensions = getItemDimensions(startId)
   return (
     <svg
       style={{
@@ -498,18 +518,32 @@ function Link({ timelineLink, helpers, group, items }) {
   )
 }
 
-function Links({ timelineLinks, helpers, group, getLayerRootProps, items }) {
+const Links = React.memo(({
+  timelineLinks,
+  getItemAbsoluteLocation,
+  getItemDimensions,
+  group,
+  getLayerRootProps,
+  items
+}) => {
   return (
     <div {...getLayerRootProps()}>
       {timelineLinks.map((timelineLink, i) => {
         const [startId, endId] = timelineLink
         return (
-          <Link timelineLink={timelineLink} key={`${startId}${endId}`} helpers={helpers} group={group} items={items} />
+          <Link
+            timelineLink={timelineLink}
+            key={`${startId}${endId}`}
+            getItemAbsoluteLocation={getItemAbsoluteLocation}
+            getItemDimensions={getItemDimensions}
+            group={group}
+            items={items}
+          />
         )
       })}
     </div>
   )
-}
+})
 
 function Droppable({ children, itemIdAccepts, style, slot, onDrop, ...rest }) {
   const [collected, droppableRef] = useDrop({
@@ -592,12 +626,12 @@ function DroppablesLayer({
   )
 }
 
-function UnavailableLayer({
+const UnavailableLayer = (({
   getLayerRootProps,
   groupUnavailableSlots,
   getLeftOffsetFromDate
-}) {
-  useEffect(()=>{
+}) => {
+  useEffect(() => {
     return () => {
       // console.log("unmount UnavailableLayer")
     }
@@ -627,4 +661,4 @@ function UnavailableLayer({
       })}
     </div>
   )
-}
+})

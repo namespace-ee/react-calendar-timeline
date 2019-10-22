@@ -5,7 +5,6 @@ import { ItemsContextProvider } from '../items/ItemsContext'
 import { GroupRowContextProvider } from './GroupRowContext'
 
 class Rows extends React.PureComponent {
-  static contextType = TimelineStateContext
 
   initState = {
     dragging: false,
@@ -42,41 +41,6 @@ class Rows extends React.PureComponent {
       resizing,
       interactingItemId: itemId
     })
-  }
-
-  //TODO: make this faster
-  getGroupByItemId = itemId => {
-    const { items, keys } = this.props
-    const item = items.find(i => _get(i, keys.itemIdKey) === itemId)
-    const groupId = _get(item, keys.itemGroupKey)
-    return groupId
-  }
-
-  getItemDimensionsHelper = itemId => {
-    const { groupsWithItemsDimensions } = this.props
-    const groupId = this.getGroupByItemId(itemId)
-    const group = groupsWithItemsDimensions[groupId]
-    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-    if (itemDimensions) return itemDimensions.dimensions
-    else return undefined
-  }
-
-  getItemAbsoluteLocation = itemId => {
-    const { groupsWithItemsDimensions } = this.props
-    const { groupHeights } = this.props
-    const groupId = this.getGroupByItemId(itemId)
-    const group = groupsWithItemsDimensions[groupId]
-    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-    if (!itemDimensions) return
-    const groupIndex = group.index
-    const groupTop = groupHeights.reduce((acc, height, index) => {
-      if (index < groupIndex) return acc + height
-      else return acc
-    }, 0)
-    return {
-      left: itemDimensions.dimensions.left,
-      top: groupTop + itemDimensions.dimensions.top
-    }
   }
 
   getLayerRootProps = () => {
@@ -125,7 +89,6 @@ class Rows extends React.PureComponent {
       keys,
       resizeEdge,
     } = this.props
-    const { getLeftOffsetFromDate, getDateFromLeftOffsetPosition } = this.context
     return (
       <div style={{ position: 'absolute', top: 0 }}>
         {groupHeights.map((groupHeight, i) => {
@@ -168,7 +131,6 @@ class Rows extends React.PureComponent {
               scrollRef={scrollRef}
               resizeEdge={resizeEdge}
               Layers={Layers}
-              getLeftOffsetFromDate={getLeftOffsetFromDate}
               rowData={rowData}
               items={items}
               itemResized={this.handleResizeEnd}
@@ -180,9 +142,6 @@ class Rows extends React.PureComponent {
               dragOffset={this.state.dragOffset}
               interactingItemId={this.state.interactingItemId}
               getLayerRootProps={this.getLayerRootProps}
-              getDateFromLeftOffsetPosition={getDateFromLeftOffsetPosition}
-              getItemAbsoluteLocation={this.getItemAbsoluteLocation}
-              getItemDimensions={this.getItemDimensionsHelper}
             />
           )
         })}
@@ -227,7 +186,6 @@ class Group extends React.PureComponent {
       scrollRef,
       resizeEdge,
       Layers,
-      getLeftOffsetFromDate,
       rowData,
       items,
       itemResized,
@@ -239,9 +197,6 @@ class Group extends React.PureComponent {
       dragOffset,
       interactingItemId,
       getLayerRootProps,
-      getDateFromLeftOffsetPosition,
-      getItemAbsoluteLocation,
-      getItemDimensions
     } = this.props
 
     return (
@@ -291,12 +246,6 @@ class Group extends React.PureComponent {
           >
             <Layers
               getLayerRootProps={getLayerRootProps}
-              helpers={{
-                getLeftOffsetFromDate: getLeftOffsetFromDate,
-                getDateFromLeftOffsetPosition: getDateFromLeftOffsetPosition,
-                getItemAbsoluteLocation: getItemAbsoluteLocation,
-                getItemDimensions: getItemDimensions
-              }}
               rowData={rowData}
               group={group.group}
               itemsWithInteractions={items}

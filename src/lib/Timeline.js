@@ -30,6 +30,7 @@ import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
 import DefaultLayer from './rows/DefaultLayer'
 import Columns from './columns/Columns'
+import { HelpersContextProvider } from './timeline/HelpersContext'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -945,81 +946,88 @@ export default class ReactCalendarTimeline extends Component {
             leftSidebarWidth={this.props.sidebarWidth}
             rightSidebarWidth={this.props.rightSidebarWidth}
           >
-            <div
-              style={this.props.style}
-              ref={el => (this.container = el)}
-              className="react-calendar-timeline"
+            <HelpersContextProvider
+              groupsWithItemsDimensions={groupsWithItemsDimensions}
+              items={items}
+              keys={keys}
+              groupHeights={groupHeights}
             >
-              {this.renderHeaders()}
-              <div style={outerComponentStyle} className="rct-outer">
-                {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
-                <ScrollElement
-                  scrollRef={this.getScrollElementRef}
-                  width={width}
-                  height={height}
-                  onZoom={this.changeZoom}
-                  onWheelZoom={this.handleWheelZoom}
-                  traditionalZoom={traditionalZoom}
-                  onScroll={this.onScroll}
-                  isInteractingWithItem={isInteractingWithItem}
-                >
-                  <MarkerCanvas>
-                    {this.childrenWithProps()}
-                    <Rows
-                      groupHeights={groupHeights}
-                      itemRenderer={itemRenderer}
-                      canChangeGroup={this.props.canChangeGroup}
-                      canMove={this.props.canMove}
-                      canResize={this.props.canResize}
-                      canSelect={this.props.canSelect}
-                      useResizeHandle={this.props.useResizeHandle}
-                      dragSnap={this.props.dragSnap}
-                      minResizeWidth={this.props.minResizeWidth}
-                      itemResized={this.resizedItem}
-                      itemResizing={this.resizingItem}
-                      moveResizeValidator={this.props.moveResizeValidator}
-                      itemSelect={this.selectItem}
-                      itemDrag={this.dragItem}
-                      itemDrop={this.dropItem}
-                      onItemDoubleClick={this.doubleClickItem}
-                      onItemContextMenu={this.contextMenuClickItem}
-                      scrollRef={this.scrollComponent}
-                      selected={this.props.selected}
-                      selectedItem={this.state.selectedItem}
-                      verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
-                      timeSteps={timeSteps}
-                      minUnit={minUnit}
-                      rowRenderer={this.props.rowRenderer}
-                      rowData={this.props.rowData}
-                      clickTolerance={this.props.clickTolerance}
-                      onRowClick={this.handleRowClick}
-                      onRowDoubleClick={this.handleRowDoubleClick}
-                      horizontalLineClassNamesForGroup={
-                        this.props.horizontalLineClassNamesForGroup
-                      }
-                      onRowContextClick={this.handleScrollContextMenu}
-                      groupsWithItemsDimensions={groupsWithItemsDimensions}
-                      groups={groups}
-                      items={items}
-                      keys={keys}
-                      resizeEdge={this.state.resizingEdge}
-                    />
-                    { hideHorizontalLines? null : <Columns 
-                      lineCount={_length(groups)}
-                      minUnit={minUnit}
-                      timeSteps={timeSteps}
-                      verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
-                      canvasTimeStart={canvasTimeStart}
-                      canvasTimeEnd={canvasTimeEnd}
-                      canvasWidth={canvasWidth}
-                    /> }
-                  </MarkerCanvas>
-                </ScrollElement>
-                {rightSidebarWidth > 0
-                  ? this.rightSidebar(height, groupHeights)
-                  : null}
+              <div
+                style={this.props.style}
+                ref={el => (this.container = el)}
+                className="react-calendar-timeline"
+              >
+                {this.renderHeaders()}
+                <div style={outerComponentStyle} className="rct-outer">
+                  {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
+                  <ScrollElement
+                    scrollRef={this.getScrollElementRef}
+                    width={width}
+                    height={height}
+                    onZoom={this.changeZoom}
+                    onWheelZoom={this.handleWheelZoom}
+                    traditionalZoom={traditionalZoom}
+                    onScroll={this.onScroll}
+                    isInteractingWithItem={isInteractingWithItem}
+                  >
+                    <MarkerCanvas>
+                      {this.childrenWithProps()}
+                      <Rows
+                        groupHeights={groupHeights}
+                        itemRenderer={itemRenderer}
+                        canChangeGroup={this.props.canChangeGroup}
+                        canMove={this.props.canMove}
+                        canResize={this.props.canResize}
+                        canSelect={this.props.canSelect}
+                        useResizeHandle={this.props.useResizeHandle}
+                        dragSnap={this.props.dragSnap}
+                        minResizeWidth={this.props.minResizeWidth}
+                        itemResized={this.resizedItem}
+                        itemResizing={this.resizingItem}
+                        moveResizeValidator={this.props.moveResizeValidator}
+                        itemSelect={this.selectItem}
+                        itemDrag={this.dragItem}
+                        itemDrop={this.dropItem}
+                        onItemDoubleClick={this.doubleClickItem}
+                        onItemContextMenu={this.contextMenuClickItem}
+                        scrollRef={this.scrollComponent}
+                        selected={this.props.selected}
+                        selectedItem={this.state.selectedItem}
+                        verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
+                        timeSteps={timeSteps}
+                        minUnit={minUnit}
+                        rowRenderer={this.props.rowRenderer}
+                        rowData={this.props.rowData}
+                        clickTolerance={this.props.clickTolerance}
+                        onRowClick={this.handleRowClick}
+                        onRowDoubleClick={this.handleRowDoubleClick}
+                        horizontalLineClassNamesForGroup={
+                          this.props.horizontalLineClassNamesForGroup
+                        }
+                        onRowContextClick={this.handleScrollContextMenu}
+                        groupsWithItemsDimensions={groupsWithItemsDimensions}
+                        groups={groups}
+                        items={items}
+                        keys={keys}
+                        resizeEdge={this.state.resizingEdge}
+                      />
+                      { hideHorizontalLines? null : <Columns 
+                        lineCount={_length(groups)}
+                        minUnit={minUnit}
+                        timeSteps={timeSteps}
+                        verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
+                        canvasTimeStart={canvasTimeStart}
+                        canvasTimeEnd={canvasTimeEnd}
+                        canvasWidth={canvasWidth}
+                      /> }
+                    </MarkerCanvas>
+                  </ScrollElement>
+                  {rightSidebarWidth > 0
+                    ? this.rightSidebar(height, groupHeights)
+                    : null}
+                </div>
               </div>
-            </div>
+            </HelpersContextProvider>
           </TimelineHeadersProvider>
         </TimelineMarkersProvider>
       </TimelineStateProvider>
