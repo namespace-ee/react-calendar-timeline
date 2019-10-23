@@ -951,6 +951,7 @@ export default class ReactCalendarTimeline extends Component {
               items={items}
               keys={keys}
               groupHeights={groupHeights}
+              groupTops={groupTops}
             >
               <div
                 style={this.props.style}
@@ -1011,7 +1012,7 @@ export default class ReactCalendarTimeline extends Component {
                         keys={keys}
                         resizeEdge={this.state.resizingEdge}
                       />
-                      { hideHorizontalLines? null : <Columns 
+                      {hideHorizontalLines? null : <Columns 
                         lineCount={_length(groups)}
                         minUnit={minUnit}
                         timeSteps={timeSteps}
@@ -1019,7 +1020,7 @@ export default class ReactCalendarTimeline extends Component {
                         canvasTimeStart={canvasTimeStart}
                         canvasTimeEnd={canvasTimeEnd}
                         canvasWidth={canvasWidth}
-                      /> }
+                      />}
                     </MarkerCanvas>
                   </ScrollElement>
                   {rightSidebarWidth > 0

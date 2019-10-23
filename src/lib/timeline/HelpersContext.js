@@ -30,7 +30,8 @@ class HelpersContextProviderCore extends PureComponent {
     groupsWithItemsDimensions: PropTypes.object.isRequired,
     items: PropTypes.array.isRequired,
     keys: PropTypes.object.isRequired,
-    groupHeights: PropTypes.array.isRequired
+    groupHeights: PropTypes.array.isRequired,
+    groupTops: PropTypes.array.isRequired
   }
 
   getGroupByItemId = itemId => {
@@ -43,30 +44,54 @@ class HelpersContextProviderCore extends PureComponent {
   /**
    * create new instance of getItemDimensions of dependant props have changed (similar to useCallback)
    */
-  getItemDimensionsCreator = memoize((groupsWithItemsDimensions, getGroupByItemId) => itemId => {
-    const groupId = getGroupByItemId(itemId)
-    const group = groupsWithItemsDimensions[groupId]
-    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-    if (itemDimensions) return itemDimensions.dimensions
-    else return undefined
-  })
+  getItemDimensionsCreator = memoize(
+    (groupsWithItemsDimensions, getGroupByItemId) => itemId => {
+      const groupId = getGroupByItemId(itemId)
+      const group = groupsWithItemsDimensions[groupId]
+      const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+      if (itemDimensions) return itemDimensions.dimensions
+      else return undefined
+    }
+  )
 
   /**
    * create new instance of getItemAbsoluteLocation of dependant props have changed (similar to useCallback)
    */
-  getItemAbsoluteLocationCreator = memoize((groupHeights, groupsWithItemsDimensions, getGroupByItemId) => (itemId) => {
-    const groupId = getGroupByItemId(itemId)
+  getItemAbsoluteLocationCreator = memoize(
+    (groupHeights, groupsWithItemsDimensions, getGroupByItemId) => itemId => {
+      const groupId = getGroupByItemId(itemId)
+      const group = groupsWithItemsDimensions[groupId]
+      const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
+      if (!itemDimensions) return
+      const groupIndex = group.index
+      const groupTop = groupHeights.reduce((acc, height, index) => {
+        if (index < groupIndex) return acc + height
+        else return acc
+      }, 0)
+      return {
+        left: itemDimensions.dimensions.left,
+        top: groupTop + itemDimensions.dimensions.top,
+        width: itemDimensions.dimensions.width
+      }
+    }
+  )
+
+  /**
+   * create new instance of getGroupDimensionsCreator of dependant props have changed (similar to useCallback)
+   */
+  getGroupDimensionsCreator = memoize((
+    groupsWithItemsDimensions,
+    groupHeights,
+    groupTops
+  ) => groupId => {
     const group = groupsWithItemsDimensions[groupId]
-    const itemDimensions = group.itemDimensions.find(i => i.id === itemId)
-    if (!itemDimensions) return
-    const groupIndex = group.index
-    const groupTop = groupHeights.reduce((acc, height, index) => {
-      if (index < groupIndex) return acc + height
-      else return acc
-    }, 0)
+    if (!group) return
+    const index = group.index
+    const height = groupHeights[index]
+    const top = groupTops[index]
     return {
-      left: itemDimensions.dimensions.left,
-      top: groupTop + itemDimensions.dimensions.top
+      height,
+      top
     }
   })
 
@@ -78,8 +103,20 @@ class HelpersContextProviderCore extends PureComponent {
           getLeftOffsetFromDate: this.props.getLeftOffsetFromDate,
           getDateFromLeftOffsetPosition: this.props
             .getDateFromLeftOffsetPosition,
-          getItemDimensions: this.getItemDimensionsCreator(this.props.groupsWithItemsDimensions, this.getGroupByItemId),
-          getItemAbsoluteLocation: this.getItemAbsoluteLocationCreator(this.props.groupHeights, this.props.groupsWithItemsDimensions, this.getGroupByItemId)
+          getItemDimensions: this.getItemDimensionsCreator(
+            this.props.groupsWithItemsDimensions,
+            this.getGroupByItemId
+          ),
+          getItemAbsoluteLocation: this.getItemAbsoluteLocationCreator(
+            this.props.groupHeights,
+            this.props.groupsWithItemsDimensions,
+            this.getGroupByItemId
+          ),
+          getGroupDimensions: this.getGroupDimensionsCreator(
+            this.props.groupsWithItemsDimensions,
+            this.props.groupHeights,
+            this.props.groupTops
+          )
         }}
       >
         {children}

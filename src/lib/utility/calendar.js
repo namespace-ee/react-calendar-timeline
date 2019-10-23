@@ -480,14 +480,8 @@ export function stackTimelineItems(
   resizeTime,
   newGroupId
 ) {
-  const visibleItems = getVisibleItems(
-    items,
-    canvasTimeStart,
-    canvasTimeEnd,
-    keys
-  )
 
-  const visibleItemsWithInteraction = visibleItems.map(item =>
+  const itemsWithInteraction = items.map(item =>
     getItemWithInteractions({
       item,
       keys,
@@ -499,6 +493,13 @@ export function stackTimelineItems(
       groups,
       newGroupId
     })
+  )
+
+  const visibleItemsWithInteraction = getVisibleItems(
+    itemsWithInteraction,
+    canvasTimeStart,
+    canvasTimeEnd,
+    keys
   )
 
   // if there are no groups return an empty array of dimensions
@@ -545,7 +546,7 @@ export function stackTimelineItems(
   )
   const height = groupHeights.reduce((acc, height) => acc + height, 0)
 
-  return { groupsWithItemsDimensions, height, groupHeights, groupTops }
+  return { groupsWithItemsDimensions, height, groupHeights, groupTops, itemsWithInteraction }
 }
 
 /**
