@@ -3,9 +3,9 @@ import TimelineStateContext from '../timeline/TimelineStateContext'
 import { _get, _length } from '../utility/generic'
 import { ItemsContextProvider } from '../items/ItemsContext'
 import { GroupRowContextProvider } from './GroupRowContext'
+import { LayerContextProvider, LayerConsumer } from './LayerContext'
 
 class Rows extends React.PureComponent {
-
   initState = {
     dragging: false,
     resizing: false,
@@ -73,9 +73,6 @@ class Rows extends React.PureComponent {
       scrollRef,
       selected,
       selectedItem,
-      verticalLineClassNamesForTime,
-      timeSteps,
-      minUnit,
       rowRenderer: Layers,
       rowData,
       groupsWithItemsDimensions,
@@ -87,71 +84,70 @@ class Rows extends React.PureComponent {
       onRowContextClick,
       items,
       keys,
-      resizeEdge,
+      resizeEdge
     } = this.props
     return (
-      <div style={{ position: 'absolute', top: 0 }}>
-        {groupHeights.map((groupHeight, i) => {
-          const groupId = _get(groups[i], keys.groupIdKey)
-          const group = groupsWithItemsDimensions[groupId]
-          return (
-            <Group
-              key={`horizontal-line-${groupId}`}
-              clickTolerance={clickTolerance}
-              onRowContextClick={onRowContextClick}
-              onRowClick={onRowClick}
-              onRowDoubleClick={onRowDoubleClick}
-              index={i}
-              groups={groups}
-              horizontalLineClassNamesForGroup={
-                horizontalLineClassNamesForGroup
-              }
-              groupHeight={groupHeight}
-              minUnit={minUnit}
-              timeSteps={timeSteps}
-              verticalLineClassNamesForTime={verticalLineClassNamesForTime}
-              group={group}
-              dragSnap={dragSnap}
-              minResizeWidth={minResizeWidth}
-              selectedItem={selectedItem}
-              canChangeGroup={canChangeGroup}
-              canMove={canMove}
-              canResize={canResize}
-              canSelect={canSelect}
-              moveResizeValidator={moveResizeValidator}
-              itemSelect={itemSelect}
-              itemDrag={itemDrag}
-              itemDrop={itemDrop}
-              itemResizing={itemResizing}
-              onItemDoubleClick={onItemDoubleClick}
-              onItemContextMenu={onItemContextMenu}
-              itemRenderer={itemRenderer}
-              selected={selected}
-              useResizeHandle={useResizeHandle}
-              scrollRef={scrollRef}
-              resizeEdge={resizeEdge}
-              Layers={Layers}
-              rowData={rowData}
-              items={items}
-              itemResized={this.handleResizeEnd}
-              onDragStart={this.handleDragStart}
-              onDragEnd={this.handleDragEnd}
-              onResizeStart={this.handleResizeStart}
-              dragging={this.state.dragging}
-              resizing={this.state.resizing}
-              dragOffset={this.state.dragOffset}
-              interactingItemId={this.state.interactingItemId}
-              getLayerRootProps={this.getLayerRootProps}
-            />
-          )
-        })}
-      </div>
+      <LayerContextProvider
+        itemsWithInteractions={items}
+        getLayerRootProps={this.getLayerRootProps}
+      >
+        <div style={{ position: 'absolute', top: 0 }}>
+          {groupHeights.map((groupHeight, i) => {
+            const groupId = _get(groups[i], keys.groupIdKey)
+            const group = groupsWithItemsDimensions[groupId]
+            return (
+              <Group
+                key={`horizontal-line-${groupId}`}
+                clickTolerance={clickTolerance}
+                onRowContextClick={onRowContextClick}
+                onRowClick={onRowClick}
+                onRowDoubleClick={onRowDoubleClick}
+                index={i}
+                groups={groups}
+                horizontalLineClassNamesForGroup={
+                  horizontalLineClassNamesForGroup
+                }
+                groupHeight={groupHeight}
+                group={group}
+                dragSnap={dragSnap}
+                minResizeWidth={minResizeWidth}
+                selectedItem={selectedItem}
+                canChangeGroup={canChangeGroup}
+                canMove={canMove}
+                canResize={canResize}
+                canSelect={canSelect}
+                moveResizeValidator={moveResizeValidator}
+                itemSelect={itemSelect}
+                itemDrag={itemDrag}
+                itemDrop={itemDrop}
+                itemResizing={itemResizing}
+                onItemDoubleClick={onItemDoubleClick}
+                onItemContextMenu={onItemContextMenu}
+                itemRenderer={itemRenderer}
+                selected={selected}
+                useResizeHandle={useResizeHandle}
+                scrollRef={scrollRef}
+                resizeEdge={resizeEdge}
+                Layers={Layers}
+                rowData={rowData}
+                itemResized={this.handleResizeEnd}
+                onDragStart={this.handleDragStart}
+                onDragEnd={this.handleDragEnd}
+                onResizeStart={this.handleResizeStart}
+                dragging={this.state.dragging}
+                resizing={this.state.resizing}
+                dragOffset={this.state.dragOffset}
+                interactingItemId={this.state.interactingItemId}
+              />
+            )
+          })}
+        </div>
+      </LayerContextProvider>
     )
   }
 }
 
 class Group extends React.PureComponent {
-
   render() {
     const {
       clickTolerance,
@@ -162,9 +158,6 @@ class Group extends React.PureComponent {
       groups,
       horizontalLineClassNamesForGroup,
       groupHeight,
-      minUnit,
-      timeSteps,
-      verticalLineClassNamesForTime,
       group,
       dragSnap,
       minResizeWidth,
@@ -187,7 +180,6 @@ class Group extends React.PureComponent {
       resizeEdge,
       Layers,
       rowData,
-      items,
       itemResized,
       onDragStart,
       onDragEnd,
@@ -195,8 +187,7 @@ class Group extends React.PureComponent {
       dragging,
       resizing,
       dragOffset,
-      interactingItemId,
-      getLayerRootProps,
+      interactingItemId
     } = this.props
 
     return (
@@ -211,46 +202,50 @@ class Group extends React.PureComponent {
         groupHeight={groupHeight}
         groupIndex={index}
       >
-          <ItemsContextProvider
-            //TODO: fix groups with no items
-            items={group.items || []}
-            groupDimensions={group}
-            dragSnap={dragSnap}
-            minResizeWidth={minResizeWidth}
-            selectedItem={selectedItem}
-            canChangeGroup={canChangeGroup}
-            canMove={canMove}
-            canResize={canResize}
-            canSelect={canSelect}
-            moveResizeValidator={moveResizeValidator}
-            itemSelect={itemSelect}
-            itemDrag={itemDrag}
-            itemDrop={itemDrop}
-            itemResizing={itemResizing}
-            itemResized={itemResized}
-            onItemDoubleClick={onItemDoubleClick}
-            onItemContextMenu={onItemContextMenu}
-            itemRenderer={itemRenderer}
-            selected={selected}
-            useResizeHandle={useResizeHandle}
-            scrollRef={scrollRef}
-            order={group}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-            onResizeStart={onResizeStart}
-            resizeEdge={resizeEdge}
-            dragging={dragging}
-            resizing={resizing}
-            dragOffset={dragOffset}
-            interactingItemId={interactingItemId}
-          >
-            <Layers
-              getLayerRootProps={getLayerRootProps}
-              rowData={rowData}
-              group={group.group}
-              itemsWithInteractions={items}
-            />
-          </ItemsContextProvider>
+        <ItemsContextProvider
+          //TODO: fix groups with no items
+          items={group.items || []}
+          groupDimensions={group}
+          dragSnap={dragSnap}
+          minResizeWidth={minResizeWidth}
+          selectedItem={selectedItem}
+          canChangeGroup={canChangeGroup}
+          canMove={canMove}
+          canResize={canResize}
+          canSelect={canSelect}
+          moveResizeValidator={moveResizeValidator}
+          itemSelect={itemSelect}
+          itemDrag={itemDrag}
+          itemDrop={itemDrop}
+          itemResizing={itemResizing}
+          itemResized={itemResized}
+          onItemDoubleClick={onItemDoubleClick}
+          onItemContextMenu={onItemContextMenu}
+          itemRenderer={itemRenderer}
+          selected={selected}
+          useResizeHandle={useResizeHandle}
+          scrollRef={scrollRef}
+          order={group}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          onResizeStart={onResizeStart}
+          resizeEdge={resizeEdge}
+          dragging={dragging}
+          resizing={resizing}
+          dragOffset={dragOffset}
+          interactingItemId={interactingItemId}
+        >
+          <LayerConsumer>
+            {({getLayerRootProps, itemsWithInteractions}) => (
+              <Layers
+                getLayerRootProps={getLayerRootProps}
+                rowData={rowData}
+                group={group.group}
+                itemsWithInteractions={itemsWithInteractions}
+              />
+            )}
+          </LayerConsumer>
+        </ItemsContextProvider>
       </GroupRowContextProvider>
     )
   }
