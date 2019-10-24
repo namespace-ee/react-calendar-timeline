@@ -481,7 +481,7 @@ export function stackTimelineItems(
   newGroupId
 ) {
 
-  const itemsWithInteraction = items.map(item =>
+  const itemsWithInteractions = items.map(item =>
     getItemWithInteractions({
       item,
       keys,
@@ -496,7 +496,7 @@ export function stackTimelineItems(
   )
 
   const visibleItemsWithInteraction = getVisibleItems(
-    itemsWithInteraction,
+    itemsWithInteractions,
     canvasTimeStart,
     canvasTimeEnd,
     keys
@@ -546,7 +546,7 @@ export function stackTimelineItems(
   )
   const height = groupHeights.reduce((acc, height) => acc + height, 0)
 
-  return { groupsWithItemsDimensions, height, groupHeights, groupTops, itemsWithInteraction }
+  return { groupsWithItemsDimensions, height, groupHeights, groupTops, itemsWithInteractions }
 }
 
 /**
