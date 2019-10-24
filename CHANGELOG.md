@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.26.6
+
+* fix `visibleTimeStart`, `visibleTimeEnd` and `onTimeChange` not working as expected in controlled mode @ilaiwi
+
 ## 0.26.5
 
 * improve performance by:
