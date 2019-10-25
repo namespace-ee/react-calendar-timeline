@@ -11,6 +11,22 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * fix `visibleTimeStart`, `visibleTimeEnd` and `onTimeChange` not working as expected in controlled mode @ilaiwi
 
+### examples
+
+two new examples
+
+## Controlled scroll
+
+Controlled visible port of the calendar using `visibleTimeStart` and `visibleTimeEnd`. This also limits scrolling by mouse and adds two buttons to change the visible port of the calendar
+
+[Example Codesandbox](https://codesandbox.io/s/timeline-demo-controlled-visible-time-no-scroll-659jb)
+
+## Programmatically Scrolling
+
+Using controlled scroll and react-spring to trigger scrolling and create an animation.
+
+[Example Codesandbox](https://codesandbox.io/s/confident-waterfall-3kq2503y8p)
+
 ## 0.26.5
 
 * improve performance by:
