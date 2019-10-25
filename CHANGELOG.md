@@ -15,13 +15,13 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 two new examples
 
-## Controlled scroll
+#### Controlled scroll
 
 Controlled visible port of the calendar using `visibleTimeStart` and `visibleTimeEnd`. This also limits scrolling by mouse and adds two buttons to change the visible port of the calendar
 
 [Example Codesandbox](https://codesandbox.io/s/timeline-demo-controlled-visible-time-no-scroll-659jb)
 
-## Programmatically Scrolling
+#### Programmatically Scrolling
 
 Using controlled scroll and react-spring to trigger scrolling and create an animation.
 
