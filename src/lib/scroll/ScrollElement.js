@@ -22,6 +22,8 @@ class ScrollElement extends Component {
     }
   }
 
+  
+
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
@@ -29,11 +31,7 @@ class ScrollElement extends Component {
       el.addEventListener('wheel', this.handleWheel, {passive: false});
     }
   }
-
-  handleScroll = () => {
-    const scrollX = this.scrollComponent.scrollLeft
-    this.props.onScroll(scrollX)
-  }
+  
 
   handleWheel = e => {
     const { traditionalZoom } = this.props
@@ -53,8 +51,7 @@ class ScrollElement extends Component {
     } else if (e.shiftKey) {
       e.preventDefault()
       // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.scrollComponent.scrollLeft += e.deltaY || e.deltaX
-
+      this.props.onScroll(this.scrollComponent.scrollLeft + (e.deltaY || e.deltaX))
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
     }
   }
@@ -73,7 +70,7 @@ class ScrollElement extends Component {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
-      this.scrollComponent.scrollLeft += this.dragLastPosition - e.pageX
+      this.props.onScroll(this.scrollComponent.scrollLeft + this.dragLastPosition - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
@@ -144,7 +141,7 @@ class ScrollElement extends Component {
       let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
       let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
       if (deltaX !== 0 && moveX) {
-        this.scrollComponent.scrollLeft -= deltaX
+        this.props.onScroll(this.scrollComponent.scrollLeft - deltaX)
       }
       if (moveY) {
         window.scrollTo(
@@ -188,7 +185,6 @@ class ScrollElement extends Component {
         data-testid="scroll-element"
         className="rct-scroll"
         style={scrollComponentStyle}
-        onScroll={this.handleScroll}
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}

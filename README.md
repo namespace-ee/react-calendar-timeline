@@ -115,15 +115,15 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
   canMove: true,
   canResize: false,
   canChangeGroup: false,
-  className: 'weekend',
-  style: {
-    backgroundColor: 'fuchsia'
-  },
   itemProps: {
     // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
     'data-custom-attribute': 'Random content',
     'aria-hidden': true,
-    onDoubleClick: () => { console.log('You clicked double!') }
+    onDoubleClick: () => { console.log('You clicked double!') },
+    className: 'weekend',
+    style: {
+      background: 'fuchsia'
+    }
   }
 }
 ```
