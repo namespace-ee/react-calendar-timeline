@@ -244,36 +244,6 @@ export function getGroupOrders(groups, keys) {
   return groupOrders
 }
 
-/**
- * Adds items relevant to each group to the result of getGroupOrders
- * @param {*} items list of all items
- * @param {*} groupOrders the result of getGroupOrders
- */
-export function getGroupedItems(items, groupOrders) {
-  var groupedItems = {}
-  var keys = Object.keys(groupOrders)
-  // Initialize with result object for each group
-  for (let i = 0; i < keys.length; i++) {
-    const groupOrder = groupOrders[keys[i]]
-    groupedItems[i] = {
-      index: groupOrder.index,
-      group: groupOrder.group,
-      items: []
-    }
-  }
-
-  // Populate groups
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order !== undefined) {
-      const groupItem = groupedItems[items[i].dimensions.order.index]
-      if (groupItem) {
-        groupItem.items.push(items[i])
-      }
-    }
-  }
-
-  return groupedItems
-}
 
 export function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
   const { itemTimeStartKey, itemTimeEndKey } = keys
@@ -368,50 +338,6 @@ function sum(arr = []) {
 }
 
 /**
- * Stack all groups
- * @param {*} items items to be stacked
- * @param {*} groupOrders the groupOrders object
- * @param {*} lineHeight
- * @param {*} stackItems should items be stacked?
- */
-export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
-  var groupHeights = []
-  var groupTops = []
-
-  var groupedItems = getGroupedItems(itemsDimensions, groupOrders)
-
-  for (var index in groupedItems) {
-    const groupItems = groupedItems[index]
-    const { items: itemsDimensions, group } = groupItems
-    const groupTop = sum(groupHeights)
-
-    // Is group being stacked?
-    const isGroupStacked =
-      group.stackItems !== undefined ? group.stackItems : stackItems
-    const { groupHeight, verticalMargin } = stackGroup(
-      itemsDimensions,
-      isGroupStacked,
-      lineHeight,
-      groupTop
-    )
-    // If group height is overridden, push new height
-    // Do this late as item position still needs to be calculated
-    groupTops.push(groupTop)
-    if (group.height) {
-      groupHeights.push(group.height)
-    } else {
-      groupHeights.push(Math.max(groupHeight, lineHeight))
-    }
-  }
-  
-  return {
-    height: sum(groupHeights),
-    groupHeights,
-    groupTops
-  }
-}
-
-/**
  * 
  * @param {*} itemsDimensions 
  * @param {*} isGroupStacked 
@@ -441,8 +367,6 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
   }
   return { groupHeight: groupHeight || lineHeight, verticalMargin }
 }
-
-const aa= [{a: {}}, {b: {}}, {c: {}}]
 
 /**
  * Stack the items that will be visible
@@ -535,7 +459,9 @@ export function stackTimelineItems(
   })
 
   const groupTops = groupHeights.reduce(
-    (acc, height) => {
+    (acc, height, index) => {
+      //skip last calculation because we already have 0 as first item in acc
+      if(groupHeights.length -1 === index) return acc
       const lastIndex = acc.length - 1
       const lastTop = acc[lastIndex]
       acc.push(lastTop + height)
@@ -565,7 +491,6 @@ export function getCanvasWidth(width, buffer = 3) {
  * @param {*} canvasTimeStart
  * @param {*} canvasTimeEnd
  * @param {*} canvasWidth
- * @param {*} groupOrders
  * @param {*} lineHeight
  * @param {*} itemHeightRatio
  */
@@ -575,7 +500,6 @@ export function getItemDimensions({
   canvasTimeStart,
   canvasTimeEnd,
   canvasWidth,
-  groupOrders,
   lineHeight,
   itemHeightRatio
 }) {
@@ -589,7 +513,6 @@ export function getItemDimensions({
   })
   if (dimension) {
     dimension.top = null
-    dimension.order = groupOrders[_get(item, keys.itemGroupKey)]
     dimension.stack = !item.isOverlay
     dimension.height = lineHeight * itemHeightRatio
     return {
@@ -767,7 +690,6 @@ export function getGroupWithItemDimensions(
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
-      groupOrders: {},
       lineHeight,
       itemHeightRatio
     })

@@ -2,6 +2,7 @@ import React from 'react'
 import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
 import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
+import { defaultKeys } from '../../src/lib/default-config'
 const oneDay = 1000 * 60 * 60 * 24
 
 // eslint-disable-next-line
@@ -18,7 +19,8 @@ export const RenderWrapper = ({ children, timelineState }) => {
     visibleWidth: 1000,
     showPeriod:()=>{},
     timelineWidth:1000,
-    timelineUnit:'day'
+    timelineUnit:'day',
+    keys: defaultKeys,
   }
 
   timelineState = timelineState != null ? timelineState : defaultTimelineState

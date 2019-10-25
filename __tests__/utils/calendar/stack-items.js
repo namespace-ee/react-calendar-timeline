@@ -134,7 +134,7 @@ describe('stackItems', () => {
         state.newGroupOrder
       )
     ).toMatchObject({
-      dimensionItems: [],
+      groupsWithItemsDimensions: {},
       height: 0,
       groupHeights: [],
       groupTops: []

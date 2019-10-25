@@ -99,7 +99,7 @@ describe('GroupRow', () => {
   })
   it('passes style prop to style', () => {
     const text = "some text"
-    const {getByTestId, debug} = render(
+    const {getByTestId} = render(
       <RenderGroupRowWrapper groupRowState={{canvasWidth: 3000, groupHeight: 30}}>
         <GroupRow>
           <div>
