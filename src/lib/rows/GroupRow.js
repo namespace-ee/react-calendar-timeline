@@ -47,10 +47,10 @@ class GroupRow extends Component {
     if (horizontalLineClassNamesForGroup) {
       classNamesForGroup = horizontalLineClassNamesForGroup(group)
     }
-
     return (
       <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
         <div
+          data-testid="groupRow"
           ref={this.ref}
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}

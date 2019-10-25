@@ -4,7 +4,7 @@ import Timeline from 'lib/Timeline'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import moment from 'moment'
 

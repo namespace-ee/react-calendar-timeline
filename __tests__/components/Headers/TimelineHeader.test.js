@@ -2,7 +2,7 @@ import { render } from 'react-testing-library'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import DateHeader from 'lib/headers/DateHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import 'react-testing-library/cleanup-after-each'
 
 import React from 'react'

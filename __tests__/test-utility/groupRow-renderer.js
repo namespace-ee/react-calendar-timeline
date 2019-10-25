@@ -1,19 +1,15 @@
 import React from 'react'
-import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
-import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
 import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
 import { state } from '../../__fixtures__/stateAndProps'
-import jest from 'jest'
+import { groups } from '../../__fixtures__/itemsAndGroups'
 import { defaultTimeSteps, defaultKeys } from '../../src/lib/default-config'
-import { TimelineHeadersProvider } from '../../src/lib/headers/HeadersContext'
+import { GroupRowContextProvider } from '../../src/lib/rows/GroupRowContext'
 
 // eslint-disable-next-line
-export const RenderHeadersWrapper = ({
+export const RenderGroupRowWrapper = ({
   children,
   timelineState = {},
-  headersState = {},
-  showPeriod = () => {},
-  registerScroll = () => {}
+  groupRowState = {},
 }) => {
   const defaultTimelineState = {
     visibleTimeStart: state.visibleTimeStart,
@@ -21,7 +17,7 @@ export const RenderHeadersWrapper = ({
     canvasTimeStart: state.canvasTimeStart,
     canvasTimeEnd: state.canvasTimeEnd,
     canvasWidth: 2000,
-    showPeriod: showPeriod,
+    showPeriod: ()=>{},
     timelineUnit: 'day',
     timelineWidth: 1000,
     keys: defaultKeys
@@ -31,24 +27,25 @@ export const RenderHeadersWrapper = ({
     ...defaultTimelineState,
     ...timelineState
   }
-
-  const headersStateProps = {
-    registerScroll: registerScroll,
-    timeSteps: defaultTimeSteps,
-    leftSidebarWidth: 150,
-    rightSidebarWidth: 0,
-    ...headersState
+  
+  const groupRowStateProps = {
+    clickTolerance: 20,
+    onContextMenu: () => {},
+    onClick: () => {},
+    onDoubleClick: ()=>{},
+    isEvenRow: true,
+    group: groups[1],
+    horizontalLineClassNamesForGroup: undefined,
+    groupHeight: 60,
+    groupIndex: 3,
+    ...groupRowState
   }
 
   return (
-    <div>
       <TimelineStateProvider {...timelineStateProps}>
-        <div>
-          <TimelineHeadersProvider {...headersStateProps}>
+          <GroupRowContextProvider {...groupRowStateProps}>
             {children}
-          </TimelineHeadersProvider>
-        </div>
+          </GroupRowContextProvider>
       </TimelineStateProvider>
-    </div>
   )
 }

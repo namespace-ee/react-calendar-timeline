@@ -526,10 +526,6 @@ export default class Item extends Component {
     return finalStyle
   }
 
-  componentWillUnmount(){
-    console.log("unmount item")
-  }
-
   render() {
     if (typeof this.props.order === 'undefined' || this.props.order === null) {
       return null
