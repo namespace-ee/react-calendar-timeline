@@ -411,7 +411,6 @@ export function stackTimelineItems(
       dragTime,
       resizingEdge,
       resizeTime,
-      groups,
       newGroupId
     })
   )
@@ -540,7 +539,6 @@ export function getItemWithInteractions({
   dragTime,
   resizingEdge,
   resizeTime,
-  groups,
   newGroupId
 }) {
   //TODO: remove from here. This shouldn't be this function's responsibility
