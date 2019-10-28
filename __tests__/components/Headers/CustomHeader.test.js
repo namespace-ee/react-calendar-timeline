@@ -1,6 +1,5 @@
 import React from 'react'
-import { render, cleanup, prettyDOM } from 'react-testing-library'
-import Timeline from 'lib/Timeline'
+import { render, cleanup } from 'react-testing-library'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
