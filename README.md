@@ -265,12 +265,12 @@ Called when an item is moving or resizing. Returns an object with the following 
 | `itemId`           | `number` | ID of the item being moved or resized                                  |
 | `time`             | `number` | UNIX timestamp in milliseconds                                         |
 | `edge`             | `string` | on `resize`, returns a value of either `left` or `right`               |
-| `newGroupOrder`    | `number` | on `move`, index position of the new group that the item is moving to  |
+| `newGroupId`       | `number` | on `move`, new group id of the new group that the item is moving to    |
 
 
-## onItemMove(itemId, dragTime, newGroupOrder)
+## onItemMove(itemId, dragTime, newGroupId)
 
-Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
+Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) group id of the new group.
 
 ## onItemResize(itemId, time, edge)
 
@@ -365,6 +365,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 ## onBoundsChange(canvasTimeStart, canvasTimeEnd)
 
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
+
+## hideHorizontalLines
+
+Boolean to hide or show HorizontalLines. `true` by default. Hiding the horizontalLines will have a good impact on performance.
 
 ## itemRenderer
 
@@ -572,6 +576,152 @@ An example could look like:
 horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
 
+## `rowData`
+
+Data to be passed to `rowRenderer`'s  `rowData` param. Changing this prop will cause rerender of the `rowRenderer`
+
+# Helpers
+
+Helpers are methods provided by `HelperContext`. These helpers power most of the rendered UI in the timeline like: Headers, Markers, Items and row renderers. 
+
+## Methods
+
+### `getLeftOffsetFromDate(x: number): number`
+
+Given time in milliseconds. The method will return the corresponding `left` position in `px`
+
+### `getDateFromLeftOffsetPosition(left: number): number`
+
+Given `left` position in `px`, the method will return the corresponding date in milliseconds.
+
+**inverse of `getLeftOffsetFromDate`**
+
+### `getItemDimensions(itemId: string|number): dimensions`
+
+Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same group.
+
+### `getItemAbsoluteDimensions(itemId: string|number): dimensions`. 
+
+Given a item id, It will return back the left and top of the item relative to the calendar container. This is useful to know the position of items in different rows relative to each other.
+
+
+### `getGroupDimensions(groupId: string | number): groupDimensions`
+
+Given groupId. The method will return `height` of the group row and `top` of the group row relative to the calendar.
+
+## Example
+
+```jsx
+import React, { Component } from "react";
+import moment from "moment";
+
+import Timeline, {
+  HelpersContext,
+  TimelineHeaders,
+  DateHeader,
+  CustomHeader
+} from "react-calendar-timeline";
+import generateFakeData from "./generate-fake-data";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    const { groups, items } = generateFakeData();
+    const defaultTimeStart = moment()
+      .startOf("week")
+      .toDate();
+    const defaultTimeEnd = moment()
+      .startOf("week")
+      .add(1, "week")
+      .toDate();
+
+    this.state = {
+      groups,
+      items,
+      defaultTimeStart,
+      defaultTimeEnd,
+      customEvents: [
+        {
+          start: moment()
+            .startOf("week")
+            .add(12, "h"),
+          end: moment()
+            .startOf("week")
+            .endOf("day"),
+          title: "Lakers game"
+        },
+        {
+          start: moment()
+            .startOf("week")
+            .add(3, 'd'),
+          end: moment()
+            .startOf("week")
+            .add(5, "d"),
+          title: "Christmas"
+        }
+      ]
+    };
+  }
+
+  render() {
+    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
+
+    return (
+        <Timeline
+          groups={groups}
+          items={items}
+          stackItems
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+        >
+          <TimelineHeaders>
+            <DateHeader />
+            <CustomHeader
+              headerData={{ customEvents: this.state.customEvents }}
+              height={30}
+            >
+              {({
+                getRootProps,
+                data: { customEvents }
+              }) => {
+                const { getLeftOffsetFromDate } = React.useContext(
+                  HelpersContext
+                );
+                return (
+                  <div {...getRootProps()}>
+                    {customEvents.map(event => {
+                      const left = getLeftOffsetFromDate(event.start.valueOf());
+                      const right = getLeftOffsetFromDate(event.end.valueOf());
+                      const width = right - left;
+                      return (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left,
+                            width,
+                            backgroundColor: "white"
+                          }}
+                        >
+                          {event.title}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }}
+            </CustomHeader>
+          </TimelineHeaders>
+        </Timeline>
+    );
+  }
+}
+
+```
+
+[or CodeSandbox Example](https://codesandbox.io/s/timeline-demo-helpers-doc-example-o24h6)
+
+
 # Timeline Markers
 
 Timeline markers are markers that are overlayed on the canvas at specific datepoints.
@@ -707,6 +857,9 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
   }
 </CursorMarker>
 ```
+
+
+Helpers are a group of 
 
 # Timeline Headers
 
@@ -1153,11 +1306,7 @@ import Timeline, {
 </Timeline>
 ```
 
-### `rowData` prop
-
-Data to be passed to `rowRenderer`'s  `rowData` param. Changing this prop will cause rerender of the `rowRenderer`
-
-### Row renderer
+## Row renderer
 
 This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
 
@@ -1165,11 +1314,11 @@ This API would give you control to add custom UI on calendar rows using a render
 
 [CodeSandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-doc-example-66pvw)
 
-```javascript
+```jsx
 import Timeline, {
-  RowColumns,
   RowItems,
-  GroupRow
+  GroupRow,
+  HelpersContext
 } from "react-calendar-timeline";
 
 import moment from 'moment'
@@ -1208,17 +1357,16 @@ ReactDOM.render(
     defaultTimeEnd={defaultTimeEnd}
     rowRenderer={({
       rowData,
-      helpers: { getLeftOffsetFromDate },
       getLayerRootProps,
       group
     }) => {
+      const { getLeftOffsetFromDate } = React.useContext(HelpersContext)
       const { unavailableSlots } = rowData;
       const groupUnavailableSlots = unavailableSlots[group.id]
         ? unavailableSlots[group.id]
         : [];
       return (
         <GroupRow>
-          <RowColumns />
           <RowItems />
           <UnavailableLayer
             getLayerRootProps={getLayerRootProps}
@@ -1281,23 +1429,17 @@ function UnavailableLayer({
 }
 ```
 
-#### API
+### API
 
 `rowRenderer` follow the render prop pattern with some prebuilt components to display the rows, items and columns.
 
 _Note_ : the renderProp can be a component or a function for convenience
 
-#### `rowRenderer` prop
+### `rowRenderer` prop
 
 ```typescript
-interface params {
+interface Params {
   getLayerRootProps: (props: React.HTMLProps<HTMLElement>) => React.HTMLProps<HTMLElement>;
-  helpers: {
-    getLeftOffsetFromDate: (x: number) => number;
-    getDateFromLeftOffsetPosition: (x: number) => number;
-    getItemAbsoluteLocation: (itemId: string | number) => {left: number, top: number};
-    getItemDimensions: (itemId) => {left: number, top: number};
-  };
   rowData : any;
   group: Group;
   itemsWithInteractions: Items[];
@@ -1305,70 +1447,32 @@ interface params {
 type rowRenderer = (args: Params) => React.Node
 ```
 
-##### getLayerRootProps
+#### getLayerRootProps
 
 These functions are used to apply props to the layer that you want to render. This gives you maximum flexibility to render what, when, and wherever you like. 
 
-##### Helpers
-
-- `getLeftOffsetFromDate(x: milliseconds): number`: This function is used to get the left position of the custom layer to render. This functions accepts time in milliseconds and returns a number that should be passed to `style.left` to be displayed.
-
-example: 
-
-```typescript
-<div {...getLayerRootProps()}>
-  {groupUnavailableSlots.map(slot => {
-    const left = getLeftOffsetFromDate(slot.startTime.valueOf());
-    const right = getLeftOffsetFromDate(slot.endTime.valueOf());
-    return (
-      <div
-        key={slot.id}
-        style={{
-          position: "absolute",
-          left: left,
-          width: right - left,
-          height: "100%",
-        }}
-      >
-        <span style={{ height: 12 }}>unavailable</span>
-      </div>
-    );
-  })}
-</div>
-```
-
-here you calculate `left` and `right` using `getLeftOffsetFromDate` and use it to render the slot in the right place in the calendar.
-
-- `getDateFromLeftOffsetPosition(left: number): milliseconds`: This method is opposite of `getLeftOffsetFromDate` where you give it a left value and it will give you back the time in millisecond relative to the timeline.
-
-- `getItemDimensions(itemId: string|number): dimensions`. Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same group.
-
-- `getItemAbsoluteLocation(itemId: string|number): dimensions`. Given a item id, It will return back the left and top of the item relative to the calendar container. This is useful to know the position of items in different rows relative to each other.
-
-##### `rowData`
+#### rowData
 
 object passed by the `rowData` prop.
-
 
 #### group
 
 current group being rendered in the row.
 
-#### items
+#### itemsWithInteractions
 
 items to be rendered in the row. These items respect visibility and interaction. This means that the items you will get back are only the items in the visible + buffer zone and if dragging/resizing is happening you will get the items the start/end time with the interaction.  
 
-#### Components
+### Components
 
 Row renderer comes with some components needed to render the rows and the default layers (columns and rows). The default value for the row renderer is:
 
 ```typescript
 import React from 'react';
-import {GroupRow, RowColumns, RowItems} from '../../index'
+import {GroupRow, RowItems} from '../../index'
 
 const DefaultRowRenderer = () => {
     return <GroupRow>
-        <RowColumns/>
         <RowItems/>
     </GroupRow>
 }
@@ -1382,24 +1486,20 @@ renders the row's root div.
 
 renders the row's items
 
-##### columnsRow
-
-renders the row's columns
-
-##### Custom Layers
+### Custom Layers
 
 To render custom layers you need to implement the row renderer with the necessary layers
 
-```typescript
+```jsx
 import React from 'react';
-import {GroupRow, RowColumns, RowItems} from '../../index'
+import {GroupRow, RowColumns, RowItems, HelpersContext} from 'react-calendar-timeline';
 
 const rowRenderer = ({
-  helpers: { getLeftOffsetFromDate },
   getLayerRootProps,
   group,
   itemsWithInteractions
 }) => {
+  const { getLeftOffsetFromDate } = React.useContext({ HelpersContext })
   return (
     <GroupRow>
       <RowColumns />
@@ -1435,7 +1535,7 @@ const rowRenderer = ({
 }
 ```
 
-##### order
+#### order
 
 You can switch the order between `RowColumns`, `RowItems` and custom layers. This will change what renders above what. So if you had `RowItems` in the bottom all the other layer will render in top of it
 

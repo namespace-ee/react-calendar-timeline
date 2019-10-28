@@ -11,8 +11,8 @@ const defaultContextState = {
   getDateFromLeftOffsetPosition: () => {
     console.warn('"getDateFromLeftOffsetPosition" default func is being used')
   },
-  getItemAbsoluteLocation: () => {
-    console.warn('"getItemAbsoluteLocation" default func is being used')
+  getItemAbsoluteDimensions: () => {
+    console.warn('"getItemAbsoluteDimensions" default func is being used')
   },
   getItemDimensions: () => {
     console.warn('"getItemDimensions" default func is being used')
@@ -55,9 +55,9 @@ class HelpersContextProviderCore extends PureComponent {
   )
 
   /**
-   * create new instance of getItemAbsoluteLocation of dependant props have changed (similar to useCallback)
+   * create new instance of getItemAbsoluteDimensions of dependant props have changed (similar to useCallback)
    */
-  getItemAbsoluteLocationCreator = memoize(
+  getItemAbsoluteDimensionsCreator = memoize(
     (groupHeights, groupsWithItemsDimensions, getGroupByItemId) => itemId => {
       const groupId = getGroupByItemId(itemId)
       const group = groupsWithItemsDimensions[groupId]
@@ -107,7 +107,7 @@ class HelpersContextProviderCore extends PureComponent {
             this.props.groupsWithItemsDimensions,
             this.getGroupByItemId
           ),
-          getItemAbsoluteLocation: this.getItemAbsoluteLocationCreator(
+          getItemAbsoluteDimensions: this.getItemAbsoluteDimensionsCreator(
             this.props.groupHeights,
             this.props.groupsWithItemsDimensions,
             this.getGroupByItemId

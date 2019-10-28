@@ -339,7 +339,7 @@ export default class App extends Component {
         />
         <Links
           timelineLinks={timelineLinks}
-          getItemAbsoluteLocation={helpers.getItemAbsoluteLocation}
+          getItemAbsoluteDimensions={helpers.getItemAbsoluteDimensions}
           getItemDimensions={helpers.getItemDimensions}
           group={group}
           getLayerRootProps={getLayerRootProps}
@@ -468,7 +468,7 @@ export default class App extends Component {
 
 function Link({
   timelineLink,
-  getItemAbsoluteLocation,
+  getItemAbsoluteDimensions,
   getItemDimensions,
   group,
   items
@@ -476,11 +476,11 @@ function Link({
   const [startId, endId] = timelineLink
   const startItem = items.find(i => i.id === startId)
   if (startItem.group !== group.id) return null
-  const startItemDimensions = getItemAbsoluteLocation(startId) || {
+  const startItemDimensions = getItemAbsoluteDimensions(startId) || {
     left: 0,
     top: 0
   }
-  const endItemDimensions = getItemAbsoluteLocation(endId) || {
+  const endItemDimensions = getItemAbsoluteDimensions(endId) || {
     left: 0,
     top: 0
   }
@@ -520,7 +520,7 @@ function Link({
 
 const Links = React.memo(({
   timelineLinks,
-  getItemAbsoluteLocation,
+  getItemAbsoluteDimensions,
   getItemDimensions,
   group,
   getLayerRootProps,
@@ -534,7 +534,7 @@ const Links = React.memo(({
           <Link
             timelineLink={timelineLink}
             key={`${startId}${endId}`}
-            getItemAbsoluteLocation={getItemAbsoluteLocation}
+            getItemAbsoluteDimensions={getItemAbsoluteDimensions}
             getItemDimensions={getItemDimensions}
             group={group}
             items={items}

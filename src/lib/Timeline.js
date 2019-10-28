@@ -307,7 +307,6 @@ export default class ReactCalendarTimeline extends Component {
       canvasTimeEnd: canvasTimeEnd,
       selectedItem: null,
       dragTime: null,
-      dragGroupTitle: null,
       resizingItem: null,
       resizeTime: undefined,
       resizingEdge: undefined
@@ -659,13 +658,10 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   dragItem = (item, dragTime, newGroupId) => {
-    let newGroup = this.props.groups.find(i => _get(i, this.props.keys.groupIdKey)===newGroupId)
-    const keys = this.props.keys
     this.setState({
       draggingItem: item,
       dragTime: dragTime,
       newGroupId: newGroupId,
-      dragGroupTitle: newGroup ? _get(newGroup, keys.groupLabelKey) : ''
     })
 
     this.updatingItem({
@@ -677,7 +673,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   dropItem = (item, dragTime, newGroupId) => {
-    this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
+    this.setState({ draggingItem: null, dragTime: null })
     if (this.props.onItemMove) {
       this.props.onItemMove(item, dragTime, newGroupId)
     }

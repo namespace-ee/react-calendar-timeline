@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline",
-  "version": "0.27.13-gamma",
+  "version": "0.27.14-gamma",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -12,8 +12,7 @@
     "prepublish": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "serve": "serve ./build"
+    "test:watch": "jest --watch"  
   },
   "files": [
     "lib",
@@ -152,7 +151,6 @@
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.3",
-    "serve": "^11.2.0",
     "style-loader": "~0.13.0",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",

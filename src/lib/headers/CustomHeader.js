@@ -173,7 +173,6 @@ export class CustomHeader extends React.Component {
       visibleTimeStart,
       visibleTimeEnd,
       headerData,
-      getLeftOffsetFromDate,
     } = this.props
     //TODO: only evaluate on changing params
     return {
@@ -192,7 +191,6 @@ export class CustomHeader extends React.Component {
       getIntervalProps: this.getIntervalProps,
       showPeriod,
       data: headerData,
-      getLeftOffsetFromDate,
     }
   }
 
