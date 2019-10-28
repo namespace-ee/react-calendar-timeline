@@ -279,14 +279,13 @@ export function groupStack(
   item,
   group,
   groupHeight,
-  groupTop,
   itemIndex
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
   let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.stack && item.dimensions.top === null) {
-    item.dimensions.top = groupTop + verticalMargin
+    item.dimensions.top =  verticalMargin
     curHeight = Math.max(curHeight, lineHeight)
     do {
       var collidingItem = null
@@ -310,7 +309,7 @@ export function groupStack(
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top + item.dimensions.height + verticalMargin - groupTop
+          item.dimensions.top + item.dimensions.height + verticalMargin
         )
       }
     } while (collidingItem)
@@ -324,10 +323,10 @@ export function groupStack(
 }
 
 // Calculate the position of this item for a group that is not being stacked
-export function groupNoStack(lineHeight, item, groupHeight, groupTop) {
+export function groupNoStack(lineHeight, item, groupHeight) {
   let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.top === null) {
-    item.dimensions.top = groupTop + verticalMargin
+    item.dimensions.top = verticalMargin
     groupHeight = Math.max(groupHeight, lineHeight)
   }
   return { groupHeight, verticalMargin: 0, itemTop: item.dimensions.top }
@@ -342,9 +341,8 @@ function sum(arr = []) {
  * @param {*} itemsDimensions 
  * @param {*} isGroupStacked 
  * @param {*} lineHeight 
- * @param {*} groupTop 
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop = 0) {
+export function stackGroup(itemsDimensions, isGroupStacked, lineHeight) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -356,11 +354,10 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemsDimensions[itemIndex],
         itemsDimensions,
         groupHeight,
-        groupTop,
         itemIndex
       )
     } else {
-      r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)
+      r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight)
     }
     groupHeight = r.groupHeight
     verticalMargin = r.verticalMargin

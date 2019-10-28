@@ -203,8 +203,7 @@ class Group extends React.PureComponent {
         groupIndex={index}
       >
         <ItemsContextProvider
-          //TODO: fix groups with no items
-          items={group.items || []}
+          items={group.items}
           groupDimensions={group}
           dragSnap={dragSnap}
           minResizeWidth={minResizeWidth}
