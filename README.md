@@ -1306,11 +1306,11 @@ import Timeline, {
 </Timeline>
 ```
 
-## Row renderer
+# Row renderer
 
 This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
 
-#### example
+## example
 
 [CodeSandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-doc-example-66pvw)
 
@@ -1429,13 +1429,13 @@ function UnavailableLayer({
 }
 ```
 
-### API
+## API
 
 `rowRenderer` follow the render prop pattern with some prebuilt components to display the rows, items and columns.
 
 _Note_ : the renderProp can be a component or a function for convenience
 
-### `rowRenderer` prop
+## `rowRenderer` prop
 
 ```typescript
 interface Params {
@@ -1447,23 +1447,23 @@ interface Params {
 type rowRenderer = (args: Params) => React.Node
 ```
 
-#### getLayerRootProps
+### getLayerRootProps
 
 These functions are used to apply props to the layer that you want to render. This gives you maximum flexibility to render what, when, and wherever you like. 
 
-#### rowData
+### rowData
 
 object passed by the `rowData` prop.
 
-#### group
+### group
 
 current group being rendered in the row.
 
-#### itemsWithInteractions
+### itemsWithInteractions
 
 items to be rendered in the row. These items respect visibility and interaction. This means that the items you will get back are only the items in the visible + buffer zone and if dragging/resizing is happening you will get the items the start/end time with the interaction.  
 
-### Components
+## Components
 
 Row renderer comes with some components needed to render the rows and the default layers (columns and rows). The default value for the row renderer is:
 
@@ -1478,11 +1478,11 @@ const DefaultRowRenderer = () => {
 }
 ```
 
-##### GroupRow
+### GroupRow
 
 renders the row's root div.
 
-##### ItemsRow
+### ItemsRow
 
 renders the row's items
 
@@ -1535,7 +1535,7 @@ const rowRenderer = ({
 }
 ```
 
-#### order
+## order
 
 You can switch the order between `RowColumns`, `RowItems` and custom layers. This will change what renders above what. So if you had `RowItems` in the bottom all the other layer will render in top of it
 
