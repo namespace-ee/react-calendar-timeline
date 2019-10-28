@@ -83,6 +83,5 @@ describe('HelperContext', () => {
         </TimelineStateConsumer>
       </TimelineStateProvider>
     )
-    debug()
   })
 })
