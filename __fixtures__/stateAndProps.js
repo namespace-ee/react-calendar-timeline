@@ -25,7 +25,7 @@ export const state = {
   resizingItem: null,
   resizingEdge: null,
   resizeTime: null,
-  newGroupOrder: null,
+  newGroupId: null,
   canvasTimeStart: 1540414800000,
   visibleTimeEnd: visibleTimeEnd,
   visibleTimeStart: visibleTimeStart,
@@ -40,14 +40,14 @@ export const stateMoveItem = {
   ...state,
   draggingItem: items[0].id,
   dragTime: items[0].start_time+timeOffset,
-  newGroupOrder: 0,
+  newGroupId: items[0].group,
 }
 export const stateResizeItemLeft = {
   ...state,
   resizingItem: items[0].id,
   resizingEdge: 'left',
   resizeTime: items[0].start_time+timeOffset,
-  newGroupOrder: 0,
+  newGroupId: items[0].group,
 }
 
 export const stateResizeItemRight = {
@@ -55,5 +55,5 @@ export const stateResizeItemRight = {
   resizingItem: items[0].id,
   resizingEdge: 'right',
   resizeTime: items[0].end_time+timeOffset,
-  newGroupOrder: 0,
+  newGroupId: items[0].group,
 }

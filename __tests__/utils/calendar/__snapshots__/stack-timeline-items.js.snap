@@ -22,12 +22,24 @@ Object {
       "itemDimensions": Array [
         Object {
           "dimensions": Object {
+            "collisionLeft": 1540543600000,
+            "collisionWidth": 6803877,
+            "height": 22.5,
+            "left": 4472.222222222223,
+            "stack": true,
+            "top": 3.75,
+            "width": 236.24572916666602,
+          },
+          "id": "0",
+        },
+        Object {
+          "dimensions": Object {
             "collisionLeft": 1540532800000,
             "collisionWidth": 21203877,
             "height": 22.5,
             "left": 4097.222222222223,
             "stack": true,
-            "top": 3.75,
+            "top": 33.75,
             "width": 736.245729166666,
           },
           "id": "5",
@@ -39,7 +51,7 @@ Object {
             "height": 22.5,
             "left": 4722.222222222223,
             "stack": true,
-            "top": 33.75,
+            "top": 3.75,
             "width": 861.245729166666,
           },
           "id": "6",
@@ -51,7 +63,7 @@ Object {
             "height": 22.5,
             "left": 5388.888888888889,
             "stack": true,
-            "top": 3.75,
+            "top": 33.75,
             "width": 516.5249652777784,
           },
           "id": "1",
@@ -70,6 +82,14 @@ Object {
         },
       ],
       "items": Array [
+        Object {
+          "canMove": false,
+          "canResize": false,
+          "end_time": 1540550403877,
+          "group": "1",
+          "id": "0",
+          "start_time": 1540543600000,
+        },
         Object {
           "canMove": false,
           "canResize": false,
@@ -155,7 +175,7 @@ Object {
       "canMove": false,
       "canResize": false,
       "end_time": 1540550403877,
-      "group": 0,
+      "group": "1",
       "id": "0",
       "start_time": 1540543600000,
     },

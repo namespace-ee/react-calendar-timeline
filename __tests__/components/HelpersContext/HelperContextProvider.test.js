@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from 'react-testing-library'
+import renderWithTimelineStateAndHelpers from '../../test-utility/renderWithTimelineStateAndHelpers'
 import 'react-testing-library/cleanup-after-each'
 import { stackTimelineItems } from 'lib/utility/calendar'
 import {
@@ -16,6 +17,7 @@ import { defaultKeys } from '../../../src/lib/default-config'
 
 describe('HelperContext', () => {
   it('should work correctly', () => {
+    const canvasWidth = state.width * 3
     const {
       groupsWithItemsDimensions,
       groupHeights,
@@ -24,7 +26,7 @@ describe('HelperContext', () => {
     } = stackTimelineItems(
       items,
       groups,
-      9000,
+      canvasWidth,
       state.canvasTimeStart,
       state.canvasTimeEnd,
       props.keys,
@@ -36,52 +38,34 @@ describe('HelperContext', () => {
       state.dragTime,
       state.resizingEdge,
       state.resizeTime,
-      state.newGroupOrder
+      state.newGroupId
     )
     const defaultTimelineState = {
       visibleTimeStart: state.visibleTimeStart,
       visibleTimeEnd: state.visibleTimeEnd,
       canvasTimeStart: state.canvasTimeStart,
       canvasTimeEnd: state.canvasTimeEnd,
-      canvasWidth: 9000,
+      canvasWidth: canvasWidth,
       showPeriod: jest.fn(),
       timelineUnit: 'day',
-      timelineWidth: 3000,
+      timelineWidth: state.width,
       keys: defaultKeys
     }
-    render(
-      <TimelineStateProvider
-        {...defaultTimelineState}
-      >
-        <TimelineStateConsumer>
-          {({getLeftOffsetFromDate, getDateFromLeftOffsetPosition}) => (
-            <HelpersContextProvider
-              getLeftOffsetFromDate={getLeftOffsetFromDate}
-              getDateFromLeftOffsetPosition={getDateFromLeftOffsetPosition}
-              groupsWithItemsDimensions={groupsWithItemsDimensions}
-              items={itemsWithInteractions}
-              keys={defaultKeys}
-              groupHeights={groupHeights}
-              groupTops={groupTops}
-            >
-              <HelpersConsumer>
-                {props => {
-                  expect(props).toEqual(
-                    expect.objectContaining({
-                      getDateFromLeftOffsetPosition: expect.any(Function),
-                      getLeftOffsetFromDate: expect.any(Function),
-                      getItemDimensions: expect.any(Function),
-                      getItemAbsoluteDimensions: expect.any(Function),
-                      getGroupDimensions: expect.any(Function)
-                    })
-                  )
-                  return <div />
-                }}
-              </HelpersConsumer>
-            </HelpersContextProvider>
-          )}
-        </TimelineStateConsumer>
-      </TimelineStateProvider>
+    renderWithTimelineStateAndHelpers(
+      <HelpersConsumer>
+        {props => {
+          expect(props).toEqual(
+            expect.objectContaining({
+              getDateFromLeftOffsetPosition: expect.any(Function),
+              getLeftOffsetFromDate: expect.any(Function),
+              getItemDimensions: expect.any(Function),
+              getItemAbsoluteDimensions: expect.any(Function),
+              getGroupDimensions: expect.any(Function)
+            })
+          )
+          return <div />
+        }}
+      </HelpersConsumer>
     )
   })
 })
