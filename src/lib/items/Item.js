@@ -27,6 +27,10 @@ export default class Item extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
+    visibleTimeEnd: PropTypes.number.isRequired,
+    visibleTimeStart: PropTypes.number.isRequired,
+    timelineWidth: PropTypes.number.isRequired,
+
     order: PropTypes.object,
 
     dragSnap: PropTypes.number,
@@ -72,10 +76,6 @@ export default class Item extends Component {
   static defaultProps = {
     selected: false,
     itemRenderer: defaultItemRenderer
-  }
-
-  static contextTypes = {
-    getTimelineContext: PropTypes.func
   }
 
   constructor(props) {
@@ -531,7 +531,15 @@ export default class Item extends Component {
       return null
     }
 
-    const timelineContext = this.context.getTimelineContext()
+    const timelineContext = {
+      canvasTimeStart: this.props.canvasTimeStart,
+      canvasTimeEnd: this.props.canvasTimeEnd,
+      visibleTimeEnd: this.props.visibleTimeEnd,
+      visibleTimeStart: this.props.visibleTimeStart,
+      timelineWidth: this.props.timelineWidth,
+  
+    }
+
     const itemContext = {
       dimensions: this.props.dimensions,
       useResizeHandle: this.props.useResizeHandle,

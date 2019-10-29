@@ -1,5 +1,4 @@
 import React from 'react'
-import TimelineStateContext from '../timeline/TimelineStateContext'
 import { _get, _length } from '../utility/generic'
 import { ItemsContextProvider } from '../items/ItemsContext'
 import { GroupRowContextProvider } from './GroupRowContext'

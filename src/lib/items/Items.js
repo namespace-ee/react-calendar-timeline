@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { PureComponent, Component } from 'react'
 import Item from './Item'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
-import {ItemsConsumer} from './ItemsContext'
+import { ItemsConsumer } from './ItemsContext'
 import { _get, arraysEqual } from '../utility/generic'
 
 const canResizeLeft = (item, canResize) => {
@@ -24,6 +24,9 @@ export class Items extends Component {
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
+    visibleTimeEnd: PropTypes.number.isRequired,
+    visibleTimeStart: PropTypes.number.isRequired,
+    timelineWidth: PropTypes.number.isRequired,
 
     dragSnap: PropTypes.number,
     minResizeWidth: PropTypes.number,
@@ -163,6 +166,9 @@ export class Items extends Component {
             onDragStart={this.props.onDragStart}
             onDragEnd={this.props.onDragEnd}
             onResizeStart={this.props.onResizeStart}
+            visibleTimeEnd={this.props.visibleTimeEnd}
+            visibleTimeStart={this.props.visibleTimeStart}
+            timelineWidth={this.props.timelineWidth}
           />
         )})}
       </div>
@@ -179,6 +185,9 @@ class ItemsWrapper extends PureComponent {
             canvasTimeStart,
             canvasTimeEnd,
             canvasWidth,
+            visibleTimeEnd,
+            visibleTimeStart,
+            timelineWidth,
             keys
           } = getTimelineState()
           return (
@@ -188,6 +197,9 @@ class ItemsWrapper extends PureComponent {
                   canvasTimeStart={canvasTimeStart}
                   canvasTimeEnd={canvasTimeEnd}
                   canvasWidth={canvasWidth}
+                  visibleTimeEnd={visibleTimeEnd}
+                  visibleTimeStart={visibleTimeStart}
+                  timelineWidth={timelineWidth}
                   keys={keys}
                   {...props}
                 />

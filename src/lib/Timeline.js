@@ -961,8 +961,26 @@ export default class ReactCalendarTimeline extends Component {
                     <MarkerCanvas>
                       {this.childrenWithProps()}
                       <Rows
+                        items={isInteractingWithItem? itemsWithInteractions : items}
                         groupHeights={groupHeights}
                         itemRenderer={itemRenderer}
+                        itemResized={this.resizedItem}
+                        itemResizing={this.resizingItem}
+                        itemSelect={this.selectItem}
+                        itemDrag={this.dragItem}
+                        itemDrop={this.dropItem}
+                        onItemDoubleClick={this.doubleClickItem}
+                        onItemContextMenu={this.contextMenuClickItem}
+                        scrollRef={this.scrollComponent}
+                        selectedItem={this.state.selectedItem}
+                        onRowClick={this.handleRowClick}
+                        onRowDoubleClick={this.handleRowDoubleClick}
+                        onRowContextClick={this.handleScrollContextMenu}
+                        groupsWithItemsDimensions={groupsWithItemsDimensions}
+                        //props
+                        groups={groups}
+                        keys={keys}
+                        resizeEdge={this.state.resizingEdge}
                         canChangeGroup={this.props.canChangeGroup}
                         canMove={this.props.canMove}
                         canResize={this.props.canResize}
@@ -970,31 +988,14 @@ export default class ReactCalendarTimeline extends Component {
                         useResizeHandle={this.props.useResizeHandle}
                         dragSnap={this.props.dragSnap}
                         minResizeWidth={this.props.minResizeWidth}
-                        itemResized={this.resizedItem}
-                        itemResizing={this.resizingItem}
                         moveResizeValidator={this.props.moveResizeValidator}
-                        itemSelect={this.selectItem}
-                        itemDrag={this.dragItem}
-                        itemDrop={this.dropItem}
-                        onItemDoubleClick={this.doubleClickItem}
-                        onItemContextMenu={this.contextMenuClickItem}
-                        scrollRef={this.scrollComponent}
                         selected={this.props.selected}
-                        selectedItem={this.state.selectedItem}
                         rowRenderer={this.props.rowRenderer}
                         rowData={this.props.rowData}
                         clickTolerance={this.props.clickTolerance}
-                        onRowClick={this.handleRowClick}
-                        onRowDoubleClick={this.handleRowDoubleClick}
                         horizontalLineClassNamesForGroup={
                           this.props.horizontalLineClassNamesForGroup
                         }
-                        onRowContextClick={this.handleScrollContextMenu}
-                        groupsWithItemsDimensions={groupsWithItemsDimensions}
-                        groups={groups}
-                        items={isInteractingWithItem? itemsWithInteractions : items}
-                        keys={keys}
-                        resizeEdge={this.state.resizingEdge}
                       />
                       {hideHorizontalLines? null : <Columns 
                         lineCount={_length(groups)}

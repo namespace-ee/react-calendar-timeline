@@ -398,9 +398,9 @@ export default class App extends Component {
               getRootProps,
               getIntervalProps,
               showPeriod,
-              getLeftOffsetFromDate,
               data: { itemsToDrag }
             }) => {
+              const {getLeftOffsetFromDate} = React.useContext(HelpersContext)
               return (
                 <div {...getRootProps()}>
                   <div
