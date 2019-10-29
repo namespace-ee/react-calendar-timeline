@@ -18,6 +18,21 @@ describe('getItemWithInteractions', () => {
       })
     ).toBe(item)
   })
+  it('should return the same item if draggingItem and resizingItem is not for the same item', () => {
+    const item = items[0]
+    expect(
+      getItemWithInteractions({
+        item,
+        keys: defaultKeys,
+        draggingItem: 'some id',
+        resizingItem: 'some id',
+        dragTime: false,
+        resizingEdge: false,
+        resizeTime: false,
+        newGroupId: '1'
+      })
+    ).toBe(item)
+  })
   it('should return new item with new start and end time if dragged with no changed group', () => {
     const item = items[0]
     //moved 1 hour
