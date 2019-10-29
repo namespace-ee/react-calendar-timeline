@@ -91,6 +91,7 @@ Object {
           "group": "1",
           "id": "0",
           "start_time": 1540540000000,
+          "title": "title 0",
         },
         Object {
           "canMove": false,
@@ -100,6 +101,7 @@ Object {
           "group": "1",
           "id": "5",
           "start_time": 1540532800000,
+          "title": "title 5",
         },
         Object {
           "canMove": false,
@@ -109,6 +111,7 @@ Object {
           "group": "1",
           "id": "6",
           "start_time": 1540550800000,
+          "title": "title 6",
         },
         Object {
           "canMove": true,
@@ -117,6 +120,7 @@ Object {
           "group": "1",
           "id": "1",
           "start_time": 1540570000000,
+          "title": "title 1",
         },
         Object {
           "canMove": false,
@@ -126,6 +130,7 @@ Object {
           "group": "1",
           "id": "2",
           "start_time": 1540620000000,
+          "title": "title 2",
         },
       ],
     },
@@ -167,6 +172,7 @@ Object {
           "group": "3",
           "id": "3",
           "start_time": 1540656000000,
+          "title": "title 3",
         },
       ],
     },
@@ -180,6 +186,7 @@ Object {
       "group": "1",
       "id": "0",
       "start_time": 1540540000000,
+      "title": "title 0",
     },
     Object {
       "canMove": false,
@@ -189,6 +196,7 @@ Object {
       "group": "1",
       "id": "5",
       "start_time": 1540532800000,
+      "title": "title 5",
     },
     Object {
       "canMove": false,
@@ -198,6 +206,7 @@ Object {
       "group": "1",
       "id": "6",
       "start_time": 1540550800000,
+      "title": "title 6",
     },
     Object {
       "canMove": true,
@@ -206,6 +215,7 @@ Object {
       "group": "1",
       "id": "1",
       "start_time": 1540570000000,
+      "title": "title 1",
     },
     Object {
       "canMove": false,
@@ -215,6 +225,7 @@ Object {
       "group": "1",
       "id": "2",
       "start_time": 1540620000000,
+      "title": "title 2",
     },
     Object {
       "canMove": false,
@@ -224,6 +235,7 @@ Object {
       "group": "3",
       "id": "3",
       "start_time": 1540656000000,
+      "title": "title 3",
     },
   ],
   "visibleTimeEnd": 1540634400000,
@@ -322,6 +334,7 @@ Object {
           "group": "1",
           "id": "0",
           "start_time": 1540540000000,
+          "title": "title 0",
         },
         Object {
           "canMove": false,
@@ -331,6 +344,7 @@ Object {
           "group": "1",
           "id": "5",
           "start_time": 1540532800000,
+          "title": "title 5",
         },
         Object {
           "canMove": false,
@@ -340,6 +354,7 @@ Object {
           "group": "1",
           "id": "6",
           "start_time": 1540550800000,
+          "title": "title 6",
         },
         Object {
           "canMove": true,
@@ -348,6 +363,7 @@ Object {
           "group": "1",
           "id": "1",
           "start_time": 1540570000000,
+          "title": "title 1",
         },
         Object {
           "canMove": false,
@@ -357,6 +373,7 @@ Object {
           "group": "1",
           "id": "2",
           "start_time": 1540620000000,
+          "title": "title 2",
         },
       ],
     },
@@ -398,6 +415,7 @@ Object {
           "group": "3",
           "id": "3",
           "start_time": 1540656000000,
+          "title": "title 3",
         },
       ],
     },
@@ -411,6 +429,7 @@ Object {
       "group": "1",
       "id": "0",
       "start_time": 1540540000000,
+      "title": "title 0",
     },
     Object {
       "canMove": false,
@@ -420,6 +439,7 @@ Object {
       "group": "1",
       "id": "5",
       "start_time": 1540532800000,
+      "title": "title 5",
     },
     Object {
       "canMove": false,
@@ -429,6 +449,7 @@ Object {
       "group": "1",
       "id": "6",
       "start_time": 1540550800000,
+      "title": "title 6",
     },
     Object {
       "canMove": true,
@@ -437,6 +458,7 @@ Object {
       "group": "1",
       "id": "1",
       "start_time": 1540570000000,
+      "title": "title 1",
     },
     Object {
       "canMove": false,
@@ -446,6 +468,7 @@ Object {
       "group": "1",
       "id": "2",
       "start_time": 1540620000000,
+      "title": "title 2",
     },
     Object {
       "canMove": false,
@@ -455,6 +478,7 @@ Object {
       "group": "3",
       "id": "3",
       "start_time": 1540656000000,
+      "title": "title 3",
     },
   ],
   "visibleTimeEnd": 1540591200000,

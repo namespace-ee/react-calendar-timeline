@@ -1,10 +1,12 @@
 import { defaultKeys } from 'lib/default-config'
 import {items} from './itemsAndGroups'
+import ReactCalendarTimeline from  '../src/lib/timeline'
 
 export const visibleTimeStart = 1540501200000
 export const visibleTimeEnd = 1540587600000
 
 export const props = {
+  ...ReactCalendarTimeline.defaultProps,
   keys: defaultKeys,
   lineHeight: 30,
   stackItems: true,
@@ -26,6 +28,7 @@ export const state = {
   resizingEdge: null,
   resizeTime: null,
   newGroupId: null,
+  selectedItem: null,
   canvasTimeStart: 1540414800000,
   visibleTimeEnd: visibleTimeEnd,
   visibleTimeStart: visibleTimeStart,
