@@ -1,5 +1,6 @@
 import React from 'react'
-import {render, fireEvent} from 'react-testing-library';
+import { fireEvent} from 'react-testing-library';
+import render from '../../test-utility/renderWithTimelineStateAndHelpers'
 import { noop } from 'test-utility'
 import GroupRow from 'lib/rows/GroupRow'
 import {RenderGroupRowWrapper} from '../../test-utility/groupRow-renderer'

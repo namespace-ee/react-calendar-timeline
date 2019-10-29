@@ -6,33 +6,12 @@ import { defaultTimeSteps, defaultKeys } from '../../src/lib/default-config'
 import { GroupRowContextProvider } from '../../src/lib/rows/GroupRowContext'
 
 // eslint-disable-next-line
-export const RenderGroupRowWrapper = ({
-  children,
-  timelineState = {},
-  groupRowState = {},
-}) => {
-  const defaultTimelineState = {
-    visibleTimeStart: state.visibleTimeStart,
-    visibleTimeEnd: state.visibleTimeEnd,
-    canvasTimeStart: state.canvasTimeStart,
-    canvasTimeEnd: state.canvasTimeEnd,
-    canvasWidth: 2000,
-    showPeriod: ()=>{},
-    timelineUnit: 'day',
-    timelineWidth: 1000,
-    keys: defaultKeys
-  }
-
-  const timelineStateProps = {
-    ...defaultTimelineState,
-    ...timelineState
-  }
-  
+export const RenderGroupRowWrapper = ({ children, groupRowState = {} }) => {
   const groupRowStateProps = {
     clickTolerance: 20,
     onContextMenu: () => {},
     onClick: () => {},
-    onDoubleClick: ()=>{},
+    onDoubleClick: () => {},
     isEvenRow: true,
     group: groups[1],
     horizontalLineClassNamesForGroup: undefined,
@@ -42,10 +21,8 @@ export const RenderGroupRowWrapper = ({
   }
 
   return (
-      <TimelineStateProvider {...timelineStateProps}>
-          <GroupRowContextProvider {...groupRowStateProps}>
-            {children}
-          </GroupRowContextProvider>
-      </TimelineStateProvider>
+    <GroupRowContextProvider {...groupRowStateProps}>
+      {children}
+    </GroupRowContextProvider>
   )
 }
