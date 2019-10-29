@@ -509,6 +509,10 @@ itemRenderer: ({
 }
 ```
 
+#### Limitations
+
+You can't save state inside the item because when changing groups the item will be remounted losing all existing state.
+
 ## groupRenderer
 
 React component that will be used to render the content of groups in the
