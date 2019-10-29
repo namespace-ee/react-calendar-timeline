@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getGroupWithItemDimensions should work as expected 1`] = `
+Object {
+  "1": Object {
+    "group": Object {
+      "id": "1",
+    },
+    "index": 0,
+    "items": Array [
+      Object {
+        "canMove": false,
+        "canResize": false,
+        "end_time": 1540546803877,
+        "group": "1",
+        "id": "0",
+        "start_time": 1540540000000,
+        "title": "title 0",
+      },
+      Object {
+        "canMove": false,
+        "canResize": false,
+        "className": "",
+        "end_time": 1540554003877,
+        "group": "1",
+        "id": "5",
+        "start_time": 1540532800000,
+        "title": "title 5",
+      },
+      Object {
+        "canMove": false,
+        "canResize": false,
+        "className": "",
+        "end_time": 1540575603877,
+        "group": "1",
+        "id": "6",
+        "start_time": 1540550800000,
+        "title": "title 6",
+      },
+      Object {
+        "canMove": true,
+        "canResize": "both",
+        "end_time": 1540584875919,
+        "group": "1",
+        "id": "1",
+        "start_time": 1540570000000,
+        "title": "title 1",
+      },
+      Object {
+        "canMove": false,
+        "canResize": false,
+        "className": "",
+        "end_time": 1540640397548,
+        "group": "1",
+        "id": "2",
+        "start_time": 1540620000000,
+        "title": "title 2",
+      },
+    ],
+  },
+  "2": Object {
+    "group": Object {
+      "id": "2",
+    },
+    "index": 1,
+    "items": Array [],
+  },
+  "3": Object {
+    "group": Object {
+      "id": "3",
+    },
+    "index": 2,
+    "items": Array [
+      Object {
+        "canMove": false,
+        "canResize": false,
+        "className": "",
+        "end_time": 1540676397548,
+        "group": "3",
+        "id": "3",
+        "start_time": 1540656000000,
+        "title": "title 3",
+      },
+    ],
+  },
+}
+`;
