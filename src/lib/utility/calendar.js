@@ -739,7 +739,7 @@ export function getOrderedGroupsWithItems(groups, items, keys) {
  * @param {*} newGroup 
  * @param {*} oldGroup 
  */
-function shallowIsEqualOrderedGroup(newGroup, oldGroup){
+export function shallowIsEqualOrderedGroup(newGroup, oldGroup){
   if(newGroup.group !== oldGroup.group) return false
   if(newGroup.index !== oldGroup.index) return false
   return arraysEqual(newGroup.items, oldGroup.items)
@@ -751,7 +751,7 @@ function shallowIsEqualOrderedGroup(newGroup, oldGroup){
  * @param {*} newArgs 
  * @param {*} oldArgs 
  */
-const isEqualItemWithDimensions = (newArgs, oldArgs) => {
+export function isEqualItemWithDimensions(newArgs, oldArgs){
   const [newGroup, ...newRest] = newArgs;
   const [oldGroup, ...oldRest] = oldArgs;
   //shallow equality
