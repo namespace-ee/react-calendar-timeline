@@ -11,7 +11,7 @@ import { defaultItemRenderer } from 'lib/items/defaultItemRenderer'
 describe('Item', () => {
   it('should render', () => {
     const container = document.createElement('div')
-    const { debug } = render(
+    const { } = render(
       <Item
         item={items[0]}
         keys={props.keys}
@@ -62,6 +62,5 @@ describe('Item', () => {
         container: document.body.appendChild(container)
       }
     )
-    debug()
   })
 })

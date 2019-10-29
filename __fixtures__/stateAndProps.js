@@ -1,6 +1,6 @@
 import { defaultKeys } from 'lib/default-config'
 import {items} from './itemsAndGroups'
-import ReactCalendarTimeline from  '../src/lib/timeline'
+import ReactCalendarTimeline from  '../src/lib/timeline.js'
 
 export const visibleTimeStart = 1540501200000
 export const visibleTimeEnd = 1540587600000
