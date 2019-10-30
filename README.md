@@ -166,17 +166,10 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 
 Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
 
-## sidebarContent
-
-Everything passed here will be displayed above the left sidebar. Use this to display small filters or so. Defaults to `null`.
-
 ## rightSidebarWidth
 
 Width of the right sidebar in pixels. If set to `0`, the right sidebar is not rendered. Defaults to `0`.
 
-## rightSidebarContent
-
-Everything passed here will be displayed above the right sidebar. Use this to display small filters or so. Defaults to `null`.
 
 ## dragSnap
 
@@ -511,7 +504,8 @@ itemRenderer: ({
 
 #### Limitations
 
-You can't save state inside the item because when changing groups the item will be remounted losing all existing state.
+- You can't save state inside the item because when changing groups the item will be remounted losing all existing state.
+- You need to do `e.stopPropagation()` for all callbacks passed to `itemRenderer`
 
 ## groupRenderer
 
@@ -602,7 +596,7 @@ Given `left` position in `px`, the method will return the corresponding date in 
 
 ### `getItemDimensions(itemId: string|number): dimensions`
 
-Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same group.
+Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same row.
 
 ### `getItemAbsoluteDimensions(itemId: string|number): dimensions`. 
 
@@ -614,6 +608,9 @@ Given a item id, It will return back the left and top of the item relative to th
 Given groupId. The method will return `height` of the group row and `top` of the group row relative to the calendar.
 
 ## Example
+
+[CodeSandbox Example](https://codesandbox.io/s/timeline-demo-helpers-doc-example-o24h6)
+
 
 ```jsx
 import React, { Component } from "react";
@@ -722,8 +719,6 @@ export default class App extends Component {
 }
 
 ```
-
-[or CodeSandbox Example](https://codesandbox.io/s/timeline-demo-helpers-doc-example-o24h6)
 
 
 # Timeline Markers
@@ -1606,10 +1601,7 @@ It's the same issue as above. See [issue 134](https://github.com/namespace-ee/re
 
 This is useful when using the plugins (that you pass as children to the component). Override the CSS to change:
 
-* Horizontal Lines: 30
-* Vertical Lines: 40
 * Items: 80-88 (depending on selection, dragging, etc)
-* Header: 90
 
 ## Behind the scenes
 

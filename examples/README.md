@@ -84,3 +84,20 @@ Native info label was removed with 0.26.0 and now the responsibility to render t
 
 [Example Codesandbox](https://codesandbox.io/s/timeline-demo-info-label-neec9)
 
+## Custom header items with helpers 
+
+using custom header and helpers, you would be able to render custom items/intervals in the header
+
+[Example Codesandbox](https://codesandbox.io/s/timeline-demo-helpers-doc-example-o24h6)
+
+## Unavailable placeholders
+
+with row renderer and helpers, custom timeslots are rendered with a label rendered on the calendar
+
+[Example Codesandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-doc-example-66pvw)
+
+## Drag and drop from outside the calendar
+
+with row renderer and helpers, you can drag and drop items from outside the calendar into predetermined spots on the calendar.
+
+[Example Codesandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-dnd-from-outside-the-calendar-gz7ns)

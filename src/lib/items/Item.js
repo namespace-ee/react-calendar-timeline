@@ -218,7 +218,7 @@ export default class Item extends Component {
           if (e.dropzone) {
             const newGroupId = e.dropzone.target.dataset.groupid
             let dragTime = this.dragTime(e)
-            // if(dragTime !== _get(this.props.item, this.props.keys.itemTimeStartKey)){
+            if(dragTime !== _get(this.props.item, this.props.keys.itemTimeStartKey)){
               if (this.props.moveResizeValidator) {
                 dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
               }
@@ -227,7 +227,7 @@ export default class Item extends Component {
                 this.props.onDrag(this.itemId, dragTime, newGroupId)
               }
             }
-          // }
+          }
         }
       })
       .on('dragend', e => {
