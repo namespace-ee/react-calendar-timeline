@@ -47,7 +47,7 @@ describe('getGroupsCache', () => {
       method(...args)
       expect(mockMethod).toHaveBeenCalledTimes(1)
       //reset after checking each method before trying the next one in the groupid:method dictionary
-      jest.clearAllMocks()
+      mockMethod.mockClear();
     })
   })
   it('should call method again if arg is different', () => {
@@ -83,7 +83,7 @@ describe('getGroupsCache', () => {
       method(...newArgs)
       expect(mockMethod).toHaveBeenCalledTimes(2)
       //reset after checking each method before trying the next one in the groupid:method dictionary
-      jest.clearAllMocks()
+      mockMethod.mockClear();
     })
   })
 })
