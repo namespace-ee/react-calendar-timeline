@@ -1,7 +1,7 @@
 import { shallowIsEqualOrderedGroup } from 'lib/utility/calendar'
 import { groups, items } from '../../../__fixtures__/itemsAndGroups'
 
-describe('getGroupWithItemDimensions', () => {
+describe('shallowIsEqualOrderedGroup', () => {
   it('should return true if passing same group', ()=>{
     const newGroupOrder = {
       group: groups[0],

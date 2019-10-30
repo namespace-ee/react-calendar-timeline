@@ -765,10 +765,10 @@ export function isEqualItemWithDimensions(newArgs, oldArgs){
  * @param {*} groups 
  * @param {*} keys 
  */
-const getGroupsCache = memoize((groups, keys)=>{
+export const getGroupsCache = memoize((groups, keys, method)=>{
   return groups.reduce((acc, group) => {
     const id = _get(group, keys.groupIdKey);
-    acc[id] = memoize(getGroupWithItemDimensions, isEqualItemWithDimensions)
+    acc[id] = memoize(method, isEqualItemWithDimensions)
     return acc
   }, {})
 })
@@ -784,7 +784,7 @@ export function getGroupsWithItemDimensions(
   canvasWidth, 
   groups,
 ) {
-  const cache = getGroupsCache(groups, keys)
+  const cache = getGroupsCache(groups, keys, getGroupWithItemDimensions)
   const groupKeys = Object.keys(groupsWithItems)
   return groupKeys.reduce((acc, groupKey) => {
     const group = groupsWithItems[groupKey]
