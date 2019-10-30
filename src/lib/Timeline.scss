@@ -17,6 +17,10 @@ $list-item-padding: 0 4px;
 $weekend: rgba(250, 246, 225, 0.5);
 
 .react-calendar-timeline {
+  //create local stack context for z-index
+  position: relative;
+  z-index: 0;
+
   * {
     box-sizing: border-box;
   }
@@ -91,10 +95,10 @@ $weekend: rgba(250, 246, 225, 0.5);
   // TODO: rename or remove once we make breaking change to rename vertical lines
   // to columns
   .rct-vertical-lines {
+    height: 100%;
     .rct-vl {
       position: absolute;
       border-left: 1px solid $border-color;
-      z-index: 30;
       &.rct-vl-first {
         border-left-width: 2px;
       }
@@ -115,7 +119,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     .rct-hl-odd {
       border-bottom: $border-width solid $border-color;
       box-sizing: border-box;
-      z-index: 40;
     }
     .rct-hl-odd {
       background: $row-background-odd;
@@ -129,7 +132,6 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: absolute;
     width: 2px;
     background: $item-background;
-    z-index: 51;
   }
 
 

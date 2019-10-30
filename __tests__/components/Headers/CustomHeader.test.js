@@ -1,6 +1,5 @@
 import React from 'react'
-import { render, cleanup, prettyDOM } from 'react-testing-library'
-import Timeline from 'lib/Timeline'
+import { render, cleanup } from 'react-testing-library'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
@@ -9,7 +8,7 @@ import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import { getCustomHeadersInTimeline } from '../../test-utility/headerRenderers'
 import { parsePxToNumbers } from '../../test-utility/index'
 
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import moment from 'moment'
 
 describe('CustomHeader Component Test', () => {

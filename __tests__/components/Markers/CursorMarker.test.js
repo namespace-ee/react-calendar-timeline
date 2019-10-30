@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent, cleanup } from 'react-testing-library'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import CursorMarker from 'lib/markers/public/CursorMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'

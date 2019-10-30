@@ -1,5 +1,6 @@
 import moment from 'moment'
-import { _get } from './generic'
+import { _get, arraysEqual } from './generic'
+import memoize from 'memoize-one';
 
 /**
  * Calculate the ms / pixel ratio of the timeline state
@@ -243,36 +244,6 @@ export function getGroupOrders(groups, keys) {
   return groupOrders
 }
 
-/**
- * Adds items relevant to each group to the result of getGroupOrders
- * @param {*} items list of all items
- * @param {*} groupOrders the result of getGroupOrders
- */
-export function getGroupedItems(items, groupOrders) {
-  var groupedItems = {}
-  var keys = Object.keys(groupOrders)
-  // Initialize with result object for each group
-  for (let i = 0; i < keys.length; i++) {
-    const groupOrder = groupOrders[keys[i]]
-    groupedItems[i] = {
-      index: groupOrder.index,
-      group: groupOrder.group,
-      items: []
-    }
-  }
-
-  // Populate groups
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].dimensions.order !== undefined) {
-      const groupItem = groupedItems[items[i].dimensions.order.index]
-      if (groupItem) {
-        groupItem.items.push(items[i])
-      }
-    }
-  }
-
-  return groupedItems
-}
 
 export function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
   const { itemTimeStartKey, itemTimeEndKey } = keys
@@ -308,14 +279,13 @@ export function groupStack(
   item,
   group,
   groupHeight,
-  groupTop,
   itemIndex
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
   let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.stack && item.dimensions.top === null) {
-    item.dimensions.top = groupTop + verticalMargin
+    item.dimensions.top =  verticalMargin
     curHeight = Math.max(curHeight, lineHeight)
     do {
       var collidingItem = null
@@ -339,7 +309,7 @@ export function groupStack(
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top + item.dimensions.height + verticalMargin - groupTop
+          item.dimensions.top + item.dimensions.height + verticalMargin
         )
       }
     } while (collidingItem)
@@ -353,10 +323,10 @@ export function groupStack(
 }
 
 // Calculate the position of this item for a group that is not being stacked
-export function groupNoStack(lineHeight, item, groupHeight, groupTop) {
+export function groupNoStack(lineHeight, item, groupHeight) {
   let verticalMargin = (lineHeight - item.dimensions.height) / 2
   if (item.dimensions.top === null) {
-    item.dimensions.top = groupTop + verticalMargin
+    item.dimensions.top = verticalMargin
     groupHeight = Math.max(groupHeight, lineHeight)
   }
   return { groupHeight, verticalMargin: 0, itemTop: item.dimensions.top }
@@ -367,57 +337,12 @@ function sum(arr = []) {
 }
 
 /**
- * Stack all groups
- * @param {*} items items to be stacked
- * @param {*} groupOrders the groupOrders object
- * @param {*} lineHeight
- * @param {*} stackItems should items be stacked?
- */
-export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
-  var groupHeights = []
-  var groupTops = []
-
-  var groupedItems = getGroupedItems(itemsDimensions, groupOrders)
-
-  for (var index in groupedItems) {
-    const groupItems = groupedItems[index]
-    const { items: itemsDimensions, group } = groupItems
-    const groupTop = sum(groupHeights)
-
-    // Is group being stacked?
-    const isGroupStacked =
-      group.stackItems !== undefined ? group.stackItems : stackItems
-    const { groupHeight, verticalMargin } = stackGroup(
-      itemsDimensions,
-      isGroupStacked,
-      lineHeight,
-      groupTop
-    )
-    // If group height is overridden, push new height
-    // Do this late as item position still needs to be calculated
-    groupTops.push(groupTop)
-    if (group.height) {
-      groupHeights.push(group.height)
-    } else {
-      groupHeights.push(Math.max(groupHeight, lineHeight))
-    }
-  }
-  
-  return {
-    height: sum(groupHeights),
-    groupHeights,
-    groupTops
-  }
-}
-
-/**
  * 
  * @param {*} itemsDimensions 
  * @param {*} isGroupStacked 
  * @param {*} lineHeight 
- * @param {*} groupTop 
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
+export function stackGroup(itemsDimensions, isGroupStacked, lineHeight) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -429,16 +354,15 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemsDimensions[itemIndex],
         itemsDimensions,
         groupHeight,
-        groupTop,
         itemIndex
       )
     } else {
-      r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)
+      r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight)
     }
     groupHeight = r.groupHeight
     verticalMargin = r.verticalMargin
   }
-  return { groupHeight, verticalMargin }
+  return { groupHeight: groupHeight || lineHeight, verticalMargin }
 }
 
 /**
@@ -458,7 +382,7 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
  * @param {number} dragTime
  * @param {left or right} resizingEdge
  * @param {number} resizeTime
- * @param {number} newGroupOrder
+ * @param {number} newGroupId
  */
 export function stackTimelineItems(
   items,
@@ -475,15 +399,10 @@ export function stackTimelineItems(
   dragTime,
   resizingEdge,
   resizeTime,
-  newGroupOrder
+  newGroupId
 ) {
-  const visibleItems = getVisibleItems(
-    items,
-    canvasTimeStart,
-    canvasTimeEnd,
-    keys
-  )
-  const visibleItemsWithInteraction = visibleItems.map(item =>
+
+  const itemsWithInteractions = items.map(item =>
     getItemWithInteractions({
       item,
       keys,
@@ -492,45 +411,64 @@ export function stackTimelineItems(
       dragTime,
       resizingEdge,
       resizeTime,
-      groups,
-      newGroupOrder
+      newGroupId
     })
+  )
+
+  const visibleItemsWithInteraction = getVisibleItems(
+    itemsWithInteractions,
+    canvasTimeStart,
+    canvasTimeEnd,
+    keys
   )
 
   // if there are no groups return an empty array of dimensions
   if (groups.length === 0) {
     return {
-      dimensionItems: [],
+      groupsWithItemsDimensions: {},
       height: 0,
       groupHeights: [],
       groupTops: []
     }
   }
 
-  // Get the order of groups based on their id key
-  const groupOrders = getGroupOrders(groups, keys)
-  let dimensionItems = visibleItemsWithInteraction
-    .map(item =>
-      getItemDimensions({
-        item,
-        keys,
-        canvasTimeStart,
-        canvasTimeEnd,
-        canvasWidth,
-        groupOrders,
-        lineHeight,
-        itemHeightRatio
-      })
-    )
-    .filter(item => !!item)
-  // Get a new array of groupOrders holding the stacked items
-  const { height, groupHeights, groupTops } = stackAll(
-    dimensionItems,
-    groupOrders,
-    lineHeight,
-    stackItems
+  const groupsWithItems = getOrderedGroupsWithItems(
+    groups,
+    visibleItemsWithInteraction,
+    keys
   )
-  return { dimensionItems, height, groupHeights, groupTops }
+  const groupsWithItemsDimensions = getGroupsWithItemDimensions(
+    groupsWithItems,
+    keys,
+    lineHeight,
+    itemHeightRatio,
+    stackItems,
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    groups,
+  )
+  const groupHeights = groups.map(group => {
+    const groupKey = _get(group, keys.groupIdKey)
+    const groupsWithItemDimensions = groupsWithItemsDimensions[groupKey]
+    return groupsWithItemDimensions.height
+  })
+
+  const groupTops = groupHeights.reduce(
+    (acc, height, index) => {
+      //skip last calculation because we already have 0 as first item in acc
+      if(groupHeights.length -1 === index) return acc
+      const lastIndex = acc.length - 1
+      const lastTop = acc[lastIndex]
+      acc.push(lastTop + height)
+
+      return acc
+    },
+    [0]
+  )
+  const height = groupHeights.reduce((acc, height) => acc + height, 0)
+
+  return { groupsWithItemsDimensions, height, groupHeights, groupTops, itemsWithInteractions }
 }
 
 /**
@@ -549,7 +487,6 @@ export function getCanvasWidth(width, buffer = 3) {
  * @param {*} canvasTimeStart
  * @param {*} canvasTimeEnd
  * @param {*} canvasWidth
- * @param {*} groupOrders
  * @param {*} lineHeight
  * @param {*} itemHeightRatio
  */
@@ -559,7 +496,6 @@ export function getItemDimensions({
   canvasTimeStart,
   canvasTimeEnd,
   canvasWidth,
-  groupOrders,
   lineHeight,
   itemHeightRatio
 }) {
@@ -573,7 +509,6 @@ export function getItemDimensions({
   })
   if (dimension) {
     dimension.top = null
-    dimension.order = groupOrders[_get(item, keys.itemGroupKey)]
     dimension.stack = !item.isOverlay
     dimension.height = lineHeight * itemHeightRatio
     return {
@@ -594,7 +529,7 @@ export function getItemDimensions({
  * @param {*} resizingEdge
  * @param {*} resizeTime
  * @param {*} groups
- * @param {*} newGroupOrder
+ * @param {*} newGroupId
  */
 export function getItemWithInteractions({
   item,
@@ -604,13 +539,15 @@ export function getItemWithInteractions({
   dragTime,
   resizingEdge,
   resizeTime,
-  groups,
-  newGroupOrder
+  newGroupId
 }) {
+  //TODO: remove from here. This shouldn't be this function's responsibility
   if (!resizingItem && !draggingItem) return item
   const itemId = _get(item, keys.itemIdKey)
   const isDragging = itemId === draggingItem
   const isResizing = itemId === resizingItem
+  //return item if is not being dragged or resized
+  if(!isResizing && !isDragging) return item
   const [itemTimeStart, itemTimeEnd] = calculateInteractionNewTimes({
     itemTimeStart: _get(item, keys.itemTimeStartKey),
     itemTimeEnd: _get(item, keys.itemTimeEndKey),
@@ -620,12 +557,13 @@ export function getItemWithInteractions({
     resizingEdge,
     resizeTime
   })
+
   const newItem = {
     ...item,
     [keys.itemTimeStartKey]: itemTimeStart,
     [keys.itemTimeEndKey]: itemTimeEnd,
     [keys.itemGroupKey]: isDragging
-      ? _get(groups[newGroupOrder], keys.groupIdKey)
+      ? newGroupId
       : _get(item, keys.itemGroupKey)
   }
   return newItem
@@ -712,9 +650,155 @@ export function calculateScrollCanvas(
         mergedState.dragTime,
         mergedState.resizingEdge,
         mergedState.resizeTime,
-        mergedState.newGroupOrder
+        mergedState.newGroupId
       )
     )
   }
   return newState
+}
+
+/**
+ * get item dimensions of a group
+ * @param {*} groupWithItems
+ * @param {*} keys
+ * @param {*} canvasTimeStart
+ * @param {*} canvasTimeEnd
+ * @param {*} canvasWidth
+ * @param {*} lineHeight
+ * @param {*} itemHeightRatio
+ * @param {*} stackItems
+ */
+export function getGroupWithItemDimensions(
+  groupWithItems,
+  keys,
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth,
+  lineHeight,
+  itemHeightRatio,
+  stackItems
+) {
+  const itemDimensions = groupWithItems.items.map(item => {
+    return getItemDimensions({
+      item,
+      keys,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      lineHeight,
+      itemHeightRatio
+    })
+  })
+  const { groupHeight } = stackGroup(itemDimensions, stackItems, lineHeight)
+  return {
+    ...groupWithItems,
+    itemDimensions: itemDimensions,
+    height: groupHeight
+  }
+}
+
+/**
+ * group timeline items by key
+ * returns a key/array pair object
+ * @param {*} items 
+ * @param {*} key 
+ */
+export function groupItemsByKey(items, key) {
+  return items.reduce((acc, item) => {
+    const itemKey = _get(item, key)
+    if (acc[itemKey]) {
+      acc[itemKey].push(item)
+    } else {
+      acc[itemKey] = [item]
+    }
+    return acc
+  }, {})
+}
+
+export function getOrderedGroupsWithItems(groups, items, keys) {
+  const groupOrders = getGroupOrders(groups, keys)
+  const groupsWithItems = {}
+  const groupKeys = Object.keys(groupOrders)
+  const groupedItems = groupItemsByKey(items, keys.itemGroupKey)
+  // Initialize with result object for each group
+  for (let i = 0; i < groupKeys.length; i++) {
+    const groupOrder = groupOrders[groupKeys[i]]
+    groupsWithItems[groupKeys[i]] = {
+      index: groupOrder.index,
+      group: groupOrder.group,
+      items: groupedItems[_get(groupOrder.group, keys.groupIdKey)] || []
+    }
+  }
+  return groupsWithItems
+}
+
+/**
+ * shallow compare ordered groups with items
+ * if index or group changed reference compare then not equal
+ * if new/old group's items changed array shallow equality then not equal
+ * @param {*} newGroup 
+ * @param {*} oldGroup 
+ */
+export function shallowIsEqualOrderedGroup(newGroup, oldGroup){
+  if(newGroup.group !== oldGroup.group) return false
+  if(newGroup.index !== oldGroup.index) return false
+  return arraysEqual(newGroup.items, oldGroup.items)
+}
+
+/**
+ * compare getGroupWithItemDimensions params. All params are compared via reference equality
+ * only groups are checked via a custom shallow equality
+ * @param {*} newArgs 
+ * @param {*} oldArgs 
+ */
+export function isEqualItemWithDimensions(newArgs, oldArgs){
+  const [newGroup, ...newRest] = newArgs;
+  const [oldGroup, ...oldRest] = oldArgs;
+  //shallow equality
+  if(!arraysEqual(newRest, oldRest)) return false;
+  return shallowIsEqualOrderedGroup(newGroup, oldGroup)
+}
+
+/**
+ * returns a cache in the form of dictionary ([groupId]: cachedMethod) for calculating getGroupWithItemDimensions
+ * the cache is cleared if groups or keys changed in reference
+ * @param {*} groups 
+ * @param {*} keys 
+ */
+export const getGroupsCache = memoize((groups, keys, method)=>{
+  return groups.reduce((acc, group) => {
+    const id = _get(group, keys.groupIdKey);
+    acc[id] = memoize(method, isEqualItemWithDimensions)
+    return acc
+  }, {})
+})
+
+export function getGroupsWithItemDimensions(
+  groupsWithItems,
+  keys,
+  lineHeight,
+  itemHeightRatio,
+  stackItems,
+  canvasTimeStart,
+  canvasTimeEnd,
+  canvasWidth, 
+  groups,
+) {
+  const cache = getGroupsCache(groups, keys, getGroupWithItemDimensions)
+  const groupKeys = Object.keys(groupsWithItems)
+  return groupKeys.reduce((acc, groupKey) => {
+    const group = groupsWithItems[groupKey]
+    const cachedGetGroupWithItemDimensions = cache[groupKey];
+    acc[groupKey] = cachedGetGroupWithItemDimensions(
+      group,
+      keys,
+      canvasTimeStart,
+      canvasTimeEnd,
+      canvasWidth,
+      lineHeight,
+      itemHeightRatio,
+      stackItems
+    )
+    return acc
+  }, {})
 }

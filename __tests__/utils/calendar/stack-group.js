@@ -3,9 +3,9 @@ import { dimensionItems } from '../../../__fixtures__/groupOrderAndItemDimention
 
 describe('stackGroup', ()=>{
     it('should stack list of items', ()=>{
-        expect(stackGroup(dimensionItems, true, 30, 0)).toMatchSnapshot()
+        expect(stackGroup(dimensionItems, true, 30)).toMatchSnapshot()
     })
     it('should not stack list of items', ()=>{
-        expect(stackGroup(dimensionItems, false, 30, 0)).toMatchSnapshot()
+        expect(stackGroup(dimensionItems, false, 30)).toMatchSnapshot()
     })
 })

@@ -4,6 +4,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { HashRouter as Router, Route, Link, withRouter } from 'react-router-dom'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 const demos = {
   main: require('./demo-main').default,
@@ -60,13 +62,15 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <MenuWithRouter />
-          <div className="demo-demo">
-            <Route path="/" exact component={demos[Object.keys(demos)[0]]} />
-            {Object.keys(demos).map(key => (
-              <Route key={key} path={`/${key}`} component={demos[key]} />
-            ))}
-          </div>
+          <DndProvider backend={HTML5Backend}>
+            <MenuWithRouter />
+            <div className="demo-demo">
+              <Route path="/" exact component={demos[Object.keys(demos)[0]]} />
+              {Object.keys(demos).map(key => (
+                <Route key={key} path={`/${key}`} component={demos[key]} />
+              ))}
+            </div>
+          </DndProvider>
         </div>
       </Router>
     )

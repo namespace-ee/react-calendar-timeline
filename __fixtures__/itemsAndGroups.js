@@ -6,7 +6,8 @@ export const items = [
     start_time: 1540540000000,
     end_time: 1540546803877,
     canMove: false,
-    canResize: false
+    canResize: false,
+    title: 'title 0',
   },
   {
     id: '5',
@@ -15,7 +16,8 @@ export const items = [
     end_time: 1540554003877,
     canMove: false,
     canResize: false,
-    className: ''
+    className: '',
+    title: 'title 5',
   },
   {
     id: '6',
@@ -24,7 +26,8 @@ export const items = [
     end_time: 1540575603877,
     canMove: false,
     canResize: false,
-    className: ''
+    className: '',
+    title: 'title 6',
   },
   {
     id: '1',
@@ -32,7 +35,8 @@ export const items = [
     start_time: 1540570000000,
     end_time: 1540584875919,
     canMove: true,
-    canResize: 'both'
+    canResize: 'both',
+    title: 'title 1',
   },
   {
     id: '2',
@@ -41,7 +45,8 @@ export const items = [
     end_time: 1540640397548,
     canMove: false,
     canResize: false,
-    className: ''
+    className: '',
+    title: 'title 2',
   },
   {
     id: '3',
@@ -50,7 +55,8 @@ export const items = [
     end_time: 1540676397548,
     canMove: false,
     canResize: false,
-    className: ''
+    className: '',
+    title: 'title 3',
   }
 ]
 

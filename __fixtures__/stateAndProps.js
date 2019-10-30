@@ -1,10 +1,12 @@
 import { defaultKeys } from 'lib/default-config'
 import {items} from './itemsAndGroups'
+import Timeline from 'lib/Timeline'
 
 export const visibleTimeStart = 1540501200000
 export const visibleTimeEnd = 1540587600000
 
 export const props = {
+  ...Timeline.defaultProps,
   keys: defaultKeys,
   lineHeight: 30,
   stackItems: true,
@@ -25,7 +27,8 @@ export const state = {
   resizingItem: null,
   resizingEdge: null,
   resizeTime: null,
-  newGroupOrder: null,
+  newGroupId: null,
+  selectedItem: null,
   canvasTimeStart: 1540414800000,
   visibleTimeEnd: visibleTimeEnd,
   visibleTimeStart: visibleTimeStart,
@@ -40,14 +43,14 @@ export const stateMoveItem = {
   ...state,
   draggingItem: items[0].id,
   dragTime: items[0].start_time+timeOffset,
-  newGroupOrder: 0,
+  newGroupId: items[0].group,
 }
 export const stateResizeItemLeft = {
   ...state,
   resizingItem: items[0].id,
   resizingEdge: 'left',
   resizeTime: items[0].start_time+timeOffset,
-  newGroupOrder: 0,
+  newGroupId: items[0].group,
 }
 
 export const stateResizeItemRight = {
@@ -55,5 +58,5 @@ export const stateResizeItemRight = {
   resizingItem: items[0].id,
   resizingEdge: 'right',
   resizeTime: items[0].end_time+timeOffset,
-  newGroupOrder: 0,
+  newGroupId: items[0].group,
 }

@@ -14,8 +14,22 @@ describe('getItemWithInteractions', () => {
         dragTime: false,
         resizingEdge: false,
         resizeTime: false,
-        groups,
-        newGroupOrder: 0
+        newGroupId: '1'
+      })
+    ).toBe(item)
+  })
+  it('should return the same item if draggingItem and resizingItem is not for the same item', () => {
+    const item = items[0]
+    expect(
+      getItemWithInteractions({
+        item,
+        keys: defaultKeys,
+        draggingItem: 'some id',
+        resizingItem: 'some id',
+        dragTime: false,
+        resizingEdge: false,
+        resizeTime: false,
+        newGroupId: '1'
       })
     ).toBe(item)
   })
@@ -32,8 +46,7 @@ describe('getItemWithInteractions', () => {
         dragTime: item.start_time + dragOffset,
         resizingEdge: false,
         resizeTime: false,
-        groups,
-        newGroupOrder: 0
+        newGroupId: '1'
       })
     ).toMatchObject({
       ...item,
@@ -55,8 +68,7 @@ describe('getItemWithInteractions', () => {
         dragTime: item.start_time + dragOffset,
         resizingEdge: false,
         resizeTime: false,
-        groups,
-        newGroupOrder: 1
+        newGroupId: groups[1].id,
       })
     ).toMatchObject({
       ...item,
@@ -78,8 +90,7 @@ describe('getItemWithInteractions', () => {
         dragTime: undefined,
         resizingEdge: 'left',
         resizeTime: item.start_time + dragOffset,
-        groups,
-        newGroupOrder: 0
+        newGroupId: 0
       })
     ).toMatchObject({
       ...item,
@@ -99,8 +110,7 @@ describe('getItemWithInteractions', () => {
         dragTime: undefined,
         resizingEdge: 'right',
         resizeTime: item.end_time + dragOffset,
-        groups,
-        newGroupOrder: 0
+        newGroupId: 0
       })
     ).toMatchObject({
       ...item,

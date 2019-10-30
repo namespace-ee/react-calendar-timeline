@@ -4,7 +4,7 @@ import { TimelineHeadersConsumer } from './HeadersContext'
 import PropTypes from 'prop-types'
 import SidebarHeader from './SidebarHeader'
 import { RIGHT_VARIANT } from './constants'
-class TimelineHeaders extends React.Component {
+class TimelineHeaders extends React.PureComponent {
   static propTypes = {
     registerScroll: PropTypes.func.isRequired,
     leftSidebarWidth: PropTypes.number.isRequired,

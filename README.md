@@ -166,17 +166,10 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 
 Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
 
-## sidebarContent
-
-Everything passed here will be displayed above the left sidebar. Use this to display small filters or so. Defaults to `null`.
-
 ## rightSidebarWidth
 
 Width of the right sidebar in pixels. If set to `0`, the right sidebar is not rendered. Defaults to `0`.
 
-## rightSidebarContent
-
-Everything passed here will be displayed above the right sidebar. Use this to display small filters or so. Defaults to `null`.
 
 ## dragSnap
 
@@ -265,12 +258,12 @@ Called when an item is moving or resizing. Returns an object with the following 
 | `itemId`           | `number` | ID of the item being moved or resized                                  |
 | `time`             | `number` | UNIX timestamp in milliseconds                                         |
 | `edge`             | `string` | on `resize`, returns a value of either `left` or `right`               |
-| `newGroupOrder`    | `number` | on `move`, index position of the new group that the item is moving to  |
+| `newGroupId`       | `number` | on `move`, new group id of the new group that the item is moving to    |
 
 
-## onItemMove(itemId, dragTime, newGroupOrder)
+## onItemMove(itemId, dragTime, newGroupId)
 
-Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
+Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) group id of the new group.
 
 ## onItemResize(itemId, time, edge)
 
@@ -365,6 +358,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 ## onBoundsChange(canvasTimeStart, canvasTimeEnd)
 
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
+
+## hideHorizontalLines
+
+Boolean to hide or show HorizontalLines. `true` by default. Hiding the horizontalLines will have a good impact on performance.
 
 ## itemRenderer
 
@@ -505,6 +502,11 @@ itemRenderer: ({
 }
 ```
 
+#### Limitations
+
+- You can't save state inside the item because when changing groups the item will be remounted losing all existing state.
+- You need to do `e.stopPropagation()` for all callbacks passed to `itemRenderer`
+
 ## groupRenderer
 
 React component that will be used to render the content of groups in the
@@ -571,6 +573,153 @@ An example could look like:
 ```jsx
 horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
+
+## `rowData`
+
+Data to be passed to `rowRenderer`'s  `rowData` param. Changing this prop will cause rerender of the `rowRenderer`
+
+# Helpers
+
+Helpers are methods provided by `HelperContext`. These helpers power most of the rendered UI in the timeline like: Headers, Markers, Items and row renderers. 
+
+## Methods
+
+### `getLeftOffsetFromDate(x: number): number`
+
+Given time in milliseconds. The method will return the corresponding `left` position in `px`
+
+### `getDateFromLeftOffsetPosition(left: number): number`
+
+Given `left` position in `px`, the method will return the corresponding date in milliseconds.
+
+**inverse of `getLeftOffsetFromDate`**
+
+### `getItemDimensions(itemId: string|number): dimensions`
+
+Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same row.
+
+### `getItemAbsoluteDimensions(itemId: string|number): dimensions`. 
+
+Given a item id, It will return back the left and top of the item relative to the calendar container. This is useful to know the position of items in different rows relative to each other.
+
+
+### `getGroupDimensions(groupId: string | number): groupDimensions`
+
+Given groupId. The method will return `height` of the group row and `top` of the group row relative to the calendar.
+
+## Example
+
+[CodeSandbox Example](https://codesandbox.io/s/timeline-demo-helpers-doc-example-o24h6)
+
+
+```jsx
+import React, { Component } from "react";
+import moment from "moment";
+
+import Timeline, {
+  HelpersContext,
+  TimelineHeaders,
+  DateHeader,
+  CustomHeader
+} from "react-calendar-timeline";
+import generateFakeData from "./generate-fake-data";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    const { groups, items } = generateFakeData();
+    const defaultTimeStart = moment()
+      .startOf("week")
+      .toDate();
+    const defaultTimeEnd = moment()
+      .startOf("week")
+      .add(1, "week")
+      .toDate();
+
+    this.state = {
+      groups,
+      items,
+      defaultTimeStart,
+      defaultTimeEnd,
+      customEvents: [
+        {
+          start: moment()
+            .startOf("week")
+            .add(12, "h"),
+          end: moment()
+            .startOf("week")
+            .endOf("day"),
+          title: "Lakers game"
+        },
+        {
+          start: moment()
+            .startOf("week")
+            .add(3, 'd'),
+          end: moment()
+            .startOf("week")
+            .add(5, "d"),
+          title: "Christmas"
+        }
+      ]
+    };
+  }
+
+  render() {
+    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
+
+    return (
+        <Timeline
+          groups={groups}
+          items={items}
+          stackItems
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+        >
+          <TimelineHeaders>
+            <DateHeader />
+            <CustomHeader
+              headerData={{ customEvents: this.state.customEvents }}
+              height={30}
+            >
+              {({
+                getRootProps,
+                data: { customEvents }
+              }) => {
+                const { getLeftOffsetFromDate } = React.useContext(
+                  HelpersContext
+                );
+                return (
+                  <div {...getRootProps()}>
+                    {customEvents.map(event => {
+                      const left = getLeftOffsetFromDate(event.start.valueOf());
+                      const right = getLeftOffsetFromDate(event.end.valueOf());
+                      const width = right - left;
+                      return (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left,
+                            width,
+                            backgroundColor: "white"
+                          }}
+                        >
+                          {event.title}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }}
+            </CustomHeader>
+          </TimelineHeaders>
+        </Timeline>
+    );
+  }
+}
+
+```
+
 
 # Timeline Markers
 
@@ -707,6 +856,9 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
   }
 </CursorMarker>
 ```
+
+
+Helpers are a group of 
 
 # Timeline Headers
 
@@ -1153,6 +1305,239 @@ import Timeline, {
 </Timeline>
 ```
 
+# Row renderer
+
+This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
+
+## example
+
+[CodeSandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-doc-example-66pvw)
+
+```jsx
+import Timeline, {
+  RowItems,
+  GroupRow,
+  HelpersContext
+} from "react-calendar-timeline";
+
+import moment from 'moment'
+
+const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
+
+const items = [
+  {
+    id: 1,
+    group: 1,
+    title: 'item 1',
+    start_time: moment(),
+    end_time: moment().add(1, 'hour')
+  },
+  {
+    id: 2,
+    group: 2,
+    title: 'item 2',
+    start_time: moment().add(-0.5, 'hour'),
+    end_time: moment().add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    group: 1,
+    title: 'item 3',
+    start_time: moment().add(2, 'hour'),
+    end_time: moment().add(3, 'hour')
+  }
+]
+ReactDOM.render(
+  <Timeline
+    groups={groups}
+    items={items}
+    stackItems
+    defaultTimeStart={defaultTimeStart}
+    defaultTimeEnd={defaultTimeEnd}
+    rowRenderer={({
+      rowData,
+      getLayerRootProps,
+      group
+    }) => {
+      const { getLeftOffsetFromDate } = React.useContext(HelpersContext)
+      const { unavailableSlots } = rowData;
+      const groupUnavailableSlots = unavailableSlots[group.id]
+        ? unavailableSlots[group.id]
+        : [];
+      return (
+        <GroupRow>
+          <RowItems />
+          <UnavailableLayer
+            getLayerRootProps={getLayerRootProps}
+            getLeftOffsetFromDate={getLeftOffsetFromDate}
+            groupUnavailableSlots={groupUnavailableSlots}
+          />
+        </GroupRow>
+      );
+    }}
+    rowData={{
+      //keys here are groupIds
+      unavailableSlots: {
+         "1": [
+            {
+              id: "0",
+              groupId: "0",
+              startTime: moment()
+                .startOf("day")
+                .add(16, "h"),
+              endTime: moment()
+                .startOf("day")
+                .add(20, "h")
+            }
+        ]
+      }
+    }}
+  />
+)
+
+function UnavailableLayer({
+  getLayerRootProps,
+  groupUnavailableSlots,
+  getLeftOffsetFromDate
+}) {
+  return (
+    <div {...getLayerRootProps()}>
+      {groupUnavailableSlots.map(slot => {
+        const left = getLeftOffsetFromDate(slot.startTime.valueOf());
+        const right = getLeftOffsetFromDate(slot.endTime.valueOf());
+        return (
+          <div
+            key={slot.id}
+            style={{
+              position: "absolute",
+              left: left,
+              width: right - left,
+              backgroundColor: "#ECF0F1",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <span style={{ height: 12 }}>unavailable</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+## API
+
+`rowRenderer` follow the render prop pattern with some prebuilt components to display the rows, items and columns.
+
+_Note_ : the renderProp can be a component or a function for convenience
+
+## `rowRenderer` prop
+
+```typescript
+interface Params {
+  getLayerRootProps: (props: React.HTMLProps<HTMLElement>) => React.HTMLProps<HTMLElement>;
+  rowData : any;
+  group: Group;
+  itemsWithInteractions: Items[];
+}
+type rowRenderer = (args: Params) => React.Node
+```
+
+### getLayerRootProps
+
+These functions are used to apply props to the layer that you want to render. This gives you maximum flexibility to render what, when, and wherever you like. 
+
+### rowData
+
+object passed by the `rowData` prop.
+
+### group
+
+current group being rendered in the row.
+
+### itemsWithInteractions
+
+items to be rendered in the row. These items respect visibility and interaction. This means that the items you will get back are only the items in the visible + buffer zone and if dragging/resizing is happening you will get the items the start/end time with the interaction.  
+
+## Components
+
+Row renderer comes with some components needed to render the rows and the default layers (columns and rows). The default value for the row renderer is:
+
+```typescript
+import React from 'react';
+import {GroupRow, RowItems} from '../../index'
+
+const DefaultRowRenderer = () => {
+    return <GroupRow>
+        <RowItems/>
+    </GroupRow>
+}
+```
+
+### GroupRow
+
+renders the row's root div.
+
+### ItemsRow
+
+renders the row's items
+
+### Custom Layers
+
+To render custom layers you need to implement the row renderer with the necessary layers
+
+```jsx
+import React from 'react';
+import {GroupRow, RowColumns, RowItems, HelpersContext} from 'react-calendar-timeline';
+
+const rowRenderer = ({
+  getLayerRootProps,
+  group,
+  itemsWithInteractions
+}) => {
+  const { getLeftOffsetFromDate } = React.useContext({ HelpersContext })
+  return (
+    <GroupRow>
+      <RowColumns />
+      <RowItems />
+      <div {...getLayerRootProps()}>
+        <div
+          style={{
+            left: getLeftOffsetFromDate(moment().valueOf()),
+            width: 200,
+            background: "lightblue",
+            position: "absolute",
+            height: '100%'
+          }}
+        >
+          {`group id: ${group.id} renders ${itemsWithInteractions.length} items`}
+        </div>
+      </div>
+      <div {...getLayerRootProps()}>
+        <div
+          style={{
+            left: getLeftOffsetFromDate(moment().add(5,'h').valueOf()),
+            width: 200,
+            background: "lightblue",
+            position: "absolute",
+            height: '100%'
+          }}
+        >
+          some other layer
+        </div>
+      </div>
+    </GroupRow>
+  );
+}
+```
+
+## order
+
+You can switch the order between `RowColumns`, `RowItems` and custom layers. This will change what renders above what. So if you had `RowItems` in the bottom all the other layer will render in top of it
+
 # FAQ
 
 ## My timeline is unstyled
@@ -1216,10 +1601,7 @@ It's the same issue as above. See [issue 134](https://github.com/namespace-ee/re
 
 This is useful when using the plugins (that you pass as children to the component). Override the CSS to change:
 
-* Horizontal Lines: 30
-* Vertical Lines: 40
 * Items: 80-88 (depending on selection, dragging, etc)
-* Header: 90
 
 ## Behind the scenes
 
