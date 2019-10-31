@@ -62,8 +62,6 @@ class GroupRow extends Component {
           style={{
             width: canvasWidth,
             height: groupHeight,
-            background: 'lightgray',
-            border: '1px solid blue',
             position: 'relative'
           }}
           data-groupid={_get(group, keys.groupIdKey)}

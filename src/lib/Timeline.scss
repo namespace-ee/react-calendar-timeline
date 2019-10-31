@@ -114,6 +114,8 @@ $weekend: rgba(250, 246, 225, 0.5);
     -moz-user-select: -moz-none;
     -ms-user-select: none;
     user-select: none;
+    position: absolute;
+    top: 0px;
 
     .rct-hl-even,
     .rct-hl-odd {
