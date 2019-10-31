@@ -90,7 +90,7 @@ class Rows extends React.PureComponent {
         itemsWithInteractions={items}
         getLayerRootProps={this.getLayerRootProps}
       >
-        <div style={{ position: 'absolute', top: 0 }}>
+        <div className="rct-horizontal-lines">
           {groupHeights.map((groupHeight, i) => {
             const groupId = _get(groups[i], keys.groupIdKey)
             const group = groupsWithItemsDimensions[groupId]
