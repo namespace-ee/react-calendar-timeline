@@ -43,8 +43,6 @@ export class TimelineStateProvider extends React.Component {
     canvasWidth: PropTypes.number.isRequired,
     showPeriod: PropTypes.func.isRequired,
     timelineUnit: PropTypes.string.isRequired,
-    showPeriod: PropTypes.func.isRequired,
-    timelineUnit: PropTypes.string.isRequired,
     timelineWidth: PropTypes.number.isRequired,
   }
 
