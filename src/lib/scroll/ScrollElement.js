@@ -22,7 +22,13 @@ class ScrollElement extends Component {
     }
   }
 
-  
+  /**
+   * needed to handle scrolling with trackpad
+   */
+  handleScroll = () => {
+    const scrollX = this.scrollComponent.scrollLeft
+    this.props.onScroll(scrollX)
+  }
 
   refHandler = el => {
     this.scrollComponent = el
@@ -192,6 +198,7 @@ class ScrollElement extends Component {
         onTouchStart={this.handleTouchStart}
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
+        onScroll={this.handleScroll}
       >
         {children}
       </div>
