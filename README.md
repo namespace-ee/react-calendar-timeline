@@ -164,7 +164,7 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 
 ## className
 
-Class name for the root Timeline element. Defaults to `react-calendar-timeline`.
+Additional class names as a string for the root Timeline element.
 
 ## sidebarWidth
 
