@@ -209,7 +209,7 @@ export default class ReactCalendarTimeline extends Component {
     itemTouchSendsClick: false,
 
     style: {},
-    className: 'react-calendar-timeline',
+    className: '',
     keys: defaultKeys,
     timeSteps: defaultTimeSteps,
     headerRef: () => {},
@@ -1042,7 +1042,7 @@ export default class ReactCalendarTimeline extends Component {
             <div
               style={this.props.style}
               ref={el => (this.container = el)}
-              className={this.props.className}
+              className={`react-calendar-timeline ${this.props.className}`}
             >
               {this.renderHeaders()}
               <div style={outerComponentStyle} className="rct-outer">
