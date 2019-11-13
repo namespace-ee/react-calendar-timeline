@@ -162,6 +162,10 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 }
 ```
 
+## className
+
+Class name for the root Timeline element. Defaults to `react-calendar-timeline`.
+
 ## sidebarWidth
 
 Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
@@ -431,7 +435,8 @@ Rather than applying props on the element yourself and to avoid your props being
   * onTouchEnd: event handler
   * onDoubleClick: event handler
   * onContextMenu: event handler
-  * style: inline object style
+  * style: inline object 
+  
 
   \*\* _the given styles will only override the styles that are not a requirement for positioning the item. Other styles like `color`, `radius` and others_
 
