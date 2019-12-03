@@ -25,25 +25,25 @@ export function getParentPosition(element) {
 }
 
 export function getSumScroll(node) {
-  if (node === document.body) {
-    return {scrollLeft: 0, scrollTop: 0}
+  if (!node || node === document.body) {
+    return { scrollLeft: 0, scrollTop: 0 }
   } else {
     const parent = getSumScroll(node.parentNode)
-    return ({
+    return {
       scrollLeft: node.scrollLeft + parent.scrollLeft,
       scrollTop: node.scrollTop + parent.scrollTop
-    })
+    }
   }
 }
 
 export function getSumOffset(node) {
-  if (node === document.body) {
-    return {offsetLeft: 0, offsetTop: 0}
+  if (!node || node === document.body) {
+    return { offsetLeft: 0, offsetTop: 0 }
   } else {
     const parent = getSumOffset(node.offsetParent)
-    return ({
+    return {
       offsetLeft: node.offsetLeft + parent.offsetLeft,
       offsetTop: node.offsetTop + parent.offsetTop
-    })
+    }
   }
 }

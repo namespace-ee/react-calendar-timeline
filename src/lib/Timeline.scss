@@ -32,7 +32,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     white-space: normal; // was set to nowrap in .rct-outer
     vertical-align: top;
     overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-y: auto;
     -ms-touch-action: none;
     touch-action: none;
   }
@@ -64,6 +64,7 @@ $weekend: rgba(250, 246, 225, 0.5);
     position: relative;
     box-sizing: border-box;
     border-right: $border-width solid $border-color;
+    background: $sidebar-color;
 
     &.rct-sidebar-right {
       border-right: 0;

@@ -28,7 +28,16 @@ var keys = {
 class GroupRenderer extends Component {
   render() {
     // console.log("heading rendering");
-    return <table><thead><tr><td>Name</td><td>Metadata</td></tr></thead></table>;
+    return (
+      <table>
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Metadata</td>
+          </tr>
+        </thead>
+      </table>
+    )
   }
 }
 
@@ -39,10 +48,12 @@ export default class App extends Component {
     const { groups, items } = generateFakeData(100, 5000)
     const visibleTimeStart = moment()
       .startOf('month')
-      .toDate().valueOf()
+      .toDate()
+      .valueOf()
     const visibleTimeEnd = moment()
       .endOf('month')
-      .toDate().valueOf()
+      .toDate()
+      .valueOf()
 
     this.state = {
       groups,
@@ -117,7 +128,6 @@ export default class App extends Component {
 
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
-
     if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
       this.setState({
         visibleTimeStart: minTime,
@@ -132,7 +142,7 @@ export default class App extends Component {
       this.setState({
         visibleTimeStart,
         visibleTimeEnd
-      });
+      })
       //updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     }
   }
@@ -195,7 +205,6 @@ export default class App extends Component {
         visibleTimeEnd={visibleTimeEnd}
         // itemRenderer={this.itemRenderer}
         groupRenderer={this.groupRenderer}
-
         onCanvasClick={this.handleCanvasClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}

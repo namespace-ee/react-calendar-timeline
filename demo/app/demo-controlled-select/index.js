@@ -52,7 +52,7 @@ export default class App extends Component {
       items,
       defaultTimeStart,
       defaultTimeEnd,
-      selected: undefined,
+      selected: undefined
     }
   }
 
@@ -80,7 +80,7 @@ export default class App extends Component {
   }
 
   handleItemDeselect = () => {
-    this.setState({selected: undefined})
+    this.setState({ selected: undefined })
   }
 
   handleItemDoubleClick = (itemId, _, time) => {

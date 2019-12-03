@@ -80,10 +80,10 @@ export default class App extends Component {
         item =>
           item.id === itemId
             ? Object.assign({}, item, {
-              start: dragTime,
-              end: dragTime + (item.end - item.start),
-              group: group.id
-            })
+                start: dragTime,
+                end: dragTime + (item.end - item.start),
+                group: group.id
+              })
             : item
       )
     })
@@ -99,9 +99,9 @@ export default class App extends Component {
         item =>
           item.id === itemId
             ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time
-            })
+                start: edge === 'left' ? time : item.start,
+                end: edge === 'left' ? item.end : time
+              })
             : item
       )
     })
@@ -137,11 +137,13 @@ export default class App extends Component {
     timelineContext,
     itemContext,
     getItemProps,
-    getResizeProps,
+    getResizeProps
   }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-    const backgroundColor = itemContext.selected ? itemContext.dragging ? 'red' : item.selectedBgColor : item.bgColor;
-    const borderColor = itemContext.resizing ? 'red' : item.color;
+    const backgroundColor = itemContext.selected
+      ? itemContext.dragging ? 'red' : item.selectedBgColor
+      : item.bgColor
+    const borderColor = itemContext.resizing ? 'red' : item.color
     return (
       <div
         {...getItemProps({
@@ -153,19 +155,17 @@ export default class App extends Component {
             borderWidth: 1,
             borderRadius: 4,
             borderLeftWidth: itemContext.selected ? 3 : 1,
-            borderRightWidth: itemContext.selected ? 3 : 1,
+            borderRightWidth: itemContext.selected ? 3 : 1
           }
-        }) }
+        })}
       >
-        {itemContext.useResizeHandle ? (
-          <div {...leftResizeProps} />
-        ) : null}
+        {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
 
         <div
           style={{
             height: itemContext.dimensions.height,
             overflow: 'hidden',
-            paddingLeft:3,
+            paddingLeft: 3,
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}
@@ -173,10 +173,7 @@ export default class App extends Component {
           {itemContext.title}
         </div>
 
-
-        {itemContext.useResizeHandle ? (
-          <div {...rightResizeProps} />
-        ) : null}
+        {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
       </div>
     )
   }
@@ -191,7 +188,7 @@ export default class App extends Component {
 
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
-    console.log("render")
+    console.log('render')
     return (
       <Timeline
         groups={groups}
