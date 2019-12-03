@@ -56,9 +56,10 @@ class Interval extends React.PureComponent {
     return (
       <div
         data-testid="dateHeaderInterval"
-        {...this.getIntervalProps({
-        })}
-        className={`rct-dateHeader ${this.props.primaryHeader? 'rct-dateHeader-primary' : ''}`}
+        {...this.getIntervalProps({})}
+        className={`rct-dateHeader ${
+          this.props.primaryHeader ? 'rct-dateHeader-primary' : ''
+        }`}
       >
         <span>{intervalText}</span>
       </div>
