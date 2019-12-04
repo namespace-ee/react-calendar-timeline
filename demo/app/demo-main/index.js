@@ -180,7 +180,7 @@ export default class App extends Component {
           <SidebarHeader>
             {({ getRootProps }) => {
               return (
-                <div style={{ ...getRootProps(), background: '#c52020' }}>
+                <div style={{ ...getRootProps().style, background: '#c52020' }}>
                   Left
                 </div>
               )
