@@ -12,7 +12,7 @@ export default class GroupRows extends Component {
     clickTolerance: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
     horizontalLineClassNamesForGroup: PropTypes.func,
-    onRowContextClick: PropTypes.func.isRequired,
+    onRowContextClick: PropTypes.func.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
@@ -34,7 +34,7 @@ export default class GroupRows extends Component {
       clickTolerance,
       groups,
       horizontalLineClassNamesForGroup,
-      onRowContextClick,
+      onRowContextClick
     } = this.props
     let lines = []
 

@@ -16,7 +16,7 @@ class TodayMarker extends React.Component {
   }
 
   componentDidMount() {
-     const { unsubscribe, getMarker } = this.props.subscribeMarker({
+    const { unsubscribe, getMarker } = this.props.subscribeMarker({
       type: TimelineMarkerType.Today,
       renderer: this.props.children,
       interval: this.props.interval
@@ -37,7 +37,7 @@ class TodayMarker extends React.Component {
       const marker = this.getMarker()
       this.props.updateMarker({
         ...marker,
-        interval: this.props.interval,
+        interval: this.props.interval
       })
     }
   }
@@ -52,7 +52,11 @@ const TodayMarkerWrapper = props => {
   return (
     <TimelineMarkersConsumer>
       {({ subscribeMarker, updateMarker }) => (
-        <TodayMarker subscribeMarker={subscribeMarker} updateMarker={updateMarker} {...props} />
+        <TodayMarker
+          subscribeMarker={subscribeMarker}
+          updateMarker={updateMarker}
+          {...props}
+        />
       )}
     </TimelineMarkersConsumer>
   )

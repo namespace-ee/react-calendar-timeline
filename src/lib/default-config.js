@@ -55,7 +55,7 @@ export const defaultHeaderFormats = {
     long: 'HH:mm',
     mediumLong: 'HH:mm',
     medium: 'HH:mm',
-    short: 'mm',
+    short: 'mm'
   }
 }
 

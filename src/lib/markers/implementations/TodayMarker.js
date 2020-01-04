@@ -40,8 +40,8 @@ class TodayMarker extends React.Component {
     return setInterval(() => {
       this.setState({
         date: Date.now() // FIXME: use date utils pass in as props
-      });
-    }, interval);
+      })
+    }, interval)
   }
 
   componentWillUnmount() {

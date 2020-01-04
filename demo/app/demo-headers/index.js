@@ -194,23 +194,20 @@ export default class App extends Component {
           rightSidebarContent={<div>Above The Right</div>}
         >
           <TimelineHeaders className="header-background">
-            <SidebarHeader/>
+            <SidebarHeader />
             <DateHeader
               labelFormat={this.state.format ? 'd' : undefined}
-              unit= "primaryHeader"
+              unit="primaryHeader"
             />
             <DateHeader height={50} />
             <CustomHeader unit="year" headerData={{ hey: 'you' }}>
-              {(
-                {
-                  headerContext: { intervals },
-                  getRootProps,
-                  getIntervalProps,
-                  showPeriod,
-                  data,
-                },
-                
-              ) => {
+              {({
+                headerContext: { intervals },
+                getRootProps,
+                getIntervalProps,
+                showPeriod,
+                data
+              }) => {
                 console.log('props', data)
                 return (
                   <div {...getRootProps()}>
@@ -320,10 +317,11 @@ export default class App extends Component {
               labelFormat="MM/DD"
               height={50}
               headerData={{ hey: 'date header' }}
-              intervalRenderer={(
-                { getIntervalProps, intervalContext, data },
-                
-              ) => {
+              intervalRenderer={({
+                getIntervalProps,
+                intervalContext,
+                data
+              }) => {
                 console.log('intervalRenderer props', data)
                 return (
                   <div {...getIntervalProps()}>
@@ -336,7 +334,7 @@ export default class App extends Component {
               ? [
                   <DateHeader
                     labelFormat={this.state.format ? 'd' : undefined}
-                    unit = "primaryHeader"
+                    unit="primaryHeader"
                   />,
                   <DateHeader height={50} />
                 ]
