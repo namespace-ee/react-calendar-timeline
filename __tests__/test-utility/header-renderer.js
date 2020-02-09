@@ -4,7 +4,7 @@ import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
 import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
 import { state } from '../../__fixtures__/stateAndProps'
 import jest from 'jest'
-import { defaultTimeSteps } from '../../src/lib/default-config'
+import { defaultTimeSteps, defaultKeys } from '../../src/lib/default-config'
 import { TimelineHeadersProvider } from '../../src/lib/headers/HeadersContext'
 
 // eslint-disable-next-line
@@ -23,7 +23,8 @@ export const RenderHeadersWrapper = ({
     canvasWidth: 2000,
     showPeriod: showPeriod,
     timelineUnit: 'day',
-    timelineWidth: 1000
+    timelineWidth: 1000,
+    keys: defaultKeys
   }
 
   const timelineStateProps = {

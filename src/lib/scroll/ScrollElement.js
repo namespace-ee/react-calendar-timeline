@@ -22,15 +22,19 @@ class ScrollElement extends PureComponent {
     }
   }
 
-  refHandler = el => {
-    this.scrollComponent = el
-    this.props.scrollRef(el)
-  }
-
   handleScroll = () => {
     const scrollX = this.scrollComponent.scrollLeft
     this.props.onScroll(scrollX)
   }
+
+  refHandler = el => {
+    this.scrollComponent = el
+    this.props.scrollRef(el)
+    if(el){
+      el.addEventListener('wheel', this.handleWheel, {passive: false});
+    }
+  }
+  
 
   handleWheel = e => {
     const { traditionalZoom } = this.props
@@ -50,8 +54,7 @@ class ScrollElement extends PureComponent {
     } else if (e.shiftKey) {
       e.preventDefault()
       // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.scrollComponent.scrollLeft += e.deltaY || e.deltaX
-
+      this.props.onScroll(this.scrollComponent.scrollLeft + (e.deltaY || e.deltaX))
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
     }
   }
@@ -70,7 +73,7 @@ class ScrollElement extends PureComponent {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
-      this.scrollComponent.scrollLeft += this.dragLastPosition - e.pageX
+      this.props.onScroll(this.scrollComponent.scrollLeft + this.dragLastPosition - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
@@ -141,7 +144,7 @@ class ScrollElement extends PureComponent {
       let moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
       let moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
       if (deltaX !== 0 && moveX) {
-        this.scrollComponent.scrollLeft -= deltaX
+        this.props.onScroll(this.scrollComponent.scrollLeft - deltaX)
       }
       if (moveY) {
         window.scrollTo(
@@ -162,6 +165,12 @@ class ScrollElement extends PureComponent {
     }
   }
 
+  componentWillUnmount(){
+    if(this.scrollComponent){
+      this.scrollComponent.removeEventListener('wheel', this.handleWheel);
+    }
+  }
+
   render() {
     const { width, height, children } = this.props
     const { isDragging } = this.state
@@ -179,8 +188,6 @@ class ScrollElement extends PureComponent {
         data-testid="scroll-element"
         className="rct-scroll"
         style={scrollComponentStyle}
-        onScroll={this.handleScroll}
-        onWheel={this.handleWheel}
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
@@ -188,6 +195,7 @@ class ScrollElement extends PureComponent {
         onTouchStart={this.handleTouchStart}
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
+        onScroll={this.handleScroll}
       >
         {children}
       </div>

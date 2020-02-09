@@ -30,7 +30,9 @@ const defaultContextState = {
 }
 /* eslint-enable */
 
-const { Consumer, Provider } = createReactContext(defaultContextState)
+const TimelineStateContext = createReactContext(defaultContextState)
+
+const { Consumer, Provider } = TimelineStateContext
 
 export class TimelineStateProvider extends React.Component {
   /* eslint-disable react/no-unused-prop-types */
@@ -43,9 +45,10 @@ export class TimelineStateProvider extends React.Component {
     canvasWidth: PropTypes.number.isRequired,
     showPeriod: PropTypes.func.isRequired,
     timelineUnit: PropTypes.string.isRequired,
+    showPeriod: PropTypes.func.isRequired,
+    timelineUnit: PropTypes.string.isRequired,
     timelineWidth: PropTypes.number.isRequired,
-    keys:PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired
+    keys: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -71,7 +74,6 @@ export class TimelineStateProvider extends React.Component {
       timelineUnit,
       timelineWidth,
       keys,
-      width,
     } = this.props
     return {
       visibleTimeStart,
@@ -82,7 +84,6 @@ export class TimelineStateProvider extends React.Component {
       timelineUnit,
       timelineWidth,
       keys,
-      width,
     } // REVIEW,
   }
 
@@ -116,3 +117,4 @@ export class TimelineStateProvider extends React.Component {
 }
 
 export const TimelineStateConsumer = Consumer
+export default TimelineStateContext;

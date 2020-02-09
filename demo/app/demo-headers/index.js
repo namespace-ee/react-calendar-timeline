@@ -10,8 +10,7 @@ import Timeline, {
   SidebarHeader,
   CustomHeader,
   TimelineHeaders,
-  DateHeader,
-  ItemHeader
+  DateHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -40,7 +39,6 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData()
-    const {items: headerItems } = generateFakeData(2, 5, 1)
     const defaultTimeStart = moment()
       .startOf('day')
       .toDate()
@@ -55,8 +53,7 @@ export default class App extends Component {
       defaultTimeStart,
       defaultTimeEnd,
       format: false,
-      showHeaders: false,
-      headerItems,
+      showHeaders: false
     }
   }
 
@@ -65,9 +62,6 @@ export default class App extends Component {
   }
 
   handleCanvasClick = (groupId, time) => {
-    this.setState(state => ({
-      groups: state.groups
-    }))
     console.log('Canvas clicked', groupId, moment(time).format())
   }
 
@@ -85,9 +79,6 @@ export default class App extends Component {
 
   handleItemSelect = (itemId, _, time) => {
     console.log('Selected: ' + itemId, moment(time).format())
-    this.setState((state)=>({
-      groups: state.groups.filter(_ => Math.random() > 0.5 )
-    }))
   }
 
   handleItemDoubleClick = (itemId, _, time) => {
@@ -98,10 +89,10 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+  handleItemMove = (itemId, dragTime, newGroupId) => {
     const { items, groups } = this.state
 
-    const group = groups[newGroupOrder]
+    const group = groups.find(i => i.id === newGroupId)
 
     this.setState({
       items: items.map(
@@ -116,9 +107,8 @@ export default class App extends Component {
       )
     })
 
-    console.log('Moved', itemId, dragTime, newGroupOrder)
+    console.log('Moved', itemId, dragTime, newGroupId)
   }
-
   handleItemResize = (itemId, time, edge) => {
     const { items } = this.state
 
@@ -184,6 +174,7 @@ export default class App extends Component {
           canSelect
           itemsSorted
           itemTouchSendsClick={false}
+          stackItems
           itemHeightRatio={0.75}
           defaultTimeStart={defaultTimeStart}
           defaultTimeEnd={defaultTimeEnd}
@@ -200,8 +191,7 @@ export default class App extends Component {
           // moveResizeValidator={this.moveResizeValidator}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
-          stackItems="space"
-          >
+        >
           <TimelineHeaders className="header-background">
             <SidebarHeader/>
             <DateHeader

@@ -1,37 +1,32 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
-
+import React, { Component, PureComponent } from 'react'
 import { iterateTimes } from '../utility/calendar'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
-const passThroughPropTypes = {
-  canvasTimeStart: PropTypes.number.isRequired,
-  canvasTimeEnd: PropTypes.number.isRequired,
-  canvasWidth: PropTypes.number.isRequired,
-  lineCount: PropTypes.number.isRequired,
-  minUnit: PropTypes.string.isRequired,
-  timeSteps: PropTypes.object.isRequired,
-  height: PropTypes.number.isRequired,
-  verticalLineClassNamesForTime: PropTypes.func
-}
-
-class Columns extends Component {
+export class Columns extends Component {
   static propTypes = {
-    ...passThroughPropTypes,
-    getLeftOffsetFromDate: PropTypes.func.isRequired
+    canvasTimeStart: PropTypes.number.isRequired,
+    canvasTimeEnd: PropTypes.number.isRequired,
+    lineCount: PropTypes.number.isRequired,
+    minUnit: PropTypes.string.isRequired,
+    timeSteps: PropTypes.object.isRequired,
+    verticalLineClassNamesForTime: PropTypes.func,
+    getLeftOffsetFromDate: PropTypes.func.isRequired,
+    canvasWidth: PropTypes.number.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
     return !(
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
-      nextProps.canvasWidth === this.props.canvasWidth &&
       nextProps.lineCount === this.props.lineCount &&
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
-      nextProps.height === this.props.height &&
       nextProps.verticalLineClassNamesForTime ===
-        this.props.verticalLineClassNamesForTime
+        this.props.verticalLineClassNamesForTime &&
+      //TODO: delete canvasWidth prop
+      //needed to trigger renderer because getLeftOffsetFromDate is dependant on canvasWidth
+      nextProps.canvasWidth === this.props.canvasWidth
     )
   }
 
@@ -39,17 +34,13 @@ class Columns extends Component {
     const {
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth,
       minUnit,
       timeSteps,
-      height,
       verticalLineClassNamesForTime,
       getLeftOffsetFromDate
     } = this.props
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
-
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
@@ -75,7 +66,6 @@ class Columns extends Component {
             ? ` rct-day-${time.day()} `
             : '') +
           classNamesForTime.join(' ')
-
         const left = getLeftOffsetFromDate(time.valueOf())
         const right = getLeftOffsetFromDate(nextTime.valueOf())
         lines.push(
@@ -87,29 +77,36 @@ class Columns extends Component {
               top: '0px',
               left: `${left}px`,
               width: `${right - left}px`,
-              height: `${height}px`
+              height: '100%'
             }}
           />
         )
       }
     )
-
     return <div className="rct-vertical-lines">{lines}</div>
   }
 }
 
-const ColumnsWrapper = ({ ...props }) => {
-  return (
-    <TimelineStateConsumer>
-      {({ getLeftOffsetFromDate }) => (
-        <Columns getLeftOffsetFromDate={getLeftOffsetFromDate} {...props} />
-      )}
-    </TimelineStateConsumer>
-  )
-}
-
-ColumnsWrapper.defaultProps = {
-  ...passThroughPropTypes
+class ColumnsWrapper extends PureComponent {
+  render() {
+    return (
+      <TimelineStateConsumer>
+        {({ getLeftOffsetFromDate, getTimelineState }) => {
+          const {
+            canvasTimeStart,
+            canvasTimeEnd,
+            canvasWidth
+          } = getTimelineState()
+          return (
+            <Columns
+              getLeftOffsetFromDate={getLeftOffsetFromDate}
+              {...this.props}
+            />
+          )
+        }}
+      </TimelineStateConsumer>
+    )
+  }
 }
 
 export default ColumnsWrapper

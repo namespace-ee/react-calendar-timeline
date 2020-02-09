@@ -1,6 +1,6 @@
 {
-  "name": "@r365/react-calendar-timeline",
-  "version": "0.25.0-beta.21",
+  "name": "react-calendar-timeline",
+  "version": "0.27.3-beta",
   "description": "react calendar timeline",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "prepublish": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch"  
   },
   "files": [
     "lib",
@@ -72,7 +72,9 @@
     "testMatch": [
       "**/__tests__/**/*.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/config/jest-setup.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/jest-setup.js"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ],
@@ -90,10 +92,11 @@
     ]
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "create-react-context": "^0.2.2",
     "element-resize-detector": "^1.1.12",
     "lodash.isequal": "^4.5.0",
-    "memoize-one": "^4.0.3"
+    "memoize-one": "^5.1.1"
   },
   "peerDependencies": {
     "interactjs": "^1.3.4",
@@ -103,20 +106,23 @@
     "react-dom": ">=16.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-core": "6.26.3",
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.2",
+    "@babel/preset-env": "^7.5.2",
+    "@babel/preset-react": "^7.0.0",
+    "@testing-library/jest-dom": "^4.2.0",
+    "@types/jest": "24",
     "babel-eslint": "^7.1.1",
-    "babel-jest": "^22.0.6",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-react-remove-properties": "^0.2.5",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "^6.5.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-react-remove-properties": "^0.3.0",
     "cross-env": "^5.1.4",
     "css-loader": "~0.26.0",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
+    "d3": "^5.12.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^4.16.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^6.2.1",
@@ -127,20 +133,22 @@
     "eslint-plugin-standard": "^2.0.1",
     "faker": "^4.1.0",
     "interactjs": "^1.3.4",
-    "jest": "^23.6.0",
-    "jest-dom": "^1.12.1",
-    "jest-watch-typeahead": "^0.1.0",
+    "jest": "^24.8.0",
+    "jest-watch-typeahead": "^0.3.1",
     "jsdom": "^11.5.1",
     "moment": "^2.11.1",
-    "node-sass": "^4.9.2",
+    "node-sass": "^4.12.0",
     "prettier": "^1.10.2",
     "prettier-eslint-cli": "^4.7.0",
     "prop-types": "^15.6.2",
     "randomcolor": "^0.5.3",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.10.2",
+    "react-dnd": "^9.3.4",
+    "react-dnd-html5-backend": "^9.3.4",
+    "react-dom": "^16.10.2",
     "react-router-dom": "^4.1.1",
     "react-testing-library": "^6.0.3",
+    "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.3",
     "style-loader": "~0.13.0",

@@ -4,7 +4,7 @@ import Timeline from 'lib/Timeline'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import moment from 'moment'
 
@@ -414,6 +414,15 @@ describe('Testing DateHeader Component', () => {
     )
 
     expect(getByTestId('interval-a')).toBeInTheDocument()
+  })
+  it('#562 Given DateHeader when passing week as a unit then header should render without error', ()=>{
+    render(
+      <RenderHeadersWrapper>
+        <TimelineHeaders>
+          <DateHeader unit="week" />
+        </TimelineHeaders>
+      </RenderHeadersWrapper>
+    )
   })
 })
 

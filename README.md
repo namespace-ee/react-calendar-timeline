@@ -6,6 +6,16 @@ A modern and responsive React timeline component.
 
 Checkout the [examples here](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples)!
 
+# Contents
+
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [API](#api)
+- [Timeline Markers](#timeline-markers)
+- [Timeline Headers](#timeline-headers)
+- [FAQ](#faq)
+- [Contribute](#contribute)
+
 # Getting started
 
 ```bash
@@ -105,15 +115,15 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
   canMove: true,
   canResize: false,
   canChangeGroup: false,
-  className: 'weekend',
-  style: {
-    backgroundColor: 'fuchsia'
-  },
   itemProps: {
     // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
     'data-custom-attribute': 'Random content',
     'aria-hidden': true,
-    onDoubleClick: () => { console.log('You clicked double!') }
+    onDoubleClick: () => { console.log('You clicked double!') },
+    className: 'weekend',
+    style: {
+      background: 'fuchsia'
+    }
   }
 }
 ```
@@ -132,7 +142,7 @@ The exact viewport of the calendar. When these are specified, scrolling in the c
 
 ## selected
 
-An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's. This overwrites the default behaviour of selecting one item on click.
+An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's and use `onItemDeselect` handler to clear selection. This overwrites the default behaviour of selecting one item on click.
 
 ## keys
 
@@ -143,7 +153,6 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
-  groupLabelKey: 'title', // key for what to show in `InfoLabel`
   itemIdKey: 'id',
   itemTitleKey: 'title',    // key for item div content
   itemDivTitleKey: 'title', // key for item div title (<div title="text"/>)
@@ -157,17 +166,10 @@ An array specifying keys in the `items` and `groups` objects. Defaults to
 
 Width of the sidebar in pixels. If set to `0`, the sidebar is not rendered. Defaults to `150`.
 
-## sidebarContent
-
-Everything passed here will be displayed above the left sidebar. Use this to display small filters or so. Defaults to `null`.
-
 ## rightSidebarWidth
 
 Width of the right sidebar in pixels. If set to `0`, the right sidebar is not rendered. Defaults to `0`.
 
-## rightSidebarContent
-
-Everything passed here will be displayed above the right sidebar. Use this to display small filters or so. Defaults to `null`.
 
 ## dragSnap
 
@@ -215,7 +217,7 @@ Append a special `.rct-drag-right` handle to the elements and only resize if dra
 
 ### stackItems
 
-Stack items under each other, so there is no visual overlap when times collide.  Can be overridden in the `groups` array. Defaults to `false`.
+Stack items under each other, so there is no visual overlap when times collide.  Can be overridden in the `groups` array. Defaults to `false`. Requires millisecond or `Moment` timestamps, not native JavaScript `Date` objects.
 
 can be assigned to 
 - false
@@ -251,9 +253,22 @@ Default:
 
 Ref callback that gets a DOM reference to the scroll body element. Can be useful to programmatically scroll.
 
-## onItemMove(itemId, dragTime, newGroupOrder)
+## onItemDrag(itemDragObject)
 
-Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) the index of the new group in the `groups` array.
+Called when an item is moving or resizing. Returns an object with the following properties:
+
+| property           | type     | description                                                            |
+| ------------------ | -------- | ---------------------------------------------------------------------- |
+| `eventType`        | `string` | retuns either `move` or `resize`                                       |
+| `itemId`           | `number` | ID of the item being moved or resized                                  |
+| `time`             | `number` | UNIX timestamp in milliseconds                                         |
+| `edge`             | `string` | on `resize`, returns a value of either `left` or `right`               |
+| `newGroupId`       | `number` | on `move`, new group id of the new group that the item is moving to    |
+
+
+## onItemMove(itemId, dragTime, newGroupId)
+
+Callback when an item is moved. Returns 1) the item's ID, 2) the new start time and 3) group id of the new group.
 
 ## onItemResize(itemId, time, edge)
 
@@ -262,6 +277,10 @@ Callback when an item is resized. Returns 1) the item's ID, 2) the new start or 
 ## onItemSelect(itemId, e, time)
 
 Called when an item is selected. This is sent on the first click on an item. `time` is the time that corresponds to where you click/select on the item in the timeline.
+
+## onItemDeselect(e)
+
+Called when deselecting an item. Used to clear controlled selected prop.
 
 ## onItemClick(itemId, e, time)
 
@@ -317,8 +336,6 @@ function (action, item, time, resizeEdge) {
 ```
 ## onUpdateMove(itemId, time, newGroup, action,resizeEdge) 
 
-this function is called after moveResizeValidator on every drag update
-
 
 ## onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
 
@@ -348,6 +365,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
 
+## hideHorizontalLines
+
+Boolean to hide or show HorizontalLines. `true` by default. Hiding the horizontalLines will have a good impact on performance.
+
 ## itemRenderer
 
 Render prop function used to render a customized item. The function provides multiple parameters that can be used to render each item.
@@ -365,8 +386,8 @@ Parameters provided to the function has two types: context params which have the
 | property           | type     | description                                          |
 | ------------------ | -------- | ---------------------------------------------------- |
 | `timelineWidth`    | `number` | returns the full width of the timeline.              |
-| `visibleTimeStart` | `number` | returns the exact start of view port of the calender |
-| `visibleTimeEnd`   | `number` | returns the exact end of view port of the calender.  |
+| `visibleTimeStart` | `number` | returns the exact start of view port of the calendar |
+| `visibleTimeEnd`   | `number` | returns the exact end of view port of the calendar.  |
 | `canvasTimeStart`  | `number` | denotes the start time in ms of the canvas timeline  |
 | `canvasTimeEnd`    | `number` | denotes the end time in ms of the canvas timeline    |
 
@@ -417,7 +438,7 @@ Rather than applying props on the element yourself and to avoid your props being
 
   \*\* _the given styles will only override the styles that are not a requirement for positioning the item. Other styles like `color`, `radius` and others_
 
-  These properties can be override using the prop argument with properties:
+  These properties can be overriden using the prop argument with properties:
 
   * className: class names to be added
   * onMouseDown: event handler will be called after the component's event handler
@@ -487,6 +508,11 @@ itemRenderer: ({
 }
 ```
 
+#### Limitations
+
+- You can't save state inside the item because when changing groups the item will be remounted losing all existing state.
+- You need to do `e.stopPropagation()` for all callbacks passed to `itemRenderer`
+
 ## groupRenderer
 
 React component that will be used to render the content of groups in the
@@ -553,6 +579,153 @@ An example could look like:
 ```jsx
 horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 ```
+
+## `rowData`
+
+Data to be passed to `rowRenderer`'s  `rowData` param. Changing this prop will cause rerender of the `rowRenderer`
+
+# Helpers
+
+Helpers are methods provided by `HelperContext`. These helpers power most of the rendered UI in the timeline like: Headers, Markers, Items and row renderers. 
+
+## Methods
+
+### `getLeftOffsetFromDate(x: number): number`
+
+Given time in milliseconds. The method will return the corresponding `left` position in `px`
+
+### `getDateFromLeftOffsetPosition(left: number): number`
+
+Given `left` position in `px`, the method will return the corresponding date in milliseconds.
+
+**inverse of `getLeftOffsetFromDate`**
+
+### `getItemDimensions(itemId: string|number): dimensions`
+
+Given a item id, It will return back the left and top of the item relative to row it is in. This is useful to know the where an item is relative to other items in the same row.
+
+### `getItemAbsoluteDimensions(itemId: string|number): dimensions`. 
+
+Given a item id, It will return back the left and top of the item relative to the calendar container. This is useful to know the position of items in different rows relative to each other.
+
+
+### `getGroupDimensions(groupId: string | number): groupDimensions`
+
+Given groupId. The method will return `height` of the group row and `top` of the group row relative to the calendar.
+
+## Example
+
+[CodeSandbox Example](https://codesandbox.io/s/timeline-demo-helpers-doc-example-o24h6)
+
+
+```jsx
+import React, { Component } from "react";
+import moment from "moment";
+
+import Timeline, {
+  HelpersContext,
+  TimelineHeaders,
+  DateHeader,
+  CustomHeader
+} from "react-calendar-timeline";
+import generateFakeData from "./generate-fake-data";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    const { groups, items } = generateFakeData();
+    const defaultTimeStart = moment()
+      .startOf("week")
+      .toDate();
+    const defaultTimeEnd = moment()
+      .startOf("week")
+      .add(1, "week")
+      .toDate();
+
+    this.state = {
+      groups,
+      items,
+      defaultTimeStart,
+      defaultTimeEnd,
+      customEvents: [
+        {
+          start: moment()
+            .startOf("week")
+            .add(12, "h"),
+          end: moment()
+            .startOf("week")
+            .endOf("day"),
+          title: "Lakers game"
+        },
+        {
+          start: moment()
+            .startOf("week")
+            .add(3, 'd'),
+          end: moment()
+            .startOf("week")
+            .add(5, "d"),
+          title: "Christmas"
+        }
+      ]
+    };
+  }
+
+  render() {
+    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
+
+    return (
+        <Timeline
+          groups={groups}
+          items={items}
+          stackItems
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+        >
+          <TimelineHeaders>
+            <DateHeader />
+            <CustomHeader
+              headerData={{ customEvents: this.state.customEvents }}
+              height={30}
+            >
+              {({
+                getRootProps,
+                data: { customEvents }
+              }) => {
+                const { getLeftOffsetFromDate } = React.useContext(
+                  HelpersContext
+                );
+                return (
+                  <div {...getRootProps()}>
+                    {customEvents.map(event => {
+                      const left = getLeftOffsetFromDate(event.start.valueOf());
+                      const right = getLeftOffsetFromDate(event.end.valueOf());
+                      const width = right - left;
+                      return (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left,
+                            width,
+                            backgroundColor: "white"
+                          }}
+                        >
+                          {event.title}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }}
+            </CustomHeader>
+          </TimelineHeaders>
+        </Timeline>
+    );
+  }
+}
+
+```
+
 
 # Timeline Markers
 
@@ -690,6 +863,9 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
 </CursorMarker>
 ```
 
+
+Helpers are a group of 
+
 # Timeline Headers
 
 Timeline headers are the section above the timeline which consist of two main parts: First, the calender header which is a scrolable div containing the dates of the calendar called `DateHeader`. Second, is the headers for the sidebars, called `SidebarHeader`, the left one and optionally the right one.
@@ -801,7 +977,7 @@ import Timeline, {
 <Timeline>
 ```
 
-_Note_ : the Child function renderer can be a component or a function for convenience 
+_Note_ : the Child function renderer can be a component or a function for convenience
 
 ### `DateHeader`
 
@@ -816,7 +992,7 @@ Responsible for rendering the headers above calendar part of the timeline. Consi
 | `className` | `string`| applied to the root of the header|
 | `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` or `primaryHeader` | intervals between columns |
 | `labelFormat` | `Function` or `string`| controls the how to format the interval label |
-| `intervalRenderer`| `Function`| render prop to render each interval in the header 
+| `intervalRenderer`| `Function`| render prop to render each interval in the header
 | `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 | `height` | `number` default (30)|  height of the header in pixels |
 
@@ -826,9 +1002,9 @@ _Note_: passing `primaryHeader` to unit the header will act as the main header w
 
 intervals are decided through the prop: `unit`. By default, the unit of the intervals will be the same the timeline.
 
-If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit. 
+If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit.
 
-If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. 
+If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`.
 
 #### Label format
 
@@ -857,37 +1033,43 @@ by default we provide a responsive format for the dates based on the label width
   ```typescript
   // default format object
   const format : LabelFormat = {
-    year: {
+  year: {
     long: 'YYYY',
     mediumLong: 'YYYY',
     medium: 'YYYY',
     short: 'YY'
-    },
-    month: {
-      long: 'MMMM YYYY',
-      mediumLong: 'MMMM',
-      medium: 'MMMM',
-      short: 'MM/YY'
-    },
-    day: {
-      long: 'dddd, LL',
-      mediumLong: 'dddd, LL',
-      medium: 'dd D',
-      short: 'D'
-    },
-    hour: {
-      long: 'dddd, LL, HH:00',
-      mediumLong: 'L, HH:00',
-      medium: 'HH:00',
-      short: 'HH'
-    },
-    minute: {
-      long: 'HH:mm',
-      mediumLong: 'HH:mm',
-      medium: 'HH:mm',
-      short: 'mm',
-    }
+  },
+  month: {
+    long: 'MMMM YYYY',
+    mediumLong: 'MMMM',
+    medium: 'MMMM',
+    short: 'MM/YY'
+  },
+  week: {
+    long: 'w',
+    mediumLong: 'w',
+    medium: 'w',
+    short: 'w'
+  },
+  day: {
+    long: 'dddd, LL',
+    mediumLong: 'dddd, LL',
+    medium: 'dd D',
+    short: 'D'
+  },
+  hour: {
+    long: 'dddd, LL, HH:00',
+    mediumLong: 'L, HH:00',
+    medium: 'HH:00',
+    short: 'HH'
+  },
+  minute: {
+    long: 'HH:mm',
+    mediumLong: 'HH:mm',
+    medium: 'HH:mm',
+    short: 'mm',
   }
+}
   ```
 
 _Note_: this is only an implementation of the function param. You can do this on your own easily
@@ -899,7 +1081,7 @@ Render prop function used to render a customized interval. The function provides
 
 Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
-_Note_ : the renderProp can be a component or a function for convenience 
+_Note_ : the renderProp can be a component or a function for convenience
 
 ##### interval context
 
@@ -932,7 +1114,7 @@ Rather than applying props on the element yourself and to avoid your props being
 
 ##### data
 
-data passed through headerData 
+data passed through headerData
 
 #### example
 
@@ -968,129 +1150,15 @@ import Timeline, {
 </Timeline>
 ```
 
-### `ItemHeader`
-
-
-Responsible for rendering group of items in the header.
-
-#### props
-
-| Prop          | type            | description|
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `style`| `object`| applied to the root of the header |
-| `className` | `string`| applied to the root of the header|
-| `itemHeight`| `number` | item height |
-| `stackItems` | `boolean` (`false` by default) | optionally stack items in header |
-| `itemRenderer`| `Function`| render prop to render each interval in the header |
-| `props` | `object` | pass extra props to itemRenderer |
-
-#### itemRenderer
-
-Render prop function used to render a customized item. The function provides multiple parameters that can be used to render each item.
-
-Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
-
-##### item
-
-The object of the item to render
-
-##### timelineContext
-
-timeline context
-
-##### itemContext
-
-item context
-
-##### Prop getters functions
-
-Rather than applying props on the element yourself and to avoid your props being overridden (or overriding the props returned). You can pass an object to the prop getters to avoid any problems. This object will only accept some properties that our component manage so the component make sure to combine them correctly.
-
-| property         | type                 | description|
-| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `getRootProps`   | `function(props={})` | returns the props you should apply to the root div element.|
-
-* `getRootProps` The returned props are:
-
-  * style: inline object style
-
-  These properties can be extended using the prop argument with properties:
-
-  * style: extra inline styles to be applied to the component
-
-#### example
-
-```jsx
-import Timeline, {
-  TimelineHeaders,
-  SidebarHeader,
-  DateHeader
-} from 'react-calendar-timeline'
-
-const items = [
-  {
-    id: 1,
-    title: 'item 1',
-    start_time: moment(),
-    end_time: moment().add(1, 'hour')
-  },
-  {
-    id: 2,
-    title: 'item 2',
-    start_time: moment().add(-0.5, 'hour'),
-    end_time: moment().add(0.5, 'hour')
-  },
-  {
-    id: 3,
-    title: 'item 3',
-    start_time: moment().add(2, 'hour'),
-    end_time: moment().add(3, 'hour')
-  }
-]
-
-<Timeline>
-  <TimelineHeaders>
-    <SidebarHeader>
-      {({ getRootProps }) => {
-        return <div {...getRootProps()}>Left</div>
-      }}
-    </SidebarHeader>
-    <ItemHeader
-      className="custom-class"
-      style={{
-        backgroundColor: "blue"
-      }}
-      items={items}
-      itemRenderer={({ item, getRootProps }) => {
-        return (
-          <div
-            {...getRootProps({
-              style: {
-                border: '1px solid black',
-                color: 'white'
-              }
-            })}
-          >
-            {item.title}
-          </div>
-        )
-      }}
-    />
-    <ItemHeader items={items} stackItems />
-
-  </TimelineHeaders>
-</Timeline>
-```
-
 ### `CustomHeader`
 
-Responsible for rendering the headers above calendar part of the timeline. This is the base component for `DateHeader` and `ItemHeader`. This offers more control with less features.
+Responsible for rendering the headers above calendar part of the timeline. This is the base component for `DateHeader` and offers more control with less features.
 
 #### props
 
 | Prop          | type            | description|
 | ----------------- | --------------- | ---|
-| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals | 
+| `unit`| `second`, `minute`, `hour`, `day`, `week`, `month`, `year` (default `timelineUnit`) | intervals |
 | `children` | `Function`| function as a child component to render the header|
 | `headerData` | `any`|  Contextual data to be passed to the item renderer as a data prop |
 | `height` | `number` default (30)|  height of the header in pixels |
@@ -1105,7 +1173,7 @@ Function as a child component to render the header
 
 Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
 
-_Note_ : the Child function renderer can be a component or a function for convenience 
+_Note_ : the Child function renderer can be a component or a function for convenience
 
 ```
 ({
@@ -1180,7 +1248,7 @@ Rather than applying props on the element yourself and to avoid your props being
 
 ##### data:
 
-pass through the `headerData` prop content 
+pass through the `headerData` prop content
 
 #### example
 
@@ -1200,7 +1268,7 @@ import Timeline, {
     </SidebarHeader>
     <DateHeader unit="primaryHeader" />
     <DateHeader />
-    <CustomHeader headerData={{someData: 'data'}} unit="year">
+    <CustomHeader height={50} headerData={{someData: 'data'}} unit="year">
       {({
         headerContext: { intervals },
         getRootProps,
@@ -1209,10 +1277,9 @@ import Timeline, {
         data,
       }) => {
         return (
-          <div {...getRootProps({ style: { height: 30 } })}>
+          <div {...getRootProps()}>
             {intervals.map(interval => {
               const intervalStyle = {
-                // height: 30,
                 lineHeight: '30px',
                 textAlign: 'center',
                 borderLeft: '1px solid black',
@@ -1243,6 +1310,239 @@ import Timeline, {
   </TimelineHeaders>
 </Timeline>
 ```
+
+# Row renderer
+
+This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
+
+## example
+
+[CodeSandbox](https://codesandbox.io/s/timeline-demo-rowrenderer-doc-example-66pvw)
+
+```jsx
+import Timeline, {
+  RowItems,
+  GroupRow,
+  HelpersContext
+} from "react-calendar-timeline";
+
+import moment from 'moment'
+
+const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
+
+const items = [
+  {
+    id: 1,
+    group: 1,
+    title: 'item 1',
+    start_time: moment(),
+    end_time: moment().add(1, 'hour')
+  },
+  {
+    id: 2,
+    group: 2,
+    title: 'item 2',
+    start_time: moment().add(-0.5, 'hour'),
+    end_time: moment().add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    group: 1,
+    title: 'item 3',
+    start_time: moment().add(2, 'hour'),
+    end_time: moment().add(3, 'hour')
+  }
+]
+ReactDOM.render(
+  <Timeline
+    groups={groups}
+    items={items}
+    stackItems
+    defaultTimeStart={defaultTimeStart}
+    defaultTimeEnd={defaultTimeEnd}
+    rowRenderer={({
+      rowData,
+      getLayerRootProps,
+      group
+    }) => {
+      const { getLeftOffsetFromDate } = React.useContext(HelpersContext)
+      const { unavailableSlots } = rowData;
+      const groupUnavailableSlots = unavailableSlots[group.id]
+        ? unavailableSlots[group.id]
+        : [];
+      return (
+        <GroupRow>
+          <RowItems />
+          <UnavailableLayer
+            getLayerRootProps={getLayerRootProps}
+            getLeftOffsetFromDate={getLeftOffsetFromDate}
+            groupUnavailableSlots={groupUnavailableSlots}
+          />
+        </GroupRow>
+      );
+    }}
+    rowData={{
+      //keys here are groupIds
+      unavailableSlots: {
+         "1": [
+            {
+              id: "0",
+              groupId: "0",
+              startTime: moment()
+                .startOf("day")
+                .add(16, "h"),
+              endTime: moment()
+                .startOf("day")
+                .add(20, "h")
+            }
+        ]
+      }
+    }}
+  />
+)
+
+function UnavailableLayer({
+  getLayerRootProps,
+  groupUnavailableSlots,
+  getLeftOffsetFromDate
+}) {
+  return (
+    <div {...getLayerRootProps()}>
+      {groupUnavailableSlots.map(slot => {
+        const left = getLeftOffsetFromDate(slot.startTime.valueOf());
+        const right = getLeftOffsetFromDate(slot.endTime.valueOf());
+        return (
+          <div
+            key={slot.id}
+            style={{
+              position: "absolute",
+              left: left,
+              width: right - left,
+              backgroundColor: "#ECF0F1",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <span style={{ height: 12 }}>unavailable</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+## API
+
+`rowRenderer` follow the render prop pattern with some prebuilt components to display the rows, items and columns.
+
+_Note_ : the renderProp can be a component or a function for convenience
+
+## `rowRenderer` prop
+
+```typescript
+interface Params {
+  getLayerRootProps: (props: React.HTMLProps<HTMLElement>) => React.HTMLProps<HTMLElement>;
+  rowData : any;
+  group: Group;
+  itemsWithInteractions: Items[];
+}
+type rowRenderer = (args: Params) => React.Node
+```
+
+### getLayerRootProps
+
+These functions are used to apply props to the layer that you want to render. This gives you maximum flexibility to render what, when, and wherever you like. 
+
+### rowData
+
+object passed by the `rowData` prop.
+
+### group
+
+current group being rendered in the row.
+
+### itemsWithInteractions
+
+items to be rendered in the row. These items respect visibility and interaction. This means that the items you will get back are only the items in the visible + buffer zone and if dragging/resizing is happening you will get the items the start/end time with the interaction.  
+
+## Components
+
+Row renderer comes with some components needed to render the rows and the default layers (columns and rows). The default value for the row renderer is:
+
+```typescript
+import React from 'react';
+import {GroupRow, RowItems} from '../../index'
+
+const DefaultRowRenderer = () => {
+    return <GroupRow>
+        <RowItems/>
+    </GroupRow>
+}
+```
+
+### GroupRow
+
+renders the row's root div.
+
+### ItemsRow
+
+renders the row's items
+
+### Custom Layers
+
+To render custom layers you need to implement the row renderer with the necessary layers
+
+```jsx
+import React from 'react';
+import {GroupRow, RowColumns, RowItems, HelpersContext} from 'react-calendar-timeline';
+
+const rowRenderer = ({
+  getLayerRootProps,
+  group,
+  itemsWithInteractions
+}) => {
+  const { getLeftOffsetFromDate } = React.useContext({ HelpersContext })
+  return (
+    <GroupRow>
+      <RowColumns />
+      <RowItems />
+      <div {...getLayerRootProps()}>
+        <div
+          style={{
+            left: getLeftOffsetFromDate(moment().valueOf()),
+            width: 200,
+            background: "lightblue",
+            position: "absolute",
+            height: '100%'
+          }}
+        >
+          {`group id: ${group.id} renders ${itemsWithInteractions.length} items`}
+        </div>
+      </div>
+      <div {...getLayerRootProps()}>
+        <div
+          style={{
+            left: getLeftOffsetFromDate(moment().add(5,'h').valueOf()),
+            width: 200,
+            background: "lightblue",
+            position: "absolute",
+            height: '100%'
+          }}
+        >
+          some other layer
+        </div>
+      </div>
+    </GroupRow>
+  );
+}
+```
+
+## order
+
+You can switch the order between `RowColumns`, `RowItems` and custom layers. This will change what renders above what. So if you had `RowItems` in the bottom all the other layer will render in top of it
 
 # FAQ
 
@@ -1282,8 +1582,6 @@ If you are using Custom Headers then you need to add `SidebarHeader` component u
 
 you need to add sticky to the header like [this example](https://github.com/FoothillSolutions/react-calendar-timeline/tree/dest-build/examples#sticky-header).
 
-```
-
 ## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
 
 These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
@@ -1309,10 +1607,7 @@ It's the same issue as above. See [issue 134](https://github.com/namespace-ee/re
 
 This is useful when using the plugins (that you pass as children to the component). Override the CSS to change:
 
-* Horizontal Lines: 30
-* Vertical Lines: 40
 * Items: 80-88 (depending on selection, dragging, etc)
-* Header: 90
 
 ## Behind the scenes
 
@@ -1338,7 +1633,7 @@ meta + mousewheel = zoom in/out 3x faster (win or cmd + mousewheel)
 Plus there is a handling for pinch-in and pinch-out zoom gestures (two touch points).
 The pinch gesture on a trackpad (not a touch device) works in Chrome and Firefox (v55+) because these browsers map the gesture to `ctrl + mousewheel`.
 
-## Contribute
+# Contribute
 
 If you like to improve React Calendar Timeline fork the repo and get started by running the following:
 

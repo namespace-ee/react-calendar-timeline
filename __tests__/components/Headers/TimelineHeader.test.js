@@ -2,7 +2,7 @@ import { render } from 'react-testing-library'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import DateHeader from 'lib/headers/DateHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import 'react-testing-library/cleanup-after-each'
 
 import React from 'react'
@@ -68,11 +68,25 @@ describe('TimelineHeader', () => {
     expect(getByTestId('headerContainer')).toHaveClass('testClassName')
   })
 
+  it('Given TimelineHeader When no calendarHeaderClassName specified Then undefined should not be applied to the date header container', () => {
+    const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
+      calendarHeaderClassName: undefined
+    })
+    expect(getByTestId('headerContainer')).not.toHaveClass('undefined')
+  })
+
   it('Given TimelineHeader When pass className Then it should be applied to the root header container', () => {
     const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
       className: 'testClassName'
     })
     expect(getByTestId('headerRootDiv')).toHaveClass('testClassName')
+  })
+
+  it('Given TimelineHeader When no className specified Then undefined should not be applied to the root header container', () => {
+    const { getByTestId } = renderTimelineWithLeftAndRightSidebar({
+      className: undefined
+    })
+    expect(getByTestId('headerRootDiv')).not.toHaveClass('undefined')
   })
 
   it('Given TimelineHeader When rendered Then it should render the default styles of the date header container', () => {
@@ -116,15 +130,16 @@ describe('TimelineHeader', () => {
     expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
   })
   it('Given SidebarHeader When passing variant prop with right value Then it should rendered above the right sidebar', () => {
-    const { getByTestId, getAllByTestId } = renderSidebarHeaderWithCustomValues(
-      { variant: 'right' }
-    )
+    const {
+      getByTestId,
+      getAllByTestId,
+      debug
+    } = renderSidebarHeaderWithCustomValues({ variant: 'right' })
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
-    expect(getByTestId('sidebarHeader').previousElementSibling).toHaveAttribute(
-      'data-testid',
-      'headerContainer'
-    )
-    expect(getAllByTestId('sidebarHeader')).toHaveLength(1)
+    expect(getAllByTestId('sidebarHeader')).toHaveLength(2)
+    expect(
+      getAllByTestId('sidebarHeader')[1].previousElementSibling
+    ).toHaveAttribute('data-testid', 'headerContainer')
   })
 
   it('Given SidebarHeader When passing variant prop with unusual value Then it should rendered above the left sidebar by default', () => {
