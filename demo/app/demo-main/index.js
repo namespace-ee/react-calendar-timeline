@@ -135,6 +135,10 @@ export default class App extends Component {
     }
   }
 
+  handleZoom = (timelineContext, unit) => {
+    console.log('Zoomed', timelineContext, unit)
+  }
+
   moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
       var newTime =
@@ -174,6 +178,7 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
+        onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>
