@@ -70,7 +70,7 @@ Controlled visible port of the calendar using `visibleTimeStart` and `visibleTim
 
 Using controlled scroll and react-spring to trigger scrolling and create an animation.
 
-[Example Codesandbox](https://codesandbox.io/s/confident-waterfall-3kq2503y8p)
+[Example Codesandbox](https://codesandbox.io/s/timeline-demo-programmatic-scroll-3kq2503y8p)
 
 ## Sticky header
 

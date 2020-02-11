@@ -7,43 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-### Fixes and Improvements
+## 0.26.7
 
-- create local stack context for z-index @ilaiwi
-- huge performance improvements @ilaiwi
-- [new examples](https://github.com/namespace-ee/react-calendar-timeline/tree/rowRenderer/examples)
-- `z-index`: removed for vertical lines, cursor line, horizontal lines
-
-### New features
-
-#### [rowRenderer](https://github.com/namespace-ee/react-calendar-timeline/tree/rowRenderer#row-renderer)
-
-This API would give you control to add custom UI on calendar rows using a render prop. You can control what is rendered by default with the library like Items and Vertical/Horizontal lines, and the renderer will provide you the ability to render custom backgrounds and droppable layers for custom dnd.
-
-#### [`hideHorizontalLines` prop](https://github.com/namespace-ee/react-calendar-timeline/tree/rowRenderer#hidehorizontallines)
-
-Boolean to hide or show HorizontalLines. `true` by default. Hiding the horizontalLines will have a good impact on performance.
-
-#### [helpers](https://github.com/namespace-ee/react-calendar-timeline/tree/rowRenderer#helpers)
-
-Helpers are methods provided by `HelperContext`. These helpers power most of the rendered UI in the timeline like: Headers, Markers, Items and row renderers. 
-
-### breaking changes
-
-- `onItemMove` 
-
-changed from `onItemMove(itemId, dragTime, newGroupOrder)` to `onItemMove(itemId, dragTime, newGroupId)`. Now you will be provided with a new group id instead of new group order
-
-- `onItemDrag`
-
-changed from providing `newGroupOrder` to `newGroupId`. Now you will be provided with a new group id instead of new group order
-
-- saving state in `Item` using `itemRenderer`
-
-if you render a stateful component via `itemRenderer` then the state will be lost because item will unmount in some cases
-
-- You need to do `e.stopPropagation()` for all callbacks passed to `itemRenderer`
-
+* fix scrolling with trackpad @ilaiwi #679
+* remove duplicate proptype validation in `TimelineStateContext` @xat
 
 ## 0.26.6
 

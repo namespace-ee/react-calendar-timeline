@@ -298,11 +298,11 @@ Called when the item is clicked by the right button of the mouse. `time` is the 
 
 Called when an empty spot on the canvas was clicked. Get the group ID and the time as arguments. For example open a "new item" window after this.
 
-## onCanvasDoubleClick(group, time, e)
+## onCanvasDoubleClick(groupId, time, e)
 
-Called when an empty spot on the canvas was double clicked. Get the group and the time as arguments.
+Called when an empty spot on the canvas was double clicked. Get the group ID and the time as arguments.
 
-## onCanvasContextMenu(group, time, e)
+## onCanvasContextMenu(groupId, time, e)
 
 Called when the canvas is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
