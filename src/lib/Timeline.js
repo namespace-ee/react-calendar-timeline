@@ -871,6 +871,11 @@ export default class ReactCalendarTimeline extends Component {
     this.scrollComponent = el
   }
 
+  isScrollControlled = () => {
+    const {visibleTimeStart, visibleTimeEnd} = this.state;
+    return !visibleTimeStart && !visibleTimeEnd || !this.props.scrollRef
+  }
+
   render() {
     const {
       items,
@@ -972,6 +977,7 @@ export default class ReactCalendarTimeline extends Component {
                     traditionalZoom={traditionalZoom}
                     onScroll={this.onScroll}
                     isInteractingWithItem={isInteractingWithItem}
+                    isScrollControlled={this.isScrollControlled}
                   >
                     <MarkerCanvas>
                       {this.childrenWithProps()}

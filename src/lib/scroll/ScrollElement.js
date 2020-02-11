@@ -12,7 +12,8 @@ class ScrollElement extends PureComponent {
     isInteractingWithItem: PropTypes.bool.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
-    onScroll: PropTypes.func.isRequired
+    onScroll: PropTypes.func.isRequired,
+    isScrollControlled: PropTypes.func
   }
 
   constructor() {
@@ -172,14 +173,15 @@ class ScrollElement extends PureComponent {
   }
 
   render() {
-    const { width, height, children } = this.props
+    const { width, height, children, isScrollControlled } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
       width: `${width}px`,
       height: `${height + 20}px`, //20px to push the scroll element down off screen...?
       cursor: isDragging ? 'move' : 'default',
-      position: 'relative'
+      position: 'relative',
+      overflowX: isScrollControlled() ? "scroll" : "hidden"
     }
 
     return (
