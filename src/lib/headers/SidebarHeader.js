@@ -14,14 +14,18 @@ class SidebarHeader extends React.PureComponent {
 
   getRootProps = (props = {}) => {
     const { style } = props
-    const width =
-      this.props.variant === RIGHT_VARIANT
-        ? this.props.rightSidebarWidth
-        : this.props.leftSidebarWidth
+    const isRight = this.props.variant === RIGHT_VARIANT
+    const width = isRight
+      ? this.props.rightSidebarWidth
+      : this.props.leftSidebarWidth
     return {
       style: {
+        zIndex: 1,
+        position: 'sticky',
+        [isRight ? 'right' : 'left']: 0,
+        minWidth: width,
         ...style,
-        width,
+        width
       }
     }
   }
@@ -29,14 +33,14 @@ class SidebarHeader extends React.PureComponent {
   getStateAndHelpers = () => {
     return {
       getRootProps: this.getRootProps,
-      data: this.props.headerData,
+      data: this.props.headerData
     }
   }
 
   render() {
     const props = this.getStateAndHelpers()
     const Renderer = this.props.children
-    return <Renderer {...props}/>
+    return <Renderer {...props} />
   }
 }
 
@@ -64,9 +68,11 @@ SidebarWrapper.propTypes = {
 
 SidebarWrapper.defaultProps = {
   variant: LEFT_VARIANT,
-  children: ({ getRootProps }) => <div data-testid="sidebarHeader" {...getRootProps()} />
+  children: ({ getRootProps }) => (
+    <div data-testid="sidebarHeader" {...getRootProps()} />
+  )
 }
 
-SidebarWrapper.secretKey = "SidebarHeader"
+SidebarWrapper.secretKey = 'SidebarHeader'
 
 export default SidebarWrapper

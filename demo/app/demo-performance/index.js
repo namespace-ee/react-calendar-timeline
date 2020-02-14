@@ -37,8 +37,8 @@ export default class App extends Component {
       .endOf('month')
       .toDate()
 
-    groups[0].stackItems = false;
-    groups[0].height = 300;
+    groups[0].stackItems = false
+    groups[0].height = 300
     this.state = {
       groups,
       items,

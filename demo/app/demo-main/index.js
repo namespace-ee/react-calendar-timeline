@@ -176,6 +176,19 @@ export default class App extends Component {
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
       >
+        <TimelineHeaders sticky>
+          <SidebarHeader>
+            {({ getRootProps }) => {
+              return (
+                <div style={{ ...getRootProps().style, background: '#c52020' }}>
+                  Left
+                </div>
+              )
+            }}
+          </SidebarHeader>
+          <DateHeader unit="primaryHeader" />
+          <DateHeader />
+        </TimelineHeaders>
         <TimelineMarkers>
           <TodayMarker />
           <CustomMarker

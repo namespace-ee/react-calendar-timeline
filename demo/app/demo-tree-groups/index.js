@@ -37,7 +37,7 @@ export default class App extends Component {
       const parent = isRoot
         ? null
         : Math.floor((parseInt(group.id) - 1) / 3) * 3 + 1
-      const height = isRoot ? 15 : null;
+      const height = isRoot ? 15 : null
 
       return Object.assign({}, group, {
         root: isRoot,
@@ -47,9 +47,9 @@ export default class App extends Component {
     })
 
     const newItems = items.filter(item => {
-      const group = newGroups.find(group => group.id === item.group);
-      return !group.root;
-    });
+      const group = newGroups.find(group => group.id === item.group)
+      return !group.root
+    })
 
     this.state = {
       groups: newGroups,
@@ -115,7 +115,9 @@ export default class App extends Component {
         itemHeightRatio={0.75}
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
-        horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
+        horizontalLineClassNamesForGroup={group =>
+          group.root ? ['row-root'] : []
+        }
       />
     )
   }
