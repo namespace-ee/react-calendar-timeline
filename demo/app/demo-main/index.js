@@ -152,6 +152,7 @@ export default class App extends Component {
       <Timeline
         groups={groups}
         items={items}
+        minHeight={1500}
         keys={keys}
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}

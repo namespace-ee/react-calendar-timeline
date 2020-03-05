@@ -186,6 +186,9 @@ Everything passed here will be displayed above the right sidebar. Use this to di
 
 Snapping unit when dragging items. Defaults to `15 * 60 * 1000` or 15min. When so, the items will snap to 15min intervals when dragging.
 
+# minHeight
+The minimum height, in pixels, of a timeline body. Default to `20`.
+
 ## minResizeWidth
 
 The minimum width, in pixels, of a timeline entry when it's possible to resize. If not reached, you must zoom in to resize more. Default to `20`.
