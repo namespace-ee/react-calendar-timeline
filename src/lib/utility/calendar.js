@@ -467,6 +467,7 @@ export function stackTimelineItems(
   canvasTimeStart,
   canvasTimeEnd,
   keys,
+  minHeight,
   lineHeight,
   itemHeightRatio,
   stackItems,
@@ -501,7 +502,7 @@ export function stackTimelineItems(
   if (groups.length === 0) {
     return {
       dimensionItems: [],
-      height: 0,
+      height: minHeight,
       groupHeights: [],
       groupTops: []
     }
@@ -530,7 +531,7 @@ export function stackTimelineItems(
     lineHeight,
     stackItems
   )
-  return { dimensionItems, height, groupHeights, groupTops }
+  return { dimensionItems, height: height > minHeight ? height : minHeight, groupHeights, groupTops }
 }
 
 /**
@@ -704,6 +705,7 @@ export function calculateScrollCanvas(
         mergedState.canvasTimeStart,
         mergedState.canvasTimeEnd,
         props.keys,
+        props.minHeight,
         props.lineHeight,
         props.itemHeightRatio,
         props.stackItems,
