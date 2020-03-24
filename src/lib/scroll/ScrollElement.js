@@ -12,7 +12,8 @@ class ScrollElement extends Component {
     isInteractingWithItem: PropTypes.bool.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
-    onScroll: PropTypes.func.isRequired
+    onScroll: PropTypes.func.isRequired,
+    isControlled: PropTypes.bool.isRequired
   }
 
   constructor() {
@@ -175,14 +176,15 @@ class ScrollElement extends Component {
   }
 
   render() {
-    const { width, height, children } = this.props
+    const { width, height, children, isControlled } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle = {
       width: `${width}px`,
       height: `${height + 20}px`, //20px to push the scroll element down off screen...?
       cursor: isDragging ? 'move' : 'default',
-      position: 'relative'
+      position: 'relative',
+      overflowX: isControlled ? 'hidden' : 'initial'
     }
 
     return (
