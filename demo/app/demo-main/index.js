@@ -4,13 +4,9 @@ import moment from 'moment'
 
 import Timeline, {
   TimelineMarkers,
-  TimelineHeaders,
   TodayMarker,
   CustomMarker,
-  CursorMarker,
-  CustomHeader,
-  SidebarHeader,
-  DateHeader
+  CursorMarker
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -89,15 +85,14 @@ export default class App extends Component {
     const group = groups[newGroupOrder]
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
-                group: group.id
-              })
-            : item
+      items: items.map(item =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: dragTime,
+              end: dragTime + (item.end - item.start),
+              group: group.id
+            })
+          : item
       )
     })
 
@@ -108,14 +103,13 @@ export default class App extends Component {
     const { items } = this.state
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: edge === 'left' ? time : item.start,
-                end: edge === 'left' ? item.end : time
-              })
-            : item
+      items: items.map(item =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === 'left' ? time : item.start,
+              end: edge === 'left' ? item.end : time
+            })
+          : item
       )
     })
 
