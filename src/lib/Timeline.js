@@ -870,7 +870,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   /**
-   * check if child of type TimelineHeader
+   * check if child of type TimelineHeaders
    * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
    */
   isTimelineHeader = (child) => {
