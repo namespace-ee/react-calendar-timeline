@@ -67,7 +67,7 @@ export default class Item extends Component {
     dragOffset: PropTypes.number.isRequired,
     resizeEdge: PropTypes.oneOf(['left', 'right']),
     resizeStart: PropTypes.number,
-  
+
     onDragStart: PropTypes.func.isRequired,
     onDragEnd : PropTypes.func.isRequired,
     onResizeStart: PropTypes.func.isRequired,
@@ -97,7 +97,7 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      (nextProps.order ? nextProps.order.index : undefined) !== 
+      (nextProps.order ? nextProps.order.index : undefined) !==
         (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
@@ -161,7 +161,7 @@ export default class Item extends Component {
 
     const offset = getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef)
-      
+
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
 
@@ -216,13 +216,13 @@ export default class Item extends Component {
         e.stopPropagation()
         if (this.props.dragging) {
           if (e.dropzone) {
-            const newGroupId = e.dropzone.target.dataset.groupid
+            const newGroupId = this.props.canChangeGroup ? e.dropzone.target.dataset.groupid : this.itemGroupId
             let dragTime = this.dragTime(e)
             if(dragTime !== _get(this.props.item, this.props.keys.itemTimeStartKey)){
               if (this.props.moveResizeValidator) {
                 dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
               }
-  
+
               if (this.props.onDrag) {
                 this.props.onDrag(this.itemId, dragTime, newGroupId)
               }
@@ -235,17 +235,17 @@ export default class Item extends Component {
         if (this.props.dragging) {
           if(e.dropzone){
 
-            const newGroupId = e.dropzone.target.dataset.groupid
+            const newGroupId = this.props.canChangeGroup ? e.dropzone.target.dataset.groupid : this.itemGroupId
             if (this.props.onDrop) {
               let dragTime = this.dragTime(e)
-              
+
               if (this.props.moveResizeValidator) {
                 dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
               }
-              
+
               this.props.onDrop(this.itemId, dragTime, newGroupId)
             }
-            
+
           }
           this.props.onDragEnd()
         }
@@ -347,7 +347,7 @@ export default class Item extends Component {
       ) {
         const leftResize = this.props.useResizeHandle ? this.dragLeft : true
         const rightResize = this.props.useResizeHandle ? this.dragRight : true
-  
+
         interact(this.item).resizable({
           enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
           edges: {
@@ -537,7 +537,7 @@ export default class Item extends Component {
       visibleTimeEnd: this.props.visibleTimeEnd,
       visibleTimeStart: this.props.visibleTimeStart,
       timelineWidth: this.props.timelineWidth,
-  
+
     }
 
     const itemContext = {
@@ -556,7 +556,7 @@ export default class Item extends Component {
       resizeEdge: this.props.resizeEdge,
       resizeStart: this.props.resizeStart,
       resizeTime: this.props.resizeEdge !== undefined ?
-        this.props.resizeEdge === 'right'? 
+        this.props.resizeEdge === 'right'?
           this.itemTimeEnd
           : this.itemTimeStart
         : null ,

@@ -12,7 +12,7 @@
     "prepublish": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "jest",
-    "test:watch": "jest --watch"  
+    "test:watch": "jest --watch"
   },
   "files": [
     "lib",
