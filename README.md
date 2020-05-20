@@ -750,7 +750,7 @@ import Timeline, {
 
 Custom headers are implemented through a set of component with mostly [function as a child component](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9) pattern, designed to give the user the most control on how to render the headers.
 
-### `TimelineHeader`
+### `TimelineHeaders`
 
 Is the core component wrapper component for custom headers
 
@@ -1190,7 +1190,7 @@ And add `rightTitle` prop to the groups objects:
 }
 ```
 
-If you are using Custom Headers then you need to add `SidebarHeader` component under `TimelineHeader` with variant `right`
+If you are using Custom Headers then you need to add `SidebarHeader` component under `TimelineHeaders` with variant `right`
 
 ## The timeline header doesn't fix to the top of the container when I scroll down.
 

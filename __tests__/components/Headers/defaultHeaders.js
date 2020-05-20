@@ -18,7 +18,7 @@ describe('Renders default headers correctly', () => {
     expect(getByTestId('headerContainer').children).toHaveLength(2);
     expect(getByTestId('sidebarHeader')).toBeInTheDocument();
   });
-  it('Given TimelineHeader When pass a rightSidebarWidthWidth Then it should render two sidebar headers', () => {
+  it('Given TimelineHeaders When pass a rightSidebarWidthWidth Then it should render two sidebar headers', () => {
     let rightSidebarWidth = 150;
     const { getAllByTestId } = renderDefaultTimeline({ rightSidebarWidth });
     const sidebarHeaders = getAllByTestId('sidebarHeader');
