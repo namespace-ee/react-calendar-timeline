@@ -271,10 +271,11 @@ export default class ReactCalendarTimeline extends Component {
 
     this.getSelected = this.getSelected.bind(this)
     this.hasSelectedItem = this.hasSelectedItem.bind(this)
-    this.isItemSelected= this.isItemSelected.bind(this)
+    this.isItemSelected = this.isItemSelected.bind(this)
 
     let visibleTimeStart = null
     let visibleTimeEnd = null
+    let isControlled = false
 
     if (this.props.defaultTimeStart && this.props.defaultTimeEnd) {
       visibleTimeStart = this.props.defaultTimeStart.valueOf()
@@ -282,6 +283,7 @@ export default class ReactCalendarTimeline extends Component {
     } else if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
+      isControlled = true
     } else {
       //throwing an error because neither default or visible time props provided
       throw new Error(
@@ -305,7 +307,8 @@ export default class ReactCalendarTimeline extends Component {
       dragGroupTitle: null,
       resizeTime: null,
       resizingItem: null,
-      resizingEdge: null
+      resizingEdge: null,
+      isControlled
     }
 
     const canvasWidth = getCanvasWidth(this.state.width)
@@ -983,7 +986,8 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart,
       visibleTimeEnd,
       canvasTimeStart,
-      canvasTimeEnd
+      canvasTimeEnd,
+      isControlled
     } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
@@ -1056,6 +1060,7 @@ export default class ReactCalendarTimeline extends Component {
                   traditionalZoom={traditionalZoom}
                   onScroll={this.onScroll}
                   isInteractingWithItem={isInteractingWithItem}
+                  isControlled={isControlled}
                 >
                   <MarkerCanvas>
                     {this.columns(
