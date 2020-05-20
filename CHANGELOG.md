@@ -8,6 +8,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 * Add `className` prop to Timeline component to override `react-calendar-timeline` class #682
+* Fix injecting custom vertical line's class names for time periods longer than day
 
 ## 0.26.7
 
