@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import interact from 'interactjs'
 import moment from 'moment'
@@ -563,7 +563,7 @@ export default class Item extends Component {
       width: this.props.dimensions.width
     }
 
-    return this.props.itemRenderer({
+    return React.createElement(this.props.itemRenderer, {
       item: this.props.item,
       timelineContext,
       itemContext,
