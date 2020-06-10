@@ -34,3 +34,5 @@ export function keyBy(value, key) {
 }
 
 export function noop() {}
+
+export const isNumber = n => !isNaN(n);

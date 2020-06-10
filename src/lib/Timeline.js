@@ -17,7 +17,7 @@ import {
   getCanvasWidth,
   stackTimelineItems
 } from './utility/calendar'
-import { _get, _length } from './utility/generic'
+import { _get, _length, isNumber } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
@@ -357,10 +357,6 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     windowResizeDetector.removeListener(this);
-
-    this.scrollComponent.removeEventListener('wheel', this.preventDefaultForScrollWheel);
-    this.scrollComponent.removeEventListener('touchmove', this.preventDefaultForScrollWheel);
-    window.removeEventListener('keydown', this.preventDefaultForScrollKeysWithScrollLeft);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -415,7 +411,7 @@ export default class ReactCalendarTimeline extends Component {
 
     return derivedState
   }
-  
+
   componentDidUpdate(prevProps, prevState) {
     const newZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const oldZoom = prevState.visibleTimeEnd - prevState.visibleTimeStart
@@ -452,10 +448,11 @@ export default class ReactCalendarTimeline extends Component {
       this.scrollHeaderRef.scrollLeft = scrollLeft
     }
 
-    const isControlledVisibleTime = this.props.visibleTimeStart && this.props.visibleTimeEnd;
+    const isControlledVisibleTime = isNumber(this.props.visibleTimeStart) && isNumber(this.props.visibleTimeEnd);
     if (isControlledVisibleTime) {
-      this.preventDefaultForScrollKeysWithScrollLeft = this.preventDefaultForScrollKeys(scrollLeft);
-      this.disableScroll();
+      window.onkeydown = e => this.preventDefaultForScrollKeys(e, scrollLeft);// keys
+      this.scrollComponent.onwheel = this.preventDefaultForScrollWheel; // browsers
+      this.scrollComponent.ontouchmove = this.preventDefaultForScrollWheel;// mobile
     }
   }
 
@@ -464,7 +461,7 @@ export default class ReactCalendarTimeline extends Component {
     if (isXScroll) e.preventDefault();
   }
 
-  preventDefaultForScrollKeys = scrollLeft => e => {
+  preventDefaultForScrollKeys = (e, scrollLeft) => {
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
 
@@ -478,12 +475,6 @@ export default class ReactCalendarTimeline extends Component {
       e.preventDefault();
       return false;
     }
-  }
-
-  disableScroll = () => {
-    this.scrollComponent.addEventListener('wheel', this.preventDefaultForScrollWheel, {passive: false}); // browsers
-    this.scrollComponent.addEventListener('touchmove', this.preventDefaultForScrollWheel, {passive: false}); // mobile
-    window.addEventListener('keydown', this.preventDefaultForScrollKeysWithScrollLeft); // keys
   }
 
   resize = (props = this.props) => {
