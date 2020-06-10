@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import moment from 'moment'
 
 import Items from './items/Items'
 import Sidebar from './layout/Sidebar'
@@ -12,14 +11,13 @@ import windowResizeDetector from '../resize-detector/window'
 
 import {
   getMinUnit,
-  getNextUnit,
   calculateTimeForXPosition,
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
   getCanvasWidth,
   stackTimelineItems
 } from './utility/calendar'
-import { _get, _length } from './utility/generic'
+import { _get, _length, isNumber } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
@@ -31,7 +29,6 @@ import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 import { TimelineHeadersProvider } from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
-import SidebarHeader from './headers/SidebarHeader'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
@@ -212,14 +209,14 @@ export default class ReactCalendarTimeline extends Component {
     className: '',
     keys: defaultKeys,
     timeSteps: defaultTimeSteps,
-    headerRef: () => {},
-    scrollRef: () => {},
+    headerRef: () => { },
+    scrollRef: () => { },
 
     // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
     // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
     visibleTimeStart: null,
     visibleTimeEnd: null,
-    onTimeChange: function(
+    onTimeChange: function (
       visibleTimeStart,
       visibleTimeEnd,
       updateScrollCanvas
@@ -271,7 +268,7 @@ export default class ReactCalendarTimeline extends Component {
 
     this.getSelected = this.getSelected.bind(this)
     this.hasSelectedItem = this.hasSelectedItem.bind(this)
-    this.isItemSelected= this.isItemSelected.bind(this)
+    this.isItemSelected = this.isItemSelected.bind(this)
 
     let visibleTimeStart = null
     let visibleTimeEnd = null
@@ -359,11 +356,11 @@ export default class ReactCalendarTimeline extends Component {
       this.props.resizeDetector.removeListener(this)
     }
 
-    windowResizeDetector.removeListener(this)
+    windowResizeDetector.removeListener(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
+    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps;
 
     // This is a gross hack pushing items and groups in to state only to allow
     // For the forceUpdate check
@@ -411,7 +408,7 @@ export default class ReactCalendarTimeline extends Component {
         )
       )
     }
-    
+
     return derivedState
   }
 
@@ -438,17 +435,45 @@ export default class ReactCalendarTimeline extends Component {
     // Check the scroll is correct
     const scrollLeft = Math.round(
       this.state.width *
-        (this.state.visibleTimeStart - this.state.canvasTimeStart) /
-        newZoom
+      (this.state.visibleTimeStart - this.state.canvasTimeStart) /
+      newZoom
     )
     const componentScrollLeft = Math.round(
       prevState.width *
-        (prevState.visibleTimeStart - prevState.canvasTimeStart) /
-        oldZoom
+      (prevState.visibleTimeStart - prevState.canvasTimeStart) /
+      oldZoom
     )
     if (componentScrollLeft !== scrollLeft) {
       this.scrollComponent.scrollLeft = scrollLeft
       this.scrollHeaderRef.scrollLeft = scrollLeft
+    }
+
+    const isControlledVisibleTime = isNumber(this.props.visibleTimeStart) && isNumber(this.props.visibleTimeEnd);
+    if (isControlledVisibleTime) {
+      window.onkeydown = e => this.preventDefaultForScrollKeys(e, scrollLeft);// keys
+      this.scrollComponent.onwheel = this.preventDefaultForScrollWheel; // browsers
+      this.scrollComponent.ontouchmove = this.preventDefaultForScrollWheel;// mobile
+    }
+  }
+
+  preventDefaultForScrollWheel = (e) => {
+    const isXScroll = e.deltaX > 0 || e.deltaX < 0;
+    if (isXScroll) e.preventDefault();
+  }
+
+  preventDefaultForScrollKeys = (e, scrollLeft) => {
+    const LEFT_ARROW = 37;
+    const RIGHT_ARROW = 39;
+
+    const keys = {
+      [LEFT_ARROW]: true,
+      [RIGHT_ARROW]: true
+    };
+
+    if (keys[e.keyCode]) {
+      this.scrollComponent.scrollLeft = scrollLeft;
+      e.preventDefault();
+      return false;
     }
   }
 
@@ -874,10 +899,10 @@ export default class ReactCalendarTimeline extends Component {
    * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
    */
   isTimelineHeader = (child) => {
-    if(child.type === undefined) return false
-    return child.type.secretKey ===TimelineHeaders.secretKey
+    if (child.type === undefined) return false
+    return child.type.secretKey === TimelineHeaders.secretKey
   }
-  
+
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,
@@ -953,12 +978,12 @@ export default class ReactCalendarTimeline extends Component {
       : this.props.selected || [];
   }
 
-  hasSelectedItem(){
-    if(!Array.isArray(this.props.selected)) return !!this.state.selectedItem
+  hasSelectedItem() {
+    if (!Array.isArray(this.props.selected)) return !!this.state.selectedItem
     return this.props.selected.length > 0
   }
 
-  isItemSelected(itemId){
+  isItemSelected(itemId) {
     const selectedItems = this.getSelected()
     return selectedItems.some(i => i === itemId)
   }
