@@ -459,6 +459,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resize = (props = this.props) => {
+    if (!this.container) return
     const { width: containerWidth } = this.container.getBoundingClientRect()
 
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
