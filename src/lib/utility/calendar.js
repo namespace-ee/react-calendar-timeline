@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { _get, arraysEqual } from './generic'
 import memoize from 'memoize-one';
 

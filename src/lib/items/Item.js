@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import interact from 'interactjs'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 import { _get, deepObjectCompare } from '../utility/generic'
 import { composeEvents } from '../utility/events'
