@@ -411,7 +411,7 @@ export default class ReactCalendarTimeline extends Component {
         )
       )
     }
-    
+
     return derivedState
   }
 
@@ -821,7 +821,7 @@ export default class ReactCalendarTimeline extends Component {
         itemDrag={this.dragItem}
         itemDrop={this.dropItem}
         onItemDoubleClick={this.doubleClickItem}
-        onItemContextMenu={this.contextMenuClickItem}
+        onItemContextMenu={this.props.onItemContextMenu ? this.contextMenuClickItem : undefined}
         itemResizing={this.resizingItem}
         itemResized={this.resizedItem}
         itemRenderer={this.props.itemRenderer}
@@ -871,13 +871,13 @@ export default class ReactCalendarTimeline extends Component {
 
   /**
    * check if child of type TimelineHeader
-   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types 
+   * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types
    */
   isTimelineHeader = (child) => {
     if(child.type === undefined) return false
     return child.type.secretKey ===TimelineHeaders.secretKey
   }
-  
+
   childrenWithProps(
     canvasTimeStart,
     canvasTimeEnd,

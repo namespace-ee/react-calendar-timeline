@@ -435,8 +435,8 @@ Rather than applying props on the element yourself and to avoid your props being
   * onTouchEnd: event handler
   * onDoubleClick: event handler
   * onContextMenu: event handler
-  * style: inline object 
-  
+  * style: inline object
+
 
   \*\* _the given styles will only override the styles that are not a requirement for positioning the item. Other styles like `color`, `radius` and others_
 
@@ -1263,7 +1263,7 @@ $ yarn start
 
 Check http://0.0.0.0:8888/ in your browser and have fun!
 
-Please run `npm run lint` before you send a pull request. `npm run jest` runs the tests.
+Please run `npm run lint` before you send a pull request. `npm run test` runs the jest tests.
 
 <!--
 
