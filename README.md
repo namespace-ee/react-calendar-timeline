@@ -316,7 +316,7 @@ Called when the canvas is clicked by the right button of the mouse. Note: If thi
 
 Called when the timeline is zoomed, either via mouse/pinch zoom or clicking header to change timeline units
 
-## moveResizeValidator(action, itemId, time, resizeEdge)
+## moveResizeValidator(action, itemId, time, resizeEdge, dragOrderIndex?, dragGroupDelta?)
 
 This function is called when an item is being moved or resized. It's up to this function to return a new version of `change`, when the proposed move would violate business logic.
 
@@ -326,7 +326,13 @@ The argument `resizeEdge` is when resizing one of `left` or `right`.
 
 The argument `time` describes the proposed new time for either the start time of the item (for move) or the start or end time (for resize).
 
+The argument `dragOrderIndex` is  group index item belonged to before dragging. [optional, exists only in dragging/move]
+
+The argument `dragGroupDelta` is  group index difference we should move item to on/after dragging. [optional, exists only in dragging/move]
+
 The function must return a new unix timestamp in milliseconds... or just `time` if the proposed new time doesn't interfere with business logic.
+
+Optionally in 'move' action you can return an object with `dragTime` timestamp in ms and `dragGroupDelta` final group index shift (integer number)
 
 For example, to prevent moving of items into the past, but to keep them at 15min intervals, use this code:
 
@@ -435,8 +441,8 @@ Rather than applying props on the element yourself and to avoid your props being
   * onTouchEnd: event handler
   * onDoubleClick: event handler
   * onContextMenu: event handler
-  * style: inline object 
-  
+  * style: inline object
+
 
   \*\* _the given styles will only override the styles that are not a requirement for positioning the item. Other styles like `color`, `radius` and others_
 
