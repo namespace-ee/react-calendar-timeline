@@ -506,7 +506,7 @@ export function getItemDimensions({
     canvasWidth,
   });
   if (dimension) {
-    if (item.type == 9 || item.type == 10) itemHeightRatio = 1;
+    if (item.type === "ConnectionPending" || item.type === "ConnectionRequest") itemHeightRatio = 1;
     dimension.top = null;
     dimension.stack = !item.isOverlay;
     dimension.height = lineHeight * itemHeightRatio;
