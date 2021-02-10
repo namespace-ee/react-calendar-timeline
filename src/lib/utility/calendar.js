@@ -279,11 +279,12 @@ export function groupStack(
   item,
   group,
   groupHeight,
-  itemIndex
+  itemIndex,
+  itemType
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
-  let verticalMargin = 0
+  let verticalMargin = (itemType === 'Available' || itemType === 'Unavailable') ? item.dimensions.height : 0
   if (item.dimensions.stack && item.dimensions.top === null) {
     item.dimensions.top = 0
     curHeight = Math.max(curHeight, lineHeight)
@@ -342,7 +343,7 @@ function sum(arr = []) {
  * @param {*} isGroupStacked 
  * @param {*} lineHeight 
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight) {
+export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, itemTypes) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -354,7 +355,8 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight) {
         itemsDimensions[itemIndex],
         itemsDimensions,
         groupHeight,
-        itemIndex
+        itemIndex,
+        itemTypes[itemIndex]
       )
     } else {
       r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight)
@@ -690,7 +692,8 @@ export function getGroupWithItemDimensions(
       itemHeightRatio
     })
   })
-  const { groupHeight } = stackGroup(itemDimensions, stackItems, lineHeight)
+  const itemTypes = groupWithItems.items.map(item => item.type)
+  const { groupHeight } = stackGroup(itemDimensions, stackItems, lineHeight, itemTypes)
   return {
     ...groupWithItems,
     itemDimensions: itemDimensions,
