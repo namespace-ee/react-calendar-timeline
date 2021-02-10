@@ -283,7 +283,7 @@ export function groupStack(
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
-  let verticalMargin = item.dimensions.height
+  let verticalMargin = 0
   if (item.dimensions.stack && item.dimensions.top === null) {
     item.dimensions.top = 0
     curHeight = Math.max(curHeight, lineHeight)
