@@ -510,10 +510,9 @@ export function getItemDimensions({
     canvasWidth
   })
   if (dimension) {
-    if (item.type === "ConnectionPending" || item.type === "ConnectionRequest") itemHeightRatio = 1
     dimension.top = null
     dimension.stack = !item.isOverlay
-    dimension.height = lineHeight * itemHeightRatio
+    dimension.height = lineHeight * (item.heightRatio ? item.heightRatio : itemHeightRatio)
     return {
       id: itemId,
       dimensions: dimension
