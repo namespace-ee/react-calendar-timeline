@@ -22,14 +22,6 @@ class ScrollElement extends Component {
     }
   }
 
-  /**
-   * needed to handle scrolling with trackpad
-   */
-  handleScroll = () => {
-    const scrollX = this.scrollComponent.scrollLeft
-    this.props.onScroll(scrollX)
-  }
-
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
@@ -42,7 +34,7 @@ class ScrollElement extends Component {
   handleWheel = e => {
     const { traditionalZoom } = this.props
 
-    
+    this.props.onScroll(this.scrollComponent.scrollLeft)
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
@@ -198,8 +190,7 @@ class ScrollElement extends Component {
         onTouchStart={this.handleTouchStart}
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
-        onScroll={this.handleScroll}
-      >
+       >
         {children}
       </div>
 
