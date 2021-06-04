@@ -33,6 +33,14 @@ import TimelineHeaders from './headers/TimelineHeaders'
 import DateHeader from './headers/DateHeader'
 import SidebarHeader from './headers/SidebarHeader'
 
+function defaultOnTimeChange(
+  visibleTimeStart,
+  visibleTimeEnd,
+  updateScrollCanvas
+) {
+  updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+}
+
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
@@ -219,13 +227,7 @@ export default class ReactCalendarTimeline extends Component {
     // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
     visibleTimeStart: null,
     visibleTimeEnd: null,
-    onTimeChange: function(
-      visibleTimeStart,
-      visibleTimeEnd,
-      updateScrollCanvas
-    ) {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
-    },
+    onTimeChange: defaultOnTimeChange,
     // called when the canvas area of the calendar changes
     onBoundsChange: null,
     children: null,
@@ -275,6 +277,7 @@ export default class ReactCalendarTimeline extends Component {
 
     let visibleTimeStart = null
     let visibleTimeEnd = null
+    let shouldNotCallOnScroll = false
 
     if (this.props.defaultTimeStart && this.props.defaultTimeEnd) {
       visibleTimeStart = this.props.defaultTimeStart.valueOf()
@@ -282,6 +285,7 @@ export default class ReactCalendarTimeline extends Component {
     } else if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
       visibleTimeStart = this.props.visibleTimeStart
       visibleTimeEnd = this.props.visibleTimeEnd
+      shouldNotCallOnScroll = this.props.onTimeChange === defaultOnTimeChange ? true : false
     } else {
       //throwing an error because neither default or visible time props provided
       throw new Error(
@@ -298,6 +302,7 @@ export default class ReactCalendarTimeline extends Component {
       width: 1000,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
+      shouldNotCallOnScroll,
       canvasTimeStart: canvasTimeStart,
       canvasTimeEnd: canvasTimeEnd,
       selectedItem: null,
@@ -1056,6 +1061,7 @@ export default class ReactCalendarTimeline extends Component {
                   traditionalZoom={traditionalZoom}
                   onScroll={this.onScroll}
                   isInteractingWithItem={isInteractingWithItem}
+                  shouldNotCallOnScroll={this.state.shouldNotCallOnScroll}
                 >
                   <MarkerCanvas>
                     {this.columns(

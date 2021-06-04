@@ -12,7 +12,8 @@ class ScrollElement extends Component {
     isInteractingWithItem: PropTypes.bool.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
-    onScroll: PropTypes.func.isRequired
+    onScroll: PropTypes.func.isRequired,
+    shouldNotCallOnScroll: PropTypes.bool.isRequired,
   }
 
   constructor() {
@@ -22,14 +23,6 @@ class ScrollElement extends Component {
     }
   }
 
-  /**
-   * needed to handle scrolling with trackpad
-   */
-  handleScroll = () => {
-    const scrollX = this.scrollComponent.scrollLeft
-    this.props.onScroll(scrollX)
-  }
-
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
@@ -37,12 +30,13 @@ class ScrollElement extends Component {
       el.addEventListener('wheel', this.handleWheel, {passive: false});
     }
   }
-  
 
   handleWheel = e => {
-    const { traditionalZoom } = this.props
+    if (this.props.shouldNotCallOnScroll) {
+      e.preventDefault()
+    }
 
-    
+    this.props.onScroll(this.scrollComponent.scrollLeft)
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
