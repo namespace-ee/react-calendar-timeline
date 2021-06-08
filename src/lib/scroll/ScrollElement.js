@@ -22,14 +22,6 @@ class ScrollElement extends Component {
     }
   }
 
-  /**
-   * needed to handle scrolling with trackpad
-   */
-  handleScroll = () => {
-    const scrollX = this.scrollComponent.scrollLeft
-    this.props.onScroll(scrollX)
-  }
-
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
@@ -40,13 +32,10 @@ class ScrollElement extends Component {
   
 
   handleWheel = e => {
-    const { traditionalZoom } = this.props
-
-    
+    e.preventDefault()
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
-      e.preventDefault()
       const parentPosition = getParentPosition(e.currentTarget)
       const xPosition = e.clientX - parentPosition.x
 
@@ -55,10 +44,11 @@ class ScrollElement extends Component {
       // convert vertical zoom to horiziontal
       this.props.onWheelZoom(speed, xPosition, e.deltaY)
     } else if (e.shiftKey) {
-      e.preventDefault()
       // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
       this.props.onScroll(this.scrollComponent.scrollLeft + (e.deltaY || e.deltaX))
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
+    } else {
+      this.props.onScroll(this.scrollComponent.scrollLeft + e.deltaX)
     }
   }
 
@@ -198,7 +188,6 @@ class ScrollElement extends Component {
         onTouchStart={this.handleTouchStart}
         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
-        onScroll={this.handleScroll}
       >
         {children}
       </div>
