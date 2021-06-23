@@ -93,7 +93,13 @@ export default class Items extends Component {
   getVisibleItems(canvasTimeStart, canvasTimeEnd) {
     const { keys, items } = this.props
 
-    return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
+    return getVisibleItems(
+        items,
+        canvasTimeStart,
+        canvasTimeEnd,
+        keys,
+        item => this.isSelected(item, keys.itemIdKey)
+      )
   }
 
   render() {

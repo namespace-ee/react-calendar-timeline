@@ -274,13 +274,18 @@ export function getGroupedItems(items, groupOrders) {
   return groupedItems
 }
 
-export function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
+export function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys, isSelectedItem) {
   const { itemTimeStartKey, itemTimeEndKey } = keys
+
+  const hasFunctionToVerify = !!isSelectedItem
 
   return items.filter(item => {
     return (
-      _get(item, itemTimeStartKey) <= canvasTimeEnd &&
-      _get(item, itemTimeEndKey) >= canvasTimeStart
+      hasFunctionToVerify && isSelectedItem(item) || 
+      (
+        _get(item, itemTimeStartKey) <= canvasTimeEnd &&
+        _get(item, itemTimeEndKey) >= canvasTimeStart
+      )
     )
   })
 }
