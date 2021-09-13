@@ -16,6 +16,7 @@ import {
   calculateTimeForXPosition,
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
+  getCanvasWidthFactor,
   getCanvasWidth,
   stackTimelineItems
 } from './utility/calendar'
@@ -157,7 +158,9 @@ export default class ReactCalendarTimeline extends Component {
 
     verticalLineClassNamesForTime: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+    
+    resizableCanvas: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -291,7 +294,8 @@ export default class ReactCalendarTimeline extends Component {
 
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
       visibleTimeStart,
-      visibleTimeEnd
+      visibleTimeEnd,
+      this.props.resizableCanvas
     )
 
     this.state = {
@@ -305,10 +309,11 @@ export default class ReactCalendarTimeline extends Component {
       dragGroupTitle: null,
       resizeTime: null,
       resizingItem: null,
-      resizingEdge: null
+      resizingEdge: null,
+      canvasWidthFactor: getCanvasWidthFactor(this.props.resizableCanvas)
     }
 
-    const canvasWidth = getCanvasWidth(this.state.width)
+    const canvasWidth = getCanvasWidth(this.state.width, this.state.canvasWidthFactor)
 
     const {
       dimensionItems,
@@ -389,7 +394,7 @@ export default class ReactCalendarTimeline extends Component {
       )
     } else if (forceUpdate) {
       // Calculate new item stack position as canvas may have changed
-      const canvasWidth = getCanvasWidth(prevState.width)
+      const canvasWidth = getCanvasWidth(prevState.width, prevState.canvasWidthFactor)
       Object.assign(
         derivedState,
         stackTimelineItems(
@@ -431,7 +436,7 @@ export default class ReactCalendarTimeline extends Component {
     ) {
       this.props.onBoundsChange(
         this.state.canvasTimeStart,
-        this.state.canvasTimeStart + newZoom * 3
+        this.state.canvasTimeStart + newZoom * getCanvasWidthFactor(this.props.resizableCanvas)
       )
     }
 
@@ -491,11 +496,19 @@ export default class ReactCalendarTimeline extends Component {
       groupTops
     })
 
+    if(!this.props.resizableCanvas){
+      return;
+    }
+    
     this.scrollComponent.scrollLeft = width
     this.scrollHeaderRef.scrollLeft = width
   }
 
   onScroll = scrollX => {
+    if(!this.props.resizableCanvas){
+      return;
+    }
+    
     const width = this.state.width
 
     const canvasTimeStart = this.state.canvasTimeStart
@@ -542,6 +555,10 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   changeZoom = (scale, offset = 0.5) => {
+    if(!this.props.resizableCanvas){
+      return;
+    }
+    
     const { minZoom, maxZoom } = this.props
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = Math.min(
@@ -615,7 +632,7 @@ export default class ReactCalendarTimeline extends Component {
   // as well as generalizing how we get time from click on the canvas
   getTimeFromRowClickEvent = e => {
     const { dragSnap } = this.props
-    const { width, canvasTimeStart, canvasTimeEnd } = this.state
+    const { width, canvasTimeStart, canvasTimeEnd, canvasWidthFactor} = this.state
     // this gives us distance from left of row element, so event is in
     // context of the row element, not client or page
     const { offsetX } = e.nativeEvent
@@ -624,7 +641,7 @@ export default class ReactCalendarTimeline extends Component {
       canvasTimeStart,
 
       canvasTimeEnd,
-      getCanvasWidth(width),
+      getCanvasWidth(width, canvasWidthFactor),
       offsetX
     )
     time = Math.floor(time / dragSnap) * dragSnap
@@ -983,12 +1000,13 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart,
       visibleTimeEnd,
       canvasTimeStart,
-      canvasTimeEnd
+      canvasTimeEnd,
+      canvasWidthFactor
     } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
     const zoom = visibleTimeEnd - visibleTimeStart
-    const canvasWidth = getCanvasWidth(width)
+    const canvasWidth = getCanvasWidth(width, canvasWidthFactor)
     const minUnit = getMinUnit(zoom, width, timeSteps)
 
     const isInteractingWithItem = !!draggingItem || !!resizingItem

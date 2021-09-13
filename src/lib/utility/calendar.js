@@ -543,6 +543,13 @@ export function getCanvasWidth(width, buffer = 3) {
 }
 
 /**
+ * get canvas width factor
+ * @param {*} shouldExpandCanvas
+ */
+ export function getCanvasWidthFactor(shouldExpandCanvas = true) {
+  return shouldExpandCanvas? 3 : 1;
+}
+/**
  * get item's position, dimensions and collisions
  * @param {*} item
  * @param {*} keys
@@ -636,14 +643,19 @@ export function getItemWithInteractions({
  * @param {number} visibleTimeStart
  * @param {number} visibleTimeEnd
  */
-export function getCanvasBoundariesFromVisibleTime(
+ export function getCanvasBoundariesFromVisibleTime(
   visibleTimeStart,
-  visibleTimeEnd
+  visibleTimeEnd,
+  shouldExpandCanvasBoundaries = true
 ) {
+  if(!shouldExpandCanvasBoundaries)
+  {
+    return [visibleTimeStart, visibleTimeEnd];
+  }
   const zoom = visibleTimeEnd - visibleTimeStart
   const canvasTimeStart = visibleTimeStart - (visibleTimeEnd - visibleTimeStart)
   const canvasTimeEnd = canvasTimeStart + zoom * 3
-  return [canvasTimeStart, canvasTimeEnd]
+  return [canvasTimeStart, canvasTimeEnd];
 }
 
 /**
@@ -658,7 +670,7 @@ export function getCanvasBoundariesFromVisibleTime(
  * @param {*} props
  * @param {*} state
  */
-export function calculateScrollCanvas(
+ export function calculateScrollCanvas(
   visibleTimeStart,
   visibleTimeEnd,
   forceUpdateDimensions,
@@ -683,7 +695,8 @@ export function calculateScrollCanvas(
   if (!canKeepCanvas || forceUpdateDimensions) {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
       visibleTimeStart,
-      visibleTimeEnd
+      visibleTimeEnd,
+      props.resizableCanvas
     )
     newState.canvasTimeStart = canvasTimeStart
     newState.canvasTimeEnd = canvasTimeEnd
@@ -692,7 +705,7 @@ export function calculateScrollCanvas(
       ...newState
     }
 
-    const canvasWidth = getCanvasWidth(mergedState.width)
+    const canvasWidth = getCanvasWidth(mergedState.width, state.canvasWidthFactor)
 
     // The canvas cannot be kept, so calculate the new items position
     Object.assign(
