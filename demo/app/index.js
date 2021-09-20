@@ -16,7 +16,8 @@ const demos = {
   customItems: require('./demo-custom-items').default,
   customHeaders: require('./demo-headers').default,
   customInfoLabel: require('./demo-custom-info-label').default,
-  controledSelect: require('./demo-controlled-select').default
+  controledSelect: require('./demo-controlled-select').default,
+  nonScrollableTimeline: require('./demo-non-scrollable-timeline').default,
 }
 
 // A simple component that shows the pathname of the current location
