@@ -82,6 +82,7 @@ export default class ReactCalendarTimeline extends Component {
     itemRenderer: PropTypes.func,
     groupRenderer: PropTypes.func,
 
+    className: PropTypes.string,
     style: PropTypes.object,
 
     keys: PropTypes.shape({
@@ -208,6 +209,7 @@ export default class ReactCalendarTimeline extends Component {
     itemTouchSendsClick: false,
 
     style: {},
+    className: '',
     keys: defaultKeys,
     timeSteps: defaultTimeSteps,
     headerRef: () => {},
@@ -580,7 +582,7 @@ export default class ReactCalendarTimeline extends Component {
 
     let zoom = visibleTimeEnd - visibleTimeStart
     // can't zoom in more than to show one hour
-    if (zoom < 360000) {
+    if (zoom < this.props.minZoom) {
       return
     }
 
@@ -837,7 +839,7 @@ export default class ReactCalendarTimeline extends Component {
         itemDrag={this.dragItem}
         itemDrop={this.dropItem}
         onItemDoubleClick={this.doubleClickItem}
-        onItemContextMenu={this.contextMenuClickItem}
+        onItemContextMenu={this.props.onItemContextMenu ? this.contextMenuClickItem : undefined}
         itemResizing={this.resizingItem}
         itemResized={this.resizedItem}
         itemRenderer={this.props.itemRenderer}
@@ -1058,7 +1060,7 @@ export default class ReactCalendarTimeline extends Component {
             <div
               style={this.props.style}
               ref={el => (this.container = el)}
-              className="react-calendar-timeline"
+              className={`react-calendar-timeline ${this.props.className}`}
             >
               {this.renderHeaders()}
               <div style={outerComponentStyle} className="rct-outer">

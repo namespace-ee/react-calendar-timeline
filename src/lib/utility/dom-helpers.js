@@ -37,7 +37,7 @@ export function getSumScroll(node) {
 }
 
 export function getSumOffset(node) {
-  if (node === document.body) {
+  if (node === document.body || !node.offsetParent) {
     return {offsetLeft: 0, offsetTop: 0}
   } else {
     const parent = getSumOffset(node.offsetParent)
