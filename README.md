@@ -312,7 +312,7 @@ Called when an empty spot on the canvas was double clicked. Get the group ID and
 
 Called when the canvas is clicked by the right button of the mouse. Note: If this property is set the default context menu doesn't appear
 
-## onZoom(timelineContext)
+## onZoom(timelineContext, unit)
 
 Called when the timeline is zoomed, either via mouse/pinch zoom or clicking header to change timeline units
 
@@ -342,7 +342,7 @@ function (action, item, time, resizeEdge) {
 ```
 
 
-## onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas)
+## onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas, unit)
 
 A function that's called when the user tries to scroll. Call the passed `updateScrollCanvas(start, end)` with the updated visibleTimeStart and visibleTimeEnd (as unix timestamps in milliseconds) to change the scroll behavior, for example to limit scrolling.
 
