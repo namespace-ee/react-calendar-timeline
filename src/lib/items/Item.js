@@ -104,7 +104,7 @@ export default class Item extends Component {
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      (nextProps.order ? nextProps.order.index : undefined) !== 
+      (nextProps.order ? nextProps.order.index : undefined) !==
         (this.props.order ? this.props.order.index : undefined) ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
@@ -167,7 +167,7 @@ export default class Item extends Component {
 
     const offset = getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef)
-      
+
     return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
   }
 
@@ -181,7 +181,7 @@ export default class Item extends Component {
 
       const offset = getSumOffset(this.props.scrollRef).offsetTop
       const scrolls = getSumScroll(this.props.scrollRef)
-      
+
       for (var key of Object.keys(groupTops)) {
         var groupTop = groupTops[key]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
@@ -221,6 +221,37 @@ export default class Item extends Component {
     }
   }
 
+  validateDragState(e) {
+    const newState = {
+      dragTime: this.dragTime(e),
+      dragGroupDelta: this.dragGroupDelta(e),
+    }
+
+    if (this.props.moveResizeValidator) {
+      const validationResult = this.props.moveResizeValidator(
+        'move',
+        this.props.item,
+        newState.dragTime,
+        null,
+        this.props.order.index,
+        newState.dragGroupDelta
+      )
+
+      if (typeof validationResult === 'number') {
+        // for backward compatibility
+        newState.dragTime = validationResult
+      } else if (typeof validationResult === 'object') {
+        // for change in dragGroupDelta (we need to block groupDelta change)
+        const { dragTime, dragGroupDelta } = validationResult
+        if (typeof dragTime === 'number') newState.dragTime = dragTime
+        if (typeof dragGroupDelta === 'number')
+          newState.dragGroupDelta = dragGroupDelta
+      }
+    }
+
+    return newState
+  }
+
   mountInteract() {
     const leftResize = this.props.useResizeHandle ? ".rct-item-handler-resize-left" : true
     const rightResize = this.props.useResizeHandle ? ".rct-item-handler-resize-right" : true
@@ -245,7 +276,7 @@ export default class Item extends Component {
           const clickTime = this.timeFor(e);
           this.setState({
             dragging: true,
-            dragStart: { 
+            dragStart: {
               x: e.pageX,
               y: e.pageY,
             offset: this.itemTimeStart - clickTime },
@@ -259,15 +290,7 @@ export default class Item extends Component {
       })
       .on('dragmove', e => {
         if (this.state.dragging) {
-          let dragTime = this.dragTime(e)
-          let dragGroupDelta = this.dragGroupDelta(e)
-          if (this.props.moveResizeValidator) {
-            dragTime = this.props.moveResizeValidator(
-              'move',
-              this.props.item,
-              dragTime
-            )
-          }
+          const { dragTime, dragGroupDelta } = this.validateDragState(e);
 
           if (this.props.onDrag) {
             this.props.onDrag(
@@ -286,20 +309,12 @@ export default class Item extends Component {
       .on('dragend', e => {
         if (this.state.dragging) {
           if (this.props.onDrop) {
-            let dragTime = this.dragTime(e)
-
-            if (this.props.moveResizeValidator) {
-              dragTime = this.props.moveResizeValidator(
-                'move',
-                this.props.item,
-                dragTime
-              )
-            }
+            const { dragTime, dragGroupDelta } = this.validateDragState(e);
 
             this.props.onDrop(
               this.itemId,
               dragTime,
-              this.props.order.index + this.dragGroupDelta(e)
+              this.props.order.index + dragGroupDelta
             )
           }
 
@@ -425,7 +440,7 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
-    if(!!this.item){
+    if(this.item) {
       if (this.props.selected && !interactMounted) {
         this.mountInteract()
         interactMounted = true
@@ -437,7 +452,7 @@ export default class Item extends Component {
       ) {
         const leftResize = this.props.useResizeHandle ? this.dragLeft : true
         const rightResize = this.props.useResizeHandle ? this.dragRight : true
-  
+
         interact(this.item).resizable({
           enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
           edges: {
