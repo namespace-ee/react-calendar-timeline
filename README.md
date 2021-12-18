@@ -366,6 +366,10 @@ function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
 }
 ```
 
+## onEndTimeChange(visibleTimeStart, visibleTimeEnd)
+
+A function that's called when the user has finished scrolling.
+
 ## onBoundsChange(canvasTimeStart, canvasTimeEnd)
 
 Called when the bounds in the calendar's canvas change. Use it for example to load new data to display. (see "Behind the scenes" below). `canvasTimeStart` and `canvasTimeEnd` are unix timestamps in milliseconds.
