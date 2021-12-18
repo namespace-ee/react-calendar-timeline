@@ -115,6 +115,7 @@ export default class ReactCalendarTimeline extends Component {
     visibleTimeStart: PropTypes.number,
     visibleTimeEnd: PropTypes.number,
     onTimeChange: PropTypes.func,
+    onEndTimeChange: PropTypes.func,
     onBoundsChange: PropTypes.func,
 
     selected: PropTypes.array,
@@ -226,6 +227,7 @@ export default class ReactCalendarTimeline extends Component {
     ) {
       updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     },
+    onEndTimeChange: null,
     // called when the canvas area of the calendar changes
     onBoundsChange: null,
     children: null,
@@ -283,6 +285,8 @@ export default class ReactCalendarTimeline extends Component {
 
   constructor(props) {
     super(props)
+
+    this.scrolled = false
 
     this.getSelected = this.getSelected.bind(this)
     this.hasSelectedItem = this.hasSelectedItem.bind(this)
@@ -511,6 +515,34 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   onScroll = scrollX => {
+    const [visibleTimeStart, visibleTimeEnd] = this.getVisibleTimeRange(scrollX)
+
+    if (
+      this.state.visibleTimeStart !== visibleTimeStart ||
+      this.state.visibleTimeEnd !== visibleTimeEnd
+    ) {
+      this.scrolled = true
+
+      this.props.onTimeChange(
+        visibleTimeStart,
+        visibleTimeEnd,
+        this.updateScrollCanvas,
+        this.getTimelineUnit()
+      )
+    }
+  }
+
+  onEndScroll = (scrollX) => {
+    if (this.scrolled) {
+      this.scrolled = false
+
+      if (this.props.onEndTimeChange) {
+        this.props.onEndTimeChange(...this.getVisibleTimeRange(scrollX))
+      }
+    }
+  }
+
+  getVisibleTimeRange = (scrollX) => {
     const width = this.state.width
 
     const canvasTimeStart = this.state.canvasTimeStart
@@ -519,17 +551,7 @@ export default class ReactCalendarTimeline extends Component {
 
     const visibleTimeStart = canvasTimeStart + zoom * scrollX / width
 
-    if (
-      this.state.visibleTimeStart !== visibleTimeStart ||
-      this.state.visibleTimeEnd !== visibleTimeStart + zoom
-    ) {
-      this.props.onTimeChange(
-        visibleTimeStart,
-        visibleTimeStart + zoom,
-        this.updateScrollCanvas,
-        this.getTimelineUnit()
-      )
-    }
+    return [visibleTimeStart, visibleTimeStart + zoom]
   }
 
   // called when the visible time changes
@@ -1073,6 +1095,7 @@ export default class ReactCalendarTimeline extends Component {
                   onWheelZoom={this.handleWheelZoom}
                   traditionalZoom={traditionalZoom}
                   onScroll={this.onScroll}
+                  onEndScroll={this.onEndScroll}
                   isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>

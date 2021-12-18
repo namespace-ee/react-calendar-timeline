@@ -135,6 +135,10 @@ export default class App extends Component {
     }
   }
 
+  handleEndTimeChange = (visibleTimeStart, visibleTimeEnd) => {
+    console.log("EndTimeChange", visibleTimeStart, visibleTimeEnd);
+  }
+
   handleZoom = (timelineContext, unit) => {
     console.log('Zoomed', timelineContext, unit)
   }
@@ -178,6 +182,7 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
+        onEndTimeChange={this.handleEndTimeChange}
         onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
       >

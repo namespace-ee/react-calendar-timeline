@@ -9,6 +9,7 @@ const defaultProps = {
   onZoom: noop,
   onWheelZoom: noop,
   onScroll: noop,
+  onEndScroll: noop,
   traditionalZoom: false,
   scrollRef: noop,
   isInteractingWithItem: false,
@@ -26,8 +27,8 @@ const createMouseEvent = pageX => ({
 
 const scrollElementSelector = sel('scroll-element')
 
-xdescribe('ScrollElement', () => {
-  describe('mouse event delegates', () => {
+describe('ScrollElement', () => {
+  describe.skip('mouse event delegates', () => {
     let onDoubleClickMock,
       onMouseLeaveMock,
       onMouseMoveMock,
@@ -75,7 +76,7 @@ xdescribe('ScrollElement', () => {
       expect(onContextMenuMock).toHaveBeenCalledTimes(1)
     })
   })
-  describe('mouse drag', () => {
+  describe.skip('mouse drag', () => {
     let wrapper
 
     beforeEach(() => {
@@ -175,7 +176,7 @@ xdescribe('ScrollElement', () => {
 
       expect(onScrollMock).toHaveBeenCalledTimes(1)
     })
-    it('adds width to scrollLeft if scrollLeft is less than half of width', () => {
+    it.skip('adds width to scrollLeft if scrollLeft is less than half of width', () => {
       const width = 800
       const props = {
         ...defaultProps,
@@ -197,7 +198,7 @@ xdescribe('ScrollElement', () => {
         currentScrollLeft + width
       )
     })
-    it('subtracts width from scrollLeft if scrollLeft is greater than one and a half of width', () => {
+    it.skip('subtracts width from scrollLeft if scrollLeft is greater than one and a half of width', () => {
       const width = 800
       const props = {
         ...defaultProps,
@@ -243,6 +244,26 @@ xdescribe('ScrollElement', () => {
 
         expect(wrapper.instance().scrollComponent.scrollLeft).toBe(scroll)
       })
+    })
+
+    it('calls onEndScroll on mouse up with current scrollLeft', () => {
+      const onEndScrollMock = jest.fn()
+      const props = {
+        ...defaultProps,
+        onEndScroll: onEndScrollMock
+      }
+
+      const wrapper = mount(
+        <ScrollElement {...props}>
+          <div />
+        </ScrollElement>
+      )
+      const scrollLeft = 200
+      wrapper.instance().scrollComponent.scrollLeft = scrollLeft
+
+      wrapper.find(scrollElementSelector).simulate('mouseUp')
+
+      expect(onEndScrollMock).toHaveBeenCalledWith(scrollLeft)
     })
   })
 })

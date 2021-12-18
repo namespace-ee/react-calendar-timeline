@@ -12,7 +12,8 @@ class ScrollElement extends Component {
     isInteractingWithItem: PropTypes.bool.isRequired,
     onZoom: PropTypes.func.isRequired,
     onWheelZoom: PropTypes.func.isRequired,
-    onScroll: PropTypes.func.isRequired
+    onScroll: PropTypes.func.isRequired,
+    onEndScroll : PropTypes.func.isRequired
   }
 
   constructor() {
@@ -37,12 +38,12 @@ class ScrollElement extends Component {
       el.addEventListener('wheel', this.handleWheel, {passive: false});
     }
   }
-  
+
 
   handleWheel = e => {
     const { traditionalZoom } = this.props
 
-    
+
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
@@ -82,6 +83,8 @@ class ScrollElement extends Component {
   }
 
   handleMouseUp = () => {
+    this.props.onEndScroll(this.scrollComponent.scrollLeft)
+
     this.dragStartPosition = null
     this.dragLastPosition = null
 
@@ -161,6 +164,7 @@ class ScrollElement extends Component {
   handleTouchEnd = () => {
     if (this.lastTouchDistance) {
       this.lastTouchDistance = null
+      this.props.onEndScroll(this.scrollComponent.scrollLeft)
     }
     if (this.lastSingleTouch) {
       this.lastSingleTouch = null
