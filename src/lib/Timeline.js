@@ -81,6 +81,7 @@ export default class ReactCalendarTimeline extends Component {
 
     itemRenderer: PropTypes.func,
     groupRenderer: PropTypes.func,
+    rowRenderer: PropTypes.func,
 
     className: PropTypes.string,
     style: PropTypes.object,
@@ -802,6 +803,7 @@ export default class ReactCalendarTimeline extends Component {
           this.props.horizontalLineClassNamesForGroup
         }
         onRowContextClick={this.handleScrollContextMenu}
+        rowRenderer={this.props.rowRenderer}
       />
     )
   }

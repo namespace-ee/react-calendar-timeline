@@ -1,17 +1,31 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
+import { defaultGroupRowRenderer } from './defaultGroupRowRenderer'
+import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import { TimelineHeadersConsumer } from '../headers/HeadersContext'
 
-class GroupRow extends Component {
-  static propTypes = {
-    onClick: PropTypes.func.isRequired,
+const passThroughPropTypes = {
     onDoubleClick: PropTypes.func.isRequired,
     onContextMenu: PropTypes.func.isRequired,
     isEvenRow: PropTypes.bool.isRequired,
     style: PropTypes.object.isRequired,
     clickTolerance: PropTypes.number.isRequired,
     group: PropTypes.object.isRequired,
-    horizontalLineClassNamesForGroup: PropTypes.func
+    horizontalLineClassNamesForGroup: PropTypes.func,
+    rowRenderer: PropTypes.func,
+}
+
+class GroupRow extends Component {
+  static propTypes = {
+    ...passThroughPropTypes,
+    getLeftOffsetFromDate: PropTypes.func.isRequired,
+    getTimelineState: PropTypes.func.isRequired,
+    timeSteps: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    rowRenderer: defaultGroupRowRenderer
   }
 
   render() {
@@ -23,7 +37,11 @@ class GroupRow extends Component {
       onClick,
       clickTolerance,
       horizontalLineClassNamesForGroup,
-      group
+      group,
+      rowRenderer,
+      getLeftOffsetFromDate,
+      getTimelineState,
+      timeSteps,
     } = this.props
 
     let classNamesForGroup = [];
@@ -31,17 +49,45 @@ class GroupRow extends Component {
       classNamesForGroup = horizontalLineClassNamesForGroup(group);
     }
 
+    const timelineState = getTimelineState()
+    const timelineContext = {
+      timelineWidth: timelineState.width,
+      visibleTimeStart: timelineState.visibleTimeStart,
+      visibleTimeEnd: timelineState.visibleTimeEnd,
+      canvasTimeStart: timelineState.canvasTimeStart,
+      canvasTimeEnd: timelineState.canvasTimeEnd,
+      timelineUnit: timelineState.timelineUnit,
+      timeSteps: timeSteps
+    }
+
     return (
       <PreventClickOnDrag clickTolerance={clickTolerance} onClick={onClick}>
-        <div
-          onContextMenu={onContextMenu}
-          onDoubleClick={onDoubleClick}
-          className={(isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')}
-          style={style}
-        />
+        {rowRenderer({
+          onContextMenu,
+          onDoubleClick,
+          className: (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : ''),
+          style,
+          group,
+          timelineContext,
+          getLeftOffsetFromDate
+        })}
       </PreventClickOnDrag>
     )
   }
 }
 
-export default GroupRow
+const GroupRowWrapper = (props) => {
+  return (
+    <TimelineStateConsumer>
+      {({ getLeftOffsetFromDate, getTimelineState }) => (
+        <TimelineHeadersConsumer>
+          {({ timeSteps }) => (
+            <GroupRow getLeftOffsetFromDate={getLeftOffsetFromDate} getTimelineState={getTimelineState} timeSteps={timeSteps} {...props} />
+          )}
+        </TimelineHeadersConsumer>
+      )}
+    </TimelineStateConsumer>
+  )
+}
+
+export default GroupRowWrapper

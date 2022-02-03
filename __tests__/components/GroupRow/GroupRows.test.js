@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { noop } from 'test-utility'
 import GroupRows from 'lib/row/GroupRows'
+import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 
 const defaultProps = {
   groups: [
@@ -31,7 +32,11 @@ const defaultProps = {
 
 describe('GroupRows', () => {
   it('passes props and get right height for first group', () => {
-    const wrapper = mount(<GroupRows {...defaultProps} />);
+    const wrapper = mount(
+      <RenderHeadersWrapper>
+        <GroupRows {...defaultProps} />
+      </RenderHeadersWrapper>
+    );
 
     const component = wrapper.find('GroupRow').first();
     expect(component.prop('style').height).toBe('30px');

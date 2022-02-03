@@ -14,6 +14,7 @@ const demos = {
   renderers: require('./demo-renderers').default,
   verticalClasses: require('./demo-vertical-classes').default,
   customItems: require('./demo-custom-items').default,
+  customRows: require('./demo-custom-rows').default,
   customHeaders: require('./demo-headers').default,
   customInfoLabel: require('./demo-custom-info-label').default,
   controledSelect: require('./demo-controlled-select').default
