@@ -287,15 +287,34 @@ export function getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys) {
 
 const EPSILON = 0.001
 
-export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
+export function simpleCollision(a, b, lineHeight, collisionPadding = EPSILON) {
   // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
   var verticalMargin = 0
 
   return (
     a.collisionLeft + collisionPadding < b.collisionLeft + b.collisionWidth &&
     a.collisionLeft + a.collisionWidth - collisionPadding > b.collisionLeft &&
-    a.top - verticalMargin + collisionPadding < b.top + b.height &&
-    a.top + a.height + verticalMargin - collisionPadding > b.top
+      a.top - verticalMargin + collisionPadding < b.top + b.height &&
+      a.top + a.height + verticalMargin - collisionPadding > b.top
+  )
+}
+
+export function collisionOrOrderMismatch(a, b, lineHeight, collisionPadding = EPSILON) {
+  // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+  var verticalMargin = 0
+
+  return (
+    a.collisionLeft + collisionPadding < b.collisionLeft + b.collisionWidth &&
+    a.collisionLeft + a.collisionWidth - collisionPadding > b.collisionLeft &&
+    ((
+      a.top - verticalMargin + collisionPadding < b.top + b.height &&
+      a.top + a.height + verticalMargin - collisionPadding > b.top
+     )
+      ||
+     (
+       a.top < b.top
+     )
+    )
   )
 }
 
@@ -309,7 +328,8 @@ export function groupStack(
   group,
   groupHeight,
   groupTop,
-  itemIndex
+  itemIndex,
+  collision
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
@@ -387,9 +407,12 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
     // Is group being stacked?
     const isGroupStacked =
       group.stackItems !== undefined ? group.stackItems : stackItems
+    const shouldStackEnforceOrder =
+      group.shouldStackEnforceOrder !== undefined ? group.shouldStackEnforceOrder : false
     const { groupHeight, verticalMargin } = stackGroup(
       itemsDimensions,
       isGroupStacked,
+      shouldStackEnforceOrder,
       lineHeight,
       groupTop
     )
@@ -411,15 +434,16 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
+export function stackGroup(itemsDimensions, isGroupStacked, shouldStackEnforceOrder, lineHeight, groupTop) {
   var groupHeight = 0
   var verticalMargin = 0
+  const collision = shouldStackEnforceOrder ? collisionOrOrderMismatch : simpleCollision
   // Find positions for each item in group
   for (let itemIndex = 0; itemIndex < itemsDimensions.length; itemIndex++) {
     let r = {}
@@ -430,7 +454,8 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemsDimensions,
         groupHeight,
         groupTop,
-        itemIndex
+        itemIndex,
+        collision
       )
     } else {
       r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)

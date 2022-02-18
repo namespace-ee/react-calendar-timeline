@@ -10,6 +10,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 * Add unit argument to onZoom and onTimeChange callbacks
 * Add `className` prop to Timeline component to override `react-calendar-timeline` class #682
 * Fix injecting custom vertical line's class names for time periods longer than day
+* Add shouldStackEnforceOrder parameter for groups to keep the consistent order of items
 
 ## 0.26.7
 
