@@ -52,5 +52,23 @@ describe('getGroupWithItemDimensions', ()=>{
             props.stackItems
         )).not.toBe(groupWithItems)
     })
+    it('should allow for the group.height property to override the manual calculation', () => {
+        const testHeight = 567.6
+        const groupWithItemsAndSetHeight ={
+            group: {id: '1', height: testHeight},
+            items
+        }
+        const result = getGroupWithItemDimensions(
+            groupWithItemsAndSetHeight,
+            props.keys,
+            state.canvasTimeStart,
+            state.canvasTimeEnd,
+            state.width*3,
+            props.lineHeight,
+            props.itemHeightRatio,
+            props.stackItems
+        )
+        expect(result.height).toEqual(testHeight)
+    })
 })
 

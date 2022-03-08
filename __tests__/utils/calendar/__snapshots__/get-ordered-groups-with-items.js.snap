@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getGroupWithItemDimensions should work as expected 1`] = `
+exports[`getOrderedGroupsWithItems should work as expected 1`] = `
 Object {
   "1": Object {
     "group": Object {

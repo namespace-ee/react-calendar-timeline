@@ -3,7 +3,7 @@ import {items, groups} from '../../../__fixtures__/itemsAndGroups'
 import {props} from '../../../__fixtures__/stateAndProps'
 
 
-describe('getGroupWithItemDimensions', ()=>{
+describe('getOrderedGroupsWithItems', ()=>{
     it('should work as expected', ()=>{
         expect(getOrderedGroupsWithItems(groups, items, props.keys)).toMatchSnapshot()
     })

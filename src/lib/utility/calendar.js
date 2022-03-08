@@ -689,7 +689,13 @@ export function getGroupWithItemDimensions(
       itemHeightRatio
     })
   })
-  const { groupHeight } = stackGroup(itemDimensions, stackItems, lineHeight)
+  //If group height property is specified, use that instead of manual calculation
+  let groupHeightProp = null;
+  if (groupWithItems && groupWithItems.group) groupHeightProp = groupWithItems.group.height
+  const { groupHeight } = groupHeightProp ? 
+    { groupHeight: groupHeightProp } : 
+    stackGroup(itemDimensions, stackItems, lineHeight)
+
   return {
     ...groupWithItems,
     itemDimensions: itemDimensions,
