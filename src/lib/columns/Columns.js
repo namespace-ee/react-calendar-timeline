@@ -73,7 +73,7 @@ class Columns extends Component {
           (firstOfType ? ' rct-vl-first' : '') +
           (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute'
             ? ` rct-day-${time.day()} `
-            : '') +
+            : ' ') +
           classNamesForTime.join(' ')
 
         const left = getLeftOffsetFromDate(time.valueOf())
