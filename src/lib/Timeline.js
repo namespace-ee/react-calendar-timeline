@@ -515,21 +515,32 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const canvasTimeStart = this.state.canvasTimeStart
     const newVsibleTimeStart = canvasTimeStart + zoom * scrollX / width
-    
+
     let newScrollX = scrollX
 
-    // prevent scroll to the value less then visibleTimeStart and more then visibleTimeEnd including zoom value
+    // prevent touchpad scroll to the value less then visibleTimeStart and more then visibleTimeEnd including zoom value
 
-    if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
-      if (newVsibleTimeStart < this.props.visibleTimeStart) {
-        newScrollX = this.scrollHeaderRef.scrollLeft
-      } else if (newVsibleTimeStart + zoom > this.props.visibleTimeEnd) {
-        newScrollX = this.scrollHeaderRef.scrollLeft
-      }
+    let defaultVisibleTimeStart = this.props.defaultTimeStart.valueOf();
+    let defaultVisibleTimeEnd = this.props.defaultTimeEnd.valueOf();
+
+      if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
+        if (newVsibleTimeStart < this.props.visibleTimeStart) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        } else if (newVsibleTimeStart + zoom > this.props.visibleTimeEnd) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        }
+      } else if (defaultVisibleTimeStart && defaultVisibleTimeEnd) {
+        if (newVsibleTimeStart < defaultVisibleTimeStart) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        } else if (newVsibleTimeStart + zoom > defaultVisibleTimeEnd) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        }  
+      } 
       
-      this.scrollHeaderRef.scrollLeft = newScrollX
-      this.scrollComponent.scrollLeft = newScrollX
-    } 
+      if (newScrollX !== scrollX) {
+        this.scrollHeaderRef.scrollLeft = newScrollX
+        this.scrollComponent.scrollLeft = newScrollX
+      }
 
     if (
       this.state.visibleTimeStart !== newVsibleTimeStart ||
