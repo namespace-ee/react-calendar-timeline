@@ -12,6 +12,7 @@ export default class GroupRows extends Component {
     clickTolerance: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
     horizontalLineClassNamesForGroup: PropTypes.func,
+    rowRenderer: PropTypes.any,
     onRowContextClick: PropTypes.func.isRequired,
   }
 
@@ -35,6 +36,7 @@ export default class GroupRows extends Component {
       groups,
       horizontalLineClassNamesForGroup,
       onRowContextClick,
+      rowRenderer
     } = this.props
     let lines = []
 
@@ -48,6 +50,7 @@ export default class GroupRows extends Component {
           key={`horizontal-line-${i}`}
           isEvenRow={i % 2 === 0}
           group={groups[i]}
+          rowRenderer={rowRenderer}
           horizontalLineClassNamesForGroup={horizontalLineClassNamesForGroup}
           style={{
             width: `${canvasWidth}px`,

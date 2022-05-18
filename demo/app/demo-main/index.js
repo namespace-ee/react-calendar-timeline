@@ -89,15 +89,14 @@ export default class App extends Component {
     const group = groups[newGroupOrder]
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
-                group: group.id
-              })
-            : item
+      items: items.map(item =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: dragTime,
+              end: dragTime + (item.end - item.start),
+              group: group.id
+            })
+          : item
       )
     })
 
@@ -108,14 +107,13 @@ export default class App extends Component {
     const { items } = this.state
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: edge === 'left' ? time : item.start,
-                end: edge === 'left' ? item.end : time
-              })
-            : item
+      items: items.map(item =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === 'left' ? time : item.start,
+              end: edge === 'left' ? item.end : time
+            })
+          : item
       )
     })
 
@@ -180,6 +178,7 @@ export default class App extends Component {
         onTimeChange={this.handleTimeChange}
         onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
+        rowRenderer={props => <div {...props} />}
       >
         <TimelineMarkers>
           <TodayMarker />
