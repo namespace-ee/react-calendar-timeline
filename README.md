@@ -1,3 +1,6 @@
+# ⚠️⚠️⚠️⚠️ HELP WANTED
+please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
+
 # React Calendar Timeline
 
 A modern and responsive React timeline component.
@@ -140,6 +143,14 @@ The exact viewport of the calendar. When these are specified, scrolling in the c
 
 **Note that you need to provide either `defaultTimeStart/End` or `visibleTimeStart/End` for the timeline to function**
 
+## buffer
+
+a number (default to 3) which represents the extra timeline rendered on right and lift of the visible area which the user will scroll through before the time rerenders.
+
+more explication in section [behind the scenes](#behind-the-scenes)
+
+Note: setting buffer to 1 will disable the scrolling on the timeline
+
 ## selected
 
 An array with id's corresponding to id's in items (`item.id`). If this prop is set you have to manage the selected items yourself within the `onItemSelect` handler to update the property with new id's and use `onItemDeselect` handler to clear selection. This overwrites the default behaviour of selecting one item on click.
@@ -202,6 +213,7 @@ What percentage of the height of the line is taken by the item? Default `0.65`
 
 Smallest time the calendar can zoom to in milliseconds. Default `60 * 60 * 1000` (1 hour)
 
+__notes__: please note than second won't show up unless you change this to `60 * 1000`
 ## maxZoom
 
 Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 86400 * 1000` (5 years)
@@ -915,7 +927,13 @@ by default we provide a responsive format for the dates based on the label width
     mediumLong: 'HH:mm',
     medium: 'HH:mm',
     short: 'mm',
-  }
+  },
+  second: {
+    "long": 'mm:ss',
+    mediumLong: 'mm:ss',
+    medium: 'mm:ss',
+    "short": 'ss'
+  }  
 }
   ```
 
@@ -1235,6 +1253,8 @@ Speed: The calendar itself is actually a 3x wide scrolling canvas of the screen.
 This results in a visually endless scrolling canvas with optimal performance.
 
 Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
+
+Note: 3x can be controlled by changing the buffer
 
 ## Interaction
 

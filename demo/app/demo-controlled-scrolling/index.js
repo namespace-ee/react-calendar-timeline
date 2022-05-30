@@ -4,9 +4,13 @@ import moment from 'moment'
 
 import Timeline, {
   TimelineMarkers,
+  TimelineHeaders,
   TodayMarker,
   CustomMarker,
   CursorMarker,
+  CustomHeader,
+  SidebarHeader,
+  DateHeader
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
@@ -35,19 +39,19 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData()
-    const defaultTimeStart = moment()
+    const visibleTimeStart = moment()
       .startOf('day')
-      .toDate()
-    const defaultTimeEnd = moment()
+      .valueOf()
+    const visibleTimeEnd = moment()
       .startOf('day')
       .add(1, 'day')
-      .toDate()
+      .valueOf()
 
     this.state = {
       groups,
       items,
-      defaultTimeStart,
-      defaultTimeEnd
+      visibleTimeStart,
+      visibleTimeEnd
     }
   }
 
@@ -131,10 +135,6 @@ export default class App extends Component {
     }
   }
 
-  handleZoom = (timelineContext, unit) => {
-    console.log('Zoomed', timelineContext, unit)
-  }
-
   moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
       var newTime =
@@ -145,10 +145,37 @@ export default class App extends Component {
     return time
   }
 
+  onPrevClick = () => {
+    this.setState(state => {
+      const zoom = state.visibleTimeEnd - state.visibleTimeStart;
+      return({
+      visibleTimeStart: state.visibleTimeStart - zoom,
+      visibleTimeEnd: state.visibleTimeEnd - zoom
+      })
+    });
+  };
+
+  onNextClick = () => {
+    this.setState(state => {
+      const zoom = state.visibleTimeEnd - state.visibleTimeStart;
+      console.log(({
+        visibleTimeStart: state.visibleTimeStart + zoom,
+        visibleTimeEnd: state.visibleTimeEnd + zoom
+      }));
+        return ({
+        visibleTimeStart: state.visibleTimeStart + zoom,
+        visibleTimeEnd: state.visibleTimeEnd + zoom
+      })
+    });
+  };
+
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
+    const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state
 
     return (
+      <div>
+        <button onClick={this.onPrevClick}>{"< Prev"}</button>
+        <button onClick={this.onNextClick}>{"Next >"}</button>
       <Timeline
         groups={groups}
         items={items}
@@ -162,8 +189,8 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
         onCanvasClick={this.handleCanvasClick}
         onCanvasDoubleClick={this.handleCanvasDoubleClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
@@ -173,10 +200,9 @@ export default class App extends Component {
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
+        buffer={1}
         onTimeChange={this.handleTimeChange}
-        onZoom={this.handleZoom}
-        moveResizeValidator={this.moveResizeValidator}
-        buffer={3}
+        // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>
           <TodayMarker />
@@ -201,6 +227,7 @@ export default class App extends Component {
           <CursorMarker />
         </TimelineMarkers>
       </Timeline>
+      </div>
     )
   }
 }
