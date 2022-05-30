@@ -476,20 +476,43 @@ export default class ReactCalendarTimeline extends Component {
 
   onScroll = scrollX => {
     const width = this.state.width
-
-    const canvasTimeStart = this.state.canvasTimeStart
-
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
+    const canvasTimeStart = this.state.canvasTimeStart
+    const newVsibleTimeStart = canvasTimeStart + zoom * scrollX / width
 
-    const visibleTimeStart = canvasTimeStart + zoom * scrollX / width
+    let newScrollX = scrollX
+
+    // prevent touchpad scroll to the value less then visibleTimeStart and more then visibleTimeEnd including zoom value
+
+    let defaultVisibleTimeStart = this.props.defaultTimeStart.valueOf();
+    let defaultVisibleTimeEnd = this.props.defaultTimeEnd.valueOf();
+
+      if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
+        if (newVsibleTimeStart < this.props.visibleTimeStart) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        } else if (newVsibleTimeStart + zoom > this.props.visibleTimeEnd) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        }
+      } else if (defaultVisibleTimeStart && defaultVisibleTimeEnd) {
+        if (newVsibleTimeStart < defaultVisibleTimeStart) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        } else if (newVsibleTimeStart + zoom > defaultVisibleTimeEnd) {
+          newScrollX = this.scrollHeaderRef.scrollLeft
+        }  
+      } 
+      
+      if (newScrollX !== scrollX) {
+        this.scrollHeaderRef.scrollLeft = newScrollX
+        this.scrollComponent.scrollLeft = newScrollX
+      }
 
     if (
-      this.state.visibleTimeStart !== visibleTimeStart ||
-      this.state.visibleTimeEnd !== visibleTimeStart + zoom
+      this.state.visibleTimeStart !== newVsibleTimeStart ||
+      this.state.visibleTimeEnd !== newVsibleTimeStart + zoom
     ) {
       this.props.onTimeChange(
-        visibleTimeStart,
-        visibleTimeStart + zoom,
+        newVsibleTimeStart,
+        newVsibleTimeStart + zoom,
         this.updateScrollCanvas,
         this.getTimelineUnit()
       )
