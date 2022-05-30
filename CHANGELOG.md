@@ -7,9 +7,17 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-* Add unit argument to onZoom and onTimeChange callbacks
+
+## 0.28.0
+
+* Add unit argument to onZoom and onTimeChange callbacks @hckr #655
 * Add `className` prop to Timeline component to override `react-calendar-timeline` class #682
-* Fix injecting custom vertical line's class names for time periods longer than day
+* support zoom level seconds #835 @horizon-plaza
+* custom buffer prop (help with controlled scrolling) @Ilaiwi
+* Fix injecting custom vertical line's class names for time periods longer than day @RafikiTiki
+* fix Context Menu unintentionally disabled by default @dsgipe #769
+* delete props `headerLabelFormats` and `subHeaderLabelFormats` not you can pass `formatLabel` function to `DateHeader` with label width and start and end time of intervals
+
 
 ## 0.26.7
 

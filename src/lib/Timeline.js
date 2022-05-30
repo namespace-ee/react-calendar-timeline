@@ -21,8 +21,6 @@ import { _get, _length } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
 } from './default-config'
 import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
@@ -116,37 +114,6 @@ export default class ReactCalendarTimeline extends Component {
 
     selected: PropTypes.array,
 
-    headerLabelFormats: PropTypes.shape({
-      yearShort: PropTypes.string,
-      yearLong: PropTypes.string,
-      monthShort: PropTypes.string,
-      monthMedium: PropTypes.string,
-      monthMediumLong: PropTypes.string,
-      monthLong: PropTypes.string,
-      dayShort: PropTypes.string,
-      dayLong: PropTypes.string,
-      hourShort: PropTypes.string,
-      hourMedium: PropTypes.string,
-      hourMediumLong: PropTypes.string,
-      hourLong: PropTypes.string
-    }),
-
-    subHeaderLabelFormats: PropTypes.shape({
-      yearShort: PropTypes.string,
-      yearLong: PropTypes.string,
-      monthShort: PropTypes.string,
-      monthMedium: PropTypes.string,
-      monthLong: PropTypes.string,
-      dayShort: PropTypes.string,
-      dayMedium: PropTypes.string,
-      dayMediumLong: PropTypes.string,
-      dayLong: PropTypes.string,
-      hourShort: PropTypes.string,
-      hourLong: PropTypes.string,
-      minuteShort: PropTypes.string,
-      minuteLong: PropTypes.string
-    }),
-
     resizeDetector: PropTypes.shape({
       addListener: PropTypes.func,
       removeListener: PropTypes.func
@@ -226,9 +193,6 @@ export default class ReactCalendarTimeline extends Component {
     // called when the canvas area of the calendar changes
     onBoundsChange: null,
     children: null,
-
-    headerLabelFormats: defaultHeaderLabelFormats,
-    subHeaderLabelFormats: defaultSubHeaderLabelFormats,
 
     selected: null
   }

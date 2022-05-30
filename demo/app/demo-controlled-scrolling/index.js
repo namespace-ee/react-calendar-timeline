@@ -201,7 +201,7 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         buffer={1}
-        // onTimeChange={this.handleTimeChange}
+        onTimeChange={this.handleTimeChange}
         // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>

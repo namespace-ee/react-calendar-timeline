@@ -1,3 +1,6 @@
+# ⚠️⚠️⚠️⚠️ HELP WANTED
+please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
+
 # React Calendar Timeline
 
 A modern and responsive React timeline component.
@@ -210,6 +213,7 @@ What percentage of the height of the line is taken by the item? Default `0.65`
 
 Smallest time the calendar can zoom to in milliseconds. Default `60 * 60 * 1000` (1 hour)
 
+__notes__: please note than second won't show up unless you change this to `60 * 1000`
 ## maxZoom
 
 Largest time the calendar can zoom to in milliseconds. Default `5 * 365.24 * 86400 * 1000` (5 years)
@@ -923,7 +927,13 @@ by default we provide a responsive format for the dates based on the label width
     mediumLong: 'HH:mm',
     medium: 'HH:mm',
     short: 'mm',
-  }
+  },
+  second: {
+    "long": 'mm:ss',
+    mediumLong: 'mm:ss',
+    medium: 'mm:ss',
+    "short": 'ss'
+  }  
 }
   ```
 
