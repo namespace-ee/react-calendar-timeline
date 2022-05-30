@@ -1,5 +1,5 @@
-import moment from 'moment'
 import { _get } from './generic'
+import { dateDriver } from "./dateDriver";
 
 /**
  * Calculate the ms / pixel ratio of the timeline state
@@ -60,7 +60,7 @@ export function calculateTimeForXPosition(
 }
 
 export function iterateTimes(start, end, unit, timeSteps, callback) {
-  let time = moment(start).startOf(unit)
+  let time = dateDriver(start).startOf(unit);
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
     let value = time.get(unit)
@@ -68,7 +68,7 @@ export function iterateTimes(start, end, unit, timeSteps, callback) {
   }
 
   while (time.valueOf() < end) {
-    let nextTime = moment(time).add(timeSteps[unit] || 1, `${unit}s`)
+    let nextTime = dateDriver(time).add(timeSteps[unit] || 1, `${unit}s`)
     callback(time, nextTime)
     time = nextTime
   }
@@ -402,7 +402,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
-  
+
   return {
     height: sum(groupHeights),
     groupHeights,
@@ -411,11 +411,11 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
  */
 export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
   var groupHeight = 0
