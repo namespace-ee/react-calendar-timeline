@@ -135,7 +135,7 @@
     "jest-watch-typeahead": "^0.3.1",
     "jsdom": "^11.5.1",
     "moment": "^2.11.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^6.0",
     "prettier": "^1.10.2",
     "prettier-eslint-cli": "^4.7.0",
     "prop-types": "^15.6.2",
