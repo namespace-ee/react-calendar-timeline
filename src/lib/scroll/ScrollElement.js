@@ -64,8 +64,9 @@ class ScrollElement extends Component {
 
   handleMouseDown = e => {
     if (e.button === 0) {
-      this.dragStartPosition = e.pageX
-      this.dragLastPosition = e.pageX
+      //make drag position variables contain both x and y
+      this.dragStartPosition = {x: e.pageX, y: e.pageY}
+      this.dragLastPosition = {x:e.pageX, y: e.pageY}
       this.setState({
         isDragging: true
       })
@@ -76,8 +77,10 @@ class ScrollElement extends Component {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
-      this.props.onScroll(this.scrollComponent.scrollLeft + this.dragLastPosition - e.pageX)
-      this.dragLastPosition = e.pageX
+      //scroll window for vertical scrolling - **causes stuttering**
+      window.scroll(window.scrollX, window.scrollY+this.dragLastPosition.y - e.pageY);
+      this.props.onScroll(this.scrollComponent.scrollLeft + this.dragLastPosition.x - e.pageX)
+      this.dragLastPosition = {x: e.pageX, y: e.pageY}
     }
   }
 
