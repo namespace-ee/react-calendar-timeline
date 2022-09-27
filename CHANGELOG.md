@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
-
+* Added X and Y dragging on calender component
+* Restored diagonal scrolling with trackpad
+* fixed bug with shuftKey modifier when scrolling
 
 ## 0.28.0
 
