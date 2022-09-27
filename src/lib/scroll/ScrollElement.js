@@ -56,13 +56,12 @@ class ScrollElement extends Component {
       }
     } else if (e.shiftKey) {
       e.preventDefault()
-
-     /*shift+scroll event from a mouse wheel has deltaX, but shift+scroll event from a touchpad has the potential to populate both delatX deltaY when moving diagonally
-     checking deltaX first in this ternary prevents bugs when both deltaX and deltaX are changing by prioritizing deltaX*/
-
+     /*shift+scroll event from a mouse wheel has deltaX, but shift+scroll event from a touchpad has the potential to change both delatX deltaY when moving diagonally
+     checking deltaX first in this ternary prevents bugs when both deltaY and deltaX are changing by prioritizing deltaX*/
       this.props.onScroll(this.scrollComponent.scrollLeft + (e.deltaX || e.deltaY))
     } else {
        // no modifier pressed? 
+       e.preventDefault();
       this.scrollComponent.scrollLeft += e.deltaX
       window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
     }
