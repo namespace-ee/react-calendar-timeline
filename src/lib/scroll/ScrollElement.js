@@ -33,43 +33,46 @@ class ScrollElement extends Component {
   refHandler = el => {
     this.scrollComponent = el
     this.props.scrollRef(el)
-    if(el){
-      el.addEventListener('wheel', this.handleWheel, {passive: false});
+    if (el) {
+      el.addEventListener('wheel', this.handleWheel, { passive: false });
     }
   }
-  
+
 
   handleWheel = e => {
-    const { traditionalZoom  } = this.props
+    const { traditionalZoom } = this.props
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
       if (!traditionalZoom) {
-      e.preventDefault()
-      const parentPosition = getParentPosition(e.currentTarget)
-      const xPosition = e.clientX - parentPosition.x
+        e.preventDefault()
+        const parentPosition = getParentPosition(e.currentTarget)
+        const xPosition = e.clientX - parentPosition.x
 
-      const speed = e.ctrlKey ? 10 : e.metaKey ? 3 : 1
+        const speed = e.ctrlKey ? 10 : e.metaKey ? 3 : 1
 
-      // convert vertical zoom to horiziontal
-      this.props.onWheelZoom(speed, xPosition, e.deltaY)
+        // convert vertical zoom to horiziontal
+        this.props.onWheelZoom(speed, xPosition, e.deltaY)
       }
     } else if (e.shiftKey) {
       e.preventDefault()
-      // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.props.onScroll(this.scrollComponent.scrollLeft + (e.deltaY || e.deltaX))
-      // no modifier pressed? 
-    }else {
-        this.scrollComponent.scrollLeft += e.deltaX
-        window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+
+     /*shift+scroll event from a mouse wheel has deltaX, but shift+scroll event from a touchpad has the potential to populate both delatX deltaY when moving diagonally
+     checking deltaX first in this ternary prevents bugs when both deltaX and deltaX are changing by prioritizing deltaX*/
+
+      this.props.onScroll(this.scrollComponent.scrollLeft + (e.deltaX || e.deltaY))
+    } else {
+       // no modifier pressed? 
+      this.scrollComponent.scrollLeft += e.deltaX
+      window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
     }
   }
 
   handleMouseDown = e => {
     if (e.button === 0) {
       //make drag position variables contain both x and y
-      this.dragStartPosition = {x: e.pageX, y: e.pageY}
-      this.dragLastPosition = {x:e.pageX, y: e.pageY}
+      this.dragStartPosition = { x: e.pageX, y: e.pageY }
+      this.dragLastPosition = { x: e.pageX, y: e.pageY }
       this.setState({
         isDragging: true
       })
@@ -80,9 +83,9 @@ class ScrollElement extends Component {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
-      //scroll window for vertical scrolling - **fixed stuttering**
+      //scroll window for vertical scrolling along with scrolling the component horizontally
       const yPositionChange = this.dragLastPosition.y - e.pageY;
-      window.scroll(window.scrollX, window.scrollY+yPositionChange);
+      window.scroll(window.scrollX, window.scrollY + yPositionChange);
       this.props.onScroll(this.scrollComponent.scrollLeft + this.dragLastPosition.x - e.pageX)
       this.dragLastPosition.x = e.pageX
     }
@@ -175,8 +178,8 @@ class ScrollElement extends Component {
     }
   }
 
-  componentWillUnmount(){
-    if(this.scrollComponent){
+  componentWillUnmount() {
+    if (this.scrollComponent) {
       this.scrollComponent.removeEventListener('wheel', this.handleWheel);
     }
   }
