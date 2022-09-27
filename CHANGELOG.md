@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
-
+* Added X and Y dragging on calender component
 
 ## 0.28.0
 
