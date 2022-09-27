@@ -63,7 +63,7 @@ class ScrollElement extends Component {
        // no modifier pressed? 
        e.preventDefault();
       this.scrollComponent.scrollLeft += e.deltaX
-      window.scrollTo(window.pageXOffset, window.pageYOffset + e.deltaY)
+      window.scrollBy(0, e.deltaY)
     }
   }
 
@@ -84,7 +84,7 @@ class ScrollElement extends Component {
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
       //scroll window for vertical scrolling along with scrolling the component horizontally
       const yPositionChange = this.dragLastPosition.y - e.pageY;
-      window.scroll(window.scrollX, window.scrollY + yPositionChange);
+      window.scrollBy(0,  yPositionChange);
       this.props.onScroll(this.scrollComponent.scrollLeft + this.dragLastPosition.x - e.pageX)
       this.dragLastPosition.x = e.pageX
     }
