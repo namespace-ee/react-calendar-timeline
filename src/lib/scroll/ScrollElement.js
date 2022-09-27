@@ -44,6 +44,7 @@ class ScrollElement extends Component {
 
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
+      if (!traditionalZoom) {
       e.preventDefault()
       const parentPosition = getParentPosition(e.currentTarget)
       const xPosition = e.clientX - parentPosition.x
@@ -52,6 +53,7 @@ class ScrollElement extends Component {
 
       // convert vertical zoom to horiziontal
       this.props.onWheelZoom(speed, xPosition, e.deltaY)
+      }
     } else if (e.shiftKey) {
       e.preventDefault()
       // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
