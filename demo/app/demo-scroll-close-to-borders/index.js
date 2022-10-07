@@ -115,15 +115,15 @@ export default class App extends Component {
       const zoomMillis = Math.round((stateTo - stateFrom));
       const percentCloseToBorder = 2;
     
-      // 5 % Percent of the window area will be used for activanting the move Time window, will change base on zoom level  
+      // Percent of the window area will be used for activanting the move Time window, will change base on zoom level  
       const timeBorderArea =  Math.round(((zoomMillis * percentCloseToBorder) / 100));
       const duration = item.end - item.start;
       const rightBorderTime = time + duration;
     
       // Moves to right  
       if (rightBorderTime > stateTo - timeBorderArea) {
-        const newFrom = stateFrom + (timeBorderArea / percentCloseToBorder); // Moves 20 percent  
-        const newTo = stateTo + (timeBorderArea / percentCloseToBorder); // Moves 20 percent  
+        const newFrom = stateFrom + (timeBorderArea / percentCloseToBorder); 
+        const newTo = stateTo + (timeBorderArea / percentCloseToBorder); 
     
         this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
         return time + (dragStart.offset);
@@ -131,11 +131,39 @@ export default class App extends Component {
     
       // Moves to left  
       if (time < stateFrom + timeBorderArea) {
-        const newFrom = stateFrom - (timeBorderArea / percentCloseToBorder); // Moves 20 percent  
-        const newTo = stateTo - (timeBorderArea / percentCloseToBorder); // Moves 20 percent  
+        const newFrom = stateFrom - (timeBorderArea / percentCloseToBorder); 
+        const newTo = stateTo - (timeBorderArea / percentCloseToBorder); 
     
         this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
         return time + (dragStart.offset);
+      }
+    }
+
+
+    if (action === 'resize' && this.timelineComponent && this.timelineComponent.current && this.timelineComponent.current.state) {
+      const time =  this.timelineComponent.current.timeFromItemEvent(e) // right time from timeline, DO NOT USE time "param"
+      const stateFrom = this.timelineComponent.current.state.visibleTimeStart;
+      const stateTo = this.timelineComponent.current.state.visibleTimeEnd;
+    
+      const zoomMillis = Math.round((stateTo - stateFrom));
+      const percentCloseToBorder = 2;
+    
+      // Percent of the window area will be used for activanting the move Time window, will change base on zoom level  
+      const timeBorderArea =  Math.round(((zoomMillis * percentCloseToBorder) / 100));
+
+      // Moves to right  
+      if (resizeEdge === 'right' && time > stateTo - timeBorderArea) {
+        const newFrom = stateFrom + (timeBorderArea / percentCloseToBorder); 
+        const newTo = stateTo + (timeBorderArea / percentCloseToBorder); 
+    
+        this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
+        return time + (timeBorderArea / 2);
+      } else if (time < stateFrom + timeBorderArea) { // Moves to left
+        const newFrom = stateFrom - (timeBorderArea / percentCloseToBorder); 
+        const newTo = stateTo - (timeBorderArea / percentCloseToBorder); 
+    
+        this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
+        return time - (timeBorderArea / 2);
       }
     }
 
