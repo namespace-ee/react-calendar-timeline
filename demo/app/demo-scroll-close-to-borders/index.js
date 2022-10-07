@@ -108,31 +108,31 @@ export default class App extends Component {
 
   moveResizeValidator = (action, item, timeDONOTUSE, resizeEdge, e, dragStart) => {
     if (action === 'move' && this.timelineComponent && this.timelineComponent.current && this.timelineComponent.current.state) {
-      const time =  this.timelineComponent.current.timeFromItemEvent(e) // right time from timeline, DO NOT USE time "param"
+      const time =  this.timelineComponent.current.timeFromItemEvent(e) // time from drag/resize event, DO NOT USE "time" param
       const stateFrom = this.timelineComponent.current.state.visibleTimeStart;
       const stateTo = this.timelineComponent.current.state.visibleTimeEnd;
     
       const zoomMillis = Math.round((stateTo - stateFrom));
-      const percentCloseToBorder = 2;
+      const closeToBorderTolerance = 3; // How close item to border enables the auto-scroll canvas, 2-5 are good values.
     
       // Percent of the window area will be used for activanting the move Time window, will change base on zoom level  
-      const timeBorderArea =  Math.round(((zoomMillis * percentCloseToBorder) / 100));
+      const timeBorderArea =  Math.round(((zoomMillis * closeToBorderTolerance) / 100));
       const duration = item.end - item.start;
       const rightBorderTime = time + duration;
     
-      // Moves to right  
+      // Moves timeline to right, when item close to right border
       if (rightBorderTime > stateTo - timeBorderArea) {
-        const newFrom = stateFrom + (timeBorderArea / percentCloseToBorder); 
-        const newTo = stateTo + (timeBorderArea / percentCloseToBorder); 
+        const newFrom = stateFrom + (timeBorderArea / closeToBorderTolerance); 
+        const newTo = stateTo + (timeBorderArea / closeToBorderTolerance); 
     
         this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
         return time + (dragStart.offset);
       }  
     
-      // Moves to left  
+      // Moves canvas to left, when item close to left border
       if (time < stateFrom + timeBorderArea) {
-        const newFrom = stateFrom - (timeBorderArea / percentCloseToBorder); 
-        const newTo = stateTo - (timeBorderArea / percentCloseToBorder); 
+        const newFrom = stateFrom - (timeBorderArea / closeToBorderTolerance); 
+        const newTo = stateTo - (timeBorderArea / closeToBorderTolerance); 
     
         this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
         return time + (dragStart.offset);
@@ -141,26 +141,26 @@ export default class App extends Component {
 
 
     if (action === 'resize' && this.timelineComponent && this.timelineComponent.current && this.timelineComponent.current.state) {
-      const time =  this.timelineComponent.current.timeFromItemEvent(e) // right time from timeline, DO NOT USE time "param"
+      const time =  this.timelineComponent.current.timeFromItemEvent(e) // time from drag/resize event, DO NOT USE "time" param
       const stateFrom = this.timelineComponent.current.state.visibleTimeStart;
       const stateTo = this.timelineComponent.current.state.visibleTimeEnd;
     
       const zoomMillis = Math.round((stateTo - stateFrom));
-      const percentCloseToBorder = 2;
+      const closeToBorderTolerance = 2; // How close item to border enables the auto-scroll canvas, 2-5 are good values.
     
       // Percent of the window area will be used for activanting the move Time window, will change base on zoom level  
-      const timeBorderArea =  Math.round(((zoomMillis * percentCloseToBorder) / 100));
+      const timeBorderArea =  Math.round(((zoomMillis * closeToBorderTolerance) / 100));
 
-      // Moves to right  
+      // Moves timeline to right, when item close to right border
       if (resizeEdge === 'right' && time > stateTo - timeBorderArea) {
-        const newFrom = stateFrom + (timeBorderArea / percentCloseToBorder); 
-        const newTo = stateTo + (timeBorderArea / percentCloseToBorder); 
+        const newFrom = stateFrom + (timeBorderArea / closeToBorderTolerance); 
+        const newTo = stateTo + (timeBorderArea / closeToBorderTolerance); 
     
         this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
         return time + (timeBorderArea / 2);
-      } else if (time < stateFrom + timeBorderArea) { // Moves to left
-        const newFrom = stateFrom - (timeBorderArea / percentCloseToBorder); 
-        const newTo = stateTo - (timeBorderArea / percentCloseToBorder); 
+      } else if (time < stateFrom + timeBorderArea) { // Moves canvas to left, when item close to left border
+        const newFrom = stateFrom - (timeBorderArea / closeToBorderTolerance); 
+        const newTo = stateTo - (timeBorderArea / closeToBorderTolerance); 
     
         this.timelineComponent.current.updateScrollCanvas(newFrom, newTo);
         return time - (timeBorderArea / 2);
@@ -180,7 +180,6 @@ export default class App extends Component {
         items={items}
         keys={keys}
         sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
         canMove
         canResize="both"
         canSelect

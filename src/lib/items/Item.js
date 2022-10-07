@@ -300,7 +300,8 @@ export default class Item extends Component {
                 this.props.item,
                 dragTime,
                 null,
-                e
+                e,
+                this.state.dragStart
               )
             }
 
@@ -348,7 +349,8 @@ export default class Item extends Component {
               this.props.item,
               resizeTime,
               resizeEdge,
-              e
+              e,
+              this.state.dragStart
             )
           }
 
@@ -372,7 +374,8 @@ export default class Item extends Component {
               this.props.item,
               resizeTime,
               resizeEdge,
-              e
+              e,
+              this.state.dragStart
             )
           }
 
