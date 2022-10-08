@@ -248,7 +248,10 @@ export default class Item extends Component {
             dragStart: { 
               x: e.pageX,
               y: e.pageY,
-            offset: this.itemTimeStart - clickTime },
+              clientX: e.clientX,
+              offset: this.itemTimeStart - clickTime,
+              itemTimeStart: this.itemTimeStart
+            },
             preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
             dragTime: this.itemTimeStart,
             dragGroupDelta: 0
@@ -265,7 +268,10 @@ export default class Item extends Component {
             dragTime = this.props.moveResizeValidator(
               'move',
               this.props.item,
-              dragTime
+              dragTime,
+              null,
+              e,
+              this.state.dragStart
             )
           }
 
@@ -292,7 +298,10 @@ export default class Item extends Component {
               dragTime = this.props.moveResizeValidator(
                 'move',
                 this.props.item,
-                dragTime
+                dragTime,
+                null,
+                e,
+                this.state.dragStart
               )
             }
 
@@ -339,7 +348,9 @@ export default class Item extends Component {
               'resize',
               this.props.item,
               resizeTime,
-              resizeEdge
+              resizeEdge,
+              e,
+              this.state.dragStart
             )
           }
 
@@ -362,7 +373,9 @@ export default class Item extends Component {
               'resize',
               this.props.item,
               resizeTime,
-              resizeEdge
+              resizeEdge,
+              e,
+              this.state.dragStart
             )
           }
 
@@ -425,7 +438,7 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
-    if(!!this.item){
+    if(this.item){
       if (this.props.selected && !interactMounted) {
         this.mountInteract()
         interactMounted = true

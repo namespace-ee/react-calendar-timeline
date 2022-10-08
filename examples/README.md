@@ -84,3 +84,9 @@ Native info label was removed with 0.26.0 and now the responsibility to render t
 
 [Example Codesandbox](https://codesandbox.io/s/timeline-demo-info-label-neec9)
 
+## Move/Resize item close to left/right border, auto scroll timeline 
+
+This demo shows how to use the `moveResizeValidator()` function to move/resize an item close to the left/right border of the timeline, and auto scroll the timeline bounds to the direction of the move/resize item. By doing this you can keep moving/resizing the item without to stop, move timeline and move/resize again and item. Below you can check the example "scrollCloseToBorders"
+
+[Example Codesandbox](https://codesandbox.io/p/github/davidbejarcaceres/react-calendar-timeline/demo/MoveResize-items-moves-timeline-when-item-close-to-left-right-border)
+
