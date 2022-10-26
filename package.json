@@ -1,7 +1,7 @@
 {
-  "name": "react-calendar-timeline",
-  "version": "0.28.0",
-  "description": "react calendar timeline",
+  "name": "@opendoor/react-calendar-timeline",
+  "version": "0.28.1",
+  "description": "Opendoor fork of https://www.npmjs.com/package/react-calendar-timeline",
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run build:lib",

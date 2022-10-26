@@ -298,6 +298,14 @@ export function collision(a, b, lineHeight, collisionPadding = EPSILON) {
     a.top + a.height + verticalMargin - collisionPadding > b.top
   )
 }
+// OD Patch: function to only consider vertical collisions
+function verticalCollision(a, b, lineHeight) {
+  var collisionPadding = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : EPSILON;
+  // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+  var verticalMargin = 0;
+  return a.top - verticalMargin + collisionPadding < b.top + b.height && a.top + a.height + verticalMargin - collisionPadding > b.top;
+}
+
 
 /**
  * Calculate the position of a given item for a group that
@@ -322,10 +330,11 @@ export function groupStack(
       //Items are placed from i=0 onwards, only check items with index < i
       for (var j = itemIndex - 1, jj = 0; j >= jj; j--) {
         var other = group[j]
+        // OD Patch: Use verticalCollision function to default all timeline items to their own row
         if (
           other.dimensions.top !== null &&
           other.dimensions.stack &&
-          collision(item.dimensions, other.dimensions, lineHeight)
+          verticalCollision(item.dimensions, other.dimensions, lineHeight)
         ) {
           collidingItem = other
           break
