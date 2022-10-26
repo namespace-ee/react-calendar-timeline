@@ -17,9 +17,7 @@ $list-item-padding: 0 4px;
 $weekend: rgba(250, 246, 225, 0.5);
 
 .react-calendar-timeline {
-  * {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
 
   .rct-outer {
     display: block;
@@ -77,7 +75,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       text-overflow: ellipsis;
       box-sizing: border-box;
       margin: 0;
-      border-bottom: $border-width solid $border-color;
+      border-bottom: $border-width solid #ebeff3;
 
       &.rct-sidebar-row-odd {
         background: $row-background-odd;
@@ -93,14 +91,15 @@ $weekend: rgba(250, 246, 225, 0.5);
   .rct-vertical-lines {
     .rct-vl {
       position: absolute;
-      border-left: 1px solid $border-color;
+      border-left: 1px solid #e0e3e7;
+      background: #ebeff3;
       z-index: 30;
       &.rct-vl-first {
         border-left-width: 2px;
       }
       &.rct-day-6,
       &.rct-day-0 {
-        background: $weekend;
+        background: #ebeff3;
       }
     }
   }
@@ -113,7 +112,7 @@ $weekend: rgba(250, 246, 225, 0.5);
 
     .rct-hl-even,
     .rct-hl-odd {
-      border-bottom: $border-width solid $border-color;
+      border-bottom: $border-width solid red;
       box-sizing: border-box;
       z-index: 40;
     }
@@ -138,18 +137,18 @@ $weekend: rgba(250, 246, 225, 0.5);
     align-items: center;
     justify-content: center;
     height: 100%;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid #ebeff3;
     cursor: pointer;
     font-size: 14px;
-    background-color: rgb(240, 240, 240);
-    border-left:  2px solid #bbb;
+    background-color: #ffffff;
+    border-left:  2px solid #f0f2f6;
   }
 
   .rct-dateHeader-primary {
     background-color: initial;
-    border-left:  1px solid #bbb;
-    border-right: 1px solid #bbb;
-    color: #fff
+    border-left:  1px solid #e0e3e7;
+    border-right: 1px solid #e0e3e7;
+    color: #154472;
   }
 
   .rct-header-root {
