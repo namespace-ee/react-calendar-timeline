@@ -1,3 +1,5 @@
+Opendoor fork of https://www.npmjs.com/package/react-calendar-timeline. See https://opendoor.slack.com/archives/C02QLNGF3SQ/p1666742104613769.
+
 # ⚠️⚠️⚠️⚠️ HELP WANTED
 please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
 
