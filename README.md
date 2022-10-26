@@ -1,5 +1,7 @@
 Opendoor fork of https://www.npmjs.com/package/react-calendar-timeline. See https://opendoor.slack.com/archives/C02QLNGF3SQ/p1666742104613769.
 
+The patches included in this fork were initially applied via node module patching: https://github.com/opendoor-labs/code/blob/81d4b0d9/js/packages/tessellation/patches/react-calendar-timeline+0.28.0.patch#L1. If additional context on those changes is desired, please reach out to those authors.
+
 # ⚠️⚠️⚠️⚠️ HELP WANTED
 please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
 
