@@ -2,6 +2,13 @@ Opendoor fork of https://www.npmjs.com/package/react-calendar-timeline. See http
 
 The patches included in this fork were initially applied via node module patching: https://github.com/opendoor-labs/code/blob/81d4b0d9/js/packages/tessellation/patches/react-calendar-timeline+0.28.0.patch#L1. If additional context on those changes is desired, please reach out to those authors.
 
+In order to publish a new version of this forked library to NPM:
+- Rev the version, either by manually adjusting the `version` field in the `package.json`, or via `npm version patch` (`| minor | major`, ref https://docs.npmjs.com/cli/v8/commands/npm-version).
+- Ensure your desired changes are code reviewed, and merged into the `master` branch.
+- Generate build artifacts via `npm build`
+- Ensure you have an `NPM_TOKEN` in your `PATH` with write privileges. The `code` repo injects an `NPM_TOKEN` into your environment with these permissions, so you should be able to navigate to `code/`, `echo $NPM_TOKEN`, and then `export NPM_TOKEN=<the_token>` from this project's working directory. Verify it has been set by running `echo $NPM_TOKEN`.
+- Publish the build artifacts via `npm publish`
+
 # ⚠️⚠️⚠️⚠️ HELP WANTED
 please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
 
