@@ -8,6 +8,7 @@ export const props = {
   keys: defaultKeys,
   lineHeight: 30,
   stackItems: true,
+  verticalMarginBetweenStackedItems: true,
   itemHeightRatio: 0.75,
   visibleTimeEnd,
   visibleTimeStart,

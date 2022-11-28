@@ -52,6 +52,7 @@ export default class ReactCalendarTimeline extends Component {
     canSelect: PropTypes.bool,
 
     stackItems: PropTypes.bool,
+    verticalMarginBetweenStackedItems: PropTypes.bool,
 
     traditionalZoom: PropTypes.bool,
 
@@ -145,6 +146,7 @@ export default class ReactCalendarTimeline extends Component {
     canSelect: true,
 
     stackItems: false,
+    verticalMarginBetweenStackedItems: true,
 
     traditionalZoom: false,
 
@@ -302,6 +304,7 @@ export default class ReactCalendarTimeline extends Component {
       props.lineHeight,
       props.itemHeightRatio,
       props.stackItems,
+      props.verticalMarginBetweenStackedItems,
       this.state.draggingItem,
       this.state.resizingItem,
       this.state.dragTime,
@@ -379,6 +382,7 @@ export default class ReactCalendarTimeline extends Component {
           nextProps.lineHeight,
           nextProps.itemHeightRatio,
           nextProps.stackItems,
+          nextProps.verticalMarginBetweenStackedItems,
           prevState.draggingItem,
           prevState.resizingItem,
           prevState.dragTime,
@@ -450,6 +454,7 @@ export default class ReactCalendarTimeline extends Component {
       props.lineHeight,
       props.itemHeightRatio,
       props.stackItems,
+      props.verticalMarginBetweenStackedItems,
       this.state.draggingItem,
       this.state.resizingItem,
       this.state.dragTime,
@@ -987,6 +992,7 @@ export default class ReactCalendarTimeline extends Component {
         this.props.lineHeight,
         this.props.itemHeightRatio,
         this.props.stackItems,
+        this.props.verticalMarginBetweenStackedItems,
         this.state.draggingItem,
         this.state.resizingItem,
         this.state.dragTime,
