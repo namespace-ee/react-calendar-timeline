@@ -966,7 +966,8 @@ export default class ReactCalendarTimeline extends Component {
       visibleTimeStart,
       visibleTimeEnd,
       canvasTimeStart,
-      canvasTimeEnd
+      canvasTimeEnd,
+      selectedItem
     } = this.state
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
@@ -974,7 +975,7 @@ export default class ReactCalendarTimeline extends Component {
     const canvasWidth = getCanvasWidth(width, buffer)
     const minUnit = getMinUnit(zoom, width, timeSteps)
 
-    const isInteractingWithItem = !!draggingItem || !!resizingItem
+    const isInteractingWithItem = !!draggingItem || !!resizingItem || !!selectedItem 
 
     if (isInteractingWithItem) {
       const stackResults = stackTimelineItems(
