@@ -79,7 +79,7 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
-  handleItemColision = (currentItem, item, time) => {
+  handleItemCollision = (currentItem, item, time) => {
     console.log('Item ' + currentItem + 'collided with ' + item, moment(time).format())
   }
 
@@ -180,6 +180,7 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         onZoom={this.handleZoom}
+        onColision={this.handleItemColision}
         moveResizeValidator={this.moveResizeValidator}
         buffer={3}
       >
