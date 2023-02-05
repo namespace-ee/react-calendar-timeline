@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres (more or less) to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
-
+* Added onCollision event between items.
+* Added item collision tests
+* Added item collision demo
 
 ## 0.28.0
 

@@ -33,4 +33,18 @@ export function keyBy(value, key) {
   return obj
 }
 
+export function isCollision(items, pickedItem, callback) {
+  const currentItem = items[pickedItem];
+  const itemsGroup  = items.filter(item => item.group === currentItem.group && item.id !== currentItem.id);
+
+  itemsGroup.forEach(item => {
+    if((currentItem.start <= item.start && currentItem.end >= item.end) ||
+      (currentItem.start >= item.start && currentItem.end <= item.end) ||
+      (currentItem.start <= item.start && currentItem.end >= item.start) ||
+      (currentItem.start <= item.end && currentItem.end >= item.end)) {
+      return callback(currentItem, item);
+    }
+  });
+}
+
 export function noop() {}

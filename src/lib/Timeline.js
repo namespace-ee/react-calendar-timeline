@@ -17,7 +17,7 @@ import {
   getCanvasWidth,
   stackTimelineItems
 } from './utility/calendar'
-import { _get, _length } from './utility/generic'
+import { _get, _length, isCollision } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
@@ -69,6 +69,7 @@ export default class ReactCalendarTimeline extends Component {
     onItemContextMenu: PropTypes.func,
     onCanvasDoubleClick: PropTypes.func,
     onCanvasContextMenu: PropTypes.func,
+    onCollision: PropTypes.func,
     onZoom: PropTypes.func,
     onItemDrag: PropTypes.func,
 
@@ -159,6 +160,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasClick: null,
     onItemDoubleClick: null,
     onItemContextMenu: null,
+    onCollision: null,
     onZoom: null,
 
     verticalLineClassNamesForTime: null,
@@ -656,6 +658,12 @@ export default class ReactCalendarTimeline extends Component {
     this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
     if (this.props.onItemMove) {
       this.props.onItemMove(item, dragTime, newGroupOrder)
+
+      this.items()
+    }
+
+    if(this.props.onCollision) {
+      isCollision(this.props.items, item, this.props.onCollision);
     }
   }
 
@@ -678,6 +686,10 @@ export default class ReactCalendarTimeline extends Component {
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge)
+    }
+
+    if(this.props.onCollision) {
+      isCollision(this.props.items, item, this.props.onCollision);
     }
   }
 
