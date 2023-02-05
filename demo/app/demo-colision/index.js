@@ -180,7 +180,7 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         onZoom={this.handleZoom}
-        onColision={this.handleItemColision}
+        onCollision={this.handleItemColision}
         moveResizeValidator={this.moveResizeValidator}
         buffer={3}
       >
