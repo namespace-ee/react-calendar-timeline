@@ -79,8 +79,8 @@ export default class App extends Component {
     console.log('Context Menu: ' + itemId, moment(time).format())
   }
 
-  handleItemCollision = (currentItem, item, time) => {
-    console.log('Item ' + currentItem + 'collided with ' + item, moment(time).format())
+  handleItemCollision = (currentItem, item) => {
+    console.log('Item ' + currentItem.id + 'collided with ' + item.id)
   }
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
