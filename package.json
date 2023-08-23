@@ -5,8 +5,10 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run build:lib",
-    "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
-    "build:lib": "echo '!!! Building Library' && rimraf lib && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
+    "build:demo":
+      "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
+    "build:lib":
+      "echo '!!! Building Library' && rimraf lib && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
     "lint": "eslint --ext .js --ext .jsx ./src",
     "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
     "prepublish": "npm run build:lib",
@@ -14,10 +16,7 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "files": [
-    "lib",
-    "src"
-  ],
+  "files": ["lib", "src"],
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
@@ -58,30 +57,16 @@
     }
   ],
   "license": "MIT",
-  "keywords": [
-    "react",
-    "reactjs",
-    "react-component",
-    "timeline"
-  ],
+  "keywords": ["react", "reactjs", "react-component", "timeline"],
   "standard": {
     "parser": "babel-eslint"
   },
   "jest": {
     "verbose": true,
-    "testMatch": [
-      "**/__tests__/**/*.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/jest-setup.js"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "modulePaths": [
-      "<rootDir>/src/",
-      "<rootDir>/__tests__"
-    ],
+    "testMatch": ["**/__tests__/**/*.js"],
+    "setupFilesAfterEnv": ["<rootDir>/config/jest-setup.js"],
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "modulePaths": ["<rootDir>/src/", "<rootDir>/__tests__"],
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules",
       "<rootDir>/__tests__/test-utility"
@@ -135,7 +120,7 @@
     "jest-watch-typeahead": "^0.3.1",
     "jsdom": "^11.5.1",
     "moment": "^2.11.1",
-    "node-sass": "^7.0.1",
+    "node-sass": "^9.0.0",
     "prettier": "^1.10.2",
     "prettier-eslint-cli": "^4.7.0",
     "prop-types": "^15.6.2",
