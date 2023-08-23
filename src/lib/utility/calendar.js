@@ -339,7 +339,10 @@ export function groupStack(
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top + item.dimensions.height + verticalMargin - groupTop
+          item.dimensions.top +
+            item.dimensions.height +
+            verticalMargin -
+            groupTop
         )
       }
     } while (collidingItem)
@@ -349,7 +352,6 @@ export function groupStack(
     verticalMargin,
     itemTop: item.dimensions.top
   }
-
 }
 
 // Calculate the position of this item for a group that is not being stacked
@@ -402,7 +404,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
-  
+
   return {
     height: sum(groupHeights),
     groupHeights,
@@ -411,13 +413,18 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
+export function stackGroup(
+  itemsDimensions,
+  isGroupStacked,
+  lineHeight,
+  groupTop
+) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -433,7 +440,12 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemIndex
       )
     } else {
-      r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)
+      r = groupNoStack(
+        lineHeight,
+        itemsDimensions[itemIndex],
+        groupHeight,
+        groupTop
+      )
     }
     groupHeight = r.groupHeight
     verticalMargin = r.verticalMargin
@@ -639,11 +651,11 @@ export function getItemWithInteractions({
 export function getCanvasBoundariesFromVisibleTime(
   visibleTimeStart,
   visibleTimeEnd,
-  buffer,
+  buffer
 ) {
   const zoom = visibleTimeEnd - visibleTimeStart
   // buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
-  const canvasTimeStart = visibleTimeStart - (zoom * (buffer - 1 )/2)
+  const canvasTimeStart = visibleTimeStart - zoom * (buffer - 1) / 2
   const canvasTimeEnd = canvasTimeStart + zoom * buffer
   return [canvasTimeStart, canvasTimeEnd]
 }
@@ -669,22 +681,23 @@ export function calculateScrollCanvas(
   props,
   state
 ) {
-  const buffer = props.buffer;
+  const buffer = props.buffer
   const oldCanvasTimeStart = state.canvasTimeStart
   const oldCanvasTimeEnd = state.canvasTimeEnd
   const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
   const newZoom = visibleTimeEnd - visibleTimeStart
   const newState = { visibleTimeStart, visibleTimeEnd }
 
-  // Check if the current canvas covers the new times
-  const canKeepCanvas =
-    newZoom === oldZoom &&
-    visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
-    visibleTimeStart <= oldCanvasTimeEnd - oldZoom * 1.5 &&
-    visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
-    visibleTimeEnd <= oldCanvasTimeEnd - oldZoom * 0.5
+  // Calculate half of the buffer size on each side = 1/4 of the (buffer - viewport)
+  const halfBuffer = oldZoom * (buffer - 1) * 0.25
 
-  if (!canKeepCanvas || forceUpdateDimensions) {
+  // Check if the current canvas covers the new times
+  const shouldCreateNewCanvas =
+    newZoom !== oldZoom ||
+    visibleTimeStart <= oldCanvasTimeStart + halfBuffer ||
+    visibleTimeEnd >= oldCanvasTimeEnd - halfBuffer
+
+  if (shouldCreateNewCanvas || forceUpdateDimensions) {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
       visibleTimeStart,
       visibleTimeEnd,
