@@ -607,6 +607,12 @@ Plenty of bugfixes, tests and new demos in these 0.14 patch releases.
 * Fix demo for IE11 #44 by @lucidlemon
 * Package a .css file, not a .scss file as previously done. @mariusandra
 
+
+
+### fix
+* Fixed the isInteractingwithItem and is now working fine 
+
+
 [0.9.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.8.6...v0.9.0
 [0.10.0]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.9.0...v0.10.0
 [0.10.1]: https://github.com/namespace-ee/react-calendar-timeline/compare/v0.10.0...v0.10.1
