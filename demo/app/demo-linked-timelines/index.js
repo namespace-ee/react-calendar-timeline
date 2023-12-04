@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-console */
 import React, { Component } from 'react'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 import Timeline from 'react-calendar-timeline'
 // import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
@@ -27,10 +27,10 @@ export default class App extends Component {
     const { groups: groups1, items: items1 } = generateFakeData(5, 400)
     const { groups: groups2, items: items2 } = generateFakeData(5, 400)
 
-    const visibleTimeStart = moment()
+    const visibleTimeStart = dayjs()
       .startOf('day')
       .valueOf()
-    const visibleTimeEnd = moment()
+    const visibleTimeEnd = dayjs()
       .startOf('day')
       .add(1, 'day')
       .valueOf()

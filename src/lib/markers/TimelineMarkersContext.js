@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import createReactContext from 'create-react-context'
 import { noop } from '../utility/generic'
 
 const defaultContextState = {
@@ -12,7 +11,7 @@ const defaultContextState = {
   }
 }
 
-const { Consumer, Provider } = createReactContext(defaultContextState)
+const { Consumer, Provider } = React.createContext(defaultContextState)
 
 // REVIEW: is this the best way to manage ids?
 let _id = 0
