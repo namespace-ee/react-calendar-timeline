@@ -1,20 +1,23 @@
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 import { _get, arraysEqual } from '../utility/generic'
+import {ReactCalendarGroupRendererProps, TimelineGroupBase, TimelineKeys} from "../types/main";
 
-export default class Sidebar extends Component {
-  static propTypes = {
-    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    groupHeights: PropTypes.array.isRequired,
-    keys: PropTypes.object.isRequired,
-    groupRenderer: PropTypes.func,
-    isRightSidebar: PropTypes.bool,
-  }
 
-  shouldComponentUpdate(nextProps) {
+
+type Props<CustomGroup extends TimelineGroupBase = TimelineGroupBase> = {
+  groups:CustomGroup[]
+  width:number
+  height:number
+  groupHeights:number[]
+  keys:TimelineKeys,
+  groupRenderer:React.ComponentType<ReactCalendarGroupRendererProps>; //TODO Check
+  isRightSidebar:boolean
+}
+
+export default class Sidebar extends Component<Props> {
+
+  shouldComponentUpdate(nextProps:Props) {
     return !(
       nextProps.keys === this.props.keys &&
       nextProps.width === this.props.width &&
@@ -24,7 +27,7 @@ export default class Sidebar extends Component {
     )
   }
 
-  renderGroupContent(group, isRightSidebar, groupTitleKey, groupRightTitleKey) {
+  renderGroupContent(group:TimelineGroupBase, isRightSidebar:boolean, groupTitleKey:string, groupRightTitleKey:string) {
     if (this.props.groupRenderer) {
       return React.createElement(this.props.groupRenderer, {
         group,

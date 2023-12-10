@@ -29,11 +29,12 @@ const config = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      }
+      },
+      { test: /\.tsx?$/, loader: 'ts-loader' },
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx','.ts', '.tsx'],
     modules: [path.resolve('./demo'), 'node_modules'],
     alias: {
       '~': path.join(__dirname, './demo'),

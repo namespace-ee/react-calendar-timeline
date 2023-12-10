@@ -1,27 +1,26 @@
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React, { Component, FC } from 'react'
 
 import { iterateTimes } from '../utility/calendar'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import { UnitType } from 'dayjs'
 
-const passThroughPropTypes = {
-  canvasTimeStart: PropTypes.number.isRequired,
-  canvasTimeEnd: PropTypes.number.isRequired,
-  canvasWidth: PropTypes.number.isRequired,
-  lineCount: PropTypes.number.isRequired,
-  minUnit: PropTypes.string.isRequired,
-  timeSteps: PropTypes.object.isRequired,
-  height: PropTypes.number.isRequired,
-  verticalLineClassNamesForTime: PropTypes.func
+type WrapperColumnsProps = {
+  canvasTimeStart: number
+  canvasTimeEnd: number
+  canvasWidth: number
+  lineCount: number
+  minUnit: UnitType
+  timeSteps: Record<string, number>
+  height: number
+  verticalLineClassNamesForTime: (a: number, b: number) => number[]
 }
 
-class Columns extends Component {
-  static propTypes = {
-    ...passThroughPropTypes,
-    getLeftOffsetFromDate: PropTypes.func.isRequired
-  }
+type ColumnsProps = WrapperColumnsProps & {
+  getLeftOffsetFromDate: (time: number) => number
+}
 
-  shouldComponentUpdate(nextProps) {
+class Columns extends Component<ColumnsProps> {
+  shouldComponentUpdate(nextProps: ColumnsProps) {
     return !(
       nextProps.canvasTimeStart === this.props.canvasTimeStart &&
       nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
@@ -44,11 +43,11 @@ class Columns extends Component {
       timeSteps,
       height,
       verticalLineClassNamesForTime,
-      getLeftOffsetFromDate
+      getLeftOffsetFromDate,
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
-    let lines = []
+    let lines: React.JSX.Element[] = []
 
     iterateTimes(
       canvasTimeStart,
@@ -59,11 +58,11 @@ class Columns extends Component {
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
 
-        let classNamesForTime = []
+        let classNamesForTime: number[] = []
         if (verticalLineClassNamesForTime) {
           classNamesForTime = verticalLineClassNamesForTime(
             time.unix() * 1000, // turn into ms, which is what verticalLineClassNamesForTime expects
-            nextTime.unix() * 1000 - 1
+            nextTime.unix() * 1000 - 1,
           )
         }
 
@@ -87,18 +86,18 @@ class Columns extends Component {
               top: '0px',
               left: `${left}px`,
               width: `${right - left}px`,
-              height: `${height}px`
+              height: `${height}px`,
             }}
-          />
+          />,
         )
-      }
+      },
     )
 
     return <div className="rct-vertical-lines">{lines}</div>
   }
 }
 
-const ColumnsWrapper = ({ ...props }) => {
+const ColumnsWrapper: FC<WrapperColumnsProps> = ({ ...props }) => {
   return (
     <TimelineStateConsumer>
       {({ getLeftOffsetFromDate }) => (
@@ -106,10 +105,6 @@ const ColumnsWrapper = ({ ...props }) => {
       )}
     </TimelineStateConsumer>
   )
-}
-
-ColumnsWrapper.defaultProps = {
-  ...passThroughPropTypes
 }
 
 export default ColumnsWrapper

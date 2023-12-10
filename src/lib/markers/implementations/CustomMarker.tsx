@@ -1,25 +1,30 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   createMarkerStylesWithLeftOffset,
-  createDefaultRenderer
+  createDefaultRenderer,
 } from './shared'
 
 const defaultCustomMarkerRenderer = createDefaultRenderer(
-  'default-customer-marker-id'
+  'default-customer-marker-id',
 )
+type CustomMarkerProps = {
+  date: number
+  getLeftOffsetFromDate: (date: number) => number
+  renderer: ({
+    styles,
+    date,
+  }: {
+    styles: React.CSSProperties
+    date: number
+  }) => React.JSX.Element
+}
+
 /**
  * CustomMarker that is placed based on passed in date prop
  */
-class CustomMarker extends React.Component {
-  static propTypes = {
-    getLeftOffsetFromDate: PropTypes.func.isRequired,
-    renderer: PropTypes.func,
-    date: PropTypes.number.isRequired
-  }
-
-  static defaultProps = {
-    renderer: defaultCustomMarkerRenderer
+class CustomMarker extends React.Component<CustomMarkerProps> {
+  public static defaultProps = {
+    renderer: defaultCustomMarkerRenderer,
   }
   render() {
     const { date } = this.props
