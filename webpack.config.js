@@ -9,7 +9,7 @@ const config = {
     demo: [
       `webpack-dev-server/client?http://0.0.0.0:${port}`,
       'webpack/hot/only-dev-server',
-      './index.js'
+      './index.jsx'
     ]
   },
   output: {
@@ -29,11 +29,12 @@ const config = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      }
+      },
+      { test: /\.tsx?$/, loader: 'ts-loader' },
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx','.ts', '.tsx'],
     modules: [path.resolve('./demo'), 'node_modules'],
     alias: {
       '~': path.join(__dirname, './demo'),

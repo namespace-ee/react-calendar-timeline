@@ -1,25 +1,29 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import PropTypes from 'prop-types'
 import { TimelineMarkersConsumer } from '../TimelineMarkersContext'
 import { TimelineMarkerType } from '../markerType'
 
-class TodayMarker extends React.Component {
+type TodayMarkerProps = {
+  interval: number
+  updateMarker: () => void
+  subscribeMarker: () => void
+}
+
+class TodayMarker extends React.Component<PropsWithChildren<TodayMarkerProps>> {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
     updateMarker: PropTypes.func.isRequired,
-    interval: PropTypes.number,
-    children: PropTypes.func
   }
 
   static defaultProps = {
-    interval: 1000 * 10 // default to ten seconds
+    interval: 1000 * 10, // default to ten seconds
   }
 
   componentDidMount() {
-     const { unsubscribe, getMarker } = this.props.subscribeMarker({
+    const { unsubscribe, getMarker } = this.props.subscribeMarker({
       type: TimelineMarkerType.Today,
       renderer: this.props.children,
-      interval: this.props.interval
+      interval: this.props.interval,
     })
     this.unsubscribe = unsubscribe
     this.getMarker = getMarker
@@ -48,11 +52,15 @@ class TodayMarker extends React.Component {
 }
 
 // TODO: turn into HOC?
-const TodayMarkerWrapper = props => {
+const TodayMarkerWrapper = (props) => {
   return (
     <TimelineMarkersConsumer>
       {({ subscribeMarker, updateMarker }) => (
-        <TodayMarker subscribeMarker={subscribeMarker} updateMarker={updateMarker} {...props} />
+        <TodayMarker
+          subscribeMarker={subscribeMarker}
+          updateMarker={updateMarker}
+          {...props}
+        />
       )}
     </TimelineMarkersConsumer>
   )

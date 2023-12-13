@@ -1,6 +1,7 @@
+import React from 'react'
 /* eslint-disable no-console */
-import React, { Component } from 'react'
-import moment from 'moment'
+import { Component } from 'react'
+import dayjs from 'dayjs'
 
 import Timeline, {
   TimelineMarkers,
@@ -11,10 +12,10 @@ import Timeline, {
 
 import generateFakeData from '../generate-fake-data'
 
-var minTime = moment()
+var minTime = dayjs()
   .add(-6, 'months')
   .valueOf()
-var maxTime = moment()
+var maxTime = dayjs()
   .add(6, 'months')
   .valueOf()
 
@@ -35,10 +36,10 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData()
-    const defaultTimeStart = moment()
+    const defaultTimeStart = dayjs()
       .startOf('day')
       .toDate()
-    const defaultTimeEnd = moment()
+    const defaultTimeEnd = dayjs()
       .startOf('day')
       .add(1, 'day')
       .toDate()
@@ -52,31 +53,31 @@ export default class App extends Component {
   }
 
   handleCanvasClick = (groupId, time) => {
-    console.log('Canvas clicked', groupId, moment(time).format())
+    console.log('Canvas clicked', groupId, dayjs(time).format())
   }
 
   handleCanvasDoubleClick = (groupId, time) => {
-    console.log('Canvas double clicked', groupId, moment(time).format())
+    console.log('Canvas double clicked', groupId, dayjs(time).format())
   }
 
   handleCanvasContextMenu = (group, time) => {
-    console.log('Canvas context menu', group, moment(time).format())
+    console.log('Canvas context menu', group, dayjs(time).format())
   }
 
   handleItemClick = (itemId, _, time) => {
-    console.log('Clicked: ' + itemId, moment(time).format())
+    console.log('Clicked: ' + itemId, dayjs(time).format())
   }
 
   handleItemSelect = (itemId, _, time) => {
-    console.log('Selected: ' + itemId, moment(time).format())
+    console.log('Selected: ' + itemId, dayjs(time).format())
   }
 
   handleItemDoubleClick = (itemId, _, time) => {
-    console.log('Double Click: ' + itemId, moment(time).format())
+    console.log('Double Click: ' + itemId, dayjs(time).format())
   }
 
   handleItemContextMenu = (itemId, _, time) => {
-    console.log('Context Menu: ' + itemId, moment(time).format())
+    console.log('Context Menu: ' + itemId, dayjs(time).format())
   }
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
@@ -182,14 +183,14 @@ export default class App extends Component {
           <TodayMarker />
           <CustomMarker
             date={
-              moment()
+              dayjs()
                 .startOf('day')
                 .valueOf() +
               1000 * 60 * 60 * 2
             }
           />
           <CustomMarker
-            date={moment()
+            date={dayjs()
               .add(3, 'day')
               .valueOf()}
           >
