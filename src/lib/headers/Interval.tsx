@@ -1,9 +1,33 @@
-import React from 'react'
+import React, { ComponentType, HTMLAttributes } from 'react'
 import PropTypes from 'prop-types'
-import { getNextUnit } from '../utility/calendar'
+import { getNextUnit, SelectUnits } from '../utility/calendar'
 import { composeEvents } from '../utility/events'
+import { Dayjs } from 'dayjs'
+import {
+  IntervalRenderer,
+  Interval as IntervalType,
+  GetIntervalProps,
+} from '../types/main'
 
-class Interval extends React.PureComponent {
+type GetIntervalPropsParams = {
+  interval: IntervalType
+} & HTMLAttributes<HTMLDivElement>
+
+export type IntervalProps<Data extends any> = {
+  intervalRenderer: ComponentType<IntervalRenderer<Data>>
+  unit: SelectUnits
+  interval: IntervalType
+  showPeriod: (startTime: Dayjs, endTime: Dayjs) => void
+  intervalText: string
+  primaryHeader: boolean
+  getIntervalProps: (
+    props?: GetIntervalPropsParams,
+  ) => HTMLAttributes<HTMLDivElement>
+
+  headerData?: Data
+}
+
+class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
   static propTypes = {
     intervalRenderer: PropTypes.func,
     unit: PropTypes.string.isRequired,
@@ -12,7 +36,7 @@ class Interval extends React.PureComponent {
     intervalText: PropTypes.string.isRequired,
     primaryHeader: PropTypes.bool.isRequired,
     getIntervalProps: PropTypes.func.isRequired,
-    headerData: PropTypes.object
+    headerData: PropTypes.object,
   }
 
   onIntervalClick = () => {
@@ -27,13 +51,15 @@ class Interval extends React.PureComponent {
     }
   }
 
-  getIntervalProps = (props = {}) => {
+  getIntervalProps = (
+    props: GetIntervalProps = {},
+  ): HTMLAttributes<HTMLDivElement> => {
     return {
       ...this.props.getIntervalProps({
         interval: this.props.interval,
-        ...props
+        ...props,
       }),
-      onClick: composeEvents(this.onIntervalClick, props.onClick)
+      onClick: composeEvents(this.onIntervalClick, props.onClick),
     }
   }
 
@@ -46,7 +72,7 @@ class Interval extends React.PureComponent {
           getIntervalProps={this.getIntervalProps}
           intervalContext={{
             interval,
-            intervalText
+            intervalText,
           }}
           data={headerData}
         />
@@ -56,9 +82,10 @@ class Interval extends React.PureComponent {
     return (
       <div
         data-testid="dateHeaderInterval"
-        {...this.getIntervalProps({
-        })}
-        className={`rct-dateHeader ${this.props.primaryHeader? 'rct-dateHeader-primary' : ''}`}
+        {...this.getIntervalProps({})}
+        className={`rct-dateHeader ${
+          this.props.primaryHeader ? 'rct-dateHeader-primary' : ''
+        }`}
       >
         <span>{intervalText}</span>
       </div>

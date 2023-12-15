@@ -1,21 +1,24 @@
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import GroupRow from './GroupRow'
 
-export default class GroupRows extends Component {
-  static propTypes = {
-    canvasWidth: PropTypes.number.isRequired,
-    lineCount: PropTypes.number.isRequired,
-    groupHeights: PropTypes.array.isRequired,
-    onRowClick: PropTypes.func.isRequired,
-    onRowDoubleClick: PropTypes.func.isRequired,
-    clickTolerance: PropTypes.number.isRequired,
-    groups: PropTypes.array.isRequired,
-    horizontalLineClassNamesForGroup: PropTypes.func,
-    onRowContextClick: PropTypes.func.isRequired,
-  }
+export type RowClickEvent = (
+  evt: React.MouseEvent<HTMLDivElement>,
+  index: number,
+) => void
 
-  shouldComponentUpdate(nextProps) {
+export interface GroupRowsProps<T> {
+  canvasWidth: number
+  lineCount: number
+  groupHeights: number[]
+  onRowClick: RowClickEvent
+  onRowDoubleClick: RowClickEvent
+  clickTolerance: number
+  groups: T[]
+  horizontalLineClassNamesForGroup?: (group: T) => string[]
+  onRowContextClick: RowClickEvent
+}
+export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
+  shouldComponentUpdate(nextProps: GroupRowsProps<T>) {
     return !(
       nextProps.canvasWidth === this.props.canvasWidth &&
       nextProps.lineCount === this.props.lineCount &&
@@ -36,24 +39,24 @@ export default class GroupRows extends Component {
       horizontalLineClassNamesForGroup,
       onRowContextClick,
     } = this.props
-    let lines = []
+    const lines = []
 
     for (let i = 0; i < lineCount; i++) {
       lines.push(
         <GroupRow
           clickTolerance={clickTolerance}
-          onContextMenu={evt => onRowContextClick(evt, i)}
-          onClick={evt => onRowClick(evt, i)}
-          onDoubleClick={evt => onRowDoubleClick(evt, i)}
+          onContextMenu={(evt) => onRowContextClick(evt, i)}
+          onClick={(evt) => onRowClick(evt, i)}
+          onDoubleClick={(evt) => onRowDoubleClick(evt, i)}
           key={`horizontal-line-${i}`}
           isEvenRow={i % 2 === 0}
           group={groups[i]}
           horizontalLineClassNamesForGroup={horizontalLineClassNamesForGroup}
           style={{
             width: `${canvasWidth}px`,
-            height: `${groupHeights[i]}px`
+            height: `${groupHeights[i]}px`,
           }}
-        />
+        />,
       )
     }
 

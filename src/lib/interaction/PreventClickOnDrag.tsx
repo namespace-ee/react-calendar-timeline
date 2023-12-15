@@ -1,24 +1,22 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component, MouseEventHandler } from 'react'
 
-class PreventClickOnDrag extends Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired,
-    onClick: PropTypes.func.isRequired,
-    clickTolerance: PropTypes.number.isRequired
-  }
-
-  handleMouseDown = evt => {
+type Props = {
+  children: React.ReactElement;
+  onClick: MouseEventHandler<HTMLElement>;
+  clickTolerance: number;
+}
+class PreventClickOnDrag extends Component<Props> {
+  handleMouseDown: MouseEventHandler<HTMLElement> = evt => {
     this.originClickX = evt.clientX
   }
 
-  handleMouseUp = evt => {
+  handleMouseUp: MouseEventHandler<HTMLElement> = evt => {
     if (Math.abs(this.originClickX - evt.clientX) > this.props.clickTolerance) {
       this.cancelClick = true
     }
   }
 
-  handleClick = evt => {
+  handleClick: MouseEventHandler<HTMLElement> = evt => {
     if (!this.cancelClick) {
       this.props.onClick(evt)
     }
@@ -26,6 +24,8 @@ class PreventClickOnDrag extends Component {
     this.cancelClick = false
     this.originClickX = null
   }
+  private originClickX: any
+  private cancelClick: boolean = false
 
   render() {
     const childElement = React.Children.only(this.props.children)

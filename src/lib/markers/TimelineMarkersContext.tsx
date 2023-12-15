@@ -2,9 +2,13 @@ import React, { PropsWithChildren } from 'react'
 import { noop } from '../utility/generic'
 import { MarkerType } from './markerType'
 
+export type SubscribeReturn = {
+  unsubscribe: () => void
+  getMarker: () => MarkerType
+}
 type TimelineMarkersContextValue = {
   markers: MarkerType[]
-  subscribeMarker: (newe: MarkerType) => void
+  subscribeMarker: (newe: MarkerType) => SubscribeReturn;
   updateMarker: (upd: MarkerType) => void
 }
 
@@ -13,7 +17,10 @@ const defaultContextState: TimelineMarkersContextValue = {
   subscribeMarker: () => {
     // eslint-disable-next-line
     console.warn('default subscribe marker used')
-    return noop
+    return {
+      unsubscribe: noop,
+      getMarker: noop
+    } as SubscribeReturn
   },
   updateMarker: () => {
     // eslint-disable-next-line
@@ -36,7 +43,7 @@ export class TimelineMarkersProvider extends React.Component<
   PropsWithChildren,
   TimelineMarkersContextValue
 > {
-  handleSubscribeToMarker = (newMarker: MarkerType) => {
+  handleSubscribeToMarker = (newMarker: MarkerType): SubscribeReturn => {
     newMarker = {
       ...newMarker,
       // REVIEW: in the event that we accept id to be passed to the Marker components, this line would override those

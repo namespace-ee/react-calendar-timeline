@@ -1,12 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { HTMLAttributes } from 'react'
+import { GetItemPropsParams, GetResizeProps, ItemProps } from './Item'
+import { ItemContext } from '../types/main'
+
+type Props = {
+  item: ItemProps
+  itemContext: ItemContext
+  getItemProps: (p?: GetItemPropsParams) => HTMLAttributes<HTMLDivElement>
+  getResizeProps: GetResizeProps
+}
 
 export const defaultItemRenderer = ({
   item,
   itemContext,
   getItemProps,
-  getResizeProps
-}) => {
+  getResizeProps,
+}: Props) => {
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
   return (
     <div {...getItemProps(item.itemProps)}>
@@ -22,13 +30,4 @@ export const defaultItemRenderer = ({
       {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}
     </div>
   )
-}
-
-// TODO: update this to actual prop types. Too much to change before release
-// future me, forgive me.
-defaultItemRenderer.propTypes = {
-  item: PropTypes.any,
-  itemContext: PropTypes.any,
-  getItemProps: PropTypes.any,
-  getResizeProps: PropTypes.any
 }

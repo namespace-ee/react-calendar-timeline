@@ -9,6 +9,7 @@ import { MarkerCanvasConsumer } from '../MarkerCanvasContext'
 const defaultRenderer = createDefaultRenderer('default-cursor-marker')
 
 type CursorMarkerWrapperProps = {
+  getLeftOffsetFromDate: (date: number) => number
   renderer: ({
     styles,
     date,

@@ -1,5 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode } from 'react'
 import { noop } from '../utility/generic'
 
 const defaultContextState = {
@@ -10,22 +9,22 @@ const defaultContextState = {
   },
   rightSidebarWidth: 0,
   leftSidebarWidth: 150,
-  timeSteps: {}
+  timeSteps: {},
 }
 
-const { Consumer, Provider } = React.createContext(defaultContextState)
+const { Consumer, Provider } =
+  React.createContext<typeof defaultContextState>(defaultContextState)
 
-
-export class TimelineHeadersProvider extends React.Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired,
-    rightSidebarWidth: PropTypes.number,
-    leftSidebarWidth: PropTypes.number.isRequired,
-    //TODO: maybe this should be skipped?
-    timeSteps: PropTypes.object.isRequired,
-    registerScroll: PropTypes.func.isRequired,
-  }
-
+export type TimelineHeadersProviderProps = {
+  children: ReactNode
+  rightSidebarWidth?: number
+  leftSidebarWidth: number
+  //TODO: maybe this should be skipped?
+  timeSteps: object
+  registerScroll: (e: HTMLDivElement) => void
+}
+export class TimelineHeadersProvider extends React.Component<TimelineHeadersProviderProps> {
+  static propTypes = {}
 
   render() {
     const contextValue = {
@@ -33,7 +32,7 @@ export class TimelineHeadersProvider extends React.Component {
       leftSidebarWidth: this.props.leftSidebarWidth,
       timeSteps: this.props.timeSteps,
       registerScroll: this.props.registerScroll,
-    }
+    } as typeof defaultContextState
     return <Provider value={contextValue}>{this.props.children}</Provider>
   }
 }

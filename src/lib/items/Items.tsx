@@ -1,25 +1,70 @@
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import Item from './Item'
+import Item, { ItemProps } from './Item'
 // import ItemGroup from './ItemGroup'
 
 import { _get, arraysEqual, keyBy } from '../utility/generic'
 import { getGroupOrders, getVisibleItems } from '../utility/calendar'
+import {
+  TimelineGroupBase,
+  TimelineItemBase,
+  TimelineKeys,
+} from '../types/main'
 
-const canResizeLeft = (item, canResize) => {
+type CustomItem = TimelineItemBase<any>
+type CanResize = true | false | 'left' | 'right' | 'both'
+type ItemsProps = {
+  groups: TimelineGroupBase[]
+  items: CustomItem[]
+  // todo
+  dimensionItems: any[]
+  selected: (string | number)[]
+
+  canvasTimeStart: number
+  canvasTimeEnd: number
+  canvasWidth: number
+
+  dragSnap?: number
+  minResizeWidth?: number
+  selectedItem?: string | number
+
+  canChangeGroup: boolean
+  canMove: boolean
+  canResize?: CanResize
+  canSelect?: boolean
+  keys: TimelineKeys
+  moveResizeValidator: ItemProps['moveResizeValidator']
+  itemSelect: ItemProps['onSelect']
+  itemDrag: ItemProps['onDrag']
+  itemDrop: ItemProps['onDrop']
+  itemResizing: ItemProps['onResizing']
+  itemResized: ItemProps['onResized']
+  onItemDoubleClick: ItemProps['onItemDoubleClick']
+  onItemContextMenu: ItemProps['onContextMenu']
+  itemRenderer: ItemProps['itemRenderer']
+  groupTops: boolean
+  useResizeHandle: boolean
+  scrollRef: HTMLElement
+  // Add more props if needed
+}
+
+type ItemsState = {
+  // Define your state properties here
+}
+
+const canResizeLeft = (item: CustomItem, canResize?: CanResize) => {
   const value =
     _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'left' || value === 'both'
 }
 
-const canResizeRight = (item, canResize) => {
+const canResizeRight = (item: CustomItem, canResize?: CanResize) => {
   const value =
     _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'right' || value === 'both' || value === true
 }
 
-export default class Items extends Component {
-  static propTypes = {
+export default class Items extends Component<ItemsProps, ItemsState> {
+  /*static propTypes = {
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 
@@ -59,9 +104,9 @@ export default class Items extends Component {
 
   static defaultProps = {
     selected: []
-  }
+  }*/
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: ItemsProps) {
     return !(
       arraysEqual(nextProps.groups, this.props.groups) &&
       arraysEqual(nextProps.items, this.props.items) &&
@@ -77,49 +122,41 @@ export default class Items extends Component {
       nextProps.canChangeGroup === this.props.canChangeGroup &&
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
-      nextProps.canSelect === this.props.canSelect     
+      nextProps.canSelect === this.props.canSelect
     )
   }
 
-  isSelected(item, itemIdKey) {
+  isSelected(item: CustomItem, itemIdKey: string) {
     if (!this.props.selected) {
       return this.props.selectedItem === _get(item, itemIdKey)
     } else {
-      let target = _get(item, itemIdKey)
+      const target = _get(item, itemIdKey) as string | number
       return this.props.selected.includes(target)
     }
   }
 
-  getVisibleItems(canvasTimeStart, canvasTimeEnd) {
+  getVisibleItems(canvasTimeStart: number, canvasTimeEnd: number) {
     const { keys, items } = this.props
 
     return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
   }
 
   render() {
-    const {
-      canvasTimeStart,
-      canvasTimeEnd,
-      dimensionItems,
-      keys,
-      groups
-    } = this.props
+    const { canvasTimeStart, canvasTimeEnd, dimensionItems, keys, groups } =
+      this.props
     const { itemIdKey, itemGroupKey } = keys
 
     const groupOrders = getGroupOrders(groups, keys)
-    const visibleItems = this.getVisibleItems(
-      canvasTimeStart,
-      canvasTimeEnd,
-      groupOrders
-    )
+    const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd)
     const sortedDimensionItems = keyBy(dimensionItems, 'id')
 
     return (
       <div className="rct-items">
         {visibleItems
-          .filter(item => sortedDimensionItems[_get(item, itemIdKey)])
-          .map(item => (
+          .filter((item) => sortedDimensionItems[_get(item, itemIdKey)])
+          .map((item) => (
             <Item
+              itemProps={item.itemProps}
               key={_get(item, itemIdKey)}
               item={item}
               keys={this.props.keys}

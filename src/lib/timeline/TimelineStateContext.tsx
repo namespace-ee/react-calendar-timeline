@@ -15,7 +15,7 @@ import { Dayjs } from 'dayjs'
 */
 
 /* eslint-disable no-console */
-const defaultContextState: timelineContextType = {
+const defaultContextState: TimelineContextType = {
   getTimelineState: () => {
     console.warn('"getTimelineState" default func is being used')
     return {} as TimelineContextValue
@@ -35,9 +35,9 @@ const defaultContextState: timelineContextType = {
 /* eslint-enable */
 
 const { Consumer, Provider } =
-  React.createContext<timelineContextType>(defaultContextState)
+  React.createContext<TimelineContextType>(defaultContextState)
 
-type TimelineStarteProps = {
+type TimelineStartProps = {
   visibleTimeStart: number
   visibleTimeEnd: number
   canvasTimeStart: number
@@ -47,7 +47,7 @@ type TimelineStarteProps = {
   timelineUnit: string //todo
   timelineWidth: number
 }
-type timelineContextType = {
+type TimelineContextType = {
   getTimelineState: () => TimelineContextValue
   getLeftOffsetFromDate: (date: number) => number
   getDateFromLeftOffsetPosition: (leftOffset: number) => number
@@ -55,14 +55,14 @@ type timelineContextType = {
 }
 
 type TimelineState = {
-  timelineContext: timelineContextType
+  timelineContext: TimelineContextType
 }
 
 export class TimelineStateProvider extends React.Component<
-  PropsWithChildren<TimelineStarteProps>,
+  PropsWithChildren<TimelineStartProps>,
   TimelineState
 > {
-  constructor(props: any) {
+  constructor(props: PropsWithChildren<TimelineStartProps>) {
     super(props)
 
     this.state = {

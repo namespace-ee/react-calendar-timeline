@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { Dayjs, UnitType } from 'dayjs'
 import { _get } from './generic'
 import { Dimension, ItemDimension } from '../types/dimension'
 import {
@@ -76,19 +76,19 @@ export function calculateTimeForXPosition(
 export function iterateTimes(
   start: number,
   end: number,
-  unit: dayjs.UnitType,
+  unit: UnitType,
   timeSteps: Record<string, number>,
   callback: (time: Dayjs, nextTime: Dayjs) => void,
 ) {
   let time = dayjs(start).startOf(unit)
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
-    let value = time.get(unit)
+    const value = time.get(unit)
     time.set(unit, value - (value % timeSteps[unit]))
   }
 
   while (time.valueOf() < end) {
-    let nextTime = dayjs(time).add(
+    const nextTime = dayjs(time).add(
       timeSteps[unit] || 1,
       unit as dayjs.ManipulateType,
     )
@@ -123,7 +123,7 @@ export function getMinUnit(
   // units has a natural progression to the other. i.e. a year is 12 months
   // a month is 24 days, a day is 24 hours.
   // with weeks this isnt the case so weeks needs to be handled specially
-  let timeDividers: Record<keyof TimelineTimeSteps, number> = {
+  const timeDividers: Record<keyof TimelineTimeSteps, number> = {
     second: 1000,
     minute: 60,
     hour: 60,
@@ -173,19 +173,29 @@ export function getMinUnit(
   return minUnit
 }
 
-export function getNextUnit(unit: string) {
-  let nextUnits: Record<string, string> = {
-    second: 'minute',
-    minute: 'hour',
-    hour: 'day',
-    day: 'month',
-    month: 'year',
-    year: 'year',
+export type SelectUnits =
+  | 'second'
+  | 'minute'
+  | 'hour'
+  | 'day'
+  | 'month'
+  | 'year'
+export type SelectUnitsRes = Exclude<SelectUnits, 'second'>
+
+export const NEXT_UNITS: Record<SelectUnits, SelectUnitsRes> = {
+  second: 'minute',
+  minute: 'hour',
+  hour: 'day',
+  day: 'month',
+  month: 'year',
+  year: 'year',
+}
+
+export function getNextUnit(unit: SelectUnits): SelectUnitsRes {
+  if (!NEXT_UNITS[unit]) {
+    throw new Error(`unit ${unit} is not acceptable`)
   }
-  if (!nextUnits[unit]) {
-    throw new Error(`unit ${unit} in not acceptable`)
-  }
-  return nextUnits[unit]
+  return NEXT_UNITS[unit]
 }
 
 /**
@@ -286,11 +296,13 @@ export function getGroupOrders(
 ) {
   const { groupIdKey } = keys
 
-  let groupOrders: GroupOrders = {}
+  const groupOrders: GroupOrders = {}
 
   for (let i = 0; i < groups.length; i++) {
-    // @ts-ignore //todo
-    groupOrders[_get(groups[i], groupIdKey)] = { index: i, group: groups[i] }
+    groupOrders[_get(groups[i], groupIdKey) as string] = {
+      index: i,
+      group: groups[i],
+    }
   }
 
   return groupOrders
@@ -305,8 +317,8 @@ export function getGroupedItems(
   items: ItemDimension[],
   groupOrders: GroupOrders,
 ) {
-  var groupedItems: Record<number, GroupedItem> = {}
-  var keys = Object.keys(groupOrders)
+  const groupedItems: Record<number, GroupedItem> = {}
+  const keys = Object.keys(groupOrders)
   // Initialize with result object for each group
   for (let i = 0; i < keys.length; i++) {
     const groupOrder = groupOrders[keys[i]]
@@ -335,7 +347,7 @@ export function getGroupedItems(
 
 export function getVisibleItems<
   CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>,
-  CustomGroup extends TimelineGroupBase = TimelineGroupBase,
+  // CustomGroup extends TimelineGroupBase = TimelineGroupBase,
 >(
   items: CustomItem[],
   canvasTimeStart: number,
@@ -361,7 +373,7 @@ export function collision(
   collisionPadding: number = EPSILON,
 ) {
   // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-  var verticalMargin = 0
+  const verticalMargin = 0
 
   return (
     a.collisionLeft + collisionPadding < b.collisionLeft + b.collisionWidth &&
@@ -386,7 +398,7 @@ export function groupStack(
 ): GroupStack {
   // calculate non-overlapping positions
   let curHeight = groupHeight
-  let verticalMargin = (lineHeight - (item.dimensions?.height ?? 1)) / 2
+  const verticalMargin = (lineHeight - (item.dimensions?.height ?? 1)) / 2
   if (
     item.dimensions &&
     item.dimensions.stack &&
@@ -394,11 +406,11 @@ export function groupStack(
   ) {
     item.dimensions.top = groupTop + verticalMargin
     curHeight = Math.max(curHeight, lineHeight)
+    let collidingItem = null
     do {
-      var collidingItem = null
       //Items are placed from i=0 onwards, only check items with index < i
-      for (var j = itemIndex - 1, jj = 0; j >= jj; j--) {
-        var other = group[j]
+      for (let j = itemIndex - 1, jj = 0; j >= jj; j--) {
+        const other = group[j]
         if (
           other.dimensions &&
           other.dimensions.top !== null &&
@@ -443,7 +455,7 @@ export function groupNoStack(
   groupHeight: number,
   groupTop: number,
 ): GroupStack {
-  let verticalMargin = (lineHeight - (item.dimensions?.height ?? 1)) / 2
+  const verticalMargin = (lineHeight - (item.dimensions?.height ?? 1)) / 2
   if (item.dimensions && item.dimensions.top === null) {
     item.dimensions.top = groupTop + verticalMargin
     groupHeight = Math.max(groupHeight, lineHeight)
@@ -468,12 +480,12 @@ export function stackAll(
   lineHeight: number,
   stackItems: boolean,
 ) {
-  var groupHeights: number[] = []
-  var groupTops = []
+  const groupHeights: number[] = []
+  const groupTops = []
 
-  var groupedItems = getGroupedItems(itemsDimensions, groupOrders)
+  const groupedItems = getGroupedItems(itemsDimensions, groupOrders)
 
-  for (var index in groupedItems) {
+  for (const index in groupedItems) {
     const groupItems = groupedItems[index]
     const { items: itemsDimensions, group } = groupItems
     const groupTop = sum(groupHeights)
@@ -517,11 +529,11 @@ export function stackGroup(
   lineHeight: number,
   groupTop: number,
 ) {
-  var groupHeight = 0
-  var verticalMargin = 0
+  let groupHeight = 0
+  let verticalMargin = 0
   // Find positions for each item in group
   for (let itemIndex = 0; itemIndex < itemsDimensions.length; itemIndex++) {
-    let r = isGroupStacked
+    const r = isGroupStacked
       ? groupStack(
           lineHeight,
           itemsDimensions[itemIndex],
@@ -614,7 +626,7 @@ export function stackTimelineItems<
 
   // Get the order of groups based on their id key
   const groupOrders = getGroupOrders(groups, keys)
-  let dimensionItems = visibleItemsWithInteraction
+  const dimensionItems = visibleItemsWithInteraction
     .map((item) =>
       getItemDimensions({
         item,
@@ -678,7 +690,7 @@ export function getItemDimensions<CustomItem extends TimelineItemBase<any>>({
   itemHeightRatio: number
 }) {
   const itemId = _get(item, keys.itemIdKey)
-  let dimension = calculateDimensions({
+  const dimension = calculateDimensions({
     itemTimeStart: _get(item, keys.itemTimeStartKey),
     itemTimeEnd: _get(item, keys.itemTimeEndKey),
     canvasTimeStart,
