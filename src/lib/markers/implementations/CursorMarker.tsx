@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   createMarkerStylesWithLeftOffset,
   createDefaultRenderer,
@@ -54,11 +53,6 @@ class CursorMarker extends React.Component<
   CursorMarkerProps,
   CursorMarkerStat
 > {
-  static propTypes = {
-    subscribeToCanvasMouseOver: PropTypes.func.isRequired,
-    renderer: PropTypes.func,
-  }
-
   public static defaultProps = {
     renderer: defaultRenderer,
   }

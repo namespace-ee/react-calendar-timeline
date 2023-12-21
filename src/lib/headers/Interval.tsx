@@ -1,5 +1,4 @@
-import React, { ComponentType, HTMLAttributes } from 'react'
-import PropTypes from 'prop-types'
+import React, { HTMLAttributes, ReactNode } from 'react'
 import { getNextUnit, SelectUnits } from '../utility/calendar'
 import { composeEvents } from '../utility/events'
 import { Dayjs } from 'dayjs'
@@ -13,8 +12,8 @@ type GetIntervalPropsParams = {
   interval: IntervalType
 } & HTMLAttributes<HTMLDivElement>
 
-export type IntervalProps<Data extends any> = {
-  intervalRenderer: ComponentType<IntervalRenderer<Data>>
+export type IntervalProps<Data> = {
+  intervalRenderer: (p: IntervalRenderer<Data>) => ReactNode
   unit: SelectUnits
   interval: IntervalType
   showPeriod: (startTime: Dayjs, endTime: Dayjs) => void
@@ -28,17 +27,6 @@ export type IntervalProps<Data extends any> = {
 }
 
 class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
-  static propTypes = {
-    intervalRenderer: PropTypes.func,
-    unit: PropTypes.string.isRequired,
-    interval: PropTypes.object.isRequired,
-    showPeriod: PropTypes.func.isRequired,
-    intervalText: PropTypes.string.isRequired,
-    primaryHeader: PropTypes.bool.isRequired,
-    getIntervalProps: PropTypes.func.isRequired,
-    headerData: PropTypes.object,
-  }
-
   onIntervalClick = () => {
     const { primaryHeader, interval, unit, showPeriod } = this.props
     if (primaryHeader) {

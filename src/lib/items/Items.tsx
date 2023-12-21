@@ -5,19 +5,20 @@ import Item, { ItemProps } from './Item'
 import { _get, arraysEqual, keyBy } from '../utility/generic'
 import { getGroupOrders, getVisibleItems } from '../utility/calendar'
 import {
+  Id,
   TimelineGroupBase,
   TimelineItemBase,
   TimelineKeys,
 } from '../types/main'
 
 type CustomItem = TimelineItemBase<any>
-type CanResize = true | false | 'left' | 'right' | 'both'
+export type CanResize = true | false | 'left' | 'right' | 'both'
 type ItemsProps = {
   groups: TimelineGroupBase[]
   items: CustomItem[]
   // todo
   dimensionItems: any[]
-  selected: (string | number)[]
+  selected?: Id[]
 
   canvasTimeStart: number
   canvasTimeEnd: number
@@ -25,25 +26,25 @@ type ItemsProps = {
 
   dragSnap?: number
   minResizeWidth?: number
-  selectedItem?: string | number
+  selectedItem?: Id
 
-  canChangeGroup: boolean
-  canMove: boolean
+  canChangeGroup?: boolean
+  canMove?: boolean
   canResize?: CanResize
   canSelect?: boolean
   keys: TimelineKeys
-  moveResizeValidator: ItemProps['moveResizeValidator']
+  moveResizeValidator?: ItemProps['moveResizeValidator']
   itemSelect: ItemProps['onSelect']
   itemDrag: ItemProps['onDrag']
   itemDrop: ItemProps['onDrop']
   itemResizing: ItemProps['onResizing']
   itemResized: ItemProps['onResized']
   onItemDoubleClick: ItemProps['onItemDoubleClick']
-  onItemContextMenu: ItemProps['onContextMenu']
-  itemRenderer: ItemProps['itemRenderer']
-  groupTops: boolean
-  useResizeHandle: boolean
-  scrollRef: HTMLElement
+  onItemContextMenu?: ItemProps['onContextMenu']
+  itemRenderer?: ItemProps['itemRenderer']
+  groupTops: number[]
+  useResizeHandle?: boolean
+  scrollRef: HTMLElement | null
   // Add more props if needed
 }
 
@@ -64,48 +65,6 @@ const canResizeRight = (item: CustomItem, canResize?: CanResize) => {
 }
 
 export default class Items extends Component<ItemsProps, ItemsState> {
-  /*static propTypes = {
-    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-
-    canvasTimeStart: PropTypes.number.isRequired,
-    canvasTimeEnd: PropTypes.number.isRequired,
-    canvasWidth: PropTypes.number.isRequired,
-
-    dragSnap: PropTypes.number,
-    minResizeWidth: PropTypes.number,
-    selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
-    canChangeGroup: PropTypes.bool.isRequired,
-    canMove: PropTypes.bool.isRequired,
-    canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
-    canSelect: PropTypes.bool,
-
-    keys: PropTypes.object.isRequired,
-
-    moveResizeValidator: PropTypes.func,
-    itemSelect: PropTypes.func,
-    itemDrag: PropTypes.func,
-    itemDrop: PropTypes.func,
-    itemResizing: PropTypes.func,
-    itemResized: PropTypes.func,
-
-    onItemDoubleClick: PropTypes.func,
-    onItemContextMenu: PropTypes.func,
-
-    itemRenderer: PropTypes.func,
-    selected: PropTypes.array,
-
-    dimensionItems: PropTypes.array,
-    groupTops: PropTypes.array,
-    useResizeHandle: PropTypes.bool,
-    scrollRef: PropTypes.object
-  }
-
-  static defaultProps = {
-    selected: []
-  }*/
-
   shouldComponentUpdate(nextProps: ItemsProps) {
     return !(
       arraysEqual(nextProps.groups, this.props.groups) &&

@@ -3,16 +3,17 @@ import React, { Component, FC } from 'react'
 import { iterateTimes } from '../utility/calendar'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import { UnitType } from 'dayjs'
+import { TimelineTimeSteps } from '../types/main'
 
 type WrapperColumnsProps = {
   canvasTimeStart: number
   canvasTimeEnd: number
   canvasWidth: number
   lineCount: number
-  minUnit: UnitType
-  timeSteps: Record<string, number>
+  minUnit: keyof TimelineTimeSteps
+  timeSteps: TimelineTimeSteps
   height: number
-  verticalLineClassNamesForTime: (a: number, b: number) => number[]
+  verticalLineClassNamesForTime?: (a: number, b: number) => string[]
 }
 
 type ColumnsProps = WrapperColumnsProps & {
@@ -38,16 +39,16 @@ class Columns extends Component<ColumnsProps> {
     const {
       canvasTimeStart,
       canvasTimeEnd,
-      canvasWidth,
+      // canvasWidth,
       minUnit,
       timeSteps,
       height,
       verticalLineClassNamesForTime,
       getLeftOffsetFromDate,
     } = this.props
-    const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
+    //const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
-    let lines: React.JSX.Element[] = []
+    const lines: React.JSX.Element[] = []
 
     iterateTimes(
       canvasTimeStart,
@@ -58,7 +59,7 @@ class Columns extends Component<ColumnsProps> {
         const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
 
-        let classNamesForTime: number[] = []
+        let classNamesForTime: string[] = []
         if (verticalLineClassNamesForTime) {
           classNamesForTime = verticalLineClassNamesForTime(
             time.unix() * 1000, // turn into ms, which is what verticalLineClassNamesForTime expects

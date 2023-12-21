@@ -5,6 +5,7 @@ import {
   GroupedItem,
   GroupOrders,
   GroupStack,
+  Id,
   TimelineGroupBase,
   TimelineItemBase,
   TimelineKeys,
@@ -76,8 +77,8 @@ export function calculateTimeForXPosition(
 export function iterateTimes(
   start: number,
   end: number,
-  unit: UnitType,
-  timeSteps: Record<string, number>,
+  unit: keyof TimelineTimeSteps,
+  timeSteps: TimelineTimeSteps,
   callback: (time: Dayjs, nextTime: Dayjs) => void,
 ) {
   let time = dayjs(start).startOf(unit)
@@ -132,7 +133,7 @@ export function getMinUnit(
     year: 12,
   }
 
-  let minUnit = 'year'
+  let minUnit: keyof TimelineTimeSteps = 'year'
 
   // this timespan is in ms initially
   let nextTimeSpanInUnitContext = zoom
@@ -165,7 +166,7 @@ export function getMinUnit(
     if (cellsToBeRenderedForCurrentUnit < minimumCellsToRenderUnit) {
       // for the current zoom, the number of cells we'd need to render all parts of this unit
       // is less than the minimum number of cells needed at minimum cell width
-      minUnit = unit
+      minUnit = unit as keyof TimelineTimeSteps
       return true
     }
   })
@@ -587,8 +588,8 @@ export function stackTimelineItems<
   lineHeight: number,
   itemHeightRatio: number,
   stackItems: boolean,
-  draggingItem: CustomItem | null | undefined,
-  resizingItem: CustomItem | null | undefined,
+  draggingItem: Id | null | undefined,
+  resizingItem: Id | null | undefined,
   dragTime: number | null,
   resizingEdge: 'left' | 'right' | null,
   resizeTime: number | null,
@@ -738,8 +739,8 @@ export function getItemWithInteractions<
 }: {
   item: CustomItem
   keys: TimelineKeys
-  draggingItem: CustomItem | null | undefined
-  resizingItem: CustomItem | null | undefined
+  draggingItem: Id | null | undefined
+  resizingItem: Id | null | undefined
   dragTime: number | null
   resizingEdge: 'left' | 'right' | null
   resizeTime: number | null

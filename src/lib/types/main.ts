@@ -201,7 +201,6 @@ export interface ReactCalendarGroupRendererProps<
 }
 
 export interface OnItemDragObjectBase {
-  eventType: 'move' | 'resize'
   itemId: Id
   time: number
 }
@@ -219,6 +218,7 @@ export interface OnItemDragObjectResize extends OnItemDragObjectBase {
 export interface TimelineKeys {
   groupIdKey: string
   groupTitleKey: string
+  groupLabelKey: string
   groupRightTitleKey: string
   itemIdKey: string
   itemTitleKey: string

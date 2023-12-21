@@ -12,7 +12,7 @@ export interface GroupRowsProps<T> {
   groupHeights: number[]
   onRowClick: RowClickEvent
   onRowDoubleClick: RowClickEvent
-  clickTolerance: number
+  clickTolerance?: number
   groups: T[]
   horizontalLineClassNamesForGroup?: (group: T) => string[]
   onRowContextClick: RowClickEvent

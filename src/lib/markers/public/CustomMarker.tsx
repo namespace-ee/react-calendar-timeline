@@ -1,23 +1,23 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { SubscribeReturn, TimelineMarkersConsumer } from '../TimelineMarkersContext'
-import { MarkerRendererType, MarkerType, TimelineMarkerType } from '../markerType'
+import {
+  SubscribeReturn,
+  TimelineMarkersConsumer,
+} from '../TimelineMarkersContext'
+import {
+  MarkerRendererType,
+  MarkerType,
+  TimelineMarkerType,
+} from '../markerType'
 
 type noop = () => any
 
 type CustomMarkerProps = {
   date: number
-  children: MarkerRendererType;
-  updateMarker: (marker: any) => void
+  children: MarkerRendererType
+  updateMarker: (marker: MarkerType) => void
   subscribeMarker: (newe: MarkerType) => SubscribeReturn
 }
 class CustomMarker extends Component<CustomMarkerProps> {
-  static propTypes = {
-    subscribeMarker: PropTypes.func.isRequired,
-    updateMarker: PropTypes.func.isRequired,
-    children: PropTypes.func,
-    date: PropTypes.number.isRequired
-  }
   private unsubscribe: noop | null = null
   private getMarker: noop | null = null
 
@@ -32,7 +32,7 @@ class CustomMarker extends Component<CustomMarkerProps> {
     const { unsubscribe, getMarker } = this.props.subscribeMarker({
       type: TimelineMarkerType.Custom,
       renderer: this.props.children,
-      date: this.props.date
+      date: this.props.date,
     })
     this.unsubscribe = unsubscribe
     this.getMarker = getMarker
@@ -50,7 +50,7 @@ class CustomMarker extends Component<CustomMarkerProps> {
   }
 }
 
-type Props = Pick<CustomMarkerProps, "date" | "children">
+type Props = Pick<CustomMarkerProps, 'date' | 'children'>
 
 // TODO: turn into HOC?
 const CustomMarkerWrapper = (props: Props) => {

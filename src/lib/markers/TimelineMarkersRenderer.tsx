@@ -13,43 +13,54 @@ const TimelineMarkersRenderer = () => {
       {({ getLeftOffsetFromDate, getTimelineState }) => (
         <TimelineMarkersConsumer>
           {({ markers }) => {
-            const timelineState = getTimelineState();
-            return markers
-              .map(marker => {
-                switch (marker.type) {
-                  case TimelineMarkerType.Today:
-                    if(!( (new Date()).valueOf() >= timelineState.canvasTimeStart && (new Date()).valueOf() <= timelineState.canvasTimeEnd)) return null;
-                    return (
-                      <TodayMarker
-                        key={marker.id}
-                        getLeftOffsetFromDate={getLeftOffsetFromDate}
-                        renderer={marker.renderer}
-                        interval={marker.interval!}
-                      />
+            const timelineState = getTimelineState()
+            return markers.map((marker) => {
+              switch (marker.type) {
+                case TimelineMarkerType.Today:
+                  if (
+                    !(
+                      new Date().valueOf() >= timelineState.canvasTimeStart &&
+                      new Date().valueOf() <= timelineState.canvasTimeEnd
                     )
-                  case TimelineMarkerType.Custom:
-                    //filter out cursors outside canvas start/end
-                    if(!(marker.date >= timelineState.canvasTimeStart && marker.date <= timelineState.canvasTimeEnd)) return null;
-                    return (
-                      <CustomMarker
-                        key={marker.id}
-                        renderer={marker.renderer}
-                        date={marker.date}
-                        getLeftOffsetFromDate={getLeftOffsetFromDate}
-                      />
-                    )
-                  case TimelineMarkerType.Cursor:
-                    return (
-                      <CursorMarker
-                        key={marker.id}
-                        renderer={marker.renderer}
-                        getLeftOffsetFromDate={getLeftOffsetFromDate}
-                      />
-                    )
-                  default:
+                  )
                     return null
-                }
-              })
+                  return (
+                    <TodayMarker
+                      key={marker.id}
+                      getLeftOffsetFromDate={getLeftOffsetFromDate}
+                      renderer={marker.renderer}
+                      interval={marker.interval!}
+                    />
+                  )
+                case TimelineMarkerType.Custom:
+                  //filter out cursors outside canvas start/end
+                  if (
+                    !(
+                      marker.date! >= timelineState.canvasTimeStart &&
+                      marker.date! <= timelineState.canvasTimeEnd
+                    )
+                  )
+                    return null
+                  return (
+                    <CustomMarker
+                      key={marker.id}
+                      renderer={marker.renderer}
+                      date={marker.date!}
+                      getLeftOffsetFromDate={getLeftOffsetFromDate}
+                    />
+                  )
+                case TimelineMarkerType.Cursor:
+                  return (
+                    <CursorMarker
+                      key={marker.id}
+                      renderer={marker.renderer}
+                      getLeftOffsetFromDate={getLeftOffsetFromDate}
+                    />
+                  )
+                default:
+                  return null
+              }
+            })
           }}
         </TimelineMarkersConsumer>
       )}

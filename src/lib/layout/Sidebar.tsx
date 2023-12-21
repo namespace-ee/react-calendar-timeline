@@ -14,7 +14,7 @@ type Props<CustomGroup extends TimelineGroupBase = TimelineGroupBase> = {
   groupHeights: number[]
   keys: TimelineKeys
   groupRenderer?: FC<ReactCalendarGroupRendererProps> //TODO Check
-  isRightSidebar: boolean
+  isRightSidebar?: boolean
 }
 
 export default class Sidebar extends Component<Props> {
@@ -30,7 +30,7 @@ export default class Sidebar extends Component<Props> {
 
   renderGroupContent(
     group: TimelineGroupBase,
-    isRightSidebar: boolean,
+    isRightSidebar: boolean = false,
     groupTitleKey: string,
     groupRightTitleKey: string,
   ) {

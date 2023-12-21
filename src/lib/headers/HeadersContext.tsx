@@ -24,8 +24,6 @@ export type TimelineHeadersProviderProps = {
   registerScroll: (e: HTMLDivElement) => void
 }
 export class TimelineHeadersProvider extends React.Component<TimelineHeadersProviderProps> {
-  static propTypes = {}
-
   render() {
     const contextValue = {
       rightSidebarWidth: this.props.rightSidebarWidth,

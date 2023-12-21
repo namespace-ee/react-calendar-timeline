@@ -7,7 +7,7 @@ interface GroupRowProps<T> {
   onContextMenu?: MouseEventHandler<HTMLDivElement>
   isEvenRow?: boolean
   style?: React.CSSProperties
-  clickTolerance: number
+  clickTolerance?: number
   group: T
   horizontalLineClassNamesForGroup?: (group: T) => string[]
 }

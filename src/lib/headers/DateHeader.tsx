@@ -5,7 +5,11 @@ import { getNextUnit, SelectUnits } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
 import memoize from 'memoize-one'
 import { CustomDateHeader } from './CustomDateHeader'
-import { IntervalRenderer, SidebarHeaderChildrenFnProps } from '../types/main'
+import {
+  IntervalRenderer,
+  SidebarHeaderChildrenFnProps,
+  TimelineTimeSteps,
+} from '../types/main'
 import { Dayjs, UnitType } from 'dayjs'
 
 type GetHeaderData<Data> = (
@@ -34,7 +38,7 @@ type GetHeaderData<Data> = (
 export interface DateHeaderProps<Data> {
   style?: CSSProperties | undefined
   className?: string | undefined
-  unit?: UnitType | 'primaryHeader' | undefined
+  unit?: keyof TimelineTimeSteps | 'primaryHeader' | undefined
   timelineUnit: SelectUnits
   labelFormat?:
     | string
@@ -52,8 +56,10 @@ export interface DateHeaderProps<Data> {
   height?: number | undefined
 }
 
-class DateHeader<Data> extends React.Component<DateHeaderProps<Data>> {
-  getHeaderUnit = (): UnitType => {
+export class DateHeaderInner<Data> extends React.Component<
+  DateHeaderProps<Data>
+> {
+  getHeaderUnit = (): keyof TimelineTimeSteps => {
     if (this.props.unit === 'primaryHeader') {
       return getNextUnit(this.props.timelineUnit)
     } else if (this.props.unit) {
@@ -127,16 +133,16 @@ class DateHeader<Data> extends React.Component<DateHeaderProps<Data>> {
 }
 
 type DateHeaderWrapper<Data> = {
-  unit: UnitType | 'primaryHeader' | undefined
+  unit?: keyof TimelineTimeSteps | 'primaryHeader'
   labelFormat?: typeof formatLabel
-  style: CSSProperties
-  className: string
+  style?: CSSProperties
+  className?: string
   intervalRenderer?: ((props?: IntervalRenderer<Data>) => ReactNode) | undefined
-  headerData: Data
-  height: number
+  headerData?: Data
+  height?: number
 }
 
-function DateHeaderWrapper<Data>({
+export function DateHeader<Data>({
   unit,
   labelFormat,
   style,
@@ -150,7 +156,7 @@ function DateHeaderWrapper<Data>({
       {({ getTimelineState }) => {
         const timelineState = getTimelineState()
         return (
-          <DateHeader
+          <DateHeaderInner
             timelineUnit={timelineState.timelineUnit}
             unit={unit}
             labelFormat={labelFormat || formatLabel}
@@ -185,4 +191,4 @@ function formatLabel(
   return timeStart.format(format)
 }
 
-export default DateHeaderWrapper
+export default DateHeader

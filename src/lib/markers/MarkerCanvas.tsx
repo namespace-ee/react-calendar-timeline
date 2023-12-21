@@ -1,5 +1,8 @@
-import React, { PropsWithChildren } from 'react'
-import { MarkerCanvasProvider } from './MarkerCanvasContext'
+import React, { MouseEventHandler, PropsWithChildren } from 'react'
+import {
+  MarkerCanvasContext,
+  MarkerCanvasProvider,
+} from './MarkerCanvasContext'
 import TimelineMarkersRenderer from './TimelineMarkersRenderer'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
@@ -23,8 +26,8 @@ type MarkerCanvasProps = {
 class MarkerCanvas extends React.Component<
   PropsWithChildren<MarkerCanvasProps>
 > {
-  handleMouseMove = (evt) => {
-    if (this.subscription != null) {
+  handleMouseMove: MouseEventHandler<HTMLDivElement> = (evt) => {
+    if (this.subscription !== null) {
       const { pageX } = evt
       // FIXME: dont use getBoundingClientRect. Use passed in scroll amount
       const { left: containerLeft } =
@@ -47,25 +50,28 @@ class MarkerCanvas extends React.Component<
     }
   }
 
-  handleMouseLeave = () => {
-    if (this.subscription != null) {
+  handleMouseLeave: MouseEventHandler<HTMLDivElement> = () => {
+    if (this.subscription !== null) {
       // tell subscriber that we're not on canvas
       this.subscription({ leftOffset: 0, date: 0, isCursorOverCanvas: false })
     }
   }
 
-  handleMouseMoveSubscribe = (sub) => {
+  handleMouseMoveSubscribe: MarkerCanvasContext['subscribeToMouseOver'] = (
+    sub,
+  ) => {
     this.subscription = sub
     return () => {
       this.subscription = null
     }
   }
 
-  state = {
+  state: MarkerCanvasContext = {
     subscribeToMouseOver: this.handleMouseMoveSubscribe,
   }
 
   containerEl = React.createRef<HTMLDivElement>()
+  private subscription: ((s: any) => void) | null = null
 
   render() {
     return (
@@ -84,7 +90,9 @@ class MarkerCanvas extends React.Component<
   }
 }
 
-const MarkerCanvasWrapper = (props) => (
+const MarkerCanvasWrapper = (
+  props: Omit<MarkerCanvasProps, 'getDateFromLeftOffsetPosition'>,
+) => (
   <TimelineStateConsumer>
     {({ getDateFromLeftOffsetPosition }) => (
       <MarkerCanvas

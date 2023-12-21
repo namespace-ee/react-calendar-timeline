@@ -36,7 +36,7 @@ import { Id, ItemContext, TimelineItemBase, TimelineKeys } from '../types/main'
 export type ResizeEdge = 'left' | 'right'
 
 type OnSelect = (
-  itemId: string,
+  itemId: string | null,
   clickType: 'click' | 'touch',
   event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>,
 ) => void
@@ -62,7 +62,7 @@ export type ItemProps = {
     resizeEdge: ResizeEdge | null,
     delta: number,
   ) => void
-  moveResizeValidator: (
+  moveResizeValidator?: (
     action: 'move' | 'resize',
     item: TimelineItemBase<any>,
     time: number,
@@ -82,10 +82,10 @@ export type ItemProps = {
   item: TimelineItemBase<any>
 
   onSelect: OnSelect
-  onContextMenu: (i: Id, e: MouseEvent<HTMLDivElement>) => void
+  onContextMenu?: (i: Id, e: MouseEvent<HTMLDivElement>) => void
   groupTops: any
   onItemDoubleClick: (i: Id, e: MouseEvent<HTMLDivElement>) => void
-  scrollRef: HTMLElement
+  scrollRef: HTMLElement | null
 }
 
 type DragProps = { offset: number; x: number; y: number }
@@ -250,8 +250,8 @@ export default class Item extends Component<ItemProps, ItemState> {
       this.props.canvasWidth,
     )
 
-    const offset = getSumOffset(this.props.scrollRef).offsetLeft
-    const scrolls = getSumScroll(this.props.scrollRef)
+    const offset = getSumOffset(this.props.scrollRef!).offsetLeft
+    const scrolls = getSumScroll(this.props.scrollRef!)
 
     return (
       (e.pageX - offset + scrolls.scrollLeft) * ratio +
@@ -267,8 +267,8 @@ export default class Item extends Component<ItemProps, ItemState> {
       }
       let groupDelta = 0
 
-      const offset = getSumOffset(this.props.scrollRef).offsetTop
-      const scrolls = getSumScroll(this.props.scrollRef)
+      const offset = getSumOffset(this.props.scrollRef!).offsetTop
+      const scrolls = getSumScroll(this.props.scrollRef!)
 
       for (const key of Object.keys(groupTops)) {
         const groupTop = groupTops[key]

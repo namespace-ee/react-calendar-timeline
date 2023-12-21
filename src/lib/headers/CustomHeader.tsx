@@ -1,15 +1,14 @@
-import React, { ComponentType, CSSProperties, ReactNode } from 'react'
-import PropTypes from 'prop-types'
+import React, { CSSProperties, ReactNode } from 'react'
 import { TimelineHeadersConsumer } from './HeadersContext'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
-import { iterateTimes, SelectUnits } from '../utility/calendar'
-import { Interval, TimelineContext } from '../types/main'
-import { Dayjs, UnitType } from 'dayjs'
+import { iterateTimes } from '../utility/calendar'
+import { Interval, TimelineTimeSteps } from '../types/main'
+import { Dayjs } from 'dayjs'
 import { CustomDateHeaderProps } from './CustomDateHeader'
 
 export type CustomHeaderProps<Data> = {
   children: (p: CustomDateHeaderProps<Data>) => ReactNode
-  unit: UnitType
+  unit: keyof TimelineTimeSteps
   timeSteps: any
   visibleTimeStart: number
   visibleTimeEnd: number
@@ -26,7 +25,7 @@ export type CustomHeaderProps<Data> = {
 type GetHeaderIntervalsParams = {
   canvasTimeStart: number
   canvasTimeEnd: number
-  unit: UnitType
+  unit: keyof TimelineTimeSteps
   timeSteps: any
   getLeftOffsetFromDate: (date: any) => number
 }
@@ -47,22 +46,6 @@ export class CustomHeader<Data> extends React.Component<
   CustomHeaderProps<Data>,
   State
 > {
-  /*  static propTypes = {
-      //component props
-      children: PropTypes.func.isRequired,
-      unit: PropTypes.string.isRequired,
-      //Timeline context
-      timeSteps: PropTypes.object.isRequired,
-      visibleTimeStart: PropTypes.number.isRequired,
-      visibleTimeEnd: PropTypes.number.isRequired,
-      canvasTimeStart: PropTypes.number.isRequired,
-      canvasTimeEnd: PropTypes.number.isRequired,
-      canvasWidth: PropTypes.number.isRequired,
-      showPeriod: PropTypes.func.isRequired,
-      headerData: PropTypes.object,
-      getLeftOffsetFromDate: PropTypes.func.isRequired,
-      height: PropTypes.number.isRequired,
-    }*/
   constructor(props: CustomHeaderProps<Data>) {
     super(props)
     const {
@@ -198,27 +181,27 @@ export class CustomHeader<Data> extends React.Component<
     }
   }
 
-  getStateAndHelpers = (): CustomHeaderWrapperChildrenParams => {
+  getStateAndHelpers = (): CustomDateHeaderProps<Data> => {
     const {
-      canvasTimeStart,
-      canvasTimeEnd,
+      /*      canvasTimeStart,
+      canvasTimeEnd,*/
       unit,
       showPeriod,
-      timelineWidth,
+      /*      timelineWidth,
       visibleTimeStart,
-      visibleTimeEnd,
+      visibleTimeEnd,*/
       headerData,
     } = this.props
     //TODO: only evaluate on changing params
 
     return {
-      timelineContext: {
+      /*timelineContext: {
         timelineWidth,
         visibleTimeStart,
         visibleTimeEnd,
         canvasTimeStart,
         canvasTimeEnd,
-      },
+      },*/
       headerContext: {
         unit,
         intervals: this.state.intervals,
@@ -226,7 +209,7 @@ export class CustomHeader<Data> extends React.Component<
       getRootProps: this.getRootProps,
       getIntervalProps: this.getIntervalProps,
       showPeriod,
-      data: headerData,
+      data: headerData as any,
     }
   }
 
@@ -237,14 +220,9 @@ export class CustomHeader<Data> extends React.Component<
   }
 }
 
-type CustomHeaderWrapperChildrenParams = {
-  getTimelineState: () => TimelineContext
-  showPeriod: (start: Dayjs, end: Dayjs) => void
-  getLeftOffsetFromDate: (date: any) => number
-}
 export type CustomHeaderWrapperProps<Data> = {
   children: (p: CustomDateHeaderProps<Data>) => ReactNode
-  unit?: UnitType
+  unit?: keyof TimelineTimeSteps
   headerData?: Data
   height: number
 }
@@ -278,13 +256,6 @@ function CustomHeaderWrapper<Data>({
       }}
     </TimelineStateConsumer>
   )
-}
-
-CustomHeaderWrapper.propTypes = {
-  children: PropTypes.func.isRequired,
-  unit: PropTypes.string,
-  headerData: PropTypes.object,
-  height: PropTypes.number,
 }
 
 CustomHeaderWrapper.defaultProps = {

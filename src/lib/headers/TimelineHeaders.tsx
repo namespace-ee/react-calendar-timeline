@@ -1,13 +1,6 @@
-import React, {
-  ReactNode,
-  Children,
-  ReactElement,
-  LegacyRef,
-  CSSProperties,
-} from 'react'
+import React, { ReactNode, LegacyRef, CSSProperties } from 'react'
 import classNames from 'classnames'
 import { TimelineHeadersConsumer } from './HeadersContext'
-import PropTypes from 'prop-types'
 import SidebarHeader from './SidebarHeader'
 import { RIGHT_VARIANT } from './constants'
 import { ElementWithSecret } from '../types/main'
@@ -24,18 +17,6 @@ export type TimelineHeadersProps = {
   headerRef?: (ref: HTMLElement | null) => void
 }
 class TimelineHeaders extends React.Component<TimelineHeadersProps> {
-  static propTypes = {
-    registerScroll: PropTypes.func.isRequired,
-    leftSidebarWidth: PropTypes.number.isRequired,
-    rightSidebarWidth: PropTypes.number.isRequired,
-    style: PropTypes.object,
-    children: PropTypes.node,
-    className: PropTypes.string,
-    calendarHeaderStyle: PropTypes.object,
-    calendarHeaderClassName: PropTypes.string,
-    headerRef: PropTypes.func,
-  }
-
   getRootStyle = () => {
     return {
       ...this.props.style,

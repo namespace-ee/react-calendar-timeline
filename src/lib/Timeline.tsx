@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types'
 import React, { Component, MouseEvent } from 'react'
-
-import Items from './items/Items'
+import Items, { CanResize } from './items/Items'
 import Sidebar from './layout/Sidebar'
 import Columns from './columns/Columns'
-import GroupRows, { GroupRowsProps, RowClickEvent } from './row/GroupRows'
+import GroupRows, { RowClickEvent } from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
 import windowResizeDetector from '../resize-detector/window'
@@ -17,13 +15,13 @@ import {
   getCanvasWidth,
   stackTimelineItems,
 } from './utility/calendar'
-import { _get, _length } from './utility/generic'
+import { _get } from './utility/generic'
 import { defaultKeys } from './default-config'
 import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 import { TimelineHeadersProvider } from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
-import DateHeader from './headers/DateHeader'
+import { DateHeader } from './headers/DateHeader'
 import {
   dateType,
   ElementWithSecret,
@@ -31,7 +29,6 @@ import {
   OnItemDragObjectMove,
   OnItemDragObjectResize,
   ReactCalendarGroupRendererProps,
-  ReactCalendarItemRendererProps,
   TimelineContext,
   TimelineGroupBase,
   TimelineItemBase,
@@ -60,7 +57,7 @@ export type ReactCalendarTimelineProps<
   sidebarContent?: React.ReactNode | undefined
   rightSidebarWidth: number
   rightSidebarContent?: React.ReactNode | undefined
-  dragSnap: number
+  dragSnap?: number
   minResizeWidth?: number | undefined
   lineHeight: number
   itemHeightRatio: number
@@ -69,14 +66,14 @@ export type ReactCalendarTimelineProps<
   clickTolerance?: number | undefined
   canMove?: boolean | undefined
   canChangeGroup?: boolean | undefined
-  canResize?: false | true | 'left' | 'right' | 'both' | undefined
+  canResize?: CanResize
   useResizeHandle?: boolean | undefined
   canSelect?: boolean
   stackItems: boolean
   traditionalZoom?: boolean | undefined
   itemTouchSendsClick?: boolean | undefined
   timeSteps: TimelineTimeSteps
-  scrollRef?: React.Ref<any> | undefined
+  scrollRef?: (el: HTMLDivElement) => void
   onItemDrag?(
     itemDragObject: OnItemDragObjectMove | OnItemDragObjectResize,
   ): void
@@ -91,12 +88,7 @@ export type ReactCalendarTimelineProps<
   onCanvasDoubleClick?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onCanvasContextMenu?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onZoom?(timelineContext: TimelineContext, unit: Unit): void
-  moveResizeValidator?(
-    action: 'move' | 'resize',
-    itemId: Id,
-    time: number,
-    resizeEdge: 'left' | 'right',
-  ): number
+  moveResizeValidator?: ItemProps['moveResizeValidator']
   onTimeChange?(
     visibleTimeStart: number,
     visibleTimeEnd: number,
@@ -110,9 +102,7 @@ export type ReactCalendarTimelineProps<
     unit: Unit,
   ): any
   onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): any
-  itemRenderer?:
-    | ((props: ReactCalendarItemRendererProps<CustomItem>) => React.ReactNode)
-    | undefined
+  itemRenderer?: ItemProps['itemRenderer']
   groupRenderer?:
     | ((props: ReactCalendarGroupRendererProps<CustomGroup>) => React.ReactNode)
     | undefined
@@ -122,15 +112,13 @@ export type ReactCalendarTimelineProps<
         removeListener: (x: any) => void
       }
     | undefined
-  verticalLineClassNamesForTime?:
-    | ((start: number, end: number) => string[] | undefined)
-    | undefined
+  verticalLineClassNamesForTime?: (start: number, end: number) => string[]
   horizontalLineClassNamesForGroup?:
     | ((group: CustomGroup) => string[])
     | undefined
   buffer: number
   // Fields that are in propTypes but not documented
-  headerRef?: React.Ref<any> | undefined
+  headerRef?: (el: HTMLDivElement) => void
   className?: string
   style?: React.CSSProperties
 }
@@ -148,11 +136,11 @@ export type ReactCalendarTimelineState<
   dragTime: number | null
   dragGroupTitle: string | null
   resizeTime: number | null
-  resizingItem: CustomItem | null
+  resizingItem: Id | null
   resizingEdge: 'left' | 'right' | null
   items?: CustomItem[]
   groups?: CustomGroup[]
-  draggingItem?: CustomItem | null
+  draggingItem?: Id | null
   newGroupOrder: number
   dimensionItems: ItemDimension[]
   height: number
@@ -164,101 +152,6 @@ export default class ReactCalendarTimeline extends Component<
   ReactCalendarTimelineProps,
   ReactCalendarTimelineState
 > {
-  // static propTypes = {
-  //    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  //    items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  //    sidebarWidth: PropTypes.number,/
-  //    rightSidebarWidth: PropTypes.number,
-  //    dragSnap: PropTypes.number,
-  //    minResizeWidth: PropTypes.num÷ber,
-  //    lineHeight: PropTypes.number,
-  //    itemHeightRatio: PropTypes.number,
-
-  //    minZoom: PropTypes.number,
-  //    maxZoom: PropTypes.number,
-  //    buffer: PropTypes.number,
-  //
-  //    clickTolerance: PropTypes.number,
-
-  //    canChangeGroup: PropTypes.bool,
-  //    canMove: PropTypes.bool,
-  //    canResize: PropTypes.oneOf([true, false, 'left', 'right', 'both']),
-  //    useResizeHandle: PropTypes.bool,
-  //    canSelect: PropTypes.bool,
-  //
-  //    stackItems: PropTypes.bool,
-  //
-  //    traditionalZoom: PropTypes.bool,
-  //
-  //    itemTouchSendsClick: PropTypes.bool,
-  //
-  //    horizontalLineClassNamesForGroup: PropTypes.func,
-  //
-  //    onItemMove: PropTypes.func,
-  //    onItemResize: PropTypes.func,
-  //    onItemClick: PropTypes.func,
-  //    onItemSelect: PropTypes.func,
-  //    onItemDeselect: PropTypes.func,
-  //    onCanvasClick: PropTypes.func,
-  //    onItemDoubleClick: PropTypes.func,
-  //    onItemContextMenu: PropTypes.func,
-  //    onCanvasDoubleClick: PropTypes.func,
-  //    onCanvasContextMenu: PropTypes.func,
-  //    onZoom: PropTypes.func,
-  //    onItemDrag: PropTypes.func,
-  //
-  //    moveResizeValidator: PropTypes.func,
-  //
-  //    itemRenderer: PropTypes.func,
-  //    groupRenderer: PropTypes.func,
-  //
-  //    className: PropTypes.string,
-  //    style: PropTypes.object,
-  //
-  //    keys: PropTypes.shape({
-  //      groupIdKey: PropTypes.string,
-  //      groupTitleKey: PropTypes.string,
-  //      groupLabelKey: PropTypes.string,
-  //      groupRightTitleKey: PropTypes.string,
-  //      itemIdKey: PropTypes.string,
-  //      itemTitleKey: PropTypes.string,
-  //      itemDivTitleKey: PropTypes.string,
-  //      itemGroupKey: PropTypes.string,
-  //      itemTimeStartKey: PropTypes.string,
-  //      itemTimeEndKey: PropTypes.string
-  //    }),
-  //    headerRef: PropTypes.func,
-  //    scrollRef: PropTypes.func,
-  //
-  //    timeSteps: PropTypes.shape({
-  //      second: PropTypes.number,
-  //      minute: PropTypes.number,
-  //      hour: PropTypes.number,
-  //      day: PropTypes.number,
-  //      month: PropTypes.number,
-  //      year: PropTypes.number
-  //    }),
-  //
-  //    defaultTimeStart: PropTypes.object,
-  //    defaultTimeEnd: PropTypes.object,
-  //
-  //    visibleTimeStart: PropTypes.number,
-  //    visibleTimeEnd: PropTypes.number,
-  //    onTimeChange: PropTypes.func,
-  //    onBoundsChange: PropTypes.func,
-  //
-  //    selected: PropTypes.array,
-  //
-  //    resizeDetector: PropTypes.shape({
-  //      addListener: PropTypes.func,
-  //      removeListener: PropTypes.func
-  //    }),
-  //
-  //    verticalLineClassNamesForTime: PropTypes.func,
-  //
-  //    children: PropTypes.node
-  //   }
-
   public static defaultProps = {
     sidebarWidth: 150,
     rightSidebarWidth: 0,
@@ -333,10 +226,6 @@ export default class ReactCalendarTimeline extends Component<
     children: null,
 
     selected: null,
-  }
-
-  public static childContextTypes = {
-    getTimelineContext: PropTypes.func,
   }
 
   getChildContext() {
@@ -697,13 +586,13 @@ export default class ReactCalendarTimeline extends Component<
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
       if (item && this.props.onItemClick) {
-        const time = this.timeFromItemEvent(e)
+        const time = this.timeFromItemEvent(e as MouseEvent<HTMLDivElement>)
         this.props.onItemClick(item, e, time)
       }
     } else {
       this.setState({ selectedItem: item })
       if (item && this.props.onItemSelect) {
-        const time = this.timeFromItemEvent(e)
+        const time = this.timeFromItemEvent(e as MouseEvent<HTMLDivElement>)
         this.props.onItemSelect(item, e, time)
       } else if (item === null && this.props.onItemDeselect) {
         this.props.onItemDeselect(e) // this isnt in the docs. Is this function even used?
@@ -729,7 +618,7 @@ export default class ReactCalendarTimeline extends Component<
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
   getTimeFromRowClickEvent = (e: MouseEvent<HTMLDivElement>) => {
-    const { dragSnap, buffer } = this.props
+    const { dragSnap = 1, buffer } = this.props
     const { width, canvasTimeStart, canvasTimeEnd } = this.state
     // this gives us distance from left of row element, so event is in
     // context of the row element, not client or page
@@ -747,9 +636,9 @@ export default class ReactCalendarTimeline extends Component<
     return time
   }
 
-  timeFromItemEvent = (e) => {
+  timeFromItemEvent = (e: MouseEvent<HTMLDivElement>) => {
     const { width, visibleTimeStart, visibleTimeEnd } = this.state
-    const { dragSnap } = this.props
+    const { dragSnap = 1 } = this.props
 
     const scrollComponent = this.scrollComponent!
     const { left: scrollX } = scrollComponent.getBoundingClientRect()
@@ -781,7 +670,6 @@ export default class ReactCalendarTimeline extends Component<
       eventType: 'move',
       itemId: item,
       time: dragTime,
-      undefined, //todo
       newGroupOrder,
     })
   }
@@ -804,14 +692,14 @@ export default class ReactCalendarTimeline extends Component<
       eventType: 'resize',
       itemId: item,
       time: resizeTime,
-      edge,
+      edge: edge || undefined,
     })
   }
 
   resizedItem: ItemProps['onResized'] = (item, resizeTime, edge, timeDelta) => {
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
-      this.props.onItemResize(item, resizeTime, edge)
+      this.props.onItemResize(item, resizeTime, edge!)
     }
   }
 
@@ -822,14 +710,28 @@ export default class ReactCalendarTimeline extends Component<
     edge,
     newGroupOrder,
   }: {
-    eventType: 'move'
+    eventType: 'move' | 'resize'
     itemId: Id
     time: number
-    edge: ResizeEdge
-    newGroupOrder: number
+    edge?: ResizeEdge
+    newGroupOrder?: number
   }) => {
     if (this.props.onItemDrag) {
-      this.props.onItemDrag({ eventType, itemId, time, edge, newGroupOrder })
+      if (eventType === 'move') {
+        this.props.onItemDrag({
+          eventType,
+          itemId,
+          time,
+          newGroupOrder: newGroupOrder!,
+        })
+      } else {
+        this.props.onItemDrag({
+          eventType,
+          itemId,
+          time,
+          edge,
+        })
+      }
     }
   }
 
@@ -837,7 +739,7 @@ export default class ReactCalendarTimeline extends Component<
     canvasTimeStart: number,
     canvasTimeEnd: number,
     canvasWidth: number,
-    minUnit: string,
+    minUnit: keyof TimelineTimeSteps,
     timeSteps: TimelineTimeSteps,
     height: number,
   ) {
@@ -846,7 +748,7 @@ export default class ReactCalendarTimeline extends Component<
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
-        lineCount={_length(this.props.groups)}
+        lineCount={this.props.groups?.length || 0}
         minUnit={minUnit}
         timeSteps={timeSteps}
         height={height}
@@ -858,7 +760,7 @@ export default class ReactCalendarTimeline extends Component<
   handleRowClick: RowClickEvent = (e, rowIndex) => {
     // shouldnt this be handled by the user, as far as when to deselect an item?
     if (this.hasSelectedItem()) {
-      this.selectItem(null)
+      this.selectItem(null, 'click', e)
     }
 
     if (this.props.onCanvasClick == null) return
@@ -907,7 +809,7 @@ export default class ReactCalendarTimeline extends Component<
       <GroupRows
         groups={groups}
         canvasWidth={canvasWidth}
-        lineCount={_length(this.props.groups)}
+        lineCount={this.props.groups?.length || 0}
         groupHeights={groupHeights}
         clickTolerance={this.props.clickTolerance}
         onRowClick={this.handleRowClick}
@@ -921,14 +823,14 @@ export default class ReactCalendarTimeline extends Component<
   }
 
   items(
-    canvasTimeStart,
-    zoom,
-    canvasTimeEnd,
-    canvasWidth,
-    minUnit,
-    dimensionItems,
-    groupHeights,
-    groupTops,
+    canvasTimeStart: number,
+    zoom: number,
+    canvasTimeEnd: number,
+    canvasWidth: number,
+    minUnit: keyof TimelineTimeSteps,
+    dimensionItems: any[],
+    groupHeights: number[],
+    groupTops: number[],
   ) {
     return (
       <Items
@@ -940,7 +842,7 @@ export default class ReactCalendarTimeline extends Component<
         items={this.props.items}
         groups={this.props.groups}
         keys={this.props.keys}
-        selectedItem={this.state.selectedItem}
+        selectedItem={this.state.selectedItem || undefined}
         dragSnap={this.props.dragSnap}
         minResizeWidth={this.props.minResizeWidth}
         canChangeGroup={this.props.canChangeGroup}
@@ -967,7 +869,9 @@ export default class ReactCalendarTimeline extends Component<
 
   handleHeaderRef = (el: HTMLDivElement) => {
     this.scrollHeaderRef = el
-    this.props.headerRef(el)
+    if (this.props.headerRef) {
+      this.props.headerRef(el)
+    }
   }
 
   sidebar(height: number, groupHeights: number[]) {
@@ -1013,17 +917,17 @@ export default class ReactCalendarTimeline extends Component<
   }
 
   childrenWithProps(
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    dimensionItems,
-    groupHeights,
-    groupTops,
-    height,
-    visibleTimeStart,
-    visibleTimeEnd,
-    minUnit,
-    timeSteps,
+    canvasTimeStart: number,
+    canvasTimeEnd: number,
+    canvasWidth: number,
+    dimensionItems: any[],
+    groupHeights: number[],
+    groupTops: number[],
+    height: number,
+    visibleTimeStart: number,
+    visibleTimeEnd: number,
+    minUnit: keyof TimelineTimeSteps,
+    timeSteps: TimelineTimeSteps,
   ) {
     if (!this.props.children) {
       return null
@@ -1065,7 +969,7 @@ export default class ReactCalendarTimeline extends Component<
     if (this.props.children) {
       let headerRenderer
       React.Children.map(this.props.children, (child) => {
-        if (this.isTimelineHeader(child)) {
+        if (this.isTimelineHeader(child as ElementWithSecret)) {
           headerRenderer = child
         }
       })
@@ -1092,12 +996,14 @@ export default class ReactCalendarTimeline extends Component<
     return this.props.selected.length > 0
   }
 
-  isItemSelected(itemId: string) {
+  isItemSelected(itemId: string | null) {
     const selectedItems = this.getSelected()
     return selectedItems.some((i) => i === itemId)
   }
   getScrollElementRef = (el: HTMLDivElement) => {
-    this.props.scrollRef(el)
+    if (this.props.scrollRef) {
+      this.props.scrollRef(el)
+    }
     this.scrollComponent = el
   }
 
