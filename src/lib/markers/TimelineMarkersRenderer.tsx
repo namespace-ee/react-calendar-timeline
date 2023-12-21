@@ -1,4 +1,3 @@
-import React from 'react'
 import { TimelineMarkersConsumer } from './TimelineMarkersContext'
 import { TimelineMarkerType } from './markerType'
 import TodayMarker from './implementations/TodayMarker'

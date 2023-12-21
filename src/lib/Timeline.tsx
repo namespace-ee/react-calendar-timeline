@@ -39,6 +39,7 @@ import {
 import { ItemDimension } from './types/dimension'
 import { Dayjs } from 'dayjs'
 import { ItemProps, ResizeEdge } from './items/Item'
+import './Timeline.scss'
 
 export type ReactCalendarTimelineProps<
   CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>,
@@ -414,7 +415,7 @@ export default class ReactCalendarTimeline extends Component<
   scrollHeaderRef: HTMLDivElement | null = null
 
   componentDidUpdate(
-    prevProps: ReactCalendarTimelineProps,
+    _: ReactCalendarTimelineProps,
     prevState: ReactCalendarTimelineState,
   ) {
     const newZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
@@ -822,16 +823,19 @@ export default class ReactCalendarTimeline extends Component<
     )
   }
 
-  items(
-    canvasTimeStart: number,
-    zoom: number,
-    canvasTimeEnd: number,
-    canvasWidth: number,
-    minUnit: keyof TimelineTimeSteps,
-    dimensionItems: any[],
-    groupHeights: number[],
-    groupTops: number[],
-  ) {
+  items({
+    canvasTimeStart,
+    canvasTimeEnd,
+    canvasWidth,
+    dimensionItems,
+    groupTops,
+  }: {
+    canvasTimeStart: number
+    canvasTimeEnd: number
+    canvasWidth: number
+    dimensionItems: any[]
+    groupTops: number[]
+  }) {
     return (
       <Items
         canvasTimeStart={canvasTimeStart}
@@ -1000,6 +1004,7 @@ export default class ReactCalendarTimeline extends Component<
     const selectedItems = this.getSelected()
     return selectedItems.some((i) => i === itemId)
   }
+
   getScrollElementRef = (el: HTMLDivElement) => {
     if (this.props.scrollRef) {
       this.props.scrollRef(el)
@@ -1008,6 +1013,7 @@ export default class ReactCalendarTimeline extends Component<
   }
 
   container = React.createRef<HTMLDivElement>()
+
   render() {
     const {
       items,
@@ -1109,16 +1115,13 @@ export default class ReactCalendarTimeline extends Component<
                       height,
                     )}
                     {this.rows(canvasWidth, groupHeights, groups)}
-                    {this.items(
+                    {this.items({
                       canvasTimeStart,
-                      zoom,
                       canvasTimeEnd,
                       canvasWidth,
-                      minUnit,
                       dimensionItems,
-                      groupHeights,
                       groupTops,
-                    )}
+                    })}
                     {this.childrenWithProps(
                       canvasTimeStart,
                       canvasTimeEnd,

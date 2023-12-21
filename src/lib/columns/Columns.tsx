@@ -2,7 +2,6 @@ import React, { Component, FC } from 'react'
 
 import { iterateTimes } from '../utility/calendar'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
-import { UnitType } from 'dayjs'
 import { TimelineTimeSteps } from '../types/main'
 
 type WrapperColumnsProps = {

@@ -1,6 +1,13 @@
-import React, { Component } from 'react'
-import { SubscribeReturn, TimelineMarkersConsumer } from '../TimelineMarkersContext'
-import { MarkerRendererType, MarkerType, TimelineMarkerType } from '../markerType'
+import { Component } from 'react'
+import {
+  SubscribeReturn,
+  TimelineMarkersConsumer,
+} from '../TimelineMarkersContext'
+import {
+  MarkerRendererType,
+  MarkerType,
+  TimelineMarkerType,
+} from '../markerType'
 
 type CursorMarkerProps = {
   subscribeMarker: (m: MarkerType) => SubscribeReturn
@@ -11,7 +18,7 @@ class CursorMarker extends Component<CursorMarkerProps> {
   componentDidMount() {
     const { unsubscribe } = this.props.subscribeMarker({
       type: TimelineMarkerType.Cursor,
-      renderer: this.props.children
+      renderer: this.props.children,
     })
     this.unsubscribe = unsubscribe
   }

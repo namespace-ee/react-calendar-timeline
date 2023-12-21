@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react'
+import { HTMLAttributes } from 'react'
 import { GetItemPropsParams, GetResizeProps, ItemProps } from './Item'
 import { ItemContext } from '../types/main'
 

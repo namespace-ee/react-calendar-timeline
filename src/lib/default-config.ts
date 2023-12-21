@@ -1,5 +1,3 @@
-import { Unit } from './types/main'
-
 export const defaultKeys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',

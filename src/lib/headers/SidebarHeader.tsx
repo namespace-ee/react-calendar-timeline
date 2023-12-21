@@ -1,4 +1,4 @@
-import React, {
+import {
   ComponentType,
   CSSProperties,
   HTMLAttributes,

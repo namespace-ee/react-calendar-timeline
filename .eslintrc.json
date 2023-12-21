@@ -23,6 +23,7 @@
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react/jsx-uses-vars": 2,
     "react/no-children-prop": 0,

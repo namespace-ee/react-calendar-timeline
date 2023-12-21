@@ -1,6 +1,5 @@
-import { Dayjs, UnitType } from 'dayjs'
+import { Dayjs } from 'dayjs'
 import {
-  ReactElement,
   ReactNode,
   CSSProperties,
   HTMLAttributes,
@@ -9,11 +8,11 @@ import {
   Ref,
   Component,
   TouchEventHandler,
+  ReactElement,
 } from 'react'
 // import reactCalendarTimeline from '../../../index'
 import { Dimension, ItemDimension } from './dimension'
-import { ReactElementLike, string } from 'prop-types'
-import { ItemProps, ResizeEdge } from '../items/Item'
+import { ResizeEdge } from '../items/Item'
 import { SelectUnits } from '../utility/calendar'
 
 export type Id = number | string
@@ -365,7 +364,7 @@ export class CustomHeader<Data = any> extends Component<
 //       CustomGroup extends TimelineGroupBase = TimelineGroupBase,
 //   > extends Component<ReactCalendarTimelineProps<CustomItem, CustomGroup>> {}
 
-export type ElementWithSecret = ReactElementLike & {
+export type ElementWithSecret = ReactElement & {
   props: {
     variant: string
   }

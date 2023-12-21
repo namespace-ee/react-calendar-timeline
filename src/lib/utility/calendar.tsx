@@ -1,4 +1,4 @@
-import dayjs, { Dayjs, UnitType } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { _get } from './generic'
 import { Dimension, ItemDimension } from '../types/dimension'
 import {
@@ -370,7 +370,6 @@ const EPSILON = 0.001
 export function collision(
   a: Dimension,
   b: Dimension,
-  lineHeight: number,
   collisionPadding: number = EPSILON,
 ) {
   // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
@@ -416,7 +415,7 @@ export function groupStack(
           other.dimensions &&
           other.dimensions.top !== null &&
           other.dimensions.stack &&
-          collision(item.dimensions, other.dimensions, lineHeight)
+          collision(item.dimensions, other.dimensions)
         ) {
           collidingItem = other
           break

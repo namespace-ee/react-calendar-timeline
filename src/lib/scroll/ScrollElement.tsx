@@ -25,6 +25,7 @@ type State = {
 
 class ScrollElement extends Component<Props, State> {
   scrollComponent: HTMLDivElement | null = null
+  // @ts-ignore
   private dragStartPosition: number | null = null
   private dragLastPosition: number | null = null
   private lastTouchDistance: number | null = null
