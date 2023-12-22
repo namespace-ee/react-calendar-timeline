@@ -10,14 +10,14 @@ import {
   TimelineItemBase,
   TimelineKeys,
 } from '../types/main'
+import { ItemDimension } from '../types/dimension.ts'
 
 type CustomItem = TimelineItemBase<any>
 export type CanResize = true | false | 'left' | 'right' | 'both'
 type ItemsProps = {
   groups: TimelineGroupBase[]
   items: CustomItem[]
-  // todo
-  dimensionItems: any[]
+  dimensionItems: ItemDimension[]
   selected?: Id[]
 
   canvasTimeStart: number

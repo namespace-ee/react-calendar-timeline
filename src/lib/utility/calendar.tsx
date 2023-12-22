@@ -358,10 +358,10 @@ export function getVisibleItems<
   const { itemTimeStartKey, itemTimeEndKey } = keys
 
   return items.filter((item) => {
-    return (
-      _get(item, itemTimeStartKey) <= canvasTimeEnd &&
-      _get(item, itemTimeEndKey) >= canvasTimeStart
-    )
+    const afterStart = _get(item, itemTimeStartKey) <= canvasTimeEnd
+    const beforeEnd = _get(item, itemTimeEndKey) >= canvasTimeStart
+
+    return afterStart && beforeEnd
   })
 }
 
@@ -433,7 +433,7 @@ export function groupStack(
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top +
+          item.dimensions.top! +
             item.dimensions.height +
             verticalMargin -
             groupTop,
@@ -481,7 +481,7 @@ export function stackAll(
   stackItems: boolean,
 ) {
   const groupHeights: number[] = []
-  const groupTops = []
+  const groupTops: number[] = []
 
   const groupedItems = getGroupedItems(itemsDimensions, groupOrders)
 
@@ -688,7 +688,7 @@ export function getItemDimensions<CustomItem extends TimelineItemBase<any>>({
   groupOrders: any //todo
   lineHeight: number
   itemHeightRatio: number
-}) {
+}): ItemDimension | undefined {
   const itemId = _get(item, keys.itemIdKey)
   const dimension = calculateDimensions({
     itemTimeStart: _get(item, keys.itemTimeStartKey),
@@ -704,8 +704,8 @@ export function getItemDimensions<CustomItem extends TimelineItemBase<any>>({
     dimension.height = lineHeight * itemHeightRatio
     return {
       id: itemId,
-      dimensions: dimension,
-    } as ItemDimension
+      dimensions: dimension as Dimension,
+    }
   }
 }
 

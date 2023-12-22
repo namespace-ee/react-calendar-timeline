@@ -16,7 +16,7 @@ import {
   stackTimelineItems,
 } from './utility/calendar'
 import { _get } from './utility/generic'
-import { defaultKeys } from './default-config'
+import { defaultKeys, defaultTimeSteps } from './default-config'
 import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 import { TimelineHeadersProvider } from './headers/HeadersContext'
@@ -40,6 +40,19 @@ import { ItemDimension } from './types/dimension'
 import { Dayjs } from 'dayjs'
 import { ItemProps, ResizeEdge } from './items/Item'
 import './Timeline.scss'
+
+export type OnTimeChange<CustomItem, CustomGroup> = (
+  visibleTimeStart: number,
+  visibleTimeEnd: number,
+  updateScrollCanvas: (
+    start: dateType,
+    end: dateType,
+    forceUpdateDimensions: boolean,
+    items: CustomItem[],
+    groups: CustomGroup[],
+  ) => void,
+  unit: Unit,
+) => any
 
 export type ReactCalendarTimelineProps<
   CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>,
@@ -90,18 +103,7 @@ export type ReactCalendarTimelineProps<
   onCanvasContextMenu?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onZoom?(timelineContext: TimelineContext, unit: Unit): void
   moveResizeValidator?: ItemProps['moveResizeValidator']
-  onTimeChange?(
-    visibleTimeStart: number,
-    visibleTimeEnd: number,
-    updateScrollCanvas: (
-      start: dateType,
-      end: dateType,
-      forceUpdateDimensions: boolean,
-      items: CustomItem[],
-      groups: CustomGroup[],
-    ) => void,
-    unit: Unit,
-  ): any
+  onTimeChange?: OnTimeChange<CustomItem, CustomGroup>
   onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): any
   itemRenderer?: ItemProps['itemRenderer']
   groupRenderer?:
@@ -196,7 +198,7 @@ export default class ReactCalendarTimeline extends Component<
 
     dayBackground: null,
 
-    // defaultTimeStart: null,
+    defaultTimeStart: null,
     defaultTimeEnd: null,
 
     itemTouchSendsClick: false,
@@ -204,7 +206,7 @@ export default class ReactCalendarTimeline extends Component<
     style: {},
     className: '',
     keys: defaultKeys,
-    //timeSteps: defaultTimeSteps,
+    timeSteps: defaultTimeSteps,
     headerRef: () => {},
     scrollRef: () => {},
 
@@ -266,7 +268,9 @@ export default class ReactCalendarTimeline extends Component<
     return minUnit as Unit
   }
 
-  constructor(props: any) {
+  state: ReactCalendarTimelineState
+
+  constructor(props: ReactCalendarTimelineProps) {
     super(props)
 
     this.getSelected = this.getSelected.bind(this)
@@ -294,28 +298,7 @@ export default class ReactCalendarTimeline extends Component<
       visibleTimeEnd,
       props.buffer,
     )
-    const canvasWidth = getCanvasWidth(this.state.width, props.buffer)
-
-    const { dimensionItems, height, groupHeights, groupTops } =
-      stackTimelineItems(
-        props.items,
-        props.groups,
-        canvasWidth,
-        this.state.canvasTimeStart,
-        this.state.canvasTimeEnd,
-        props.keys,
-        props.lineHeight,
-        props.itemHeightRatio,
-        props.stackItems,
-        this.state.draggingItem,
-        this.state.resizingItem,
-        this.state.dragTime,
-        this.state.resizingEdge,
-        this.state.resizeTime,
-        this.state.newGroupOrder,
-      )
-
-    this.state = {
+    const state: Partial<ReactCalendarTimelineState> = {
       width: 1000,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd,
@@ -328,11 +311,32 @@ export default class ReactCalendarTimeline extends Component<
       resizingItem: null,
       resizingEdge: null,
       newGroupOrder: 0, //CHECK
-      groupHeights: groupHeights,
-      height: height,
-      groupTops: groupTops,
-      dimensionItems: dimensionItems,
     }
+    const canvasWidth = getCanvasWidth(state.width!, props.buffer)
+    const { dimensionItems, height, groupHeights, groupTops } =
+      stackTimelineItems(
+        props.items,
+        props.groups,
+        canvasWidth,
+        state.canvasTimeStart!,
+        state.canvasTimeEnd!,
+        props.keys,
+        props.lineHeight,
+        props.itemHeightRatio,
+        props.stackItems,
+        state.draggingItem,
+        state.resizingItem,
+        state.dragTime!,
+        state.resizingEdge!,
+        state.resizeTime!,
+        state.newGroupOrder!,
+      )
+
+    state.dimensionItems = dimensionItems
+    state.height = height
+    state.groupHeights = groupHeights
+    state.groupTops = groupTops
+    this.state = state as ReactCalendarTimelineState
   }
 
   componentDidMount() {
@@ -833,7 +837,7 @@ export default class ReactCalendarTimeline extends Component<
     canvasTimeStart: number
     canvasTimeEnd: number
     canvasWidth: number
-    dimensionItems: any[]
+    dimensionItems: ItemDimension[]
     groupTops: number[]
   }) {
     return (

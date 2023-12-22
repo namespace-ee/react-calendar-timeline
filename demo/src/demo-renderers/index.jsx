@@ -1,25 +1,16 @@
-import React from 'react'
 /* eslint-disable no-console */
 import { Component } from 'react'
 import dayjs from 'dayjs'
 
-import Timeline, {
-  TimelineMarkers,
-  TodayMarker,
-  CustomMarker,
-  CursorMarker,
-} from 'react-calendar-timeline'
+import Timeline from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
 
-var minTime = dayjs()
-  .add(-6, 'months')
-  .valueOf()
-var maxTime = dayjs()
-  .add(6, 'months')
-  .valueOf()
+const minTime = dayjs().add(-6, 'months').valueOf()
+const maxTime = dayjs().add(6, 'months').valueOf()
 
-var keys = {
+const keys = {
+  groupLabelKey: 'title',
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
@@ -28,36 +19,43 @@ var keys = {
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
   itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeEndKey: 'end',
+}
+
+class GroupRenderer extends Component {
+  render() {
+    // console.log("heading rendering");
+    return (
+      <table>
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Metadata</td>
+          </tr>
+        </thead>
+      </table>
+    )
+  }
 }
 
 export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData()
-    const defaultTimeStart = dayjs()
-      .startOf('day')
-      .toDate()
-    const defaultTimeEnd = dayjs()
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
+    const { groups, items } = generateFakeData(100, 5000)
+    const visibleTimeStart = dayjs().startOf('month').toDate().valueOf()
+    const visibleTimeEnd = dayjs().endOf('month').toDate().valueOf()
 
     this.state = {
       groups,
       items,
-      defaultTimeStart,
-      defaultTimeEnd
+      visibleTimeStart,
+      visibleTimeEnd,
     }
   }
 
   handleCanvasClick = (groupId, time) => {
     console.log('Canvas clicked', groupId, dayjs(time).format())
-  }
-
-  handleCanvasDoubleClick = (groupId, time) => {
-    console.log('Canvas double clicked', groupId, dayjs(time).format())
   }
 
   handleCanvasContextMenu = (group, time) => {
@@ -86,16 +84,15 @@ export default class App extends Component {
     const group = groups[newGroupOrder]
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
-                group: group.id
-              })
-            : item
-      )
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: dragTime,
+              end: dragTime + (item.end - item.start),
+              group: group.id,
+            })
+          : item,
+      ),
     })
 
     console.log('Moved', itemId, dragTime, newGroupOrder)
@@ -105,15 +102,14 @@ export default class App extends Component {
     const { items } = this.state
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: edge === 'left' ? time : item.start,
-                end: edge === 'left' ? item.end : time
-              })
-            : item
-      )
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === 'left' ? time : item.start,
+              end: edge === 'left' ? item.end : time,
+            })
+          : item,
+      ),
     })
 
     console.log('Resized', itemId, time, edge)
@@ -122,18 +118,22 @@ export default class App extends Component {
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
     if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-      updateScrollCanvas(minTime, maxTime)
+      this.setState({
+        visibleTimeStart: minTime,
+        visibleTimeEnd: maxTime,
+      })
+      //updateScrollCanvas(minTime, maxTime)
     } else if (visibleTimeStart < minTime) {
-      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+      //updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
     } else if (visibleTimeEnd > maxTime) {
-      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+      //updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
     } else {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+      this.setState({
+        visibleTimeStart,
+        visibleTimeEnd,
+      })
+      //updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     }
-  }
-
-  handleZoom = (timelineContext, unit) => {
-    console.log('Zoomed', timelineContext, unit)
   }
 
   moveResizeValidator = (action, item, time) => {
@@ -146,8 +146,30 @@ export default class App extends Component {
     return time
   }
 
+  // itemRenderer = ({ item }) => {
+  //   return (
+  //     <div className='custom-item'>
+  //       <span className='title'>{item.title}</span>
+  //       <p className='tip'>{item.itemProps['data-tip']}</p>
+  //     </div>
+  //   )
+  // }
+
+  groupRenderer = ({ group }) => {
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td>{group.title}</td>
+            <td>Another Cell</td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  }
+
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
+    const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state
 
     return (
       <Timeline
@@ -155,18 +177,22 @@ export default class App extends Component {
         items={items}
         keys={keys}
         sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
+        sidebarContent={<GroupRenderer />}
+        rightSidebarWidth={150}
+        rightSidebarContent={<div>Above The Right</div>}
         canMove
         canResize="right"
         canSelect
-        itemsSorted
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
+        // resizeDetector={containerResizeDetector}
+
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
+        // itemRenderer={this.itemRenderer}
+        groupRenderer={this.groupRenderer}
         onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}
         onItemSelect={this.handleItemSelect}
@@ -175,33 +201,8 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
-        onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
-        buffer={3}
-      >
-        <TimelineMarkers>
-          <TodayMarker />
-          <CustomMarker
-            date={
-              dayjs()
-                .startOf('day')
-                .valueOf() +
-              1000 * 60 * 60 * 2
-            }
-          />
-          <CustomMarker
-            date={dayjs()
-              .add(3, 'day')
-              .valueOf()}
-          >
-            {({ styles }) => {
-              const newStyles = { ...styles, backgroundColor: 'blue' }
-              return <div style={newStyles} />
-            }}
-          </CustomMarker>
-          <CursorMarker />
-        </TimelineMarkers>
-      </Timeline>
+      />
     )
   }
 }

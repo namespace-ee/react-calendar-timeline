@@ -1,3 +1,3 @@
-import Timeline from './lib/lib/Timeline'
+import Timeline from './lib/index.mjs'
 
 export default Timeline
