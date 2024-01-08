@@ -496,8 +496,12 @@ export default class ReactCalendarTimeline extends Component<
     })
     //initial scroll left is the buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
     const scrollLeft = width * ((props.buffer - 1) / 2)
-    this.scrollComponent!.scrollLeft = scrollLeft
-    this.scrollHeaderRef!.scrollLeft = scrollLeft
+    if (this.scrollComponent) {
+      this.scrollComponent.scrollLeft = scrollLeft
+    }
+    if (this.scrollHeaderRef) {
+      this.scrollHeaderRef.scrollLeft = scrollLeft
+    }
   }
 
   onScroll = (scrollX: number) => {

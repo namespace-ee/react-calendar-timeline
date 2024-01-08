@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 
 import DemoMain from './demo-main'
-/*import DemoPerformance from './demo-performance'
+import DemoPerformance from './demo-performance'
 import DemoTreePGroups from './demo-tree-groups'
 import LinkedTimelines from './demo-linked-timelines'
 import ElementResize from './demo-element-resize'
@@ -17,23 +17,22 @@ import CustomItems from './demo-custom-items'
 import CustomHeaders from './demo-headers'
 import CustomInfoLabel from './demo-custom-info-label'
 import ControledSelect from './demo-controlled-select'
-import ControlledScrolling from './demo-controlled-scrolling'*/
-
+import ControlledScrolling from './demo-controlled-scrolling'
+const loader = () => 'loading'
 const routes: RouteObject[] = [
   {
     path: '/',
     Component: withLayout(DemoMain),
-    loader: () => 'loading',
+    loader,
   },
-  /* {
+  {
     path: '/DemoPerformance',
     Component: withLayout(DemoPerformance),
-    loader: () => 'loading',
+    loader,
   },
   {
     path: '/DemoTreePGroups',
     Component: withLayout(DemoTreePGroups),
-    loader: () => 'loading',
   },
   {
     path: '/LinkedTimelines',
@@ -70,7 +69,7 @@ const routes: RouteObject[] = [
   {
     path: '/ControlledScrolling',
     Component: withLayout(ControlledScrolling),
-  },*/
+  },
 ]
 
 function Menu() {
@@ -79,7 +78,7 @@ function Menu() {
       Choose the demo:
       {routes.map((key) => (
         <Link key={key.path} to={`${key.path}`}>
-          {key.path!.replace('/', '')}
+          {key.path === '/' ? 'Home' : key.path!.replace('/', '')}
         </Link>
       ))}
     </div>
@@ -91,15 +90,16 @@ function withLayout(Component: ComponentType<any>) {
     return (
       <div>
         <Menu />
-        <div className="demo-demo">{/* <Component />*/}</div>
+        <div className="demo-demo">
+          <Component />
+        </div>
       </div>
     )
   }
 }
 
 function App() {
-  // return <RouterProvider router={createBrowserRouter(routes)} />
-  return <DemoMain />
+  return <RouterProvider router={createBrowserRouter(routes)} />
 }
 
 export default App

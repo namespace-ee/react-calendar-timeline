@@ -2,6 +2,9 @@ body {
   font-family: 'Lato';
   margin: 0;
   font-size: 13px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .react-calendar-timeline .rct-item.item-weekend {

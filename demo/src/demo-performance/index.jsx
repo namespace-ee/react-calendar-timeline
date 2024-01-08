@@ -6,12 +6,8 @@ import Timeline from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
 
-var minTime = dayjs()
-  .add(-6, 'months')
-  .valueOf()
-var maxTime = dayjs()
-  .add(6, 'months')
-  .valueOf()
+var minTime = dayjs().add(-6, 'months').valueOf()
+var maxTime = dayjs().add(6, 'months').valueOf()
 
 var keys = {
   groupIdKey: 'id',
@@ -22,7 +18,7 @@ var keys = {
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
   itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeEndKey: 'end',
 }
 
 export default class App extends Component {
@@ -30,20 +26,22 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData(100, 10000)
-    const defaultTimeStart = dayjs()
-      .startOf('month')
-      .toDate()
-    const defaultTimeEnd = dayjs()
-      .endOf('month')
-      .toDate()
+    const defaultTimeStart = dayjs().startOf('month').valueOf()
+    const defaultTimeEnd = dayjs().endOf('month').valueOf()
 
-    groups[0].stackItems = false;
-    groups[0].height = 300;
+    groups[0].stackItems = false
+    groups[0].height = 300
     this.state = {
       groups,
-      items,
+      items: items.map((item) => {
+        return {
+          ...item,
+          start: dayjs(item.start).valueOf(),
+          end: dayjs(item.end).valueOf(),
+        }
+      }),
       defaultTimeStart,
-      defaultTimeEnd
+      defaultTimeEnd,
     }
   }
 
@@ -77,16 +75,15 @@ export default class App extends Component {
     const group = groups[newGroupOrder]
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
-                group: group.id
-              })
-            : item
-      )
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: dragTime,
+              end: dragTime + (item.end - item.start),
+              group: group.id,
+            })
+          : item,
+      ),
     })
 
     console.log('Moved', itemId, dragTime, newGroupOrder)
@@ -96,15 +93,14 @@ export default class App extends Component {
     const { items } = this.state
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: edge === 'left' ? time : item.start,
-                end: edge === 'left' ? item.end : time
-              })
-            : item
-      )
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === 'left' ? time : item.start,
+              end: edge === 'left' ? item.end : time,
+            })
+          : item,
+      ),
     })
 
     console.log('Resized', itemId, time, edge)
@@ -176,7 +172,6 @@ export default class App extends Component {
         defaultTimeEnd={defaultTimeEnd}
         // itemRenderer={this.itemRenderer}
         // groupRenderer={this.groupRenderer}
-
         onCanvasClick={this.handleCanvasClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}

@@ -358,8 +358,10 @@ export function getVisibleItems<
   const { itemTimeStartKey, itemTimeEndKey } = keys
 
   return items.filter((item) => {
-    const afterStart = _get(item, itemTimeStartKey) <= canvasTimeEnd
-    const beforeEnd = _get(item, itemTimeEndKey) >= canvasTimeStart
+    const afterStart =
+      dayjs(_get(item, itemTimeStartKey)).valueOf() <= canvasTimeEnd
+    const beforeEnd =
+      dayjs(_get(item, itemTimeEndKey)).valueOf() >= canvasTimeStart
 
     return afterStart && beforeEnd
   })
@@ -415,7 +417,7 @@ export function groupStack(
           other.dimensions &&
           other.dimensions.top !== null &&
           other.dimensions.stack &&
-          collision(item.dimensions, other.dimensions)
+          collision(item.dimensions, other.dimensions, lineHeight)
         ) {
           collidingItem = other
           break
@@ -424,16 +426,12 @@ export function groupStack(
         }
       }
 
-      if (
-        collidingItem != null &&
-        collidingItem.dimensions &&
-        collidingItem.dimensions.top
-      ) {
+      if (collidingItem != null) {
         // There is a collision. Reposition the items above the colliding element
-        item.dimensions.top = collidingItem.dimensions.top + lineHeight
+        item.dimensions.top = collidingItem.dimensions.top! + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top! +
+          item.dimensions.top +
             item.dimensions.height +
             verticalMargin -
             groupTop,

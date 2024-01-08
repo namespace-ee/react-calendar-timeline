@@ -41,7 +41,13 @@ export default class App extends Component {
 
     this.state = {
       groups,
-      items,
+      items: items.map((item) => {
+        return {
+          ...item,
+          start_time: dayjs(item.start_time).valueOf(),
+          end_time: dayjs(item.end_time).valueOf(),
+        }
+      }),
       defaultTimeStart,
       defaultTimeEnd,
     }
@@ -156,8 +162,6 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
-        //defaultTimeStart={defaultTimeStart}
-        //defaultTimeEnd={defaultTimeEnd}
         onCanvasClick={this.handleCanvasClick}
         onCanvasDoubleClick={this.handleCanvasDoubleClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
@@ -173,8 +177,8 @@ export default class App extends Component {
         buffer={3}
         minZoom={365.24 * 86400 * 1000} // 1 year
         maxZoom={365.24 * 86400 * 1000 * 20} // 20 years
-        defaultTimeStart={dayjs().add(-20, 'year')}
-        defaultTimeEnd={dayjs()}
+        defaultTimeStart={dayjs().add(-20, 'year').valueOf()}
+        defaultTimeEnd={dayjs().valueOf()}
       >
         <TimelineMarkers>
           <TodayMarker />

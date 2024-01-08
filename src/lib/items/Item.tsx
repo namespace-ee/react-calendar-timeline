@@ -547,9 +547,11 @@ export default class Item extends Component<ItemProps, ItemState> {
     } else {
       interactMounted = false
     }
-    this.setState({
-      interactMounted,
-    })
+    if (interactMounted !== this.state.interactMounted) {
+      this.setState({
+        interactMounted,
+      })
+    }
   }
 
   onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
