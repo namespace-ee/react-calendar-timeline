@@ -3,6 +3,7 @@ import React, { PropsWithChildren } from 'react'
 import {
   calculateXPositionForTime,
   calculateTimeForXPosition,
+  SelectUnits,
 } from '../utility/calendar'
 import { TimelineContext as TimelineContextValue } from '../types/main'
 import { Dayjs } from 'dayjs'
@@ -34,8 +35,9 @@ const defaultContextState: TimelineContextType = {
 }
 /* eslint-enable */
 
-const { Consumer, Provider } =
+export const TimelineContext =
   React.createContext<TimelineContextType>(defaultContextState)
+const { Consumer, Provider } = TimelineContext
 
 type TimelineStartProps = {
   visibleTimeStart: number
@@ -44,10 +46,10 @@ type TimelineStartProps = {
   canvasTimeEnd: number
   canvasWidth: number
   showPeriod: (from: Dayjs, to: Dayjs) => void
-  timelineUnit: string //todo
+  timelineUnit: SelectUnits
   timelineWidth: number
 }
-type TimelineContextType = {
+export type TimelineContextType = {
   getTimelineState: () => TimelineContextValue
   getLeftOffsetFromDate: (date: number) => number
   getDateFromLeftOffsetPosition: (leftOffset: number) => number

@@ -26,10 +26,8 @@ export interface TimelineGroupBase {
   dimensions?: Dimension | undefined
 }
 
-export type GroupOrders = Record<
-  Id,
-  { index: number; group: TimelineGroupBase }
->
+export type GroupOrder = { index: number; group: TimelineGroupBase }
+export type GroupOrders = Record<Id, GroupOrder>
 
 export type GroupedItem = {
   index: number
@@ -83,12 +81,7 @@ export interface ItemContext {
     height: number
     isDragging: boolean
     left: number
-    order: {
-      group: {
-        id: string
-      }
-      index: number
-    }
+    order: GroupOrder
     originalLeft: number
     stack: boolean
     top: number | null

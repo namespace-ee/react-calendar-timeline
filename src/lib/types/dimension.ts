@@ -1,4 +1,4 @@
-import { Id } from './main'
+import { GroupOrder, Id } from './main'
 
 export type Dimension = {
   collisionLeft: number
@@ -6,12 +6,7 @@ export type Dimension = {
   height: number
   isDragging: boolean
   left: number
-  order: {
-    group: {
-      id: string
-    }
-    index: number
-  }
+  order: GroupOrder
   originalLeft: number
   stack: boolean
   top: number | null

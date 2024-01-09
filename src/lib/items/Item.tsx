@@ -32,6 +32,10 @@ import {
   rightResizeStyle,
 } from './styles'
 import { Id, ItemContext, TimelineItemBase, TimelineKeys } from '../types/main'
+import {
+  TimelineContext,
+  TimelineContextType,
+} from '../timeline/TimelineStateContext.tsx'
 
 export type ResizeEdge = 'left' | 'right'
 
@@ -103,10 +107,6 @@ interface ItemState {
   resizeTime: null | number
 }
 
-interface TimelineContext {
-  // Define your timeline context types here
-}
-
 export type GetItemPropsParams = HTMLAttributes<HTMLDivElement> & {
   leftClassName?: string
   rightClassName?: string
@@ -116,7 +116,7 @@ export type GetItemPropsParams = HTMLAttributes<HTMLDivElement> & {
 
 export interface ItemRendererProps {
   item: TimelineItemBase<any>
-  timelineContext: TimelineContext
+  timelineContext: TimelineContextType
   itemContext: ItemContext
   getItemProps: (params: GetItemPropsParams) => HTMLAttributes<HTMLDivElement>
   getResizeProps: GetResizeProps
@@ -136,6 +136,8 @@ export default class Item extends Component<ItemProps, ItemState> {
     selected: false,
     itemRenderer: defaultItemRenderer,
   }
+  declare context: TimelineContextType
+  static contextType = TimelineContext
 
   state: ItemState = {
     interactMounted: false,
@@ -702,10 +704,7 @@ export default class Item extends Component<ItemProps, ItemState> {
       return null
     }
 
-    //todo context is not defined
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const timelineContext = this.context?.getTimelineContext?.()
+    const timelineContext = this.context
     const itemContext: ItemContext = {
       dimensions: this.props.dimensions!,
       useResizeHandle: !!this.props.useResizeHandle,

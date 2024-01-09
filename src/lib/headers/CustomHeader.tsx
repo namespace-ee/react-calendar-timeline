@@ -84,17 +84,14 @@ export class CustomHeader<Data> extends React.Component<
     }
     return false
   }
-
-  // todo - rework with "gdsfp"
-  // eslint-disable-next-line react/no-deprecated
-  componentWillReceiveProps(nextProps: CustomHeaderProps<Data>) {
+  componentDidUpdate(prevProps: CustomHeaderProps<Data>) {
     if (
-      nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
-      nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
-      nextProps.canvasWidth !== this.props.canvasWidth ||
-      nextProps.unit !== this.props.unit ||
-      nextProps.timeSteps !== this.props.timeSteps ||
-      nextProps.showPeriod !== this.props.showPeriod
+      prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      prevProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      prevProps.canvasWidth !== this.props.canvasWidth ||
+      prevProps.unit !== this.props.unit ||
+      prevProps.timeSteps !== this.props.timeSteps ||
+      prevProps.showPeriod !== this.props.showPeriod
     ) {
       const {
         canvasTimeStart,
@@ -102,7 +99,7 @@ export class CustomHeader<Data> extends React.Component<
         unit,
         timeSteps,
         getLeftOffsetFromDate,
-      } = nextProps
+      } = this.props
 
       const intervals = this.getHeaderIntervals({
         canvasTimeStart,

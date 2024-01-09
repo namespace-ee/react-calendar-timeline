@@ -3,7 +3,10 @@ import {
   createMarkerStylesWithLeftOffset,
   createDefaultRenderer,
 } from './shared'
-import { MarkerCanvasConsumer } from '../MarkerCanvasContext'
+import {
+  HandleCanvasMouseOver,
+  MarkerCanvasConsumer,
+} from '../MarkerCanvasContext'
 
 const defaultRenderer = createDefaultRenderer('default-cursor-marker')
 
@@ -20,17 +23,7 @@ type CursorMarkerWrapperProps = {
 }
 
 type CursorMarkerProps = CursorMarkerWrapperProps & {
-  subscribeToCanvasMouseOver: (
-    handleCanvasMouseOver: ({
-      leftOffset,
-      date,
-      isCursorOverCanvas,
-    }: {
-      leftOffset: number
-      date: number
-      isCursorOverCanvas: boolean
-    }) => void,
-  ) => void
+  subscribeToCanvasMouseOver: (p: HandleCanvasMouseOver) => () => void
 }
 
 type CursorMarkerStat = {
@@ -82,7 +75,9 @@ class CursorMarker extends React.Component<
       isShowingCursor: isCursorOverCanvas,
     })
   }
-  private unsubscribe: undefined | any //todo
+  private unsubscribe?: ReturnType<
+    CursorMarkerProps['subscribeToCanvasMouseOver']
+  >
 
   componentDidMount() {
     this.unsubscribe = this.props.subscribeToCanvasMouseOver(
@@ -91,9 +86,9 @@ class CursorMarker extends React.Component<
   }
 
   componentWillUnmount() {
-    if (this.unsubscribe != null) {
+    if (this.unsubscribe) {
       this.unsubscribe()
-      this.unsubscribe = null
+      this.unsubscribe = undefined
     }
   }
 
@@ -108,7 +103,6 @@ class CursorMarker extends React.Component<
   }
 }
 
-// TODO: turn into HOC?
 const CursorMarkerWrapper = (props: CursorMarkerWrapperProps) => {
   return (
     <MarkerCanvasConsumer>

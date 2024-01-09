@@ -10,8 +10,6 @@ import Timeline, {
 } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
-import groups from './groups'
-import items from './items'
 
 var minTime = dayjs().add(-6, 'months').valueOf()
 var maxTime = dayjs().add(6, 'months').valueOf()
@@ -32,12 +30,16 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    // const { groups, items } = generateFakeData(2, 4)
-    const defaultTimeStart = dayjs(items[0].start_time).startOf('day').toDate()
+    const { groups, items } = generateFakeData()
+    const defaultTimeStart = dayjs(items[0].start_time)
+      .startOf('day')
+      .toDate()
+      .valueOf()
     const defaultTimeEnd = dayjs(items[0].end_time)
       .startOf('day')
       .add(1, 'day')
       .toDate()
+      .valueOf()
 
     this.state = {
       groups,
@@ -177,8 +179,8 @@ export default class App extends Component {
         buffer={3}
         minZoom={365.24 * 86400 * 1000} // 1 year
         maxZoom={365.24 * 86400 * 1000 * 20} // 20 years
-        defaultTimeStart={dayjs().add(-20, 'year').valueOf()}
-        defaultTimeEnd={dayjs().valueOf()}
+        defaultTimeStart={defaultTimeStart}
+        defaultTimeEnd={defaultTimeEnd}
       >
         <TimelineMarkers>
           <TodayMarker />

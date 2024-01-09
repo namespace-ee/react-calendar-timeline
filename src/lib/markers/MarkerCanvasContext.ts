@@ -1,6 +1,5 @@
 import React from 'react'
 
-/* eslint-disable no-console */
 const defaultContextState = {
   subscribeToMouseOver: () => {
     console.warn('"subscribeToMouseOver" default func is being used')
@@ -8,14 +7,17 @@ const defaultContextState = {
   },
 }
 
-type Params = {
+export type HandleCanvasMouseOver = ({
+  leftOffset,
+  date,
+  isCursorOverCanvas,
+}: {
   leftOffset: number
   date: number
   isCursorOverCanvas: boolean
-}
-/* eslint-enable */
+}) => void
 export type MarkerCanvasContext = {
-  subscribeToMouseOver: (p: (params: Params) => void) => void
+  subscribeToMouseOver: (p: HandleCanvasMouseOver) => () => void
 }
 
 const { Consumer, Provider } =

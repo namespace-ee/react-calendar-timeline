@@ -336,7 +336,7 @@ export function getGroupedItems(
       items[i].dimensions !== undefined &&
       items[i].dimensions?.order !== undefined
     ) {
-      const groupItem = groupedItems[items[i].dimensions?.order.index ?? 0] //todo check
+      const groupItem = groupedItems[items[i].dimensions?.order.index ?? 0]
       if (groupItem) {
         groupItem.items.push(items[i])
       }
@@ -683,7 +683,7 @@ export function getItemDimensions<CustomItem extends TimelineItemBase<any>>({
   canvasTimeStart: number
   canvasTimeEnd: number
   canvasWidth: number
-  groupOrders: any //todo
+  groupOrders: GroupOrders
   lineHeight: number
   itemHeightRatio: number
 }): ItemDimension | undefined {
