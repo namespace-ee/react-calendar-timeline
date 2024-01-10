@@ -1,15 +1,5 @@
 import { Dayjs } from 'dayjs'
-import {
-  ReactNode,
-  CSSProperties,
-  HTMLAttributes,
-  MouseEventHandler,
-  ReactEventHandler,
-  Ref,
-  Component,
-  TouchEventHandler,
-  ReactElement,
-} from 'react'
+import { ReactNode, CSSProperties, HTMLProps, MouseEventHandler, ReactEventHandler, Ref, Component, TouchEventHandler, ReactElement } from 'react'
 // import reactCalendarTimeline from '../../../index'
 import { Dimension, ItemDimension } from './dimension'
 import { ResizeEdge } from '../items/Item'
@@ -46,17 +36,13 @@ export interface TimelineItemBase<DateType> {
   canChangeGroup?: boolean | undefined
   className?: string | undefined
   style?: CSSProperties | undefined
-  itemProps?: HTMLAttributes<HTMLDivElement>
+  itemProps?: HTMLProps<HTMLDivElement>
   isOverlay?: boolean | undefined
   dimensions?: Dimension | undefined
 }
 
-export type TimelineItem<
-  CustomItemFields,
-  DateType = number,
-> = TimelineItemBase<DateType> & CustomItemFields
-export type TimelineGroup<CustomGroupFields> = TimelineGroupBase &
-  CustomGroupFields
+export type TimelineItem<CustomItemFields, DateType = number> = TimelineItemBase<DateType> & CustomItemFields
+export type TimelineGroup<CustomGroupFields> = TimelineGroupBase & CustomGroupFields
 
 export interface TimelineContext {
   timelineWidth: number
@@ -135,9 +121,7 @@ export interface ItemRendererGetItemPropsReturnType {
   style: CSSProperties
 }
 
-export type GetItemsProps = Partial<
-  Omit<ItemRendererGetItemPropsReturnType, 'key' | 'ref'>
->
+export type GetItemsProps = Partial<Omit<ItemRendererGetItemPropsReturnType, 'key' | 'ref'>>
 
 export interface ItemRendererGetResizePropsReturnType {
   left?:
@@ -163,9 +147,7 @@ export type GetResizeProps = {
   rightClassName?: string | undefined
 }
 
-export interface ReactCalendarItemRendererProps<
-  CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>,
-> {
+export interface ReactCalendarItemRendererProps<CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>> {
   item: CustomItem
   itemContext: ItemContext
   getItemProps: (props: GetItemsProps) => {
@@ -180,14 +162,10 @@ export interface ReactCalendarItemRendererProps<
     onContextMenu: ReactEventHandler
     style: CSSProperties
   }
-  getResizeProps: (
-    propsOverride?: GetResizeProps,
-  ) => ItemRendererGetResizePropsReturnType
+  getResizeProps: (propsOverride?: GetResizeProps) => ItemRendererGetResizePropsReturnType
 }
 
-export interface ReactCalendarGroupRendererProps<
-  CustomGroup extends TimelineGroupBase = TimelineGroupBase,
-> {
+export interface ReactCalendarGroupRendererProps<CustomGroup extends TimelineGroupBase = TimelineGroupBase> {
   group: CustomGroup
   isRightSidebar?: boolean | undefined
 }
@@ -281,19 +259,9 @@ export interface SidebarHeaderProps<Data> {
   children: (props: SidebarHeaderChildrenFnProps<Data>) => ReactNode
 }
 
-export class SidebarHeader<Data = any> extends Component<
-  SidebarHeaderProps<Data>
-> {}
+export class SidebarHeader<Data = any> extends Component<SidebarHeaderProps<Data>> {}
 
-export type Unit =
-  | 'second'
-  | 'minute'
-  | 'hour'
-  | 'day'
-  | 'week'
-  | 'isoWeek'
-  | 'month'
-  | 'year'
+export type Unit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'isoWeek' | 'month' | 'year'
 
 export interface IntervalContext {
   interval: Interval
@@ -308,7 +276,7 @@ export interface GetIntervalProps {
 
 export interface IntervalRenderer<Data> {
   intervalContext: IntervalContext
-  getIntervalProps: (props?: GetIntervalProps) => HTMLAttributes<HTMLDivElement>
+  getIntervalProps: (props?: GetIntervalProps) => HTMLProps<HTMLDivElement>
   data?: Data | undefined
 }
 
@@ -327,9 +295,7 @@ export interface HeaderContext {
 export interface CustomHeaderPropsChildrenFnProps<Data> {
   timelineContext: TimelineContext
   headerContext: HeaderContext
-  getIntervalProps: (
-    props?: GetIntervalProps,
-  ) => Required<GetIntervalProps> & { key: string | number }
+  getIntervalProps: (props?: GetIntervalProps) => Required<GetIntervalProps> & { key: string | number }
   getRootProps: (propsToOverride?: { style: CSSProperties }) => {
     style: CSSProperties
   }
@@ -344,9 +310,7 @@ export interface CustomHeaderProps<Data> {
   children: (props?: CustomHeaderPropsChildrenFnProps<Data>) => ReactNode
 }
 
-export class CustomHeader<Data = any> extends Component<
-  CustomHeaderProps<Data>
-> {}
+export class CustomHeader<Data = any> extends Component<CustomHeaderProps<Data>> {}
 
 // export const defaultKeys: TimelineKeys;
 // export const defaultTimeSteps: TimelineTimeSteps;

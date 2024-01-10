@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 export enum TimelineMarkerType {
   Today = 'Today',
@@ -14,10 +14,5 @@ export type MarkerType = {
   id?: number
 }
 
-export type MarkerRendererType = ({
-  styles,
-  date,
-}: {
-  styles: React.CSSProperties
-  date: number
-}) => React.JSX.Element
+export type MarkerRendererTypeProps = { styles: React.CSSProperties; date: number }
+export type MarkerRendererType = ({ styles, date }: MarkerRendererTypeProps) => ReactNode

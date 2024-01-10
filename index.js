@@ -1,3 +1,1 @@
-import Timeline from './lib/index.mjs'
-
-export default Timeline
+export * from './dist/react-calendar-timeline-4ef.es.js'

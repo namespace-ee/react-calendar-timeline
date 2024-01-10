@@ -1,22 +1,12 @@
 import React from 'react'
-import {
-  createMarkerStylesWithLeftOffset,
-  createDefaultRenderer,
-} from './shared'
+import { createMarkerStylesWithLeftOffset, createDefaultRenderer } from './shared'
+import { MarkerRendererType } from '../markerType.ts'
 
-const defaultCustomMarkerRenderer = createDefaultRenderer(
-  'default-customer-marker-id',
-)
+const defaultCustomMarkerRenderer = createDefaultRenderer('default-customer-marker-id')
 type CustomMarkerProps = {
   date: number
   getLeftOffsetFromDate: (date: number) => number
-  renderer: ({
-    styles,
-    date,
-  }: {
-    styles: React.CSSProperties
-    date: number
-  }) => React.JSX.Element
+  renderer: MarkerRendererType
 }
 
 /**

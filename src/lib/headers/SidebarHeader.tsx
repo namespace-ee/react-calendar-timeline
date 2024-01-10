@@ -1,9 +1,4 @@
-import {
-  ComponentType,
-  CSSProperties,
-  HTMLAttributes,
-  PureComponent,
-} from 'react'
+import { ComponentType, CSSProperties, HTMLProps, PureComponent } from 'react'
 import { TimelineHeadersConsumer } from './HeadersContext'
 import { LEFT_VARIANT, RIGHT_VARIANT } from './constants'
 
@@ -18,10 +13,7 @@ type SidebarHeaderProps = {
 class SidebarHeader extends PureComponent<SidebarHeaderProps> {
   getRootProps = (props: { style?: CSSProperties } = {}) => {
     const { style } = props
-    const width =
-      this.props.variant === RIGHT_VARIANT
-        ? this.props.rightSidebarWidth
-        : this.props.leftSidebarWidth
+    const width = this.props.variant === RIGHT_VARIANT ? this.props.rightSidebarWidth : this.props.leftSidebarWidth
     return {
       style: {
         ...style,
@@ -44,7 +36,7 @@ class SidebarHeader extends PureComponent<SidebarHeaderProps> {
   }
 }
 
-type GetRootProps = () => HTMLAttributes<HTMLDivElement>
+type GetRootProps = () => HTMLProps<HTMLDivElement>
 
 type SidebarWrapperProps = {
   children?: ComponentType<{ getRootProps: GetRootProps }>
@@ -52,11 +44,7 @@ type SidebarWrapperProps = {
   headerData?: any
 }
 
-const defaultChildren: SidebarWrapperProps['children'] = ({
-  getRootProps,
-}: {
-  getRootProps: GetRootProps
-}) => <div data-testid="sidebarHeader" {...getRootProps()} />
+const defaultChildren: SidebarWrapperProps['children'] = ({ getRootProps }: { getRootProps: GetRootProps }) => <div data-testid="sidebarHeader" {...getRootProps()} />
 
 const SidebarWrapper = (props: SidebarWrapperProps) => {
   const { children, variant = LEFT_VARIANT, headerData } = props
@@ -64,12 +52,7 @@ const SidebarWrapper = (props: SidebarWrapperProps) => {
     <TimelineHeadersConsumer>
       {({ leftSidebarWidth, rightSidebarWidth }) => {
         return (
-          <SidebarHeader
-            leftSidebarWidth={leftSidebarWidth}
-            rightSidebarWidth={rightSidebarWidth}
-            variant={variant}
-            headerData={headerData}
-          >
+          <SidebarHeader leftSidebarWidth={leftSidebarWidth} rightSidebarWidth={rightSidebarWidth} variant={variant} headerData={headerData}>
             {children || defaultChildren}
           </SidebarHeader>
         )
