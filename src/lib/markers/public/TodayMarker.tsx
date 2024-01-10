@@ -1,20 +1,13 @@
-import React, { PropsWithChildren } from 'react'
-import {
-  SubscribeReturn,
-  TimelineMarkersConsumer,
-} from '../TimelineMarkersContext'
-import {
-  MarkerRendererType,
-  MarkerType,
-  TimelineMarkerType,
-} from '../markerType'
+import React from 'react'
+import { SubscribeReturn, TimelineMarkersConsumer } from '../TimelineMarkersContext'
+import { MarkerRendererType, MarkerType, TimelineMarkerType } from '../markerType'
 
-type TodayMarkerProps = PropsWithChildren<{
-  interval: number
+type TodayMarkerProps = {
+  interval?: number
   updateMarker: (marker: MarkerType) => void
   subscribeMarker: (m: MarkerType) => SubscribeReturn
   children: MarkerRendererType
-}>
+}
 
 class TodayMarker extends React.Component<TodayMarkerProps> {
   static defaultProps = {
@@ -56,20 +49,8 @@ class TodayMarker extends React.Component<TodayMarkerProps> {
 }
 
 // TODO: turn into HOC?
-const TodayMarkerWrapper = (
-  props: Omit<TodayMarkerProps, 'updateMarker' | 'subscribeMarker'>,
-) => {
-  return (
-    <TimelineMarkersConsumer>
-      {({ subscribeMarker, updateMarker }) => (
-        <TodayMarker
-          subscribeMarker={subscribeMarker}
-          updateMarker={updateMarker}
-          {...props}
-        />
-      )}
-    </TimelineMarkersConsumer>
-  )
+const TodayMarkerWrapper = (props: Omit<TodayMarkerProps, 'updateMarker' | 'subscribeMarker'>) => {
+  return <TimelineMarkersConsumer>{({ subscribeMarker, updateMarker }) => <TodayMarker subscribeMarker={subscribeMarker} updateMarker={updateMarker} {...props} />}</TimelineMarkersConsumer>
 }
 
 TodayMarkerWrapper.displayName = 'TodayMarkerWrapper'
