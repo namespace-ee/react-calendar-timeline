@@ -2,7 +2,7 @@ import React from 'react'
 import { SubscribeReturn, TimelineMarkersConsumer } from '../TimelineMarkersContext'
 import { MarkerRendererType, MarkerType, TimelineMarkerType } from '../markerType'
 
-type TodayMarkerProps = {
+export type TodayMarkerProps = {
   interval?: number
   updateMarker: (marker: MarkerType) => void
   subscribeMarker: (m: MarkerType) => SubscribeReturn

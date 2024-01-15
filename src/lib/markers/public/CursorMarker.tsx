@@ -1,15 +1,8 @@
 import { Component } from 'react'
-import {
-  SubscribeReturn,
-  TimelineMarkersConsumer,
-} from '../TimelineMarkersContext'
-import {
-  MarkerRendererType,
-  MarkerType,
-  TimelineMarkerType,
-} from '../markerType'
+import { SubscribeReturn, TimelineMarkersConsumer } from '../TimelineMarkersContext'
+import { MarkerRendererType, MarkerType, TimelineMarkerType } from '../markerType'
 
-type CursorMarkerProps = {
+export type CursorMarkerProps = {
   subscribeMarker: (m: MarkerType) => SubscribeReturn
   children: MarkerRendererType
 }
@@ -37,13 +30,7 @@ class CursorMarker extends Component<CursorMarkerProps> {
 // TODO: turn into HOC?
 
 const CursorMarkerWrapper = (props: Pick<CursorMarkerProps, 'children'>) => {
-  return (
-    <TimelineMarkersConsumer>
-      {({ subscribeMarker }) => (
-        <CursorMarker subscribeMarker={subscribeMarker} {...props} />
-      )}
-    </TimelineMarkersConsumer>
-  )
+  return <TimelineMarkersConsumer>{({ subscribeMarker }) => <CursorMarker subscribeMarker={subscribeMarker} {...props} />}</TimelineMarkersConsumer>
 }
 
 CursorMarkerWrapper.displayName = 'CursorMarkerWrapper'

@@ -24,7 +24,7 @@ import PropTypes from 'prop-types'
 
 export type OnTimeChange<CustomItem, CustomGroup> = (visibleTimeStart: number, visibleTimeEnd: number, updateScrollCanvas: (start: dateType, end: dateType, forceUpdateDimensions?: boolean, items?: CustomItem[], groups?: CustomGroup[]) => void, unit: Unit) => any
 
-export type ReactCalendarTimelineProps<CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>, CustomGroup extends TimelineGroupBase = TimelineGroupBase> = {
+export type ReactCalendarTimelineProps<CustomItem extends TimelineItemBase<number>, CustomGroup extends TimelineGroupBase = TimelineGroupBase> = {
   children?: React.ReactNode
   groups: CustomGroup[]
   items: CustomItem[]
@@ -67,10 +67,10 @@ export type ReactCalendarTimelineProps<CustomItem extends TimelineItemBase<any> 
   onCanvasDoubleClick?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onCanvasContextMenu?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onZoom?(timelineContext: TimelineContext, unit: Unit): void
-  moveResizeValidator?: ItemProps['moveResizeValidator']
+  moveResizeValidator?: ItemProps<CustomItem>['moveResizeValidator']
   onTimeChange?: OnTimeChange<CustomItem, CustomGroup>
   onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): any
-  itemRenderer?: ItemProps['itemRenderer']
+  itemRenderer?: ItemProps<CustomItem>['itemRenderer']
   groupRenderer?: ((props: ReactCalendarGroupRendererProps<CustomGroup>) => React.ReactNode) | undefined
   resizeDetector?:
     | {
@@ -281,7 +281,7 @@ export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<a
     windowResizeDetector.removeListener(this)
   }
 
-  static getDerivedStateFromProps(nextProps: ReactCalendarTimelineProps, prevState: ReactCalendarTimelineState) {
+  static getDerivedStateFromProps(nextProps: ReactCalendarTimelineProps<any>, prevState: ReactCalendarTimelineState) {
     const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
 
     // This is a gross hack pushing items and groups in to state only to allow
@@ -404,7 +404,7 @@ export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<a
     this.props.onTimeChange?.(visibleTimeStart, visibleTimeStart + zoom, this.updateScrollCanvas, this.getTimelineUnit())
   }
 
-  selectItem: ItemProps['onSelect'] = (item, clickType, e) => {
+  selectItem: ItemProps<CustomItem>['onSelect'] = (item, clickType, e) => {
     if (this.isItemSelected(item) || (this.props.itemTouchSendsClick && clickType === 'touch')) {
       if (item && this.props.onItemClick) {
         const time = this.timeFromItemEvent(e as MouseEvent<HTMLDivElement>)
@@ -421,14 +421,14 @@ export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<a
     }
   }
 
-  doubleClickItem: ItemProps['onItemDoubleClick'] = (item, e) => {
+  doubleClickItem: ItemProps<CustomItem>['onItemDoubleClick'] = (item, e) => {
     if (this.props.onItemDoubleClick) {
       const time = this.timeFromItemEvent(e)
       this.props.onItemDoubleClick(item, e, time)
     }
   }
 
-  contextMenuClickItem: ItemProps['onContextMenu'] = (item, e) => {
+  contextMenuClickItem: ItemProps<CustomItem>['onContextMenu'] = (item, e) => {
     if (this.props.onItemContextMenu) {
       const time = this.timeFromItemEvent(e)
       this.props.onItemContextMenu(item, e, time)
@@ -476,7 +476,7 @@ export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<a
     return time
   }
 
-  dragItem: ItemProps['onDrag'] = (item, dragTime, newGroupOrder) => {
+  dragItem: ItemProps<CustomItem>['onDrag'] = (item, dragTime, newGroupOrder) => {
     const newGroup = this.props.groups[newGroupOrder]
     const keys = this.props.keys
 
@@ -495,14 +495,14 @@ export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<a
     })
   }
 
-  dropItem: ItemProps['onDrop'] = (item, dragTime, newGroupOrder) => {
+  dropItem: ItemProps<CustomItem>['onDrop'] = (item, dragTime, newGroupOrder) => {
     this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
     if (this.props.onItemMove) {
       this.props.onItemMove(item, dragTime, newGroupOrder)
     }
   }
 
-  resizingItem: ItemProps['onResizing'] = (item, resizeTime, edge) => {
+  resizingItem: ItemProps<CustomItem>['onResizing'] = (item, resizeTime, edge) => {
     this.setState({
       resizingItem: item,
       resizingEdge: edge,
@@ -517,7 +517,7 @@ export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<a
     })
   }
 
-  resizedItem: ItemProps['onResized'] = (item, resizeTime, edge, timeDelta) => {
+  resizedItem: ItemProps<CustomItem>['onResized'] = (item, resizeTime, edge, timeDelta) => {
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge!)

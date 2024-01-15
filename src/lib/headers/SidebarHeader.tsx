@@ -38,7 +38,7 @@ class SidebarHeader extends PureComponent<SidebarHeaderProps> {
 
 type GetRootProps = () => HTMLProps<HTMLDivElement>
 
-type SidebarWrapperProps = {
+export type SidebarWrapperProps = {
   children?: ComponentType<{ getRootProps: GetRootProps }>
   variant?: typeof LEFT_VARIANT | typeof RIGHT_VARIANT
   headerData?: any

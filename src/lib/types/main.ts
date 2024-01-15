@@ -140,7 +140,7 @@ export interface ItemRendererGetResizePropsReturnType {
     | undefined
 }
 
-export type GetResizeProps = {
+/*export type GetResizeProps = {
   leftStyle?: CSSProperties | undefined
   rightStyle?: CSSProperties | undefined
   leftClassName?: string | undefined
@@ -163,7 +163,7 @@ export interface ReactCalendarItemRendererProps<CustomItem extends TimelineItemB
     style: CSSProperties
   }
   getResizeProps: (propsOverride?: GetResizeProps) => ItemRendererGetResizePropsReturnType
-}
+}*/
 
 export interface ReactCalendarGroupRendererProps<CustomGroup extends TimelineGroupBase = TimelineGroupBase> {
   group: CustomGroup

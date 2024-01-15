@@ -1,20 +1,12 @@
 import { Component } from 'react'
 import Item, { ItemProps } from './Item'
-// import ItemGroup from './ItemGroup'
-
 import { _get, arraysEqual, keyBy } from '../utility/generic'
 import { getGroupOrders, getVisibleItems } from '../utility/calendar'
-import {
-  Id,
-  TimelineGroupBase,
-  TimelineItemBase,
-  TimelineKeys,
-} from '../types/main'
+import { Id, TimelineGroupBase, TimelineItemBase, TimelineKeys } from '../types/main'
 import { ItemDimension } from '../types/dimension.ts'
 
-type CustomItem = TimelineItemBase<any>
 export type CanResize = true | false | 'left' | 'right' | 'both'
-type ItemsProps = {
+type ItemsProps<CustomItem extends TimelineItemBase<number>> = {
   groups: TimelineGroupBase[]
   items: CustomItem[]
   dimensionItems: ItemDimension[]
@@ -33,15 +25,15 @@ type ItemsProps = {
   canResize?: CanResize
   canSelect?: boolean
   keys: TimelineKeys
-  moveResizeValidator?: ItemProps['moveResizeValidator']
-  itemSelect: ItemProps['onSelect']
-  itemDrag: ItemProps['onDrag']
-  itemDrop: ItemProps['onDrop']
-  itemResizing: ItemProps['onResizing']
-  itemResized: ItemProps['onResized']
-  onItemDoubleClick: ItemProps['onItemDoubleClick']
-  onItemContextMenu?: ItemProps['onContextMenu']
-  itemRenderer?: ItemProps['itemRenderer']
+  moveResizeValidator?: ItemProps<CustomItem>['moveResizeValidator']
+  itemSelect: ItemProps<CustomItem>['onSelect']
+  itemDrag: ItemProps<CustomItem>['onDrag']
+  itemDrop: ItemProps<CustomItem>['onDrop']
+  itemResizing: ItemProps<CustomItem>['onResizing']
+  itemResized: ItemProps<CustomItem>['onResized']
+  onItemDoubleClick: ItemProps<CustomItem>['onItemDoubleClick']
+  onItemContextMenu?: ItemProps<CustomItem>['onContextMenu']
+  itemRenderer?: ItemProps<CustomItem>['itemRenderer']
   groupTops: number[]
   useResizeHandle?: boolean
   scrollRef: HTMLElement | null
@@ -52,37 +44,19 @@ type ItemsState = {
   // Define your state properties here
 }
 
-const canResizeLeft = (item: CustomItem, canResize?: CanResize) => {
-  const value =
-    _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
+function canResizeLeft<CustomItem extends TimelineItemBase<number>>(item: CustomItem, canResize?: CanResize) {
+  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'left' || value === 'both'
 }
 
-const canResizeRight = (item: CustomItem, canResize?: CanResize) => {
-  const value =
-    _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
+function canResizeRight<CustomItem extends TimelineItemBase<number>>(item: CustomItem, canResize?: CanResize) {
+  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
   return value === 'right' || value === 'both' || value === true
 }
 
-export default class Items extends Component<ItemsProps, ItemsState> {
-  shouldComponentUpdate(nextProps: ItemsProps) {
-    return !(
-      arraysEqual(nextProps.groups, this.props.groups) &&
-      arraysEqual(nextProps.items, this.props.items) &&
-      arraysEqual(nextProps.dimensionItems, this.props.dimensionItems) &&
-      nextProps.keys === this.props.keys &&
-      nextProps.canvasTimeStart === this.props.canvasTimeStart &&
-      nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
-      nextProps.canvasWidth === this.props.canvasWidth &&
-      nextProps.selectedItem === this.props.selectedItem &&
-      nextProps.selected === this.props.selected &&
-      nextProps.dragSnap === this.props.dragSnap &&
-      nextProps.minResizeWidth === this.props.minResizeWidth &&
-      nextProps.canChangeGroup === this.props.canChangeGroup &&
-      nextProps.canMove === this.props.canMove &&
-      nextProps.canResize === this.props.canResize &&
-      nextProps.canSelect === this.props.canSelect
-    )
+export default class Items<CustomItem extends TimelineItemBase<number>> extends Component<ItemsProps<CustomItem>, ItemsState> {
+  shouldComponentUpdate(nextProps: ItemsProps<CustomItem>) {
+    return !(arraysEqual(nextProps.groups, this.props.groups) && arraysEqual(nextProps.items, this.props.items) && arraysEqual(nextProps.dimensionItems, this.props.dimensionItems) && nextProps.keys === this.props.keys && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.selectedItem === this.props.selectedItem && nextProps.selected === this.props.selected && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.canSelect === this.props.canSelect)
   }
 
   isSelected(item: CustomItem, itemIdKey: string) {
@@ -101,8 +75,7 @@ export default class Items extends Component<ItemsProps, ItemsState> {
   }
 
   render() {
-    const { canvasTimeStart, canvasTimeEnd, dimensionItems, keys, groups } =
-      this.props
+    const { canvasTimeStart, canvasTimeEnd, dimensionItems, keys, groups } = this.props
     const { itemIdKey, itemGroupKey } = keys
 
     const groupOrders = getGroupOrders(groups, keys)
@@ -120,27 +93,13 @@ export default class Items extends Component<ItemsProps, ItemsState> {
               item={item}
               keys={this.props.keys}
               order={groupOrders[_get(item, itemGroupKey)]}
-              dimensions={
-                sortedDimensionItems[_get(item, itemIdKey)].dimensions
-              }
+              dimensions={sortedDimensionItems[_get(item, itemIdKey)].dimensions}
               selected={this.isSelected(item, itemIdKey)}
-              canChangeGroup={
-                _get(item, 'canChangeGroup') !== undefined
-                  ? _get(item, 'canChangeGroup')
-                  : this.props.canChangeGroup
-              }
-              canMove={
-                _get(item, 'canMove') !== undefined
-                  ? _get(item, 'canMove')
-                  : this.props.canMove
-              }
+              canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
+              canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
               canResizeLeft={canResizeLeft(item, this.props.canResize)}
               canResizeRight={canResizeRight(item, this.props.canResize)}
-              canSelect={
-                _get(item, 'canSelect') !== undefined
-                  ? _get(item, 'canSelect')
-                  : this.props.canSelect
-              }
+              canSelect={_get(item, 'canSelect') !== undefined ? _get(item, 'canSelect') : this.props.canSelect}
               useResizeHandle={this.props.useResizeHandle}
               groupTops={this.props.groupTops}
               canvasTimeStart={this.props.canvasTimeStart}
