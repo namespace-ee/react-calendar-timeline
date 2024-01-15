@@ -542,13 +542,13 @@ export function getCanvasBoundariesFromVisibleTime(visibleTimeStart: number, vis
  * @param {*} props
  * @param {*} state
  */
-export function calculateScrollCanvas(visibleTimeStart: number, visibleTimeEnd: number, forceUpdateDimensions: boolean, items: any, groups: any, props: ReactCalendarTimelineProps, state: ReactCalendarTimelineState) {
+export function calculateScrollCanvas<P extends ReactCalendarTimelineProps<any, any>, S extends ReactCalendarTimelineState<any, any>>(visibleTimeStart: number, visibleTimeEnd: number, forceUpdateDimensions: boolean, items: any, groups: any, props: P, state: S): S {
   const buffer = props.buffer
   const oldCanvasTimeStart = state.canvasTimeStart
   const oldCanvasTimeEnd = state.canvasTimeEnd
   const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
   const newZoom = visibleTimeEnd - visibleTimeStart
-  const newState: ReactCalendarTimelineState = {
+  const newState: S = {
     ...state,
     visibleTimeStart,
     visibleTimeEnd,

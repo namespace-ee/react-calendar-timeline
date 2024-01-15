@@ -1,8 +1,8 @@
 {
   "name": "react-calendar-timeline-4ef",
-  "version": "1.0.0",
-  "description": "react calendar timeline",
-  "packageManager": "npm@8.19.2",
+  "version": "1.0.2",
+  "description": "fork form react-calendar-timeline with TS latest react and other improvements",
+  "packageManager": "npm@10.1.0",
   "scripts": {
     "build-vite": "tsc && vite build",
     "lint": "eslint --ext .js --ext .jsx ./src",
@@ -30,40 +30,8 @@
     "type": "git",
     "url": "https://github.com/namespace-ee/react-calendar-timeline.git"
   },
-  "author": "Marius Andra <marius.andra@gmail.com>",
-  "contributors": [
-    {
-      "name": "Stanisław Chmiela",
-      "email": "sjchmiela@gmail.com"
-    },
-    {
-      "name": "Mike Joyce",
-      "url": "https://github.com/mcMickJuice"
-    },
-    {
-      "name": "Samuel Rossetti"
-    },
-    {
-      "name": "amakhrov",
-      "url": "https://github.com/amakhrov"
-    },
-    {
-      "name": "Ahmad Ilaiwi",
-      "url": "https://github.com/Ilaiwi"
-    },
-    {
-      "name": "dkarnutsch",
-      "url": "https://github.com/dkarnutsch"
-    },
-    {
-      "name": "Alex Maclean",
-      "url": "https://github.com/acemac"
-    },
-    {
-      "name": "Kevin Mann",
-      "url": "https://github.com/kevinmanncito"
-    }
-  ],
+  "private": false,
+  "author": "4EF",
   "license": "MIT",
   "keywords": [
     "react",
@@ -71,41 +39,11 @@
     "react-component",
     "timeline"
   ],
-  "standard": {
-    "parser": "babel-eslint"
-  },
-  "jest": {
-    "verbose": true,
-    "testMatch": [
-      "**/__tests__/**/*.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/jest-setup.js"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "modulePaths": [
-      "<rootDir>/src/",
-      "<rootDir>/__tests__"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules",
-      "<rootDir>/__tests__/test-utility"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
-  },
   "dependencies": {
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@types/lodash": "^4.14.202",
     "classnames": "^2.3.2",
     "element-resize-detector": "^1.2.4",
     "lodash": "^4.17.21",
-    "memoize-one": "^6.0.0",
-    "rollup-plugin-typescript-paths": "^1.5.0"
+    "memoize-one": "^6.0.0"
   },
   "peerDependencies": {
     "dayjs": "*",
@@ -114,6 +52,9 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "rollup-plugin-typescript-paths": "^1.5.0",
+    "@types/lodash": "^4.14.202",
+    "@rollup/plugin-typescript": "^11.1.5",
     "@faker-js/faker": "^8.3.1",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",

@@ -1,7 +1,5 @@
-# ⚠️⚠️⚠️⚠️ HELP WANTED
-please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
-
-# React Calendar Timeline
+# fork from react-calendar-timeline
+# React Calendar Timeline docs here may not be relevant
 
 A modern and responsive React timeline component.
 
@@ -933,7 +931,7 @@ by default we provide a responsive format for the dates based on the label width
     mediumLong: 'mm:ss',
     medium: 'mm:ss',
     "short": 'ss'
-  }  
+  }
 }
   ```
 

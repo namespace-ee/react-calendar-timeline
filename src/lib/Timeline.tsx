@@ -109,7 +109,7 @@ export type ReactCalendarTimelineState<CustomItem extends TimelineItemBase<any> 
   groupTops: number[]
 }
 
-export default class ReactCalendarTimeline extends Component<ReactCalendarTimelineProps, ReactCalendarTimelineState> {
+export default class ReactCalendarTimeline<CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>, CustomGroup extends TimelineGroupBase = TimelineGroupBase> extends Component<ReactCalendarTimelineProps<CustomItem, CustomGroup>, ReactCalendarTimelineState<CustomItem, CustomGroup>> {
   static childContextType = {
     getTimelineContext: PropTypes.func,
   }
@@ -213,9 +213,9 @@ export default class ReactCalendarTimeline extends Component<ReactCalendarTimeli
     return minUnit as Unit
   }
 
-  state: ReactCalendarTimelineState
+  state: ReactCalendarTimelineState<CustomItem, CustomGroup>
 
-  constructor(props: ReactCalendarTimelineProps) {
+  constructor(props: ReactCalendarTimelineProps<CustomItem, CustomGroup>) {
     super(props)
 
     this.getSelected = this.getSelected.bind(this)
@@ -258,7 +258,7 @@ export default class ReactCalendarTimeline extends Component<ReactCalendarTimeli
     state.height = height
     state.groupHeights = groupHeights
     state.groupTops = groupTops
-    this.state = state as ReactCalendarTimelineState
+    this.state = state as ReactCalendarTimelineState<CustomItem, CustomGroup>
   }
 
   componentDidMount() {
@@ -307,7 +307,7 @@ export default class ReactCalendarTimeline extends Component<ReactCalendarTimeli
   scrollComponent: HTMLDivElement | null = null
   scrollHeaderRef: HTMLDivElement | null = null
 
-  componentDidUpdate(_: ReactCalendarTimelineProps, prevState: ReactCalendarTimelineState) {
+  componentDidUpdate(_: ReactCalendarTimelineProps<CustomItem, CustomGroup>, prevState: ReactCalendarTimelineState) {
     const newZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const oldZoom = prevState.visibleTimeEnd - prevState.visibleTimeStart
 
@@ -582,7 +582,7 @@ export default class ReactCalendarTimeline extends Component<ReactCalendarTimeli
     }
   }
 
-  rows(canvasWidth: number, groupHeights: number[], groups: TimelineGroupBase[]) {
+  rows(canvasWidth: number, groupHeights: number[], groups: typeof this.props.groups) {
     return <GroupRows groups={groups} canvasWidth={canvasWidth} lineCount={this.props.groups?.length || 0} groupHeights={groupHeights} clickTolerance={this.props.clickTolerance} onRowClick={this.handleRowClick} onRowDoubleClick={this.handleRowDoubleClick} horizontalLineClassNamesForGroup={this.props.horizontalLineClassNamesForGroup} onRowContextClick={this.handleScrollContextMenu} />
   }
 
