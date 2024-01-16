@@ -36,12 +36,6 @@ type State = {
   intervals: Interval[]
 }
 
-type GetIntervalStyleParams = {
-  left: number
-  labelWidth: number
-  style?: CSSProperties
-}
-
 class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State> {
   constructor(props: CustomHeaderProps<Data>) {
     super(props)
@@ -60,7 +54,7 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     }
   }
 
-  shouldComponentUpdate(nextProps: CustomHeaderProps<Data>) {
+  /*shouldComponentUpdate(nextProps: CustomHeaderProps<Data>) {
     if (
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
@@ -74,7 +68,7 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
       return true
     }
     return false
-  }
+  }*/
   componentDidUpdate(prevProps: CustomHeaderProps<Data>) {
     if (
       prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
@@ -136,21 +130,13 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     if (!interval) throw new Error('you should provide interval to the prop getter')
     const { startTime, labelWidth, left } = interval
     return {
-      style: this.getIntervalStyle({
-        style,
-        labelWidth,
+      style: {
+        ...style,
         left,
-      }),
+        width: labelWidth,
+        position: 'absolute',
+      },
       key: `label-${startTime.valueOf()}`,
-    }
-  }
-
-  getIntervalStyle = ({ left, labelWidth, style }: GetIntervalStyleParams) => {
-    return {
-      ...style,
-      left,
-      width: labelWidth,
-      position: 'absolute',
     }
   }
 
