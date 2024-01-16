@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline-4ef",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "fork form react-calendar-timeline with TS latest react and other improvements",
   "packageManager": "npm@10.1.0",
   "scripts": {
