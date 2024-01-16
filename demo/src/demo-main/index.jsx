@@ -2,12 +2,7 @@ import React from 'react'
 import { Component } from 'react'
 import dayjs from 'dayjs'
 
-import Timeline, {
-  TimelineMarkers,
-  TodayMarker,
-  CustomMarker,
-  CursorMarker,
-} from 'react-calendar-timeline'
+import Timeline, { TimelineMarkers, TodayMarker, CustomMarker, CursorMarker } from '../../../src/index'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -31,15 +26,8 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData()
-    const defaultTimeStart = dayjs(items[0].start_time)
-      .startOf('day')
-      .toDate()
-      .valueOf()
-    const defaultTimeEnd = dayjs(items[0].end_time)
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
-      .valueOf()
+    const defaultTimeStart = dayjs(items[0].start_time).startOf('day').toDate().valueOf()
+    const defaultTimeEnd = dayjs(items[0].end_time).startOf('day').add(1, 'day').toDate().valueOf()
 
     this.state = {
       groups,
@@ -139,8 +127,7 @@ export default class App extends Component {
 
   moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
+      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
       return newTime
     }
 
@@ -184,16 +171,14 @@ export default class App extends Component {
       >
         <TimelineMarkers>
           <TodayMarker />
-          <CustomMarker
-            date={dayjs().startOf('day').valueOf() + 1000 * 60 * 60 * 2}
-          />
+          <CustomMarker date={dayjs().startOf('day').valueOf() + 1000 * 60 * 60 * 2} />
           <CustomMarker date={dayjs().add(3, 'day').valueOf()}>
             {({ styles }) => {
               const newStyles = { ...styles, backgroundColor: 'blue' }
               return <div style={newStyles} />
             }}
           </CustomMarker>
-          <CursorMarker />
+          {/* <CursorMarker />*/}
         </TimelineMarkers>
       </Timeline>
     )

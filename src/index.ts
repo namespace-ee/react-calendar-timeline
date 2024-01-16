@@ -4,6 +4,7 @@ export { default as TimelineMarkers } from './lib/markers/public/TimelineMarkers
 export { default as TodayMarker } from './lib/markers/public/TodayMarker'
 export type { TodayMarkerProps } from './lib/markers/public/TodayMarker'
 export { default as CustomMarker } from './lib/markers/public/CustomMarker'
+export { default as CursorMarker } from './lib/markers/public/CursorMarker'
 export type { CursorMarkerProps } from './lib/markers/public/CursorMarker'
 export { default as TimelineHeaders } from './lib/headers/TimelineHeaders'
 export type { TimelineHeadersWrapperProps as TimelineHeadersProps } from './lib/headers/TimelineHeaders'
@@ -12,7 +13,7 @@ export type { SidebarWrapperProps as SidebarHeaderProps } from './lib/headers/Si
 export { default as CustomHeader } from './lib/headers/CustomHeader'
 export type { CustomHeaderWrapperProps as CustomHeaderProps } from './lib/headers/CustomHeader'
 export { default as DateHeader } from './lib/headers/DateHeader'
-export type { DateHeaderProps } from './lib/headers/DateHeader'
+export type { DateHeaderWrapper as DateHeaderProps } from './lib/headers/DateHeader'
 export * as calendarUtils from './lib/utility/calendar'
 export * from './lib/types/main'
 

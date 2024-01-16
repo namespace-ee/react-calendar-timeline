@@ -2,25 +2,12 @@
 import React, { Component } from 'react'
 import dayjs from 'dayjs'
 
-import Timeline, {
-  TimelineMarkers,
-  TimelineHeaders,
-  TodayMarker,
-  CustomMarker,
-  CursorMarker,
-  CustomHeader,
-  SidebarHeader,
-  DateHeader
-} from 'react-calendar-timeline'
+import Timeline, { TimelineMarkers, TimelineHeaders, TodayMarker, CustomMarker, CursorMarker, CustomHeader, SidebarHeader, DateHeader } from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
 
-var minTime = dayjs()
-  .add(-6, 'months')
-  .valueOf()
-var maxTime = dayjs()
-  .add(6, 'months')
-  .valueOf()
+var minTime = dayjs().add(-6, 'months').valueOf()
+var maxTime = dayjs().add(6, 'months').valueOf()
 
 var keys = {
   groupIdKey: 'id',
@@ -31,7 +18,7 @@ var keys = {
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
   itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeEndKey: 'end',
 }
 
 export default class App extends Component {
@@ -39,13 +26,8 @@ export default class App extends Component {
     super(props)
 
     const { groups, items } = generateFakeData()
-    const defaultTimeStart = dayjs()
-      .startOf('day')
-      .toDate()
-    const defaultTimeEnd = dayjs()
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
+    const defaultTimeStart = dayjs().startOf('day').toDate().valueOf()
+    const defaultTimeEnd = dayjs().startOf('day').add(1, 'day').toDate().valueOf()
 
     this.state = {
       groups,
@@ -74,13 +56,13 @@ export default class App extends Component {
 
   handleItemSelect = (itemId, _, time) => {
     this.setState({
-      selected: [itemId]
+      selected: [itemId],
     })
     console.log('Selected: ' + itemId, dayjs(time).format())
   }
 
   handleItemDeselect = () => {
-    this.setState({selected: undefined})
+    this.setState({ selected: undefined })
   }
 
   handleItemDoubleClick = (itemId, _, time) => {
@@ -97,16 +79,15 @@ export default class App extends Component {
     const group = groups[newGroupOrder]
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
-                group: group.id
-              })
-            : item
-      )
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: dragTime,
+              end: dragTime + (item.end - item.start),
+              group: group.id,
+            })
+          : item,
+      ),
     })
 
     console.log('Moved', itemId, dragTime, newGroupOrder)
@@ -116,15 +97,14 @@ export default class App extends Component {
     const { items } = this.state
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: edge === 'left' ? time : item.start,
-                end: edge === 'left' ? item.end : time
-              })
-            : item
-      )
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === 'left' ? time : item.start,
+              end: edge === 'left' ? item.end : time,
+            })
+          : item,
+      ),
     })
 
     console.log('Resized', itemId, time, edge)
@@ -145,8 +125,7 @@ export default class App extends Component {
 
   moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
+      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
       return newTime
     }
 
@@ -157,50 +136,11 @@ export default class App extends Component {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
 
     return (
-      <Timeline
-        groups={groups}
-        items={items}
-        keys={keys}
-        sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
-        canMove
-        canResize="right"
-        canSelect
-        itemsSorted
-        itemTouchSendsClick={false}
-        stackItems
-        itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
-        onCanvasContextMenu={this.handleCanvasContextMenu}
-        onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
-        onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
-        onItemResize={this.handleItemResize}
-        onItemDoubleClick={this.handleItemDoubleClick}
-        onTimeChange={this.handleTimeChange}
-        moveResizeValidator={this.moveResizeValidator}
-        selected={this.state.selected}
-        onItemDeselect={this.handleItemDeselect}
-      >
+      <Timeline groups={groups} items={items} keys={keys} sidebarWidth={150} sidebarContent={<div>Above The Left</div>} canMove canResize="right" canSelect itemsSorted itemTouchSendsClick={false} stackItems itemHeightRatio={0.75} defaultTimeStart={defaultTimeStart} defaultTimeEnd={defaultTimeEnd} onCanvasClick={this.handleCanvasClick} onCanvasDoubleClick={this.handleCanvasDoubleClick} onCanvasContextMenu={this.handleCanvasContextMenu} onItemClick={this.handleItemClick} onItemSelect={this.handleItemSelect} onItemContextMenu={this.handleItemContextMenu} onItemMove={this.handleItemMove} onItemResize={this.handleItemResize} onItemDoubleClick={this.handleItemDoubleClick} onTimeChange={this.handleTimeChange} moveResizeValidator={this.moveResizeValidator} selected={this.state.selected} onItemDeselect={this.handleItemDeselect}>
         <TimelineMarkers>
           <TodayMarker />
-          <CustomMarker
-            date={
-              dayjs()
-                .startOf('day')
-                .valueOf() +
-              1000 * 60 * 60 * 2
-            }
-          />
-          <CustomMarker
-            date={dayjs()
-              .add(3, 'day')
-              .valueOf()}
-          >
+          <CustomMarker date={dayjs().startOf('day').valueOf() + 1000 * 60 * 60 * 2} />
+          <CustomMarker date={dayjs().add(3, 'day').valueOf()}>
             {({ styles }) => {
               const newStyles = { ...styles, backgroundColor: 'blue' }
               return <div style={newStyles} />

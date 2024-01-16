@@ -5,33 +5,21 @@ import { getNextUnit, SelectUnits } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
 import memoize from 'memoize-one'
 import { CustomDateHeader } from './CustomDateHeader'
-import {
-  IntervalRenderer,
-  SidebarHeaderChildrenFnProps,
-  TimelineTimeSteps,
-} from '../types/main'
+import { IntervalRenderer, SidebarHeaderChildrenFnProps, TimelineTimeSteps } from '../types/main'
 import { Dayjs, UnitType } from 'dayjs'
 
 type GetHeaderData<Data> = (
   intervalRenderer: (p: IntervalRenderer<Data>) => ReactNode,
   style: React.CSSProperties,
   className: string | undefined,
-  getLabelFormat: (
-    interval: [Dayjs, Dayjs],
-    unit: keyof typeof defaultHeaderFormats,
-    labelWidth: number,
-  ) => string,
+  getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string,
   unitProp: UnitType | 'primaryHeader' | undefined,
   headerData: Data | undefined,
 ) => {
   intervalRenderer?: IntervalRenderer<Data>
   style: React.CSSProperties
   className: string
-  getLabelFormat: (
-    interval: [Dayjs, Dayjs],
-    unit: keyof typeof defaultHeaderFormats,
-    labelWidth: number,
-  ) => string
+  getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string
   unitProp: UnitType | 'primaryHeader' | undefined
   headerData: Data
 }
@@ -40,25 +28,14 @@ export interface DateHeaderProps<Data> {
   className?: string | undefined
   unit?: keyof TimelineTimeSteps | 'primaryHeader' | undefined
   timelineUnit: SelectUnits
-  labelFormat?:
-    | string
-    | ((
-        [startTime, endTime]: [Dayjs, Dayjs],
-        unit: UnitType | 'primaryHeader',
-        labelWidth: number,
-      ) => string)
-    | undefined
-  intervalRenderer?: ((props: IntervalRenderer<Data>) => ReactNode) | undefined
+  labelFormat?: string | (([startTime, endTime]: [Dayjs, Dayjs], unit: UnitType | 'primaryHeader', labelWidth: number) => string) | undefined
+  intervalRenderer?: (props: IntervalRenderer<Data>) => ReactNode
   headerData?: Data | undefined
-  children?:
-    | ((props: SidebarHeaderChildrenFnProps<Data>) => ReactNode)
-    | undefined
+  children?: ((props: SidebarHeaderChildrenFnProps<Data>) => ReactNode) | undefined
   height?: number | undefined
 }
 
-export class DateHeaderInner<Data> extends React.Component<
-  DateHeaderProps<Data>
-> {
+class DateHeaderInner<Data> extends React.Component<DateHeaderProps<Data>> {
   getHeaderUnit = (): keyof TimelineTimeSteps => {
     if (this.props.unit === 'primaryHeader') {
       return getNextUnit(this.props.timelineUnit)
@@ -75,11 +52,7 @@ export class DateHeaderInner<Data> extends React.Component<
     }
   })
 
-  getLabelFormat = (
-    interval: [Dayjs, Dayjs],
-    unit: keyof typeof defaultHeaderFormats,
-    labelWidth: number,
-  ) => {
+  getLabelFormat = (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => {
     const { labelFormat } = this.props
     if (typeof labelFormat === 'string') {
       const startTime = interval[0]
@@ -91,93 +64,46 @@ export class DateHeaderInner<Data> extends React.Component<
     }
   }
 
-  getHeaderData: GetHeaderData<Data> = memoize(
-    (
+  getHeaderData: GetHeaderData<Data> = memoize((intervalRenderer, style, className, getLabelFormat, unitProp, headerData) => {
+    return {
       intervalRenderer,
       style,
       className,
       getLabelFormat,
       unitProp,
       headerData,
-    ) => {
-      return {
-        intervalRenderer,
-        style,
-        className,
-        getLabelFormat,
-        unitProp,
-        headerData,
-      }
-    },
-  )
+    }
+  })
 
   render() {
     const unit = this.getHeaderUnit()
     const { height } = this.props
-    return (
-      <CustomHeader
-        children={CustomDateHeader}
-        unit={unit}
-        height={height}
-        headerData={this.getHeaderData(
-          this.props.intervalRenderer!,
-          this.getRootStyle(this.props.style),
-          this.props.className,
-          this.getLabelFormat,
-          this.props.unit,
-          this.props.headerData,
-        )}
-      />
-    )
+    return <CustomHeader children={CustomDateHeader} unit={unit} height={height} headerData={this.getHeaderData(this.props.intervalRenderer!, this.getRootStyle(this.props.style), this.props.className, this.getLabelFormat, this.props.unit, this.props.headerData)} />
   }
 }
 
-type DateHeaderWrapper<Data> = {
+export type DateHeaderWrapper<Data> = {
   unit?: keyof TimelineTimeSteps | 'primaryHeader'
   labelFormat?: typeof formatLabel
   style?: CSSProperties
   className?: string
-  intervalRenderer?: ((props?: IntervalRenderer<Data>) => ReactNode) | undefined
+  intervalRenderer?: (props: IntervalRenderer<Data>) => ReactNode
   headerData?: Data
   height?: number
 }
 
-export function DateHeader<Data>({
-  unit,
-  labelFormat,
-  style,
-  className,
-  intervalRenderer,
-  headerData,
-  height,
-}: DateHeaderWrapper<Data>) {
+export function DateHeader<Data>({ unit, labelFormat, style, className, intervalRenderer, headerData, height }: DateHeaderWrapper<Data>) {
   return (
     <TimelineStateConsumer>
       {({ getTimelineState }) => {
         const timelineState = getTimelineState()
-        return (
-          <DateHeaderInner
-            timelineUnit={timelineState.timelineUnit}
-            unit={unit}
-            labelFormat={labelFormat || formatLabel}
-            style={style}
-            className={className}
-            intervalRenderer={intervalRenderer}
-            headerData={headerData}
-            height={height}
-          />
-        )
+        return <DateHeaderInner timelineUnit={timelineState.timelineUnit} unit={unit} labelFormat={labelFormat || formatLabel} style={style} className={className} intervalRenderer={intervalRenderer} headerData={headerData} height={height} />
       }}
     </TimelineStateConsumer>
   )
 }
 
-function formatLabel(
-  [timeStart]: [Dayjs, Dayjs],
-  unit: keyof typeof defaultHeaderFormats,
-  labelWidth: number,
-  formatOptions = defaultHeaderFormats,
-) {
+function formatLabel([timeStart]: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number, formatOptions = defaultHeaderFormats) {
   let format
   if (labelWidth >= 150) {
     format = formatOptions[unit]['long']

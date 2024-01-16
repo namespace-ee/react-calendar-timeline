@@ -61,13 +61,29 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
   }
 
   shouldComponentUpdate(nextProps: CustomHeaderProps<Data>) {
-    if (nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || nextProps.unit !== this.props.unit || nextProps.timeSteps !== this.props.timeSteps || nextProps.showPeriod !== this.props.showPeriod || nextProps.children !== this.props.children || nextProps.headerData !== this.props.headerData) {
+    if (
+      nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      nextProps.canvasWidth !== this.props.canvasWidth ||
+      nextProps.unit !== this.props.unit ||
+      nextProps.timeSteps !== this.props.timeSteps ||
+      nextProps.showPeriod !== this.props.showPeriod ||
+      nextProps.children !== this.props.children ||
+      nextProps.headerData !== this.props.headerData
+    ) {
       return true
     }
     return false
   }
   componentDidUpdate(prevProps: CustomHeaderProps<Data>) {
-    if (prevProps.canvasTimeStart !== this.props.canvasTimeStart || prevProps.canvasTimeEnd !== this.props.canvasTimeEnd || prevProps.canvasWidth !== this.props.canvasWidth || prevProps.unit !== this.props.unit || prevProps.timeSteps !== this.props.timeSteps || prevProps.showPeriod !== this.props.showPeriod) {
+    if (
+      prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      prevProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      prevProps.canvasWidth !== this.props.canvasWidth ||
+      prevProps.unit !== this.props.unit ||
+      prevProps.timeSteps !== this.props.timeSteps ||
+      prevProps.showPeriod !== this.props.showPeriod
+    ) {
       const { canvasTimeStart, canvasTimeEnd, unit, timeSteps, getLeftOffsetFromDate } = this.props
 
       const intervals = this.getHeaderIntervals({
@@ -82,7 +98,13 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     }
   }
 
-  getHeaderIntervals: GetHeaderIntervalsFn = ({ canvasTimeStart, canvasTimeEnd, unit, timeSteps, getLeftOffsetFromDate }) => {
+  getHeaderIntervals: GetHeaderIntervalsFn = ({
+    canvasTimeStart,
+    canvasTimeEnd,
+    unit,
+    timeSteps,
+    getLeftOffsetFromDate,
+  }) => {
     const intervals: Interval[] = []
     iterateTimes(canvasTimeStart, canvasTimeEnd, unit, timeSteps, (startTime, endTime) => {
       const left = getLeftOffsetFromDate(startTime.valueOf())
@@ -134,13 +156,13 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
 
   getStateAndHelpers = (): CustomDateHeaderProps<Data> => {
     const {
-      /*      canvasTimeStart,
-      canvasTimeEnd,*/
-      unit,
-      showPeriod,
-      /*      timelineWidth,
+      /*canvasTimeStart,
+      canvasTimeEnd,
+      timelineWidth,
       visibleTimeStart,
       visibleTimeEnd,*/
+      unit,
+      showPeriod,
       headerData,
     } = this.props
     //TODO: only evaluate on changing params
@@ -183,7 +205,22 @@ function CustomHeaderWrapper<Data>({ children, unit, headerData, height }: Custo
     <TimelineStateConsumer>
       {({ getTimelineState, showPeriod, getLeftOffsetFromDate }) => {
         const timelineState = getTimelineState()
-        return <TimelineHeadersConsumer>{({ timeSteps }) => <CustomHeader children={children} timeSteps={timeSteps} showPeriod={showPeriod} unit={unit ? unit : timelineState.timelineUnit} {...timelineState} headerData={headerData} getLeftOffsetFromDate={getLeftOffsetFromDate} height={height} />}</TimelineHeadersConsumer>
+        return (
+          <TimelineHeadersConsumer>
+            {({ timeSteps }) => (
+              <CustomHeader
+                children={children}
+                timeSteps={timeSteps}
+                showPeriod={showPeriod}
+                unit={unit ? unit : timelineState.timelineUnit}
+                {...timelineState}
+                headerData={headerData}
+                getLeftOffsetFromDate={getLeftOffsetFromDate}
+                height={height}
+              />
+            )}
+          </TimelineHeadersConsumer>
+        )
       }}
     </TimelineStateConsumer>
   )
