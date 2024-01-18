@@ -6,7 +6,6 @@ import GroupRows, { RowClickEvent } from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
 import windowResizeDetector from '../resize-detector/window'
-
 import {
   getMinUnit,
   calculateTimeForXPosition,
@@ -37,10 +36,12 @@ import {
   Unit,
 } from './types/main'
 import { ItemDimension } from './types/dimension'
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { ItemProps, ResizeEdge } from './items/Item'
 import './Timeline.scss'
 import PropTypes from 'prop-types'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat)
 
 export type OnTimeChange<CustomItem, CustomGroup> = (
   visibleTimeStart: number,
@@ -156,6 +157,7 @@ export default class ReactCalendarTimeline<
   static childContextType = {
     getTimelineContext: PropTypes.func,
   }
+  static setDayjsLocale = dayjs.locale
   public static defaultProps = {
     sidebarWidth: 150,
     rightSidebarWidth: 0,

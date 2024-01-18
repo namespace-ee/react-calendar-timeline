@@ -12,7 +12,10 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     lib: {
-      entry: resolve("src", 'index.ts'),
+      entry: {
+        index: resolve("src", 'index.ts'),
+        styles: resolve("src/lib", 'Timeline.scss')
+      },
       name: 'react-calendar-timeline-4ef',
       fileName: (format) => `react-calendar-timeline-4ef.${format}.js`
     },

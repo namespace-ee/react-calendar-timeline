@@ -1,6 +1,6 @@
 {
   "name": "react-calendar-timeline-4ef",
-  "version": "1.0.7",
+  "version": "1.0.11",
   "description": "fork form react-calendar-timeline with TS latest react and other improvements",
   "packageManager": "npm@10.1.0",
   "scripts": {
@@ -13,6 +13,7 @@
   "main": "./dist/react-calendar-timeline-4ef.umd.js",
   "module": "./dist/react-calendar-timeline-4ef.es.js",
   "exports": {
+    "./styles.css": "./dist/styles.css",
     ".": {
       "types": [
         "./dist/index.d.ts"
@@ -46,7 +47,7 @@
     "memoize-one": "^6.0.0"
   },
   "peerDependencies": {
-    "dayjs": "*",
+    "dayjs": ">=1.10.0",
     "interactjs": "^1.10.24",
     "react": ">=18",
     "react-dom": ">=18"
