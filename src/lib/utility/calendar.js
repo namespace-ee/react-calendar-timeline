@@ -309,7 +309,8 @@ export function groupStack(
   group,
   groupHeight,
   groupTop,
-  itemIndex
+  itemIndex,
+  verticalMarginBetweenStackedItems
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
@@ -336,7 +337,11 @@ export function groupStack(
 
       if (collidingItem != null) {
         // There is a collision. Reposition the items above the colliding element
-        item.dimensions.top = collidingItem.dimensions.top + lineHeight
+        if (verticalMarginBetweenStackedItems) {
+          item.dimensions.top = collidingItem.dimensions.top + lineHeight
+        } else {
+          item.dimensions.top = collidingItem.dimensions.top + lineHeight - (lineHeight - collidingItem.dimensions.height)
+        }
         curHeight = Math.max(
           curHeight,
           item.dimensions.top + item.dimensions.height + verticalMargin - groupTop
@@ -372,8 +377,9 @@ function sum(arr = []) {
  * @param {*} groupOrders the groupOrders object
  * @param {*} lineHeight
  * @param {*} stackItems should items be stacked?
+ * @param {*} verticalMarginBetweenStackedItems should there be a margin between stacked items?
  */
-export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
+export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems, verticalMarginBetweenStackedItems) {
   var groupHeights = []
   var groupTops = []
 
@@ -391,7 +397,8 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       itemsDimensions,
       isGroupStacked,
       lineHeight,
-      groupTop
+      groupTop,
+      verticalMarginBetweenStackedItems
     )
     // If group height is overridden, push new height
     // Do this late as item position still needs to be calculated
@@ -402,7 +409,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
-  
+
   return {
     height: sum(groupHeights),
     groupHeights,
@@ -411,13 +418,14 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
+ * @param {*} verticalMarginBetweenStackedItems
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
+export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop, verticalMarginBetweenStackedItems) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -430,7 +438,8 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemsDimensions,
         groupHeight,
         groupTop,
-        itemIndex
+        itemIndex,
+        verticalMarginBetweenStackedItems
       )
     } else {
       r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)
@@ -453,6 +462,7 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
  * @param {number} lineHeight
  * @param {number} itemHeightRatio
  * @param {boolean} stackItems
+ * @param {boolean} verticalMarginBetweenStackedItems
  * @param {*} draggingItem
  * @param {*} resizingItem
  * @param {number} dragTime
@@ -470,6 +480,7 @@ export function stackTimelineItems(
   lineHeight,
   itemHeightRatio,
   stackItems,
+  verticalMarginBetweenStackedItems,
   draggingItem,
   resizingItem,
   dragTime,
@@ -528,7 +539,8 @@ export function stackTimelineItems(
     dimensionItems,
     groupOrders,
     lineHeight,
-    stackItems
+    stackItems,
+    verticalMarginBetweenStackedItems
   )
   return { dimensionItems, height, groupHeights, groupTops }
 }
@@ -712,6 +724,7 @@ export function calculateScrollCanvas(
         props.lineHeight,
         props.itemHeightRatio,
         props.stackItems,
+        props.verticalMarginBetweenStackedItems,
         mergedState.draggingItem,
         mergedState.resizingItem,
         mergedState.dragTime,
