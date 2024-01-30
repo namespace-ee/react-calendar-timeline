@@ -16,3 +16,4 @@ package-lock.json
 coverage
 
 *.orig
+yarn.lock
