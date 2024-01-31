@@ -1,7 +1,10 @@
 {
-  "name": "react-calendar-timeline",
-  "version": "0.28.0",
-  "description": "react calendar timeline",
+  "name": "react-gantt-events",
+  "version": "1.0.0",
+  "engines": {
+    "node": "16.x"
+  },
+  "description": "React gantt events",
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run build:lib",
@@ -21,42 +24,9 @@
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
-    "url": "https://github.com/namespace-ee/react-calendar-timeline.git"
+    "url": "https://github.com/guestready/react-gantt-events.git"
   },
-  "author": "Marius Andra <marius.andra@gmail.com>",
-  "contributors": [
-    {
-      "name": "Stanisław Chmiela",
-      "email": "sjchmiela@gmail.com"
-    },
-    {
-      "name": "Mike Joyce",
-      "url": "https://github.com/mcMickJuice"
-    },
-    {
-      "name": "Samuel Rossetti"
-    },
-    {
-      "name": "amakhrov",
-      "url": "https://github.com/amakhrov"
-    },
-    {
-      "name": "Ahmad Ilaiwi",
-      "url": "https://github.com/Ilaiwi"
-    },
-    {
-      "name": "dkarnutsch",
-      "url": "https://github.com/dkarnutsch"
-    },
-    {
-      "name": "Alex Maclean",
-      "url": "https://github.com/acemac"
-    },
-    {
-      "name": "Kevin Mann",
-      "url": "https://github.com/kevinmanncito"
-    }
-  ],
+  "author": "GuestReady",
   "license": "MIT",
   "keywords": [
     "react",
