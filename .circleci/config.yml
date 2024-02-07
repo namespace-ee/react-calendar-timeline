@@ -1,0 +1,23 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16.19.1
+    steps:
+      - checkout
+      - run:
+          name: Install pnpm
+          command: npm install -g pnpm
+      - run:
+          name: Install Dependencies with pnpm
+          command: pnpm install --production=false
+      - run:
+          name: Build the Package
+          command: pnpm run build
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build

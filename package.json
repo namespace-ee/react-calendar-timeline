@@ -1,15 +1,15 @@
 {
-  "name": "react-calendar-timeline",
-  "version": "0.28.0",
-  "description": "react calendar timeline",
+  "name": "react-gantt-events",
+  "version": "1.0.0",
+  "engines": {
+    "node": "16.x"
+  },
+  "description": "React gantt events",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run build:lib",
-    "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
-    "build:lib": "echo '!!! Building Library' && rimraf lib && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
+    "build:demo": "echo '!!! Building Demo' && NODE_ENV=production webpack --progress",
     "lint": "eslint --ext .js --ext .jsx ./src",
     "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
-    "prepublish": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0",
     "test": "jest",
     "test:watch": "jest --watch"
@@ -21,42 +21,9 @@
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
-    "url": "https://github.com/namespace-ee/react-calendar-timeline.git"
+    "url": "https://github.com/guestready/react-gantt-events.git"
   },
-  "author": "Marius Andra <marius.andra@gmail.com>",
-  "contributors": [
-    {
-      "name": "Stanisław Chmiela",
-      "email": "sjchmiela@gmail.com"
-    },
-    {
-      "name": "Mike Joyce",
-      "url": "https://github.com/mcMickJuice"
-    },
-    {
-      "name": "Samuel Rossetti"
-    },
-    {
-      "name": "amakhrov",
-      "url": "https://github.com/amakhrov"
-    },
-    {
-      "name": "Ahmad Ilaiwi",
-      "url": "https://github.com/Ilaiwi"
-    },
-    {
-      "name": "dkarnutsch",
-      "url": "https://github.com/dkarnutsch"
-    },
-    {
-      "name": "Alex Maclean",
-      "url": "https://github.com/acemac"
-    },
-    {
-      "name": "Kevin Mann",
-      "url": "https://github.com/kevinmanncito"
-    }
-  ],
+  "author": "GuestReady",
   "license": "MIT",
   "keywords": [
     "react",
