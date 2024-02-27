@@ -341,7 +341,8 @@ export function groupStack(
     item.dimensions.top = groupTop + verticalMargin
     curHeight = Math.max(curHeight, lineHeight)
     do {
-      // noinspection ES6ConvertVarToLetConst converting it to a const create an infinite loop (why?)
+      // converting it to a const create an infinite loop (why?)
+      // noinspection ES6ConvertVarToLetConst
       var collidingItem = null
       //Items are placed from i=0 onwards, only check items with index < i
       for (let j = itemIndex - 1, jj = 0; j >= jj; j--) {
@@ -651,13 +652,12 @@ export function getItemWithInteractions<
     resizingEdge,
     resizeTime,
   })
-  const newItem = {
+  return {
     ...item,
     [keys.itemTimeStartKey]: itemTimeStart,
     [keys.itemTimeEndKey]: itemTimeEnd,
     [keys.itemGroupKey]: isDragging ? _get(groups[newGroupOrder], keys.groupIdKey) : _get(item, keys.itemGroupKey),
   }
-  return newItem
 }
 
 /**
