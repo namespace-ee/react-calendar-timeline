@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import dayjs, { Dayjs } from 'dayjs'
 import { _get } from './generic'
 import { Dimension, ItemDimension } from '../types/dimension'
