@@ -39,8 +39,8 @@ import { ItemDimension } from './types/dimension'
 import dayjs, { Dayjs } from 'dayjs'
 import { ItemProps, ResizeEdge } from './items/Item'
 import './Timeline.scss'
-import PropTypes from 'prop-types'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+
 dayjs.extend(localizedFormat)
 
 export type OnTimeChange<CustomItem, CustomGroup> = (
@@ -154,9 +154,6 @@ export default class ReactCalendarTimeline<
   ReactCalendarTimelineProps<CustomItem, CustomGroup>,
   ReactCalendarTimelineState<CustomItem, CustomGroup>
 > {
-  static childContextType = {
-    getTimelineContext: PropTypes.func,
-  }
   static setDayjsLocale = dayjs.locale
   public static defaultProps = {
     sidebarWidth: 150,
@@ -231,24 +228,20 @@ export default class ReactCalendarTimeline<
     selected: null,
   }
 
-  getChildContext() {
-    return {
-      getTimelineContext: () => {
-        return this.getTimelineContext()
-      },
-    }
-  }
-
-  getTimelineContext = () => {
+  getTimelineContext = (): TimelineContext => {
     const { width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, canvasTimeEnd } = this.state
-
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasWidth = getCanvasWidth(width, this.props.buffer!)
+    const minUnit = getMinUnit(zoom, width, this.props.timeSteps)
     return {
+      canvasWidth,
+      timelineUnit: minUnit,
       timelineWidth: width,
       visibleTimeStart,
       visibleTimeEnd,
       canvasTimeStart,
       canvasTimeEnd,
-    } as TimelineContext
+    }
   }
 
   getTimelineUnit = () => {
@@ -583,7 +576,7 @@ export default class ReactCalendarTimeline<
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
   getTimeFromRowClickEvent = (e: MouseEvent<HTMLDivElement>) => {
-    const { dragSnap = 1, buffer } = this.props
+    const { dragSnap, buffer } = this.props
     const { width, canvasTimeStart, canvasTimeEnd } = this.state
     // this gives us distance from left of row element, so event is in
     // context of the row element, not client or page
@@ -596,14 +589,14 @@ export default class ReactCalendarTimeline<
       getCanvasWidth(width, buffer!),
       offsetX,
     )
-    time = Math.floor(time / dragSnap) * dragSnap
+    time = Math.floor(time / dragSnap!) * dragSnap!
 
     return time
   }
 
   timeFromItemEvent = (e: MouseEvent<HTMLDivElement>) => {
     const { width, visibleTimeStart, visibleTimeEnd } = this.state
-    const { dragSnap = 1 } = this.props
+    const dragSnap = this.props.dragSnap!
 
     const scrollComponent = this.scrollComponent!
     const { left: scrollX } = scrollComponent.getBoundingClientRect()
@@ -1065,8 +1058,5 @@ export default class ReactCalendarTimeline<
         </TimelineMarkersProvider>
       </TimelineStateProvider>
     )
-  }
-  static childContextTypes = {
-    getTimelineContext: PropTypes.func,
   }
 }

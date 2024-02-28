@@ -1,7 +1,7 @@
 import React from 'react'
 import { createMarkerStylesWithLeftOffset, createDefaultRenderer } from './shared'
 import { HandleCanvasMouseOver, MarkerCanvasConsumer } from '../MarkerCanvasContext'
-import { MarkerRendererType } from '../markerType.ts'
+import { MarkerRendererType } from '../markerType'
 
 const defaultRenderer = createDefaultRenderer('default-cursor-marker')
 

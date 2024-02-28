@@ -1,22 +1,46 @@
-import { Component, CSSProperties, MouseEventHandler, ReactNode, TouchEventHandler, MouseEvent, TouchEvent, HTMLAttributes, LegacyRef } from 'react'
+import {
+  Component,
+  CSSProperties,
+  HTMLAttributes,
+  LegacyRef,
+  MouseEvent,
+  MouseEventHandler,
+  ReactNode,
+  TouchEvent,
+  TouchEventHandler,
+} from 'react'
 import interact from 'interactjs'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-
-dayjs.extend(utc)
-
-import { _get, deepObjectCompare } from '../utility/generic'
+import { _get } from '../utility/generic'
 import { composeEvents } from '../utility/events'
 import { defaultItemRenderer } from './defaultItemRenderer'
 import { coordinateToTimeRatio } from '../utility/calendar'
-import { getSumScroll, getSumOffset } from '../utility/dom-helpers'
-import { overridableStyles, selectedStyle, selectedAndCanMove, selectedAndCanResizeLeft, selectedAndCanResizeLeftAndDragLeft, selectedAndCanResizeRight, selectedAndCanResizeRightAndDragRight, leftResizeStyle, rightResizeStyle } from './styles'
+import { getSumOffset, getSumScroll } from '../utility/dom-helpers'
+import {
+  leftResizeStyle,
+  overridableStyles,
+  rightResizeStyle,
+  selectedAndCanMove,
+  selectedAndCanResizeLeft,
+  selectedAndCanResizeLeftAndDragLeft,
+  selectedAndCanResizeRight,
+  selectedAndCanResizeRightAndDragRight,
+  selectedStyle,
+} from './styles'
 import { Id, ItemContext, TimelineItemBase, TimelineKeys } from '../types/main'
-import { TimelineContext, TimelineContextType } from '../timeline/TimelineStateContext.tsx'
+import { TimelineContext, TimelineContextType } from '../timeline/TimelineStateContext'
+import isEqual from 'lodash/isEqual'
+
+dayjs.extend(utc)
 
 export type ResizeEdge = 'left' | 'right'
 
-type OnSelect = (itemId: string | null, clickType: 'click' | 'touch', event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>) => void
+type OnSelect = (
+  itemId: string | null,
+  clickType: 'click' | 'touch',
+  event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>,
+) => void
 
 export type ItemProps<CustomItem extends TimelineItemBase<number>> = {
   canvasTimeStart: number
@@ -30,7 +54,12 @@ export type ItemProps<CustomItem extends TimelineItemBase<number>> = {
   onDrop: (itemId: string, dragTime: number, newGroupOrder: number) => void
   onResizing: (itemId: string, time: number, resizeEdge: ResizeEdge | null) => void
   onResized: (itemId: string, time: number, resizeEdge: ResizeEdge | null, delta: number) => void
-  moveResizeValidator?: (action: 'move' | 'resize', item: TimelineItemBase<any>, time: number, resizeEdge?: ResizeEdge | null) => number
+  moveResizeValidator?: (
+    action: 'move' | 'resize',
+    item: TimelineItemBase<any>,
+    time: number,
+    resizeEdge?: ResizeEdge | null,
+  ) => number
   itemRenderer?: (props: ItemRendererProps<CustomItem>) => ReactNode
   selected: boolean
   canChangeGroup?: boolean
@@ -90,7 +119,10 @@ export type GetResizeProps = (params?: GetItemPropsParams) => {
   left: GetResizePropsDirection
 }
 
-export default class Item<CustomItem extends TimelineItemBase<number>> extends Component<ItemProps<CustomItem>, ItemState> {
+export default class Item<CustomItem extends TimelineItemBase<number>> extends Component<
+  ItemProps<CustomItem>,
+  ItemState
+> {
   static defaultProps = {
     selected: false,
     itemRenderer: defaultItemRenderer,
@@ -130,8 +162,30 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   }
 
   shouldComponentUpdate(nextProps: ItemProps<CustomItem>, nextState: ItemState) {
-    const shouldUpdate = nextState.dragging !== this.state.dragging || nextState.dragTime !== this.state.dragTime || nextState.dragGroupDelta !== this.state.dragGroupDelta || nextState.resizing !== this.state.resizing || nextState.resizeTime !== this.state.resizeTime || nextProps.keys !== this.props.keys || !deepObjectCompare(nextProps.itemProps, this.props.itemProps) || nextProps.selected !== this.props.selected || nextProps.item !== this.props.item || nextProps.canvasTimeStart !== this.props.canvasTimeStart || nextProps.canvasTimeEnd !== this.props.canvasTimeEnd || nextProps.canvasWidth !== this.props.canvasWidth || (nextProps.order ? nextProps.order.index : undefined) !== (this.props.order ? this.props.order.index : undefined) || nextProps.dragSnap !== this.props.dragSnap || nextProps.minResizeWidth !== this.props.minResizeWidth || nextProps.canChangeGroup !== this.props.canChangeGroup || nextProps.canSelect !== this.props.canSelect || nextProps.canMove !== this.props.canMove || nextProps.canResizeLeft !== this.props.canResizeLeft || nextProps.canResizeRight !== this.props.canResizeRight || nextProps.dimensions !== this.props.dimensions
-    return shouldUpdate
+    /*const shouldUpdate =
+      nextState.dragging !== this.state.dragging ||
+      nextState.dragTime !== this.state.dragTime ||
+      nextState.dragGroupDelta !== this.state.dragGroupDelta ||
+      nextState.resizing !== this.state.resizing ||
+      nextState.resizeTime !== this.state.resizeTime ||
+      nextProps.keys !== this.props.keys ||
+      !deepObjectCompare(nextProps.itemProps, this.props.itemProps) ||
+      nextProps.selected !== this.props.selected ||
+      nextProps.item !== this.props.item ||
+      nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      nextProps.canvasWidth !== this.props.canvasWidth ||
+      (nextProps.order ? nextProps.order.index : undefined) !==
+        (this.props.order ? this.props.order.index : undefined) ||
+      nextProps.dragSnap !== this.props.dragSnap ||
+      nextProps.minResizeWidth !== this.props.minResizeWidth ||
+      nextProps.canChangeGroup !== this.props.canChangeGroup ||
+      nextProps.canSelect !== this.props.canSelect ||
+      nextProps.canMove !== this.props.canMove ||
+      nextProps.canResizeLeft !== this.props.canResizeLeft ||
+      nextProps.canResizeRight !== this.props.canResizeRight ||
+      nextProps.dimensions !== this.props.dimensions*/
+    return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState)
   }
 
   cacheDataFromProps(props: ItemProps<CustomItem>) {
@@ -246,6 +300,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         enabled: this.props.selected && (this.canResizeLeft() || this.canResizeRight()),
       })
       .draggable({
+        delay: 0,
         enabled: this.props.selected && this.canMove(),
       })
       .styleCursor(false)
@@ -405,7 +460,10 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         this.mountInteract()
         interactMounted = true
       }
-      if (interactMounted && (couldResizeLeft !== willBeAbleToResizeLeft || couldResizeRight !== willBeAbleToResizeRight)) {
+      if (
+        interactMounted &&
+        (couldResizeLeft !== willBeAbleToResizeLeft || couldResizeRight !== willBeAbleToResizeRight)
+      ) {
         const leftResize = this.props.useResizeHandle ? this.dragLeft : true
         const rightResize = this.props.useResizeHandle ? this.dragRight : true
 
@@ -541,7 +599,22 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       lineHeight: `${dimensions.height}px`,
     }
 
-    const finalStyle = Object.assign({}, overridableStyles, this.props.selected ? selectedStyle : {}, this.props.selected && this.canMove(this.props) ? selectedAndCanMove : {}, this.props.selected && this.canResizeLeft(this.props) ? selectedAndCanResizeLeft : {}, this.props.selected && this.canResizeLeft(this.props) && this.state.dragging ? selectedAndCanResizeLeftAndDragLeft : {}, this.props.selected && this.canResizeRight(this.props) ? selectedAndCanResizeRight : {}, this.props.selected && this.canResizeRight(this.props) && this.state.dragging ? selectedAndCanResizeRightAndDragRight : {}, props.style, baseStyles)
+    const finalStyle = Object.assign(
+      {},
+      overridableStyles,
+      this.props.selected ? selectedStyle : {},
+      this.props.selected && this.canMove(this.props) ? selectedAndCanMove : {},
+      this.props.selected && this.canResizeLeft(this.props) ? selectedAndCanResizeLeft : {},
+      this.props.selected && this.canResizeLeft(this.props) && this.state.dragging
+        ? selectedAndCanResizeLeftAndDragLeft
+        : {},
+      this.props.selected && this.canResizeRight(this.props) ? selectedAndCanResizeRight : {},
+      this.props.selected && this.canResizeRight(this.props) && this.state.dragging
+        ? selectedAndCanResizeRightAndDragRight
+        : {},
+      props.style,
+      baseStyles,
+    )
     return finalStyle
   }
 

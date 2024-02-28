@@ -1,6 +1,5 @@
 import { Dayjs } from 'dayjs'
-import { ReactNode, CSSProperties, HTMLProps, MouseEventHandler, ReactEventHandler, Ref, Component, TouchEventHandler, ReactElement } from 'react'
-// import reactCalendarTimeline from '../../../index'
+import { ReactNode, CSSProperties, HTMLProps, MouseEventHandler, Ref, Component, ReactElement } from 'react'
 import { Dimension, ItemDimension } from './dimension'
 import { ResizeEdge } from '../items/Item'
 import { SelectUnits } from '../utility/calendar'
@@ -40,9 +39,6 @@ export interface TimelineItemBase<DateType> {
   isOverlay?: boolean | undefined
   dimensions?: Dimension | undefined
 }
-
-export type TimelineItem<CustomItemFields, DateType = number> = TimelineItemBase<DateType> & CustomItemFields
-export type TimelineGroup<CustomGroupFields> = TimelineGroupBase & CustomGroupFields
 
 export interface TimelineContext {
   timelineWidth: number
@@ -91,79 +87,6 @@ export interface ItemContext {
   resizeStart: number | null
   resizeTime: number | null
 }
-
-export interface TimeFormat {
-  long: string
-  mediumLong: string
-  medium: string
-  short: string
-}
-
-export interface LabelFormat {
-  year: TimeFormat
-  month: TimeFormat
-  week: TimeFormat
-  day: TimeFormat
-  hour: TimeFormat
-  minute: TimeFormat
-}
-
-export interface ItemRendererGetItemPropsReturnType {
-  key: Id
-  ref: Ref<any>
-  className: string
-  onMouseDown: MouseEventHandler
-  onMouseUp: MouseEventHandler
-  onTouchStart: TouchEventHandler
-  onTouchEnd: TouchEventHandler
-  onDoubleClick: MouseEventHandler
-  onContextMenu: ReactEventHandler
-  style: CSSProperties
-}
-
-export type GetItemsProps = Partial<Omit<ItemRendererGetItemPropsReturnType, 'key' | 'ref'>>
-
-export interface ItemRendererGetResizePropsReturnType {
-  left?:
-    | {
-        ref: Ref<any>
-        className: string
-        style: CSSProperties
-      }
-    | undefined
-  right?:
-    | {
-        ref: Ref<any>
-        className: string
-        style: CSSProperties
-      }
-    | undefined
-}
-
-/*export type GetResizeProps = {
-  leftStyle?: CSSProperties | undefined
-  rightStyle?: CSSProperties | undefined
-  leftClassName?: string | undefined
-  rightClassName?: string | undefined
-}
-
-export interface ReactCalendarItemRendererProps<CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>> {
-  item: CustomItem
-  itemContext: ItemContext
-  getItemProps: (props: GetItemsProps) => {
-    key: Id
-    ref: Ref<any>
-    className: string
-    onMouseDown: MouseEventHandler
-    onMouseUp: MouseEventHandler
-    onTouchStart: TouchEventHandler
-    onTouchEnd: TouchEventHandler
-    onDoubleClick: MouseEventHandler
-    onContextMenu: ReactEventHandler
-    style: CSSProperties
-  }
-  getResizeProps: (propsOverride?: GetResizeProps) => ItemRendererGetResizePropsReturnType
-}*/
 
 export interface ReactCalendarGroupRendererProps<CustomGroup extends TimelineGroupBase = TimelineGroupBase> {
   group: CustomGroup
@@ -243,8 +166,6 @@ export interface TimelineHeadersProps {
 }
 
 export class TimelineHeaders extends Component<TimelineHeadersProps> {}
-
-export type TimelineHeaderProps = TimelineHeadersProps
 
 export interface SidebarHeaderChildrenFnProps<Data> {
   getRootProps: (propsToOverride?: { style: CSSProperties }) => {

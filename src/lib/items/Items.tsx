@@ -3,7 +3,7 @@ import Item, { ItemProps } from './Item'
 import { _get, arraysEqual, keyBy } from '../utility/generic'
 import { getGroupOrders, getVisibleItems } from '../utility/calendar'
 import { Id, TimelineGroupBase, TimelineItemBase, TimelineKeys } from '../types/main'
-import { ItemDimension } from '../types/dimension.ts'
+import { ItemDimension } from '../types/dimension'
 
 export type CanResize = true | false | 'left' | 'right' | 'both'
 type ItemsProps<CustomItem extends TimelineItemBase<number>> = {
@@ -54,9 +54,28 @@ function canResizeRight<CustomItem extends TimelineItemBase<number>>(item: Custo
   return value === 'right' || value === 'both' || value === true
 }
 
-export default class Items<CustomItem extends TimelineItemBase<number>> extends Component<ItemsProps<CustomItem>, ItemsState> {
+export default class Items<CustomItem extends TimelineItemBase<number>> extends Component<
+  ItemsProps<CustomItem>,
+  ItemsState
+> {
   shouldComponentUpdate(nextProps: ItemsProps<CustomItem>) {
-    return !(arraysEqual(nextProps.groups, this.props.groups) && arraysEqual(nextProps.items, this.props.items) && arraysEqual(nextProps.dimensionItems, this.props.dimensionItems) && nextProps.keys === this.props.keys && nextProps.canvasTimeStart === this.props.canvasTimeStart && nextProps.canvasTimeEnd === this.props.canvasTimeEnd && nextProps.canvasWidth === this.props.canvasWidth && nextProps.selectedItem === this.props.selectedItem && nextProps.selected === this.props.selected && nextProps.dragSnap === this.props.dragSnap && nextProps.minResizeWidth === this.props.minResizeWidth && nextProps.canChangeGroup === this.props.canChangeGroup && nextProps.canMove === this.props.canMove && nextProps.canResize === this.props.canResize && nextProps.canSelect === this.props.canSelect)
+    return !(
+      arraysEqual(nextProps.groups, this.props.groups) &&
+      arraysEqual(nextProps.items, this.props.items) &&
+      arraysEqual(nextProps.dimensionItems, this.props.dimensionItems) &&
+      nextProps.keys === this.props.keys &&
+      nextProps.canvasTimeStart === this.props.canvasTimeStart &&
+      nextProps.canvasTimeEnd === this.props.canvasTimeEnd &&
+      nextProps.canvasWidth === this.props.canvasWidth &&
+      nextProps.selectedItem === this.props.selectedItem &&
+      nextProps.selected === this.props.selected &&
+      nextProps.dragSnap === this.props.dragSnap &&
+      nextProps.minResizeWidth === this.props.minResizeWidth &&
+      nextProps.canChangeGroup === this.props.canChangeGroup &&
+      nextProps.canMove === this.props.canMove &&
+      nextProps.canResize === this.props.canResize &&
+      nextProps.canSelect === this.props.canSelect
+    )
   }
 
   isSelected(item: CustomItem, itemIdKey: string) {
@@ -95,7 +114,9 @@ export default class Items<CustomItem extends TimelineItemBase<number>> extends 
               order={groupOrders[_get(item, itemGroupKey)]}
               dimensions={sortedDimensionItems[_get(item, itemIdKey)].dimensions}
               selected={this.isSelected(item, itemIdKey)}
-              canChangeGroup={_get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup}
+              canChangeGroup={
+                _get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup
+              }
               canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
               canResizeLeft={canResizeLeft(item, this.props.canResize)}
               canResizeRight={canResizeRight(item, this.props.canResize)}

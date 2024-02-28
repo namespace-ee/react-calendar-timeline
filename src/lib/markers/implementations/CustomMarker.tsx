@@ -1,6 +1,6 @@
 import React from 'react'
 import { createMarkerStylesWithLeftOffset, createDefaultRenderer } from './shared'
-import { MarkerRendererType } from '../markerType.ts'
+import { MarkerRendererType } from '../markerType'
 
 const defaultCustomMarkerRenderer = createDefaultRenderer('default-customer-marker-id')
 type CustomMarkerProps = {
