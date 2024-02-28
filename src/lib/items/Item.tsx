@@ -154,6 +154,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   private dragRight?: HTMLElement
   private startedClicking: boolean = false
   private startedTouching: boolean = false
+  private dragInProgress: boolean = false
 
   constructor(props: ItemProps<CustomItem>) {
     super(props)
@@ -300,12 +301,12 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         enabled: this.props.selected && (this.canResizeLeft() || this.canResizeRight()),
       })
       .draggable({
-        delay: 0,
         enabled: this.props.selected && this.canMove(),
       })
       .styleCursor(false)
       .on('dragstart', (e) => {
         if (this.props.selected) {
+          this.dragInProgress = true
           const clickTime = this.timeFor(e)
           this.setState({
             dragging: true,
@@ -324,25 +325,32 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       })
       .on('dragmove', (e) => {
         if (this.state.dragging) {
-          let dragTime = this.dragTime(e)
-          const dragGroupDelta = this.dragGroupDelta(e)
-          if (this.props.moveResizeValidator) {
-            dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
-          }
+          this.setState((state) => {
+            // stop updating when dropped already
+            if (!this.dragInProgress) {
+              return { ...state }
+            }
+            let dragTime = this.dragTime(e)
+            const dragGroupDelta = this.dragGroupDelta(e)
+            if (this.props.moveResizeValidator) {
+              dragTime = this.props.moveResizeValidator('move', this.props.item, dragTime)
+            }
 
-          if (this.props.onDrag) {
-            this.props.onDrag(this.itemId!, dragTime, this.props.order.index + dragGroupDelta)
-          }
+            if (this.props.onDrag) {
+              this.props.onDrag(this.itemId!, dragTime, this.props.order.index + dragGroupDelta)
+            }
 
-          this.setState({
-            dragTime: dragTime,
-            dragGroupDelta: dragGroupDelta,
+            return {
+              dragTime: dragTime,
+              dragGroupDelta: dragGroupDelta,
+            }
           })
         }
       })
       .on('dragend', (e) => {
         if (this.state.dragging) {
           if (this.props.onDrop) {
+            this.dragInProgress = false
             let dragTime = this.dragTime(e)
 
             if (this.props.moveResizeValidator) {

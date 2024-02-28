@@ -1,10 +1,4 @@
-import {
-  Component,
-  CSSProperties,
-  MouseEventHandler,
-  ReactNode,
-  TouchEventHandler,
-} from 'react'
+import { Component, CSSProperties, MouseEventHandler, ReactNode, TouchEventHandler } from 'react'
 import { getParentPosition } from '../utility/dom-helpers'
 
 type Props = {
@@ -29,10 +23,8 @@ class ScrollElement extends Component<Props, State> {
   private dragStartPosition: number | null = null
   private dragLastPosition: number | null = null
   private lastTouchDistance: number | null = null
-  private singleTouchStart: { x: number; y: number; screenY: number } | null =
-    null
-  private lastSingleTouch: { x: number; y: number; screenY: number } | null =
-    null
+  private singleTouchStart: { x: number; y: number; screenY: number } | null = null
+  private lastSingleTouch: { x: number; y: number; screenY: number } | null = null
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -72,9 +64,7 @@ class ScrollElement extends Component<Props, State> {
     } else if (e.shiftKey) {
       e.preventDefault()
       // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.props.onScroll(
-        this.scrollComponent!.scrollLeft + (e.deltaY || e.deltaX),
-      )
+      this.props.onScroll(this.scrollComponent!.scrollLeft + (e.deltaY || e.deltaX))
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
     }
   }
@@ -93,9 +83,7 @@ class ScrollElement extends Component<Props, State> {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.props.isInteractingWithItem) {
-      this.props.onScroll(
-        this.scrollComponent!.scrollLeft + this.dragLastPosition! - e.pageX,
-      )
+      this.props.onScroll(this.scrollComponent!.scrollLeft + this.dragLastPosition! - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
@@ -122,9 +110,7 @@ class ScrollElement extends Component<Props, State> {
     if (e.touches.length === 2) {
       e.preventDefault()
 
-      this.lastTouchDistance = Math.abs(
-        e.touches[0].screenX - e.touches[1].screenX,
-      )
+      this.lastTouchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
       this.singleTouchStart = null
       this.lastSingleTouch = null
     } else if (e.touches.length === 1) {
@@ -147,12 +133,9 @@ class ScrollElement extends Component<Props, State> {
     }
     if (this.lastTouchDistance && e.touches.length === 2) {
       e.preventDefault()
-      const touchDistance = Math.abs(
-        e.touches[0].screenX - e.touches[1].screenX,
-      )
+      const touchDistance = Math.abs(e.touches[0].screenX - e.touches[1].screenX)
       const parentPosition = getParentPosition(e.currentTarget as HTMLElement)
-      const xPosition =
-        (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
+      const xPosition = (e.touches[0].screenX + e.touches[1].screenX) / 2 - parentPosition.x
       if (touchDistance !== 0 && this.lastTouchDistance !== 0) {
         onZoom(this.lastTouchDistance / touchDistance, xPosition / width)
         this.lastTouchDistance = touchDistance
@@ -171,10 +154,7 @@ class ScrollElement extends Component<Props, State> {
         this.props.onScroll(this.scrollComponent!.scrollLeft - deltaX)
       }
       if (moveY) {
-        window.scrollTo(
-          window.pageXOffset,
-          this.singleTouchStart!.screenY - deltaY0,
-        )
+        window.scrollTo(window.pageXOffset, this.singleTouchStart!.screenY - deltaY0)
       }
     }
   }
