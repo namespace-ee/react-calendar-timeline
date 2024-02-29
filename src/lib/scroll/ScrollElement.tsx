@@ -7,7 +7,6 @@ type Props = {
   height: number
   traditionalZoom: boolean
   scrollRef: (e: HTMLDivElement) => void
-  isInteractingWithItem: boolean
   onZoom: (n: number, m: number) => void
   onWheelZoom: (speed: number, xPosition: number, deltaY: number) => void
   onScroll: (n: number) => void
@@ -19,12 +18,11 @@ type State = {
 
 class ScrollElement extends Component<Props, State> {
   scrollComponent: HTMLDivElement | null = null
-  // @ts-ignore
-  private dragStartPosition: number | null = null
   private dragLastPosition: number | null = null
   private lastTouchDistance: number | null = null
   private singleTouchStart: { x: number; y: number; screenY: number } | null = null
   private lastSingleTouch: { x: number; y: number; screenY: number } | null = null
+  private isItemInteraction: boolean = false
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -45,6 +43,7 @@ class ScrollElement extends Component<Props, State> {
     this.props.scrollRef(el)
     if (el) {
       el.addEventListener('wheel', this.handleWheel, { passive: false })
+      el.addEventListener('itemInteraction', this.handleItemInteract)
     }
   }
 
@@ -71,7 +70,6 @@ class ScrollElement extends Component<Props, State> {
 
   handleMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.button === 0) {
-      this.dragStartPosition = e.pageX
       this.dragLastPosition = e.pageX
       this.setState({
         isDragging: true,
@@ -82,14 +80,13 @@ class ScrollElement extends Component<Props, State> {
   handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
-    if (this.state.isDragging && !this.props.isInteractingWithItem) {
+    if (this.state.isDragging && !this.isItemInteraction) {
       this.props.onScroll(this.scrollComponent!.scrollLeft + this.dragLastPosition! - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
 
   handleMouseUp = () => {
-    this.dragStartPosition = null
     this.dragLastPosition = null
 
     this.setState({
@@ -99,7 +96,6 @@ class ScrollElement extends Component<Props, State> {
 
   handleMouseLeave = () => {
     // this.props.onMouseLeave(e)
-    this.dragStartPosition = null
     this.dragLastPosition = null
     this.setState({
       isDragging: false,
@@ -126,8 +122,8 @@ class ScrollElement extends Component<Props, State> {
   }
 
   handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
-    const { isInteractingWithItem, width, onZoom } = this.props
-    if (isInteractingWithItem) {
+    const { width, onZoom } = this.props
+    if (this.isItemInteraction) {
       e.preventDefault()
       return
     }
@@ -168,10 +164,14 @@ class ScrollElement extends Component<Props, State> {
       this.singleTouchStart = null
     }
   }
+  handleItemInteract = (e: Event) => {
+    this.isItemInteraction = (e as CustomEvent<{ itemInteraction: boolean }>).detail.itemInteraction
+  }
 
   componentWillUnmount() {
     if (this.scrollComponent) {
       this.scrollComponent.removeEventListener('wheel', this.handleWheel)
+      this.scrollComponent.removeEventListener('itemInteraction', this.handleItemInteract)
     }
   }
 

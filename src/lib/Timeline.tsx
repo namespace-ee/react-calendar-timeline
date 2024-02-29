@@ -1024,7 +1024,6 @@ export default class ReactCalendarTimeline<
                   onWheelZoom={this.handleWheelZoom}
                   traditionalZoom={!!traditionalZoom}
                   onScroll={this.onScroll}
-                  isInteractingWithItem={isInteractingWithItem}
                 >
                   <MarkerCanvas>
                     {this.columns(canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height)}

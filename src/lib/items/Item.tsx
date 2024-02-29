@@ -307,6 +307,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       .on('dragstart', (e) => {
         if (this.props.selected) {
           this.dragInProgress = true
+          this.fireInteractEvent(true)
           const clickTime = this.timeFor(e)
           this.setState({
             dragging: true,
@@ -351,6 +352,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         if (this.state.dragging) {
           if (this.props.onDrop) {
             this.dragInProgress = false
+            this.fireInteractEvent(false)
             let dragTime = this.dragTime(e)
 
             if (this.props.moveResizeValidator) {
@@ -371,6 +373,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       })
       .on('resizestart', (e) => {
         if (this.props.selected) {
+          this.fireInteractEvent(true)
           this.setState({
             resizing: true,
             resizeEdge: null, // we don't know yet
@@ -406,6 +409,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       })
       .on('resizeend', (e) => {
         if (this.state.resizing) {
+          this.fireInteractEvent(false)
           const { resizeEdge } = this.state
           let resizeTime = this.resizeTimeSnap(this.timeFor(e))
 
@@ -451,6 +455,17 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
 
   canMove(props = this.props) {
     return !!props.canMove
+  }
+  fireInteractEvent = (itemInteraction: boolean) => {
+    if (this.item) {
+      const event = new CustomEvent('itemInteraction', {
+        bubbles: true,
+        detail: {
+          itemInteraction,
+        },
+      })
+      this.item.dispatchEvent(event)
+    }
   }
 
   componentDidUpdate(prevProps: ItemProps<CustomItem>) {
