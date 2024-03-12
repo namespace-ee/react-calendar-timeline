@@ -1,5 +1,5 @@
 import { ComponentType, CSSProperties, HTMLProps, PureComponent } from 'react'
-import { TimelineHeadersConsumer } from './HeadersContext'
+import { useTimelineHeadersContext } from './HeadersContext'
 import { LEFT_VARIANT, RIGHT_VARIANT } from './constants'
 
 type SidebarHeaderProps = {
@@ -44,20 +44,22 @@ export type SidebarWrapperProps = {
   headerData?: any
 }
 
-const defaultChildren: SidebarWrapperProps['children'] = ({ getRootProps }: { getRootProps: GetRootProps }) => <div data-testid="sidebarHeader" {...getRootProps()} />
+const defaultChildren: SidebarWrapperProps['children'] = ({ getRootProps }: { getRootProps: GetRootProps }) => (
+  <div data-testid="sidebarHeader" {...getRootProps()} />
+)
 
 const SidebarWrapper = (props: SidebarWrapperProps) => {
   const { children, variant = LEFT_VARIANT, headerData } = props
+  const { leftSidebarWidth, rightSidebarWidth } = useTimelineHeadersContext()
   return (
-    <TimelineHeadersConsumer>
-      {({ leftSidebarWidth, rightSidebarWidth }) => {
-        return (
-          <SidebarHeader leftSidebarWidth={leftSidebarWidth} rightSidebarWidth={rightSidebarWidth} variant={variant} headerData={headerData}>
-            {children || defaultChildren}
-          </SidebarHeader>
-        )
-      }}
-    </TimelineHeadersConsumer>
+    <SidebarHeader
+      leftSidebarWidth={leftSidebarWidth}
+      rightSidebarWidth={rightSidebarWidth}
+      variant={variant}
+      headerData={headerData}
+    >
+      {children || defaultChildren}
+    </SidebarHeader>
   )
 }
 

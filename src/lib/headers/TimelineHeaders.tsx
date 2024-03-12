@@ -1,6 +1,6 @@
 import React, { ReactNode, LegacyRef, CSSProperties } from 'react'
 import classNames from 'classnames'
-import { TimelineHeadersConsumer } from './HeadersContext'
+import { useTimelineHeadersContext } from './HeadersContext'
 import SidebarHeader from './SidebarHeader'
 import { RIGHT_VARIANT } from './constants'
 import { ElementWithSecret } from '../types/main'
@@ -14,7 +14,6 @@ export type TimelineHeadersProps = {
   className?: string
   calendarHeaderStyle?: React.CSSProperties
   calendarHeaderClassName?: string
-  headerRef?: (ref: HTMLElement | null) => void
 }
 class TimelineHeaders extends React.Component<TimelineHeadersProps> {
   getRootStyle = () => {
@@ -34,12 +33,6 @@ class TimelineHeaders extends React.Component<TimelineHeadersProps> {
     }
   }
 
-  handleRootRef: LegacyRef<HTMLDivElement> = (element) => {
-    if (this.props.headerRef) {
-      this.props.headerRef(element)
-    }
-  }
-
   /**
    * check if child of type SidebarHeader
    * refer to for explanation https://github.com/gaearon/react-hot-loader#checking-element-types
@@ -53,7 +46,9 @@ class TimelineHeaders extends React.Component<TimelineHeadersProps> {
     let rightSidebarHeader
     let leftSidebarHeader
     const calendarHeaders: ElementWithSecret[] = []
-    const children: ElementWithSecret[] = Array.isArray(this.props.children) ? this.props.children.filter((c) => c) : [this.props.children]
+    const children: ElementWithSecret[] = Array.isArray(this.props.children)
+      ? this.props.children.filter((c) => c)
+      : [this.props.children]
     React.Children.map(children, (child) => {
       if (this.isSidebarHeader(child)) {
         if (child?.props?.variant === RIGHT_VARIANT) {
@@ -72,9 +67,18 @@ class TimelineHeaders extends React.Component<TimelineHeadersProps> {
       rightSidebarHeader = <SidebarHeader variant="right" />
     }
     return (
-      <div ref={this.handleRootRef} data-testid="headerRootDiv" style={this.getRootStyle()} className={classNames('rct-header-root', this.props.className)}>
+      <div
+        data-testid="headerRootDiv"
+        style={this.getRootStyle()}
+        className={classNames('rct-header-root', this.props.className)}
+      >
         {leftSidebarHeader}
-        <div ref={this.props.registerScroll} style={this.getCalendarHeaderStyle()} className={classNames('rct-calendar-header', this.props.calendarHeaderClassName)} data-testid="headerContainer">
+        <div
+          ref={this.props.registerScroll}
+          style={this.getCalendarHeaderStyle()}
+          className={classNames('rct-calendar-header', this.props.calendarHeaderClassName)}
+          data-testid="headerContainer"
+        >
           {calendarHeaders}
         </div>
         {rightSidebarHeader}
@@ -90,17 +94,28 @@ export interface TimelineHeadersWrapperProps {
   calendarHeaderStyle?: CSSProperties
   calendarHeaderClassName?: string
 }
-const TimelineHeadersWrapper = ({ children, style, className, calendarHeaderStyle, calendarHeaderClassName }: TimelineHeadersWrapperProps) => (
-  <TimelineHeadersConsumer>
-    {({ leftSidebarWidth, rightSidebarWidth, registerScroll }) => {
-      return (
-        <TimelineHeaders leftSidebarWidth={leftSidebarWidth} rightSidebarWidth={rightSidebarWidth} registerScroll={registerScroll} style={style} className={className} calendarHeaderStyle={calendarHeaderStyle} calendarHeaderClassName={calendarHeaderClassName}>
-          {children}
-        </TimelineHeaders>
-      )
-    }}
-  </TimelineHeadersConsumer>
-)
+const TimelineHeadersWrapper = ({
+  children,
+  style,
+  className,
+  calendarHeaderStyle,
+  calendarHeaderClassName,
+}: TimelineHeadersWrapperProps) => {
+  const { leftSidebarWidth, rightSidebarWidth, registerScroll } = useTimelineHeadersContext()
+  return (
+    <TimelineHeaders
+      leftSidebarWidth={leftSidebarWidth}
+      rightSidebarWidth={rightSidebarWidth}
+      registerScroll={registerScroll}
+      style={style}
+      className={className}
+      calendarHeaderStyle={calendarHeaderStyle}
+      calendarHeaderClassName={calendarHeaderClassName}
+    >
+      {children}
+    </TimelineHeaders>
+  )
+}
 
 TimelineHeadersWrapper.secretKey = 'TimelineHeaders'
 

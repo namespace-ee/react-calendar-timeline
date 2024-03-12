@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import { noop } from '../utility/generic'
 
 const defaultContextState = {
@@ -12,8 +12,7 @@ const defaultContextState = {
   timeSteps: {},
 }
 
-const { Consumer, Provider } =
-  React.createContext<typeof defaultContextState>(defaultContextState)
+const HeaderContext = React.createContext<typeof defaultContextState>(defaultContextState)
 
 export type TimelineHeadersProviderProps = {
   children: ReactNode
@@ -31,8 +30,9 @@ export class TimelineHeadersProvider extends React.Component<TimelineHeadersProv
       timeSteps: this.props.timeSteps,
       registerScroll: this.props.registerScroll,
     } as typeof defaultContextState
-    return <Provider value={contextValue}>{this.props.children}</Provider>
+    return <HeaderContext.Provider value={contextValue}>{this.props.children}</HeaderContext.Provider>
   }
 }
 
-export const TimelineHeadersConsumer = Consumer
+export const TimelineHeadersContext = HeaderContext
+export const useTimelineHeadersContext = () => useContext(TimelineHeadersContext)

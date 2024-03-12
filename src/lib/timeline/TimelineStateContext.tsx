@@ -1,10 +1,6 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useContext } from 'react'
 
-import {
-  calculateXPositionForTime,
-  calculateTimeForXPosition,
-  SelectUnits,
-} from '../utility/calendar'
+import { calculateXPositionForTime, calculateTimeForXPosition, SelectUnits } from '../utility/calendar'
 import { TimelineContext as TimelineContextValue } from '../types/main'
 import { Dayjs } from 'dayjs'
 
@@ -35,8 +31,7 @@ const defaultContextState: TimelineContextType = {
 }
 /* eslint-enable */
 
-export const TimelineContext =
-  React.createContext<TimelineContextType>(defaultContextState)
+export const TimelineContext = React.createContext<TimelineContextType>(defaultContextState)
 const { Consumer, Provider } = TimelineContext
 
 type TimelineStartProps = {
@@ -60,10 +55,7 @@ type TimelineState = {
   timelineContext: TimelineContextType
 }
 
-export class TimelineStateProvider extends React.Component<
-  PropsWithChildren<TimelineStartProps>,
-  TimelineState
-> {
+export class TimelineStateProvider extends React.Component<PropsWithChildren<TimelineStartProps>, TimelineState> {
   constructor(props: PropsWithChildren<TimelineStartProps>) {
     super(props)
 
@@ -100,31 +92,18 @@ export class TimelineStateProvider extends React.Component<
 
   getLeftOffsetFromDate = (date: number): number => {
     const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
-    return calculateXPositionForTime(
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-      date,
-    )
+    return calculateXPositionForTime(canvasTimeStart, canvasTimeEnd, canvasWidth, date)
   }
 
   getDateFromLeftOffsetPosition = (leftOffset: number) => {
     const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
-    return calculateTimeForXPosition(
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-      leftOffset,
-    )
+    return calculateTimeForXPosition(canvasTimeStart, canvasTimeEnd, canvasWidth, leftOffset)
   }
 
   render() {
-    return (
-      <Provider value={this.state.timelineContext}>
-        {this.props.children}
-      </Provider>
-    )
+    return <Provider value={this.state.timelineContext}>{this.props.children}</Provider>
   }
 }
 
 export const TimelineStateConsumer = Consumer
+export const useTimelineState = () => useContext(TimelineContext)

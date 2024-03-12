@@ -1,10 +1,11 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import { TimelineHeadersConsumer } from './HeadersContext'
-import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
+import { useTimelineHeadersContext } from './HeadersContext'
+import { useTimelineState } from '../timeline/TimelineStateContext'
 import { iterateTimes } from '../utility/calendar'
 import { Interval, TimelineTimeSteps } from '../types/main'
 import { Dayjs } from 'dayjs'
 import { CustomDateHeaderProps } from './CustomDateHeader'
+import isEqual from 'lodash/isEqual'
 
 export type CustomHeaderProps<Data> = {
   children: (p: CustomDateHeaderProps<Data>) => ReactNode
@@ -71,12 +72,13 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
   }*/
   componentDidUpdate(prevProps: CustomHeaderProps<Data>) {
     if (
-      prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
-      prevProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
-      prevProps.canvasWidth !== this.props.canvasWidth ||
-      prevProps.unit !== this.props.unit ||
-      prevProps.timeSteps !== this.props.timeSteps ||
-      prevProps.showPeriod !== this.props.showPeriod
+      !isEqual(prevProps, this.props)
+      //prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      //prevProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      //prevProps.canvasWidth !== this.props.canvasWidth ||
+      //prevProps.unit !== this.props.unit ||
+      //prevProps.timeSteps !== this.props.timeSteps ||
+      //prevProps.showPeriod !== this.props.showPeriod
     ) {
       const { canvasTimeStart, canvasTimeEnd, unit, timeSteps, getLeftOffsetFromDate } = this.props
 
@@ -187,28 +189,20 @@ export type CustomHeaderWrapperProps<Data> = {
 }
 
 function CustomHeaderWrapper<Data>({ children, unit, headerData, height }: CustomHeaderWrapperProps<Data>) {
+  const { getTimelineState, showPeriod, getLeftOffsetFromDate } = useTimelineState()
+  const timelineState = getTimelineState()
+  const { timeSteps } = useTimelineHeadersContext()
   return (
-    <TimelineStateConsumer>
-      {({ getTimelineState, showPeriod, getLeftOffsetFromDate }) => {
-        const timelineState = getTimelineState()
-        return (
-          <TimelineHeadersConsumer>
-            {({ timeSteps }) => (
-              <CustomHeader
-                children={children}
-                timeSteps={timeSteps}
-                showPeriod={showPeriod}
-                unit={unit ? unit : timelineState.timelineUnit}
-                {...timelineState}
-                headerData={headerData}
-                getLeftOffsetFromDate={getLeftOffsetFromDate}
-                height={height}
-              />
-            )}
-          </TimelineHeadersConsumer>
-        )
-      }}
-    </TimelineStateConsumer>
+    <CustomHeader
+      children={children}
+      timeSteps={timeSteps}
+      showPeriod={showPeriod}
+      unit={unit ? unit : timelineState.timelineUnit}
+      {...timelineState}
+      headerData={headerData}
+      getLeftOffsetFromDate={getLeftOffsetFromDate}
+      height={height}
+    />
   )
 }
 
