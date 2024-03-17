@@ -192,6 +192,8 @@ export default class App extends Component {
           // moveResizeValidator={this.moveResizeValidator}
           rightSidebarWidth={150}
           rightSidebarContent={<div>Above The Right</div>}
+          canvasTimeStart={minTime}
+          canvasTimeEnd={maxTime}
         >
           <TimelineHeaders className="header-background">
             <SidebarHeader/>
@@ -209,7 +211,7 @@ export default class App extends Component {
                   showPeriod,
                   data,
                 },
-                
+
               ) => {
                 console.log('props', data)
                 return (
@@ -322,7 +324,7 @@ export default class App extends Component {
               headerData={{ hey: 'date header' }}
               intervalRenderer={(
                 { getIntervalProps, intervalContext, data },
-                
+
               ) => {
                 console.log('intervalRenderer props', data)
                 return (

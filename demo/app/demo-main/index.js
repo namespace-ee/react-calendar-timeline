@@ -12,10 +12,10 @@ import Timeline, {
 import generateFakeData from '../generate-fake-data'
 
 var minTime = moment()
-  .add(-6, 'months')
+  .add(-3, 'day')
   .valueOf()
 var maxTime = moment()
-  .add(6, 'months')
+  .add(3, 'day')
   .valueOf()
 
 var keys = {
@@ -119,17 +119,17 @@ export default class App extends Component {
   }
 
   // this limits the timeline to -6 months ... +6 months
-  handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
-    if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-      updateScrollCanvas(minTime, maxTime)
-    } else if (visibleTimeStart < minTime) {
-      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
-    } else if (visibleTimeEnd > maxTime) {
-      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
-    } else {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
-    }
-  }
+  // handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+  //   if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
+  //     updateScrollCanvas(minTime, maxTime)
+  //   } else if (visibleTimeStart < minTime) {
+  //     updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+  //   } else if (visibleTimeEnd > maxTime) {
+  //     updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+  //   } else {
+  //     updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+  //   }
+  // }
 
   handleZoom = (timelineContext, unit) => {
     console.log('Zoomed', timelineContext, unit)
@@ -164,6 +164,8 @@ export default class App extends Component {
         itemHeightRatio={0.75}
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
+        canvasTimeStart={minTime}
+        canvasTimeEnd={maxTime}
         onCanvasClick={this.handleCanvasClick}
         onCanvasDoubleClick={this.handleCanvasDoubleClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
@@ -173,7 +175,6 @@ export default class App extends Component {
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
-        onTimeChange={this.handleTimeChange}
         onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
         buffer={3}

@@ -195,7 +195,8 @@ export default class App extends Component {
         visibleTimeEnd={visibleTimeEnd}
         // itemRenderer={this.itemRenderer}
         groupRenderer={this.groupRenderer}
-
+        canvasTimeStart={minTime}
+        canvasTimeEnd={maxTime}
         onCanvasClick={this.handleCanvasClick}
         onCanvasContextMenu={this.handleCanvasContextMenu}
         onItemClick={this.handleItemClick}

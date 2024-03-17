@@ -106,6 +106,8 @@ export default class ReactCalendarTimeline extends Component {
 
     defaultTimeStart: PropTypes.object,
     defaultTimeEnd: PropTypes.object,
+    canvasTimeStart: PropTypes.number,
+    canvasTimeEnd: PropTypes.number,
 
     visibleTimeStart: PropTypes.number,
     visibleTimeEnd: PropTypes.number,
@@ -265,9 +267,15 @@ export default class ReactCalendarTimeline extends Component {
       )
     }
 
+    if(!this.props.canvasTimeStart || !this.props.canvasTimeEnd) {
+      throw new Error(
+        'You must provide either "canvasTimeStart" and "canvasTimeEnd" to initialize the Timeline'
+      )
+    }
+
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
-      visibleTimeStart,
-      visibleTimeEnd,
+      props.canvasTimeStart,
+      props.canvasTimeEnd,
       props.buffer,
     )
 
