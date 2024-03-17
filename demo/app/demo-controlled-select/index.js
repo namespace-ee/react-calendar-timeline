@@ -185,6 +185,8 @@ export default class App extends Component {
         moveResizeValidator={this.moveResizeValidator}
         selected={this.state.selected}
         onItemDeselect={this.handleItemDeselect}
+        canvasTimeStart={minTime}
+        canvasTimeEnd={maxTime}
       >
         <TimelineMarkers>
           <TodayMarker />

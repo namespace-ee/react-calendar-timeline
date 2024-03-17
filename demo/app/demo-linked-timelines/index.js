@@ -20,6 +20,13 @@ var keys = {
   itemTimeEndKey: 'end'
 }
 
+var minTime = moment()
+  .add(-6, 'months')
+  .valueOf()
+var maxTime = moment()
+  .add(6, 'months')
+  .valueOf()
+
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -98,6 +105,8 @@ export default class App extends Component {
         itemHeightRatio={0.75}
         visibleTimeStart={visibleTimeStart}
         visibleTimeEnd={visibleTimeEnd}
+        canvasTimeStart={minTime}
+        canvasTimeEnd={maxTime}
         onTimeChange={this.handleTimeChangeSecond}
       />
     )

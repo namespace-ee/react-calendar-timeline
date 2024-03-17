@@ -19,6 +19,13 @@ var keys = {
   groupLabelKey: 'title'
 }
 
+var minTime = moment()
+  .add(-6, 'months')
+  .valueOf()
+var maxTime = moment()
+  .add(6, 'months')
+  .valueOf()
+
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -148,6 +155,8 @@ export default class App extends Component {
           onItemMove={this.handleItemMove}
           onItemResize={this.handleItemResize}
           onItemDrag={this.handleItemDrag}
+          canvasTimeStart={minTime}
+          canvasTimeEnd={maxTime}
         />
       </div>
     )

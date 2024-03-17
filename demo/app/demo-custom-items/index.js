@@ -228,6 +228,8 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
+        canvasTimeStart={minTime}
+        canvasTimeEnd={maxTime}
       />
     )
   }

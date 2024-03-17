@@ -16,10 +16,10 @@ import Timeline, {
 import generateFakeData from '../generate-fake-data'
 
 var minTime = moment()
-  .add(-6, 'months')
+  .add(-1, 'day')
   .valueOf()
 var maxTime = moment()
-  .add(6, 'months')
+  .add(1, 'day')
   .valueOf()
 
 var keys = {
@@ -202,6 +202,8 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         buffer={1}
         onTimeChange={this.handleTimeChange}
+        canvasTimeStart={minTime}
+        canvasTimeEnd={maxTime}
         // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>

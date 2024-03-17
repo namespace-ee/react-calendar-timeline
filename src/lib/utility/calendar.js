@@ -402,7 +402,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
-  
+
   return {
     height: sum(groupHeights),
     groupHeights,
@@ -411,11 +411,11 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
  */
 export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
   var groupHeight = 0
@@ -643,8 +643,8 @@ export function getCanvasBoundariesFromVisibleTime(
 ) {
   const zoom = visibleTimeEnd - visibleTimeStart
   // buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
-  const canvasTimeStart = visibleTimeStart - (zoom * (buffer - 1 )/2)
-  const canvasTimeEnd = canvasTimeStart + zoom * buffer
+  const canvasTimeStart = visibleTimeStart
+  const canvasTimeEnd = visibleTimeEnd
   return [canvasTimeStart, canvasTimeEnd]
 }
 
@@ -667,7 +667,8 @@ export function calculateScrollCanvas(
   items,
   groups,
   props,
-  state
+  state,
+
 ) {
   const buffer = props.buffer;
   const oldCanvasTimeStart = state.canvasTimeStart
@@ -686,8 +687,8 @@ export function calculateScrollCanvas(
 
   if (!canKeepCanvas || forceUpdateDimensions) {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
-      visibleTimeStart,
-      visibleTimeEnd,
+      state.canvasTimeStart,
+      state.canvasTimeEnd,
       buffer
     )
     newState.canvasTimeStart = canvasTimeStart

@@ -24,6 +24,13 @@ const keys = {
   itemTimeEndKey: 'end'
 }
 
+var minTime = moment()
+  .add(-6, 'months')
+  .valueOf()
+var maxTime = moment()
+  .add(6, 'months')
+  .valueOf()
+
 export default class App extends Component {
 
   constructor(props) {
@@ -97,6 +104,8 @@ export default class App extends Component {
           itemHeightRatio={0.75}
           defaultTimeStart={defaultTimeStart}
           defaultTimeEnd={defaultTimeEnd}
+          canvasTimeStart={minTime}
+          canvasTimeEnd={maxTime}
           verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
         />
       </div>
