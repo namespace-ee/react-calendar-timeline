@@ -6,7 +6,7 @@ export type TodayMarkerProps = {
   interval?: number
   updateMarker: (marker: MarkerType) => void
   subscribeMarker: (m: MarkerType) => SubscribeReturn
-  children: MarkerRendererType
+  children?: MarkerRendererType
 }
 
 class TodayMarker extends React.Component<TodayMarkerProps> {

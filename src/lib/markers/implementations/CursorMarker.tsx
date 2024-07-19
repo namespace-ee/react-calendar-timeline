@@ -7,7 +7,7 @@ const defaultRenderer = createDefaultRenderer('default-cursor-marker')
 
 type CursorMarkerWrapperProps = {
   getLeftOffsetFromDate: (date: number) => number
-  renderer: MarkerRendererType
+  renderer?: MarkerRendererType
   //interval: number
 }
 
@@ -72,7 +72,7 @@ class CursorMarker extends React.Component<CursorMarkerProps, CursorMarkerStat> 
     if (!isShowingCursor) return null
 
     const styles = createMarkerStylesWithLeftOffset(leftOffset)
-
+    if(!this.props.renderer)return null;
     return this.props.renderer({ styles, date })
   }
 }

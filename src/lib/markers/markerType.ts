@@ -9,7 +9,7 @@ export enum TimelineMarkerType {
 export type MarkerType = {
   date?: number
   type: TimelineMarkerType
-  renderer: MarkerRendererType
+  renderer?: MarkerRendererType
   interval?: number
   id?: number
 }
