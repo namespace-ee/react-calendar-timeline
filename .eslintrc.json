@@ -1,0 +1,41 @@
+{
+  "env": {
+    "browser": true,
+    "jest/globals": true,
+    "node": true,
+    "es6": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "jest",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/jsx-uses-vars": 2,
+    "react/no-children-prop": 0,
+    "react/no-unused-prop-types": 0,
+    "no-labels": 0,
+    "arrow-parens": 0,
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  }
+}

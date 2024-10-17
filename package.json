@@ -1,62 +1,38 @@
 {
-  "name": "react-calendar-timeline",
-  "version": "0.28.0",
-  "description": "react calendar timeline",
-  "main": "lib/index.js",
+  "name": "react-calendar-timeline-4ef",
+  "version": "1.0.18",
+  "description": "fork form react-calendar-timeline with TS latest react and other improvements",
+  "packageManager": "npm@10.1.0",
   "scripts": {
-    "build": "npm run build:lib",
-    "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
-    "build:lib": "echo '!!! Building Library' && rimraf lib && cross-env NODE_ENV=production babel src --out-dir lib && node-sass src/lib/Timeline.scss lib/Timeline.css && sed -i'.bak' 's/Timeline\\.scss/Timeline\\.css/g' lib/lib/Timeline.js && rm lib/lib/Timeline.js.bak",
-    "lint": "eslint --ext .js --ext .jsx ./src",
-    "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
-    "prepublish": "npm run build:lib",
-    "start": "webpack-dev-server --hot --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "lint": "eslint --ext .ts --ext .tsx ./src",
+    "lint:fix": "npm run lint --fix",
     "test": "jest",
     "test:watch": "jest --watch"
   },
+  "main": "./dist/react-calendar-timeline-4ef.umd.js",
+  "module": "./dist/react-calendar-timeline-4ef.es.js",
+  "exports": {
+    "./styles.css": "./dist/styles.css",
+    ".": {
+      "types": [
+        "./dist/index.d.ts"
+      ],
+      "import": "./dist/react-calendar-timeline-4ef.es.js",
+      "require": "./dist/react-calendar-timeline-4ef.umd.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
   "files": [
-    "lib",
-    "src"
+    "dist"
   ],
   "homepage": "https://github.com/namespace-ee/react-calendar-timeline",
   "repository": {
     "type": "git",
     "url": "https://github.com/namespace-ee/react-calendar-timeline.git"
   },
-  "author": "Marius Andra <marius.andra@gmail.com>",
-  "contributors": [
-    {
-      "name": "Stanisław Chmiela",
-      "email": "sjchmiela@gmail.com"
-    },
-    {
-      "name": "Mike Joyce",
-      "url": "https://github.com/mcMickJuice"
-    },
-    {
-      "name": "Samuel Rossetti"
-    },
-    {
-      "name": "amakhrov",
-      "url": "https://github.com/amakhrov"
-    },
-    {
-      "name": "Ahmad Ilaiwi",
-      "url": "https://github.com/Ilaiwi"
-    },
-    {
-      "name": "dkarnutsch",
-      "url": "https://github.com/dkarnutsch"
-    },
-    {
-      "name": "Alex Maclean",
-      "url": "https://github.com/acemac"
-    },
-    {
-      "name": "Kevin Mann",
-      "url": "https://github.com/kevinmanncito"
-    }
-  ],
+  "private": false,
+  "author": "4EF",
   "license": "MIT",
   "keywords": [
     "react",
@@ -64,92 +40,54 @@
     "react-component",
     "timeline"
   ],
-  "standard": {
-    "parser": "babel-eslint"
-  },
-  "jest": {
-    "verbose": true,
-    "testMatch": [
-      "**/__tests__/**/*.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/jest-setup.js"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "modulePaths": [
-      "<rootDir>/src/",
-      "<rootDir>/__tests__"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules",
-      "<rootDir>/__tests__/test-utility"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
-  },
   "dependencies": {
-    "classnames": "^2.2.6",
-    "create-react-context": "^0.3.0",
-    "element-resize-detector": "^1.1.12",
-    "lodash.isequal": "^4.5.0",
-    "memoize-one": "^5.1.1"
+    "classnames": "^2.5.1",
+    "element-resize-detector": "^1.2.4",
+    "lodash": "^4.17.21",
+    "memoize-one": "^6.0.0"
   },
   "peerDependencies": {
-    "interactjs": "^1.3.4",
-    "moment": "*",
-    "prop-types": "^15.6.2",
-    "react": ">=16.3",
-    "react-dom": ">=16.3"
+    "dayjs": ">=1.10.0",
+    "interactjs": "1.10.27",
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.0",
-    "@babel/plugin-proposal-class-properties": "^7.5.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.2",
-    "@babel/preset-env": "^7.5.2",
-    "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^7.1.1",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-react-remove-properties": "^0.3.0",
-    "cross-env": "^5.1.4",
-    "css-loader": "^6.7.1",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
-    "eslint": "^4.16.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-jest": "^21.6.1",
-    "eslint-plugin-prettier": "^2.5.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-react": "^7.5.1",
-    "eslint-plugin-standard": "^2.0.1",
-    "faker": "^4.1.0",
-    "interactjs": "^1.3.4",
-    "jest": "^24.8.0",
-    "jest-dom": "^3.5.0",
-    "jest-watch-typeahead": "^0.3.1",
-    "jsdom": "^11.5.1",
-    "moment": "^2.11.1",
-    "node-sass": "^7.0.1",
-    "prettier": "^1.10.2",
-    "prettier-eslint-cli": "^4.7.0",
-    "prop-types": "^15.6.2",
-    "randomcolor": "^0.5.3",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-router-dom": "^4.1.1",
-    "react-testing-library": "^6.0.3",
-    "regenerator-runtime": "^0.13.2",
-    "rimraf": "^2.6.2",
-    "sass-loader": "^13.0.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.72.1",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0"
+    "rollup-plugin-typescript-paths": "^1.5.0",
+    "@types/lodash": "^4.14.202",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@faker-js/faker": "^9.0.3",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/element-resize-detector": "^1.1.6",
+    "@types/react": "^18.2.41",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1",
+    "@vitejs/plugin-react-swc": "^3.7.1",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.10",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.8.3",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "interactjs": "1.10.27",
+    "jest": "^29.7.0",
+    "jest-watch-typeahead": "^2.2.2",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.1.0",
+    "prettier-eslint-cli": "^8.0.1",
+    "randomcolor": "^0.6.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sass": "^1.69.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.8",
+    "vite-plugin-dts": "^4.2.4",
+    "vite-plugin-lib-inject-css": "^2.1.1"
   }
 }
