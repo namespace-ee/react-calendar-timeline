@@ -17,7 +17,7 @@ export default defineConfig({
         styles: resolve("src/lib", 'Timeline.scss')
       },
       name: 'react-calendar-timeline',
-      fileName: (format) => `react-calendar-timeline-4ef.${format}.js`
+      fileName: (format) => `react-calendar-timeline.${format}.js`
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
