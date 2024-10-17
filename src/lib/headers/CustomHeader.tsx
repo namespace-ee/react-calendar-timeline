@@ -6,6 +6,7 @@ import { Interval, TimelineTimeSteps } from '../types/main'
 import { Dayjs } from 'dayjs'
 import { CustomDateHeaderProps } from './CustomDateHeader'
 import isEqual from 'lodash/isEqual'
+import { GetIntervalPropsType } from './types'
 
 export type CustomHeaderProps<Data> = {
   children: (p: CustomDateHeaderProps<Data>) => ReactNode
@@ -53,6 +54,10 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     this.state = {
       intervals,
     }
+  }
+
+  static defaultProps = {
+    height: 30,
   }
 
   /*shouldComponentUpdate(nextProps: CustomHeaderProps<Data>) {
@@ -127,7 +132,7 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     }
   }
 
-  getIntervalProps = (props: { interval?: Interval; style?: CSSProperties } = {}) => {
+  getIntervalProps: GetIntervalPropsType = (props: { interval?: Interval; style?: CSSProperties } = {}) => {
     const { interval, style } = props
     if (!interval) throw new Error('you should provide interval to the prop getter')
     const { startTime, labelWidth, left } = interval
@@ -185,7 +190,7 @@ export type CustomHeaderWrapperProps<Data> = {
   children: (p: CustomDateHeaderProps<Data>) => ReactNode
   unit?: keyof TimelineTimeSteps
   headerData?: Data
-  height: number
+  height?: number | undefined
 }
 
 function CustomHeaderWrapper<Data>({ children, unit, headerData, height }: CustomHeaderWrapperProps<Data>) {
@@ -204,10 +209,6 @@ function CustomHeaderWrapper<Data>({ children, unit, headerData, height }: Custo
       height={height}
     />
   )
-}
-
-CustomHeaderWrapper.defaultProps = {
-  height: 30,
 }
 
 export default CustomHeaderWrapper
