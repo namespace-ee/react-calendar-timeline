@@ -17,7 +17,7 @@
   },
   "packageManager": "npm@8.19.2",
   "resolutions": {
-    "react-calendar-timeline-4ef": "../src/index.ts"
+    "react-calendar-timeline": "../src/index.ts"
   },
   "devDependencies": {
     "@types/randomcolor": "^0.5.9",

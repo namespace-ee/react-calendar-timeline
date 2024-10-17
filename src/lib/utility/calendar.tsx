@@ -344,7 +344,7 @@ export function groupStack(
     do {
       // converting it to a const create an infinite loop (why?)
       // noinspection ES6ConvertVarToLetConst
-      var collidingItem = null
+      var collidingItem: null | ItemDimension = null
       //Items are placed from i=0 onwards, only check items with index < i
       for (let j = itemIndex - 1, jj = 0; j >= jj; j--) {
         const other = group[j]

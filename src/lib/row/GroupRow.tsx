@@ -7,7 +7,7 @@ interface GroupRowProps<T> {
   onContextMenu?: MouseEventHandler<HTMLDivElement>
   isEvenRow?: boolean
   style?: React.CSSProperties
-  clickTolerance?: number
+  clickTolerance?: number | undefined
   group: T
   horizontalLineClassNamesForGroup?: (group: T) => string[]
 }
@@ -36,8 +36,7 @@ class GroupRow<T> extends Component<GroupRowProps<T>> {
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
           className={
-            (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') +
-            (classNamesForGroup ? classNamesForGroup.join(' ') : '')
+            (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')
           }
           style={style}
         />

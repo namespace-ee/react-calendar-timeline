@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import GroupRow from './GroupRow'
 
-export type RowClickEvent = (
-  evt: React.MouseEvent<HTMLDivElement>,
-  index: number,
-) => void
+export type RowClickEvent = (evt: React.MouseEvent<HTMLDivElement>, index: number) => void
 
 export interface GroupRowsProps<T> {
   canvasWidth: number
@@ -17,6 +14,7 @@ export interface GroupRowsProps<T> {
   horizontalLineClassNamesForGroup?: (group: T) => string[]
   onRowContextClick: RowClickEvent
 }
+
 export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
   shouldComponentUpdate(nextProps: GroupRowsProps<T>) {
     return !(
@@ -39,7 +37,7 @@ export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
       horizontalLineClassNamesForGroup,
       onRowContextClick,
     } = this.props
-    const lines = []
+    const lines: React.ReactNode[] = []
 
     for (let i = 0; i < lineCount; i++) {
       lines.push(

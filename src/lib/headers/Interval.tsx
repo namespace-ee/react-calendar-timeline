@@ -3,10 +3,7 @@ import { getNextUnit, SelectUnits } from '../utility/calendar'
 import { composeEvents } from '../utility/events'
 import { Dayjs } from 'dayjs'
 import { IntervalRenderer, Interval as IntervalType, GetIntervalProps } from '../types/main'
-
-type GetIntervalPropsParams = {
-  interval: IntervalType
-} & HTMLAttributes<HTMLDivElement>
+import { GetIntervalPropsType } from './types'
 
 export type IntervalProps<Data> = {
   intervalRenderer: (p: IntervalRenderer<Data>) => ReactNode
@@ -15,7 +12,7 @@ export type IntervalProps<Data> = {
   showPeriod: (startTime: Dayjs, endTime: Dayjs) => void
   intervalText: string
   primaryHeader: boolean
-  getIntervalProps: (props?: GetIntervalPropsParams) => HTMLAttributes<HTMLDivElement>
+  getIntervalProps: GetIntervalPropsType
 
   headerData?: Data
 }
@@ -33,7 +30,7 @@ class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
     }
   }
 
-  getIntervalProps = (props: GetIntervalProps = {}): HTMLAttributes<HTMLDivElement> => {
+  getIntervalProps = (props: GetIntervalProps = {}): HTMLAttributes<HTMLDivElement> & { key: string } => {
     return {
       ...this.props.getIntervalProps({
         interval: this.props.interval,
@@ -58,11 +55,12 @@ class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
         />
       )
     }
-
+    const { key, ...rest } = this.getIntervalProps()
     return (
       <div
         data-testid="dateHeaderInterval"
-        {...this.getIntervalProps()}
+        {...rest}
+        key={key}
         className={`rct-dateHeader ${this.props.primaryHeader ? 'rct-dateHeader-primary' : ''}`}
       >
         <span>{intervalText}</span>
