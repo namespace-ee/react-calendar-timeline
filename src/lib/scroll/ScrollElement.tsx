@@ -1,4 +1,4 @@
-import { Component, CSSProperties, MouseEventHandler, ReactNode, TouchEventHandler } from 'react'
+import { Component, CSSProperties, MouseEventHandler, ReactNode } from 'react'
 import { getParentPosition } from '../utility/dom-helpers'
 
 type Props = {
@@ -44,6 +44,8 @@ class ScrollElement extends Component<Props, State> {
     if (el) {
       el.addEventListener('wheel', this.handleWheel, { passive: false })
       el.addEventListener('itemInteraction', this.handleItemInteract)
+      el.addEventListener('touchstart',this.handleTouchStart,{ passive: false })
+      el.addEventListener("touchmove",this.handleTouchMove,{ passive: false })
     }
   }
 
@@ -102,7 +104,7 @@ class ScrollElement extends Component<Props, State> {
     })
   }
 
-  handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
+  handleTouchStart = (e:TouchEvent) => {
     if (e.touches.length === 2) {
       e.preventDefault()
 
@@ -121,7 +123,7 @@ class ScrollElement extends Component<Props, State> {
     }
   }
 
-  handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
+  handleTouchMove = (e:TouchEvent) => {
     const { width, onZoom } = this.props
     if (this.isItemInteraction) {
       e.preventDefault()
@@ -172,6 +174,8 @@ class ScrollElement extends Component<Props, State> {
     if (this.scrollComponent) {
       this.scrollComponent.removeEventListener('wheel', this.handleWheel)
       this.scrollComponent.removeEventListener('itemInteraction', this.handleItemInteract)
+      this.scrollComponent.removeEventListener('touchstart',this.handleTouchStart)
+      this.scrollComponent.removeEventListener("touchmove",this.handleTouchMove)
     }
   }
 
@@ -196,8 +200,8 @@ class ScrollElement extends Component<Props, State> {
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
         onMouseLeave={this.handleMouseLeave}
-        onTouchStart={this.handleTouchStart}
-        onTouchMove={this.handleTouchMove}
+//        onTouchStart={this.handleTouchStart}
+//         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
         onScroll={this.handleScroll}
       >
