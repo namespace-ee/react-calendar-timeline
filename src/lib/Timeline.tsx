@@ -1,4 +1,5 @@
 import React, { Component, MouseEvent } from 'react'
+import { getSumOffset, getSumScroll } from './utility/dom-helpers'
 import Items, { CanResize } from './items/Items'
 import Sidebar from './layout/Sidebar'
 import Columns from './columns/Columns'
@@ -12,7 +13,7 @@ import {
   calculateScrollCanvas,
   getCanvasBoundariesFromVisibleTime,
   getCanvasWidth,
-  stackTimelineItems,
+  stackTimelineItems, coordinateToTimeRatio,
 } from './utility/calendar'
 import { _get } from './utility/generic'
 import { defaultKeys, defaultTimeSteps } from './default-config'
@@ -42,6 +43,12 @@ import './Timeline.scss'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 dayjs.extend(localizedFormat)
+
+export interface ReactCalendarTimelineRef {
+  // Add any methods or properties you want to expose
+  getBoundingClientRect(): DOMRect;
+  pageXToTime(x: number): number;
+}
 
 export type OnTimeChange<CustomItem, CustomGroup> = (
   visibleTimeStart: number,
@@ -120,6 +127,7 @@ export type ReactCalendarTimelineProps<
   headerRef?: (el: HTMLDivElement) => void
   className?: string
   style?: React.CSSProperties
+  ref?: React.Ref<ReactCalendarTimelineRef >
 }
 
 export type ReactCalendarTimelineState<
@@ -256,6 +264,7 @@ export default class ReactCalendarTimeline<
   }
 
   state: ReactCalendarTimelineState<CustomItem, CustomGroup>
+
 
   constructor(props: ReactCalendarTimelineProps<CustomItem, CustomGroup>) {
     super(props)
@@ -949,6 +958,23 @@ export default class ReactCalendarTimeline<
   }
 
   container = React.createRef<HTMLDivElement>()
+  getBoundingClientRect = () => this.scrollComponent!.getBoundingClientRect()
+  pageXToTime =(x:number)=>{
+    const canvasWidth = getCanvasWidth(this.state.width, this.props.buffer!)
+    const ratio = coordinateToTimeRatio(this.state.canvasTimeStart, this.state.canvasTimeEnd, canvasWidth)
+
+    const offset = getSumOffset(this.scrollComponent!).offsetLeft
+    const scrolls = getSumScroll(this.scrollComponent!)
+
+    //return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart!.offset, true)
+    const dragTime = (x - offset + scrolls.scrollLeft) * ratio + this.state.canvasTimeStart;
+    if(!this.props.dragSnap) return dragTime;
+
+    const consideredOffset =  dayjs().utcOffset() * 60 * 1000 ;
+    return Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap - (consideredOffset % this.props.dragSnap)
+
+
+}
 
   render() {
     const { items, groups, sidebarWidth, rightSidebarWidth, timeSteps, traditionalZoom, buffer } = this.props
