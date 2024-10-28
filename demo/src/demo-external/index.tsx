@@ -1,9 +1,9 @@
 // App.jsx
 import dayjs from "dayjs";
-import {useEffect, useState, useRef, useMemo} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import Timeline from 'react-calendar-timeline';
 import interact from 'interactjs';
-import generateFakeData, {FakeDataItem} from "../generate-fake-data";
+import generateFakeData, {FakeDataItem, FakeGroup} from "../generate-fake-data";
 import TableComponent from './TableComponent';
 
 // const groups = [
@@ -14,23 +14,29 @@ import TableComponent from './TableComponent';
 
 
 const App = () => {
-  const {groups:gr, items: fakeItems} = generateFakeData(10,10)
-  const groups =useMemo(()=>gr,[gr])
-  const [items, setItems] = useState<FakeDataItem[]>(fakeItems.splice(0, Math.floor(fakeItems.length / 2)));
-  const [newItems, setNewItems] = useState<FakeDataItem[]>(fakeItems)
 
+  const [groups,setGroups] =useState<FakeGroup[]>([]);
+  const [items, setItems] = useState<FakeDataItem[]>([]);
+  const [newItems, setNewItems] = useState<FakeDataItem[]>([])
+
+  useEffect(()=>{
+    const {groups:gr, items: fakeItems} = generateFakeData()
+    setItems(fakeItems.splice(0, Math.floor(fakeItems.length / 2)))
+      setNewItems(fakeItems)
+    setGroups(gr)
+  },[])
 
   const timelineRef = useRef<Timeline>(null);
 
-
+  const interactRef = useRef(interact);
   useEffect(() => {
-    interact('.draggable')
+    interactRef.current('.draggable')
       .draggable({
         inertia: true,
         modifiers: [
           interact.modifiers.restrictRect({
-            restriction: 'timeline-dropzone',
-            endOnly: false,
+            restriction: 'timeline-ext-wrapper',
+            endOnly: true,
           }),
           interact.modifiers.snap({
             targets: [
@@ -39,10 +45,10 @@ const App = () => {
                 const {top, left} = timelineElement!.getBoundingClientRect();
               return{
                 x: x,
-                y: Math.round(y / timelineRef.current!.props.lineHeight) * timelineRef.current!.props.lineHeight,
+                y: (Math.round(y / timelineRef.current!.props.lineHeight) * timelineRef.current!.props.lineHeight)+ (timelineRef.current!.props.lineHeight/2),
                 offset: {top: top, left: left}
               }},
-            ]
+            ], relativePoints: [{ x: 0.5, y: 0.5 }]
           })
         ],
         autoScroll: true,
@@ -51,12 +57,8 @@ const App = () => {
             const target = event.target;
             const timelineElement = timelineRef.current;
             if (timelineElement == null) return;
-            target.style.width = '50px';
+            //target.style.width = '50px';
             target.style.height = timelineElement.props.lineHeight;
-            target.style.overflow = "hidden";
-            target.style.textWrap = "nowrap";
-            target.style.whiteSpace = "nowrap";
-
           },
           move(event) {
             //Show the button as being moved
@@ -69,45 +71,55 @@ const App = () => {
             target.style.transform = `translate(${x}px, ${y}px)`;
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
-            const timelineElement = timelineRef.current;
-            if (timelineElement == null) return;
-            const startTime = dayjs(timelineElement.pageXToTime(x));
-            console.log(startTime.format("dd-MM-YYYY HH:mm"))
           },
         },
+      }).on("dragend", (event) => {
+      event.target.removeAttribute("data-x");
+      event.target.removeAttribute("data-y");
+      event.target.style.transform = "translate(0px, 0px)";
       });
 
-    interact('.timeline-dropzone').dropzone({
+    interactRef.current('.timeline-dropzone').dropzone({
       accept: '.draggable',
       overlap: 0.5,
-
       ondrop(event) {
-
+        console.log("dropped")
         event.stopImmediatePropagation()
-        const fk_joborder = event.relatedTarget.id.split('-')[1];
+        event.target.classList.remove('drop-active');
+        const droppedId = event.relatedTarget.id.split('-')[1];
         const dropPosition = event.dragEvent.client;
+
+        //const x1 = (parseFloat(event.dragEvent.client.getAttribute('data-x')) || 0) + event.dx;
         const timelineElement = timelineRef.current;
-        if (timelineElement == null) return;
-        const {top, left} = timelineElement.getBoundingClientRect();
-        const x = dropPosition.x - left;
-        const y = dropPosition.y - top;
+        if (timelineElement == null) {
+         console.log("Timeline not found");
+          return;
+        }
+        const {top} = timelineElement.getBoundingClientRect();
+        const x = dropPosition.x ;
+        const y = dropPosition.y-top;
 
-        const groupIndex = Math.floor(y / timelineElement.props.lineHeight);
+
+        const {time,group:groupIndex}=timelineElement.pageXToTime(x,y)
+
+        //const groupIndex = Math.floor(y / timelineElement.props.lineHeight);
         const group = groups[groupIndex];
-        if (!group) return
+        if (!group) {
+          console.error('Group not found');
+          return
+        }
 
-        const startTime = dayjs(timelineElement.pageXToTime(x));
-        const endTime = startTime.clone().add(8, 'hours');
-        const itemToDrop = newItems.filter(i => i.id === Number(fk_joborder))[0];
-        console.log(startTime, endTime, itemToDrop)
+        const startTime = dayjs(time);
+        const endTime = startTime.clone().add(1, 'day');
+        const itemToDrop = newItems.filter(i => i.id === Number(droppedId))[0];
+        console.log("Dropped at ",startTime.format("DD-MM-YYYY HH:mm"), endTime, itemToDrop)
 
         setNewItems(newItems.filter(i => i.id !== itemToDrop.id))
-        // setRows(prevRows => prevRows.filter(row => row.id !== Number(fk_joborder)));
         setItems((prevItems) => [
           ...prevItems,
           {
             id: itemToDrop.id,
-            group: group.id,
+            group: group.id as string,
             title: itemToDrop.title,
             start_time: startTime.valueOf(),
             end_time: endTime.valueOf(),
@@ -116,12 +128,22 @@ const App = () => {
           },
         ]);
       },
+    }).on('dragenter', function (event) {
+      event.target.classList.add('drop-active')
+      event.relatedTarget.classList.add('drop-active-element')
+    }).on("dragleave", function (event) {
+      event.target.classList.remove('drop-active')
+      event.relatedTarget.classList.remove('drop-active-element')
     });
-  }, []);
+    return () => {
+      interactRef.current('.draggable').unset();
+      interactRef.current('.timeline-dropzone').unset();
+    }
+  }, [groups,items]);
 
   return (
-    <div  style={{display: "grid", gridTemplateColumns: "50% 50%"}}>
-      <div style={{width: "100%"}}>
+    <div style={{display: "grid", gridTemplateColumns: "50% 50%"}}>
+      <div  className="timeline-ext-wrapper" style={{width: "100%"}}>
         <Timeline
           ref={timelineRef}
           groups={groups}
@@ -130,6 +152,7 @@ const App = () => {
           defaultTimeStart={dayjs()
             .startOf('day')
             .valueOf()}
+
           defaultTimeEnd={dayjs()
             .startOf('day').add(14, 'day')
             .valueOf()}

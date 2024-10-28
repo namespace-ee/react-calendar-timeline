@@ -2,12 +2,10 @@ import {faker} from '@faker-js/faker'
 import randomColor from 'randomcolor'
 import dayjs from 'dayjs'
 import {HTMLProps} from "react";
-import {TimelineItemBase} from "react-calendar-timeline";
+import {TimelineGroupBase, TimelineItemBase} from "react-calendar-timeline";
 
-type Group = {
-  id: string
-  title: string
-  rightTitle: string
+export type FakeGroup = TimelineGroupBase &  {
+  id:string;
   label: string
   bgColor: string
 }
@@ -27,10 +25,10 @@ export type FakeDataItem = TimelineItemBase<number> & {
 }
 export default function (groupCount = 30, itemCount = 1000, daysInPast = 30) {
   let randomSeed = Math.floor(Math.random() * 1000)
-  let groups :Group[]= []
+  let groups :FakeGroup[]= []
   for (let i = 0; i < groupCount; i++) {
     groups.push({
-      id: `${i + 1}`,
+      id:`${i + 1}`,
       title: faker.person.firstName(),
       rightTitle: faker.person.lastName(),
       label: `Label ${faker.person.firstName()}`,

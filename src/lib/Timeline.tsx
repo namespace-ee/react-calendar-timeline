@@ -1,9 +1,9 @@
-import React, { Component, MouseEvent } from 'react'
-import { getSumOffset, getSumScroll } from './utility/dom-helpers'
-import Items, { CanResize } from './items/Items'
+import React, {Component, MouseEvent} from 'react'
+import {getSumOffset, getSumScroll} from './utility/dom-helpers'
+import Items, {CanResize} from './items/Items'
 import Sidebar from './layout/Sidebar'
 import Columns from './columns/Columns'
-import GroupRows, { RowClickEvent } from './row/GroupRows'
+import GroupRows, {RowClickEvent} from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
 import windowResizeDetector from '../resize-detector/window'
@@ -15,13 +15,13 @@ import {
   getCanvasWidth,
   stackTimelineItems, coordinateToTimeRatio,
 } from './utility/calendar'
-import { _get } from './utility/generic'
-import { defaultKeys, defaultTimeSteps } from './default-config'
-import { TimelineStateProvider } from './timeline/TimelineStateContext'
-import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
-import { TimelineHeadersProvider } from './headers/HeadersContext'
+import {_get} from './utility/generic'
+import {defaultKeys, defaultTimeSteps} from './default-config'
+import {TimelineStateProvider} from './timeline/TimelineStateContext'
+import {TimelineMarkersProvider} from './markers/TimelineMarkersContext'
+import {TimelineHeadersProvider} from './headers/HeadersContext'
 import TimelineHeaders from './headers/TimelineHeaders'
-import { DateHeader } from './headers/DateHeader'
+import {DateHeader} from './headers/DateHeader'
 import {
   dateType,
   ElementWithSecret,
@@ -36,9 +36,9 @@ import {
   TimelineTimeSteps,
   Unit,
 } from './types/main'
-import { ItemDimension } from './types/dimension'
-import dayjs, { Dayjs } from 'dayjs'
-import { ItemProps, ResizeEdge } from './items/Item'
+import {ItemDimension} from './types/dimension'
+import dayjs, {Dayjs} from 'dayjs'
+import {ItemProps, ResizeEdge} from './items/Item'
 import './Timeline.scss'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 
@@ -47,7 +47,8 @@ dayjs.extend(localizedFormat)
 export interface ReactCalendarTimelineRef {
   // Add any methods or properties you want to expose
   getBoundingClientRect(): DOMRect;
-  pageXToTime(x: number): number;
+
+  pageXToTime(x: number, y: number): { time: number, group: number };
 }
 
 export type OnTimeChange<CustomItem, CustomGroup> = (
@@ -116,9 +117,9 @@ export type ReactCalendarTimelineProps<
   groupRenderer?: ((props: ReactCalendarGroupRendererProps<CustomGroup>) => React.ReactNode) | undefined
   resizeDetector?:
     | {
-        addListener?: (x: any) => void
-        removeListener: (x: any) => void
-      }
+    addListener?: (x: any) => void
+    removeListener: (x: any) => void
+  }
     | undefined
   verticalLineClassNamesForTime?: (start: number, end: number) => string[]
   horizontalLineClassNamesForGroup?: ((group: CustomGroup) => string[]) | undefined
@@ -127,7 +128,7 @@ export type ReactCalendarTimelineProps<
   headerRef?: (el: HTMLDivElement) => void
   className?: string
   style?: React.CSSProperties
-  ref?: React.Ref<ReactCalendarTimelineRef >
+  ref?: React.Ref<ReactCalendarTimelineRef>
 }
 
 export type ReactCalendarTimelineState<
@@ -215,8 +216,10 @@ export default class ReactCalendarTimeline<
     className: '',
     keys: defaultKeys,
     timeSteps: defaultTimeSteps,
-    headerRef: () => {},
-    scrollRef: () => {},
+    headerRef: () => {
+    },
+    scrollRef: () => {
+    },
 
     // if you pass in visibleTimeStart and visibleTimeEnd, you must also pass onTimeChange(visibleTimeStart, visibleTimeEnd),
     // which needs to update the props visibleTimeStart and visibleTimeEnd to the ones passed
@@ -237,7 +240,7 @@ export default class ReactCalendarTimeline<
   }
 
   getTimelineContext = (): TimelineContext => {
-    const { width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, canvasTimeEnd } = this.state
+    const {width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, canvasTimeEnd} = this.state
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasWidth = getCanvasWidth(width, this.props.buffer!)
     const minUnit = getMinUnit(zoom, width, this.props.timeSteps)
@@ -253,9 +256,9 @@ export default class ReactCalendarTimeline<
   }
 
   getTimelineUnit = () => {
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+    const {width, visibleTimeStart, visibleTimeEnd} = this.state
 
-    const { timeSteps } = this.props
+    const {timeSteps} = this.props
 
     const zoom = visibleTimeEnd - visibleTimeStart
     const minUnit = getMinUnit(zoom, width, timeSteps)
@@ -309,7 +312,7 @@ export default class ReactCalendarTimeline<
       newGroupOrder: 0, //CHECK
     }
     const canvasWidth = getCanvasWidth(state.width!, props.buffer!)
-    const { dimensionItems, height, groupHeights, groupTops } = stackTimelineItems(
+    const {dimensionItems, height, groupHeights, groupTops} = stackTimelineItems(
       props.items,
       props.groups,
       canvasWidth,
@@ -355,11 +358,11 @@ export default class ReactCalendarTimeline<
   }
 
   static getDerivedStateFromProps(nextProps: ReactCalendarTimelineProps<any>, prevState: ReactCalendarTimelineState) {
-    const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
+    const {visibleTimeStart, visibleTimeEnd, items, groups} = nextProps
 
     // This is a gross hack pushing items and groups in to state only to allow
     // For the forceUpdate check
-    const derivedState = { items, groups }
+    const derivedState = {items, groups}
 
     // if the items or groups have changed we must re-render
     const forceUpdate = items !== prevState.items || groups !== prevState.groups
@@ -431,11 +434,11 @@ export default class ReactCalendarTimeline<
   }
 
   resize = (props = this.props) => {
-    const { width: containerWidth } = this.container.current?.getBoundingClientRect() ?? { width: 0 }
+    const {width: containerWidth} = this.container.current?.getBoundingClientRect() ?? {width: 0}
 
     const width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
     const canvasWidth = getCanvasWidth(width, props.buffer!)
-    const { dimensionItems, height, groupHeights, groupTops } = stackTimelineItems(
+    const {dimensionItems, height, groupHeights, groupTops} = stackTimelineItems(
       props.items,
       props.groups,
       canvasWidth,
@@ -518,7 +521,7 @@ export default class ReactCalendarTimeline<
   }
 
   changeZoom = (scale: number, offset = 0.5) => {
-    const { minZoom, maxZoom } = this.props
+    const {minZoom, maxZoom} = this.props
     const oldZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const newZoom = Math.min(Math.max(Math.round(oldZoom * scale), minZoom), maxZoom) // min 1 min, max 20 years
     const newVisibleTimeStart = Math.round(this.state.visibleTimeStart + (oldZoom - newZoom) * offset)
@@ -557,7 +560,7 @@ export default class ReactCalendarTimeline<
         this.props.onItemClick(item, e, time)
       }
     } else {
-      this.setState({ selectedItem: item })
+      this.setState({selectedItem: item})
       if (item && this.props.onItemSelect) {
         const time = this.timeFromItemEvent(e as MouseEvent<HTMLDivElement>)
         this.props.onItemSelect(item, e, time)
@@ -585,11 +588,11 @@ export default class ReactCalendarTimeline<
   // from.  Look to consolidate the logic for determining coordinate to time
   // as well as generalizing how we get time from click on the canvas
   getTimeFromRowClickEvent = (e: MouseEvent<HTMLDivElement>) => {
-    const { dragSnap, buffer } = this.props
-    const { width, canvasTimeStart, canvasTimeEnd } = this.state
+    const {dragSnap, buffer} = this.props
+    const {width, canvasTimeStart, canvasTimeEnd} = this.state
     // this gives us distance from left of row element, so event is in
     // context of the row element, not client or page
-    const { offsetX } = e.nativeEvent
+    const {offsetX} = e.nativeEvent
 
     let time = calculateTimeForXPosition(
       canvasTimeStart,
@@ -604,11 +607,11 @@ export default class ReactCalendarTimeline<
   }
 
   timeFromItemEvent = (e: MouseEvent<HTMLDivElement>) => {
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+    const {width, visibleTimeStart, visibleTimeEnd} = this.state
     const dragSnap = this.props.dragSnap!
 
     const scrollComponent = this.scrollComponent!
-    const { left: scrollX } = scrollComponent.getBoundingClientRect()
+    const {left: scrollX} = scrollComponent.getBoundingClientRect()
 
     const xRelativeToTimeline = e.clientX - scrollX
 
@@ -642,7 +645,7 @@ export default class ReactCalendarTimeline<
   }
 
   dropItem: ItemProps<CustomItem>['onDrop'] = (item, dragTime, newGroupOrder) => {
-    this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
+    this.setState({draggingItem: null, dragTime: null, dragGroupTitle: null})
     if (this.props.onItemMove) {
       this.props.onItemMove(item, dragTime, newGroupOrder)
     }
@@ -664,19 +667,19 @@ export default class ReactCalendarTimeline<
   }
 
   resizedItem: ItemProps<CustomItem>['onResized'] = (item, resizeTime, edge, timeDelta) => {
-    this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
+    this.setState({resizingItem: null, resizingEdge: null, resizeTime: null})
     if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge!)
     }
   }
 
   updatingItem = ({
-    eventType,
-    itemId,
-    time,
-    edge,
-    newGroupOrder,
-  }: {
+                    eventType,
+                    itemId,
+                    time,
+                    edge,
+                    newGroupOrder,
+                  }: {
     eventType: 'move' | 'resize'
     itemId: Id
     time: number
@@ -775,12 +778,12 @@ export default class ReactCalendarTimeline<
   }
 
   items({
-    canvasTimeStart,
-    canvasTimeEnd,
-    canvasWidth,
-    dimensionItems,
-    groupTops,
-  }: {
+          canvasTimeStart,
+          canvasTimeEnd,
+          canvasWidth,
+          dimensionItems,
+          groupTops,
+        }: {
     canvasTimeStart: number
     canvasTimeEnd: number
     canvasWidth: number
@@ -828,7 +831,7 @@ export default class ReactCalendarTimeline<
   }
 
   sidebar(height: number, groupHeights: number[]) {
-    const { sidebarWidth } = this.props
+    const {sidebarWidth} = this.props
     return (
       sidebarWidth && (
         <Sidebar
@@ -844,7 +847,7 @@ export default class ReactCalendarTimeline<
   }
 
   rightSidebar(height: number, groupHeights: number[]) {
-    const { rightSidebarWidth } = this.props
+    const {rightSidebarWidth} = this.props
     return (
       rightSidebarWidth && (
         <Sidebar
@@ -930,8 +933,8 @@ export default class ReactCalendarTimeline<
     }
     return (
       <TimelineHeaders>
-        <DateHeader unit="primaryHeader" />
-        <DateHeader />
+        <DateHeader unit="primaryHeader"/>
+        <DateHeader/>
       </TimelineHeaders>
     )
   }
@@ -959,28 +962,40 @@ export default class ReactCalendarTimeline<
 
   container = React.createRef<HTMLDivElement>()
   getBoundingClientRect = () => this.scrollComponent!.getBoundingClientRect()
-  pageXToTime =(x:number)=>{
+  pageXToTime = (x: number, y: number) => {
     const canvasWidth = getCanvasWidth(this.state.width, this.props.buffer!)
     const ratio = coordinateToTimeRatio(this.state.canvasTimeStart, this.state.canvasTimeEnd, canvasWidth)
 
     const offset = getSumOffset(this.scrollComponent!).offsetLeft
     const scrolls = getSumScroll(this.scrollComponent!)
 
-    //return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart!.offset, true)
     const dragTime = (x - offset + scrolls.scrollLeft) * ratio + this.state.canvasTimeStart;
-    if(!this.props.dragSnap) return dragTime;
+    let groupDelta = 0;
+    for (const key of this.state.groupTops) {
 
-    const consideredOffset =  dayjs().utcOffset() * 60 * 1000 ;
-    return Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap - (consideredOffset % this.props.dragSnap)
+      if (y  > Number(key)) {
+        groupDelta = this.state.groupTops.indexOf(key)
+      } else {
+        break
+      }
+    }
+
+    if (!this.props.dragSnap) return {time: dragTime, group: groupDelta};
+
+    const consideredOffset = dayjs().utcOffset() * 60 * 1000;
+    return {
+      time: Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap - (consideredOffset % this.props.dragSnap)
+      , group: groupDelta
+    }
 
 
-}
+  }
 
   render() {
-    const { items, groups, sidebarWidth, rightSidebarWidth, timeSteps, traditionalZoom, buffer } = this.props
-    const { draggingItem, resizingItem, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, canvasTimeEnd } =
+    const {items, groups, sidebarWidth, rightSidebarWidth, timeSteps, traditionalZoom, buffer} = this.props
+    const {draggingItem, resizingItem, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, canvasTimeEnd} =
       this.state
-    let { dimensionItems, height, groupHeights, groupTops } = this.state
+    let {dimensionItems, height, groupHeights, groupTops} = this.state
 
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasWidth = getCanvasWidth(width, buffer!)
