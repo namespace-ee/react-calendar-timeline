@@ -4,7 +4,7 @@ import { MarkerRendererType, MarkerType, TimelineMarkerType } from '../markerTyp
 
 export type CursorMarkerProps = {
   subscribeMarker: (m: MarkerType) => SubscribeReturn
-  children: MarkerRendererType
+  children?: MarkerRendererType
 }
 class CursorMarker extends Component<CursorMarkerProps> {
   private unsubscribe: (() => void) | null = null

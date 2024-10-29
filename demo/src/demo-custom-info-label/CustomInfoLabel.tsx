@@ -13,7 +13,7 @@ export default function CustomInfoLabel(props:Props) {
     <div
       style={{
         position: 'fixed',
-        top: '100px',
+        bottom: '100px',
         left: '100px',
         backgroundColor: '#E3F1DF',
         color: '#212B36',
