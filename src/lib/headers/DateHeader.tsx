@@ -30,7 +30,7 @@ export interface DateHeaderProps<Data> {
   timelineUnit: SelectUnits
   labelFormat?:
     | string
-    | (([startTime, endTime]: [Dayjs, Dayjs], unit: UnitType | 'primaryHeader', labelWidth: number) => string)
+    | FormatLabelFunction
     | undefined
   intervalRenderer?: (props: IntervalRenderer<Data>) => ReactNode
   headerData?: Data | undefined
@@ -103,7 +103,7 @@ class DateHeaderInner<Data> extends React.Component<DateHeaderProps<Data>> {
 
 export type DateHeaderWrapper<Data> = {
   unit?: keyof TimelineTimeSteps | 'primaryHeader'
-  labelFormat?: typeof formatLabel
+  labelFormat?: FormatLabelFunction
   style?: CSSProperties
   className?: string
   intervalRenderer?: (props: IntervalRenderer<Data>) => ReactNode
@@ -140,13 +140,19 @@ export function DateHeader<Data>({
     </TimelineStateConsumer>
   )
 }
-
-function formatLabel(
-  [timeStart]: [Dayjs, Dayjs],
+type FormatLabelFunction = (
+  timeRange: [Dayjs, Dayjs],
   unit: keyof typeof defaultHeaderFormats,
-  labelWidth: number,
+  labelWidth?: number,
+  formatOptions?: typeof defaultHeaderFormats
+) => string;
+
+const formatLabel:FormatLabelFunction = (
+  [timeStart],
+  unit,
+  labelWidth =150,
   formatOptions = defaultHeaderFormats,
-) {
+) =>{
   let format
   if (labelWidth >= 150) {
     format = formatOptions[unit]['long']
