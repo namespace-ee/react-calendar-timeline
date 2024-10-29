@@ -6,7 +6,11 @@ const TableComponent = ({rows}: {rows: FakeDataItem[]}) => {
       <tbody>
         {rows && rows.map(row =>(
           <tr key={row.id}>
-            <td><div className="draggable rct-item" id={`drop-${row.id}`} style={{width:"50px", backgroundColor:"pink",overflow:"hidden",textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{row.title}</div></td>
+            <td>
+              <div style={{overflow:"visible"}}>
+              <div className="draggable rct-item" id={`drop-${row.id}`} style={{width:"50px", backgroundColor:"pink",overflow:"hidden",textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{row.title}</div>
+              </div>
+              </td>
             <td>{row.color}</td>
           </tr>
         ))}

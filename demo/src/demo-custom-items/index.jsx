@@ -21,8 +21,8 @@ var keys = {
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
-  itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time'
 }
 
 export default class App extends Component {

@@ -48,7 +48,7 @@ export interface ReactCalendarTimelineRef {
   // Add any methods or properties you want to expose
   getBoundingClientRect(): DOMRect;
 
-  pageXToTime(x: number, y: number): { time: number, group: number };
+  calculateDropCoordinatesToTimeAndGroup(x: number, y: number): { time: number, groupIndex: number };
 }
 
 export type OnTimeChange<CustomItem, CustomGroup> = (
@@ -477,15 +477,21 @@ export default class ReactCalendarTimeline<
   }
 
   onScroll = (scrollX: number) => {
-    const width = this.state.width
+    const width =getCanvasWidth(this.state.width!, this.props.buffer!)
 
     const canvasTimeStart = this.state.canvasTimeStart
 
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
 
-    const visibleTimeStart = canvasTimeStart + (zoom * scrollX) / width
+    const visibleTimeStart = canvasTimeStart + (zoom * (scrollX)) / width
+
+
 
     if (this.state.visibleTimeStart !== visibleTimeStart || this.state.visibleTimeEnd !== visibleTimeStart + zoom) {
+      console.log('onScroll',
+        dayjs(this.state.visibleTimeStart).format(),
+        dayjs(visibleTimeStart).format(),
+        dayjs(visibleTimeStart+zoom).format())
       this.props.onTimeChange?.(
         visibleTimeStart,
         visibleTimeStart + zoom,
@@ -962,7 +968,7 @@ export default class ReactCalendarTimeline<
 
   container = React.createRef<HTMLDivElement>()
   getBoundingClientRect = () => this.scrollComponent!.getBoundingClientRect()
-  pageXToTime = (x: number, y: number) => {
+  calculateDropCoordinatesToTimeAndGroup = (x: number, y: number) => {
     const canvasWidth = getCanvasWidth(this.state.width, this.props.buffer!)
     const ratio = coordinateToTimeRatio(this.state.canvasTimeStart, this.state.canvasTimeEnd, canvasWidth)
 
@@ -973,19 +979,19 @@ export default class ReactCalendarTimeline<
     let groupDelta = 0;
     for (const key of this.state.groupTops) {
 
-      if (y  > Number(key)) {
+      if (y > Number(key)) {
         groupDelta = this.state.groupTops.indexOf(key)
       } else {
         break
       }
     }
 
-    if (!this.props.dragSnap) return {time: dragTime, group: groupDelta};
+    if (!this.props.dragSnap) return {time: dragTime, groupIndex: groupDelta};
 
     const consideredOffset = dayjs().utcOffset() * 60 * 1000;
     return {
       time: Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap - (consideredOffset % this.props.dragSnap)
-      , group: groupDelta
+      , groupIndex: groupDelta
     }
 
 

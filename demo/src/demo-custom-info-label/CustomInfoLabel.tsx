@@ -1,14 +1,19 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 
-export default function CustomInfoLabel(props) {
+import {ReactNode} from "react";
+
+type Props = {
+  time: string
+  groupTitle: string|ReactNode
+  heading: string
+}
+export default function CustomInfoLabel(props:Props) {
   const { time, groupTitle, heading } = props
 
   return (
     <div
       style={{
         position: 'fixed',
-        bottom: '100px',
+        top: '100px',
         left: '100px',
         backgroundColor: '#E3F1DF',
         color: '#212B36',
@@ -34,10 +39,4 @@ export default function CustomInfoLabel(props) {
       {time}
     </div>
   )
-}
-
-CustomInfoLabel.propTypes = {
-  time: PropTypes.string,
-  groupTitle: PropTypes.string,
-  heading: PropTypes.string
 }
