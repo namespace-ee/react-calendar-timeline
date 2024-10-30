@@ -1,10 +1,11 @@
 {
   "name": "react-calendar-timeline-4ef",
-  "version": "1.0.21",
+  "version": "1.0.21.1",
   "description": "fork form react-calendar-timeline with TS latest react and other improvements",
   "packageManager": "npm@10.1.0",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "npm run clean && tsc && vite build",
+    "clean": "rimraf ./dist",
     "lint": "eslint --ext .ts --ext .tsx ./src",
     "lint:fix": "npm run lint --fix",
     "test": "jest",
@@ -53,13 +54,12 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "rollup-plugin-typescript-paths": "^1.5.0",
-    "@types/lodash": "^4.14.202",
-    "@rollup/plugin-typescript": "^12.1.0",
     "@faker-js/faker": "^9.0.3",
+    "@rollup/plugin-typescript": "^12.1.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@types/element-resize-detector": "^1.1.6",
+    "@types/lodash": "^4.14.202",
     "@types/react": "^18.2.41",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
@@ -84,6 +84,8 @@
     "randomcolor": "^0.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "rimraf": "^6.0.1",
+    "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.69.5",
     "typescript": "^5.2.2",
     "vite": "^5.4.8",
