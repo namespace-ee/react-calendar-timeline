@@ -101,7 +101,7 @@ export type ReactCalendarTimelineProps<
   onItemDrag?(itemDragObject: OnItemDragObjectMove | OnItemDragObjectResize): void
   onItemMove?(itemId: Id, dragTime: number, newGroupOrder: number): void
   onItemResize?(itemId: Id, endTimeOrStartTime: number, edge: ResizeEdge): void
-  onItemSelect?(itemId: Id, e: any, time: number): void
+  onItemSelect?(itemId: Id, e: React.SyntheticEvent, time: number): void
   onItemDeselect?(e: React.SyntheticEvent): void
   onItemClick?(itemId: Id, e: React.SyntheticEvent, time: number): void
   onItemDoubleClick?(itemId: Id, e: React.SyntheticEvent, time: number): void
