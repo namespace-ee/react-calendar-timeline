@@ -7,8 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
-## 0.30.0 (unreleased)
- * full rewrite to typescript
+## 0.30.0 (beta)
+Huge update made by @Remco4EF and @remcoblumink
+ * full rewrite to typescript 
  * uses Vite as bundler
  * Updates dependencies to latest versions
  * Updates react usage to 18+

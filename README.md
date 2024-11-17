@@ -1,9 +1,26 @@
-# ⚠️⚠️⚠️⚠️ HELP WANTED
-please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
-
 # React Calendar Timeline
 
 A modern and responsive React timeline component.
+
+> **🎉 Version 0.30.0-beta.1 Now Available!**
+> 
+> We're excited to announce the beta release of v0.30.0 which includes:
+> - Full TypeScript rewrite
+> - Vite as bundler
+> - Updated dependencies to latest versions 
+> - React 18+ support
+>
+> The beta version is available via:
+> ```bash
+> npm install react-calendar-timeline@beta
+> ```
+> 
+> We encourage users to try out the beta and provide feedback before the stable release. Please report any issues on GitHub.
+>
+> Note: Testing framework has been updated and some tests are currently being migrated.
+
+# ⚠️⚠️⚠️⚠️ HELP WANTED
+please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
 
 ![calendar demo](https://raw.githubusercontent.com/namespace-ee/react-calendar-timeline/master/demo.gif)
 
