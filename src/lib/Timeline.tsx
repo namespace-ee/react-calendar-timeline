@@ -264,8 +264,8 @@ export default class ReactCalendarTimeline<
     this.hasSelectedItem = this.hasSelectedItem.bind(this)
     this.isItemSelected = this.isItemSelected.bind(this)
 
-    let visibleTimeStart = null
-    let visibleTimeEnd = null
+    let visibleTimeStart: number | null = null
+    let visibleTimeEnd: number | null = null
 
     if (this.props.defaultTimeStart && this.props.defaultTimeEnd) {
       visibleTimeStart = this.props.defaultTimeStart //.valueOf()

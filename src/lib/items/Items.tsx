@@ -40,9 +40,7 @@ type ItemsProps<CustomItem extends TimelineItemBase<number>> = {
   // Add more props if needed
 }
 
-type ItemsState = {
-  // Define your state properties here
-}
+type ItemsState = object
 
 function canResizeLeft<CustomItem extends TimelineItemBase<number>>(item: CustomItem, canResize?: CanResize) {
   const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
