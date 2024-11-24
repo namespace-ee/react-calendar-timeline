@@ -13,7 +13,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
  * Updates dependencies to latest versions
  * Updates react usage to 18+
  * REMOVED enzyme for tests --> testing does not work atm
-
+ * Added option to drag from external element to the timeline
+ * Added nextjs15 demo to test #939 and removed bundled stylesheet (added somewhere in 0.30.0 reworks...)
 
 ## 0.28.0
 
