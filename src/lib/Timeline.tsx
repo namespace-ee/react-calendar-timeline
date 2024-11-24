@@ -39,7 +39,7 @@ import {
 import { ItemDimension } from './types/dimension'
 import dayjs, { Dayjs } from 'dayjs'
 import { ItemProps, ResizeEdge } from './items/Item'
-import './Timeline.scss'
+// import './Timeline.scss'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 dayjs.extend(localizedFormat)

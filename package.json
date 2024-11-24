@@ -13,12 +13,17 @@
   },
   "main": "./dist/react-calendar-timeline-4ef.umd.js",
   "module": "./dist/react-calendar-timeline-4ef.es.js",
+  "sideEffects": false,
   "exports": {
-    "./styles.css": "./dist/styles.css",
+    "./style.css": "./dist/style.css",
+    "./dist/*.scss": "./dist/*.scss",
+    "./dist/*.css": "./dist/*.css",
     ".": {
       "types": [
         "./dist/index.d.ts"
       ],
+      "sass": "./dist/Timeline.scss",
+      "style": "./dist/Timeline.css",
       "import": "./dist/react-calendar-timeline-4ef.es.js",
       "require": "./dist/react-calendar-timeline-4ef.umd.js"
     }
@@ -88,8 +93,9 @@
     "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.69.5",
     "typescript": "^5.2.2",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.4",
-    "vite-plugin-lib-inject-css": "^2.1.1"
+    "vite": "^5.4.11",
+    "vite-plugin-dts": "^4.3.0",
+    "vite-plugin-lib-inject-css": "^2.1.1",
+    "vite-plugin-static-copy": "^2.1.0"
   }
 }

@@ -6,7 +6,9 @@ import Timeline, {
     OnItemDragObjectMove,
     OnItemDragObjectResize,
     ReactCalendarTimelineProps, TimelineMarkers, TodayMarker,
-} from 'react-calendar-timeline';
+} from 'react-calendar-timeline-4ef';
+import './test.scss'
+
 
 
 import CustomInfoLabel from "../demo-custom-info-label/CustomInfoLabel";
