@@ -87,8 +87,6 @@
     "prettier": "^3.1.0",
     "prettier-eslint-cli": "^8.0.1",
     "randomcolor": "^0.6.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "rimraf": "^6.0.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.69.5",

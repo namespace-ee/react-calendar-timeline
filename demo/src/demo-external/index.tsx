@@ -6,8 +6,8 @@ import Timeline, {
     OnItemDragObjectMove,
     OnItemDragObjectResize,
     ReactCalendarTimelineProps, TimelineMarkers, TodayMarker,
-} from 'react-calendar-timeline-4ef';
-import './test.scss'
+} from 'react-calendar-timeline';
+import 'react-calendar-timeline/dist/Timeline.scss';
 
 
 

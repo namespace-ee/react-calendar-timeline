@@ -11,10 +11,13 @@ $row-background-odd: rgba(0, 0, 0, 0.05) !default;
 $border-color: #bbb !default;
 $border-width: 1px;
 $thick-border-width: 2px;
-$sidebar-color: #ffffff!default;
-$sidebar-background-color: #c52020!default;
+$sidebar-color: #ffffff !default;
+$sidebar-background-color: #c52020 !default;
 $list-item-padding: 0 4px;
-$weekend: rgba(250, 246, 225, 0.5)!default;
+$weekend: rgba(250, 246, 225, 0.5) !default;
+
+$date-header-background: rgb(240, 240, 240) !default;
+$date-header-color: #fff !default;
 
 .react-calendar-timeline {
   * {
@@ -138,27 +141,27 @@ $weekend: rgba(250, 246, 225, 0.5)!default;
     align-items: center;
     justify-content: center;
     height: 100%;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid $border-color;
     cursor: pointer;
     font-size: 14px;
-    background-color: rgb(240, 240, 240);
-    border-left:  2px solid #bbb;
+    background-color: $date-header-background;
+    border-left:  2px solid $border-color;
   }
 
   .rct-dateHeader-primary {
     background-color: initial;
-    border-left:  1px solid #bbb;
-    border-right: 1px solid #bbb;
-    color: #fff
+    border-left:  1px solid $border-color;
+    border-right: 1px solid $border-color;
+    color: $date-header-color;
   }
 
   .rct-header-root {
     background: $sidebar-background-color;
     //color: #fff;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid $border-color;
   }
 
   .rct-calendar-header {
-    border: 1px solid #bbb
+    border: 1px solid $border-color
   }
 }

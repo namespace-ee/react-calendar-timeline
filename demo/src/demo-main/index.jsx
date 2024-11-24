@@ -3,7 +3,6 @@ import { Component } from 'react'
 import dayjs from 'dayjs'
 
 import Timeline, { TimelineMarkers, TodayMarker, CustomMarker, CursorMarker } from '../../../src/index'
-import 'react-calendar-timeline-4ef/style.css'
 
 import generateFakeData from '../generate-fake-data'
 

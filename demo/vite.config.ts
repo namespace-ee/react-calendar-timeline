@@ -22,7 +22,10 @@ export default defineConfig({
 
       // 'react-calendar-timeline-4e': resolve(__dirname, '../dist'),
       // 'react-calendar-timeline-4ef': resolve(__dirname, '../dist/react-calendar-timeline-4ef.es.js'),
+      'react-calendar-timeline/dist/Timeline.scss': resolve(__dirname, '../src/lib/Timeline.scss'),
+      'react-calendar-timeline/style.css': resolve(__dirname, '../dist/style.css'),
       'react-calendar-timeline': resolve(__dirname, '../src/index.ts'),
+
 
     },
   },
