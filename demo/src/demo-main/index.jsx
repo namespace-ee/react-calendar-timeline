@@ -164,8 +164,8 @@ export default class App extends Component {
         onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
         buffer={3}
-        minZoom={365.24 * 86400 * 1000} // 1 year
-        maxZoom={365.24 * 86400 * 1000 * 20} // 20 years
+        minZoom={60 * 60 * 1000} // 1 year
+        maxZoom={365*24 * 86400 * 1000 * 20} // 20 years
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
       >
@@ -178,7 +178,7 @@ export default class App extends Component {
               return <div style={newStyles} />
             }}
           </CustomMarker>
-          {/* <CursorMarker />*/}
+           <CursorMarker />
         </TimelineMarkers>
       </Timeline>
     )

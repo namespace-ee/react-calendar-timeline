@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {HTMLProps} from 'react'
 import Interval from './Interval'
 import { Interval as IntervalType, IntervalRenderer } from '../types/main'
 import { Dayjs } from 'dayjs'
@@ -10,7 +10,7 @@ export interface CustomDateHeaderProps<Data> {
     intervals: IntervalType[]
     unit: SelectUnits
   }
-  getRootProps: (props?: any) => any
+  getRootProps: (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>
   getIntervalProps: GetIntervalPropsType
   showPeriod: (start: Dayjs, end: Dayjs) => void
   data: {
