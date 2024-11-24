@@ -670,7 +670,7 @@ export function getItemWithInteractions<
 export function getCanvasBoundariesFromVisibleTime(visibleTimeStart: number, visibleTimeEnd: number, buffer: number) {
   const zoom = visibleTimeEnd - visibleTimeStart
   // buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
-  const canvasTimeStart = visibleTimeStart - (zoom * (buffer - 1)) / 2
+  const canvasTimeStart = visibleTimeStart - zoom * (buffer - 1) / 2
   const canvasTimeEnd = canvasTimeStart + zoom * buffer
   return [canvasTimeStart, canvasTimeEnd]
 }
@@ -710,15 +710,16 @@ export function calculateScrollCanvas<
     visibleTimeEnd,
   }
 
-  // Check if the current canvas covers the new times
-  const canKeepCanvas =
-    newZoom === oldZoom &&
-    visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
-    visibleTimeStart <= oldCanvasTimeEnd - oldZoom * 1.5 &&
-    visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
-    visibleTimeEnd <= oldCanvasTimeEnd - oldZoom * 0.5
+  // Calculate half of the buffer size on each side = 1/4 of the (buffer - viewport)
+  const halfBuffer = oldZoom * (buffer! - 1) * 0.25
 
-  if (!canKeepCanvas || forceUpdateDimensions) {
+  // Check if the current canvas covers the new times
+  const shouldCreateNewCanvas =
+    newZoom !== oldZoom ||
+    visibleTimeStart <= oldCanvasTimeStart + halfBuffer ||
+    visibleTimeEnd >= oldCanvasTimeEnd - halfBuffer
+
+  if (shouldCreateNewCanvas || forceUpdateDimensions) {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
       visibleTimeStart,
       visibleTimeEnd,
