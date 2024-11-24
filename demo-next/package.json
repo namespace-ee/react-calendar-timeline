@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "next": "15.0.3",
-    "react": "^19.0.0-rc.1",
-    "react-dom": "^19.0.0-rc.1",
-    "react-calendar-timeline-4ef": "file:../react-calendar-timeline-4ef-1.0.23.tgz"
+    "randomcolor": "^0.6.2",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-calendar-timeline": "file:../dist/",
+    "react-dom": "19.0.0-rc-66855b96-20241106"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/randomcolor": "^0.5.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
