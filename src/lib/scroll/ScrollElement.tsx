@@ -1,4 +1,4 @@
-import { Component, CSSProperties, MouseEventHandler, ReactNode, TouchEventHandler } from 'react'
+import {Component, createRef, CSSProperties, MouseEventHandler, ReactNode} from 'react'
 import { getParentPosition } from '../utility/dom-helpers'
 
 type Props = {
@@ -17,7 +17,7 @@ type State = {
 }
 
 class ScrollElement extends Component<Props, State> {
-  scrollComponent: HTMLDivElement | null = null
+  scrollComponentRef = createRef<HTMLDivElement>();
   private dragLastPosition: number | null = null
   private lastTouchDistance: number | null = null
   private singleTouchStart: { x: number; y: number; screenY: number } | null = null
@@ -29,23 +29,25 @@ class ScrollElement extends Component<Props, State> {
       isDragging: false,
     }
   }
+  componentDidMount() {
+      if (this.scrollComponentRef.current) {
+        this.props.scrollRef(this.scrollComponentRef.current)
+          this.scrollComponentRef.current.addEventListener('wheel', this.handleWheel, { passive: false })
+        this.scrollComponentRef.current.addEventListener('itemInteraction', this.handleItemInteract)
+        this.scrollComponentRef.current.addEventListener('touchstart',this.handleTouchStart,{ passive: false })
+        this.scrollComponentRef.current.addEventListener("touchmove",this.handleTouchMove,{ passive: false })
+        }
+    }
 
   /**
    * needed to handle scrolling with trackpad
    */
   handleScroll = () => {
-    const scrollX = this.scrollComponent!.scrollLeft
+    const scrollX = this.scrollComponentRef.current!.scrollLeft
     this.props.onScroll(scrollX)
   }
 
-  refHandler = (el: HTMLDivElement) => {
-    this.scrollComponent = el
-    this.props.scrollRef(el)
-    if (el) {
-      el.addEventListener('wheel', this.handleWheel, { passive: false })
-      el.addEventListener('itemInteraction', this.handleItemInteract)
-    }
-  }
+
 
   handleWheel = (e: WheelEvent) => {
     //const { traditionalZoom } = this.props
@@ -63,7 +65,7 @@ class ScrollElement extends Component<Props, State> {
     } else if (e.shiftKey) {
       e.preventDefault()
       // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.props.onScroll(this.scrollComponent!.scrollLeft + (e.deltaY || e.deltaX))
+      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + (e.deltaY || e.deltaX))
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
     }
   }
@@ -81,7 +83,7 @@ class ScrollElement extends Component<Props, State> {
     // this.props.onMouseMove(e)
     //why is interacting with item important?
     if (this.state.isDragging && !this.isItemInteraction) {
-      this.props.onScroll(this.scrollComponent!.scrollLeft + this.dragLastPosition! - e.pageX)
+      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + this.dragLastPosition! - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
@@ -102,7 +104,7 @@ class ScrollElement extends Component<Props, State> {
     })
   }
 
-  handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
+  handleTouchStart = (e:TouchEvent) => {
     if (e.touches.length === 2) {
       e.preventDefault()
 
@@ -121,7 +123,7 @@ class ScrollElement extends Component<Props, State> {
     }
   }
 
-  handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
+  handleTouchMove = (e:TouchEvent) => {
     const { width, onZoom } = this.props
     if (this.isItemInteraction) {
       e.preventDefault()
@@ -147,10 +149,10 @@ class ScrollElement extends Component<Props, State> {
       const moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
       const moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
       if (deltaX !== 0 && moveX) {
-        this.props.onScroll(this.scrollComponent!.scrollLeft - deltaX)
+        this.props.onScroll(this.scrollComponentRef.current!.scrollLeft - deltaX)
       }
       if (moveY) {
-        window.scrollTo(window.pageXOffset, this.singleTouchStart!.screenY - deltaY0)
+        window.scrollTo(window.scrollX, this.singleTouchStart!.screenY - deltaY0)
       }
     }
   }
@@ -169,9 +171,11 @@ class ScrollElement extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    if (this.scrollComponent) {
-      this.scrollComponent.removeEventListener('wheel', this.handleWheel)
-      this.scrollComponent.removeEventListener('itemInteraction', this.handleItemInteract)
+    if (this.scrollComponentRef.current) {
+      this.scrollComponentRef.current.removeEventListener('wheel', this.handleWheel)
+      this.scrollComponentRef.current.removeEventListener('itemInteraction', this.handleItemInteract)
+      this.scrollComponentRef.current.removeEventListener('touchstart',this.handleTouchStart)
+      this.scrollComponentRef.current.removeEventListener("touchmove",this.handleTouchMove)
     }
   }
 
@@ -188,7 +192,7 @@ class ScrollElement extends Component<Props, State> {
 
     return (
       <div
-        ref={this.refHandler}
+        ref={this.scrollComponentRef}
         data-testid="scroll-element"
         className="rct-scroll"
         style={scrollComponentStyle}
@@ -196,8 +200,8 @@ class ScrollElement extends Component<Props, State> {
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
         onMouseLeave={this.handleMouseLeave}
-        onTouchStart={this.handleTouchStart}
-        onTouchMove={this.handleTouchMove}
+//        onTouchStart={this.handleTouchStart}
+//         onTouchMove={this.handleTouchMove}
         onTouchEnd={this.handleTouchEnd}
         onScroll={this.handleScroll}
       >

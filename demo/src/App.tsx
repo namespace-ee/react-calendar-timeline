@@ -18,6 +18,7 @@ import CustomHeaders from './demo-headers'
 import CustomInfoLabel from './demo-custom-info-label'
 import ControledSelect from './demo-controlled-select'
 import ControlledScrolling from './demo-controlled-scrolling'
+import ExternalDrop from "./demo-external"
 const loader = () => 'loading'
 const routes: RouteObject[] = [
   {
@@ -70,6 +71,10 @@ const routes: RouteObject[] = [
     path: '/ControlledScrolling',
     Component: withLayout(ControlledScrolling),
   },
+  {
+    path: "/ExternalDrop",
+    Component: withLayout(ExternalDrop),
+  }
 ]
 
 function Menu() {

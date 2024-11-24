@@ -5,25 +5,26 @@ import generateFakeData from '../generate-fake-data'
 import Timeline from 'react-calendar-timeline'
 
 const format = 'DD.MM.YYYY'
+const year = dayjs().year()
 const holidays = [
-  dayjs('01.01.2018', format),
-  dayjs('06.01.2018', format),
-  dayjs('30.03.2018', format),
-  dayjs('01.04.2018', format),
-  dayjs('02.04.2018', format),
-  dayjs('01.05.2018', format),
-  dayjs('10.05.2018', format),
-  dayjs('20.05.2018', format),
-  dayjs('21.05.2018', format),
-  dayjs('31.05.2018', format),
-  dayjs('15.08.2018', format),
-  dayjs('26.10.2018', format),
-  dayjs('01.11.2018', format),
-  dayjs('08.12.2018', format),
-  dayjs('24.12.2018', format),
-  dayjs('25.12.2018', format),
-  dayjs('26.12.2018', format),
-  dayjs('31.12.2018', format),
+  dayjs(`01.01.${year}`, format),
+  dayjs(`06.01.${year}`, format),
+  dayjs(`30.03.${year}`, format),
+  dayjs(`01.04.${year}`, format),
+  dayjs(`02.04.${year}`, format),
+  dayjs(`01.05.${year}`, format),
+  dayjs(`10.05.${year}`, format),
+  dayjs(`20.05.${year}`, format),
+  dayjs(`21.05.${year}`, format),
+  dayjs(`31.05.${year}`, format),
+  dayjs(`15.08.${year}`, format),
+  dayjs(`26.10.${year}`, format),
+  dayjs(`01.11.${year}`, format),
+  dayjs(`08.12.${year}`, format),
+  dayjs(`24.12.${year}`, format),
+  dayjs(`25.12.${year}`, format),
+  dayjs(`26.12.${year}`, format),
+  dayjs(`31.12.${year}`, format),
 ]
 
 const keys = {
@@ -34,8 +35,8 @@ const keys = {
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
-  itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end',
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time',
 }
 
 export default class App extends Component {

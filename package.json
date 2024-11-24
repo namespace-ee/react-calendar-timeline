@@ -4,7 +4,8 @@
   "description": "react-calendar-timeline",
   "packageManager": "npm@10.1.0",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "npm run clean && tsc && vite build",
+    "clean": "rimraf ./dist",
     "lint": "eslint --ext .ts --ext .tsx ./src",
     "lint:fix": "npm run lint --fix",
     "test": "jest",
@@ -12,12 +13,17 @@
   },
   "main": "./dist/react-calendar-timeline.umd.js",
   "module": "./dist/react-calendar-timeline.es.js",
+  "sideEffects": false,
   "exports": {
-    "./styles.css": "./dist/styles.css",
+    "./style.css": "./dist/style.css",
+    "./dist/*.scss": "./dist/*.scss",
+    "./dist/*.css": "./dist/*.css",
     ".": {
       "types": [
         "./dist/index.d.ts"
       ],
+      "sass": "./dist/Timeline.scss",
+      "style": "./dist/Timeline.css",
       "import": "./dist/react-calendar-timeline.es.js",
       "require": "./dist/react-calendar-timeline.umd.js"
     }
@@ -86,17 +92,16 @@
   "peerDependencies": {
     "dayjs": ">=1.10.0",
     "interactjs": "1.10.27",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "^18 || ^19.0.0-rc-66855b96-20241106",
+    "react-dom": "^18 || ^19.0.0-rc-66855b96-20241106"
   },
   "devDependencies": {
-    "rollup-plugin-typescript-paths": "^1.5.0",
-    "@types/lodash": "^4.14.202",
-    "@rollup/plugin-typescript": "^12.1.0",
     "@faker-js/faker": "^9.0.3",
+    "@rollup/plugin-typescript": "^12.1.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@types/element-resize-detector": "^1.1.6",
+    "@types/lodash": "^4.14.202",
     "@types/react": "^18.2.41",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
@@ -119,12 +124,13 @@
     "prettier": "^3.1.0",
     "prettier-eslint-cli": "^8.0.1",
     "randomcolor": "^0.6.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "rimraf": "^6.0.1",
+    "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.69.5",
     "typescript": "^5.2.2",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.4",
-    "vite-plugin-lib-inject-css": "^2.1.1"
+    "vite": "^5.4.11",
+    "vite-plugin-dts": "^4.3.0",
+    "vite-plugin-lib-inject-css": "^2.1.1",
+    "vite-plugin-static-copy": "^2.1.0"
   }
 }

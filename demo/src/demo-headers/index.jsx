@@ -30,8 +30,8 @@ var keys = {
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
-  itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time'
 }
 
 export default class App extends Component {
@@ -209,7 +209,7 @@ export default class App extends Component {
                   showPeriod,
                   data,
                 },
-                
+
               ) => {
                 console.log('props', data)
                 return (
@@ -322,7 +322,7 @@ export default class App extends Component {
               headerData={{ hey: 'date header' }}
               intervalRenderer={(
                 { getIntervalProps, intervalContext, data },
-                
+
               ) => {
                 console.log('intervalRenderer props', data)
                 return (

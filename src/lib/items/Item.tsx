@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, createRef,
   CSSProperties,
   HTMLAttributes,
   LegacyRef,
@@ -106,7 +106,7 @@ export interface ItemRendererProps<CustomItem extends TimelineItemBase<number>> 
   item: CustomItem
   timelineContext: TimelineContextType
   itemContext: ItemContext
-  getItemProps: (params: GetItemPropsParams) => HTMLAttributes<HTMLDivElement>
+  getItemProps: (params: GetItemPropsParams) => HTMLAttributes<HTMLDivElement> & { key:string, ref:LegacyRef<HTMLDivElement> }
   getResizeProps: GetResizeProps
 }
 type GetResizePropsDirection = {
@@ -149,7 +149,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   private itemDivTitle?: string
   private itemTimeStart?: number
   private itemTimeEnd?: number
-  private item?: HTMLElement
+private itemRef  = createRef<HTMLDivElement>();
   private dragLeft?: HTMLElement
   private dragRight?: HTMLElement
   private startedClicking: boolean = false
@@ -290,7 +290,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
     const leftResize = this.props.useResizeHandle ? '.rct-item-handler-resize-left' : true
     const rightResize = this.props.useResizeHandle ? '.rct-item-handler-resize-right' : true
 
-    interact(this.item!)
+    interact(this.itemRef.current!)
       .resizable({
         edges: {
           left: this.canResizeLeft() && leftResize,
@@ -457,14 +457,14 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
     return !!props.canMove
   }
   fireInteractEvent = (itemInteraction: boolean) => {
-    if (this.item) {
+    if (this.itemRef && this.itemRef.current) {
       const event = new CustomEvent('itemInteraction', {
         bubbles: true,
         detail: {
           itemInteraction,
         },
       })
-      this.item.dispatchEvent(event)
+      this.itemRef.current?.dispatchEvent(event)
     }
   }
 
@@ -478,7 +478,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
     const willBeAbleToResizeLeft = this.props.selected && this.canResizeLeft(this.props)
     const willBeAbleToResizeRight = this.props.selected && this.canResizeRight(this.props)
 
-    if (this.item) {
+    if (this.itemRef && this.itemRef.current) {
       if (this.props.selected && !interactMounted) {
         this.mountInteract()
         interactMounted = true
@@ -490,7 +490,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         const leftResize = this.props.useResizeHandle ? this.dragLeft : true
         const rightResize = this.props.useResizeHandle ? this.dragRight : true
 
-        interact(this.item).resizable({
+        interact(this.itemRef.current).resizable({
           enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
           edges: {
             top: false,
@@ -501,7 +501,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         })
       }
       if (interactMounted && couldDrag !== willBeAbleToDrag) {
-        interact(this.item).draggable({ enabled: willBeAbleToDrag })
+        interact(this.itemRef.current).draggable({ enabled: willBeAbleToDrag })
       }
     } else {
       interactMounted = false
@@ -562,7 +562,8 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
     }
   }
 
-  getItemRef = (el: HTMLElement) => (this.item = el)
+
+  //getItemRef = (el: HTMLElement) => (this.item = el)
   getDragLeftRef = (el: HTMLElement) => (this.dragLeft = el)
   getDragRightRef = (el: HTMLElement) => (this.dragRight = el)
 
@@ -572,7 +573,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
 
     return {
       key: this.itemId,
-      ref: this.getItemRef,
+      ref: this.itemRef,
       title: this.itemDivTitle,
       className: classNames + ` ${props.className ? props.className : ''}`,
       onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
@@ -664,8 +665,15 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       resizeStart: this.state.resizeStart,
       resizeTime: this.state.resizeTime,
     }
-
-    return this.props?.itemRenderer?.({
+    if(!this.props.itemRenderer){
+      return defaultItemRenderer({
+        item: this.props.item,
+        timelineContext,
+        itemContext,
+        getItemProps: this.getItemProps,
+        getResizeProps: this.getResizeProps,
+      })
+    } else return this.props.itemRenderer({
       item: this.props.item,
       timelineContext,
       itemContext,

@@ -21,8 +21,8 @@ var keys = {
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
-  itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time'
 }
 
 export default class App extends Component {
@@ -146,16 +146,18 @@ export default class App extends Component {
       <div
         {...getItemProps({
           style: {
-            backgroundColor,
+            backgroundColor:backgroundColor,
             color: item.color,
-            borderColor,
+            borderColor:borderColor,
             borderStyle: 'solid',
-            borderWidth: 1,
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
             borderRadius: 4,
             borderLeftWidth: itemContext.selected ? 3 : 1,
             borderRightWidth: itemContext.selected ? 3 : 1,
           }
         }) }
+        key={item.id}
       >
         {itemContext.useResizeHandle ? (
           <div {...leftResizeProps} />
@@ -169,6 +171,7 @@ export default class App extends Component {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}
+          key={`${item.id}-content`}
         >
           {itemContext.title}
         </div>

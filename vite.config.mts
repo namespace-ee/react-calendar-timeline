@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { resolve } from 'path'
-import { libInjectCss } from 'vite-plugin-lib-inject-css'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import typescript from '@rollup/plugin-typescript'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 
@@ -40,5 +40,12 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  plugins: [react(), libInjectCss()],
+  plugins: [react(), viteStaticCopy({
+    targets: [
+      {
+        src: 'src/lib/Timeline.scss',
+        dest: ''
+      }
+    ]
+  })],
 })

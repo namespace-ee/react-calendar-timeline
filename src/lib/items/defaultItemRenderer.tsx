@@ -1,25 +1,23 @@
-import { HTMLAttributes } from 'react'
-import { GetItemPropsParams, GetResizeProps, ItemProps } from './Item'
-import { ItemContext, TimelineItemBase } from '../types/main'
 
-type Props<CustomItem extends TimelineItemBase<number>> = {
-  item: ItemProps<CustomItem>
-  itemContext: ItemContext
-  getItemProps: (p?: GetItemPropsParams) => HTMLAttributes<HTMLDivElement>
-  getResizeProps: GetResizeProps
-}
 
-export function defaultItemRenderer<CustomItem extends TimelineItemBase<number>>({ item, itemContext, getItemProps, getResizeProps }: Props<CustomItem>) {
+import { ItemRendererProps} from './Item'
+import {  TimelineItemBase } from '../types/main'
+
+
+export function defaultItemRenderer<CustomItem extends TimelineItemBase<number>>({ item, itemContext, getItemProps, getResizeProps }:  ItemRendererProps<CustomItem>) {
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-  return (
-    <div {...getItemProps(item.itemProps)}>
-      {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
+  const {key,ref,  ...rest} =getItemProps(item.itemProps??{})
+  const {useResizeHandle} = itemContext
 
-      <div className="rct-item-content" style={{ maxHeight: `${itemContext.dimensions.height}` }}>
+  return (
+    <div {...rest} ref={ref}  key={`${key}-outer`} >
+      {useResizeHandle ? <div  {...leftResizeProps} key={`${key}-lr`}  /> : null}
+
+      <div className="rct-item-content" style={{ maxHeight: `${itemContext.dimensions.height}` }}  key={`${key}-content`}>
         {itemContext.title}
       </div>
 
-      {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}
+      {useResizeHandle ? <div {...rightResizeProps}  key={`${key}-rr`}/> : null}
     </div>
   )
 }
