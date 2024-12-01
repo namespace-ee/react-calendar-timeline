@@ -181,8 +181,7 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
 
   render() {
     const props = this.getStateAndHelpers()
-    const Renderer = this.props.children
-    return <Renderer {...props} />
+    return this.props.children(props)
   }
 }
 
