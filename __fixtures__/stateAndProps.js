@@ -11,6 +11,7 @@ export const props = {
   itemHeightRatio: 0.75,
   visibleTimeEnd,
   visibleTimeStart,
+  buffer: 3,
 }
 
 export const propsNoStack = {

@@ -4,6 +4,7 @@ import 'jest-dom/extend-expect'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import CustomMarker from 'lib/markers/public/CustomMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'
+import { TimelineStateConsumer } from 'lib/timeline/TimelineStateContext'
 
 describe('CustomMarker', () => {
   afterEach(cleanup)
@@ -11,9 +12,16 @@ describe('CustomMarker', () => {
   it('renders one', () => {
     const { getByTestId } = render(
       <RenderWrapper>
-        <TimelineMarkers>
-          <CustomMarker date={1000} />
-        </TimelineMarkers>
+        <TimelineStateConsumer>
+          {({ getTimelineState }) => {
+            const { canvasTimeStart } = getTimelineState();
+            return (
+              <TimelineMarkers>
+                <CustomMarker date={canvasTimeStart + 100} />
+              </TimelineMarkers>
+            )
+          }}
+        </TimelineStateConsumer>
       </RenderWrapper>
     )
 
@@ -22,11 +30,18 @@ describe('CustomMarker', () => {
   it('render multiple', () => {
     const { queryAllByTestId } = render(
       <RenderWrapper>
-        <TimelineMarkers>
-          <CustomMarker date={1000} />
-          <CustomMarker date={1000} />
-          <CustomMarker date={1000} />
-        </TimelineMarkers>
+        <TimelineStateConsumer>
+          {({ getTimelineState }) => {
+            const { canvasTimeStart } = getTimelineState();
+            return (
+              <TimelineMarkers>
+                <CustomMarker date={canvasTimeStart + 100} />
+                <CustomMarker date={canvasTimeStart + 101} />
+                <CustomMarker date={canvasTimeStart + 102} />
+              </TimelineMarkers>
+            )
+          }}
+        </TimelineStateConsumer>
       </RenderWrapper>
     )
 
@@ -36,11 +51,18 @@ describe('CustomMarker', () => {
     const customDataIdSelector = 'my-custom-marker'
     const { getByTestId } = render(
       <RenderWrapper>
-        <TimelineMarkers>
-          <CustomMarker date={1000}>
-            {() => <div data-testid={customDataIdSelector} />}
-          </CustomMarker>
-        </TimelineMarkers>
+        <TimelineStateConsumer>
+          {({ getTimelineState }) => {
+            const { canvasTimeStart } = getTimelineState();
+            return (
+              <TimelineMarkers>
+                <CustomMarker date={canvasTimeStart + 100}>
+                  {() => <div data-testid={customDataIdSelector} />}
+                </CustomMarker>
+              </TimelineMarkers>
+            )
+          }}
+        </TimelineStateConsumer>
       </RenderWrapper>
     )
 
@@ -68,7 +90,7 @@ describe('CustomMarker', () => {
       canvasTimeStart: visibleTimeStart - oneDay,
       canvasTimeEnd: visibleTimeEnd + oneDay,
       canvasWidth,
-      showPeriod: () => {},
+      showPeriod: () => { },
       timelineWidth: 1000,
       timelineUnit: 'day'
     }
@@ -101,12 +123,20 @@ describe('CustomMarker', () => {
       render() {
         return (
           <RenderWrapper>
-            <button onClick={this.handleToggleCustomMarker}>
-              Hide Custom Marker
-            </button>
-            <TimelineMarkers>
-              {this.state.isShowing && <CustomMarker date={1000} />}
-            </TimelineMarkers>
+            <TimelineStateConsumer>
+              {({ getTimelineState }) => {
+                const { canvasTimeStart } = getTimelineState();
+                return (
+                  <React.Fragment>
+                    <button onClick={this.handleToggleCustomMarker}>
+                      Hide Custom Marker
+                    </button>
+                    <TimelineMarkers>
+                      {this.state.isShowing && <CustomMarker date={canvasTimeStart + 100} />}
+                    </TimelineMarkers>
+                  </React.Fragment>
+                )
+              }}</TimelineStateConsumer>
           </RenderWrapper>
         )
       }
@@ -120,20 +150,50 @@ describe('CustomMarker', () => {
 
     expect(queryByTestId(defaultCustomMarkerTestId)).not.toBeInTheDocument()
   })
-  it('updates marker location after passing new date', ()=>{
+  it('updates marker location after passing new date', () => {
     const { getByTestId, rerender } = render(
       <RenderWrapper>
-        <TimelineMarkers>
-          <CustomMarker date={1000} />
-        </TimelineMarkers>
+        <TimelineStateConsumer>
+          {({ getTimelineState }) => {
+            const { canvasTimeStart } = getTimelineState();
+            return (
+              <TimelineMarkers>
+                <CustomMarker date={canvasTimeStart + 1000} />
+              </TimelineMarkers>
+            )
+          }}</TimelineStateConsumer>
       </RenderWrapper>)
-      const positionLeftBeforeChange = getByTestId(defaultCustomMarkerTestId).style.left
-      rerender(<RenderWrapper>
-        <TimelineMarkers>
-          <CustomMarker date={2000} />
-        </TimelineMarkers>
-      </RenderWrapper>)
-      const positionLeftAfterChange = getByTestId(defaultCustomMarkerTestId).style.left
-      expect(positionLeftBeforeChange).not.toEqual(positionLeftAfterChange)
+    const positionLeftBeforeChange = getByTestId(defaultCustomMarkerTestId).style.left
+    rerender(<RenderWrapper>
+      <TimelineStateConsumer>
+        {({ getTimelineState }) => {
+          const { canvasTimeStart } = getTimelineState();
+          return (
+            <TimelineMarkers>
+              <CustomMarker date={canvasTimeStart + 2000} />
+            </TimelineMarkers>
+          )
+        }}</TimelineStateConsumer>
+    </RenderWrapper>)
+    const positionLeftAfterChange = getByTestId(defaultCustomMarkerTestId).style.left
+    expect(positionLeftBeforeChange).not.toEqual(positionLeftAfterChange)
+  })
+  it('should not render marker outside canvas', () => {
+    const { queryByTestId } = render(
+      <RenderWrapper>
+        <TimelineStateConsumer>
+          {({ getTimelineState }) => {
+            const { canvasTimeEnd } = getTimelineState();
+            return (
+              <TimelineMarkers>
+                <CustomMarker date={canvasTimeEnd + 100} />
+              </TimelineMarkers>
+            )
+          }}
+        </TimelineStateConsumer>
+      </RenderWrapper>
+    )
+
+    expect(queryByTestId(defaultCustomMarkerTestId)).not.toBeInTheDocument()
   })
 })

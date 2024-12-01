@@ -7,7 +7,25 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta)
+Huge update made by @Remco4EF and @remcoblumink
+ * full rewrite to typescript 
+ * uses Vite as bundler
+ * Updates dependencies to latest versions
+ * Updates react usage to 18+
+ * REMOVED enzyme for tests --> testing does not work atm
+
+
+## 0.28.0
+
+* Add unit argument to onZoom and onTimeChange callbacks @hckr #655
 * Add `className` prop to Timeline component to override `react-calendar-timeline` class #682
+* support zoom level seconds #835 @horizon-plaza
+* custom buffer prop (help with controlled scrolling) @Ilaiwi
+* Fix injecting custom vertical line's class names for time periods longer than day @RafikiTiki
+* fix Context Menu unintentionally disabled by default @dsgipe #769
+* delete props `headerLabelFormats` and `subHeaderLabelFormats` not you can pass `formatLabel` function to `DateHeader` with label width and start and end time of intervals
+
 
 ## 0.26.7
 
@@ -49,11 +67,11 @@ Using controlled scroll and react-spring to trigger scrolling and create an anim
 
 * add documentation for `onItemDeselect` #350 @ilaiwi
 * solve a bug where `onItemDeselect` is not triggered as expected for several item clicks #350 @ilaiwi
-* fix row height on browser scaling #615 @gaston-niglia 
+* fix row height on browser scaling #615 @gaston-niglia
 
 ### Packages
 
-update to `node-sass@4.12.0` for newer versions of node. 
+update to `node-sass@4.12.0` for newer versions of node.
 
 ## 0.26.2
 
@@ -85,7 +103,7 @@ you can as well solve the issue without upgrading by adding the following style
 
 #### Breaking
 
-* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label or [this example](https://codesandbox.io/s/timeline-demo-info-label-neec9). 
+* Removed `<InfoLabel />` in favour of allowing for custom component to be rendered on move or resize. Check out the demo in `demo/app/demo-custom-info-label` for an example on how to display your own custom info label or [this example](https://codesandbox.io/s/timeline-demo-info-label-neec9).
 
 
 ## 0.25.4
@@ -383,7 +401,7 @@ from 'react-calendar-timeline'
 
 * added `stickyHeader` to disable/enable timeline header sticking on scroll.
 * removed `fullUpdate` prop and functionality. Labels rely on `position: sticky` to show for items that start before `visibleTimeStart`. This (should) greatly improve scroll performance.
-* removed extraneous css such as `text-align: center` on `.rct-item`, `.rct-item-overflow` to simplify the dom structure of `Item.js`
+* removed extraneous css such as `text-align: center` on `.rct-item`, `.rct-item-overflow` to simplify the dom structure of `Item.tsx`
 * added `headerRef` callback to receive a reference to the header element. Due to the change in how the header positioning is implemented (i.e. using `position: sticky`), there is a need to use a polyfill in [certain browsers](https://caniuse.com/#feat=css-sticky) that don't support `position: sticky`. With a reference to the header dom element, you can use a polyfill to apply sticky behavior.
 * `minimumWidthForItemContentVisibility` prop to control at what width inner item content is rendered.
 
