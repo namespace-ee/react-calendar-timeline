@@ -44,16 +44,14 @@ class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
     const { intervalText, interval, intervalRenderer, headerData } = this.props
     const Renderer = intervalRenderer
     if (Renderer) {
-      return (
-        <Renderer
-          getIntervalProps={this.getIntervalProps}
-          intervalContext={{
-            interval,
-            intervalText,
-          }}
-          data={headerData}
-        />
-      )
+      return Renderer({
+        getIntervalProps: this.getIntervalProps,
+        intervalContext: {
+          interval,
+          intervalText,
+        },
+        data: headerData,
+      })
     }
     const { key, ...rest } = this.getIntervalProps()
     return (
