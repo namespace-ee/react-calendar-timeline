@@ -79,7 +79,7 @@ export function iterateTimes(
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
     const value = time.get(unit)
-    time.set(unit, value - (value % timeSteps[unit]))
+    time = time.set(unit, value - (value % timeSteps[unit]))
   }
 
   while (time.valueOf() < end) {
