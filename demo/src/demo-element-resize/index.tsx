@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import dayjs from 'dayjs'
 
 import Timeline from 'react-calendar-timeline'
-import containerResizeDetector from '../../../src/resize-detector/container'
+// import containerResizeDetector from '../../../src/resize-detector/container'
 
 // you would use this in real life:
 // import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
@@ -13,15 +13,16 @@ var keys = {
   groupIdKey: 'id',
   groupTitleKey: 'title',
   groupRightTitleKey: 'rightTitle',
+  groupLabelKey:'title',
   itemIdKey: 'id',
   itemTitleKey: 'title',
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
-  itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
+  itemTimeStartKey: 'start_time',
+  itemTimeEndKey: 'end_time'
 }
 
-export default class App extends Component {
+export default class App extends Component<{}, any> {
   constructor(props) {
     super(props)
 
@@ -44,7 +45,45 @@ export default class App extends Component {
     }
   }
 
+  handleItemMove = (itemId, dragTime, newGroupOrder) => {
+    const { items, groups } = this.state;
+
+    const group = groups[newGroupOrder];
+
+    this.setState({
+      items: items.map(item =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+            start: dragTime,
+            end: dragTime + (item.end - item.start),
+            group: group.id
+          })
+          : item
+      )
+    });
+
+    console.log("Moved", itemId, dragTime, newGroupOrder);
+  };
+
+  handleItemResize = (itemId, time, edge) => {
+    const { items } = this.state;
+
+    this.setState({
+      items: items.map(item =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+            start: edge === "left" ? time : item.start,
+            end: edge === "left" ? item.end : time
+          })
+          : item
+      )
+    });
+
+    console.log("Resized", itemId, time, edge);
+  };
+
   render() {
+    // @ts-ignore
     const {
       groups,
       items,
@@ -52,6 +91,8 @@ export default class App extends Component {
       defaultTimeEnd,
       width
     } = this.state
+
+
 
     return (
       <div>
@@ -67,13 +108,15 @@ export default class App extends Component {
             canMove
             canResize="right"
             canSelect
-            itemsSorted
+            // itemsSorted
             itemTouchSendsClick={false}
             stackItems
             itemHeightRatio={0.75}
-            resizeDetector={containerResizeDetector}
+            // resizeDetector={containerResizeDetector}
             defaultTimeStart={defaultTimeStart}
             defaultTimeEnd={defaultTimeEnd}
+            onItemMove={this.handleItemMove}
+            onItemResize={this.handleItemResize}
           />
         </div>
         <div style={{ width: `${100 - width}%`, float: 'left' }}>
