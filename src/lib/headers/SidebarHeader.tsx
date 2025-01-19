@@ -1,7 +1,8 @@
-import { CSSProperties, HTMLProps, PureComponent, ReactNode } from 'react'
+import React, { CSSProperties, HTMLProps, PureComponent, ReactNode } from 'react'
 import { useTimelineHeadersContext } from './HeadersContext'
 import { LEFT_VARIANT, RIGHT_VARIANT } from './constants'
 
+type GetRootProps = (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>
 type SidebarHeaderProps = {
   children: (props: { getRootProps: GetRootProps }) => ReactNode
   rightSidebarWidth?: number
@@ -11,11 +12,12 @@ type SidebarHeaderProps = {
 }
 
 class SidebarHeader extends PureComponent<SidebarHeaderProps> {
-  getRootProps = (props: { style?: CSSProperties } = {}) => {
+  getRootProps:GetRootProps = (props: { style?: CSSProperties } = {}) => {
     const { style } = props
     const width = this.props.variant === RIGHT_VARIANT ? this.props.rightSidebarWidth : this.props.leftSidebarWidth
     return {
       style: {
+        color:style?.color??"#fff",
         ...style,
         width,
       },
@@ -35,7 +37,7 @@ class SidebarHeader extends PureComponent<SidebarHeaderProps> {
   }
 }
 
-type GetRootProps = () => HTMLProps<HTMLDivElement>
+
 
 export type SidebarWrapperProps = {
   children?: (props: { getRootProps: GetRootProps }) => ReactNode

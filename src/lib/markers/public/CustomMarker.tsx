@@ -13,7 +13,7 @@ type noop = () => any
 
 type CustomMarkerProps = {
   date: number
-  children: MarkerRendererType
+  children?: MarkerRendererType
   updateMarker: (marker: MarkerType) => void
   subscribeMarker: (newe: MarkerType) => SubscribeReturn
 }
