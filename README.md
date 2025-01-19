@@ -3,7 +3,17 @@
 
 A modern and responsive React timeline component.
 
-**🎉 Version 0.30.0-beta.1 Now Available!**
+**🎉 Version 0.30.0-beta.3 Now Available!**
+
+Latest release includes:
+- [Use buffer prop to calculate when to redraw canvas](https://github.com/namespace-ee/react-calendar-timeline/pull/936)
+- [fix start and end of day when there is daylight saving](https://github.com/namespace-ee/react-calendar-timeline/pull/727)
+- [fix timeSteps don't work properly](https://github.com/namespace-ee/react-calendar-timeline/pull/951)
+- [Add option do drop new tasks to the timeline from an external component](https://github.com/namespace-ee/react-calendar-timeline/pull/941)
+- [fix few other issues](https://github.com/namespace-ee/react-calendar-timeline/pull/944):
+  - Resolved an issue where the timeline would scroll left even when there were no items present
+  - Addressed a problem where anonymous renderers caused headers to unmount and lose their state
+  - Cleaned up unnecessary demo files following updates in the new release.
 
 We're excited to announce the beta release of v0.30.0 which includes:
 - Full TypeScript rewrite
