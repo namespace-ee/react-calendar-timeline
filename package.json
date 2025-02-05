@@ -11,7 +11,7 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "main": "./dist/react-calendar-timeline.umd.js",
+  "main": "./dist/react-calendar-timeline.cjs.js",
   "module": "./dist/react-calendar-timeline.es.js",
   "sideEffects": false,
   "exports": {
@@ -25,7 +25,7 @@
       "sass": "./dist/Timeline.scss",
       "style": "./dist/Timeline.css",
       "import": "./dist/react-calendar-timeline.es.js",
-      "require": "./dist/react-calendar-timeline.umd.js"
+      "require": "./dist/react-calendar-timeline.cjs.js"
     }
   },
   "types": "./dist/index.d.ts",
