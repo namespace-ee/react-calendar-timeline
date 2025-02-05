@@ -8,6 +8,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 * Fix issue where the redraw mechanism was not based on the `buffer` prop.
+* Fix incorrect references to ".umd.js" file paths in the package.json
 
 ## 0.30.0 (beta)
 Huge update made by @Remco4EF and @remcoblumink
