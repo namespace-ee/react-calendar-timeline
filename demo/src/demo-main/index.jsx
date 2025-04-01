@@ -25,7 +25,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    const { groups, items } = generateFakeData()
+    const { groups, items } = generateFakeData(3, 4, 1)
     const defaultTimeStart = dayjs(items[0].start_time).startOf('day').toDate().valueOf()
     const defaultTimeEnd = dayjs(items[0].end_time).startOf('day').add(1, 'day').toDate().valueOf()
 
@@ -80,10 +80,10 @@ export default class App extends Component {
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: dragTime,
-              end: dragTime + (item.end - item.start),
-              group: group.id,
-            })
+            start: dragTime,
+            end: dragTime + (item.end - item.start),
+            group: group.id,
+          })
           : item,
       ),
     })
@@ -98,9 +98,9 @@ export default class App extends Component {
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time,
-            })
+            start: edge === 'left' ? time : item.start,
+            end: edge === 'left' ? item.end : time,
+          })
           : item,
       ),
     })
@@ -144,8 +144,8 @@ export default class App extends Component {
         keys={keys}
         sidebarWidth={150}
         sidebarContent={<div>Above The Left</div>}
-        canMove
-        canResize="right"
+        canMove={true}
+        canResize={"both"}
         canSelect
         itemsSorted
         itemTouchSendsClick={false}
@@ -164,8 +164,8 @@ export default class App extends Component {
         onZoom={this.handleZoom}
         moveResizeValidator={this.moveResizeValidator}
         buffer={3}
-        minZoom={60 * 60 * 1000} // 1 year
-        maxZoom={365*24 * 86400 * 1000 * 20} // 20 years
+        minZoom={60 * 60 * 1000} // 1 hour
+        maxZoom={365 * 24 * 86400 * 1000 * 20} // 20 years
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
       >
@@ -178,7 +178,7 @@ export default class App extends Component {
               return <div style={newStyles} />
             }}
           </CustomMarker>
-           <CursorMarker />
+          <CursorMarker />
         </TimelineMarkers>
       </Timeline>
     )

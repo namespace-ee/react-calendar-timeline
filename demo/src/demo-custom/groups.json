@@ -1,0 +1,70 @@
+[
+  {
+    "id": 10,
+    "title": "U.S. President"
+  },
+  {
+    "id": 20,
+    "title": "Windows"
+  },
+  {
+    "id": 21,
+    "title": "Android"
+  },
+  {
+    "id": 22,
+    "title": "RPG Maker"
+  },
+  {
+    "id": 40,
+    "title": "Pokemon game"
+  },
+  {
+    "id": 30,
+    "title": "Nintendo console"
+  },
+  {
+    "id": 31,
+    "title": "Nintendo handheld"
+  },
+  {
+    "id": 32,
+    "title": "Sony console"
+  },
+  {
+    "id": 33,
+    "title": "Sony handheld"
+  },
+  {
+    "id": 34,
+    "title": "Microsoft console"
+  },
+  {
+    "id": 35,
+    "title": "Sega console"
+  },
+  {
+    "id": 41,
+    "title": "Mario game"
+  },
+  {
+    "id": 42,
+    "title": "Zelda game"
+  },
+  {
+    "id": 49,
+    "title": "GTA game"
+  },
+  {
+    "id": 50,
+    "title": "Best Picture"
+  },
+  {
+    "id": 51,
+    "title": "Star Wars movies"
+  },
+  {
+    "id": 52,
+    "title": "Marvel movies (MCU)"
+  }
+]

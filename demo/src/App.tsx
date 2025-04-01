@@ -1,12 +1,8 @@
 import { ComponentType } from 'react'
-import {
-  createBrowserRouter,
-  Link,
-  RouteObject,
-  RouterProvider,
-} from 'react-router-dom'
+import { createBrowserRouter, Link, RouteObject, RouterProvider } from 'react-router-dom'
 
 import DemoMain from './demo-main'
+import DemoCustom from './demo-custom'
 import DemoPerformance from './demo-performance'
 import DemoTreePGroups from './demo-tree-groups'
 import LinkedTimelines from './demo-linked-timelines'
@@ -18,7 +14,7 @@ import CustomHeaders from './demo-headers'
 import CustomInfoLabel from './demo-custom-info-label'
 import ControledSelect from './demo-controlled-select'
 import ControlledScrolling from './demo-controlled-scrolling'
-import ExternalDrop from "./demo-external"
+import ExternalDrop from './demo-external'
 const loader = () => 'loading'
 const routes: RouteObject[] = [
   {
@@ -27,54 +23,59 @@ const routes: RouteObject[] = [
     loader,
   },
   {
-    path: '/DemoPerformance',
-    Component: withLayout(DemoPerformance),
+    path: '/Custom',
+    Component: withLayout(DemoCustom),
     loader,
   },
-  {
-    path: '/DemoTreePGroups',
-    Component: withLayout(DemoTreePGroups),
-  },
-  {
-    path: '/LinkedTimelines',
-    Component: withLayout(LinkedTimelines),
-  },
-  {
-    path: '/ElementResize',
-    Component: withLayout(ElementResize),
-  },
-  {
-    path: '/Renderers',
-    Component: withLayout(Renderers),
-  },
-  {
-    path: '/VerticalClasses',
-    Component: withLayout(VerticalClasses),
-  },
-  {
-    path: '/CustomItems',
-    Component: withLayout(CustomItems),
-  },
-  {
-    path: '/CustomHeaders',
-    Component: withLayout(CustomHeaders),
-  },
-  {
-    path: '/CustomInfoLabel',
-    Component: withLayout(CustomInfoLabel),
-  },
-  {
-    path: '/ControledSelect',
-    Component: withLayout(ControledSelect),
-  },
-  {
-    path: '/ControlledScrolling',
-    Component: withLayout(ControlledScrolling),
-  },
-  {
-    path: "/ExternalDrop",
-    Component: withLayout(ExternalDrop),
-  }
+  // {
+  //   path: '/DemoPerformance',
+  //   Component: withLayout(DemoPerformance),
+  //   loader,
+  // },
+  // {
+  //   path: '/DemoTreePGroups',
+  //   Component: withLayout(DemoTreePGroups),
+  // },
+  // {
+  //   path: '/LinkedTimelines',
+  //   Component: withLayout(LinkedTimelines),
+  // },
+  // {
+  //   path: '/ElementResize',
+  //   Component: withLayout(ElementResize),
+  // },
+  // {
+  //   path: '/Renderers',
+  //   Component: withLayout(Renderers),
+  // },
+  // {
+  //   path: '/VerticalClasses',
+  //   Component: withLayout(VerticalClasses),
+  // },
+  // {
+  //   path: '/CustomItems',
+  //   Component: withLayout(CustomItems),
+  // },
+  // {
+  //   path: '/CustomHeaders',
+  //   Component: withLayout(CustomHeaders),
+  // },
+  // {
+  //   path: '/CustomInfoLabel',
+  //   Component: withLayout(CustomInfoLabel),
+  // },
+  // {
+  //   path: '/ControledSelect',
+  //   Component: withLayout(ControledSelect),
+  // },
+  // {
+  //   path: '/ControlledScrolling',
+  //   Component: withLayout(ControlledScrolling),
+  // },
+  // {
+  //   path: '/ExternalDrop',
+  //   Component: withLayout(ExternalDrop),
+  // },
 ]
 
 function Menu() {
