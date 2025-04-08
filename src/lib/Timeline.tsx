@@ -46,17 +46,17 @@ dayjs.extend(localizedFormat)
 
 export interface ReactCalendarTimelineRef {
   // Add any methods or properties you want to expose
-  getBoundingClientRect(): DOMRect;
+  getBoundingClientRect(): DOMRect
 
-  calculateDropCoordinatesToTimeAndGroup(x: number, y: number): { time: number, groupIndex: number };
+  calculateDropCoordinatesToTimeAndGroup(x: number, y: number): { time: number; groupIndex: number }
 }
 
 export type OnTimeChange<CustomItem, CustomGroup> = (
   visibleTimeStart: number,
   visibleTimeEnd: number,
   updateScrollCanvas: (
-    start: dateType,
-    end: dateType,
+    start: number,
+    end: number,
     forceUpdateDimensions?: boolean,
     items?: CustomItem[],
     groups?: CustomGroup[],
@@ -74,8 +74,8 @@ export type ReactCalendarTimelineProps<
   keys: TimelineKeys
   defaultTimeStart: number
   defaultTimeEnd: number
-  visibleTimeStart?: dateType
-  visibleTimeEnd?: dateType
+  visibleTimeStart?: number
+  visibleTimeEnd?: number
   selected?: Id[] | undefined
   sidebarWidth: number
   sidebarContent?: React.ReactNode | undefined
@@ -138,8 +138,8 @@ export type ReactCalendarTimelineState<
   width: number
   visibleTimeStart: number
   visibleTimeEnd: number
-  canvasTimeStart: dateType
-  canvasTimeEnd: dateType
+  canvasTimeStart: number
+  canvasTimeEnd: number
   selectedItem: Id | null
   dragTime: number | null
   dragGroupTitle: string | null
@@ -224,9 +224,9 @@ export default class ReactCalendarTimeline<
     visibleTimeStart: null,
     visibleTimeEnd: null,
     onTimeChange: function (
-      visibleTimeStart: dateType,
-      visibleTimeEnd: dateType,
-      updateScrollCanvas: (visibleTimeStart: dateType, visibleTimeEnd: dateType) => void,
+      visibleTimeStart: number,
+      visibleTimeEnd: number,
+      updateScrollCanvas: (visibleTimeStart: number, visibleTimeEnd: number) => void,
     ) {
       updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     },
@@ -494,8 +494,8 @@ export default class ReactCalendarTimeline<
 
   // called when the visible time changes
   updateScrollCanvas = (
-    visibleTimeStart: dateType,
-    visibleTimeEnd: dateType,
+    visibleTimeStart: number,
+    visibleTimeEnd: number,
     forceUpdateDimensions: boolean = false,
     items = this.props.items,
     groups = this.props.groups,
