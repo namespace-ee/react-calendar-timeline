@@ -12,6 +12,7 @@ export const defaultKeys = {
 }
 
 export const defaultTimeSteps = {
+  blocks5: 1,
   second: 1,
   minute: 1,
   hour: 1,
@@ -27,6 +28,12 @@ type UnitValue = {
   short: string
 }
 export const defaultHeaderFormats: Record<string, UnitValue> = {
+  blocks5: {
+    long: '--',
+    mediumLong: '--',
+    medium: '--',
+    short: '--',
+  },
   year: {
     long: 'YYYY',
     mediumLong: 'YYYY',

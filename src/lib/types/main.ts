@@ -124,6 +124,7 @@ export interface TimelineKeys {
 export type dateType = number //| undefined;
 
 export interface TimelineTimeSteps {
+  blocks5: number
   second: number
   minute: number
   hour: number
@@ -182,7 +183,7 @@ export interface SidebarHeaderProps<Data> {
 
 export class SidebarHeader<Data = any> extends Component<SidebarHeaderProps<Data>> {}
 
-export type Unit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'isoWeek' | 'month' | 'year'
+export type Unit = 'blocks5' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'isoWeek' | 'month' | 'year'
 
 export interface IntervalContext {
   interval: Interval

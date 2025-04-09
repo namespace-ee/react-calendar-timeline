@@ -73,22 +73,35 @@ export function iterateTimes(
   end: number,
   unit: keyof TimelineTimeSteps,
   timeSteps: TimelineTimeSteps,
-  callback: (time: Dayjs, nextTime: Dayjs) => void,
+  callback: (time: number, nextTime: number) => void,
 ) {
-  let time = dayjs(start).startOf(unit)
+  if (unit === 'blocks5') {
+    // 5 msec blocks or future 5 blocks (where each block will represent 16nanoseconds)
+    // this is used for the timeline to render the blocks
+    const blockTime = 20
+    let time = Math.floor(start / blockTime) * blockTime
 
-  if (timeSteps[unit] && timeSteps[unit] > 1) {
-    const value = time.get(unit)
-    time = time.set(unit, value - (value % timeSteps[unit]))
-  }
+    while (time < end) {
+      const nextTime = Math.floor((time + blockTime) / blockTime) * blockTime
+      callback(time, nextTime)
+      time = nextTime
+    }
+  } else {
+    let time = dayjs(start).startOf(unit)
 
-  while (time.valueOf() < end) {
-    const nextTime = dayjs(time)
-      .add(timeSteps[unit] || 1, unit as dayjs.ManipulateType)
-      .startOf(unit)
+    if (timeSteps[unit] && timeSteps[unit] > 1) {
+      const value = time.get(unit)
+      time = time.set(unit, value - (value % timeSteps[unit]))
+    }
 
-    callback(time, nextTime)
-    time = nextTime
+    while (time.valueOf() < end) {
+      const nextTime = dayjs(time)
+        .add(timeSteps[unit] || 1, unit as dayjs.ManipulateType)
+        .startOf(unit)
+
+      callback(time.valueOf(), nextTime.valueOf())
+      time = nextTime
+    }
   }
 }
 
@@ -115,7 +128,8 @@ export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeS
   // a month is 24 days, a day is 24 hours.
   // with weeks this isnt the case so weeks needs to be handled specially
   const timeDividers: Record<keyof TimelineTimeSteps, number> = {
-    second: 1000,
+    blocks5: 20,
+    second: 50,
     minute: 60,
     hour: 60,
     day: 24,
@@ -159,10 +173,12 @@ export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeS
   return minUnit
 }
 
-export type SelectUnits = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year'
-export type SelectUnitsRes = Exclude<SelectUnits, 'second'>
+export type SelectUnits = 'blocks5' | 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year'
+
+export type SelectUnitsRes = Exclude<SelectUnits, 'blocks5'>
 
 export const NEXT_UNITS: Record<SelectUnits, SelectUnitsRes> = {
+  blocks5: 'second',
   second: 'minute',
   minute: 'hour',
   hour: 'day',
@@ -305,8 +321,8 @@ export function getVisibleItems<
   const { itemTimeStartKey, itemTimeEndKey } = keys
 
   return items.filter((item) => {
-    const afterStart = dayjs(_get(item, itemTimeStartKey)).valueOf() <= canvasTimeEnd
-    const beforeEnd = dayjs(_get(item, itemTimeEndKey)).valueOf() >= canvasTimeStart
+    const afterStart = _get(item, itemTimeStartKey) <= canvasTimeEnd
+    const beforeEnd = _get(item, itemTimeEndKey) >= canvasTimeStart
 
     return afterStart && beforeEnd
   })
@@ -673,7 +689,7 @@ export function getItemWithInteractions<
 export function getCanvasBoundariesFromVisibleTime(visibleTimeStart: number, visibleTimeEnd: number, buffer: number) {
   const zoom = visibleTimeEnd - visibleTimeStart
   // buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
-  const canvasTimeStart = visibleTimeStart - zoom * (buffer - 1) / 2
+  const canvasTimeStart = visibleTimeStart - (zoom * (buffer - 1)) / 2
   const canvasTimeEnd = canvasTimeStart + zoom * buffer
   return [canvasTimeStart, canvasTimeEnd]
 }
