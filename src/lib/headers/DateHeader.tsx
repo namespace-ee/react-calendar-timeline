@@ -1,11 +1,11 @@
 import React, { CSSProperties, ReactNode } from 'react'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import CustomHeader from './CustomHeader'
-import { getNextUnit, SelectUnits } from '../utility/calendar'
+import { getNextUnit, isCustomUnit, SelectUnits } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
 import memoize from 'memoize-one'
 import { CustomDateHeader } from './CustomDateHeader'
-import { IntervalRenderer, SidebarHeaderChildrenFnProps, TimelineTimeSteps } from '../types/main'
+import { CustomUnit, IntervalRenderer, SidebarHeaderChildrenFnProps, TimelineTimeSteps } from '../types/main'
 import { Dayjs, UnitType } from 'dayjs'
 
 type GetHeaderData<Data> = (
@@ -13,14 +13,14 @@ type GetHeaderData<Data> = (
   style: React.CSSProperties,
   className: string | undefined,
   getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string,
-  unitProp: UnitType | 'primaryHeader' | 'blocks5' | undefined,
+  unitProp: UnitType | 'primaryHeader' | CustomUnit | undefined,
   headerData: Data | undefined,
 ) => {
   intervalRenderer?: IntervalRenderer<Data>
   style: React.CSSProperties
   className: string
   getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string
-  unitProp: UnitType | 'primaryHeader' | 'blocks5' | undefined
+  unitProp: UnitType | 'primaryHeader' | CustomUnit | undefined
   headerData: Data
 }
 export interface DateHeaderProps<Data> {
@@ -161,10 +161,8 @@ const formatLabel: FormatLabelFunction = (
     format = formatOptions[unit]['short']
   }
 
-  if (unit === 'blocks5') {
-    console.log('timestart: ', timeStart.valueOf())
-    const timeLeft = timeStart.valueOf() - timeStart.startOf(getNextUnit(unit)).valueOf()
-    return 'b5: ' + Math.floor(timeLeft / 20)
+  if (unit in defaultHeaderFormats && isCustomUnit(unit as keyof TimelineTimeSteps)) {
+    return format
   }
   return timeStart.format(format)
 }

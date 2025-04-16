@@ -1,7 +1,7 @@
 import React, { Component, FC } from 'react'
 
-import { iterateTimes } from '../utility/calendar'
-import dayjs from 'dayjs'
+import { isCustomUnit, iterateTimes } from '../utility/calendar'
+import dayjs, { UnitType } from 'dayjs'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import { TimelineTimeSteps } from '../types/main'
 
@@ -50,8 +50,16 @@ class Columns extends Component<ColumnsProps> {
     const lines: React.JSX.Element[] = []
 
     iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, (time: number, nextTime: number) => {
-      const minUnitValue = minUnit === 'blocks5' ? minUnit : dayjs(time).get(minUnit === 'day' ? 'date' : minUnit)
-      const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
+      // TODO: bypasses first line for custom timeline steps, missing slight css perk
+      let minUnitValue = 0
+      let firstOfType = false
+      let originalCheck = false
+      if (!isCustomUnit(minUnit)) {
+        const originalMinUnit = minUnit as UnitType
+        minUnitValue = dayjs(time).get(originalMinUnit === 'day' ? 'date' : originalMinUnit)
+        firstOfType = minUnitValue === (originalMinUnit === 'day' ? 1 : 0)
+        originalCheck = originalMinUnit === 'day' || originalMinUnit === 'hour' || originalMinUnit === 'minute'
+      }
 
       let classNamesForTime: string[] = []
       if (verticalLineClassNamesForTime) {
@@ -65,7 +73,7 @@ class Columns extends Component<ColumnsProps> {
       const classNames =
         'rct-vl' +
         (firstOfType ? ' rct-vl-first' : '') +
-        (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute' ? ` rct-day-${dayjs(time).day()} ` : ' ') +
+        (originalCheck ? ` rct-day-${dayjs(time).day()} ` : ' ') +
         classNamesForTime.join(' ')
 
       const left = getLeftOffsetFromDate(time)

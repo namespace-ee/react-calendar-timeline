@@ -1,8 +1,9 @@
 /* eslint-disable no-var */
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { UnitType } from 'dayjs'
 import { _get } from './generic'
 import { Dimension, ItemDimension } from '../types/dimension'
 import {
+  CustomUnit,
   GroupedItem,
   GroupOrders,
   GroupStack,
@@ -68,6 +69,26 @@ export function calculateTimeForXPosition(
   return timeFromCanvasTimeStart + canvasTimeStart
 }
 
+const customPrevUnits: Record<CustomUnit, CustomUnit> = {
+  blocks2: 'blocks1',
+  blocks1: 'blocks1',
+}
+
+export function getPrevFactor(unit: CustomUnit): number {
+  let currentUnit = unit
+  let factor = 1
+  while (currentUnit !== customPrevUnits[currentUnit]) {
+    factor *= defaultTimeDividers[currentUnit]
+    currentUnit = customPrevUnits[currentUnit]
+  }
+  return factor * defaultTimeDividers[currentUnit]
+}
+
+export function isCustomUnit(unit: keyof TimelineTimeSteps): boolean {
+  const customTypes: CustomUnit[] = ['blocks1', 'blocks2']
+  return customTypes.includes(unit as CustomUnit)
+}
+
 export function iterateTimes(
   start: number,
   end: number,
@@ -75,10 +96,8 @@ export function iterateTimes(
   timeSteps: TimelineTimeSteps,
   callback: (time: number, nextTime: number) => void,
 ) {
-  if (unit === 'blocks5') {
-    // 5 msec blocks or future 5 blocks (where each block will represent 16nanoseconds)
-    // this is used for the timeline to render the blocks
-    const blockTime = 20
+  if (isCustomUnit(unit)) {
+    const blockTime = getPrevFactor(unit as CustomUnit)
     let time = Math.floor(start / blockTime) * blockTime
 
     while (time < end) {
@@ -87,17 +106,18 @@ export function iterateTimes(
       time = nextTime
     }
   } else {
-    let time = dayjs(start).startOf(unit)
+    const dayjsUnit = unit as UnitType
+    let time = dayjs(start).startOf(dayjsUnit)
 
     if (timeSteps[unit] && timeSteps[unit] > 1) {
-      const value = time.get(unit)
-      time = time.set(unit, value - (value % timeSteps[unit]))
+      const value = time.get(dayjsUnit)
+      time = time.set(dayjsUnit, value - (value % timeSteps[unit]))
     }
 
     while (time.valueOf() < end) {
       const nextTime = dayjs(time)
         .add(timeSteps[unit] || 1, unit as dayjs.ManipulateType)
-        .startOf(unit)
+        .startOf(dayjsUnit)
 
       callback(time.valueOf(), nextTime.valueOf())
       time = nextTime
@@ -122,20 +142,23 @@ export function iterateTimes(
 // i think this is the distance between cell lines
 export const minCellWidth = 17
 
+export const defaultTimeDividers: Record<string, number> = {
+  blocks1: 8,
+  blocks2: 5,
+  second: 25,
+  minute: 60,
+  hour: 60,
+  day: 24,
+  month: 30,
+  year: 12,
+}
+
 export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeSteps) {
   // for supporting weeks, its important to remember that each of these
   // units has a natural progression to the other. i.e. a year is 12 months
   // a month is 24 days, a day is 24 hours.
   // with weeks this isnt the case so weeks needs to be handled specially
-  const timeDividers: Record<keyof TimelineTimeSteps, number> = {
-    blocks5: 20,
-    second: 50,
-    minute: 60,
-    hour: 60,
-    day: 24,
-    month: 30,
-    year: 12,
-  }
+  const timeDividers: Record<keyof TimelineTimeSteps, number> = defaultTimeDividers
 
   let minUnit: keyof TimelineTimeSteps = 'year'
 
@@ -170,21 +193,32 @@ export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeS
     }
   })
 
-  return minUnit
+  return minUnit as SelectUnits
 }
 
-export type SelectUnits = 'blocks5' | 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year'
+type CustomSelectUnits = 'blocks1' | 'blocks2'
+type OriginalSelectUnits = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year'
+export type SelectUnits = CustomSelectUnits | OriginalSelectUnits
 
-export type SelectUnitsRes = Exclude<SelectUnits, 'blocks5'>
+export type SelectUnitsRes = Exclude<SelectUnits, 'blocks1'>
 
-export const NEXT_UNITS: Record<SelectUnits, SelectUnitsRes> = {
-  blocks5: 'second',
+const customNextUnits: Record<string, string> = {
+  blocks1: 'blocks2',
+  blocks2: 'second',
+}
+
+const originalNextUnits: Record<string, string> = {
   second: 'minute',
   minute: 'hour',
   hour: 'day',
   day: 'month',
   month: 'year',
   year: 'year',
+}
+
+export const NEXT_UNITS: Record<SelectUnits, SelectUnitsRes> = {
+  ...(customNextUnits as Record<SelectUnits, SelectUnitsRes>),
+  ...(originalNextUnits as Record<SelectUnits, SelectUnitsRes>),
 }
 
 export function getNextUnit(unit: SelectUnits): SelectUnitsRes {
