@@ -1,6 +1,7 @@
 import React from 'react'
 import { Component } from 'react'
 import dayjs from 'dayjs'
+import randomColor from "randomcolor";
 
 import Timeline, { TimelineMarkers, TodayMarker, CustomMarker, CursorMarker } from '../../../src/index'
 
@@ -19,13 +20,71 @@ var keys = {
   groupLabelKey: "title"
 };
 
+function customData() {
+  let randomSeed = Math.floor(Math.random() * 1000);
+  let groups = [
+    { id: 1, title: "G1", rightTitle: "Right Title 1", bgColor: randomColor({ luminosity: "light", seed: randomSeed + 0 }) },
+    { id: 2, title: "G2", rightTitle: "Right Title 2", bgColor: randomColor({ luminosity: "light", seed: randomSeed + 1 }) },
+    { id: 3, title: "G3", rightTitle: "Right Title 3", bgColor: randomColor({ luminosity: "light", seed: randomSeed + 2 }) },
+  ]
+
+  let items = [];
+  items.push({
+    id: "0",
+    group: "1",
+    title: "Hercules",
+    start: 0,
+    end: 16 * 10,
+    canChangeGroup: false,
+    className: "",
+    itemProps: { "data-tip": "GO" }
+  });
+  items.push({
+    id: "1",
+    group: "1",
+    title: "Ares",
+    start: 16 * 12,
+    end: 16 * 30,
+    canChangeGroup: false,
+    className: "",
+    itemProps: { "data-tip": "GO" }
+  });
+  items.push({
+    id: "2",
+    group: "2",
+    title: "Artemis",
+    start: 16 * 4,
+    end: 16 * 124,
+    canMove: true,
+    canChangeGroup: false,
+    className: "",
+    itemProps: { "data-tip": "GO" }
+  });
+  items.push({
+    id: "3",
+    group: "3",
+    title: "Athena",
+    start: 16 * 1,
+    end: 16 * 60,
+    canChangeGroup: false,
+    canResize: "both",
+    className: "",
+    itemProps: { "data-tip": "GO" }
+  });
+
+  return { groups, items };
+}
+
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    const { groups, items } = generateFakeData(3, 6, 1);
-    const defaultTimeStart = dayjs(items[0].start_time).startOf('day').toDate().valueOf()
-    const defaultTimeEnd = dayjs(items[0].end_time).startOf('day').add(1, 'day').toDate().valueOf()
+    // const { groups, items } = generateFakeData(3, 6, 1);
+    const { groups, items } = customData();
+    // const defaultTimeStart = dayjs(items[0].start_time).startOf('day').toDate().valueOf()
+    const defaultTimeStart = 1
+    // const defaultTimeEnd = dayjs(items[0].end_time).startOf('day').add(1, 'day').toDate().valueOf()
+    const defaultTimeEnd = 10000
 
     this.state = {
       groups,
@@ -90,6 +149,9 @@ export default class App extends Component {
         keys={keys}
         fullUpdate
         itemTouchSendsClick={false}
+        minZoom={5}
+        maxZoom={16 * 6 * 5 * 4 * 5}
+        dragSnap={1000}
         stackItems
         itemHeightRatio={0.75}
         canMove={true}
@@ -100,6 +162,12 @@ export default class App extends Component {
         onItemResize={this.handleItemResize}
         onItemClick={this.handleItemClick}
         onItemSelect={this.handleItemSelect}
+        onTimeChange={(visibleStartTime, visibleEndTime, updateScrollCanvas) => {
+          if (visibleStartTime > defaultTimeStart) {
+            updateScrollCanvas(visibleStartTime, visibleEndTime);
+          }
+        }
+        }
       />
     );
   }
