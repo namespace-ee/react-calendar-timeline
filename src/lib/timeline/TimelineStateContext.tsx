@@ -2,7 +2,6 @@ import React, { PropsWithChildren, useContext } from 'react'
 
 import { calculateXPositionForTime, calculateTimeForXPosition, SelectUnits } from '../utility/calendar'
 import { TimelineContext as TimelineContextValue } from '../types/main'
-import { Dayjs } from 'dayjs'
 
 /* this context will hold all information regarding timeline state:
   1. timeline width
@@ -40,7 +39,7 @@ type TimelineStartProps = {
   canvasTimeStart: number
   canvasTimeEnd: number
   canvasWidth: number
-  showPeriod: (from: Dayjs, to: Dayjs) => void
+  showPeriod: (from: number, to: number) => void
   timelineUnit: SelectUnits
   timelineWidth: number
 }
@@ -48,7 +47,7 @@ export type TimelineContextType = {
   getTimelineState: () => TimelineContextValue
   getLeftOffsetFromDate: (date: number) => number
   getDateFromLeftOffsetPosition: (leftOffset: number) => number
-  showPeriod: (from: Dayjs, to: Dayjs) => void
+  showPeriod: (from: number, to: number) => void
 }
 
 type TimelineState = {

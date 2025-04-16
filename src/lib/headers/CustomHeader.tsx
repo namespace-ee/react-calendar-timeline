@@ -17,7 +17,7 @@ export type CustomHeaderProps<Data> = {
   canvasTimeStart: number
   canvasTimeEnd: number
   canvasWidth: number
-  showPeriod: (start: Dayjs, end: Dayjs) => void
+  showPeriod: (start: number, end: number) => void
   headerData?: Data
   getLeftOffsetFromDate: (date: any) => number
   height: number

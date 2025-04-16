@@ -532,9 +532,9 @@ export default class ReactCalendarTimeline<
     }
   }
 
-  showPeriod = (from: Dayjs, to: Dayjs) => {
-    const visibleTimeStart = from.valueOf()
-    const visibleTimeEnd = to.valueOf()
+  showPeriod = (from: number, to: number) => {
+    const visibleTimeStart = from
+    const visibleTimeEnd = to
 
     const zoom = visibleTimeEnd - visibleTimeStart
     // can't zoom in more than to show one hour
