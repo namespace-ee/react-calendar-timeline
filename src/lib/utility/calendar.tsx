@@ -70,6 +70,13 @@ export function calculateTimeForXPosition(
 }
 
 const customPrevUnits: Record<CustomUnit, CustomUnit> = {
+  blocks9: 'blocks8',
+  blocks8: 'blocks7',
+  blocks7: 'blocks6',
+  blocks6: 'blocks5',
+  blocks5: 'blocks4',
+  blocks4: 'blocks3',
+  blocks3: 'blocks2',
   blocks2: 'blocks1',
   blocks1: 'blocks1',
 }
@@ -85,7 +92,17 @@ export function getPrevFactor(unit: CustomUnit): number {
 }
 
 export function isCustomUnit(unit: keyof TimelineTimeSteps): boolean {
-  const customTypes: CustomUnit[] = ['blocks1', 'blocks2']
+  const customTypes: CustomUnit[] = [
+    'blocks1',
+    'blocks2',
+    'blocks3',
+    'blocks4',
+    'blocks5',
+    'blocks6',
+    'blocks7',
+    'blocks8',
+    'blocks9',
+  ]
   return customTypes.includes(unit as CustomUnit)
 }
 
@@ -144,8 +161,16 @@ export const minCellWidth = 17
 
 export const defaultTimeDividers: Record<string, number> = {
   blocks1: 8,
-  blocks2: 5,
-  second: 25,
+  blocks2: 2, // 16
+  blocks3: 50, // 800 - 0.8 usec
+  blocks4: 25, // 20 usec
+  blocks5: 50, // 1 msec
+  blocks6: 25, // 25 msec
+  blocks7: 50, // 1 sec
+  blocks8: 60, // 1 min
+  blocks9: 60, // 1 hour
+  // original time dividers
+  second: 1000,
   minute: 60,
   hour: 60,
   day: 24,
@@ -196,7 +221,16 @@ export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeS
   return minUnit as SelectUnits
 }
 
-type CustomSelectUnits = 'blocks1' | 'blocks2'
+type CustomSelectUnits =
+  | 'blocks1'
+  | 'blocks2'
+  | 'blocks3'
+  | 'blocks4'
+  | 'blocks5'
+  | 'blocks6'
+  | 'blocks7'
+  | 'blocks8'
+  | 'blocks9'
 type OriginalSelectUnits = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year'
 export type SelectUnits = CustomSelectUnits | OriginalSelectUnits
 
@@ -204,7 +238,16 @@ export type SelectUnitsRes = Exclude<SelectUnits, 'blocks1'>
 
 const customNextUnits: Record<string, string> = {
   blocks1: 'blocks2',
-  blocks2: 'second',
+  blocks2: 'blocks3',
+  blocks3: 'blocks4',
+  blocks4: 'blocks5',
+  blocks5: 'blocks6',
+  blocks6: 'blocks7',
+  blocks7: 'blocks8',
+  blocks8: 'blocks9',
+  // Purely for continuity -- meaningless. The zoom will be bounded before reaching the original unit.
+  // TODO: check if it can be removed safely
+  blocks9: 'second',
 }
 
 const originalNextUnits: Record<string, string> = {

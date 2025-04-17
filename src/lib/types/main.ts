@@ -126,6 +126,13 @@ export type dateType = number //| undefined;
 interface CustomTimelineTimeSteps {
   blocks1: number
   blocks2: number
+  blocks3: number
+  blocks4: number
+  blocks5: number
+  blocks6: number
+  blocks7: number
+  blocks8: number
+  blocks9: number
 }
 
 interface OriginalTimelineTimeSteps {
@@ -189,7 +196,16 @@ export interface SidebarHeaderProps<Data> {
 
 export class SidebarHeader<Data = any> extends Component<SidebarHeaderProps<Data>> {}
 
-export type CustomUnit = 'blocks1' | 'blocks2'
+export type CustomUnit =
+  | 'blocks1'
+  | 'blocks2'
+  | 'blocks3'
+  | 'blocks4'
+  | 'blocks5'
+  | 'blocks6'
+  | 'blocks7'
+  | 'blocks8'
+  | 'blocks9'
 type OriginalUnit = 'second' | 'minute' | 'hour' | 'day' | 'isoWeek' | 'month' | 'year'
 export type Unit = CustomUnit | OriginalUnit
 

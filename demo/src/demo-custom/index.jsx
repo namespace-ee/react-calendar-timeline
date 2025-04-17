@@ -150,8 +150,8 @@ export default class App extends Component {
         fullUpdate
         itemTouchSendsClick={false}
         minZoom={5}
-        maxZoom={16 * 6 * 5 * 4 * 5}
-        dragSnap={1000}
+        maxZoom={8 * 2 * 50 * 25 * 50 * 25}
+        dragSnap={10}
         stackItems
         itemHeightRatio={0.75}
         canMove={true}
