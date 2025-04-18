@@ -15,6 +15,7 @@ import {
   getCanvasWidth,
   stackTimelineItems,
   coordinateToTimeRatio,
+  defaultTimeDividers,
 } from './utility/calendar'
 import { _get } from './utility/generic'
 import { defaultKeys, defaultTimeSteps } from './default-config'
@@ -109,7 +110,7 @@ export type ReactCalendarTimelineProps<
   onCanvasClick?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onCanvasDoubleClick?(groupId: Id, time: number, e: React.SyntheticEvent): void
   onCanvasContextMenu?(groupId: Id, time: number, e: React.SyntheticEvent): void
-  onZoom?(timelineContext: TimelineContext, unit: Unit): void
+  onZoom?(timelineContext: TimelineContext, unit: Unit, dividers: Record<string, number>): void
   moveResizeValidator?: ItemProps<CustomItem>['moveResizeValidator']
   onTimeChange?: OnTimeChange<CustomItem, CustomGroup>
   onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): any
@@ -408,7 +409,7 @@ export default class ReactCalendarTimeline<
 
     // are we changing zoom? Report it!
     if (this.props.onZoom && newZoom !== oldZoom) {
-      this.props.onZoom(this.getTimelineContext(), this.getTimelineUnit())
+      this.props.onZoom(this.getTimelineContext(), this.getTimelineUnit(), defaultTimeDividers)
     }
 
     // The bounds have changed? Report it!

@@ -139,6 +139,10 @@ export default class App extends Component {
     console.log("Resized", itemId, time, edge);
   };
 
+  handleZoom = (timelineContext, unit, dividers) => {
+    console.log("Unit: ", unit, dividers[unit]);
+  }
+
   render() {
     const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
 
@@ -168,6 +172,7 @@ export default class App extends Component {
           }
         }
         }
+        onZoom={this.handleZoom}
       >
         <TimelineMarkers>
           <CursorMarker />
