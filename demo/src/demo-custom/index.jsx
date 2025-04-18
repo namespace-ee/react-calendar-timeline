@@ -151,7 +151,7 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         minZoom={5}
         maxZoom={8 * 2 * 50 * 25 * 50 * 25}
-        dragSnap={10}
+        dragSnap={16}
         stackItems
         itemHeightRatio={0.75}
         canMove={true}
@@ -168,7 +168,12 @@ export default class App extends Component {
           }
         }
         }
-      />
+      >
+        <TimelineMarkers>
+          <CursorMarker />
+          <CustomMarker date={16 * 60} />
+        </TimelineMarkers>
+      </Timeline>
     );
   }
 }
