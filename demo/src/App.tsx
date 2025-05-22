@@ -23,59 +23,59 @@ const routes: RouteObject[] = [
     loader,
   },
   {
-    path: '/Custom',
+    path: '/CustomTimescale',
     Component: withLayout(DemoCustom),
     loader,
   },
-  // {
-  //   path: '/DemoPerformance',
-  //   Component: withLayout(DemoPerformance),
-  //   loader,
-  // },
-  // {
-  //   path: '/DemoTreePGroups',
-  //   Component: withLayout(DemoTreePGroups),
-  // },
-  // {
-  //   path: '/LinkedTimelines',
-  //   Component: withLayout(LinkedTimelines),
-  // },
-  // {
-  //   path: '/ElementResize',
-  //   Component: withLayout(ElementResize),
-  // },
-  // {
-  //   path: '/Renderers',
-  //   Component: withLayout(Renderers),
-  // },
-  // {
-  //   path: '/VerticalClasses',
-  //   Component: withLayout(VerticalClasses),
-  // },
-  // {
-  //   path: '/CustomItems',
-  //   Component: withLayout(CustomItems),
-  // },
-  // {
-  //   path: '/CustomHeaders',
-  //   Component: withLayout(CustomHeaders),
-  // },
-  // {
-  //   path: '/CustomInfoLabel',
-  //   Component: withLayout(CustomInfoLabel),
-  // },
-  // {
-  //   path: '/ControledSelect',
-  //   Component: withLayout(ControledSelect),
-  // },
-  // {
-  //   path: '/ControlledScrolling',
-  //   Component: withLayout(ControlledScrolling),
-  // },
-  // {
-  //   path: '/ExternalDrop',
-  //   Component: withLayout(ExternalDrop),
-  // },
+  {
+    path: '/DemoPerformance',
+    Component: withLayout(DemoPerformance),
+    loader,
+  },
+  {
+    path: '/DemoTreePGroups',
+    Component: withLayout(DemoTreePGroups),
+  },
+  {
+    path: '/LinkedTimelines',
+    Component: withLayout(LinkedTimelines),
+  },
+  {
+    path: '/ElementResize',
+    Component: withLayout(ElementResize),
+  },
+  {
+    path: '/Renderers',
+    Component: withLayout(Renderers),
+  },
+  {
+    path: '/VerticalClasses',
+    Component: withLayout(VerticalClasses),
+  },
+  {
+    path: '/CustomItems',
+    Component: withLayout(CustomItems),
+  },
+  {
+    path: '/CustomHeaders',
+    Component: withLayout(CustomHeaders),
+  },
+  {
+    path: '/CustomInfoLabel',
+    Component: withLayout(CustomInfoLabel),
+  },
+  {
+    path: '/ControledSelect',
+    Component: withLayout(ControledSelect),
+  },
+  {
+    path: '/ControlledScrolling',
+    Component: withLayout(ControlledScrolling),
+  },
+  {
+    path: '/ExternalDrop',
+    Component: withLayout(ExternalDrop),
+  },
 ]
 
 function Menu() {
