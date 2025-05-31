@@ -90,7 +90,7 @@
     "memoize-one": "^6.0.0"
   },
   "peerDependencies": {
-    "dayjs": ">=1.10.0",
+    "dayjs": "^1.11.10",
     "interactjs": "1.10.27",
     "react": "^18 || ^19.0.0-rc-66855b96-20241106",
     "react-dom": "^18 || ^19.0.0-rc-66855b96-20241106"
@@ -108,7 +108,6 @@
     "@typescript-eslint/parser": "^8.8.1",
     "@vitejs/plugin-react-swc": "^3.7.1",
     "cross-env": "^7.0.3",
-    "dayjs": "^1.11.10",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.8.3",
