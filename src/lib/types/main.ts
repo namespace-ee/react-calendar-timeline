@@ -38,6 +38,11 @@ export interface TimelineItemBase<DateType> {
   itemProps?: HTMLProps<HTMLDivElement>
   isOverlay?: boolean | undefined
   dimensions?: Dimension | undefined
+  /**
+   * Fixed pixel height for this item.
+   * Overrides `lineHeight` for this item only.
+   */
+  height?: number | undefined
 }
 
 export interface TimelineContext {
