@@ -7,11 +7,15 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+
+## 0.30.0 (beta.4)
+
 * Fix issue where the redraw mechanism was not based on the `buffer` prop.
 * Fix incorrect references to ".umd.js" file paths in the package.json
 * Externalize dayjs dependency. That allows using dayjs locale, but needs consuming application to install dayjs.
 * Added support for dynamic item sizing with an optional per-item `height` override prop.
 * Introduced `itemVerticalGap` timeline prop to ensure consistent spacing between timeline items, which takes precedence over the `itemHeightRatio` setting when specified.
+* fix DST time causing infinite loop
 
 ## 0.30.0 (beta)
 Huge update made by @Remco4EF and @remcoblumink

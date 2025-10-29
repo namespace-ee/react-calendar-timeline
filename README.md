@@ -14,6 +14,11 @@ Latest release includes:
   - Resolved an issue where the timeline would scroll left even when there were no items present
   - Addressed a problem where anonymous renderers caused headers to unmount and lose their state
   - Cleaned up unnecessary demo files following updates in the new release.
+* Fix issue where the redraw mechanism was not based on the `buffer` prop.
+* Fix incorrect references to ".umd.js" file paths in the package.json
+* Externalize dayjs dependency. That allows using dayjs locale, but needs consuming application to install dayjs.
+* Added support for dynamic item sizing with an optional per-item `height` override prop.
+* Introduced `itemVerticalGap` timeline prop to ensure consistent spacing between timeline items, which takes precedence over the `itemHeightRatio` setting when specified.
 
 We're excited to announce the beta release of v0.30.0 which includes:
 - Full TypeScript rewrite
