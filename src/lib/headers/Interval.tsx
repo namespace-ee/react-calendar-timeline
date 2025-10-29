@@ -1,15 +1,15 @@
 import React, { HTMLAttributes, ReactNode } from 'react'
-import { getNextUnit, SelectUnits } from '../utility/calendar'
+import { getNextUnit, SelectUnits, getPrevFactor, isCustomUnit } from '../utility/calendar'
 import { composeEvents } from '../utility/events'
-import { Dayjs } from 'dayjs'
-import { IntervalRenderer, Interval as IntervalType, GetIntervalProps } from '../types/main'
+import { IntervalRenderer, Interval as IntervalType, GetIntervalProps, CustomUnit } from '../types/main'
 import { GetIntervalPropsType } from './types'
+import { UnitType } from 'dayjs'
 
 export type IntervalProps<Data> = {
   intervalRenderer: (p: IntervalRenderer<Data>) => ReactNode
   unit: SelectUnits
   interval: IntervalType
-  showPeriod: (startTime: Dayjs, endTime: Dayjs) => void
+  showPeriod: (startTime: number, endTime: number) => void
   intervalText: string
   primaryHeader: boolean
   getIntervalProps: GetIntervalPropsType
@@ -21,12 +21,21 @@ class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
   onIntervalClick = () => {
     const { primaryHeader, interval, unit, showPeriod } = this.props
     if (primaryHeader) {
-      const nextUnit = getNextUnit(unit)
-      const newStartTime = interval.startTime.clone().startOf(nextUnit)
-      const newEndTime = interval.startTime.clone().endOf(nextUnit)
-      showPeriod(newStartTime, newEndTime)
+      if (isCustomUnit(unit)) {
+        const nextUnit = getNextUnit(unit) as CustomUnit
+        const startTimeValue = interval.startTime.valueOf()
+        const blockSize = getPrevFactor(nextUnit)
+        const newStartTimeValue = Math.floor(startTimeValue / blockSize) * blockSize
+        const newEndTimeValue = Math.floor(startTimeValue / blockSize) * blockSize + blockSize - 1
+        showPeriod(newStartTimeValue, newEndTimeValue)
+      } else {
+        const nextUnit = getNextUnit(unit) as UnitType
+        const newStartTime = interval.startTime.clone().startOf(nextUnit)
+        const newEndTime = interval.startTime.clone().endOf(nextUnit)
+        showPeriod(newStartTime.valueOf(), newEndTime.valueOf())
+      }
     } else {
-      showPeriod(interval.startTime, interval.endTime)
+      showPeriod(interval.startTime.valueOf(), interval.endTime.valueOf())
     }
   }
 

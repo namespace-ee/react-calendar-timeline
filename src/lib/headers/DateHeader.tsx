@@ -1,11 +1,11 @@
 import React, { CSSProperties, ReactNode } from 'react'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import CustomHeader from './CustomHeader'
-import { getNextUnit, SelectUnits } from '../utility/calendar'
+import { getNextUnit, isCustomUnit, SelectUnits } from '../utility/calendar'
 import { defaultHeaderFormats } from '../default-config'
 import memoize from 'memoize-one'
 import { CustomDateHeader } from './CustomDateHeader'
-import { IntervalRenderer, SidebarHeaderChildrenFnProps, TimelineTimeSteps } from '../types/main'
+import { CustomUnit, IntervalRenderer, SidebarHeaderChildrenFnProps, TimelineTimeSteps } from '../types/main'
 import { Dayjs, UnitType } from 'dayjs'
 
 type GetHeaderData<Data> = (
@@ -13,14 +13,14 @@ type GetHeaderData<Data> = (
   style: React.CSSProperties,
   className: string | undefined,
   getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string,
-  unitProp: UnitType | 'primaryHeader' | undefined,
+  unitProp: UnitType | 'primaryHeader' | CustomUnit | undefined,
   headerData: Data | undefined,
 ) => {
   intervalRenderer?: IntervalRenderer<Data>
   style: React.CSSProperties
   className: string
   getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string
-  unitProp: UnitType | 'primaryHeader' | undefined
+  unitProp: UnitType | 'primaryHeader' | CustomUnit | undefined
   headerData: Data
 }
 export interface DateHeaderProps<Data> {
@@ -28,10 +28,7 @@ export interface DateHeaderProps<Data> {
   className?: string | undefined
   unit?: keyof TimelineTimeSteps | 'primaryHeader' | undefined
   timelineUnit: SelectUnits
-  labelFormat?:
-    | string
-    | FormatLabelFunction
-    | undefined
+  labelFormat?: string | FormatLabelFunction | undefined
   intervalRenderer?: (props: IntervalRenderer<Data>) => ReactNode
   headerData?: Data | undefined
   children?: ((props: SidebarHeaderChildrenFnProps<Data>) => ReactNode) | undefined
@@ -144,15 +141,15 @@ type FormatLabelFunction = (
   timeRange: [Dayjs, Dayjs],
   unit: keyof typeof defaultHeaderFormats,
   labelWidth?: number,
-  formatOptions?: typeof defaultHeaderFormats
-) => string;
+  formatOptions?: typeof defaultHeaderFormats,
+) => string
 
-const formatLabel:FormatLabelFunction = (
+const formatLabel: FormatLabelFunction = (
   [timeStart],
   unit,
-  labelWidth =150,
+  labelWidth = 150,
   formatOptions = defaultHeaderFormats,
-) =>{
+) => {
   let format
   if (labelWidth >= 150) {
     format = formatOptions[unit]['long']
@@ -162,6 +159,10 @@ const formatLabel:FormatLabelFunction = (
     format = formatOptions[unit]['medium']
   } else {
     format = formatOptions[unit]['short']
+  }
+
+  if (unit in defaultHeaderFormats && isCustomUnit(unit as keyof TimelineTimeSteps)) {
+    return format
   }
   return timeStart.format(format)
 }

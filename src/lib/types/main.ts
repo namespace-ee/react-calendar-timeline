@@ -128,7 +128,19 @@ export interface TimelineKeys {
 
 export type dateType = number //| undefined;
 
-export interface TimelineTimeSteps {
+interface CustomTimelineTimeSteps {
+  blocks1: number
+  blocks2: number
+  blocks3: number
+  blocks4: number
+  blocks5: number
+  blocks6: number
+  blocks7: number
+  blocks8: number
+  blocks9: number
+}
+
+interface OriginalTimelineTimeSteps {
   second: number
   minute: number
   hour: number
@@ -136,6 +148,8 @@ export interface TimelineTimeSteps {
   month: number
   year: number
 }
+
+export interface TimelineTimeSteps extends CustomTimelineTimeSteps, OriginalTimelineTimeSteps {}
 
 export class TimelineMarkers extends Component {}
 
@@ -187,7 +201,18 @@ export interface SidebarHeaderProps<Data> {
 
 export class SidebarHeader<Data = any> extends Component<SidebarHeaderProps<Data>> {}
 
-export type Unit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'isoWeek' | 'month' | 'year'
+export type CustomUnit =
+  | 'blocks1'
+  | 'blocks2'
+  | 'blocks3'
+  | 'blocks4'
+  | 'blocks5'
+  | 'blocks6'
+  | 'blocks7'
+  | 'blocks8'
+  | 'blocks9'
+type OriginalUnit = 'second' | 'minute' | 'hour' | 'day' | 'isoWeek' | 'month' | 'year'
+export type Unit = CustomUnit | OriginalUnit
 
 export interface IntervalContext {
   interval: Interval

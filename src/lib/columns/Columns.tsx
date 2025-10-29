@@ -1,6 +1,7 @@
 import React, { Component, FC } from 'react'
 
-import { iterateTimes } from '../utility/calendar'
+import { isCustomUnit, iterateTimes } from '../utility/calendar'
+import dayjs, { UnitType } from 'dayjs'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 import { TimelineTimeSteps } from '../types/main'
 
@@ -48,15 +49,23 @@ class Columns extends Component<ColumnsProps> {
 
     const lines: React.JSX.Element[] = []
 
-    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, (time, nextTime) => {
-      const minUnitValue = time.get(minUnit === 'day' ? 'date' : minUnit)
-      const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
+    iterateTimes(canvasTimeStart, canvasTimeEnd, minUnit, timeSteps, (time: number, nextTime: number) => {
+      // TODO: bypasses first line for custom timeline steps, missing slight css perk
+      let minUnitValue = 0
+      let firstOfType = false
+      let originalCheck = false
+      if (!isCustomUnit(minUnit)) {
+        const originalMinUnit = minUnit as UnitType
+        minUnitValue = dayjs(time).get(originalMinUnit === 'day' ? 'date' : originalMinUnit)
+        firstOfType = minUnitValue === (originalMinUnit === 'day' ? 1 : 0)
+        originalCheck = originalMinUnit === 'day' || originalMinUnit === 'hour' || originalMinUnit === 'minute'
+      }
 
       let classNamesForTime: string[] = []
       if (verticalLineClassNamesForTime) {
         classNamesForTime = verticalLineClassNamesForTime(
-          time.unix() * 1000, // turn into ms, which is what verticalLineClassNamesForTime expects
-          nextTime.unix() * 1000 - 1,
+          time * 1000, // turn into ms, which is what verticalLineClassNamesForTime expects
+          nextTime * 1000 - 1,
         )
       }
 
@@ -64,14 +73,14 @@ class Columns extends Component<ColumnsProps> {
       const classNames =
         'rct-vl' +
         (firstOfType ? ' rct-vl-first' : '') +
-        (minUnit === 'day' || minUnit === 'hour' || minUnit === 'minute' ? ` rct-day-${time.day()} ` : ' ') +
+        (originalCheck ? ` rct-day-${dayjs(time).day()} ` : ' ') +
         classNamesForTime.join(' ')
 
-      const left = getLeftOffsetFromDate(time.valueOf())
-      const right = getLeftOffsetFromDate(nextTime.valueOf())
+      const left = getLeftOffsetFromDate(time)
+      const right = getLeftOffsetFromDate(nextTime)
       lines.push(
         <div
-          key={`line-${time.valueOf()}`}
+          key={`line-${time}`}
           className={classNames}
           style={{
             pointerEvents: 'none',

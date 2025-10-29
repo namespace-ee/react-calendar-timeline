@@ -3,7 +3,7 @@ import { useTimelineHeadersContext } from './HeadersContext'
 import { useTimelineState } from '../timeline/TimelineStateContext'
 import { iterateTimes } from '../utility/calendar'
 import { Interval, TimelineTimeSteps } from '../types/main'
-import { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { CustomDateHeaderProps } from './CustomDateHeader'
 import isEqual from 'lodash/isEqual'
 import { GetIntervalPropsType } from './types'
@@ -17,7 +17,7 @@ export type CustomHeaderProps<Data> = {
   canvasTimeStart: number
   canvasTimeEnd: number
   canvasWidth: number
-  showPeriod: (start: Dayjs, end: Dayjs) => void
+  showPeriod: (start: number, end: number) => void
   headerData?: Data
   getLeftOffsetFromDate: (date: any) => number
   height: number
@@ -107,13 +107,13 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     getLeftOffsetFromDate,
   }) => {
     const intervals: Interval[] = []
-    iterateTimes(canvasTimeStart, canvasTimeEnd, unit, timeSteps, (startTime, endTime) => {
-      const left = getLeftOffsetFromDate(startTime.valueOf())
-      const right = getLeftOffsetFromDate(endTime.valueOf())
+    iterateTimes(canvasTimeStart, canvasTimeEnd, unit, timeSteps, (startTime: number, endTime: number) => {
+      const left = getLeftOffsetFromDate(startTime)
+      const right = getLeftOffsetFromDate(endTime)
       const width = right - left
       intervals.push({
-        startTime,
-        endTime,
+        startTime: dayjs(startTime),
+        endTime: dayjs(endTime),
         labelWidth: width,
         left,
       })

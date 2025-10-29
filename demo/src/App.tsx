@@ -1,12 +1,8 @@
 import { ComponentType } from 'react'
-import {
-  createBrowserRouter,
-  Link,
-  RouteObject,
-  RouterProvider,
-} from 'react-router-dom'
+import { createBrowserRouter, Link, RouteObject, RouterProvider } from 'react-router-dom'
 
 import DemoMain from './demo-main'
+import DemoCustom from './demo-custom'
 import DemoPerformance from './demo-performance'
 import DemoTreePGroups from './demo-tree-groups'
 import LinkedTimelines from './demo-linked-timelines'
@@ -18,12 +14,17 @@ import CustomHeaders from './demo-headers'
 import CustomInfoLabel from './demo-custom-info-label'
 import ControledSelect from './demo-controlled-select'
 import ControlledScrolling from './demo-controlled-scrolling'
-import ExternalDrop from "./demo-external"
+import ExternalDrop from './demo-external'
 const loader = () => 'loading'
 const routes: RouteObject[] = [
   {
     path: '/',
     Component: withLayout(DemoMain),
+    loader,
+  },
+  {
+    path: '/CustomTimescale',
+    Component: withLayout(DemoCustom),
     loader,
   },
   {
@@ -72,9 +73,9 @@ const routes: RouteObject[] = [
     Component: withLayout(ControlledScrolling),
   },
   {
-    path: "/ExternalDrop",
+    path: '/ExternalDrop',
     Component: withLayout(ExternalDrop),
-  }
+  },
 ]
 
 function Menu() {
