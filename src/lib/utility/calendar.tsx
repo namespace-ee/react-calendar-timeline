@@ -83,9 +83,13 @@ export function iterateTimes(
   }
 
   while (time.valueOf() < end) {
-    const nextTime = dayjs(time)
-      .add(timeSteps[unit] || 1, unit as dayjs.ManipulateType)
+    let nextTime = dayjs(time)
+      .add(timeSteps[unit] || 1, unit)
       .startOf(unit)
+
+    if (nextTime.valueOf() <= time.valueOf()) {
+      nextTime = nextTime.add(timeSteps[unit] || 1, unit)
+    }
 
     callback(time, nextTime)
     time = nextTime
