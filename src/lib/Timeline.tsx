@@ -85,6 +85,12 @@ export type ReactCalendarTimelineProps<
   minResizeWidth?: number | undefined
   lineHeight: number
   itemHeightRatio: number
+  /**
+   * vertical gap (in pixels) added above and below each item.
+   * Applies globally for consistent spacing between items.
+   * If it's defined it will override `lineHeight`.
+   */
+  itemVerticalGap?: number | undefined
   minZoom: number
   maxZoom: number
   clickTolerance?: number | undefined
@@ -325,6 +331,7 @@ export default class ReactCalendarTimeline<
       state.resizingEdge!,
       state.resizeTime!,
       state.newGroupOrder!,
+      props.itemVerticalGap
     )
 
     state.dimensionItems = dimensionItems
@@ -392,6 +399,7 @@ export default class ReactCalendarTimeline<
           prevState.resizingEdge,
           prevState.resizeTime,
           prevState.newGroupOrder,
+          nextProps.itemVerticalGap,
         ),
       )
     }
@@ -451,6 +459,7 @@ export default class ReactCalendarTimeline<
       this.state.resizingEdge,
       this.state.resizeTime,
       this.state.newGroupOrder,
+      props.itemVerticalGap,
     )
 
     // this is needed by dragItem since it uses pageY from the drag events
@@ -1017,6 +1026,7 @@ export default class ReactCalendarTimeline<
         this.state.resizingEdge,
         this.state.resizeTime,
         this.state.newGroupOrder,
+        this.props.itemVerticalGap,
       )
       dimensionItems = stackResults.dimensionItems
       height = stackResults.height
