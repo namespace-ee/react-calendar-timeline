@@ -3,7 +3,7 @@
 
 A modern and responsive React timeline component.
 
-**🎉 Version 0.30.0-beta.3 Now Available!**
+**🎉 Version 0.30.0-beta.5 Now Available!**
 
 Latest release includes:
 - [Use buffer prop to calculate when to redraw canvas](https://github.com/namespace-ee/react-calendar-timeline/pull/936)
