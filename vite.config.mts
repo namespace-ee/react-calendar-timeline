@@ -20,7 +20,7 @@ export default defineConfig({
       fileName: (format) => `react-calendar-timeline.${format}.js`
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-dom', 'react-dom/client'],
+      external: ['react', 'react/jsx-runtime', 'react-dom', 'react-dom/client', 'dayjs'],
       output: {
         globals: {
           react: 'React'
