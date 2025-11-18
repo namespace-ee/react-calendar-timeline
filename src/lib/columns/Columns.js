@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import moment from 'moment'
 
-import { iterateTimes } from '../utility/calendar'
+import { iterateTimes, getGroupOrders } from '../utility/calendar'
+import { _get } from '../utility/generic'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
 const passThroughPropTypes = {
@@ -18,7 +20,14 @@ const passThroughPropTypes = {
 class Columns extends Component {
   static propTypes = {
     ...passThroughPropTypes,
-    getLeftOffsetFromDate: PropTypes.func.isRequired
+    getLeftOffsetFromDate: PropTypes.func.isRequired,
+    items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    keys: PropTypes.object,
+    dimensionItems: PropTypes.array,
+    groupHeights: PropTypes.array,
+    groupTops: PropTypes.array,
+    emptyCellLabelRenderer: PropTypes.func
   }
 
   shouldComponentUpdate(nextProps) {
@@ -31,8 +40,39 @@ class Columns extends Component {
       nextProps.timeSteps === this.props.timeSteps &&
       nextProps.height === this.props.height &&
       nextProps.verticalLineClassNamesForTime ===
-        this.props.verticalLineClassNamesForTime
+        this.props.verticalLineClassNamesForTime &&
+      nextProps.items === this.props.items &&
+      nextProps.groups === this.props.groups &&
+      nextProps.dimensionItems === this.props.dimensionItems &&
+      nextProps.groupHeights === this.props.groupHeights &&
+      nextProps.groupTops === this.props.groupTops &&
+      nextProps.emptyCellLabelRenderer === this.props.emptyCellLabelRenderer
     )
+  }
+
+  // Check if a time range overlaps with any items in a group
+  isTimeRangeEmpty(groupId, timeStart, timeEnd) {
+    const { items, keys } = this.props
+    
+    if (!items || !keys) {
+      return false
+    }
+
+    const { itemGroupKey, itemTimeStartKey, itemTimeEndKey } = keys
+
+    // Get all items for this group
+    const groupItems = Array.isArray(items) 
+      ? items.filter(item => _get(item, itemGroupKey) === groupId)
+      : Object.values(items).filter(item => _get(item, itemGroupKey) === groupId)
+
+    // Check if any item overlaps with this time range
+    return !groupItems.some(item => {
+      const itemStart = _get(item, itemTimeStartKey)
+      const itemEnd = _get(item, itemTimeEndKey)
+      
+      // Check for overlap: item starts before timeEnd and ends after timeStart
+      return itemStart < timeEnd && itemEnd > timeStart
+    })
   }
 
   render() {
@@ -44,11 +84,16 @@ class Columns extends Component {
       timeSteps,
       height,
       verticalLineClassNamesForTime,
-      getLeftOffsetFromDate
+      getLeftOffsetFromDate,
+      groups,
+      groupHeights,
+      groupTops,
+      emptyCellLabelRenderer
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
     let lines = []
+    let emptyCellLabels = []
 
     iterateTimes(
       canvasTimeStart,
@@ -91,10 +136,65 @@ class Columns extends Component {
             }}
           />
         )
+
+        // Check for empty cells and render labels if renderer is provided
+        if (emptyCellLabelRenderer && groups && groupHeights && groupTops && this.props.keys) {
+          const timeStartMs = time.valueOf()
+          const timeEndMs = nextTime.valueOf()
+          const cellWidth = right - left
+          const groupOrders = getGroupOrders(groups, this.props.keys)
+
+          // Check each group for empty cells
+          groups.forEach((group) => {
+            const groupId = _get(group, this.props.keys.groupIdKey)
+            const groupOrderData = groupOrders[groupId]
+            
+            if (groupOrderData && this.isTimeRangeEmpty(groupId, timeStartMs, timeEndMs)) {
+              const groupOrder = groupOrderData.index
+              const groupTop = groupTops[groupOrder] || 0
+              const groupHeight = groupHeights[groupOrder] || height
+              
+              const label = emptyCellLabelRenderer({
+                time: moment(timeStartMs),
+                timeEnd: moment(timeEndMs),
+                group: group,
+                groupOrder: groupOrder
+              })
+
+              if (label) {
+                emptyCellLabels.push(
+                  <div
+                    key={`empty-cell-${groupOrder}-${timeStartMs}`}
+                    className="rct-empty-cell-label"
+                    style={{
+                      position: 'absolute',
+                      top: `${groupTop}px`,
+                      left: `${left}px`,
+                      width: `${cellWidth}px`,
+                      height: `${groupHeight}px`,
+                      pointerEvents: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 1
+                    }}
+                  >
+                    {label}
+                  </div>
+                )
+              }
+            }
+          })
+        }
       }
     )
 
-    return <div className="rct-vertical-lines">{lines}</div>
+    return (
+      <div className="rct-vertical-lines">
+        {lines}
+        {emptyCellLabels}
+      </div>
+    )
   }
 }
 
