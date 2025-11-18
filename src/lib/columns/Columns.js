@@ -95,6 +95,10 @@ class Columns extends Component {
     let lines = []
     let emptyCellLabels = []
 
+    const groupOrders = emptyCellLabelRenderer && groups && this.props.keys
+      ? getGroupOrders(groups, this.props.keys)
+      : null
+
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
@@ -138,11 +142,10 @@ class Columns extends Component {
         )
 
         // Check for empty cells and render labels if renderer is provided
-        if (emptyCellLabelRenderer && groups && groupHeights && groupTops && this.props.keys) {
+        if (emptyCellLabelRenderer && groups && groupHeights && groupTops && groupOrders) {
           const timeStartMs = time.valueOf()
           const timeEndMs = nextTime.valueOf()
           const cellWidth = right - left
-          const groupOrders = getGroupOrders(groups, this.props.keys)
 
           // Check each group for empty cells
           groups.forEach((group) => {
