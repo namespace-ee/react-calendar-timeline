@@ -59,16 +59,14 @@ class Columns extends Component {
       return false
     }
 
-    if (!items || (Array.isArray(items) && items.length === 0) || (typeof items === 'object' && Object.keys(items).length === 0)) {
+    if (!items || items.length === 0) {
       return true
     }
 
     const { itemGroupKey, itemTimeStartKey, itemTimeEndKey } = keys
 
     // Get all items for this group
-    const groupItems = Array.isArray(items) 
-      ? items.filter(item => _get(item, itemGroupKey) === groupId)
-      : Object.values(items).filter(item => _get(item, itemGroupKey) === groupId)
+    const groupItems = items.filter(item => _get(item, itemGroupKey) === groupId)
 
     // Check if any item overlaps with this time range
     return !groupItems.some(item => {
