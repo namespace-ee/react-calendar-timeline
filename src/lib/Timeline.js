@@ -716,6 +716,7 @@ export default class ReactCalendarTimeline extends Component {
         groupHeights={groupHeights}
         groupTops={groupTops}
         emptyCellLabelRenderer={this.props.emptyCellLabelRenderer}
+        lineHeight={this.props.lineHeight}
       />
     )
   }

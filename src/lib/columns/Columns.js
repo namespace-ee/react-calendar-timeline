@@ -27,7 +27,8 @@ class Columns extends Component {
     dimensionItems: PropTypes.array,
     groupHeights: PropTypes.array,
     groupTops: PropTypes.array,
-    emptyCellLabelRenderer: PropTypes.func
+    emptyCellLabelRenderer: PropTypes.func,
+    lineHeight: PropTypes.number
   }
 
   shouldComponentUpdate(nextProps) {
@@ -88,7 +89,8 @@ class Columns extends Component {
       groups,
       groupHeights,
       groupTops,
-      emptyCellLabelRenderer
+      emptyCellLabelRenderer,
+      lineHeight
     } = this.props
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
@@ -155,7 +157,11 @@ class Columns extends Component {
             if (groupOrderData && this.isTimeRangeEmpty(groupId, timeStartMs, timeEndMs)) {
               const groupOrder = groupOrderData.index
               const groupTop = groupTops[groupOrder] || 0
-              const groupHeight = groupHeights[groupOrder] || height
+              
+              let groupHeight = groupHeights[groupOrder]
+              if (!groupHeight) {
+                groupHeight = group.height || lineHeight
+              }
               
               const label = emptyCellLabelRenderer({
                 time: moment(timeStartMs),
