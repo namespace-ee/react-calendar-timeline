@@ -35,7 +35,8 @@ export default class App extends Component {
       items,
       defaultTimeStart,
       defaultTimeEnd,
-      labelMode: 'available'
+      labelMode: 'available',
+      showNoItems: false
     }
   }
 
@@ -43,7 +44,11 @@ export default class App extends Component {
     this.setState({ labelMode: mode })
   }
 
-  emptyCellLabelRenderer = ({ time, group }) => {
+  handleToggleNoItems = () => {
+    this.setState({ showNoItems: !this.state.showNoItems })
+  }
+
+  emptyCellLabelRenderer = ({ time, timeEnd, group, groupOrder }) => {
     const { labelMode } = this.state
 
     if (labelMode === 'none') {
@@ -154,7 +159,8 @@ export default class App extends Component {
   }
 
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd, labelMode } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd, labelMode, showNoItems } = this.state
+    const displayItems = showNoItems ? [] : items
 
     return (
       <div style={{ padding: '20px' }}>
@@ -195,12 +201,26 @@ export default class App extends Component {
               </button>
             ))}
           </div>
+          <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #ddd' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={showNoItems}
+                onChange={this.handleToggleNoItems}
+                style={{ cursor: 'pointer' }}
+              />
+              <strong>Test: Show no items</strong>
+              <span style={{ color: '#666', fontSize: '12px' }}>
+                (Tests empty cell labels when items array is empty)
+              </span>
+            </label>
+          </div>
         </div>
 
         <Timeline
-          key={labelMode}
+          key={`${labelMode}-${showNoItems}`}
           groups={groups}
-          items={items}
+          items={displayItems}
           keys={keys}
           sidebarWidth={150}
           canMove

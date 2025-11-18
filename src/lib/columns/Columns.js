@@ -55,8 +55,12 @@ class Columns extends Component {
   isTimeRangeEmpty(groupId, timeStart, timeEnd) {
     const { items, keys } = this.props
     
-    if (!items || !keys) {
+    if (!keys) {
       return false
+    }
+
+    if (!items || (Array.isArray(items) && items.length === 0) || (typeof items === 'object' && Object.keys(items).length === 0)) {
+      return true
     }
 
     const { itemGroupKey, itemTimeStartKey, itemTimeEndKey } = keys
