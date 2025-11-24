@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 
 import { iterateTimes, getGroupOrders } from '../utility/calendar'
-import { _get, arraysEqual } from '../utility/generic'
+import { _get, _length, arraysEqual } from '../utility/generic'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
 const passThroughPropTypes = {
@@ -61,7 +61,7 @@ class Columns extends Component {
       return false
     }
 
-    if (!items || items.length === 0) {
+    if (!items || _length(items) === 0) {
       return true
     }
 
