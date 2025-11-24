@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 
 import { iterateTimes, getGroupOrders } from '../utility/calendar'
-import { _get } from '../utility/generic'
+import { _get, arraysEqual } from '../utility/generic'
 import { TimelineStateConsumer } from '../timeline/TimelineStateContext'
 
 const passThroughPropTypes = {
@@ -42,12 +42,12 @@ class Columns extends Component {
       nextProps.height === this.props.height &&
       nextProps.verticalLineClassNamesForTime ===
         this.props.verticalLineClassNamesForTime &&
-      nextProps.items === this.props.items &&
-      nextProps.groups === this.props.groups &&
+      arraysEqual(nextProps.items, this.props.items) &&
+      arraysEqual(nextProps.groups, this.props.groups) &&
       nextProps.keys === this.props.keys &&
-      nextProps.dimensionItems === this.props.dimensionItems &&
-      nextProps.groupHeights === this.props.groupHeights &&
-      nextProps.groupTops === this.props.groupTops &&
+      arraysEqual(nextProps.dimensionItems, this.props.dimensionItems) &&
+      arraysEqual(nextProps.groupHeights, this.props.groupHeights) &&
+      arraysEqual(nextProps.groupTops, this.props.groupTops) &&
       nextProps.emptyCellLabelRenderer === this.props.emptyCellLabelRenderer &&
       nextProps.lineHeight === this.props.lineHeight
     )
