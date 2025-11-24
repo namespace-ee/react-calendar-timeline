@@ -48,7 +48,7 @@ export default class App extends Component {
     this.setState({ showNoItems: !this.state.showNoItems })
   }
 
-  emptyCellLabelRenderer = ({ time, timeEnd, group, groupOrder }) => {
+  emptyCellLabelRenderer = ({ time, group }) => {
     const { labelMode } = this.state
 
     if (labelMode === 'none') {
