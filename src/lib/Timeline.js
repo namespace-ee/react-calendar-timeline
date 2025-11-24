@@ -76,6 +76,7 @@ export default class ReactCalendarTimeline extends Component {
 
     itemRenderer: PropTypes.func,
     groupRenderer: PropTypes.func,
+    emptyCellLabelRenderer: PropTypes.func,
 
     className: PropTypes.string,
     style: PropTypes.object,
@@ -693,7 +694,10 @@ export default class ReactCalendarTimeline extends Component {
     canvasWidth,
     minUnit,
     timeSteps,
-    height
+    height,
+    dimensionItems,
+    groupHeights,
+    groupTops
   ) {
     return (
       <Columns
@@ -705,6 +709,14 @@ export default class ReactCalendarTimeline extends Component {
         timeSteps={timeSteps}
         height={height}
         verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
+        items={this.props.items}
+        groups={this.props.groups}
+        keys={this.props.keys}
+        dimensionItems={dimensionItems}
+        groupHeights={groupHeights}
+        groupTops={groupTops}
+        emptyCellLabelRenderer={this.props.emptyCellLabelRenderer}
+        lineHeight={this.props.lineHeight}
       />
     )
   }
@@ -1047,7 +1059,10 @@ export default class ReactCalendarTimeline extends Component {
                       canvasWidth,
                       minUnit,
                       timeSteps,
-                      height
+                      height,
+                      dimensionItems,
+                      groupHeights,
+                      groupTops
                     )}
                     {this.rows(canvasWidth, groupHeights, groups)}
                     {this.items(
