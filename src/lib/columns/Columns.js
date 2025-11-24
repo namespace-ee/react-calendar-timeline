@@ -44,10 +44,12 @@ class Columns extends Component {
         this.props.verticalLineClassNamesForTime &&
       nextProps.items === this.props.items &&
       nextProps.groups === this.props.groups &&
+      nextProps.keys === this.props.keys &&
       nextProps.dimensionItems === this.props.dimensionItems &&
       nextProps.groupHeights === this.props.groupHeights &&
       nextProps.groupTops === this.props.groupTops &&
-      nextProps.emptyCellLabelRenderer === this.props.emptyCellLabelRenderer
+      nextProps.emptyCellLabelRenderer === this.props.emptyCellLabelRenderer &&
+      nextProps.lineHeight === this.props.lineHeight
     )
   }
 
