@@ -18,6 +18,7 @@ const demos = {
   customInfoLabel: require('./demo-custom-info-label').default,
   controledSelect: require('./demo-controlled-select').default,
   controlledScrolling: require('./demo-controlled-scrolling').default,
+  emptyCellLabels: require('./demo-empty-cell-labels').default,
 }
 
 // A simple component that shows the pathname of the current location

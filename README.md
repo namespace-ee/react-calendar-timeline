@@ -546,6 +546,67 @@ groupRenderer = ({ group }) => {
 }
 ```
 
+## emptyCellLabelRenderer
+
+Function that allows you to render custom labels in empty cells (cells where no items overlap). This is useful for displaying information like availability status, pricing, or other metadata for specific date ranges and groups.
+
+The function is called for each empty cell in the timeline. The Timeline component automatically iterates over all time ranges and groups, checking for empty cells and calling your renderer function when needed.
+
+**Function signature:**
+
+```jsx
+emptyCellLabelRenderer = ({ time, timeEnd, group, groupOrder }) => {
+  // Return JSX to render a label, or null/undefined to render nothing
+}
+```
+
+**Parameters:**
+
+| property     | type            | description                                                                 |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| `time`       | `Moment`        | Start time of the empty cell (moment object)                                |
+| `timeEnd`    | `Moment`        | End time of the empty cell (moment object)                                 |
+| `group`      | `object`        | The group object for this row (same object passed in the `groups` prop)    |
+| `groupOrder` | `number`        | The index/order of the group in the groups array                           |
+
+**Return value:**
+
+- Return a React element (JSX) to render a label in the empty cell
+- Return `null` or `undefined` to render nothing for that cell
+
+**Example:**
+
+```jsx
+emptyCellLabelRenderer = ({ time, timeEnd, group, groupOrder }) => {
+  // Access the date for this cell
+  const cellDate = moment(time).format('YYYY-MM-DD');
+  
+  // Access group/rental data
+  const rental = group;
+  
+  // Return custom label based on your logic
+  return (
+    <span style={{ fontSize: '11px', color: '#999' }}>
+      Available
+    </span>
+  );
+}
+
+// Usage in Timeline component
+<Timeline
+  groups={groups}
+  items={items}
+  emptyCellLabelRenderer={this.emptyCellLabelRenderer}
+/>
+```
+
+**Notes:**
+
+- The renderer function is called automatically by the Timeline for each empty cell - you don't need to iterate over groups or time ranges yourself
+- The function can access component state, props, or make API calls to fetch data for specific dates
+- For performance, consider caching data or pre-fetching pricing/availability information rather than fetching it on every render call
+- Empty cells are determined by checking if any items overlap with the time range for that group
+
 ## resizeDetector
 
 The component automatically detects when the window has been resized. Optionally you can also detect when the component's DOM element has been resized.
