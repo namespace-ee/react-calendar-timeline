@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "15.0.3",
+    "next": "16.1.5",
     "randomcolor": "^0.6.2",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-calendar-timeline": "file:../dist/",
