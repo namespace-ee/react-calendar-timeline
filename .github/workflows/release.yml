@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   release:
@@ -59,6 +60,4 @@ jobs:
           fi
 
       - name: Publish to npm
-        run: npm publish --tag ${{ steps.dist-tag.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --tag ${{ steps.dist-tag.outputs.tag }}
