@@ -127,7 +127,7 @@
     "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.69.5",
     "typescript": "^5.2.2",
-    "vite": "^5.4.11",
+    "vite": "^7.3.1",
     "vite-plugin-dts": "^4.3.0",
     "vite-plugin-lib-inject-css": "^2.1.1",
     "vite-plugin-static-copy": "^2.1.0"
