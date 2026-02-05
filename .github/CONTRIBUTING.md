@@ -21,3 +21,38 @@ Before you submit your pull request please read and consider the following guide
 All code is linted for consistency.
 
 * To check for style lint run `npm run lint`. To fix linting errors, run `npm run lint:fix`
+
+## Releasing
+
+Releases are automated via GitHub Actions. When a version tag is pushed, the workflow runs lint, tests, and build, then publishes to npm.
+
+### Steps
+
+1. Bump the version in `package.json`
+2. Commit the version bump
+3. Create a git tag matching the version (prefixed with `v`)
+4. Push the commit and tag
+
+### Stable release
+
+```bash
+# Update version in package.json to 0.31.0
+git add package.json
+git commit -m "Bump version to 0.31.0"
+git tag v0.31.0
+git push origin main --tags
+```
+
+### Prerelease (beta, alpha, rc)
+
+Prerelease tags publish under their respective npm dist-tag (e.g., `beta`) so they don't become the default install.
+
+```bash
+# Update version in package.json to 0.31.0-beta.1
+git add package.json
+git commit -m "Bump version to 0.31.0-beta.1"
+git tag v0.31.0-beta.1
+git push origin main --tags
+```
+
+**Note:** The tag version must match the version in `package.json` or the workflow will fail.

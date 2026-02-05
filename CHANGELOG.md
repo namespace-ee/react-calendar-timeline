@@ -8,6 +8,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 * Fix `vite.config.mts` reference in `tsconfig.node.json`.
+* Add automated npm release via GitHub Actions on git tag push (`v*`), with support for beta/alpha/rc dist-tags.
 
 ## 0.30.0 (beta.4)
 
