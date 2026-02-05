@@ -60,4 +60,4 @@ jobs:
           fi
 
       - name: Publish to npm
-        run: npm publish --provenance --tag ${{ steps.dist-tag.outputs.tag }}
+        run: npm publish --tag ${{ steps.dist-tag.outputs.tag }}
