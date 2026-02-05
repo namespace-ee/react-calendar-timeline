@@ -35,9 +35,6 @@ We encourage users to try out the beta and provide feedback before the stable re
 
  Note: Testing framework has been updated and some tests are currently being migrated.
 
-# ⚠️⚠️⚠️⚠️ HELP WANTED
-please email me [ahmad.ilaiwi@gmail.com](mailto:ahmad.ilaiwi@gmail.com) and we will setup some time to speak and see if you can help maintain this library.
-
 ![calendar demo](https://raw.githubusercontent.com/namespace-ee/react-calendar-timeline/master/demo.gif)
 
 Checkout the [examples here](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples)!
