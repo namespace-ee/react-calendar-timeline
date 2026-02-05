@@ -9,6 +9,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * Fix `vite.config.mts` reference in `tsconfig.node.json`.
 * Add automated npm release via GitHub Actions on git tag push (`v*`), with support for beta/alpha/rc dist-tags.
+* Add CI workflow for linting and building on Node.js 22 (tests skipped until migrated to TypeScript).
 
 ## 0.30.0 (beta.4)
 
