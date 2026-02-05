@@ -20,8 +20,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           registry-url: https://registry.npmjs.org
+
+      - name: Update npm to latest (>= 11.5 required for OIDC auth)
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm ci
