@@ -7,6 +7,14 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta.13)
+
+* Upgrade resize detection to native `ResizeObserver` with `borderBoxSize` reading and `contentRect` fallback, replacing the window-only resize listener. Detects both window and container-level width changes (e.g. parent sidebar toggling).
+* Add SSR / jsdom guard with automatic fallback to window resize event.
+* Add `Math.round()` on dimensions and early bail-out when width is unchanged to prevent sub-pixel jitter and unnecessary re-renders.
+
+## 0.30.0 (beta.12)
+
 * Fix `vite.config.mts` reference in `tsconfig.node.json`.
 * Add automated npm release via GitHub Actions on git tag push (`v*`), with support for beta/alpha/rc dist-tags.
 * Add CI workflow for linting and building on Node.js 22 (tests skipped until migrated to TypeScript).

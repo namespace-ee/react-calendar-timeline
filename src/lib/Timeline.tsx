@@ -348,9 +348,7 @@ export default class ReactCalendarTimeline<
       this.props.resizeDetector.addListener(this)
     }
 
-    windowResizeDetector.addListener(this)
-
-    //this.lastTouchDistance = null //TODO do we need this?
+    windowResizeDetector.addListener(this, this.container.current)
   }
 
   componentWillUnmount() {
@@ -438,10 +436,16 @@ export default class ReactCalendarTimeline<
     }
   }
 
-  resize = (props = this.props) => {
-    const { width: containerWidth } = this.container.current?.getBoundingClientRect() ?? { width: 0 }
+  resize = (props = this.props, containerWidth?: number) => {
+    if (containerWidth === undefined) {
+      containerWidth = Math.round(
+        this.container.current?.getBoundingClientRect().width ?? 0,
+      )
+    }
 
-    const width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    const width = Math.round(containerWidth - props.sidebarWidth - props.rightSidebarWidth)
+    if (width === this.state.width) return
+
     const canvasWidth = getCanvasWidth(width, props.buffer!)
     const { dimensionItems, height, groupHeights, groupTops } = stackTimelineItems(
       props.items,
