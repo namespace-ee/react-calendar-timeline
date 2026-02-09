@@ -16,6 +16,8 @@ const listeners = new WeakMap<ResizableComponent, ListenerEntry>()
  * in SSR / jsdom / environments without ResizeObserver.
  */
 function addListener(component: ResizableComponent, element?: HTMLElement | null) {
+  if (listeners.has(component)) removeListener(component)
+
   if (element && typeof ResizeObserver !== 'undefined') {
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0]
