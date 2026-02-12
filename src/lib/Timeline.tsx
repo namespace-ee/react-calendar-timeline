@@ -121,12 +121,6 @@ export type ReactCalendarTimelineProps<
   onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): any
   itemRenderer?: ItemProps<CustomItem>['itemRenderer']
   groupRenderer?: ((props: ReactCalendarGroupRendererProps<CustomGroup>) => React.ReactNode) | undefined
-  resizeDetector?:
-    | {
-        addListener?: (x: any) => void
-        removeListener: (x: any) => void
-      }
-    | undefined
   verticalLineClassNamesForTime?: (start: number, end: number) => string[]
   horizontalLineClassNamesForGroup?: ((group: CustomGroup) => string[]) | undefined
   buffer?: number
@@ -343,21 +337,10 @@ export default class ReactCalendarTimeline<
 
   componentDidMount() {
     this.resize(this.props)
-
-    if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
-      this.props.resizeDetector.addListener(this)
-    }
-
-    windowResizeDetector.addListener(this)
-
-    //this.lastTouchDistance = null //TODO do we need this?
+    windowResizeDetector.addListener(this, this.container.current)
   }
 
   componentWillUnmount() {
-    if (this.props.resizeDetector && this.props.resizeDetector.addListener) {
-      this.props.resizeDetector.removeListener(this)
-    }
-
     windowResizeDetector.removeListener(this)
   }
 
@@ -438,10 +421,16 @@ export default class ReactCalendarTimeline<
     }
   }
 
-  resize = (props = this.props) => {
-    const { width: containerWidth } = this.container.current?.getBoundingClientRect() ?? { width: 0 }
+  resize = (props = this.props, containerWidth?: number) => {
+    if (containerWidth === undefined) {
+      containerWidth = Math.round(
+        this.container.current?.getBoundingClientRect().width ?? 0,
+      )
+    }
 
-    const width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
+    const width = Math.round(containerWidth - props.sidebarWidth - props.rightSidebarWidth)
+    if (width === this.state.width && this.scrollComponent) return
+
     const canvasWidth = getCanvasWidth(width, props.buffer!)
     const { dimensionItems, height, groupHeights, groupTops } = stackTimelineItems(
       props.items,
