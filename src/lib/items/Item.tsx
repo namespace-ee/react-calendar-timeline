@@ -307,7 +307,6 @@ private itemRef  = createRef<HTMLDivElement>();
       .on('dragstart', (e) => {
         if (this.props.selected) {
           this.dragInProgress = true
-          this.fireInteractEvent(true)
           const clickTime = this.timeFor(e)
           this.setState({
             dragging: true,
@@ -373,7 +372,6 @@ private itemRef  = createRef<HTMLDivElement>();
       })
       .on('resizestart', (e) => {
         if (this.props.selected) {
-          this.fireInteractEvent(true)
           this.setState({
             resizing: true,
             resizeEdge: null, // we don't know yet
@@ -431,6 +429,20 @@ private itemRef  = createRef<HTMLDivElement>();
       .on('tap', (e) => {
         this.actualClick(e, e.pointerType === 'mouse' ? 'click' : 'touch')
       })
+
+    // Native pointerdown fires on the item element during bubble phase, before the
+    // event reaches ScrollElement's div listener. This ensures isItemInteraction is
+    // set synchronously before ScrollElement's handleMouseDown runs.
+    // Guard on selected: listeners persist after deselection since mountInteract is
+    // only called once, so we must not fire when the item is no longer selected.
+    this.itemRef.current!.addEventListener('pointerdown', () => {
+      if (this.props.selected) this.fireInteractEvent(true)
+    })
+    // Reset on pointerup to handle clicks that don't become drags or resizes.
+    // dragend/resizeend handle the reset for actual interactions.
+    this.itemRef.current!.addEventListener('pointerup', () => {
+      if (this.props.selected) this.fireInteractEvent(false)
+    })
 
     this.setState({
       interactMounted: true,

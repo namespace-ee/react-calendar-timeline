@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Fix timeline panning triggering when clicking or dragging a selected item. Native `pointerdown`/`pointerup` listeners on the item element now set `isItemInteraction` synchronously before `ScrollElement`'s handler runs, eliminating the race condition with interact.js `dragstart`.
+
 ## 0.30.0 (beta.13)
 
 * Upgrade resize detection to native `ResizeObserver` with `borderBoxSize` reading and `contentRect` fallback, replacing the window-only resize listener. Detects both window and container-level width changes.
