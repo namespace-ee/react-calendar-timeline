@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Fix crash in `getSumScroll` when a node has no `parentNode` before reaching `document.body`.
+
 ## 0.30.0 (beta.13)
 
 * Upgrade resize detection to native `ResizeObserver` with `borderBoxSize` reading and `contentRect` fallback, replacing the window-only resize listener. Detects both window and container-level width changes.
