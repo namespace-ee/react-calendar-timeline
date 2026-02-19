@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Fix incorrect zoom scale calculation in `handleWheelZoom` — zoom in and zoom out are now symmetric, preventing over-zooming on ctrl+scroll especially at higher speeds.
+
 ## 0.30.0 (beta.13)
 
 * Upgrade resize detection to native `ResizeObserver` with `borderBoxSize` reading and `contentRect` fallback, replacing the window-only resize listener. Detects both window and container-level width changes.
