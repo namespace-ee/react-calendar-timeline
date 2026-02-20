@@ -10,6 +10,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 * Fix crash in `getSumScroll` when a node has no `parentNode` before reaching `document.body`.
 * Fix incorrect zoom scale calculation in `handleWheelZoom` — zoom in and zoom out are now symmetric, preventing over-zooming on ctrl+scroll especially at higher speeds.
 * Fix timeline panning triggering when clicking or dragging a selected item. Native `pointerdown`/`pointerup` listeners on the item element now set `isItemInteraction` synchronously before `ScrollElement`'s handler runs, eliminating the race condition with interact.js `dragstart`.
+* Normalize wheel event delta values across browsers and platforms to fix excessive scrolling/zooming with trackpads on some systems. Handles different `deltaMode` values (PIXEL/LINE/PAGE) and clamps to ±120px for consistent behavior. Closes #929, addresses #975.
 
 ## 0.30.0 (beta.13)
 
