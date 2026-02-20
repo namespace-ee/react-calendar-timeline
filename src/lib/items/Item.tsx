@@ -78,6 +78,7 @@ export type ItemProps<CustomItem extends TimelineItemBase<number>> = {
   groupTops: any
   onItemDoubleClick: (i: Id, e: MouseEvent<HTMLDivElement>) => void
   scrollRef: HTMLElement | null
+  timezone?: string
 }
 
 type DragProps = { offset: number; x: number; y: number }
@@ -203,9 +204,13 @@ private itemRef  = createRef<HTMLDivElement>();
   }
 
   dragTimeSnap(dragTime: number, considerOffset?: boolean) {
-    const { dragSnap } = this.props
+    const { dragSnap, timezone } = this.props
     if (dragSnap) {
-      const offset = considerOffset ? dayjs().utcOffset() * 60 * 1000 : 0
+      const offset = considerOffset
+        ? (timezone
+            ? dayjs().tz(timezone).utcOffset() * 60 * 1000
+            : dayjs().utcOffset() * 60 * 1000)
+        : 0
       return Math.round(dragTime / dragSnap) * dragSnap - (offset % dragSnap)
     } else {
       return dragTime

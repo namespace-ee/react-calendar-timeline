@@ -15,15 +15,21 @@ export type IntervalProps<Data> = {
   getIntervalProps: GetIntervalPropsType
 
   headerData?: Data
+  timezone?: string
 }
 
 class Interval<Data> extends React.PureComponent<IntervalProps<Data>> {
   onIntervalClick = () => {
-    const { primaryHeader, interval, unit, showPeriod } = this.props
+    const { primaryHeader, interval, unit, showPeriod, timezone } = this.props
     if (primaryHeader) {
       const nextUnit = getNextUnit(unit)
-      const newStartTime = interval.startTime.clone().startOf(nextUnit)
-      const newEndTime = interval.startTime.clone().endOf(nextUnit)
+      // Preserve timezone when calculating period boundaries
+      let baseTime = interval.startTime.clone()
+      if (timezone) {
+        baseTime = baseTime.tz(timezone)
+      }
+      const newStartTime = baseTime.startOf(nextUnit)
+      const newEndTime = baseTime.endOf(nextUnit)
       showPeriod(newStartTime, newEndTime)
     } else {
       showPeriod(interval.startTime, interval.endTime)

@@ -43,12 +43,14 @@ type TimelineStartProps = {
   showPeriod: (from: Dayjs, to: Dayjs) => void
   timelineUnit: SelectUnits
   timelineWidth: number
+  timezone?: string
 }
 export type TimelineContextType = {
   getTimelineState: () => TimelineContextValue
   getLeftOffsetFromDate: (date: number) => number
   getDateFromLeftOffsetPosition: (leftOffset: number) => number
   showPeriod: (from: Dayjs, to: Dayjs) => void
+  timezone?: string
 }
 
 type TimelineState = {
@@ -65,6 +67,7 @@ export class TimelineStateProvider extends React.Component<PropsWithChildren<Tim
         getLeftOffsetFromDate: this.getLeftOffsetFromDate,
         getDateFromLeftOffsetPosition: this.getDateFromLeftOffsetPosition,
         showPeriod: this.props.showPeriod,
+        timezone: this.props.timezone,
       },
     }
   }
@@ -78,6 +81,7 @@ export class TimelineStateProvider extends React.Component<PropsWithChildren<Tim
       canvasWidth,
       timelineUnit,
       timelineWidth,
+      timezone,
     } = this.props
     return {
       visibleTimeStart,
@@ -87,6 +91,7 @@ export class TimelineStateProvider extends React.Component<PropsWithChildren<Tim
       canvasWidth,
       timelineUnit,
       timelineWidth,
+      timezone,
     } as TimelineContextValue // REVIEW,
   }
 
@@ -98,6 +103,17 @@ export class TimelineStateProvider extends React.Component<PropsWithChildren<Tim
   getDateFromLeftOffsetPosition = (leftOffset: number) => {
     const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
     return calculateTimeForXPosition(canvasTimeStart, canvasTimeEnd, canvasWidth, leftOffset)
+  }
+
+  componentDidUpdate(prevProps: PropsWithChildren<TimelineStartProps>) {
+    if (prevProps.timezone !== this.props.timezone) {
+      this.setState({
+        timelineContext: {
+          ...this.state.timelineContext,
+          timezone: this.props.timezone,
+        },
+      })
+    }
   }
 
   render() {

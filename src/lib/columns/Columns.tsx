@@ -17,6 +17,7 @@ type WrapperColumnsProps = {
 
 type ColumnsProps = WrapperColumnsProps & {
   getLeftOffsetFromDate: (time: number) => number
+  timezone?: string
 }
 
 class Columns extends Component<ColumnsProps> {
@@ -29,7 +30,8 @@ class Columns extends Component<ColumnsProps> {
       nextProps.minUnit === this.props.minUnit &&
       nextProps.timeSteps === this.props.timeSteps &&
       nextProps.height === this.props.height &&
-      nextProps.verticalLineClassNamesForTime === this.props.verticalLineClassNamesForTime
+      nextProps.verticalLineClassNamesForTime === this.props.verticalLineClassNamesForTime &&
+      nextProps.timezone === this.props.timezone
     )
   }
 
@@ -43,6 +45,7 @@ class Columns extends Component<ColumnsProps> {
       height,
       verticalLineClassNamesForTime,
       getLeftOffsetFromDate,
+      timezone,
     } = this.props
     //const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
 
@@ -82,7 +85,7 @@ class Columns extends Component<ColumnsProps> {
           }}
         />,
       )
-    })
+    }, timezone)
 
     return <div className="rct-vertical-lines">{lines}</div>
   }
@@ -91,7 +94,7 @@ class Columns extends Component<ColumnsProps> {
 const ColumnsWrapper: FC<WrapperColumnsProps> = ({ ...props }) => {
   return (
     <TimelineStateConsumer>
-      {({ getLeftOffsetFromDate }) => <Columns getLeftOffsetFromDate={getLeftOffsetFromDate} {...props} />}
+      {({ getLeftOffsetFromDate, timezone }) => <Columns getLeftOffsetFromDate={getLeftOffsetFromDate} timezone={timezone} {...props} />}
     </TimelineStateConsumer>
   )
 }

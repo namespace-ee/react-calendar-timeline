@@ -1,5 +1,7 @@
 /* eslint-disable no-var */
 import dayjs, { Dayjs } from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import { _get } from './generic'
 import { Dimension, ItemDimension } from '../types/dimension'
 import {
@@ -13,6 +15,28 @@ import {
   TimelineTimeSteps,
 } from '../types/main'
 import { ReactCalendarTimelineProps, ReactCalendarTimelineState } from '../Timeline'
+
+// Ensure timezone plugins are extended only once
+let pluginsExtended = false
+function ensurePlugins() {
+  if (!pluginsExtended) {
+    dayjs.extend(utc)
+    dayjs.extend(timezone)
+    pluginsExtended = true
+  }
+}
+
+/**
+ * Create a dayjs instance in the specified timezone
+ * Falls back to browser timezone if no timezone specified
+ */
+export function createDayjsInTimezone(date: number | Dayjs, tz?: string): Dayjs {
+  if (tz) {
+    ensurePlugins()
+    return dayjs(date).tz(tz)
+  }
+  return dayjs(date)
+}
 
 /**
  * Calculate the ms / pixel ratio of the timeline state
@@ -74,8 +98,9 @@ export function iterateTimes(
   unit: keyof TimelineTimeSteps,
   timeSteps: TimelineTimeSteps,
   callback: (time: Dayjs, nextTime: Dayjs) => void,
+  timezone?: string,
 ) {
-  let time = dayjs(start).startOf(unit)
+  let time = createDayjsInTimezone(start, timezone).startOf(unit)
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
     const value = time.get(unit)
@@ -83,7 +108,7 @@ export function iterateTimes(
   }
 
   while (time.valueOf() < end) {
-    let nextTime = dayjs(time)
+    let nextTime = createDayjsInTimezone(time, timezone)
       .add(timeSteps[unit] || 1, unit)
       .startOf(unit)
 

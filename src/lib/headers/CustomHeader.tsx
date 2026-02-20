@@ -22,6 +22,7 @@ export type CustomHeaderProps<Data> = {
   getLeftOffsetFromDate: (date: any) => number
   height: number
   timelineWidth: number
+  timezone?: string
 }
 
 type GetHeaderIntervalsParams = {
@@ -117,7 +118,7 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
         labelWidth: width,
         left,
       })
-    })
+    }, this.props.timezone)
     return intervals
   }
 
@@ -193,7 +194,7 @@ export type CustomHeaderWrapperProps<Data> = {
 }
 
 function CustomHeaderWrapper<Data>({ children, unit, headerData, height }: CustomHeaderWrapperProps<Data>) {
-  const { getTimelineState, showPeriod, getLeftOffsetFromDate } = useTimelineState()
+  const { getTimelineState, showPeriod, getLeftOffsetFromDate, timezone } = useTimelineState()
   const timelineState = getTimelineState()
   const { timeSteps } = useTimelineHeadersContext()
   return (
@@ -206,6 +207,7 @@ function CustomHeaderWrapper<Data>({ children, unit, headerData, height }: Custo
       headerData={headerData}
       getLeftOffsetFromDate={getLeftOffsetFromDate}
       height={height}
+      timezone={timezone}
     />
   )
 }

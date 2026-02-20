@@ -53,6 +53,7 @@ export interface TimelineContext {
   canvasTimeEnd: number
   canvasWidth: number
   timelineUnit: SelectUnits
+  timezone?: string
 }
 
 export type GroupStack = {
