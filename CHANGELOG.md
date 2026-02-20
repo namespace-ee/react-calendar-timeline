@@ -8,6 +8,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 * Fix incorrect zoom scale calculation in `handleWheelZoom` — zoom in and zoom out are now symmetric, preventing over-zooming on ctrl+scroll especially at higher speeds.
+* Fix timeline panning triggering when clicking or dragging a selected item. Native `pointerdown`/`pointerup` listeners on the item element now set `isItemInteraction` synchronously before `ScrollElement`'s handler runs, eliminating the race condition with interact.js `dragstart`.
 
 ## 0.30.0 (beta.13)
 

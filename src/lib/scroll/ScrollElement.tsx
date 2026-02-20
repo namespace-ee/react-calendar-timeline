@@ -95,18 +95,18 @@ class ScrollElement extends Component<Props, State> {
   }
 
   handleMouseDown = (e: PointerEvent) => {
-    if (e.button === 0) {
+    if (e.button === 0 && !this.isItemInteraction) {
       this.dragLastPosition = e.pageX
-      this.setState({
-        isDragging: true,
-      })
     }
   }
 
   handleMouseMove = (e: PointerEvent) => {
     //why is interacting with item important?
-    if (this.state.isDragging && !this.isItemInteraction) {
-      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + this.dragLastPosition! - e.pageX)
+    if (this.dragLastPosition !== null) {
+      if (!this.state.isDragging) {
+        this.setState({ isDragging: true })
+      }
+      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + this.dragLastPosition - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
