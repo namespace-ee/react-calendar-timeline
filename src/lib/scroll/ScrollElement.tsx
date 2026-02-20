@@ -73,6 +73,32 @@ class ScrollElement extends Component<Props, State> {
     this.props.onScroll(scrollX)
   }
 
+  /**
+   * Normalize wheel delta values for consistent behavior across browsers.
+   * Addresses issue #929 (trackpad scrolling too fast on some platforms)
+   * and issue #975 (mouse wheel zoom jumps).
+   *
+   * Browsers report wheel events differently:
+   * - deltaMode 0 (DOM_DELTA_PIXEL): Raw pixel values (varies by OS/browser)
+   * - deltaMode 1 (DOM_DELTA_LINE): Line-based scrolling (multiply by pixels/line)
+   * - deltaMode 2 (DOM_DELTA_PAGE): Page-based scrolling (rare)
+   */
+  normalizeWheelDelta = (e: WheelEvent): number => {
+    let delta = e.deltaY || e.deltaX
+
+    if (e.deltaMode === 1) {
+      // LINE mode: Convert to pixels (1 line ≈ 15px)
+      delta *= 15
+    } else if (e.deltaMode === 2) {
+      // PAGE mode: Convert to pixels (1 page ≈ viewport height)
+      delta *= 800
+    }
+
+    // Clamp to ±120 (standard mouse wheel click) to prevent excessive jumps
+    const MAX_DELTA = 120
+    return Math.max(-MAX_DELTA, Math.min(MAX_DELTA, delta))
+  }
+
   handleWheel = (e: WheelEvent) => {
     //const { traditionalZoom } = this.props
 
@@ -84,12 +110,14 @@ class ScrollElement extends Component<Props, State> {
 
       const speed = e.ctrlKey ? 10 : e.metaKey ? 3 : 1
 
-      // convert vertical zoom to horiziontal
-      this.props.onWheelZoom(speed, xPosition, e.deltaY)
+      // Normalize delta for consistent zoom behavior
+      const normalizedDelta = this.normalizeWheelDelta(e)
+      this.props.onWheelZoom(speed, xPosition, normalizedDelta)
     } else if (e.shiftKey) {
       e.preventDefault()
-      // shift+scroll event from a touchpad has deltaY property populated; shift+scroll event from a mouse has deltaX
-      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + (e.deltaY || e.deltaX))
+      // Normalize delta for consistent horizontal scroll
+      const normalizedDelta = this.normalizeWheelDelta(e)
+      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + normalizedDelta)
       // no modifier pressed? we prevented the default event, so scroll or zoom as needed
     }
   }
