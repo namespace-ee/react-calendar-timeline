@@ -30,7 +30,7 @@ interface ScrollPosition {
 }
 
 export function getSumScroll(node: HTMLElement): ScrollPosition {
-  if (node === document.body) {
+  if (node === document.body || !node.parentNode) {
     return { scrollLeft: 0, scrollTop: 0 };
   } else {
     const parent = getSumScroll(node.parentNode as HTMLElement);
