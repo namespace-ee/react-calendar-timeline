@@ -41,8 +41,10 @@ import dayjs, { Dayjs } from 'dayjs'
 import { ItemProps, ResizeEdge } from './items/Item'
 // import './Timeline.scss'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
 
 dayjs.extend(localizedFormat)
+dayjs.extend(advancedFormat)
 
 export interface ReactCalendarTimelineRef {
   // Add any methods or properties you want to expose

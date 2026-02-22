@@ -569,22 +569,35 @@ private itemRef  = createRef<HTMLDivElement>();
   getDragLeftRef = (el: HTMLElement) => (this.dragLeft = el)
   getDragRightRef = (el: HTMLElement) => (this.dragRight = el)
 
-  getItemProps = (props: GetItemPropsParams = {}) => {
-    //TODO: maybe shouldnt include all of these classes
+  getItemProps = ({
+    className: propsClassName,
+    onMouseDown,
+    onMouseUp,
+    onTouchStart,
+    onTouchEnd,
+    onDoubleClick,
+    onContextMenu,
+    leftClassName,
+    rightClassName,
+    leftStyle,
+    rightStyle,
+    ...rest
+  }: GetItemPropsParams = {}) => {
     const classNames = 'rct-item' + (this.props.item.className ? ` ${this.props.item.className}` : '')
 
     return {
+      ...rest,
       key: this.itemId,
       ref: this.itemRef,
       title: this.itemDivTitle,
-      className: classNames + ` ${props.className ? props.className : ''}`,
-      onMouseDown: composeEvents(this.onMouseDown, props.onMouseDown),
-      onMouseUp: composeEvents(this.onMouseUp, props.onMouseUp),
-      onTouchStart: composeEvents(this.onTouchStart, props.onTouchStart),
-      onTouchEnd: composeEvents(this.onTouchEnd, props.onTouchEnd),
-      onDoubleClick: composeEvents(this.handleDoubleClick, props.onDoubleClick),
-      onContextMenu: composeEvents(this.handleContextMenu, props.onContextMenu),
-      style: Object.assign({}, this.getItemStyle(props)),
+      className: classNames + ` ${propsClassName ? propsClassName : ''}`,
+      onMouseDown: composeEvents(this.onMouseDown, onMouseDown),
+      onMouseUp: composeEvents(this.onMouseUp, onMouseUp),
+      onTouchStart: composeEvents(this.onTouchStart, onTouchStart),
+      onTouchEnd: composeEvents(this.onTouchEnd, onTouchEnd),
+      onDoubleClick: composeEvents(this.handleDoubleClick, onDoubleClick),
+      onContextMenu: composeEvents(this.handleContextMenu, onContextMenu),
+      style: Object.assign({}, this.getItemStyle({ leftClassName, rightClassName, leftStyle, rightStyle, ...rest } as GetItemPropsParams)),
     }
   }
 

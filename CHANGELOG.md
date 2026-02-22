@@ -8,6 +8,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ## Unreleased
 
 * Fix stale `itemContext.title` in custom `itemRenderer` — replaced mutable cache (`cacheDataFromProps`) with getters that derive values directly from current props. Closes #1014.
+* Add `advancedFormat` dayjs plugin to restore support for ordinal date tokens (`Do`, `Q`, `k`, etc.) lost in the Moment.js → Day.js migration. Closes #1011.
+* Fix `getItemProps` silently dropping custom event handlers (`onClick`, `onMouseEnter`, `onMouseLeave`, etc.) and HTML attributes (`data-*`, `aria-*`) passed by custom `itemRenderer`. Unhandled props are now forwarded via rest spread. Closes #970.
+* Remove blanket `preventDefault()` from `composeEvents` — internal handlers already call it conditionally where needed.
 * Fix crash in `getSumScroll` when a node has no `parentNode` before reaching `document.body`.
 * Fix incorrect zoom scale calculation in `handleWheelZoom` — zoom in and zoom out are now symmetric, preventing over-zooming on ctrl+scroll especially at higher speeds.
 * Fix timeline panning triggering when clicking or dragging a selected item. Native `pointerdown`/`pointerup` listeners on the item element now set `isItemInteraction` synchronously before `ScrollElement`'s handler runs, eliminating the race condition with interact.js `dragstart`.
