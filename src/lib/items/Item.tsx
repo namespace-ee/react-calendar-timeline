@@ -144,11 +144,11 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
     resizeStart: null,
     resizeTime: null,
   }
-  private itemId: string = ''
-  private itemTitle: string = ''
-  private itemDivTitle?: string
-  private itemTimeStart?: number
-  private itemTimeEnd?: number
+  private get itemId(): string { return _get(this.props.item, this.props.keys.itemIdKey) }
+  private get itemTitle(): string { return _get(this.props.item, this.props.keys.itemTitleKey) }
+  private get itemDivTitle(): string { return this.props.keys.itemDivTitleKey ? _get(this.props.item, this.props.keys.itemDivTitleKey) : this.itemTitle }
+  private get itemTimeStart(): number { return _get(this.props.item, this.props.keys.itemTimeStartKey) }
+  private get itemTimeEnd(): number { return _get(this.props.item, this.props.keys.itemTimeEndKey) }
 private itemRef  = createRef<HTMLDivElement>();
   private dragLeft?: HTMLElement
   private dragRight?: HTMLElement
@@ -158,8 +158,6 @@ private itemRef  = createRef<HTMLDivElement>();
 
   constructor(props: ItemProps<CustomItem>) {
     super(props)
-
-    this.cacheDataFromProps(props)
   }
 
   shouldComponentUpdate(nextProps: ItemProps<CustomItem>, nextState: ItemState) {
@@ -189,13 +187,6 @@ private itemRef  = createRef<HTMLDivElement>();
     return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState)
   }
 
-  cacheDataFromProps(props: ItemProps<CustomItem>) {
-    this.itemId = _get(props.item, props.keys.itemIdKey)
-    this.itemTitle = _get(props.item, props.keys.itemTitleKey)
-    this.itemDivTitle = props.keys.itemDivTitleKey ? _get(props.item, props.keys.itemDivTitleKey) : this.itemTitle
-    this.itemTimeStart = _get(props.item, props.keys.itemTimeStartKey)
-    this.itemTimeEnd = _get(props.item, props.keys.itemTimeEndKey)
-  }
 
   getTimeRatio() {
     const { canvasTimeStart, canvasTimeEnd, canvasWidth } = this.props
@@ -481,7 +472,6 @@ private itemRef  = createRef<HTMLDivElement>();
   }
 
   componentDidUpdate(prevProps: ItemProps<CustomItem>) {
-    this.cacheDataFromProps(this.props)
     let { interactMounted } = this.state
     const couldDrag = prevProps.selected && this.canMove(prevProps)
     const couldResizeLeft = prevProps.selected && this.canResizeLeft(prevProps)
