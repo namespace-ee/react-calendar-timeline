@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta.14)
+
 * Fix stale `itemContext.title` in custom `itemRenderer` — replaced mutable cache (`cacheDataFromProps`) with getters that derive values directly from current props. Closes #1014.
 * Add `advancedFormat` dayjs plugin to restore support for ordinal date tokens (`Do`, `Q`, `k`, etc.) lost in the Moment.js → Day.js migration. Closes #1011.
 * Fix `getItemProps` silently dropping custom event handlers (`onClick`, `onMouseEnter`, `onMouseLeave`, etc.) and HTML attributes (`data-*`, `aria-*`) passed by custom `itemRenderer`. Unhandled props are now forwarded via rest spread. Closes #970.
