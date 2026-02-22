@@ -7,6 +7,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Add `advancedFormat` dayjs plugin to restore support for ordinal date tokens (`Do`, `Q`, `k`, etc.) lost in the Moment.js → Day.js migration. Closes #1011.
 * Fix `getItemProps` silently dropping custom event handlers (`onClick`, `onMouseEnter`, `onMouseLeave`, etc.) and HTML attributes (`data-*`, `aria-*`) passed by custom `itemRenderer`. Unhandled props are now forwarded via rest spread. Closes #970.
 * Remove blanket `preventDefault()` from `composeEvents` — internal handlers already call it conditionally where needed.
 * Fix crash in `getSumScroll` when a node has no `parentNode` before reaching `document.body`.
