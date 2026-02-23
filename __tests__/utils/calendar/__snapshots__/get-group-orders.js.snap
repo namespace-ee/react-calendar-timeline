@@ -1,21 +1,21 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getGroupOrders works as expected 1`] = `
-Object {
-  "1": Object {
-    "group": Object {
+exports[`getGroupOrders > works as expected 1`] = `
+{
+  "1": {
+    "group": {
       "id": "1",
     },
     "index": 0,
   },
-  "2": Object {
-    "group": Object {
+  "2": {
+    "group": {
       "id": "2",
     },
     "index": 1,
   },
-  "3": Object {
-    "group": Object {
+  "3": {
+    "group": {
       "id": "3",
     },
     "index": 2,

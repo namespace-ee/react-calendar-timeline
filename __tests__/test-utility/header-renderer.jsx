@@ -3,7 +3,6 @@ import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
 import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
 import { state } from '../../__fixtures__/stateAndProps'
-import jest from 'jest'
 import { defaultTimeSteps } from '../../src/lib/default-config'
 import { TimelineHeadersProvider } from '../../src/lib/headers/HeadersContext'
 

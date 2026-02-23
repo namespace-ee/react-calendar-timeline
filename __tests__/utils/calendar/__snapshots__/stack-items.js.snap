@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`stackItems should stack items while moving an item 1`] = `
-Object {
-  "dimensionItems": Array [
-    Object {
-      "dimensions": Object {
+exports[`stackItems > should stack items while moving an item 1`] = `
+{
+  "dimensionItems": [
+    {
+      "dimensions": {
         "collisionLeft": 1540543600000,
         "collisionWidth": 6803877,
         "height": 22.5,
         "left": 4472.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -21,14 +21,14 @@ Object {
       },
       "id": "0",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
         "height": 22.5,
         "left": 4097.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -39,14 +39,14 @@ Object {
       },
       "id": "5",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
         "height": 22.5,
         "left": 4722.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -57,14 +57,14 @@ Object {
       },
       "id": "6",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
         "left": 5388.888888888889,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -75,14 +75,14 @@ Object {
       },
       "id": "1",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 7125,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -93,14 +93,14 @@ Object {
       },
       "id": "2",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 8375,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "3",
           },
           "index": 2,
@@ -112,12 +112,12 @@ Object {
       "id": "3",
     },
   ],
-  "groupHeights": Array [
+  "groupHeights": [
     60,
     30,
     30,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     60,
     90,
@@ -126,17 +126,17 @@ Object {
 }
 `;
 
-exports[`stackItems should stack items while resize item left 1`] = `
-Object {
-  "dimensionItems": Array [
-    Object {
-      "dimensions": Object {
+exports[`stackItems > should stack items while resize item left 1`] = `
+{
+  "dimensionItems": [
+    {
+      "dimensions": {
         "collisionLeft": 1540543600000,
         "collisionWidth": 3203877,
         "height": 22.5,
         "left": 4472.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -147,14 +147,14 @@ Object {
       },
       "id": "0",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
         "height": 22.5,
         "left": 4097.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -165,14 +165,14 @@ Object {
       },
       "id": "5",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
         "height": 22.5,
         "left": 4722.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -183,14 +183,14 @@ Object {
       },
       "id": "6",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
         "left": 5388.888888888889,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -201,14 +201,14 @@ Object {
       },
       "id": "1",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 7125,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -219,14 +219,14 @@ Object {
       },
       "id": "2",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 8375,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "3",
           },
           "index": 2,
@@ -238,12 +238,12 @@ Object {
       "id": "3",
     },
   ],
-  "groupHeights": Array [
+  "groupHeights": [
     60,
     30,
     30,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     60,
     90,
@@ -252,17 +252,17 @@ Object {
 }
 `;
 
-exports[`stackItems should stack items while resize item right 1`] = `
-Object {
-  "dimensionItems": Array [
-    Object {
-      "dimensions": Object {
+exports[`stackItems > should stack items while resize item right 1`] = `
+{
+  "dimensionItems": [
+    {
+      "dimensions": {
         "collisionLeft": 1540540000000,
         "collisionWidth": 10403877,
         "height": 22.5,
         "left": 4347.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -273,14 +273,14 @@ Object {
       },
       "id": "0",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
         "height": 22.5,
         "left": 4097.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -291,14 +291,14 @@ Object {
       },
       "id": "5",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
         "height": 22.5,
         "left": 4722.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -309,14 +309,14 @@ Object {
       },
       "id": "6",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
         "left": 5388.888888888889,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -327,14 +327,14 @@ Object {
       },
       "id": "1",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 7125,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -345,14 +345,14 @@ Object {
       },
       "id": "2",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 8375,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "3",
           },
           "index": 2,
@@ -364,12 +364,12 @@ Object {
       "id": "3",
     },
   ],
-  "groupHeights": Array [
+  "groupHeights": [
     60,
     30,
     30,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     60,
     90,
@@ -378,17 +378,17 @@ Object {
 }
 `;
 
-exports[`stackItems work as expected 1`] = `
-Object {
-  "dimensionItems": Array [
-    Object {
-      "dimensions": Object {
+exports[`stackItems > work as expected 1`] = `
+{
+  "dimensionItems": [
+    {
+      "dimensions": {
         "collisionLeft": 1540540000000,
         "collisionWidth": 6803877,
         "height": 22.5,
         "left": 4347.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -399,14 +399,14 @@ Object {
       },
       "id": "0",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
         "height": 22.5,
         "left": 4097.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -417,14 +417,14 @@ Object {
       },
       "id": "5",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
         "height": 22.5,
         "left": 4722.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -435,14 +435,14 @@ Object {
       },
       "id": "6",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
         "left": 5388.888888888889,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -453,14 +453,14 @@ Object {
       },
       "id": "1",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 7125,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -471,14 +471,14 @@ Object {
       },
       "id": "2",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 8375,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "3",
           },
           "index": 2,
@@ -490,12 +490,12 @@ Object {
       "id": "3",
     },
   ],
-  "groupHeights": Array [
+  "groupHeights": [
     60,
     30,
     30,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     60,
     90,
@@ -504,17 +504,17 @@ Object {
 }
 `;
 
-exports[`stackItems work as expected no stack 1`] = `
-Object {
-  "dimensionItems": Array [
-    Object {
-      "dimensions": Object {
+exports[`stackItems > work as expected no stack 1`] = `
+{
+  "dimensionItems": [
+    {
+      "dimensions": {
         "collisionLeft": 1540540000000,
         "collisionWidth": 6803877,
         "height": 22.5,
         "left": 4347.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -525,14 +525,14 @@ Object {
       },
       "id": "0",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540532800000,
         "collisionWidth": 21203877,
         "height": 22.5,
         "left": 4097.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -543,14 +543,14 @@ Object {
       },
       "id": "5",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540550800000,
         "collisionWidth": 24803877,
         "height": 22.5,
         "left": 4722.222222222223,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -561,14 +561,14 @@ Object {
       },
       "id": "6",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540570000000,
         "collisionWidth": 14875919,
         "height": 22.5,
         "left": 5388.888888888889,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -579,14 +579,14 @@ Object {
       },
       "id": "1",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540620000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 7125,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "1",
           },
           "index": 0,
@@ -597,14 +597,14 @@ Object {
       },
       "id": "2",
     },
-    Object {
-      "dimensions": Object {
+    {
+      "dimensions": {
         "collisionLeft": 1540656000000,
         "collisionWidth": 20397548,
         "height": 22.5,
         "left": 8375,
-        "order": Object {
-          "group": Object {
+        "order": {
+          "group": {
             "id": "3",
           },
           "index": 2,
@@ -616,12 +616,12 @@ Object {
       "id": "3",
     },
   ],
-  "groupHeights": Array [
+  "groupHeights": [
     30,
     30,
     30,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     30,
     60,

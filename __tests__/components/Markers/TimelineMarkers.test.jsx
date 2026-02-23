@@ -1,6 +1,5 @@
 import React from 'react'
-import { render } from 'react-testing-library'
-import 'jest-dom/extend-expect'
+import { render } from '@testing-library/react'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import TodayMarker from 'lib/markers/public/TodayMarker'
 import CustomMarker from 'lib/markers/public/CustomMarker'

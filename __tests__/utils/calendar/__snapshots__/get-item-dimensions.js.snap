@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getItemDimensions should evaluate dimensions for an item 1`] = `
-Object {
-  "dimensions": Object {
+exports[`getItemDimensions > should evaluate dimensions for an item 1`] = `
+{
+  "dimensions": {
     "collisionLeft": 1540540000000,
     "collisionWidth": 6803877,
     "height": 60,
     "left": 1449.074074074074,
-    "order": Object {
-      "group": Object {
+    "order": {
+      "group": {
         "id": "1",
       },
       "index": 0,

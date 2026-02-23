@@ -1,5 +1,5 @@
 import { getVisibleItems } from 'lib/utility/calendar'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const itemTimeStartKey = 'start'
 const itemTimeEndKey = 'end'
@@ -11,16 +11,16 @@ const keys = {
 
 describe('getVisibleItems', () => {
   it('returns items within date range - both dates', () => {
-    const startRange = moment()
+    const startRange = dayjs()
       .add(-1, 'day')
       .valueOf()
-    const endRange = moment(startRange).add(1, 'day')
+    const endRange = dayjs(startRange).add(1, 'day')
     const items = [
       {
-        [itemTimeStartKey]: moment(startRange)
+        [itemTimeStartKey]: dayjs(startRange)
           .add(10, 'minute')
           .valueOf(),
-        [itemTimeEndKey]: moment(startRange)
+        [itemTimeEndKey]: dayjs(startRange)
           .add(20, 'minute')
           .valueOf(),
         id: 1
@@ -33,16 +33,16 @@ describe('getVisibleItems', () => {
   })
 
   it('returns items within date range - start date', () => {
-    const startRange = moment()
+    const startRange = dayjs()
       .add(-1, 'day')
       .valueOf()
-    const endRange = moment(startRange).add(1, 'day')
+    const endRange = dayjs(startRange).add(1, 'day')
     const items = [
       {
-        [itemTimeStartKey]: moment(endRange)
+        [itemTimeStartKey]: dayjs(endRange)
           .add(-10, 'minute')
           .valueOf(),
-        [itemTimeEndKey]: moment(endRange)
+        [itemTimeEndKey]: dayjs(endRange)
           .add(20, 'minute')
           .valueOf(),
         id: 1
@@ -55,16 +55,16 @@ describe('getVisibleItems', () => {
   })
 
   it('returns items within date range - end date', () => {
-    const startRange = moment()
+    const startRange = dayjs()
       .add(-1, 'day')
       .valueOf()
-    const endRange = moment(startRange).add(1, 'day')
+    const endRange = dayjs(startRange).add(1, 'day')
     const items = [
       {
-        [itemTimeStartKey]: moment(startRange)
+        [itemTimeStartKey]: dayjs(startRange)
           .add(-10, 'minute')
           .valueOf(),
-        [itemTimeEndKey]: moment(startRange)
+        [itemTimeEndKey]: dayjs(startRange)
           .add(10, 'minute')
           .valueOf(),
         id: 1
@@ -77,16 +77,16 @@ describe('getVisibleItems', () => {
   })
 
   it('does not return items outside of date range - before start date', () => {
-    const startRange = moment()
+    const startRange = dayjs()
       .add(-1, 'day')
       .valueOf()
-    const endRange = moment(startRange).add(1, 'day')
+    const endRange = dayjs(startRange).add(1, 'day')
     const items = [
       {
-        [itemTimeStartKey]: moment(startRange)
+        [itemTimeStartKey]: dayjs(startRange)
           .add(-2, 'day')
           .valueOf(),
-        [itemTimeEndKey]: moment(startRange)
+        [itemTimeEndKey]: dayjs(startRange)
           .add(-1, 'day')
           .valueOf(),
         id: 1
@@ -99,16 +99,16 @@ describe('getVisibleItems', () => {
   })
 
   it('does not return items outside of date range - after end date', () => {
-    const startRange = moment()
+    const startRange = dayjs()
       .add(-1, 'day')
       .valueOf()
-    const endRange = moment(startRange).add(1, 'day')
+    const endRange = dayjs(startRange).add(1, 'day')
     const items = [
       {
-        [itemTimeStartKey]: moment(endRange)
+        [itemTimeStartKey]: dayjs(endRange)
           .add(1, 'day')
           .valueOf(),
-        [itemTimeEndKey]: moment(endRange)
+        [itemTimeEndKey]: dayjs(endRange)
           .add(2, 'day')
           .valueOf(),
         id: 1

@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount, render } from 'enzyme'
+import { render, fireEvent } from '@testing-library/react'
 import { noop } from 'test-utility'
 import GroupRow from 'lib/row/GroupRow'
 
@@ -13,78 +13,79 @@ const defaultProps = {
   group: {}
 }
 
-// using mount to be able to interact with element, render
-// to assert dom level props (styles, className)
 describe('GroupRow', () => {
   it('calls passed in onDoubleClick', () => {
-    const onDoubleClickMock = jest.fn()
+    const onDoubleClickMock = vi.fn()
     const props = {
       ...defaultProps,
       onDoubleClick: onDoubleClickMock
     }
 
-    const wrapper = mount(<GroupRow {...props} />)
+    const { container } = render(<GroupRow {...props} />)
 
-    wrapper.simulate('doubleclick')
+    fireEvent.doubleClick(container.firstChild)
 
     expect(onDoubleClickMock).toHaveBeenCalledTimes(1)
   })
 
   it('calls passed in onClick', () => {
-    const onClickMock = jest.fn()
+    const onClickMock = vi.fn()
     const props = {
       ...defaultProps,
       onClick: onClickMock
     }
 
-    const wrapper = mount(<GroupRow {...props} />)
+    const { container } = render(<GroupRow {...props} />)
 
-    wrapper.simulate('click')
+    fireEvent.click(container.firstChild)
 
     expect(onClickMock).toHaveBeenCalledTimes(1)
   })
 
   it('calls passed in onContextMenu', () => {
-    const onContextMenuMock = jest.fn()
+    const onContextMenuMock = vi.fn()
     const props = {
       ...defaultProps,
       onContextMenu: onContextMenuMock
     }
 
-    const wrapper = mount(<GroupRow {...props} />)
+    const { container } = render(<GroupRow {...props} />)
 
-    wrapper.simulate('contextmenu')
+    fireEvent.contextMenu(container.firstChild)
 
     expect(onContextMenuMock).toHaveBeenCalledTimes(1)
   })
+
   it('assigns "rct-hl-even" class if isEvenRow is true', () => {
     const props = {
       ...defaultProps,
       isEvenRow: true
     }
 
-    const wrapper = render(<GroupRow {...props} />)
+    const { container } = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('class').trim()).toBe('rct-hl-even')
+    expect(container.firstChild.className.trim()).toBe('rct-hl-even')
   })
+
   it('assigns "rct-hl-odd" if isEvenRow is false', () => {
     const props = {
       ...defaultProps,
       isEvenRow: false
     }
 
-    const wrapper = render(<GroupRow {...props} />)
+    const { container } = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('class').trim()).toBe('rct-hl-odd')
+    expect(container.firstChild.className.trim()).toBe('rct-hl-odd')
   })
+
   it('passes style prop to style', () => {
     const props = {
       ...defaultProps,
       style: { border: '1px solid black' }
     }
 
-    const wrapper = render(<GroupRow {...props} />)
+    const { container } = render(<GroupRow {...props} />)
 
-    expect(wrapper.prop('style').border).toBe(props.style.border)
+    expect(container.firstChild.style.border).toBe('1px solid black')
   })
 })

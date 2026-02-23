@@ -1,21 +1,21 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getGroupedItems works as expected 1`] = `
-Object {
-  "0": Object {
-    "group": Object {
+exports[`getGroupedItems > works as expected 1`] = `
+{
+  "0": {
+    "group": {
       "id": "1",
     },
     "index": 0,
-    "items": Array [
-      Object {
-        "dimensions": Object {
+    "items": [
+      {
+        "dimensions": {
           "collisionLeft": 1540540000000,
           "collisionWidth": 6803877,
           "height": 22.5,
           "left": 907.4074074074074,
-          "order": Object {
-            "group": Object {
+          "order": {
+            "group": {
               "id": "1",
             },
             "index": 0,
@@ -26,14 +26,14 @@ Object {
         },
         "id": "0",
       },
-      Object {
-        "dimensions": Object {
+      {
+        "dimensions": {
           "collisionLeft": 1540532800000,
           "collisionWidth": 21203877,
           "height": 22.5,
           "left": 824.074074074074,
-          "order": Object {
-            "group": Object {
+          "order": {
+            "group": {
               "id": "1",
             },
             "index": 0,
@@ -44,14 +44,14 @@ Object {
         },
         "id": "5",
       },
-      Object {
-        "dimensions": Object {
+      {
+        "dimensions": {
           "collisionLeft": 1540550800000,
           "collisionWidth": 24803877,
           "height": 22.5,
           "left": 1032.4074074074074,
-          "order": Object {
-            "group": Object {
+          "order": {
+            "group": {
               "id": "1",
             },
             "index": 0,
@@ -62,14 +62,14 @@ Object {
         },
         "id": "6",
       },
-      Object {
-        "dimensions": Object {
+      {
+        "dimensions": {
           "collisionLeft": 1540570000000,
           "collisionWidth": 14875919,
           "height": 22.5,
           "left": 1254.6296296296296,
-          "order": Object {
-            "group": Object {
+          "order": {
+            "group": {
               "id": "1",
             },
             "index": 0,
@@ -80,14 +80,14 @@ Object {
         },
         "id": "1",
       },
-      Object {
-        "dimensions": Object {
+      {
+        "dimensions": {
           "collisionLeft": 1540620000000,
           "collisionWidth": 20397548,
           "height": 22.5,
           "left": 1833.3333333333333,
-          "order": Object {
-            "group": Object {
+          "order": {
+            "group": {
               "id": "1",
             },
             "index": 0,
@@ -100,27 +100,27 @@ Object {
       },
     ],
   },
-  "1": Object {
-    "group": Object {
+  "1": {
+    "group": {
       "id": "2",
     },
     "index": 1,
-    "items": Array [],
+    "items": [],
   },
-  "2": Object {
-    "group": Object {
+  "2": {
+    "group": {
       "id": "3",
     },
     "index": 2,
-    "items": Array [
-      Object {
-        "dimensions": Object {
+    "items": [
+      {
+        "dimensions": {
           "collisionLeft": 1540656000000,
           "collisionWidth": 20397548,
           "height": 22.5,
           "left": 2250,
-          "order": Object {
-            "group": Object {
+          "order": {
+            "group": {
               "id": "3",
             },
             "index": 2,

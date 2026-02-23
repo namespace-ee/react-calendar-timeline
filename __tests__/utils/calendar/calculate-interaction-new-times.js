@@ -53,5 +53,5 @@ describe('calculateInteractionNewTimes', () => {
       })
     ).toMatchObject([210, 300])
   })
-  xit('the item is moved and snapped to the grid', () => {})
+  it.skip('the item is moved and snapped to the grid', () => {})
 })

@@ -14,7 +14,7 @@ describe('collision', () => {
       const subject = buildObject(45, 0, 50, 50)
       const collidingObject = buildObject(0, 0, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(true)
     })
@@ -23,7 +23,7 @@ describe('collision', () => {
       const subject = buildObject(50, 0, 50, 50)
       const collidingObject = buildObject(0, 0, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(false)
     })
@@ -34,7 +34,7 @@ describe('collision', () => {
       const subject = buildObject(0, 0, 50, 50)
       const collidingObject = buildObject(45, 0, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(true)
     })
@@ -43,7 +43,7 @@ describe('collision', () => {
       const subject = buildObject(0, 0, 50, 50)
       const collidingObject = buildObject(50, 0, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(false)
     })
@@ -54,7 +54,7 @@ describe('collision', () => {
       const subject = buildObject(0, 40, 50, 50)
       const collidingObject = buildObject(0, 30, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(true)
     })
@@ -63,7 +63,7 @@ describe('collision', () => {
       const subject = buildObject(0, 50, 50, 50)
       const collidingObject = buildObject(0, 0, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(false)
     })
@@ -74,7 +74,7 @@ describe('collision', () => {
       const subject = buildObject(0, 30, 50, 50)
       const collidingObject = buildObject(0, 50, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(true)
     })
@@ -83,7 +83,7 @@ describe('collision', () => {
       const subject = buildObject(0, 0, 50, 50)
       const collidingObject = buildObject(0, 50, 50, 50)
 
-      const result = collision(subject, collidingObject)
+      const result = collision(subject, collidingObject, 0)
 
       expect(result).toBe(false)
     })

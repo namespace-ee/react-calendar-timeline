@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { render } from '@testing-library/react'
 import { noop } from 'test-utility'
 import GroupRows from 'lib/row/GroupRows'
 
@@ -31,9 +31,9 @@ const defaultProps = {
 
 describe('GroupRows', () => {
   it('passes props and get right height for first group', () => {
-    const wrapper = mount(<GroupRows {...defaultProps} />);
+    const { container } = render(<GroupRows {...defaultProps} />)
 
-    const component = wrapper.find('GroupRow').first();
-    expect(component.prop('style').height).toBe('30px');
+    const firstRow = container.querySelector('.rct-hl-even')
+    expect(firstRow.style.height).toBe('30px')
   })
 })

@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`stackGroup should not stack list of items 1`] = `
-Object {
+exports[`stackGroup > should not stack list of items 1`] = `
+{
   "groupHeight": 0,
   "verticalMargin": 0,
 }
 `;
 
-exports[`stackGroup should stack list of items 1`] = `
-Object {
+exports[`stackGroup > should stack list of items 1`] = `
+{
   "groupHeight": 0,
   "verticalMargin": 3.75,
 }

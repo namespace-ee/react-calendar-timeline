@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`groupStack works as expected 1`] = `
-Object {
+exports[`groupStack > works as expected 1`] = `
+{
   "groupHeight": 0,
   "itemTop": 7.5,
   "verticalMargin": 18.75,

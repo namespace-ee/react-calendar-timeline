@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`stackAll works as expected not stacked 1`] = `
-Object {
-  "groupHeights": Array [
+exports[`stackAll > works as expected not stacked 1`] = `
+{
+  "groupHeights": [
     60,
     60,
     60,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     60,
     120,
@@ -16,14 +16,14 @@ Object {
 }
 `;
 
-exports[`stackAll works as expected stacked 1`] = `
-Object {
-  "groupHeights": Array [
+exports[`stackAll > works as expected stacked 1`] = `
+{
+  "groupHeights": [
     60,
     60,
     60,
   ],
-  "groupTops": Array [
+  "groupTops": [
     0,
     60,
     120,

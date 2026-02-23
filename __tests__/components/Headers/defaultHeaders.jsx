@@ -1,12 +1,10 @@
 import React from 'react'
-import { render } from 'react-testing-library'
+import { render } from '@testing-library/react'
 import { items, groups } from '../../../__fixtures__/itemsAndGroups'
 import {
   props as defaultProps
 } from '../../../__fixtures__/stateAndProps'
-import 'react-testing-library/cleanup-after-each'
 import Timeline from 'lib/Timeline'
-import 'jest-dom/extend-expect'
 
 /**
  * Testing The Default Functionality

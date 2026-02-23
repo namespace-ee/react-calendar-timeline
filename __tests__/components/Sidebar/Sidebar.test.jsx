@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { render } from '@testing-library/react'
 import Sidebar from 'lib/layout/Sidebar'
 
 const defaultProps = {
@@ -35,11 +35,11 @@ const defaultProps = {
   }
 }
 
-describe('GroupRows', () => {
+describe('Sidebar', () => {
   it('passes props and get right height for first group', () => {
-    const wrapper = mount(<Sidebar {...defaultProps} />);
+    const { container } = render(<Sidebar {...defaultProps} />)
 
-    const component = wrapper.find('div.rct-sidebar-row').first();
-    expect(component.prop('style').height).toBe('30px');
+    const firstRow = container.querySelector('.rct-sidebar-row')
+    expect(firstRow.style.height).toBe('30px')
   })
 })

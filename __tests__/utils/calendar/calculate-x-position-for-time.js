@@ -1,5 +1,5 @@
 import { calculateXPositionForTime } from 'lib/utility/calendar'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 describe('calculateXPositionForTime', () => {
   const width = 1000
@@ -21,10 +21,9 @@ describe('calculateXPositionForTime', () => {
   })
 
   it('returns time in the middle of timeline with actual date', () => {
-    const today = moment().startOf('day')
+    const today = dayjs().startOf('day')
     const startTime = today.valueOf()
     const endTime = today
-      .clone()
       .add(1, 'day')
       .valueOf()
     const time = startTime + (endTime - startTime) * 0.5
