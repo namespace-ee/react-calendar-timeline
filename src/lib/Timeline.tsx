@@ -395,31 +395,22 @@ export default class ReactCalendarTimeline<
   scrollComponent: HTMLDivElement | null = null
   scrollHeaderRef: HTMLDivElement | null = null
 
+  getScrollOffset = () => {
+    const { width, visibleTimeStart, canvasTimeStart, visibleTimeEnd } = this.state
+    const zoom = visibleTimeEnd - visibleTimeStart
+    return Math.round((width * (visibleTimeStart - canvasTimeStart)) / zoom)
+  }
+
   componentDidUpdate(_: ReactCalendarTimelineProps<CustomItem, CustomGroup>, prevState: ReactCalendarTimelineState) {
     const newZoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
     const oldZoom = prevState.visibleTimeEnd - prevState.visibleTimeStart
 
-    // are we changing zoom? Report it!
     if (this.props.onZoom && newZoom !== oldZoom) {
       this.props.onZoom(this.getTimelineContext(), this.getTimelineUnit())
     }
 
-    // The bounds have changed? Report it!
     if (this.props.onBoundsChange && this.state.canvasTimeStart !== prevState.canvasTimeStart) {
       this.props.onBoundsChange(this.state.canvasTimeStart, this.state.canvasTimeStart + newZoom * 3)
-    }
-
-    // Check the scroll is correct
-    const scrollLeft = Math.round(
-      (this.state.width * (this.state.visibleTimeStart - this.state.canvasTimeStart)) / newZoom,
-    )
-    const componentScrollLeft = Math.round(
-      (prevState.width * (prevState.visibleTimeStart - prevState.canvasTimeStart)) / oldZoom,
-    )
-
-    if (componentScrollLeft !== scrollLeft || this.scrollComponent!.scrollLeft !== scrollLeft) {
-      this.scrollComponent!.scrollLeft = scrollLeft
-      this.scrollHeaderRef!.scrollLeft = scrollLeft
     }
   }
 
@@ -463,14 +454,6 @@ export default class ReactCalendarTimeline<
       groupHeights,
       groupTops,
     })
-    //initial scroll left is the buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
-    const scrollLeft = width * ((props.buffer! - 1) / 2)
-    if (this.scrollComponent) {
-      this.scrollComponent.scrollLeft = scrollLeft
-    }
-    if (this.scrollHeaderRef) {
-      this.scrollHeaderRef.scrollLeft = scrollLeft
-    }
   }
 
   onScroll = (scrollX: number) => {
@@ -817,6 +800,7 @@ export default class ReactCalendarTimeline<
         itemRenderer={this.props.itemRenderer}
         selected={this.props.selected}
         scrollRef={this.scrollComponent}
+        scrollOffset={this.getScrollOffset()}
       />
     )
   }
@@ -967,7 +951,7 @@ export default class ReactCalendarTimeline<
     const offset = getSumOffset(this.scrollComponent!).offsetLeft
     const scrolls = getSumScroll(this.scrollComponent!)
 
-    const dragTime = (x - offset + scrolls.scrollLeft) * ratio + this.state.canvasTimeStart;
+    const dragTime = (x - offset + scrolls.scrollLeft + this.getScrollOffset()) * ratio + this.state.canvasTimeStart;
     let groupDelta = 0;
     for (const key of this.state.groupTops) {
 
@@ -1047,6 +1031,7 @@ export default class ReactCalendarTimeline<
             timeSteps={timeSteps}
             leftSidebarWidth={this.props.sidebarWidth}
             rightSidebarWidth={this.props.rightSidebarWidth}
+            scrollOffset={this.getScrollOffset()}
           >
             <div
               style={this.props.style}
@@ -1064,6 +1049,7 @@ export default class ReactCalendarTimeline<
                   onWheelZoom={this.handleWheelZoom}
                   traditionalZoom={!!traditionalZoom}
                   onScroll={this.onScroll}
+                  scrollOffset={this.getScrollOffset()}
                 >
                   <MarkerCanvas>
                     {this.columns(canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height)}
