@@ -764,12 +764,14 @@ export default class ReactCalendarTimeline<
     canvasWidth,
     dimensionItems,
     groupTops,
+    scrollOffset,
   }: {
     canvasTimeStart: number
     canvasTimeEnd: number
     canvasWidth: number
     dimensionItems: ItemDimension[]
     groupTops: number[]
+    scrollOffset: number
   }) {
     return (
       <Items
@@ -800,7 +802,7 @@ export default class ReactCalendarTimeline<
         itemRenderer={this.props.itemRenderer}
         selected={this.props.selected}
         scrollRef={this.scrollComponent}
-        scrollOffset={this.getScrollOffset()}
+        scrollOffset={scrollOffset}
       />
     )
   }
@@ -969,14 +971,13 @@ export default class ReactCalendarTimeline<
       time: Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap - (consideredOffset % this.props.dragSnap)
       , groupIndex: groupDelta
     }
-
-
   }
 
   render() {
     const { items, groups, sidebarWidth, rightSidebarWidth, timeSteps, traditionalZoom, buffer } = this.props
     const { draggingItem, resizingItem, width, visibleTimeStart, visibleTimeEnd, canvasTimeStart, canvasTimeEnd } =
       this.state
+    const scrollOffset = this.getScrollOffset()
     let { dimensionItems, height, groupHeights, groupTops } = this.state
 
     const zoom = visibleTimeEnd - visibleTimeStart
@@ -1031,7 +1032,7 @@ export default class ReactCalendarTimeline<
             timeSteps={timeSteps}
             leftSidebarWidth={this.props.sidebarWidth}
             rightSidebarWidth={this.props.rightSidebarWidth}
-            scrollOffset={this.getScrollOffset()}
+            scrollOffset={scrollOffset}
           >
             <div
               style={this.props.style}
@@ -1049,7 +1050,7 @@ export default class ReactCalendarTimeline<
                   onWheelZoom={this.handleWheelZoom}
                   traditionalZoom={!!traditionalZoom}
                   onScroll={this.onScroll}
-                  scrollOffset={this.getScrollOffset()}
+                  scrollOffset={scrollOffset}
                 >
                   <MarkerCanvas>
                     {this.columns(canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height)}
@@ -1060,6 +1061,7 @@ export default class ReactCalendarTimeline<
                       canvasWidth,
                       dimensionItems,
                       groupTops,
+                      scrollOffset,
                     })}
                     {this.childrenWithProps(
                       canvasTimeStart,
