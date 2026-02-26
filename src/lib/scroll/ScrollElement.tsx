@@ -24,10 +24,31 @@ class ScrollElement extends Component<Props, State> {
   private singleTouchStart: { x: number; y: number; screenY: number } | null = null
   private lastSingleTouch: { x: number; y: number; screenY: number } | null = null
   private isItemInteraction: boolean = false
+  private rafId: number | null = null
+  private pendingScrollOffset: number | null = null
   constructor(props: Props) {
     super(props)
     this.state = {
       isDragging: false,
+    }
+  }
+
+  /**
+   * Batch scroll updates to once per animation frame, mimicking
+   * how the browser coalesces native scroll events. Without this,
+   * each wheel/pointer event triggers a separate onScroll → onTimeChange
+   * → canvas recalculation cycle.
+   */
+  scheduleScroll = (scrollOffset: number) => {
+    this.pendingScrollOffset = scrollOffset
+    if (this.rafId === null) {
+      this.rafId = requestAnimationFrame(() => {
+        this.rafId = null
+        if (this.pendingScrollOffset !== null) {
+          this.props.onScroll(this.pendingScrollOffset)
+          this.pendingScrollOffset = null
+        }
+      })
     }
   }
   componentDidMount() {
@@ -108,14 +129,14 @@ class ScrollElement extends Component<Props, State> {
       e.preventDefault()
       // Normalize delta for consistent horizontal scroll
       const normalizedDelta = this.normalizeWheelDelta(e)
-      this.props.onScroll(this.props.scrollOffset + normalizedDelta)
+      this.scheduleScroll(this.props.scrollOffset + normalizedDelta)
     } else {
       // Plain wheel/trackpad horizontal panning.
       // Use raw deltaX (not clamped) so trackpad momentum feels natural.
       const deltaX = e.deltaX
       if (deltaX !== 0) {
         e.preventDefault()
-        this.props.onScroll(this.props.scrollOffset + deltaX)
+        this.scheduleScroll(this.props.scrollOffset + deltaX)
       }
     }
   }
@@ -132,7 +153,7 @@ class ScrollElement extends Component<Props, State> {
       if (!this.state.isDragging) {
         this.setState({ isDragging: true })
       }
-      this.props.onScroll(this.props.scrollOffset + this.dragLastPosition - e.pageX)
+      this.scheduleScroll(this.props.scrollOffset + this.dragLastPosition - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
@@ -194,7 +215,7 @@ class ScrollElement extends Component<Props, State> {
       const moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
       const moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
       if (deltaX !== 0 && moveX) {
-        this.props.onScroll(this.props.scrollOffset - deltaX)
+        this.scheduleScroll(this.props.scrollOffset - deltaX)
       }
       if (moveY) {
         window.scrollTo(window.scrollX, this.singleTouchStart!.screenY - deltaY0)
@@ -216,6 +237,9 @@ class ScrollElement extends Component<Props, State> {
   }
 
   componentWillUnmount() {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId)
+    }
     if (this.scrollComponentRef.current) {
       this.scrollComponentRef.current.removeEventListener('wheel', this.handleWheel)
       this.scrollComponentRef.current.removeEventListener('itemInteraction', this.handleItemInteract)
