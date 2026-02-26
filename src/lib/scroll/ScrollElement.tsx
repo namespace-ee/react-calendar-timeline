@@ -10,6 +10,7 @@ type Props = {
   onZoom: (n: number, m: number) => void
   onWheelZoom: (speed: number, xPosition: number, deltaY: number) => void
   onScroll: (n: number) => void
+  scrollOffset: number
 }
 
 type State = {
@@ -23,10 +24,31 @@ class ScrollElement extends Component<Props, State> {
   private singleTouchStart: { x: number; y: number; screenY: number } | null = null
   private lastSingleTouch: { x: number; y: number; screenY: number } | null = null
   private isItemInteraction: boolean = false
+  private rafId: number | null = null
+  private pendingScrollOffset: number | null = null
   constructor(props: Props) {
     super(props)
     this.state = {
       isDragging: false,
+    }
+  }
+
+  /**
+   * Batch scroll updates to once per animation frame, mimicking
+   * how the browser coalesces native scroll events. Without this,
+   * each wheel/pointer event triggers a separate onScroll → onTimeChange
+   * → canvas recalculation cycle.
+   */
+  scheduleScroll = (scrollOffset: number) => {
+    this.pendingScrollOffset = scrollOffset
+    if (this.rafId === null) {
+      this.rafId = requestAnimationFrame(() => {
+        this.rafId = null
+        if (this.pendingScrollOffset !== null) {
+          this.props.onScroll(this.pendingScrollOffset)
+          this.pendingScrollOffset = null
+        }
+      })
     }
   }
   componentDidMount() {
@@ -66,14 +88,6 @@ class ScrollElement extends Component<Props, State> {
   }
 
   /**
-   * needed to handle scrolling with trackpad
-   */
-  handleScroll = () => {
-    const scrollX = this.scrollComponentRef.current!.scrollLeft
-    this.props.onScroll(scrollX)
-  }
-
-  /**
    * Normalize wheel delta values for consistent behavior across browsers.
    * Addresses issue #929 (trackpad scrolling too fast on some platforms)
    * and issue #975 (mouse wheel zoom jumps).
@@ -100,8 +114,6 @@ class ScrollElement extends Component<Props, State> {
   }
 
   handleWheel = (e: WheelEvent) => {
-    //const { traditionalZoom } = this.props
-
     // zoom in the time dimension
     if (e.ctrlKey || e.metaKey || e.altKey) {
       e.preventDefault()
@@ -117,8 +129,15 @@ class ScrollElement extends Component<Props, State> {
       e.preventDefault()
       // Normalize delta for consistent horizontal scroll
       const normalizedDelta = this.normalizeWheelDelta(e)
-      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + normalizedDelta)
-      // no modifier pressed? we prevented the default event, so scroll or zoom as needed
+      this.scheduleScroll(this.props.scrollOffset + normalizedDelta)
+    } else {
+      // Plain wheel/trackpad horizontal panning.
+      // Use raw deltaX (not clamped) so trackpad momentum feels natural.
+      const deltaX = e.deltaX
+      if (deltaX !== 0) {
+        e.preventDefault()
+        this.scheduleScroll(this.props.scrollOffset + deltaX)
+      }
     }
   }
 
@@ -134,7 +153,7 @@ class ScrollElement extends Component<Props, State> {
       if (!this.state.isDragging) {
         this.setState({ isDragging: true })
       }
-      this.props.onScroll(this.scrollComponentRef.current!.scrollLeft + this.dragLastPosition - e.pageX)
+      this.scheduleScroll(this.props.scrollOffset + this.dragLastPosition - e.pageX)
       this.dragLastPosition = e.pageX
     }
   }
@@ -196,7 +215,7 @@ class ScrollElement extends Component<Props, State> {
       const moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
       const moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
       if (deltaX !== 0 && moveX) {
-        this.props.onScroll(this.scrollComponentRef.current!.scrollLeft - deltaX)
+        this.scheduleScroll(this.props.scrollOffset - deltaX)
       }
       if (moveY) {
         window.scrollTo(window.scrollX, this.singleTouchStart!.screenY - deltaY0)
@@ -218,6 +237,9 @@ class ScrollElement extends Component<Props, State> {
   }
 
   componentWillUnmount() {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId)
+    }
     if (this.scrollComponentRef.current) {
       this.scrollComponentRef.current.removeEventListener('wheel', this.handleWheel)
       this.scrollComponentRef.current.removeEventListener('itemInteraction', this.handleItemInteract)
@@ -229,14 +251,15 @@ class ScrollElement extends Component<Props, State> {
   }
 
   render() {
-    const { width, height, children } = this.props
+    const { width, height, children, scrollOffset } = this.props
     const { isDragging } = this.state
 
     const scrollComponentStyle: CSSProperties = {
       width: `${width}px`,
-      height: `${height + 20}px`, //20px to push the scroll element down off screen...?
+      height: `${height}px`,
       cursor: isDragging ? 'move' : 'default',
       position: 'relative',
+      overflow: 'hidden',
     }
 
     return (
@@ -245,9 +268,10 @@ class ScrollElement extends Component<Props, State> {
         data-testid="scroll-element"
         className="rct-scroll"
         style={scrollComponentStyle}
-        onScroll={this.handleScroll}
       >
-        {children}
+        <div style={{ transform: `translateX(${-scrollOffset}px)` }}>
+          {children}
+        </div>
       </div>
     )
   }

@@ -34,8 +34,7 @@ $date-header-color: #fff !default;
     display: inline-block;
     white-space: normal; // was set to nowrap in .rct-outer
     vertical-align: top;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow: hidden;
     -ms-touch-action: none;
     touch-action: none;
   }

@@ -78,6 +78,7 @@ export type ItemProps<CustomItem extends TimelineItemBase<number>> = {
   groupTops: any
   onItemDoubleClick: (i: Id, e: MouseEvent<HTMLDivElement>) => void
   scrollRef: HTMLElement | null
+  scrollOffset: number
 }
 
 type DragProps = { offset: number; x: number; y: number }
@@ -229,7 +230,7 @@ private itemRef  = createRef<HTMLDivElement>();
     const offset = getSumOffset(this.props.scrollRef!).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef!)
 
-    return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart
+    return (e.pageX - offset + scrolls.scrollLeft + this.props.scrollOffset) * ratio + this.props.canvasTimeStart
   }
 
   dragGroupDelta(e: MouseEvent) {

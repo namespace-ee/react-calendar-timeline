@@ -9,6 +9,7 @@ export type TimelineHeadersProps = {
   registerScroll: LegacyRef<HTMLDivElement>
   leftSidebarWidth: number
   rightSidebarWidth: number
+  scrollOffset: number
   style?: React.CSSProperties
   children?: ReactNode
   className?: string
@@ -79,7 +80,9 @@ class TimelineHeaders extends React.Component<TimelineHeadersProps> {
           className={classNames('rct-calendar-header', this.props.calendarHeaderClassName)}
           data-testid="headerContainer"
         >
-          {calendarHeaders}
+          <div style={{ transform: `translateX(${-this.props.scrollOffset}px)` }}>
+            {calendarHeaders}
+          </div>
         </div>
         {rightSidebarHeader}
       </div>
@@ -101,12 +104,13 @@ const TimelineHeadersWrapper = ({
   calendarHeaderStyle,
   calendarHeaderClassName,
 }: TimelineHeadersWrapperProps) => {
-  const { leftSidebarWidth, rightSidebarWidth, registerScroll } = useTimelineHeadersContext()
+  const { leftSidebarWidth, rightSidebarWidth, registerScroll, scrollOffset } = useTimelineHeadersContext()
   return (
     <TimelineHeaders
       leftSidebarWidth={leftSidebarWidth}
       rightSidebarWidth={rightSidebarWidth}
       registerScroll={registerScroll}
+      scrollOffset={scrollOffset}
       style={style}
       className={className}
       calendarHeaderStyle={calendarHeaderStyle}

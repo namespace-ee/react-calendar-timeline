@@ -10,6 +10,7 @@ const defaultContextState = {
   rightSidebarWidth: 0,
   leftSidebarWidth: 150,
   timeSteps: {},
+  scrollOffset: 0,
 }
 
 const HeaderContext = React.createContext<typeof defaultContextState>(defaultContextState)
@@ -21,6 +22,7 @@ export type TimelineHeadersProviderProps = {
   //TODO: maybe this should be skipped?
   timeSteps: object
   registerScroll: (e: HTMLDivElement) => void
+  scrollOffset: number
 }
 export class TimelineHeadersProvider extends React.Component<TimelineHeadersProviderProps> {
   render() {
@@ -29,6 +31,7 @@ export class TimelineHeadersProvider extends React.Component<TimelineHeadersProv
       leftSidebarWidth: this.props.leftSidebarWidth,
       timeSteps: this.props.timeSteps,
       registerScroll: this.props.registerScroll,
+      scrollOffset: this.props.scrollOffset,
     } as typeof defaultContextState
     return <HeaderContext.Provider value={contextValue}>{this.props.children}</HeaderContext.Provider>
   }
