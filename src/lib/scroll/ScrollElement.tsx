@@ -133,8 +133,10 @@ class ScrollElement extends Component<Props, State> {
     } else {
       // Plain wheel/trackpad horizontal panning.
       // Use raw deltaX (not clamped) so trackpad momentum feels natural.
+      // Only intercept when scroll is predominantly horizontal to avoid
+      // capturing vertical scroll that has a small deltaX component.
       const deltaX = e.deltaX
-      if (deltaX !== 0) {
+      if (deltaX !== 0 && Math.abs(deltaX) > Math.abs(e.deltaY)) {
         e.preventDefault()
         this.scheduleScroll(this.props.scrollOffset + deltaX)
       }

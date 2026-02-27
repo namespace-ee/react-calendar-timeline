@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Fix vertical page scroll being hijacked by horizontal timeline panning on trackpads
+
 ## 0.30.0 (beta.16)
 
 * Fix timeline markers (TodayMarker, CursorMarker, CustomMarker) becoming invisible after the CSS transform scroll change. The inner transform wrapper had 0 height because MarkerCanvas is `position: absolute`, causing all markers with `top:0; bottom:0` to collapse.
