@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta.16)
+
+* Fix timeline markers (TodayMarker, CursorMarker, CustomMarker) becoming invisible after the CSS transform scroll change. The inner transform wrapper had 0 height because MarkerCanvas is `position: absolute`, causing all markers with `top:0; bottom:0` to collapse.
+
 ## 0.30.0 (beta.15)
 
 * Fix Safari trackpad scroll jank by replacing native `scrollLeft` with CSS `transform: translateX()` so the browser never owns the scroll position. Eliminates the feedback loop where Safari's momentum engine fights programmatic `scrollLeft` writes in `componentDidUpdate`.

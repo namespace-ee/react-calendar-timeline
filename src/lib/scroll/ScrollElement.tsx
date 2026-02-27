@@ -269,7 +269,7 @@ class ScrollElement extends Component<Props, State> {
         className="rct-scroll"
         style={scrollComponentStyle}
       >
-        <div style={{ transform: `translateX(${-scrollOffset}px)` }}>
+        <div style={{ transform: `translateX(${-scrollOffset}px)`, height: '100%' }}>
           {children}
         </div>
       </div>
