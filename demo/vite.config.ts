@@ -2,7 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
-import { fileURLToPath, URL } from "node:url";
+
 // https://vitejs.dev/config/
 export default defineConfig({
   css: {
@@ -26,6 +26,11 @@ export default defineConfig({
       "react-calendar-timeline/dist/Timeline.scss": resolve(__dirname, "../src/lib/Timeline.scss"),
       "react-calendar-timeline/style.css": resolve(__dirname, "../dist/style.css"),
       "react-calendar-timeline": resolve(__dirname, "../src/index.ts"),
+    },
+  },
+  server: {
+    fs: {
+      allow: [resolve(__dirname, "..")],
     },
   },
   plugins: [react()],
