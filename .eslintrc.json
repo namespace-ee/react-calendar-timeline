@@ -40,7 +40,7 @@
     {
       "files": ["__tests__/**/*.{js,jsx,ts,tsx}"],
       "plugins": ["@vitest"],
-      "extends": ["plugin:@vitest/recommended"]
+      "extends": ["plugin:@vitest/legacy-recommended"]
     }
   ]
 }
