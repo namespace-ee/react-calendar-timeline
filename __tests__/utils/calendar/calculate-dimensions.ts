@@ -5,18 +5,9 @@ describe('calculateDimensions', () => {
     const dimension = calculateDimensions({
       itemTimeStart: 200,
       itemTimeEnd: 300,
-      isDragging: false,
-      isResizing: false,
       canvasTimeStart: 0,
       canvasTimeEnd: 500,
       canvasWidth: 500,
-      dragSnap: 0,
-      dragTime: false, // we are not draging right now
-      resizingItem: false,
-      resizingEdge: false,
-      resizeTime: false, // we are not resizing right now
-      visibleTimeStart: 0,
-      visibleTimeEnd: 500
     })
 
     expect(dimension).toMatchObject({
@@ -28,7 +19,7 @@ describe('calculateDimensions', () => {
   })
 
   it('items timeStart is less than canvasTimeStart', () => {
-    let example = {
+    const example = {
       itemTimeStart: 0,
       itemTimeEnd: 300,
       canvasTimeStart: 100,
@@ -47,7 +38,7 @@ describe('calculateDimensions', () => {
   })
 
   it('items timeEnd is greater than canvasTimeEnd', () => {
-    let example = {
+    const example = {
       itemTimeStart: 400,
       itemTimeEnd: 700,
       canvasTimeStart: 100,
@@ -65,7 +56,7 @@ describe('calculateDimensions', () => {
     })
   })
   it('item time range completely overlaps canvas time range', () => {
-    let example = {
+    const example = {
       itemTimeStart: 0, // item range extends before and after canvas
       itemTimeEnd: 600,
       canvasTimeStart: 100,

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "baseUrl": ".",
+    "paths": {
+      "lib/*": ["src/lib/*"],
+      "test-utility": ["__tests__/test-utility/index"],
+      "test-utility/*": ["__tests__/test-utility/*"]
+    }
+  },
+  "include": ["__tests__/**/*", "src/**/*"]
+}
