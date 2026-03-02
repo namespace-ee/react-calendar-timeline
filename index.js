@@ -1,1 +1,1 @@
-export * from './dist/react-calendar-timeline.es.js'
+export * from "./dist/react-calendar-timeline.es.js";

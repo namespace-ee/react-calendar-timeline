@@ -1,81 +1,76 @@
-import { ComponentType } from 'react'
-import {
-  createBrowserRouter,
-  Link,
-  RouteObject,
-  RouterProvider,
-} from 'react-router-dom'
+import { ComponentType } from "react";
+import { createBrowserRouter, Link, RouteObject, RouterProvider } from "react-router-dom";
 
-import DemoMain from './demo-main'
-import DemoPerformance from './demo-performance'
-import DemoTreePGroups from './demo-tree-groups'
-import LinkedTimelines from './demo-linked-timelines'
-import ElementResize from './demo-element-resize'
-import Renderers from './demo-renderers'
-import VerticalClasses from './demo-vertical-classes'
-import CustomItems from './demo-custom-items'
-import CustomHeaders from './demo-headers'
-import CustomInfoLabel from './demo-custom-info-label'
-import ControledSelect from './demo-controlled-select'
-import ControlledScrolling from './demo-controlled-scrolling'
-import ExternalDrop from "./demo-external"
-const loader = () => 'loading'
+import DemoMain from "./demo-main";
+import DemoPerformance from "./demo-performance";
+import DemoTreePGroups from "./demo-tree-groups";
+import LinkedTimelines from "./demo-linked-timelines";
+import ElementResize from "./demo-element-resize";
+import Renderers from "./demo-renderers";
+import VerticalClasses from "./demo-vertical-classes";
+import CustomItems from "./demo-custom-items";
+import CustomHeaders from "./demo-headers";
+import CustomInfoLabel from "./demo-custom-info-label";
+import ControledSelect from "./demo-controlled-select";
+import ControlledScrolling from "./demo-controlled-scrolling";
+import ExternalDrop from "./demo-external";
+const loader = () => "loading";
 const routes: RouteObject[] = [
   {
-    path: '/',
+    path: "/",
     Component: withLayout(DemoMain),
     loader,
   },
   {
-    path: '/DemoPerformance',
+    path: "/DemoPerformance",
     Component: withLayout(DemoPerformance),
     loader,
   },
   {
-    path: '/DemoTreePGroups',
+    path: "/DemoTreePGroups",
     Component: withLayout(DemoTreePGroups),
   },
   {
-    path: '/LinkedTimelines',
+    path: "/LinkedTimelines",
     Component: withLayout(LinkedTimelines),
   },
   {
-    path: '/ElementResize',
+    path: "/ElementResize",
     Component: withLayout(ElementResize),
   },
   {
-    path: '/Renderers',
+    path: "/Renderers",
     Component: withLayout(Renderers),
   },
   {
-    path: '/VerticalClasses',
+    path: "/VerticalClasses",
     Component: withLayout(VerticalClasses),
   },
   {
-    path: '/CustomItems',
+    path: "/CustomItems",
     Component: withLayout(CustomItems),
   },
   {
-    path: '/CustomHeaders',
+    path: "/CustomHeaders",
     Component: withLayout(CustomHeaders),
   },
   {
-    path: '/CustomInfoLabel',
+    path: "/CustomInfoLabel",
     Component: withLayout(CustomInfoLabel),
   },
   {
-    path: '/ControledSelect',
+    path: "/ControledSelect",
     Component: withLayout(ControledSelect),
   },
   {
-    path: '/ControlledScrolling',
+    path: "/ControlledScrolling",
     Component: withLayout(ControlledScrolling),
   },
   {
     path: "/ExternalDrop",
     Component: withLayout(ExternalDrop),
-  }
-]
+  },
+];
 
 function Menu() {
   return (
@@ -83,11 +78,11 @@ function Menu() {
       Choose the demo:
       {routes.map((key) => (
         <Link key={key.path} to={`${key.path}`}>
-          {key.path === '/' ? 'Home' : key.path!.replace('/', '')}
+          {key.path === "/" ? "Home" : key.path!.replace("/", "")}
         </Link>
       ))}
     </div>
-  )
+  );
 }
 
 function withLayout(Component: ComponentType<any>) {
@@ -99,12 +94,12 @@ function withLayout(Component: ComponentType<any>) {
           <Component />
         </div>
       </div>
-    )
-  }
+    );
+  };
 }
 
 function App() {
-  return <RouterProvider router={createBrowserRouter(routes)} />
+  return <RouterProvider router={createBrowserRouter(routes)} />;
 }
 
-export default App
+export default App;

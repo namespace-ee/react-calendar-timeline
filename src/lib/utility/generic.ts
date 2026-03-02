@@ -1,14 +1,11 @@
-import isEqual from 'lodash/isEqual'
+import isEqual from "lodash/isEqual";
 
 // so we could use both immutable.js objects and regular objects
 
-type GetObject = {
-  get?: (key: string) => any
-  [key: string]: any
-}
+type GetObject = Record<string, any>;
 
-export function _get(object: GetObject, key: string) {
-  return typeof object.get === 'function' ? object.get(key) : object[key]
+export function _get(object: GetObject, key: string): any {
+  return typeof object.get === "function" ? object.get(key) : object[key];
 }
 
 interface CountObject {
@@ -16,7 +13,7 @@ interface CountObject {
   length?: number;
 }
 export function _length(object: CountObject) {
-  return typeof object.count === 'function' ? object.count() : object.length
+  return typeof object.count === "function" ? object.count() : object.length;
 }
 
 export function arraysEqual<T>(array1: T[], array2: T[]): boolean {
@@ -28,7 +25,7 @@ export function arraysEqual<T>(array1: T[], array2: T[]): boolean {
   );
 }
 
-export function deepObjectCompare(obj1: any, obj2: any): boolean {
+export function deepObjectCompare(obj1: unknown, obj2: unknown): boolean {
   return isEqual(obj1, obj2);
 }
 

@@ -1,13 +1,13 @@
 type ResizableComponent = {
-  resize: (props?: any, containerWidth?: number) => void
-}
+  resize: (props?: any, containerWidth?: number) => void;
+};
 
 type ListenerEntry = {
-  observer: ResizeObserver | null
-  windowListener: (() => void) | null
-}
+  observer: ResizeObserver | null;
+  windowListener: (() => void) | null;
+};
 
-const listeners = new WeakMap<ResizableComponent, ListenerEntry>()
+const listeners = new WeakMap<ResizableComponent, ListenerEntry>();
 
 /**
  * Attach a resize listener to a component. When an element is provided and
@@ -16,37 +16,35 @@ const listeners = new WeakMap<ResizableComponent, ListenerEntry>()
  * in SSR / jsdom / environments without ResizeObserver.
  */
 function addListener(component: ResizableComponent, element?: HTMLElement | null) {
-  if (listeners.has(component)) removeListener(component)
+  if (listeners.has(component)) removeListener(component);
 
-  if (element && typeof ResizeObserver !== 'undefined') {
+  if (element && typeof ResizeObserver !== "undefined") {
     const observer = new ResizeObserver((entries) => {
-      const entry = entries[0]
-      if (!entry) return
-      const borderBox = entry.borderBoxSize?.[0]
-      const containerWidth = borderBox
-        ? Math.round(borderBox.inlineSize)
-        : Math.round(entry.contentRect.width)
-      component.resize(undefined, containerWidth)
-    })
-    observer.observe(element, { box: 'border-box' })
-    listeners.set(component, { observer, windowListener: null })
+      const entry = entries[0];
+      if (!entry) return;
+      const borderBox = entry.borderBoxSize?.[0];
+      const containerWidth = borderBox ? Math.round(borderBox.inlineSize) : Math.round(entry.contentRect.width);
+      component.resize(undefined, containerWidth);
+    });
+    observer.observe(element, { box: "border-box" });
+    listeners.set(component, { observer, windowListener: null });
   } else {
-    const handler = () => component.resize()
-    window.addEventListener('resize', handler)
-    listeners.set(component, { observer: null, windowListener: handler })
+    const handler = () => component.resize();
+    window.addEventListener("resize", handler);
+    listeners.set(component, { observer: null, windowListener: handler });
   }
 }
 
 function removeListener(component: ResizableComponent) {
-  const entry = listeners.get(component)
-  if (!entry) return
+  const entry = listeners.get(component);
+  if (!entry) return;
   if (entry.observer) {
-    entry.observer.disconnect()
+    entry.observer.disconnect();
   }
   if (entry.windowListener) {
-    window.removeEventListener('resize', entry.windowListener)
+    window.removeEventListener("resize", entry.windowListener);
   }
-  listeners.delete(component)
+  listeners.delete(component);
 }
 
-export default { addListener, removeListener }
+export default { addListener, removeListener };

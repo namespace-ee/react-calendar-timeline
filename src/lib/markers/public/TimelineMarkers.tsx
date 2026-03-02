@@ -12,14 +12,14 @@
 
 */
 
-import { ReactNode } from 'react'
+import { ReactNode } from "react";
 
 type Props = {
-  children?: ReactNode
-}
+  children?: ReactNode;
+};
 // If we decide to pass in props to TimelineMarkers, then yes, this is necessary.
 const TimelineMarkers = (props: Props) => {
-  return props.children || null
-}
+  return props.children || null;
+};
 
-export default TimelineMarkers
+export default TimelineMarkers;
