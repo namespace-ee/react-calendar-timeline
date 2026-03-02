@@ -149,25 +149,24 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
 
   getStateAndHelpers = (): CustomDateHeaderProps<Data> => {
     const {
-      /*canvasTimeStart,
+      canvasTimeStart,
       canvasTimeEnd,
       timelineWidth,
       visibleTimeStart,
-      visibleTimeEnd,*/
+      visibleTimeEnd,
       unit,
       showPeriod,
       headerData,
     } = this.props
-    //TODO: only evaluate on changing params
 
     return {
-      /*timelineContext: {
+      timelineContext: {
         timelineWidth,
         visibleTimeStart,
         visibleTimeEnd,
         canvasTimeStart,
         canvasTimeEnd,
-      },*/
+      },
       headerContext: {
         unit,
         intervals: this.state.intervals,
@@ -181,7 +180,11 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
 
   render() {
     const props = this.getStateAndHelpers()
-    return this.props.children(props)
+    const Children = this.props.children
+    if (typeof Children === 'function' && Children.prototype?.isReactComponent) {
+      return <Children {...props} />
+    }
+    return Children(props)
   }
 }
 

@@ -7,7 +7,9 @@ import TimelineHeaders from 'lib/headers/TimelineHeaders'
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
 dayjs.extend(utc)
+dayjs.extend(weekOfYear)
 
 describe('Testing DateHeader Component', () => {
   afterEach(cleanup)
@@ -384,7 +386,7 @@ describe('Testing DateHeader Component', () => {
 
     expect(getAllByTestId('interval-a')[0]).toBeInTheDocument()
   })
-  it.skip('Given DateHeader When passing a react component to interval renderer Then it should render', () => {
+  it('Given DateHeader When passing a react component to interval renderer Then it should render', () => {
     class Renderer extends React.Component {
       render() {
         const { getIntervalProps, intervalContext } = this.props
@@ -395,7 +397,7 @@ describe('Testing DateHeader Component', () => {
         )
       }
     }
-    const { getByTestId } = render(
+    const { getAllByTestId } = render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
           <SidebarHeader>
@@ -414,9 +416,9 @@ describe('Testing DateHeader Component', () => {
       </RenderHeadersWrapper>
     )
 
-    expect(getByTestId('interval-a')).toBeInTheDocument()
+    expect(getAllByTestId('interval-a')[0]).toBeInTheDocument()
   })
-  it.skip('#562 Given DateHeader when passing week as a unit then header should render without error', ()=>{
+  it('#562 Given DateHeader when passing week as a unit then header should render without error', ()=>{
     render(
       <RenderHeadersWrapper>
         <TimelineHeaders>

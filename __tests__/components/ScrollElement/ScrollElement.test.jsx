@@ -1,7 +1,18 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { noop } from 'test-utility'
 import ScrollElement from 'lib/scroll/ScrollElement'
+
+// jsdom does not provide PointerEvent
+class PointerEventPolyfill extends MouseEvent {
+  constructor(type, params = {}) {
+    super(type, params)
+    this.pointerType = params.pointerType || 'mouse'
+    this.pointerId = params.pointerId || 1
+    this.isPrimary = params.isPrimary !== undefined ? params.isPrimary : true
+  }
+}
+globalThis.PointerEvent = globalThis.PointerEvent || PointerEventPolyfill
 
 const defaultProps = {
   width: 1000,
@@ -12,12 +23,10 @@ const defaultProps = {
   traditionalZoom: false,
   scrollRef: noop,
   isInteractingWithItem: false,
+  scrollOffset: 0,
 }
 
-// ScrollElement was refactored to use pointer events via native addEventListener.
-// These tests relied on Enzyme's wrapper.instance() and simulate() which don't
-// map to the new event model. Keeping skipped until a dedicated rewrite.
-describe.skip('ScrollElement', () => {
+describe('ScrollElement', () => {
   it('renders with data-testid', () => {
     const { getByTestId } = render(
       <ScrollElement {...defaultProps}>
@@ -28,11 +37,14 @@ describe.skip('ScrollElement', () => {
     expect(getByTestId('scroll-element')).toBeDefined()
   })
 
-  it('calls onScroll when scrolled', () => {
+  it('calls onScroll when dragged via pointer events', () => {
+    // Mock requestAnimationFrame to execute callback synchronously
+    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => { cb(0); return 0 })
+
     const onScrollMock = vi.fn()
     const props = {
       ...defaultProps,
-      onScroll: onScrollMock
+      onScroll: onScrollMock,
     }
 
     const { getByTestId } = render(
@@ -42,8 +54,21 @@ describe.skip('ScrollElement', () => {
     )
 
     const scrollEl = getByTestId('scroll-element')
-    scrollEl.dispatchEvent(new Event('scroll'))
+
+    // Simulate a pointer drag (mouse)
+    act(() => {
+      scrollEl.dispatchEvent(new PointerEvent('pointerdown', {
+        clientX: 100, pageX: 100, button: 0, pointerType: 'mouse', bubbles: true,
+      }))
+      scrollEl.dispatchEvent(new PointerEvent('pointermove', {
+        clientX: 50, pageX: 50, pointerType: 'mouse', bubbles: true,
+      }))
+    })
 
     expect(onScrollMock).toHaveBeenCalledTimes(1)
+    // scrollOffset (0) + dragLastPosition (100) - pageX (50) = 50
+    expect(onScrollMock).toHaveBeenCalledWith(50)
+
+    rafSpy.mockRestore()
   })
 })

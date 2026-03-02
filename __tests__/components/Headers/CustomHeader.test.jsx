@@ -189,7 +189,7 @@ describe('CustomHeader Component Test', () => {
     expect(unit).toEqual(expect.any(String))
   })
 
-  it.skip('Given CustomHeader When passing child renderer Then timelineContext should be passed', () => {
+  it('Given CustomHeader When passing child renderer Then timelineContext should be passed', () => {
     const renderer = vi.fn(() => {
       return <div>header</div>
     })
@@ -348,7 +348,7 @@ describe('CustomHeader Component Test', () => {
     expect(getByText('header')).toBeInTheDocument()
   })
 
-  it.skip('Given Custom Header When passing react component to render prop Then it should render', () => {
+  it('Given Custom Header When passing react component to render prop Then it should render', () => {
     class Renderer extends React.Component {
       render() {
         return <div>header</div>

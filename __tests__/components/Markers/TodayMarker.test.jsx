@@ -83,7 +83,33 @@ describe('TodayMarker', () => {
     })
   })
 
-  // TODO: find good way to test these interval based functionality
-  // xit('sets setInterval timeout based on passed in prop')
-  // xit('sets setInterval timeout to 10 seconds if no interval prop passed in')
+  it('sets setInterval timeout based on passed in prop', () => {
+    const spy = vi.spyOn(global, 'setInterval')
+
+    render(
+      <RenderWrapper>
+        <TimelineMarkers>
+          <TodayMarker interval={5000} />
+        </TimelineMarkers>
+      </RenderWrapper>
+    )
+
+    expect(spy).toHaveBeenCalledWith(expect.any(Function), 5000)
+    spy.mockRestore()
+  })
+
+  it('sets setInterval timeout to 10 seconds if no interval prop passed in', () => {
+    const spy = vi.spyOn(global, 'setInterval')
+
+    render(
+      <RenderWrapper>
+        <TimelineMarkers>
+          <TodayMarker />
+        </TimelineMarkers>
+      </RenderWrapper>
+    )
+
+    expect(spy).toHaveBeenCalledWith(expect.any(Function), 10000)
+    spy.mockRestore()
+  })
 })

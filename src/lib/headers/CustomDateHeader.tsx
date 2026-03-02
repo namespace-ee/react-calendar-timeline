@@ -6,6 +6,13 @@ import { SelectUnits } from '../utility/calendar'
 import { GetIntervalPropsType } from './types'
 
 export interface CustomDateHeaderProps<Data> {
+  timelineContext?: {
+    timelineWidth: number
+    visibleTimeStart: number
+    visibleTimeEnd: number
+    canvasTimeStart: number
+    canvasTimeEnd: number
+  }
   headerContext: {
     intervals: IntervalType[]
     unit: SelectUnits

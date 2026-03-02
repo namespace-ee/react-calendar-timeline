@@ -132,7 +132,7 @@ describe('Testing SidebarHeader Component', () => {
     )
     expect(getByText('Left')).toBeInTheDocument()
   })
-  it.skip('Given SideBarHeader When passing a react stateful component as a child Then it should render', () => {
+  it('Given SideBarHeader When passing a react stateful component as a child Then it should render', () => {
     class Renderer extends React.Component {
       render() {
         const { getRootProps } = this.props
