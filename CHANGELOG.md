@@ -7,6 +7,20 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta.17)
+
+* Fix vertical page scroll being hijacked by horizontal timeline panning on trackpads
+
+## 0.30.0 (beta.16)
+
+* Fix timeline markers (TodayMarker, CursorMarker, CustomMarker) becoming invisible after the CSS transform scroll change. The inner transform wrapper had 0 height because MarkerCanvas is `position: absolute`, causing all markers with `top:0; bottom:0` to collapse.
+
+## 0.30.0 (beta.15)
+
+* Fix Safari trackpad scroll jank by replacing native `scrollLeft` with CSS `transform: translateX()` so the browser never owns the scroll position. Eliminates the feedback loop where Safari's momentum engine fights programmatic `scrollLeft` writes in `componentDidUpdate`.
+* Batch scroll events via `requestAnimationFrame` to coalesce multiple wheel/pointer events into a single `onScroll` → `onTimeChange` → canvas recalculation cycle per frame, reducing redundant `onBoundsChange` calls.
+* Compute `scrollOffset` once per render instead of calling `getScrollOffset()` multiple times.
+
 ## 0.30.0 (beta.14)
 
 * Fix stale `itemContext.title` in custom `itemRenderer` — replaced mutable cache (`cacheDataFromProps`) with getters that derive values directly from current props. Closes #1014.
