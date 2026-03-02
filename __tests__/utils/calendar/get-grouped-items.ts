@@ -1,8 +1,8 @@
-import { getGroupedItems } from 'lib/utility/calendar'
-import {orderedGroups, dimensionItems} from '../../../__fixtures__/groupOrderAndItemDimentions'
+import { getGroupedItems } from "lib/utility/calendar";
+import { orderedGroups, dimensionItems } from "../../../__fixtures__/groupOrderAndItemDimentions";
 
-describe('getGroupedItems', () => {
-  it('works as expected', () => {
-    expect(getGroupedItems(dimensionItems,orderedGroups)).toMatchSnapshot()
-  })
-})
+describe("getGroupedItems", () => {
+  it("works as expected", () => {
+    expect(getGroupedItems(dimensionItems, orderedGroups)).toMatchSnapshot();
+  });
+});

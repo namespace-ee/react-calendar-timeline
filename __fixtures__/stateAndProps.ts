@@ -1,8 +1,8 @@
-import { defaultKeys } from 'lib/default-config'
-import {items} from './itemsAndGroups'
+import { defaultKeys } from "lib/default-config";
+import { items } from "./itemsAndGroups";
 
-export const visibleTimeStart = 1540501200000
-export const visibleTimeEnd = 1540587600000
+export const visibleTimeStart = 1540501200000;
+export const visibleTimeEnd = 1540587600000;
 
 export const props = {
   keys: defaultKeys,
@@ -12,19 +12,18 @@ export const props = {
   visibleTimeEnd,
   visibleTimeStart,
   buffer: 3,
-}
+};
 
 export const propsNoStack = {
   ...props,
   stackItems: false,
-}
-
+};
 
 export const state = {
   draggingItem: undefined as string | undefined,
   dragTime: null as number | null,
   resizingItem: null as string | null,
-  resizingEdge: null as 'left' | 'right' | null,
+  resizingEdge: null as "left" | "right" | null,
   resizeTime: null as number | null,
   newGroupOrder: 0,
   canvasTimeStart: 1540414800000,
@@ -32,29 +31,29 @@ export const state = {
   visibleTimeStart: visibleTimeStart,
   canvasTimeEnd: 1540674000000,
   width: 1000,
-}
+};
 
 //offset 1 hour
-const timeOffset = 1 * 60 *60 *1000
+const timeOffset = 1 * 60 * 60 * 1000;
 
 export const stateMoveItem = {
   ...state,
   draggingItem: items[0].id,
-  dragTime: items[0].start_time+timeOffset,
+  dragTime: items[0].start_time + timeOffset,
   newGroupOrder: 0,
-}
+};
 export const stateResizeItemLeft = {
   ...state,
   resizingItem: items[0].id,
-  resizingEdge: 'left' as const,
-  resizeTime: items[0].start_time+timeOffset,
+  resizingEdge: "left" as const,
+  resizeTime: items[0].start_time + timeOffset,
   newGroupOrder: 0,
-}
+};
 
 export const stateResizeItemRight = {
   ...state,
   resizingItem: items[0].id,
-  resizingEdge: 'right' as const,
-  resizeTime: items[0].end_time+timeOffset,
+  resizingEdge: "right" as const,
+  resizeTime: items[0].end_time + timeOffset,
   newGroupOrder: 0,
-}
+};

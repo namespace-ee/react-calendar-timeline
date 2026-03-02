@@ -1,15 +1,15 @@
-import React, { Component, MouseEventHandler } from 'react'
-import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
+import React, { Component, MouseEventHandler } from "react";
+import PreventClickOnDrag from "../interaction/PreventClickOnDrag";
 
 interface GroupRowProps<T> {
-  onClick: MouseEventHandler<HTMLDivElement>
-  onDoubleClick?: MouseEventHandler<HTMLDivElement>
-  onContextMenu?: MouseEventHandler<HTMLDivElement>
-  isEvenRow?: boolean
-  style?: React.CSSProperties
-  clickTolerance?: number | undefined
-  group: T
-  horizontalLineClassNamesForGroup?: (group: T) => string[]
+  onClick: MouseEventHandler<HTMLDivElement>;
+  onDoubleClick?: MouseEventHandler<HTMLDivElement>;
+  onContextMenu?: MouseEventHandler<HTMLDivElement>;
+  isEvenRow?: boolean;
+  style?: React.CSSProperties;
+  clickTolerance?: number | undefined;
+  group: T;
+  horizontalLineClassNamesForGroup?: (group: T) => string[];
 }
 
 class GroupRow<T> extends Component<GroupRowProps<T>> {
@@ -23,11 +23,11 @@ class GroupRow<T> extends Component<GroupRowProps<T>> {
       clickTolerance,
       horizontalLineClassNamesForGroup,
       group,
-    } = this.props
+    } = this.props;
 
-    let classNamesForGroup: string[] = []
+    let classNamesForGroup: string[] = [];
     if (horizontalLineClassNamesForGroup) {
-      classNamesForGroup = horizontalLineClassNamesForGroup(group)
+      classNamesForGroup = horizontalLineClassNamesForGroup(group);
     }
 
     return (
@@ -36,13 +36,13 @@ class GroupRow<T> extends Component<GroupRowProps<T>> {
           onContextMenu={onContextMenu}
           onDoubleClick={onDoubleClick}
           className={
-            (isEvenRow ? 'rct-hl-even ' : 'rct-hl-odd ') + (classNamesForGroup ? classNamesForGroup.join(' ') : '')
+            (isEvenRow ? "rct-hl-even " : "rct-hl-odd ") + (classNamesForGroup ? classNamesForGroup.join(" ") : "")
           }
           style={style}
         />
       </PreventClickOnDrag>
-    )
+    );
   }
 }
 
-export default GroupRow
+export default GroupRow;

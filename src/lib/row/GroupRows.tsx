@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import GroupRow from './GroupRow'
+import React, { Component } from "react";
+import GroupRow from "./GroupRow";
 
-export type RowClickEvent = (evt: React.MouseEvent<HTMLDivElement>, index: number) => void
+export type RowClickEvent = (evt: React.MouseEvent<HTMLDivElement>, index: number) => void;
 
 export interface GroupRowsProps<T> {
-  canvasWidth: number
-  lineCount: number
-  groupHeights: number[]
-  onRowClick: RowClickEvent
-  onRowDoubleClick: RowClickEvent
-  clickTolerance?: number
-  groups: T[]
-  horizontalLineClassNamesForGroup?: (group: T) => string[]
-  onRowContextClick: RowClickEvent
+  canvasWidth: number;
+  lineCount: number;
+  groupHeights: number[];
+  onRowClick: RowClickEvent;
+  onRowDoubleClick: RowClickEvent;
+  clickTolerance?: number;
+  groups: T[];
+  horizontalLineClassNamesForGroup?: (group: T) => string[];
+  onRowContextClick: RowClickEvent;
 }
 
 export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
@@ -22,7 +22,7 @@ export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
       nextProps.lineCount === this.props.lineCount &&
       nextProps.groupHeights === this.props.groupHeights &&
       nextProps.groups === this.props.groups
-    )
+    );
   }
 
   render() {
@@ -36,8 +36,8 @@ export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
       groups,
       horizontalLineClassNamesForGroup,
       onRowContextClick,
-    } = this.props
-    const lines: React.ReactNode[] = []
+    } = this.props;
+    const lines: React.ReactNode[] = [];
 
     for (let i = 0; i < lineCount; i++) {
       lines.push(
@@ -54,10 +54,10 @@ export default class GroupRows<T> extends Component<GroupRowsProps<T>> {
             width: `${canvasWidth}px`,
             height: `${groupHeights[i]}px`,
           }}
-        />,
-      )
+        />
+      );
     }
 
-    return <div className="rct-horizontal-lines">{lines}</div>
+    return <div className="rct-horizontal-lines">{lines}</div>;
   }
 }

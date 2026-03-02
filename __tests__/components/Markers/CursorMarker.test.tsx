@@ -1,9 +1,9 @@
-import React from 'react'
-import { render, fireEvent, cleanup, act } from '@testing-library/react'
-import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
-import CursorMarker from 'lib/markers/public/CursorMarker'
-import { RenderWrapper } from 'test-utility/marker-renderer'
-import { MarkerCanvasProvider } from 'lib/markers/MarkerCanvasContext'
+import React from "react";
+import { render, fireEvent, cleanup, act } from "@testing-library/react";
+import TimelineMarkers from "lib/markers/public/TimelineMarkers";
+import CursorMarker from "lib/markers/public/CursorMarker";
+import { RenderWrapper } from "test-utility/marker-renderer";
+import { MarkerCanvasProvider } from "lib/markers/MarkerCanvasContext";
 
 /**
  * CursorMarker implementation relies on MarkerCanvas to notify it when the user
@@ -12,158 +12,142 @@ import { MarkerCanvasProvider } from 'lib/markers/MarkerCanvasContext'
  * kind of stub that behavior out but are kind of dirty...
  */
 
-describe('CursorMarker', () => {
-  afterEach(cleanup)
-  const defaultCursorMarkerTestId = 'default-cursor-marker'
-  it('renders one', () => {
-    const subscribeToMouseOverMock = vi.fn()
+describe("CursorMarker", () => {
+  afterEach(cleanup);
+  const defaultCursorMarkerTestId = "default-cursor-marker";
+  it("renders one", () => {
+    const subscribeToMouseOverMock = vi.fn();
 
     const { getByTestId } = render(
-      <MarkerCanvasProvider
-        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
-      >
+      <MarkerCanvasProvider value={{ subscribeToMouseOver: subscribeToMouseOverMock }}>
         <RenderWrapper>
           <TimelineMarkers>
             <CursorMarker />
           </TimelineMarkers>
         </RenderWrapper>
       </MarkerCanvasProvider>
-    )
-
-    act(() => {
-      subscribeToMouseOverMock.mock.calls[0][0]({
-        isCursorOverCanvas: true
-      })
-    })
-
-    expect(getByTestId(defaultCursorMarkerTestId)).toBeInTheDocument()
-  })
-
-  it('renders with custom renderer', () => {
-    const customDataIdSelector = 'my-custom-marker-cursor'
-    const subscribeToMouseOverMock = vi.fn()
-    const { getByTestId } = render(
-      <MarkerCanvasProvider
-        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
-      >
-        <RenderWrapper>
-          <TimelineMarkers>
-            <CursorMarker>
-              {() => <div data-testid={customDataIdSelector} />}
-            </CursorMarker>
-          </TimelineMarkers>
-        </RenderWrapper>
-      </MarkerCanvasProvider>
-    )
-
-    act(() => {
-      subscribeToMouseOverMock.mock.calls[0][0]({
-        isCursorOverCanvas: true
-      })
-    })
-
-    expect(getByTestId(customDataIdSelector)).toBeInTheDocument()
-  })
-
-  it('styles.left based on callback leftOffset', () => {
-    const subscribeToMouseOverMock = vi.fn()
-    const { getByTestId } = render(
-      <MarkerCanvasProvider
-        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
-      >
-        <RenderWrapper>
-          <TimelineMarkers>
-            <CursorMarker />
-          </TimelineMarkers>
-        </RenderWrapper>
-      </MarkerCanvasProvider>
-    )
-
-    const leftOffset = 1000
+    );
 
     act(() => {
       subscribeToMouseOverMock.mock.calls[0][0]({
         isCursorOverCanvas: true,
-        leftOffset
-      })
-    })
+      });
+    });
 
-    const el = getByTestId(defaultCursorMarkerTestId)
+    expect(getByTestId(defaultCursorMarkerTestId)).toBeInTheDocument();
+  });
 
-    expect(el).toHaveStyle(`left: ${leftOffset}px`)
-  })
+  it("renders with custom renderer", () => {
+    const customDataIdSelector = "my-custom-marker-cursor";
+    const subscribeToMouseOverMock = vi.fn();
+    const { getByTestId } = render(
+      <MarkerCanvasProvider value={{ subscribeToMouseOver: subscribeToMouseOverMock }}>
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CursorMarker>{() => <div data-testid={customDataIdSelector} />}</CursorMarker>
+          </TimelineMarkers>
+        </RenderWrapper>
+      </MarkerCanvasProvider>
+    );
 
-  it('child function is passed in date from callback', () => {
-    const subscribeToMouseOverMock = vi.fn()
-    const rendererMock = vi.fn(() => null)
+    act(() => {
+      subscribeToMouseOverMock.mock.calls[0][0]({
+        isCursorOverCanvas: true,
+      });
+    });
+
+    expect(getByTestId(customDataIdSelector)).toBeInTheDocument();
+  });
+
+  it("styles.left based on callback leftOffset", () => {
+    const subscribeToMouseOverMock = vi.fn();
+    const { getByTestId } = render(
+      <MarkerCanvasProvider value={{ subscribeToMouseOver: subscribeToMouseOverMock }}>
+        <RenderWrapper>
+          <TimelineMarkers>
+            <CursorMarker />
+          </TimelineMarkers>
+        </RenderWrapper>
+      </MarkerCanvasProvider>
+    );
+
+    const leftOffset = 1000;
+
+    act(() => {
+      subscribeToMouseOverMock.mock.calls[0][0]({
+        isCursorOverCanvas: true,
+        leftOffset,
+      });
+    });
+
+    const el = getByTestId(defaultCursorMarkerTestId);
+
+    expect(el).toHaveStyle(`left: ${leftOffset}px`);
+  });
+
+  it("child function is passed in date from callback", () => {
+    const subscribeToMouseOverMock = vi.fn();
+    const rendererMock = vi.fn(() => null);
     render(
-      <MarkerCanvasProvider
-        value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
-      >
+      <MarkerCanvasProvider value={{ subscribeToMouseOver: subscribeToMouseOverMock }}>
         <RenderWrapper>
           <TimelineMarkers>
             <CursorMarker>{rendererMock}</CursorMarker>
           </TimelineMarkers>
         </RenderWrapper>
       </MarkerCanvasProvider>
-    )
+    );
 
-    const now = Date.now()
+    const now = Date.now();
 
     act(() => {
       subscribeToMouseOverMock.mock.calls[0][0]({
         isCursorOverCanvas: true,
-        date: now
-      })
-    })
+        date: now,
+      });
+    });
 
     expect(rendererMock).toHaveBeenCalledWith({
       styles: expect.any(Object),
-      date: now
-    })
-  })
+      date: now,
+    });
+  });
 
-  it('is removed after unmount', () => {
-    const subscribeToMouseOverMock = vi.fn()
+  it("is removed after unmount", () => {
+    const subscribeToMouseOverMock = vi.fn();
     class RemoveCursorMarker extends React.Component {
       state = {
-        isShowing: true
-      }
+        isShowing: true,
+      };
       handleToggleCursorMarker = () => {
         this.setState({
-          isShowing: false
-        })
-      }
+          isShowing: false,
+        });
+      };
       render() {
         return (
-          <MarkerCanvasProvider
-            value={{ subscribeToMouseOver: subscribeToMouseOverMock }}
-          >
+          <MarkerCanvasProvider value={{ subscribeToMouseOver: subscribeToMouseOverMock }}>
             <RenderWrapper>
-              <button onClick={this.handleToggleCursorMarker}>
-                Hide Cursor Marker
-              </button>
-              <TimelineMarkers>
-                {this.state.isShowing && <CursorMarker />}
-              </TimelineMarkers>
+              <button onClick={this.handleToggleCursorMarker}>Hide Cursor Marker</button>
+              <TimelineMarkers>{this.state.isShowing && <CursorMarker />}</TimelineMarkers>
             </RenderWrapper>
           </MarkerCanvasProvider>
-        )
+        );
       }
     }
 
-    const { queryByTestId, getByText } = render(<RemoveCursorMarker />)
+    const { queryByTestId, getByText } = render(<RemoveCursorMarker />);
 
     act(() => {
       subscribeToMouseOverMock.mock.calls[0][0]({
-        isCursorOverCanvas: true
-      })
-    })
+        isCursorOverCanvas: true,
+      });
+    });
 
-    expect(queryByTestId(defaultCursorMarkerTestId)).toBeInTheDocument()
+    expect(queryByTestId(defaultCursorMarkerTestId)).toBeInTheDocument();
 
-    fireEvent.click(getByText('Hide Cursor Marker'))
+    fireEvent.click(getByText("Hide Cursor Marker"));
 
-    expect(queryByTestId(defaultCursorMarkerTestId)).not.toBeInTheDocument()
-  })
-})
+    expect(queryByTestId(defaultCursorMarkerTestId)).not.toBeInTheDocument();
+  });
+});

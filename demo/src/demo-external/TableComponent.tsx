@@ -1,26 +1,41 @@
-import {FakeDataItem} from "../generate-fake-data";
+import { FakeDataItem } from "../generate-fake-data";
 
-const TableComponent = ({rows}: {rows: FakeDataItem[]}) => {
+const TableComponent = ({ rows }: { rows: FakeDataItem[] }) => {
   return (
     <table>
-        <thead>
+      <thead>
         <tr>
-            <td colSpan={2}>Choose any of these items to <br/> drop into the page</td>
+          <td colSpan={2}>
+            Choose any of these items to <br /> drop into the page
+          </td>
         </tr>
-        </thead>
+      </thead>
       <tbody>
-        {rows && rows.map(row =>(
-          <tr key={row.id}>
-            <td>
-              <div style={{overflow:"visible"}}>
-              <div className="draggable rct-item" id={`drop-${row.id}`} style={{width:"250px", backgroundColor:row.bgColor, color:row.color,overflow:"hidden",textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{row.title}</div>
-              </div>
+        {rows &&
+          rows.map((row) => (
+            <tr key={row.id}>
+              <td>
+                <div style={{ overflow: "visible" }}>
+                  <div
+                    className="draggable rct-item"
+                    id={`drop-${row.id}`}
+                    style={{
+                      width: "250px",
+                      backgroundColor: row.bgColor,
+                      color: row.color,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {row.title}
+                  </div>
+                </div>
               </td>
-
-          </tr>
-        ))}
+            </tr>
+          ))}
       </tbody>
     </table>
-  )
-}
-export default TableComponent
+  );
+};
+export default TableComponent;

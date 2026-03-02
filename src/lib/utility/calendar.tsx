@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
-import dayjs, { Dayjs } from 'dayjs'
-import { _get } from './generic'
-import { Dimension, ItemDimension } from '../types/dimension'
+import dayjs, { Dayjs } from "dayjs";
+import { _get } from "./generic";
+import { Dimension, ItemDimension } from "../types/dimension";
 import {
   GroupedItem,
   GroupOrders,
@@ -11,8 +11,8 @@ import {
   TimelineItemBase,
   TimelineKeys,
   TimelineTimeSteps,
-} from '../types/main'
-import { ReactCalendarTimelineProps, ReactCalendarTimelineState } from '../Timeline'
+} from "../types/main";
+import { ReactCalendarTimelineProps, ReactCalendarTimelineState } from "../Timeline";
 
 /**
  * Calculate the ms / pixel ratio of the timeline state
@@ -22,7 +22,7 @@ import { ReactCalendarTimelineProps, ReactCalendarTimelineState } from '../Timel
  * @returns {number}
  */
 export function coordinateToTimeRatio(canvasTimeStart: number, canvasTimeEnd: number, canvasWidth: number): number {
-  return (canvasTimeEnd - canvasTimeStart) / canvasWidth
+  return (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 }
 
 /**
@@ -38,12 +38,12 @@ export function calculateXPositionForTime(
   canvasTimeStart: number,
   canvasTimeEnd: number,
   canvasWidth: number,
-  time: number,
+  time: number
 ): number {
-  const widthToZoomRatio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
-  const timeOffset = time - canvasTimeStart
+  const widthToZoomRatio = canvasWidth / (canvasTimeEnd - canvasTimeStart);
+  const timeOffset = time - canvasTimeStart;
 
-  return timeOffset * widthToZoomRatio
+  return timeOffset * widthToZoomRatio;
 }
 
 /**
@@ -59,13 +59,13 @@ export function calculateTimeForXPosition(
   canvasTimeStart: number,
   canvasTimeEnd: number,
   canvasWidth: number,
-  leftOffset: number,
+  leftOffset: number
 ): number {
-  const timeToPxRatio = (canvasTimeEnd - canvasTimeStart) / canvasWidth
+  const timeToPxRatio = (canvasTimeEnd - canvasTimeStart) / canvasWidth;
 
-  const timeFromCanvasTimeStart = timeToPxRatio * leftOffset
+  const timeFromCanvasTimeStart = timeToPxRatio * leftOffset;
 
-  return timeFromCanvasTimeStart + canvasTimeStart
+  return timeFromCanvasTimeStart + canvasTimeStart;
 }
 
 export function iterateTimes(
@@ -73,26 +73,26 @@ export function iterateTimes(
   end: number,
   unit: keyof TimelineTimeSteps,
   timeSteps: TimelineTimeSteps,
-  callback: (time: Dayjs, nextTime: Dayjs) => void,
+  callback: (time: Dayjs, nextTime: Dayjs) => void
 ) {
-  let time = dayjs(start).startOf(unit)
+  let time = dayjs(start).startOf(unit);
 
   if (timeSteps[unit] && timeSteps[unit] > 1) {
-    const value = time.get(unit)
-    time = time.set(unit, value - (value % timeSteps[unit]))
+    const value = time.get(unit);
+    time = time.set(unit, value - (value % timeSteps[unit]));
   }
 
   while (time.valueOf() < end) {
     let nextTime = dayjs(time)
       .add(timeSteps[unit] || 1, unit)
-      .startOf(unit)
+      .startOf(unit);
 
     if (nextTime.valueOf() <= time.valueOf()) {
-      nextTime = nextTime.add(timeSteps[unit] || 1, unit)
+      nextTime = nextTime.add(timeSteps[unit] || 1, unit);
     }
 
-    callback(time, nextTime)
-    time = nextTime
+    callback(time, nextTime);
+    time = nextTime;
   }
 }
 
@@ -111,7 +111,7 @@ export function iterateTimes(
 // this can be manipulated to make the breakpoints change more/less
 // i.e. on zoom how often do we switch to the next unit of time
 // i think this is the distance between cell lines
-export const minCellWidth = 17
+export const minCellWidth = 17;
 
 export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeSteps) {
   // for supporting weeks, its important to remember that each of these
@@ -125,61 +125,61 @@ export function getMinUnit(zoom: number, width: number, timeSteps: TimelineTimeS
     day: 24,
     month: 30,
     year: 12,
-  }
+  };
 
-  let minUnit: keyof TimelineTimeSteps = 'year'
+  let minUnit: keyof TimelineTimeSteps = "year";
 
   // this timespan is in ms initially
-  let nextTimeSpanInUnitContext = zoom
+  let nextTimeSpanInUnitContext = zoom;
 
   Object.keys(timeDividers).some((unit) => {
-    const unitKey = unit as keyof TimelineTimeSteps
+    const unitKey = unit as keyof TimelineTimeSteps;
     // converts previous time span to current unit
     // (e.g. milliseconds to seconds, seconds to minutes, etc)
-    nextTimeSpanInUnitContext = nextTimeSpanInUnitContext / timeDividers[unitKey]
+    nextTimeSpanInUnitContext = nextTimeSpanInUnitContext / timeDividers[unitKey];
 
     // timeSteps is "
     // With what step to display different units. E.g. 15 for minute means only minutes 0, 15, 30 and 45 will be shown."
     // how many cells would be rendered given this time span, for this unit?
     // e.g. for time span of 60 minutes, and time step of 1, we would render 60 cells
-    const cellsToBeRenderedForCurrentUnit = nextTimeSpanInUnitContext / timeSteps[unitKey]
+    const cellsToBeRenderedForCurrentUnit = nextTimeSpanInUnitContext / timeSteps[unitKey];
 
     // what is happening here? why 3 if time steps are greater than 1??
-    const cellWidthToUse = timeSteps[unitKey] && timeSteps[unitKey] > 1 ? 3 * minCellWidth : minCellWidth
+    const cellWidthToUse = timeSteps[unitKey] && timeSteps[unitKey] > 1 ? 3 * minCellWidth : minCellWidth;
 
     // for the minWidth of a cell, how many cells would be rendered given
     // the current pixel width
     // i.e. f
-    const minimumCellsToRenderUnit = width / cellWidthToUse
+    const minimumCellsToRenderUnit = width / cellWidthToUse;
 
     if (cellsToBeRenderedForCurrentUnit < minimumCellsToRenderUnit) {
       // for the current zoom, the number of cells we'd need to render all parts of this unit
       // is less than the minimum number of cells needed at minimum cell width
-      minUnit = unit as keyof TimelineTimeSteps
-      return true
+      minUnit = unit as keyof TimelineTimeSteps;
+      return true;
     }
-  })
+  });
 
-  return minUnit
+  return minUnit;
 }
 
-export type SelectUnits = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year'
-export type SelectUnitsRes = Exclude<SelectUnits, 'second'>
+export type SelectUnits = "second" | "minute" | "hour" | "day" | "month" | "year";
+export type SelectUnitsRes = Exclude<SelectUnits, "second">;
 
 export const NEXT_UNITS: Record<SelectUnits, SelectUnitsRes> = {
-  second: 'minute',
-  minute: 'hour',
-  hour: 'day',
-  day: 'month',
-  month: 'year',
-  year: 'year',
-}
+  second: "minute",
+  minute: "hour",
+  hour: "day",
+  day: "month",
+  month: "year",
+  year: "year",
+};
 
 export function getNextUnit(unit: SelectUnits): SelectUnitsRes {
   if (!NEXT_UNITS[unit]) {
-    throw new Error(`unit ${unit} is not acceptable`)
+    throw new Error(`unit ${unit} is not acceptable`);
   }
-  return NEXT_UNITS[unit]
+  return NEXT_UNITS[unit];
 }
 
 /**
@@ -202,21 +202,21 @@ export function calculateInteractionNewTimes({
   resizingEdge,
   resizeTime,
 }: {
-  itemTimeStart: number
-  itemTimeEnd: number
-  dragTime: number | null
-  isDragging: boolean
-  isResizing: boolean
-  resizingEdge: 'left' | 'right' | null
-  resizeTime: number | null
+  itemTimeStart: number;
+  itemTimeEnd: number;
+  dragTime: number | null;
+  isDragging: boolean;
+  isResizing: boolean;
+  resizingEdge: "left" | "right" | null;
+  resizeTime: number | null;
 }): [number, number] {
-  const originalItemRange = itemTimeEnd - itemTimeStart
-  const itemStart = isResizing && resizingEdge === 'left' && resizeTime ? resizeTime : itemTimeStart
-  const itemEnd = isResizing && resizingEdge === 'right' && resizeTime ? resizeTime : itemTimeEnd
+  const originalItemRange = itemTimeEnd - itemTimeStart;
+  const itemStart = isResizing && resizingEdge === "left" && resizeTime ? resizeTime : itemTimeStart;
+  const itemEnd = isResizing && resizingEdge === "right" && resizeTime ? resizeTime : itemTimeEnd;
   return [
     isDragging && dragTime ? dragTime : itemStart,
     isDragging && dragTime ? dragTime + originalItemRange : itemEnd,
-  ]
+  ];
 }
 
 export function calculateDimensions({
@@ -226,28 +226,28 @@ export function calculateDimensions({
   canvasTimeEnd,
   canvasWidth,
 }: {
-  itemTimeStart: number
-  itemTimeEnd: number
-  canvasTimeStart: number
-  canvasTimeEnd: number
-  canvasWidth: number
+  itemTimeStart: number;
+  itemTimeEnd: number;
+  canvasTimeStart: number;
+  canvasTimeEnd: number;
+  canvasWidth: number;
 }): Partial<Dimension> {
-  const itemTimeRange = itemTimeEnd - itemTimeStart
+  const itemTimeRange = itemTimeEnd - itemTimeStart;
 
   // restrict startTime and endTime to be bounded by canvasTimeStart and canvasTimeEnd
-  const effectiveStartTime = Math.max(itemTimeStart, canvasTimeStart)
-  const effectiveEndTime = Math.min(itemTimeEnd, canvasTimeEnd)
+  const effectiveStartTime = Math.max(itemTimeStart, canvasTimeStart);
+  const effectiveEndTime = Math.min(itemTimeEnd, canvasTimeEnd);
 
-  const left = calculateXPositionForTime(canvasTimeStart, canvasTimeEnd, canvasWidth, effectiveStartTime)
-  const right = calculateXPositionForTime(canvasTimeStart, canvasTimeEnd, canvasWidth, effectiveEndTime)
-  const itemWidth = right - left
+  const left = calculateXPositionForTime(canvasTimeStart, canvasTimeEnd, canvasWidth, effectiveStartTime);
+  const right = calculateXPositionForTime(canvasTimeStart, canvasTimeEnd, canvasWidth, effectiveEndTime);
+  const itemWidth = right - left;
 
   return {
     left: left,
     width: Math.max(itemWidth, 3),
     collisionLeft: itemTimeStart,
     collisionWidth: itemTimeRange,
-  }
+  };
 }
 
 /**
@@ -257,18 +257,18 @@ export function calculateDimensions({
  * @returns Ordered hash of objects with their array index and group
  */
 export function getGroupOrders(groups: TimelineGroupBase[], keys: TimelineKeys) {
-  const { groupIdKey } = keys
+  const { groupIdKey } = keys;
 
-  const groupOrders: GroupOrders = {}
+  const groupOrders: GroupOrders = {};
 
   for (let i = 0; i < groups.length; i++) {
     groupOrders[_get(groups[i], groupIdKey) as string] = {
       index: i,
       group: groups[i],
-    }
+    };
   }
 
-  return groupOrders
+  return groupOrders;
 }
 
 /**
@@ -277,48 +277,48 @@ export function getGroupOrders(groups: TimelineGroupBase[], keys: TimelineKeys) 
  * @param {*} groupOrders the result of getGroupOrders
  */
 export function getGroupedItems(items: ItemDimension[], groupOrders: GroupOrders) {
-  const groupedItems: Record<number, GroupedItem> = {}
-  const keys = Object.keys(groupOrders)
+  const groupedItems: Record<number, GroupedItem> = {};
+  const keys = Object.keys(groupOrders);
   // Initialize with result object for each group
   for (let i = 0; i < keys.length; i++) {
-    const groupOrder = groupOrders[keys[i]]
+    const groupOrder = groupOrders[keys[i]];
     groupedItems[i] = {
       index: groupOrder.index,
       group: groupOrder.group,
       items: [],
-    }
+    };
   }
 
   // Populate groups
   for (let i = 0; i < items.length; i++) {
     if (items[i].dimensions !== undefined && items[i].dimensions?.order !== undefined) {
-      const groupItem = groupedItems[items[i].dimensions?.order.index ?? 0]
+      const groupItem = groupedItems[items[i].dimensions?.order.index ?? 0];
       if (groupItem) {
-        groupItem.items.push(items[i])
+        groupItem.items.push(items[i]);
       }
     }
   }
 
-  return groupedItems
+  return groupedItems;
 }
 
 export function getVisibleItems<
   CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>,
   // CustomGroup extends TimelineGroupBase = TimelineGroupBase,
 >(items: CustomItem[], canvasTimeStart: number, canvasTimeEnd: number, keys: TimelineKeys) {
-  const { itemTimeStartKey, itemTimeEndKey } = keys
+  const { itemTimeStartKey, itemTimeEndKey } = keys;
 
   return items.filter((item) => {
-    const afterStart = dayjs(_get(item, itemTimeStartKey)).valueOf() <= canvasTimeEnd
-    const beforeEnd = dayjs(_get(item, itemTimeEndKey)).valueOf() >= canvasTimeStart
+    const afterStart = dayjs(_get(item, itemTimeStartKey)).valueOf() <= canvasTimeEnd;
+    const beforeEnd = dayjs(_get(item, itemTimeEndKey)).valueOf() >= canvasTimeStart;
 
-    return afterStart && beforeEnd
-  })
+    return afterStart && beforeEnd;
+  });
 }
 
-const EPSILON = 0.001
+const EPSILON = 0.001;
 
-export function collision(a: Dimension, b: Dimension, verticalMargin : number, collisionPadding: number = EPSILON) {
+export function collision(a: Dimension, b: Dimension, verticalMargin: number, collisionPadding: number = EPSILON) {
   // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 
   return (
@@ -326,7 +326,7 @@ export function collision(a: Dimension, b: Dimension, verticalMargin : number, c
     a.collisionLeft + a.collisionWidth - collisionPadding > b.collisionLeft &&
     a.top! - verticalMargin + collisionPadding < b.top! + b.height &&
     a.top! + a.height + verticalMargin - collisionPadding > b.top!
-  )
+  );
 }
 
 /**
@@ -340,24 +340,28 @@ export function groupStack(
   groupHeight: number,
   groupTop: number,
   itemIndex: number,
-  itemVerticalGap: number | undefined,
+  itemVerticalGap: number | undefined
 ): GroupStack {
   // calculate non-overlapping positions
-  let curHeight = groupHeight
-  const verticalMargin = itemVerticalGap ?? (lineHeight - item.dimensions.height) / 2
+  let curHeight = groupHeight;
+  const verticalMargin = itemVerticalGap ?? (lineHeight - item.dimensions.height) / 2;
   if (item.dimensions.stack && item.dimensions.top === null) {
-    item.dimensions.top = groupTop + verticalMargin
-    curHeight = Math.max(curHeight, lineHeight, item.dimensions.height + verticalMargin * 2)
+    item.dimensions.top = groupTop + verticalMargin;
+    curHeight = Math.max(curHeight, lineHeight, item.dimensions.height + verticalMargin * 2);
     do {
       // converting it to a const create an infinite loop (why?)
       // noinspection ES6ConvertVarToLetConst
-      var collidingItem: null | ItemDimension = null
+      var collidingItem: null | ItemDimension = null;
       //Items are placed from i=0 onwards, only check items with index < i
       for (let j = itemIndex - 1, jj = 0; j >= jj; j--) {
-        const other = group[j]
-        if (other.dimensions.top !== null && other.dimensions.stack && collision(item.dimensions, other.dimensions, verticalMargin)) {
-          collidingItem = other
-          break
+        const other = group[j];
+        if (
+          other.dimensions.top !== null &&
+          other.dimensions.stack &&
+          collision(item.dimensions, other.dimensions, verticalMargin)
+        ) {
+          collidingItem = other;
+          break;
         } else {
           // console.log('dont test', other.top !== null, other !== item, other.stack);
         }
@@ -369,16 +373,16 @@ export function groupStack(
           collidingItem.dimensions.top! +
           collidingItem.dimensions.height +
           /* backward compatibility where gap between items is 2 */
-          verticalMargin * (itemVerticalGap !== undefined ? 1 : 2)
-        curHeight = Math.max(curHeight, item.dimensions.top + item.dimensions.height + verticalMargin - groupTop)
+          verticalMargin * (itemVerticalGap !== undefined ? 1 : 2);
+        curHeight = Math.max(curHeight, item.dimensions.top + item.dimensions.height + verticalMargin - groupTop);
       }
-    } while (collidingItem)
+    } while (collidingItem);
   }
   return {
     groupHeight: curHeight,
     verticalMargin,
     itemTop: item.dimensions.top!,
-  }
+  };
 }
 
 // Calculate the position of this item for a group that is not being stacked
@@ -387,18 +391,18 @@ export function groupNoStack(
   item: ItemDimension,
   groupHeight: number,
   groupTop: number,
-  itemVerticalGap: number | undefined,
+  itemVerticalGap: number | undefined
 ): GroupStack {
-  const verticalMargin = itemVerticalGap ?? (lineHeight - (item.dimensions?.height ?? 1)) / 2
+  const verticalMargin = itemVerticalGap ?? (lineHeight - (item.dimensions?.height ?? 1)) / 2;
   if (item.dimensions && item.dimensions.top === null) {
-    item.dimensions.top = groupTop + verticalMargin
+    item.dimensions.top = groupTop + verticalMargin;
     groupHeight = Math.max(groupHeight, lineHeight, item.dimensions.height + verticalMargin);
   }
-  return { groupHeight, verticalMargin: 0, itemTop: item.dimensions?.top ?? 0 }
+  return { groupHeight, verticalMargin: 0, itemTop: item.dimensions?.top ?? 0 };
 }
 
 function sum(arr: number[] = []) {
-  return arr.reduce((acc, i) => acc + i, 0)
+  return arr.reduce((acc, i) => acc + i, 0);
 }
 
 /**
@@ -413,28 +417,28 @@ export function stackAll(
   groupOrders: GroupOrders,
   lineHeight: number,
   stackItems: boolean,
-  itemVerticalGap: number | undefined,
+  itemVerticalGap: number | undefined
 ) {
-  const groupHeights: number[] = []
-  const groupTops: number[] = []
+  const groupHeights: number[] = [];
+  const groupTops: number[] = [];
 
-  const groupedItems = getGroupedItems(itemsDimensions, groupOrders)
+  const groupedItems = getGroupedItems(itemsDimensions, groupOrders);
 
   for (const index in groupedItems) {
-    const groupItems = groupedItems[index]
-    const { items: itemsDimensions, group } = groupItems
-    const groupTop = sum(groupHeights)
+    const groupItems = groupedItems[index];
+    const { items: itemsDimensions, group } = groupItems;
+    const groupTop = sum(groupHeights);
 
     // Is group being stacked?
-    const isGroupStacked = group.stackItems !== undefined ? group.stackItems : stackItems
-    const { groupHeight } = stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop, itemVerticalGap)
+    const isGroupStacked = group.stackItems !== undefined ? group.stackItems : stackItems;
+    const { groupHeight } = stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop, itemVerticalGap);
     // If group height is overridden, push new height
     // Do this late as item position still needs to be calculated
-    groupTops.push(groupTop)
+    groupTops.push(groupTop);
     if (group.height) {
-      groupHeights.push(group.height)
+      groupHeights.push(group.height);
     } else {
-      groupHeights.push(Math.max(groupHeight, lineHeight))
+      groupHeights.push(Math.max(groupHeight, lineHeight));
     }
   }
 
@@ -442,7 +446,7 @@ export function stackAll(
     height: sum(groupHeights),
     groupHeights,
     groupTops,
-  }
+  };
 }
 
 /**
@@ -457,20 +461,28 @@ export function stackGroup(
   isGroupStacked: boolean,
   lineHeight: number,
   groupTop: number,
-  itemVerticalGap: number | undefined,
+  itemVerticalGap: number | undefined
 ) {
-  let groupHeight = 0
-  let verticalMargin = 0
+  let groupHeight = 0;
+  let verticalMargin = 0;
   // Find positions for each item in group
   for (let itemIndex = 0; itemIndex < itemsDimensions.length; itemIndex++) {
     const r = isGroupStacked
-      ? groupStack(lineHeight, itemsDimensions[itemIndex], itemsDimensions, groupHeight, groupTop, itemIndex, itemVerticalGap)
-      : groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop, itemVerticalGap)
+      ? groupStack(
+          lineHeight,
+          itemsDimensions[itemIndex],
+          itemsDimensions,
+          groupHeight,
+          groupTop,
+          itemIndex,
+          itemVerticalGap
+        )
+      : groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop, itemVerticalGap);
 
-    groupHeight = r.groupHeight
-    verticalMargin = r.verticalMargin
+    groupHeight = r.groupHeight;
+    verticalMargin = r.verticalMargin;
   }
-  return { groupHeight, verticalMargin }
+  return { groupHeight, verticalMargin };
 }
 
 /**
@@ -509,12 +521,12 @@ export function stackTimelineItems<
   draggingItem: Id | null | undefined,
   resizingItem: Id | null | undefined,
   dragTime: number | null,
-  resizingEdge: 'left' | 'right' | null,
+  resizingEdge: "left" | "right" | null,
   resizeTime: number | null,
   newGroupOrder: number,
-  itemVerticalGap: number | undefined,
+  itemVerticalGap: number | undefined
 ) {
-  const visibleItems = getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
+  const visibleItems = getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys);
   const visibleItemsWithInteraction = visibleItems.map((item) =>
     getItemWithInteractions({
       item,
@@ -526,8 +538,8 @@ export function stackTimelineItems<
       resizeTime,
       groups,
       newGroupOrder,
-    }),
-  )
+    })
+  );
 
   // if there are no groups return an empty array of dimensions
   if (groups.length === 0) {
@@ -536,11 +548,11 @@ export function stackTimelineItems<
       height: 0,
       groupHeights: [],
       groupTops: [],
-    }
+    };
   }
 
   // Get the order of groups based on their id key
-  const groupOrders = getGroupOrders(groups, keys)
+  const groupOrders = getGroupOrders(groups, keys);
   const dimensionItems = visibleItemsWithInteraction
     .map((item) =>
       getItemDimensions({
@@ -553,12 +565,18 @@ export function stackTimelineItems<
         lineHeight,
         itemHeightRatio,
         itemVerticalGap,
-      }),
+      })
     )
-    .filter((item) => !!item) as ItemDimension[]
+    .filter((item) => !!item) as ItemDimension[];
   // Get a new array of groupOrders holding the stacked items
-  const { height, groupHeights, groupTops } = stackAll(dimensionItems, groupOrders, lineHeight, stackItems, itemVerticalGap)
-  return { dimensionItems, height, groupHeights, groupTops }
+  const { height, groupHeights, groupTops } = stackAll(
+    dimensionItems,
+    groupOrders,
+    lineHeight,
+    stackItems,
+    itemVerticalGap
+  );
+  return { dimensionItems, height, groupHeights, groupTops };
 }
 
 /**
@@ -567,7 +585,7 @@ export function stackTimelineItems<
  * @param {*} buffer
  */
 export function getCanvasWidth(width: number, buffer: number) {
-  return width * buffer
+  return width * buffer;
 }
 
 /**
@@ -592,33 +610,33 @@ export function getItemDimensions<CustomItem extends TimelineItemBase<any>>({
   itemHeightRatio,
   itemVerticalGap,
 }: {
-  item: CustomItem
-  keys: TimelineKeys
-  canvasTimeStart: number
-  canvasTimeEnd: number
-  canvasWidth: number
-  groupOrders: GroupOrders
-  lineHeight: number
-  itemHeightRatio: number
-  itemVerticalGap: number | undefined
+  item: CustomItem;
+  keys: TimelineKeys;
+  canvasTimeStart: number;
+  canvasTimeEnd: number;
+  canvasWidth: number;
+  groupOrders: GroupOrders;
+  lineHeight: number;
+  itemHeightRatio: number;
+  itemVerticalGap: number | undefined;
 }): ItemDimension | undefined {
-  const itemId = _get(item, keys.itemIdKey)
+  const itemId = _get(item, keys.itemIdKey);
   const dimension = calculateDimensions({
     itemTimeStart: _get(item, keys.itemTimeStartKey),
     itemTimeEnd: _get(item, keys.itemTimeEndKey),
     canvasTimeStart,
     canvasTimeEnd,
     canvasWidth,
-  })
+  });
   if (dimension) {
-    dimension.top = null
-    dimension.order = groupOrders[_get(item, keys.itemGroupKey)]
-    dimension.stack = !item.isOverlay
-    dimension.height = (item.height || lineHeight) * (typeof itemVerticalGap === 'undefined' ? itemHeightRatio : 1)
+    dimension.top = null;
+    dimension.order = groupOrders[_get(item, keys.itemGroupKey)];
+    dimension.stack = !item.isOverlay;
+    dimension.height = (item.height || lineHeight) * (typeof itemVerticalGap === "undefined" ? itemHeightRatio : 1);
     return {
       id: itemId,
       dimensions: dimension as Dimension,
-    }
+    };
   }
 }
 
@@ -649,20 +667,20 @@ export function getItemWithInteractions<
   groups,
   newGroupOrder,
 }: {
-  item: CustomItem
-  keys: TimelineKeys
-  draggingItem: Id | null | undefined
-  resizingItem: Id | null | undefined
-  dragTime: number | null
-  resizingEdge: 'left' | 'right' | null
-  resizeTime: number | null
-  groups: CustomGroup[]
-  newGroupOrder: number
+  item: CustomItem;
+  keys: TimelineKeys;
+  draggingItem: Id | null | undefined;
+  resizingItem: Id | null | undefined;
+  dragTime: number | null;
+  resizingEdge: "left" | "right" | null;
+  resizeTime: number | null;
+  groups: CustomGroup[];
+  newGroupOrder: number;
 }) {
-  if (!resizingItem && !draggingItem) return item
-  const itemId = _get(item, keys.itemIdKey)
-  const isDragging = itemId === draggingItem
-  const isResizing = itemId === resizingItem
+  if (!resizingItem && !draggingItem) return item;
+  const itemId = _get(item, keys.itemIdKey);
+  const isDragging = itemId === draggingItem;
+  const isResizing = itemId === resizingItem;
   const [itemTimeStart, itemTimeEnd] = calculateInteractionNewTimes({
     itemTimeStart: _get(item, keys.itemTimeStartKey),
     itemTimeEnd: _get(item, keys.itemTimeEndKey),
@@ -671,13 +689,13 @@ export function getItemWithInteractions<
     dragTime,
     resizingEdge,
     resizeTime,
-  })
+  });
   return {
     ...item,
     [keys.itemTimeStartKey]: itemTimeStart,
     [keys.itemTimeEndKey]: itemTimeEnd,
     [keys.itemGroupKey]: isDragging ? _get(groups[newGroupOrder], keys.groupIdKey) : _get(item, keys.itemGroupKey),
-  }
+  };
 }
 
 /**
@@ -687,11 +705,11 @@ export function getItemWithInteractions<
  * @param buffer
  */
 export function getCanvasBoundariesFromVisibleTime(visibleTimeStart: number, visibleTimeEnd: number, buffer: number) {
-  const zoom = visibleTimeEnd - visibleTimeStart
+  const zoom = visibleTimeEnd - visibleTimeStart;
   // buffer - 1 (1 is visible area) divided by 2 (2 is the buffer split on the right and left of the timeline)
-  const canvasTimeStart = visibleTimeStart - zoom * (buffer - 1) / 2
-  const canvasTimeEnd = canvasTimeStart + zoom * buffer
-  return [canvasTimeStart, canvasTimeEnd]
+  const canvasTimeStart = visibleTimeStart - (zoom * (buffer - 1)) / 2;
+  const canvasTimeEnd = canvasTimeStart + zoom * buffer;
+  return [canvasTimeStart, canvasTimeEnd];
 }
 
 /**
@@ -713,45 +731,45 @@ export function calculateScrollCanvas<
   visibleTimeStart: number,
   visibleTimeEnd: number,
   forceUpdateDimensions: boolean,
-  items: P['items'],
-  groups: P['groups'],
+  items: P["items"],
+  groups: P["groups"],
   props: P,
-  state: S,
+  state: S
 ): S {
-  const buffer = props.buffer
-  const oldCanvasTimeStart = state.canvasTimeStart
-  const oldCanvasTimeEnd = state.canvasTimeEnd
-  const oldZoom = state.visibleTimeEnd - state.visibleTimeStart
-  const newZoom = visibleTimeEnd - visibleTimeStart
+  const buffer = props.buffer;
+  const oldCanvasTimeStart = state.canvasTimeStart;
+  const oldCanvasTimeEnd = state.canvasTimeEnd;
+  const oldZoom = state.visibleTimeEnd - state.visibleTimeStart;
+  const newZoom = visibleTimeEnd - visibleTimeStart;
   const newState: S = {
     ...state,
     visibleTimeStart,
     visibleTimeEnd,
-  }
+  };
 
   // Calculate half of the buffer size on each side = 1/4 of the (buffer - viewport)
-  const halfBuffer = oldZoom * (buffer! - 1) * 0.25
+  const halfBuffer = oldZoom * (buffer! - 1) * 0.25;
 
   // Check if the current canvas covers the new times
   const shouldCreateNewCanvas =
     newZoom !== oldZoom ||
     visibleTimeStart <= oldCanvasTimeStart + halfBuffer ||
-    visibleTimeEnd >= oldCanvasTimeEnd - halfBuffer
+    visibleTimeEnd >= oldCanvasTimeEnd - halfBuffer;
 
   if (shouldCreateNewCanvas || forceUpdateDimensions) {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
       visibleTimeStart,
       visibleTimeEnd,
-      buffer!,
-    )
-    newState.canvasTimeStart = canvasTimeStart
-    newState.canvasTimeEnd = canvasTimeEnd
+      buffer!
+    );
+    newState.canvasTimeStart = canvasTimeStart;
+    newState.canvasTimeEnd = canvasTimeEnd;
     const mergedState = {
       ...state,
       ...newState,
-    }
+    };
 
-    const canvasWidth = getCanvasWidth(mergedState.width, props.buffer!)
+    const canvasWidth = getCanvasWidth(mergedState.width, props.buffer!);
 
     // The canvas cannot be kept, so calculate the new items position
     Object.assign(
@@ -772,9 +790,9 @@ export function calculateScrollCanvas<
         mergedState.resizingEdge,
         mergedState.resizeTime,
         mergedState.newGroupOrder,
-        props.itemVerticalGap,
-      ),
-    )
+        props.itemVerticalGap
+      )
+    );
   }
-  return newState
+  return newState;
 }

@@ -1,157 +1,134 @@
-import { render, fireEvent } from '@testing-library/react'
-import { noop } from 'test-utility'
-import PreventClickOnDrag from 'lib/interaction/PreventClickOnDrag'
+import { render, fireEvent } from "@testing-library/react";
+import { noop } from "test-utility";
+import PreventClickOnDrag from "lib/interaction/PreventClickOnDrag";
 
-const defaultClickTolerance = 10
+const defaultClickTolerance = 10;
 
-describe('PreventClickOnDrag', () => {
-  it('should prevent click if element is dragged further than clickTolerance pixels forwards', () => {
-    const onClickMock = vi.fn()
+describe("PreventClickOnDrag", () => {
+  it("should prevent click if element is dragged further than clickTolerance pixels forwards", () => {
+    const onClickMock = vi.fn();
     const { container } = render(
-      <PreventClickOnDrag
-        onClick={onClickMock}
-        clickTolerance={defaultClickTolerance}
-      >
+      <PreventClickOnDrag onClick={onClickMock} clickTolerance={defaultClickTolerance}>
         <div />
       </PreventClickOnDrag>
-    )
+    );
 
-    const el = container.firstChild as HTMLElement
-    const originalClientX = 100
+    const el = container.firstChild as HTMLElement;
+    const originalClientX = 100;
 
-    fireEvent.mouseDown(el, { clientX: originalClientX })
-    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance + 1 })
-    fireEvent.click(el)
+    fireEvent.mouseDown(el, { clientX: originalClientX });
+    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance + 1 });
+    fireEvent.click(el);
 
-    expect(onClickMock).not.toHaveBeenCalled()
-  })
+    expect(onClickMock).not.toHaveBeenCalled();
+  });
 
-  it('should prevent click if element is dragged further than clickTolerance pixels backwards', () => {
-    const onClickMock = vi.fn()
+  it("should prevent click if element is dragged further than clickTolerance pixels backwards", () => {
+    const onClickMock = vi.fn();
     const { container } = render(
-      <PreventClickOnDrag
-        onClick={onClickMock}
-        clickTolerance={defaultClickTolerance}
-      >
+      <PreventClickOnDrag onClick={onClickMock} clickTolerance={defaultClickTolerance}>
         <div />
       </PreventClickOnDrag>
-    )
+    );
 
-    const el = container.firstChild as HTMLElement
-    const originalClientX = 100
+    const el = container.firstChild as HTMLElement;
+    const originalClientX = 100;
 
-    fireEvent.mouseDown(el, { clientX: originalClientX })
-    fireEvent.mouseUp(el, { clientX: originalClientX - defaultClickTolerance - 1 })
-    fireEvent.click(el)
+    fireEvent.mouseDown(el, { clientX: originalClientX });
+    fireEvent.mouseUp(el, { clientX: originalClientX - defaultClickTolerance - 1 });
+    fireEvent.click(el);
 
-    expect(onClickMock).not.toHaveBeenCalled()
-  })
+    expect(onClickMock).not.toHaveBeenCalled();
+  });
 
-  it('should not prevent click if element is dragged less than clickTolerance pixels forwards', () => {
-    const onClickMock = vi.fn()
+  it("should not prevent click if element is dragged less than clickTolerance pixels forwards", () => {
+    const onClickMock = vi.fn();
     const { container } = render(
-      <PreventClickOnDrag
-        onClick={onClickMock}
-        clickTolerance={defaultClickTolerance}
-      >
+      <PreventClickOnDrag onClick={onClickMock} clickTolerance={defaultClickTolerance}>
         <div />
       </PreventClickOnDrag>
-    )
+    );
 
-    const el = container.firstChild as HTMLElement
-    const originalClientX = 100
+    const el = container.firstChild as HTMLElement;
+    const originalClientX = 100;
 
-    fireEvent.mouseDown(el, { clientX: originalClientX })
-    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance - 1 })
-    fireEvent.click(el)
+    fireEvent.mouseDown(el, { clientX: originalClientX });
+    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance - 1 });
+    fireEvent.click(el);
 
-    expect(onClickMock).toHaveBeenCalledTimes(1)
-  })
+    expect(onClickMock).toHaveBeenCalledTimes(1);
+  });
 
-  it('should not prevent click if element is dragged less than clickTolerance pixels backwards', () => {
-    const onClickMock = vi.fn()
+  it("should not prevent click if element is dragged less than clickTolerance pixels backwards", () => {
+    const onClickMock = vi.fn();
     const { container } = render(
-      <PreventClickOnDrag
-        onClick={onClickMock}
-        clickTolerance={defaultClickTolerance}
-      >
+      <PreventClickOnDrag onClick={onClickMock} clickTolerance={defaultClickTolerance}>
         <div />
       </PreventClickOnDrag>
-    )
+    );
 
-    const el = container.firstChild as HTMLElement
-    const originalClientX = 100
+    const el = container.firstChild as HTMLElement;
+    const originalClientX = 100;
 
-    fireEvent.mouseDown(el, { clientX: originalClientX })
-    fireEvent.mouseUp(el, { clientX: originalClientX - defaultClickTolerance + 1 })
-    fireEvent.click(el)
+    fireEvent.mouseDown(el, { clientX: originalClientX });
+    fireEvent.mouseUp(el, { clientX: originalClientX - defaultClickTolerance + 1 });
+    fireEvent.click(el);
 
-    expect(onClickMock).toHaveBeenCalledTimes(1)
-  })
+    expect(onClickMock).toHaveBeenCalledTimes(1);
+  });
 
-  it('should not prevent click if first interaction was drag but second is click', () => {
-    const onClickMock = vi.fn()
+  it("should not prevent click if first interaction was drag but second is click", () => {
+    const onClickMock = vi.fn();
     const { container } = render(
-      <PreventClickOnDrag
-        onClick={onClickMock}
-        clickTolerance={defaultClickTolerance}
-      >
+      <PreventClickOnDrag onClick={onClickMock} clickTolerance={defaultClickTolerance}>
         <div />
       </PreventClickOnDrag>
-    )
+    );
 
-    const el = container.firstChild as HTMLElement
-    const originalClientX = 100
+    const el = container.firstChild as HTMLElement;
+    const originalClientX = 100;
 
     // First interaction: drag beyond tolerance
-    fireEvent.mouseDown(el, { clientX: originalClientX })
-    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance + 1 })
-    fireEvent.click(el)
+    fireEvent.mouseDown(el, { clientX: originalClientX });
+    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance + 1 });
+    fireEvent.click(el);
 
-    expect(onClickMock).not.toHaveBeenCalled()
+    expect(onClickMock).not.toHaveBeenCalled();
 
     // Second interaction: click within tolerance
-    fireEvent.mouseDown(el, { clientX: originalClientX })
-    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance - 1 })
-    fireEvent.click(el)
+    fireEvent.mouseDown(el, { clientX: originalClientX });
+    fireEvent.mouseUp(el, { clientX: originalClientX + defaultClickTolerance - 1 });
+    fireEvent.click(el);
 
-    expect(onClickMock).toHaveBeenCalled()
-  })
+    expect(onClickMock).toHaveBeenCalled();
+  });
 
-  it('calls all other event handlers in wrapped component', () => {
-    const doubleClickMock = vi.fn()
+  it("calls all other event handlers in wrapped component", () => {
+    const doubleClickMock = vi.fn();
     const { container } = render(
-      <PreventClickOnDrag
-        onClick={vi.fn()}
-        clickTolerance={defaultClickTolerance}
-      >
+      <PreventClickOnDrag onClick={vi.fn()} clickTolerance={defaultClickTolerance}>
         <div onDoubleClick={doubleClickMock} />
       </PreventClickOnDrag>
-    )
+    );
 
-    fireEvent.doubleClick(container.firstChild as HTMLElement)
+    fireEvent.doubleClick(container.firstChild as HTMLElement);
 
-    expect(doubleClickMock).toHaveBeenCalled()
-  })
+    expect(doubleClickMock).toHaveBeenCalled();
+  });
 
-  it('only allows single children element', () => {
-    vi.spyOn(console, 'error').mockImplementation(noop)
+  it("only allows single children element", () => {
+    vi.spyOn(console, "error").mockImplementation(noop);
     expect(() =>
       render(
         // @ts-expect-error Testing runtime validation with multiple children
-        <PreventClickOnDrag
-          onClick={noop}
-          clickTolerance={defaultClickTolerance}
-        >
+        <PreventClickOnDrag onClick={noop} clickTolerance={defaultClickTolerance}>
           <div>hey</div>
           <div>hi</div>
           <div>how are ya</div>
         </PreventClickOnDrag>
       )
-    ).toThrowError(
-      'React.Children.only expected to receive a single React element child'
-    )
+    ).toThrowError("React.Children.only expected to receive a single React element child");
 
-    vi.restoreAllMocks()
-  })
-})
+    vi.restoreAllMocks();
+  });
+});

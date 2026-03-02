@@ -1,5 +1,5 @@
-import { stackTimelineItems } from 'lib/utility/calendar'
-import { items, groups } from '../../../__fixtures__/itemsAndGroups'
+import { stackTimelineItems } from "lib/utility/calendar";
+import { items, groups } from "../../../__fixtures__/itemsAndGroups";
 import {
   props,
   state,
@@ -7,9 +7,9 @@ import {
   stateResizeItemLeft,
   stateResizeItemRight,
   propsNoStack,
-} from '../../../__fixtures__/stateAndProps'
-describe('stackItems', () => {
-  it('work as expected', () => {
+} from "../../../__fixtures__/stateAndProps";
+describe("stackItems", () => {
+  it("work as expected", () => {
     expect(
       stackTimelineItems(
         items,
@@ -29,9 +29,9 @@ describe('stackItems', () => {
         state.newGroupOrder,
         undefined
       )
-    ).toMatchSnapshot()
-  })
-  it('work as expected no stack', () => {
+    ).toMatchSnapshot();
+  });
+  it("work as expected no stack", () => {
     expect(
       stackTimelineItems(
         items,
@@ -51,9 +51,9 @@ describe('stackItems', () => {
         state.newGroupOrder,
         undefined
       )
-    ).toMatchSnapshot()
-  })
-  it('should stack items while moving an item', () => {
+    ).toMatchSnapshot();
+  });
+  it("should stack items while moving an item", () => {
     expect(
       stackTimelineItems(
         items,
@@ -73,9 +73,9 @@ describe('stackItems', () => {
         stateMoveItem.newGroupOrder,
         undefined
       )
-    ).toMatchSnapshot()
-  })
-  it('should stack items while resize item left', () => {
+    ).toMatchSnapshot();
+  });
+  it("should stack items while resize item left", () => {
     expect(
       stackTimelineItems(
         items,
@@ -95,9 +95,9 @@ describe('stackItems', () => {
         stateResizeItemLeft.newGroupOrder,
         undefined
       )
-    ).toMatchSnapshot()
-  })
-  it('should stack items while resize item right', () => {
+    ).toMatchSnapshot();
+  });
+  it("should stack items while resize item right", () => {
     expect(
       stackTimelineItems(
         items,
@@ -117,9 +117,9 @@ describe('stackItems', () => {
         stateResizeItemRight.newGroupOrder,
         undefined
       )
-    ).toMatchSnapshot()
-  })
-  it('should return empty dimensions if groups are empty', () => {
+    ).toMatchSnapshot();
+  });
+  it("should return empty dimensions if groups are empty", () => {
     expect(
       stackTimelineItems(
         items,
@@ -143,7 +143,7 @@ describe('stackItems', () => {
       dimensionItems: [],
       height: 0,
       groupHeights: [],
-      groupTops: []
-    })
-  })
-})
+      groupTops: [],
+    });
+  });
+});

@@ -1,26 +1,26 @@
 /* eslint-disable no-console */
-import { Component } from 'react'
-import dayjs from 'dayjs'
+import { Component } from "react";
+import dayjs from "dayjs";
 
-import Timeline from 'react-calendar-timeline'
+import Timeline from "react-calendar-timeline";
 
-import generateFakeData from '../generate-fake-data'
+import generateFakeData from "../generate-fake-data";
 
-const minTime = dayjs().add(-6, 'months').valueOf()
-const maxTime = dayjs().add(6, 'months').valueOf()
+const minTime = dayjs().add(-6, "months").valueOf();
+const maxTime = dayjs().add(6, "months").valueOf();
 
 const keys = {
-  groupLabelKey: 'title',
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemDivTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time',
-}
+  groupLabelKey: "title",
+  groupIdKey: "id",
+  groupTitleKey: "title",
+  groupRightTitleKey: "rightTitle",
+  itemIdKey: "id",
+  itemTitleKey: "title",
+  itemDivTitleKey: "title",
+  itemGroupKey: "group",
+  itemTimeStartKey: "start_time",
+  itemTimeEndKey: "end_time",
+};
 
 class GroupRenderer extends Component {
   render() {
@@ -34,54 +34,54 @@ class GroupRenderer extends Component {
           </tr>
         </thead>
       </table>
-    )
+    );
   }
 }
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups, items } = generateFakeData(100, 5000)
-    const visibleTimeStart = dayjs().startOf('month').toDate().valueOf()
-    const visibleTimeEnd = dayjs().endOf('month').toDate().valueOf()
+    const { groups, items } = generateFakeData(100, 5000);
+    const visibleTimeStart = dayjs().startOf("month").toDate().valueOf();
+    const visibleTimeEnd = dayjs().endOf("month").toDate().valueOf();
 
     this.state = {
       groups,
       items,
       visibleTimeStart,
       visibleTimeEnd,
-    }
+    };
   }
 
   handleCanvasClick = (groupId, time) => {
-    console.log('Canvas clicked', groupId, dayjs(time).format())
-  }
+    console.log("Canvas clicked", groupId, dayjs(time).format());
+  };
 
   handleCanvasContextMenu = (group, time) => {
-    console.log('Canvas context menu', group, dayjs(time).format())
-  }
+    console.log("Canvas context menu", group, dayjs(time).format());
+  };
 
   handleItemClick = (itemId, _, time) => {
-    console.log('Clicked: ' + itemId, dayjs(time).format())
-  }
+    console.log("Clicked: " + itemId, dayjs(time).format());
+  };
 
   handleItemSelect = (itemId, _, time) => {
-    console.log('Selected: ' + itemId, dayjs(time).format())
-  }
+    console.log("Selected: " + itemId, dayjs(time).format());
+  };
 
   handleItemDoubleClick = (itemId, _, time) => {
-    console.log('Double Click: ' + itemId, dayjs(time).format())
-  }
+    console.log("Double Click: " + itemId, dayjs(time).format());
+  };
 
   handleItemContextMenu = (itemId, _, time) => {
-    console.log('Context Menu: ' + itemId, dayjs(time).format())
-  }
+    console.log("Context Menu: " + itemId, dayjs(time).format());
+  };
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    const { items, groups } = this.state
+    const { items, groups } = this.state;
 
-    const group = groups[newGroupOrder]
+    const group = groups[newGroupOrder];
 
     this.setState({
       items: items.map((item) =>
@@ -91,29 +91,29 @@ export default class App extends Component {
               end: dragTime + (item.end - item.start),
               group: group.id,
             })
-          : item,
+          : item
       ),
-    })
+    });
 
-    console.log('Moved', itemId, dragTime, newGroupOrder)
-  }
+    console.log("Moved", itemId, dragTime, newGroupOrder);
+  };
 
   handleItemResize = (itemId, time, edge) => {
-    const { items } = this.state
+    const { items } = this.state;
 
     this.setState({
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time,
+              start: edge === "left" ? time : item.start,
+              end: edge === "left" ? item.end : time,
             })
-          : item,
+          : item
       ),
-    })
+    });
 
-    console.log('Resized', itemId, time, edge)
-  }
+    console.log("Resized", itemId, time, edge);
+  };
 
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
@@ -121,7 +121,7 @@ export default class App extends Component {
       this.setState({
         visibleTimeStart: minTime,
         visibleTimeEnd: maxTime,
-      })
+      });
       //updateScrollCanvas(minTime, maxTime)
     } else if (visibleTimeStart < minTime) {
       //updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
@@ -131,20 +131,19 @@ export default class App extends Component {
       this.setState({
         visibleTimeStart,
         visibleTimeEnd,
-      })
+      });
       //updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
     }
-  }
+  };
 
   moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
-      return newTime
+      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000);
+      return newTime;
     }
 
-    return time
-  }
+    return time;
+  };
 
   // itemRenderer = ({ item }) => {
   //   return (
@@ -165,11 +164,11 @@ export default class App extends Component {
           </tr>
         </tbody>
       </table>
-    )
-  }
+    );
+  };
 
   render() {
-    const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state
+    const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state;
 
     return (
       <Timeline
@@ -203,6 +202,6 @@ export default class App extends Component {
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
       />
-    )
+    );
   }
 }

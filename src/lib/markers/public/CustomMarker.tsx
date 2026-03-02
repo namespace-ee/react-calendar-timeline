@@ -1,28 +1,21 @@
-import { Component } from 'react'
-import {
-  SubscribeReturn,
-  TimelineMarkersConsumer,
-} from '../TimelineMarkersContext'
-import {
-  MarkerRendererType,
-  MarkerType,
-  TimelineMarkerType,
-} from '../markerType'
+import { Component } from "react";
+import { SubscribeReturn, TimelineMarkersConsumer } from "../TimelineMarkersContext";
+import { MarkerRendererType, MarkerType, TimelineMarkerType } from "../markerType";
 
 type CustomMarkerProps = {
-  date: number
-  children?: MarkerRendererType
-  updateMarker: (marker: MarkerType) => void
-  subscribeMarker: (newe: MarkerType) => SubscribeReturn
-}
+  date: number;
+  children?: MarkerRendererType;
+  updateMarker: (marker: MarkerType) => void;
+  subscribeMarker: (newe: MarkerType) => SubscribeReturn;
+};
 class CustomMarker extends Component<CustomMarkerProps> {
-  private unsubscribe: SubscribeReturn['unsubscribe'] | null = null
-  private getMarker: SubscribeReturn['getMarker'] | null = null
+  private unsubscribe: SubscribeReturn["unsubscribe"] | null = null;
+  private getMarker: SubscribeReturn["getMarker"] | null = null;
 
   componentDidUpdate(prevProps: CustomMarkerProps) {
     if (prevProps.date !== this.props.date && this.getMarker) {
-      const marker = this.getMarker()
-      this.props.updateMarker({ ...marker, date: this.props.date })
+      const marker = this.getMarker();
+      this.props.updateMarker({ ...marker, date: this.props.date });
     }
   }
 
@@ -31,40 +24,36 @@ class CustomMarker extends Component<CustomMarkerProps> {
       type: TimelineMarkerType.Custom,
       renderer: this.props.children,
       date: this.props.date,
-    })
-    this.unsubscribe = unsubscribe
-    this.getMarker = getMarker
+    });
+    this.unsubscribe = unsubscribe;
+    this.getMarker = getMarker;
   }
 
   componentWillUnmount() {
     if (this.unsubscribe != null) {
-      this.unsubscribe()
-      this.unsubscribe = null
+      this.unsubscribe();
+      this.unsubscribe = null;
     }
   }
 
   render() {
-    return null
+    return null;
   }
 }
 
-type Props = Pick<CustomMarkerProps, 'date' | 'children'>
+type Props = Pick<CustomMarkerProps, "date" | "children">;
 
 // TODO: turn into HOC?
 const CustomMarkerWrapper = (props: Props) => {
   return (
     <TimelineMarkersConsumer>
       {({ subscribeMarker, updateMarker }) => (
-        <CustomMarker
-          subscribeMarker={subscribeMarker}
-          updateMarker={updateMarker}
-          {...props}
-        />
+        <CustomMarker subscribeMarker={subscribeMarker} updateMarker={updateMarker} {...props} />
       )}
     </TimelineMarkersConsumer>
-  )
-}
+  );
+};
 
-CustomMarkerWrapper.displayName = 'CustomMarkerWrapper'
+CustomMarkerWrapper.displayName = "CustomMarkerWrapper";
 
-export default CustomMarkerWrapper
+export default CustomMarkerWrapper;

@@ -1,18 +1,16 @@
-
-@use 'react-calendar-timeline/dist/Timeline.scss' as * ;/*with (
+@use "react-calendar-timeline/dist/Timeline.scss" as *; /*with (
 $sidebar-background-color: #2196f3,
 //$weekend:#29b31a
 ) ;*/
 
 body {
-  font-family: 'Lato';
+  font-family: "Lato";
   margin: 0;
   font-size: 13px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
 
 .react-calendar-timeline .rct-item.item-weekend {
   background: #21f32c;
@@ -62,12 +60,7 @@ body {
 }
 
 .lunch {
-  background-color: rgba(
-    255,
-    0,
-    0,
-    0.5
-  ) !important; /* we need to overwrite the weekend rule */
+  background-color: rgba(255, 0, 0, 0.5) !important; /* we need to overwrite the weekend rule */
 }
 
 .row-root {
@@ -89,16 +82,16 @@ body {
 .header-background {
   background: azure;
 }
-.draggable{
-    touch-action: none;
-    user-select: none;
+.draggable {
+  touch-action: none;
+  user-select: none;
 
   z-index: 1000;
 }
 
-.drop-active{
+.drop-active {
   background-color: #b4b4b4;
 }
 .drop-active-element {
-  border-color:#0000ff;
+  border-color: #0000ff;
 }

@@ -1,33 +1,33 @@
-import React, {HTMLProps} from 'react'
-import Interval from './Interval'
-import { Interval as IntervalType, IntervalRenderer } from '../types/main'
-import { Dayjs } from 'dayjs'
-import { SelectUnits } from '../utility/calendar'
-import { GetIntervalPropsType } from './types'
+import React, { HTMLProps } from "react";
+import Interval from "./Interval";
+import { Interval as IntervalType, IntervalRenderer } from "../types/main";
+import { Dayjs } from "dayjs";
+import { SelectUnits } from "../utility/calendar";
+import { GetIntervalPropsType } from "./types";
 
 export interface CustomDateHeaderProps<Data> {
   timelineContext?: {
-    timelineWidth: number
-    visibleTimeStart: number
-    visibleTimeEnd: number
-    canvasTimeStart: number
-    canvasTimeEnd: number
-  }
+    timelineWidth: number;
+    visibleTimeStart: number;
+    visibleTimeEnd: number;
+    canvasTimeStart: number;
+    canvasTimeEnd: number;
+  };
   headerContext: {
-    intervals: IntervalType[]
-    unit: SelectUnits
-  }
-  getRootProps: (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>
-  getIntervalProps: GetIntervalPropsType
-  showPeriod: (start: Dayjs, end: Dayjs) => void
+    intervals: IntervalType[];
+    unit: SelectUnits;
+  };
+  getRootProps: (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>;
+  getIntervalProps: GetIntervalPropsType;
+  showPeriod: (start: Dayjs, end: Dayjs) => void;
   data: {
-    style: React.CSSProperties
-    intervalRenderer: (props: IntervalRenderer<Data>) => React.ReactNode
-    className?: string
-    getLabelFormat: (interval: [Dayjs, Dayjs], unit: string, labelWidth: number) => string
-    unitProp?: 'primaryHeader'
-    headerData?: Data
-  }
+    style: React.CSSProperties;
+    intervalRenderer: (props: IntervalRenderer<Data>) => React.ReactNode;
+    className?: string;
+    getLabelFormat: (interval: [Dayjs, Dayjs], unit: string, labelWidth: number) => string;
+    unitProp?: "primaryHeader";
+    headerData?: Data;
+  };
 }
 
 export function CustomDateHeader<Data>({
@@ -40,7 +40,7 @@ export function CustomDateHeader<Data>({
   return (
     <div data-testid={`dateHeader`} className={className} {...getRootProps({ style })}>
       {intervals.map((interval) => {
-        const intervalText = getLabelFormat([interval.startTime, interval.endTime], unit, interval.labelWidth)
+        const intervalText = getLabelFormat([interval.startTime, interval.endTime], unit, interval.labelWidth);
         return (
           <Interval
             key={`label-${interval.startTime.valueOf()}`}
@@ -48,13 +48,13 @@ export function CustomDateHeader<Data>({
             interval={interval}
             showPeriod={showPeriod}
             intervalText={intervalText}
-            primaryHeader={unitProp === 'primaryHeader'}
+            primaryHeader={unitProp === "primaryHeader"}
             getIntervalProps={getIntervalProps}
             intervalRenderer={intervalRenderer}
             headerData={headerData}
           />
-        )
+        );
       })}
     </div>
-  )
+  );
 }

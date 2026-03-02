@@ -1,29 +1,29 @@
-import type { GroupOrders } from 'lib/types/main'
-import type { ItemDimension } from 'lib/types/dimension'
+import type { GroupOrders } from "lib/types/main";
+import type { ItemDimension } from "lib/types/dimension";
 
 export const orderedGroups: GroupOrders = {
-  '1': {
+  "1": {
     group: {
-      id: '1',
-      title: 'Group 1'
+      id: "1",
+      title: "Group 1",
     },
-    index: 0
+    index: 0,
   },
-  '2': {
+  "2": {
     group: {
-      id: '2',
-      title: 'Group 2'
+      id: "2",
+      title: "Group 2",
     },
-    index: 1
+    index: 1,
   },
-  '3': {
+  "3": {
     group: {
-      id: '3',
-      title: 'Group 3'
+      id: "3",
+      title: "Group 3",
     },
-    index: 2
-  }
-}
+    index: 2,
+  },
+};
 
 export const dimensionItems: ItemDimension[] = [
   {
@@ -36,16 +36,16 @@ export const dimensionItems: ItemDimension[] = [
       originalLeft: 907.4074074074074,
       order: {
         group: {
-          id: '1',
-          title: 'Group 1'
+          id: "1",
+          title: "Group 1",
         },
-        index: 0
+        index: 0,
       },
       stack: true,
       top: 7.5,
-      width: 78.74857638888886
+      width: 78.74857638888886,
     },
-    id: '0'
+    id: "0",
   },
   {
     dimensions: {
@@ -57,16 +57,16 @@ export const dimensionItems: ItemDimension[] = [
       originalLeft: 824.074074074074,
       order: {
         group: {
-          id: '1',
-          title: 'Group 1'
+          id: "1",
+          title: "Group 1",
         },
-        index: 0
+        index: 0,
       },
       stack: true,
       top: 37.5,
-      width: 245.4152430555556
+      width: 245.4152430555556,
     },
-    id: '5'
+    id: "5",
   },
   {
     dimensions: {
@@ -78,16 +78,16 @@ export const dimensionItems: ItemDimension[] = [
       originalLeft: 1032.4074074074074,
       order: {
         group: {
-          id: '1',
-          title: 'Group 1'
+          id: "1",
+          title: "Group 1",
         },
-        index: 0
+        index: 0,
       },
       stack: true,
       top: 7.5,
-      width: 287.08190972222224
+      width: 287.08190972222224,
     },
-    id: '6'
+    id: "6",
   },
   {
     dimensions: {
@@ -99,16 +99,16 @@ export const dimensionItems: ItemDimension[] = [
       originalLeft: 1254.6296296296296,
       order: {
         group: {
-          id: '1',
-          title: 'Group 1'
+          id: "1",
+          title: "Group 1",
         },
-        index: 0
+        index: 0,
       },
       stack: true,
       top: 37.5,
-      width: 172.1749884259259
+      width: 172.1749884259259,
     },
-    id: '1'
+    id: "1",
   },
   {
     dimensions: {
@@ -120,16 +120,16 @@ export const dimensionItems: ItemDimension[] = [
       originalLeft: 1833.3333333333333,
       order: {
         group: {
-          id: '1',
-          title: 'Group 1'
+          id: "1",
+          title: "Group 1",
         },
-        index: 0
+        index: 0,
       },
       stack: true,
       top: 7.5,
-      width: 236.08273148148123
+      width: 236.08273148148123,
     },
-    id: '2'
+    id: "2",
   },
   {
     dimensions: {
@@ -141,15 +141,15 @@ export const dimensionItems: ItemDimension[] = [
       originalLeft: 2250,
       order: {
         group: {
-          id: '3',
-          title: 'Group 3'
+          id: "3",
+          title: "Group 3",
         },
-        index: 2
+        index: 2,
       },
       stack: true,
       top: 105,
-      width: 236.08273148148146
+      width: 236.08273148148146,
     },
-    id: '3'
-  }
-]
+    id: "3",
+  },
+];

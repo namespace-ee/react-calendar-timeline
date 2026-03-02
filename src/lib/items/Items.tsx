@@ -1,55 +1,55 @@
-import { Component } from 'react'
-import Item, { ItemProps } from './Item'
-import { _get, arraysEqual, keyBy } from '../utility/generic'
-import { getGroupOrders, getVisibleItems } from '../utility/calendar'
-import { Id, TimelineGroupBase, TimelineItemBase, TimelineKeys } from '../types/main'
-import { ItemDimension } from '../types/dimension'
+import { Component } from "react";
+import Item, { ItemProps } from "./Item";
+import { _get, arraysEqual, keyBy } from "../utility/generic";
+import { getGroupOrders, getVisibleItems } from "../utility/calendar";
+import { Id, TimelineGroupBase, TimelineItemBase, TimelineKeys } from "../types/main";
+import { ItemDimension } from "../types/dimension";
 
-export type CanResize = true | false | 'left' | 'right' | 'both'
+export type CanResize = true | false | "left" | "right" | "both";
 type ItemsProps<CustomItem extends TimelineItemBase<number>> = {
-  groups: TimelineGroupBase[]
-  items: CustomItem[]
-  dimensionItems: ItemDimension[]
-  selected?: Id[]
+  groups: TimelineGroupBase[];
+  items: CustomItem[];
+  dimensionItems: ItemDimension[];
+  selected?: Id[];
 
-  canvasTimeStart: number
-  canvasTimeEnd: number
-  canvasWidth: number
+  canvasTimeStart: number;
+  canvasTimeEnd: number;
+  canvasWidth: number;
 
-  dragSnap?: number
-  minResizeWidth?: number
-  selectedItem?: Id
+  dragSnap?: number;
+  minResizeWidth?: number;
+  selectedItem?: Id;
 
-  canChangeGroup?: boolean
-  canMove?: boolean
-  canResize?: CanResize
-  canSelect?: boolean
-  keys: TimelineKeys
-  moveResizeValidator?: ItemProps<CustomItem>['moveResizeValidator']
-  itemSelect: ItemProps<CustomItem>['onSelect']
-  itemDrag: ItemProps<CustomItem>['onDrag']
-  itemDrop: ItemProps<CustomItem>['onDrop']
-  itemResizing: ItemProps<CustomItem>['onResizing']
-  itemResized: ItemProps<CustomItem>['onResized']
-  onItemDoubleClick: ItemProps<CustomItem>['onItemDoubleClick']
-  onItemContextMenu?: ItemProps<CustomItem>['onContextMenu']
-  itemRenderer?: ItemProps<CustomItem>['itemRenderer']
-  groupTops: number[]
-  useResizeHandle?: boolean
-  scrollRef: HTMLElement | null
-  scrollOffset: number
-}
+  canChangeGroup?: boolean;
+  canMove?: boolean;
+  canResize?: CanResize;
+  canSelect?: boolean;
+  keys: TimelineKeys;
+  moveResizeValidator?: ItemProps<CustomItem>["moveResizeValidator"];
+  itemSelect: ItemProps<CustomItem>["onSelect"];
+  itemDrag: ItemProps<CustomItem>["onDrag"];
+  itemDrop: ItemProps<CustomItem>["onDrop"];
+  itemResizing: ItemProps<CustomItem>["onResizing"];
+  itemResized: ItemProps<CustomItem>["onResized"];
+  onItemDoubleClick: ItemProps<CustomItem>["onItemDoubleClick"];
+  onItemContextMenu?: ItemProps<CustomItem>["onContextMenu"];
+  itemRenderer?: ItemProps<CustomItem>["itemRenderer"];
+  groupTops: number[];
+  useResizeHandle?: boolean;
+  scrollRef: HTMLElement | null;
+  scrollOffset: number;
+};
 
-type ItemsState = object
+type ItemsState = object;
 
 function canResizeLeft<CustomItem extends TimelineItemBase<number>>(item: CustomItem, canResize?: CanResize) {
-  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
-  return value === 'left' || value === 'both'
+  const value = _get(item, "canResize") !== undefined ? _get(item, "canResize") : canResize;
+  return value === "left" || value === "both";
 }
 
 function canResizeRight<CustomItem extends TimelineItemBase<number>>(item: CustomItem, canResize?: CanResize) {
-  const value = _get(item, 'canResize') !== undefined ? _get(item, 'canResize') : canResize
-  return value === 'right' || value === 'both' || value === true
+  const value = _get(item, "canResize") !== undefined ? _get(item, "canResize") : canResize;
+  return value === "right" || value === "both" || value === true;
 }
 
 export default class Items<CustomItem extends TimelineItemBase<number>> extends Component<
@@ -73,31 +73,31 @@ export default class Items<CustomItem extends TimelineItemBase<number>> extends 
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
       nextProps.canSelect === this.props.canSelect
-    )
+    );
   }
 
   isSelected(item: CustomItem, itemIdKey: string) {
     if (!this.props.selected) {
-      return this.props.selectedItem === _get(item, itemIdKey)
+      return this.props.selectedItem === _get(item, itemIdKey);
     } else {
-      const target = _get(item, itemIdKey) as string | number
-      return this.props.selected.includes(target)
+      const target = _get(item, itemIdKey) as string | number;
+      return this.props.selected.includes(target);
     }
   }
 
   getVisibleItems(canvasTimeStart: number, canvasTimeEnd: number) {
-    const { keys, items } = this.props
+    const { keys, items } = this.props;
 
-    return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys)
+    return getVisibleItems(items, canvasTimeStart, canvasTimeEnd, keys);
   }
 
   render() {
-    const { canvasTimeStart, canvasTimeEnd, dimensionItems, keys, groups } = this.props
-    const { itemIdKey, itemGroupKey } = keys
+    const { canvasTimeStart, canvasTimeEnd, dimensionItems, keys, groups } = this.props;
+    const { itemIdKey, itemGroupKey } = keys;
 
-    const groupOrders = getGroupOrders(groups, keys)
-    const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd)
-    const sortedDimensionItems = keyBy(dimensionItems, 'id')
+    const groupOrders = getGroupOrders(groups, keys);
+    const visibleItems = this.getVisibleItems(canvasTimeStart, canvasTimeEnd);
+    const sortedDimensionItems = keyBy(dimensionItems, "id");
 
     return (
       <div className="rct-items">
@@ -113,12 +113,12 @@ export default class Items<CustomItem extends TimelineItemBase<number>> extends 
               dimensions={sortedDimensionItems[_get(item, itemIdKey)].dimensions}
               selected={this.isSelected(item, itemIdKey)}
               canChangeGroup={
-                _get(item, 'canChangeGroup') !== undefined ? _get(item, 'canChangeGroup') : this.props.canChangeGroup
+                _get(item, "canChangeGroup") !== undefined ? _get(item, "canChangeGroup") : this.props.canChangeGroup
               }
-              canMove={_get(item, 'canMove') !== undefined ? _get(item, 'canMove') : this.props.canMove}
+              canMove={_get(item, "canMove") !== undefined ? _get(item, "canMove") : this.props.canMove}
               canResizeLeft={canResizeLeft(item, this.props.canResize)}
               canResizeRight={canResizeRight(item, this.props.canResize)}
-              canSelect={_get(item, 'canSelect') !== undefined ? _get(item, 'canSelect') : this.props.canSelect}
+              canSelect={_get(item, "canSelect") !== undefined ? _get(item, "canSelect") : this.props.canSelect}
               useResizeHandle={this.props.useResizeHandle}
               groupTops={this.props.groupTops}
               canvasTimeStart={this.props.canvasTimeStart}
@@ -140,6 +140,6 @@ export default class Items<CustomItem extends TimelineItemBase<number>> extends 
             />
           ))}
       </div>
-    )
+    );
   }
 }
