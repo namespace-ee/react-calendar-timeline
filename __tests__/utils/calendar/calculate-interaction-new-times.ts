@@ -53,5 +53,25 @@ describe('calculateInteractionNewTimes', () => {
       })
     ).toMatchObject([210, 300])
   })
-  it.todo('the item is moved and snapped to the grid', () => {})
+  it('preserves item duration when moved to a snapped drag time', () => {
+    // dragTime would already be snapped by the caller (e.g., dragTimeSnap)
+    // This test verifies the function preserves the original range
+    const itemTimeStart = 1000
+    const itemTimeEnd = 1500
+    const snappedDragTime = 2000 // pre-snapped value
+
+    const [newStart, newEnd] = calculateInteractionNewTimes({
+      itemTimeStart,
+      itemTimeEnd,
+      dragTime: snappedDragTime,
+      isDragging: true,
+      isResizing: false,
+      resizingEdge: null,
+      resizeTime: null,
+    })
+
+    expect(newStart).toBe(2000)
+    expect(newEnd).toBe(2500) // 2000 + (1500 - 1000) = 2500
+    expect(newEnd - newStart).toBe(itemTimeEnd - itemTimeStart)
+  })
 })
