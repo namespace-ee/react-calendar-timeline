@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta.17)
+
 * Fix vertical page scroll being hijacked by horizontal timeline panning on trackpads
 
 ## 0.30.0 (beta.16)
