@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { type CSSProperties, type ReactNode } from 'react'
 import { render, cleanup, within, fireEvent } from '@testing-library/react'
-import Timeline from 'lib/Timeline'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
+import type { IntervalRenderer, TimelineTimeSteps } from 'lib/types/main'
+import type { Dayjs } from 'dayjs'
+import type { defaultHeaderFormats } from 'lib/default-config'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 dayjs.extend(utc)
 dayjs.extend(weekOfYear)
+
+type FormatLabelFunction = (
+  timeRange: [Dayjs, Dayjs],
+  unit: keyof typeof defaultHeaderFormats,
+  labelWidth?: number,
+) => string
 
 describe('Testing DateHeader Component', () => {
   afterEach(cleanup)
@@ -59,7 +67,7 @@ describe('Testing DateHeader Component', () => {
     })
 
     it('Given Dateheader When pass a function typed labelFormat Then it should render the intervals with the given format', () => {
-      const formatlabel = vi.fn(interval => interval[0].format('MM/DD/YYYY'))
+      const formatlabel: FormatLabelFunction = vi.fn((interval: [Dayjs, Dayjs]) => interval[0].format('MM/DD/YYYY'))
       const { getAllByTestId } = render(
         dateHeaderComponent({ unit: 'day', labelFormat: formatlabel })
       )
@@ -72,7 +80,7 @@ describe('Testing DateHeader Component', () => {
     })
 
     it('Given Dateheader When pass a function typed labelFormat Then it should be called with an interval, label width and unit', () => {
-      const formatlabel = vi.fn(interval => interval[0].format('MM/DD/YYYY'))
+      const formatlabel = vi.fn<FormatLabelFunction>((interval) => interval[0].format('MM/DD/YYYY'))
       render(dateHeaderComponent({ unit: 'day', labelFormat: formatlabel }))
 
       expect(formatlabel).toHaveBeenCalled()
@@ -89,7 +97,7 @@ describe('Testing DateHeader Component', () => {
   })
 
   it('Given Dateheader When click on the primary header Then it should change the unit', async () => {
-    const formatlabel = vi.fn(interval => interval[0].format('MM/DD/YYYY'))
+    const formatlabel: FormatLabelFunction = vi.fn((interval: [Dayjs, Dayjs]) => interval[0].format('MM/DD/YYYY'))
     const showPeriod = vi.fn()
     const { getAllByTestId } = render(
       dateHeaderComponent({ unit: 'day', labelFormat: formatlabel, showPeriod })
@@ -100,7 +108,7 @@ describe('Testing DateHeader Component', () => {
     // Act
     const primaryFirstClick = within(primaryHeader).getByText('2018')
       .parentElement
-    primaryFirstClick.click()
+    primaryFirstClick!.click()
     expect(showPeriod).toBeCalled()
     const [start, end] = showPeriod.mock.calls[0]
     expect(start.format('DD/MM/YYYY hh:mm a')).toBe('01/01/2018 12:00 am')
@@ -133,7 +141,7 @@ describe('Testing DateHeader Component', () => {
   })
 
   it('Given Interval When pass an override (width, position) Then it should ignore these values', () => {
-    const { getAllByTestId, debug } = render(
+    const { getAllByTestId } = render(
       dateHeaderComponent({
         labelFormat: 'MM/DD/YYYY',
         props: { style: { width: 100, position: 'fixed' } }
@@ -157,7 +165,7 @@ describe('Testing DateHeader Component', () => {
 
   it('Given DateHeader component When pass an intervalRenderer prop then it should be called with the right params', () => {
     const intervalRenderer = vi.fn(
-      ({ getIntervalProps, intervalContext, data }) => (
+      ({ intervalContext }: IntervalRenderer<unknown>) => (
         <div data-testid="myAwesomeInterval">
           {intervalContext.intervalText}
         </div>
@@ -172,10 +180,6 @@ describe('Testing DateHeader Component', () => {
         props
       })
     )
-    const bluePrint = {
-      getIntervalProps: expect.any(Function),
-      intervalContext: expect.any(Object)
-    }
     expect(intervalRenderer).toBeCalled()
     expect(intervalRenderer).toReturn()
     expect(intervalRenderer.mock.calls[0][0].data).toBe(props)
@@ -291,8 +295,7 @@ describe('Testing DateHeader Component', () => {
             <DateHeader
               intervalRenderer={({
                 getIntervalProps,
-                intervalContext,
-                data
+                intervalContext
               }) => {
                 return (
                   <div
@@ -330,7 +333,7 @@ describe('Testing DateHeader Component', () => {
       expect(getAllByTestId('interval')[0]).toBeInTheDocument()
     })
     it("Given DateHeader When passing interval renderer Then it should called with interval's context", () => {
-      const renderer = vi.fn(({ getIntervalProps, intervalContext }) => {
+      const renderer = vi.fn(({ getIntervalProps, intervalContext }: IntervalRenderer<unknown>) => {
         return (
           <div data-testid="interval" {...getIntervalProps()}>
             {intervalContext.intervalText}
@@ -358,7 +361,7 @@ describe('Testing DateHeader Component', () => {
     })
   })
   it('Given DateHeader When passing a stateless react component to interval renderer Then it should render', () => {
-    const Renderer = ({ getIntervalProps, intervalContext }) => {
+    const Renderer = ({ getIntervalProps, intervalContext }: IntervalRenderer<unknown>) => {
       return (
         <div data-testid="interval-a" {...getIntervalProps()}>
           {intervalContext.intervalText}
@@ -387,7 +390,7 @@ describe('Testing DateHeader Component', () => {
     expect(getAllByTestId('interval-a')[0]).toBeInTheDocument()
   })
   it('Given DateHeader When passing a react component to interval renderer Then it should render', () => {
-    class Renderer extends React.Component {
+    class Renderer extends React.Component<IntervalRenderer<unknown>> {
       render() {
         const { getIntervalProps, intervalContext } = this.props
         return (
@@ -410,7 +413,7 @@ describe('Testing DateHeader Component', () => {
           <DateHeader
             unit="day"
             style={{ height: 50 }}
-            intervalRenderer={Renderer}
+            intervalRenderer={Renderer as unknown as (props: IntervalRenderer<unknown>) => ReactNode}
           />
         </TimelineHeaders>
       </RenderHeadersWrapper>
@@ -419,15 +422,25 @@ describe('Testing DateHeader Component', () => {
     expect(getAllByTestId('interval-a')[0]).toBeInTheDocument()
   })
   it('#562 Given DateHeader when passing week as a unit then header should render without error', ()=>{
-    render(
+    const { container } = render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
-          <DateHeader unit="week" />
+          <DateHeader unit={"week" as keyof TimelineTimeSteps} />
         </TimelineHeaders>
       </RenderHeadersWrapper>
     )
+    expect(container).toBeInTheDocument()
   })
 })
+
+type DateHeaderComponentOptions = {
+  labelFormat?: FormatLabelFunction | string
+  unit?: keyof TimelineTimeSteps | 'primaryHeader'
+  props?: Record<string, unknown>
+  className?: string
+  style?: CSSProperties
+  showPeriod?: (...args: unknown[]) => void
+}
 
 function dateHeaderComponent({
   labelFormat,
@@ -436,7 +449,7 @@ function dateHeaderComponent({
   className,
   style,
   showPeriod
-} = {}) {
+}: DateHeaderComponentOptions = {}) {
   return (
     <RenderHeadersWrapper
       showPeriod={showPeriod}
@@ -451,7 +464,7 @@ function dateHeaderComponent({
         <DateHeader unit="primaryHeader" />
         <DateHeader
           unit={unit}
-          labelFormat={labelFormat}
+          labelFormat={labelFormat as FormatLabelFunction | undefined}
           headerData={props}
           style={style}
           className={className}
@@ -469,7 +482,15 @@ function dateHeaderComponent({
   )
 }
 
-function dateHeaderWithIntervalRenderer({ intervalRenderer, props } = {}) {
+type DateHeaderWithIntervalRendererOptions = {
+  intervalRenderer?: (props: IntervalRenderer<unknown>) => ReactNode
+  props?: Record<string, unknown>
+}
+
+function dateHeaderWithIntervalRenderer({
+  intervalRenderer,
+  props
+}: DateHeaderWithIntervalRendererOptions = {}) {
   return (
     <RenderHeadersWrapper timelineState={{ timelineUnit: 'month' }}>
       <TimelineHeaders>
@@ -481,7 +502,6 @@ function dateHeaderWithIntervalRenderer({ intervalRenderer, props } = {}) {
         <DateHeader unit="primaryHeader" />
         <DateHeader
           unit={'day'}
-          labelFormat={'MM/DD/YYYY'}
           headerData={props}
           intervalRenderer={intervalRenderer}
         />

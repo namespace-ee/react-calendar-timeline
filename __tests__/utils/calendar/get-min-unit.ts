@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { getMinUnit, minCellWidth } from 'lib/utility/calendar'
+import { getMinUnit } from 'lib/utility/calendar'
 import { defaultTimeSteps } from 'lib/default-config'
 
 describe('getMinUnit', () => {

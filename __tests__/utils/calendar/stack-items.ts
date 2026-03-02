@@ -26,7 +26,8 @@ describe('stackItems', () => {
         state.dragTime,
         state.resizingEdge,
         state.resizeTime,
-        state.newGroupOrder
+        state.newGroupOrder,
+        undefined
       )
     ).toMatchSnapshot()
   })
@@ -47,7 +48,8 @@ describe('stackItems', () => {
         state.dragTime,
         state.resizingEdge,
         state.resizeTime,
-        state.newGroupOrder
+        state.newGroupOrder,
+        undefined
       )
     ).toMatchSnapshot()
   })
@@ -68,7 +70,8 @@ describe('stackItems', () => {
         stateMoveItem.dragTime,
         stateMoveItem.resizingEdge,
         stateMoveItem.resizeTime,
-        stateMoveItem.newGroupOrder
+        stateMoveItem.newGroupOrder,
+        undefined
       )
     ).toMatchSnapshot()
   })
@@ -89,7 +92,8 @@ describe('stackItems', () => {
         stateResizeItemLeft.dragTime,
         stateResizeItemLeft.resizingEdge,
         stateResizeItemLeft.resizeTime,
-        stateResizeItemLeft.newGroupOrder
+        stateResizeItemLeft.newGroupOrder,
+        undefined
       )
     ).toMatchSnapshot()
   })
@@ -110,7 +114,8 @@ describe('stackItems', () => {
         stateResizeItemRight.dragTime,
         stateResizeItemRight.resizingEdge,
         stateResizeItemRight.resizeTime,
-        stateResizeItemRight.newGroupOrder
+        stateResizeItemRight.newGroupOrder,
+        undefined
       )
     ).toMatchSnapshot()
   })
@@ -131,7 +136,8 @@ describe('stackItems', () => {
         state.dragTime,
         state.resizingEdge,
         state.resizeTime,
-        state.newGroupOrder
+        state.newGroupOrder,
+        undefined
       )
     ).toMatchObject({
       dimensionItems: [],

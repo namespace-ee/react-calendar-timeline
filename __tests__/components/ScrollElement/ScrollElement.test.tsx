@@ -1,18 +1,20 @@
-import React from 'react'
 import { render, act } from '@testing-library/react'
 import { noop } from 'test-utility'
 import ScrollElement from 'lib/scroll/ScrollElement'
 
 // jsdom does not provide PointerEvent
 class PointerEventPolyfill extends MouseEvent {
-  constructor(type, params = {}) {
+  pointerType: string
+  pointerId: number
+  isPrimary: boolean
+  constructor(type: string, params: PointerEventInit & Record<string, unknown> = {}) {
     super(type, params)
-    this.pointerType = params.pointerType || 'mouse'
-    this.pointerId = params.pointerId || 1
+    this.pointerType = (params.pointerType as string) || 'mouse'
+    this.pointerId = (params.pointerId as number) || 1
     this.isPrimary = params.isPrimary !== undefined ? params.isPrimary : true
   }
 }
-globalThis.PointerEvent = globalThis.PointerEvent || PointerEventPolyfill
+globalThis.PointerEvent = globalThis.PointerEvent || (PointerEventPolyfill as typeof PointerEvent)
 
 const defaultProps = {
   width: 1000,
@@ -39,7 +41,7 @@ describe('ScrollElement', () => {
 
   it('calls onScroll when dragged via pointer events', () => {
     // Mock requestAnimationFrame to execute callback synchronously
-    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => { cb(0); return 0 })
+    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => { cb(0); return 0 })
 
     const onScrollMock = vi.fn()
     const props = {
@@ -58,10 +60,10 @@ describe('ScrollElement', () => {
     // Simulate a pointer drag (mouse)
     act(() => {
       scrollEl.dispatchEvent(new PointerEvent('pointerdown', {
-        clientX: 100, pageX: 100, button: 0, pointerType: 'mouse', bubbles: true,
+        clientX: 100, button: 0, pointerType: 'mouse', bubbles: true,
       }))
       scrollEl.dispatchEvent(new PointerEvent('pointermove', {
-        clientX: 50, pageX: 50, pointerType: 'mouse', bubbles: true,
+        clientX: 50, pointerType: 'mouse', bubbles: true,
       }))
     })
 
@@ -73,10 +75,10 @@ describe('ScrollElement', () => {
   })
 
   describe('wheel events', () => {
-    let rafSpy
+    let rafSpy: { mockRestore: () => void }
 
     beforeEach(() => {
-      rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => { cb(0); return 0 })
+      rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => { cb(0); return 0 })
     })
 
     afterEach(() => {
@@ -185,7 +187,7 @@ describe('ScrollElement', () => {
   })
 
   it('item interaction blocks pointer drag', () => {
-    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => { cb(0); return 0 })
+    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => { cb(0); return 0 })
     const onScrollMock = vi.fn()
     const { getByTestId } = render(
       <ScrollElement {...defaultProps} onScroll={onScrollMock}>
@@ -206,10 +208,10 @@ describe('ScrollElement', () => {
     // Now try to drag — should be blocked
     act(() => {
       scrollEl.dispatchEvent(new PointerEvent('pointerdown', {
-        clientX: 100, pageX: 100, button: 0, pointerType: 'mouse', bubbles: true,
+        clientX: 100, button: 0, pointerType: 'mouse', bubbles: true,
       }))
       scrollEl.dispatchEvent(new PointerEvent('pointermove', {
-        clientX: 50, pageX: 50, pointerType: 'mouse', bubbles: true,
+        clientX: 50, pointerType: 'mouse', bubbles: true,
       }))
     })
 
@@ -219,7 +221,7 @@ describe('ScrollElement', () => {
   })
 
   it('touch drag calls onScroll for horizontal movement', () => {
-    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => { cb(0); return 0 })
+    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => { cb(0); return 0 })
     const onScrollMock = vi.fn()
     const { getByTestId } = render(
       <ScrollElement {...defaultProps} onScroll={onScrollMock} scrollOffset={0}>

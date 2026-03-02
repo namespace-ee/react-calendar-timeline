@@ -1,8 +1,9 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import Items from 'lib/items/Items'
-import { TimelineContext } from 'lib/timeline/TimelineStateContext'
+import { TimelineContext, TimelineContextType } from 'lib/timeline/TimelineStateContext'
 import { noop } from 'test-utility'
+import { SelectUnits } from 'lib/utility/calendar'
+import { TimelineContext as TimelineContextValue } from 'lib/types/main'
 
 const now = Date.now()
 const oneHour = 1000 * 60 * 60
@@ -51,16 +52,16 @@ const dimensionItems = [
   },
 ]
 
-const mockTimelineContext = {
+const mockTimelineContext: TimelineContextType = {
   getTimelineState: () => ({
     visibleTimeStart: now - oneHour,
     visibleTimeEnd: now + 3 * oneHour,
     canvasTimeStart: now - 2 * oneHour,
     canvasTimeEnd: now + 4 * oneHour,
     canvasWidth: 3000,
-    timelineUnit: 'hour',
+    timelineUnit: 'hour' as SelectUnits,
     timelineWidth: 1000,
-  }),
+  }) as TimelineContextValue,
   getLeftOffsetFromDate: () => 0,
   getDateFromLeftOffsetPosition: () => 0,
   showPeriod: noop,
@@ -138,7 +139,7 @@ describe('Items', () => {
     })
     // The selected item gets selectedStyle (amber background)
     const itemEls = container.querySelectorAll('.rct-item')
-    const firstItemStyle = itemEls[0].style
+    const firstItemStyle = (itemEls[0] as HTMLElement).style
     expect(firstItemStyle.background).toBe('rgb(255, 193, 7)') // #ffc107
   })
 
@@ -148,8 +149,8 @@ describe('Items', () => {
     })
     const itemEls = container.querySelectorAll('.rct-item')
     // Both items should be selected (amber background)
-    expect(itemEls[0].style.background).toBe('rgb(255, 193, 7)')
-    expect(itemEls[1].style.background).toBe('rgb(255, 193, 7)')
+    expect((itemEls[0] as HTMLElement).style.background).toBe('rgb(255, 193, 7)')
+    expect((itemEls[1] as HTMLElement).style.background).toBe('rgb(255, 193, 7)')
   })
 
   it('uses per-item canResize override', () => {

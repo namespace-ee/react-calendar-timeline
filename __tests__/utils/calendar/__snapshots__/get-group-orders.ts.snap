@@ -5,18 +5,21 @@ exports[`getGroupOrders > works as expected 1`] = `
   "1": {
     "group": {
       "id": "1",
+      "title": "Group 1",
     },
     "index": 0,
   },
   "2": {
     "group": {
       "id": "2",
+      "title": "Group 2",
     },
     "index": 1,
   },
   "3": {
     "group": {
       "id": "3",
+      "title": "Group 3",
     },
     "index": 2,
   },

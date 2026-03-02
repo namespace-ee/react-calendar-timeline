@@ -6,7 +6,7 @@ export type SubscribeReturn = {
   unsubscribe: () => void
   getMarker: () => MarkerType
 }
-type TimelineMarkersContextValue = {
+export type TimelineMarkersContextValue = {
   markers: MarkerType[]
   subscribeMarker: (newe: MarkerType) => SubscribeReturn;
   updateMarker: (upd: MarkerType) => void

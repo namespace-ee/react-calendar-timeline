@@ -1,20 +1,26 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import dayjs from 'dayjs'
 import Timeline from 'lib/Timeline'
+import type { ReactCalendarTimelineProps } from 'lib/Timeline'
+import type { TimelineItemBase, TimelineGroupBase } from 'lib/types/main'
 import { noop } from 'test-utility'
 
+type TimelineProps = ReactCalendarTimelineProps<TimelineItemBase<number>, TimelineGroupBase>
+
+// Timeline.defaultProps contains null for many optional fields and string
+// literals wider than expected union types. We need items & groups to be
+// required while the rest can stay partial.
 const defaultProps = {
-  ...Timeline.defaultProps,
-  items: [],
-  groups: []
+  ...(Timeline.defaultProps as unknown as Partial<Omit<TimelineProps, 'ref'>>),
+  items: [] as TimelineItemBase<number>[],
+  groups: [] as TimelineGroupBase[],
 }
 
 describe('Timeline', () => {
   describe('initialization', () => {
     it('renders with defaultTimeStart and defaultTimeEnd', () => {
-      const defaultTimeStart = dayjs('2018-01-01').toDate()
-      const defaultTimeEnd = dayjs('2018-03-01').toDate()
+      const defaultTimeStart = dayjs('2018-01-01').valueOf()
+      const defaultTimeEnd = dayjs('2018-03-01').valueOf()
 
       const props = {
         ...defaultProps,

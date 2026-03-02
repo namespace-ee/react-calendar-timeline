@@ -1,6 +1,6 @@
-import React from 'react'
 import { render, act } from '@testing-library/react'
-import { TimelineMarkersProvider, TimelineMarkersConsumer } from 'lib/markers/TimelineMarkersContext'
+import { TimelineMarkersProvider, TimelineMarkersConsumer, type TimelineMarkersContextValue, type SubscribeReturn } from 'lib/markers/TimelineMarkersContext'
+import { TimelineMarkerType } from 'lib/markers/markerType'
 
 describe('TimelineMarkersContext', () => {
   it('starts with empty markers array', () => {
@@ -20,7 +20,7 @@ describe('TimelineMarkersContext', () => {
   })
 
   it('subscribeMarker adds a marker with unique id', () => {
-    let ctx
+    let ctx: TimelineMarkersContextValue | undefined
     render(
       <TimelineMarkersProvider>
         <TimelineMarkersConsumer>
@@ -33,17 +33,17 @@ describe('TimelineMarkersContext', () => {
     )
 
     act(() => {
-      ctx.subscribeMarker({ type: 'Today', date: Date.now() })
+      ctx!.subscribeMarker({ type: TimelineMarkerType.Today, date: Date.now() })
     })
 
-    expect(ctx.markers).toHaveLength(1)
-    expect(ctx.markers[0].id).toBeDefined()
-    expect(ctx.markers[0].type).toBe('Today')
+    expect(ctx!.markers).toHaveLength(1)
+    expect(ctx!.markers[0].id).toBeDefined()
+    expect(ctx!.markers[0].type).toBe('Today')
   })
 
   it('unsubscribe removes the marker', () => {
-    let ctx
-    let sub
+    let ctx: TimelineMarkersContextValue | undefined
+    let sub: SubscribeReturn | undefined
     render(
       <TimelineMarkersProvider>
         <TimelineMarkersConsumer>
@@ -56,21 +56,21 @@ describe('TimelineMarkersContext', () => {
     )
 
     act(() => {
-      sub = ctx.subscribeMarker({ type: 'Custom', date: Date.now() })
+      sub = ctx!.subscribeMarker({ type: TimelineMarkerType.Custom, date: Date.now() })
     })
 
-    expect(ctx.markers).toHaveLength(1)
+    expect(ctx!.markers).toHaveLength(1)
 
     act(() => {
-      sub.unsubscribe()
+      sub!.unsubscribe()
     })
 
-    expect(ctx.markers).toHaveLength(0)
+    expect(ctx!.markers).toHaveLength(0)
   })
 
   it('getMarker returns the subscribed marker', () => {
-    let ctx
-    let sub
+    let ctx: TimelineMarkersContextValue | undefined
+    let sub: SubscribeReturn | undefined
     render(
       <TimelineMarkersProvider>
         <TimelineMarkersConsumer>
@@ -83,17 +83,17 @@ describe('TimelineMarkersContext', () => {
     )
 
     act(() => {
-      sub = ctx.subscribeMarker({ type: 'Today', date: 12345 })
+      sub = ctx!.subscribeMarker({ type: TimelineMarkerType.Today, date: 12345 })
     })
 
-    const marker = sub.getMarker()
+    const marker = sub!.getMarker()
     expect(marker.type).toBe('Today')
     expect(marker.id).toBeDefined()
   })
 
   it('updateMarker updates an existing marker', () => {
-    let ctx
-    let sub
+    let ctx: TimelineMarkersContextValue | undefined
+    let sub: SubscribeReturn | undefined
     render(
       <TimelineMarkersProvider>
         <TimelineMarkersConsumer>
@@ -106,21 +106,21 @@ describe('TimelineMarkersContext', () => {
     )
 
     act(() => {
-      sub = ctx.subscribeMarker({ type: 'Custom', date: 1000 })
+      sub = ctx!.subscribeMarker({ type: TimelineMarkerType.Custom, date: 1000 })
     })
 
-    const marker = sub.getMarker()
+    const marker = sub!.getMarker()
 
     act(() => {
-      ctx.updateMarker({ ...marker, date: 2000 })
+      ctx!.updateMarker({ ...marker, date: 2000 })
     })
 
-    expect(ctx.markers).toHaveLength(1)
-    expect(ctx.markers[0].date).toBe(2000)
+    expect(ctx!.markers).toHaveLength(1)
+    expect(ctx!.markers[0].date).toBe(2000)
   })
 
   it('multiple subscriptions get unique ids', () => {
-    let ctx
+    let ctx: TimelineMarkersContextValue | undefined
     render(
       <TimelineMarkersProvider>
         <TimelineMarkersConsumer>
@@ -132,15 +132,16 @@ describe('TimelineMarkersContext', () => {
       </TimelineMarkersProvider>
     )
 
-    let sub1, sub2
+    let sub1: SubscribeReturn | undefined
+    let sub2: SubscribeReturn | undefined
     act(() => {
-      sub1 = ctx.subscribeMarker({ type: 'Today' })
+      sub1 = ctx!.subscribeMarker({ type: TimelineMarkerType.Today })
     })
     act(() => {
-      sub2 = ctx.subscribeMarker({ type: 'Custom', date: 1000 })
+      sub2 = ctx!.subscribeMarker({ type: TimelineMarkerType.Custom, date: 1000 })
     })
 
-    expect(sub1.getMarker().id).not.toBe(sub2.getMarker().id)
-    expect(ctx.markers).toHaveLength(2)
+    expect(sub1!.getMarker().id).not.toBe(sub2!.getMarker().id)
+    expect(ctx!.markers).toHaveLength(2)
   })
 })

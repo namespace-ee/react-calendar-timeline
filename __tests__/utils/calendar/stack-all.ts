@@ -5,9 +5,9 @@ const lineHeight = 60
 
 describe('stackAll', () => {
   it('works as expected stacked', () => {
-    expect(stackAll(dimensionItems, orderedGroups, lineHeight, true)).toMatchSnapshot()
+    expect(stackAll(dimensionItems, orderedGroups, lineHeight, true, undefined)).toMatchSnapshot()
   })
   it('works as expected not stacked', () => {
-    expect(stackAll(dimensionItems, orderedGroups, lineHeight, false)).toMatchSnapshot()
+    expect(stackAll(dimensionItems, orderedGroups, lineHeight, false, undefined)).toMatchSnapshot()
   })
 })

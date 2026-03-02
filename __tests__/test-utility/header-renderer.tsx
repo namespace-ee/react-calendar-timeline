@@ -1,40 +1,48 @@
-import React from 'react'
-import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
-import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
-import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
+import { ReactNode } from 'react'
+import { TimelineStateProvider, type TimelineStartProps } from 'lib/timeline/TimelineStateContext'
 import { state } from '../../__fixtures__/stateAndProps'
 import { defaultTimeSteps } from '../../src/lib/default-config'
-import { TimelineHeadersProvider } from '../../src/lib/headers/HeadersContext'
+import { TimelineHeadersProvider, type TimelineHeadersProviderProps } from '../../src/lib/headers/HeadersContext'
+import type { SelectUnits } from 'lib/utility/calendar'
 
-// eslint-disable-next-line
+type RenderHeadersWrapperProps = {
+  children?: ReactNode
+  timelineState?: Partial<TimelineStartProps>
+  headersState?: Partial<TimelineHeadersProviderProps>
+  showPeriod?: TimelineStartProps['showPeriod']
+  registerScroll?: (e: HTMLDivElement) => void
+}
+
 export const RenderHeadersWrapper = ({
   children,
   timelineState = {},
   headersState = {},
   showPeriod = () => {},
   registerScroll = () => {}
-}) => {
-  const defaultTimelineState = {
+}: RenderHeadersWrapperProps) => {
+  const defaultTimelineState: TimelineStartProps = {
     visibleTimeStart: state.visibleTimeStart,
     visibleTimeEnd: state.visibleTimeEnd,
     canvasTimeStart: state.canvasTimeStart,
     canvasTimeEnd: state.canvasTimeEnd,
     canvasWidth: 2000,
     showPeriod: showPeriod,
-    timelineUnit: 'day',
+    timelineUnit: 'day' as SelectUnits,
     timelineWidth: 1000
   }
 
-  const timelineStateProps = {
+  const timelineStateProps: TimelineStartProps = {
     ...defaultTimelineState,
     ...timelineState
   }
 
-  const headersStateProps = {
+  const headersStateProps: TimelineHeadersProviderProps = {
+    children,
     registerScroll: registerScroll,
     timeSteps: defaultTimeSteps,
     leftSidebarWidth: 150,
     rightSidebarWidth: 0,
+    scrollOffset: 0,
     ...headersState
   }
 

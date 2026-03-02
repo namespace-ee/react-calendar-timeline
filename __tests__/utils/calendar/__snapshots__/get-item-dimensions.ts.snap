@@ -10,6 +10,7 @@ exports[`getItemDimensions > should evaluate dimensions for an item 1`] = `
     "order": {
       "group": {
         "id": "1",
+        "title": "Group 1",
       },
       "index": 0,
     },

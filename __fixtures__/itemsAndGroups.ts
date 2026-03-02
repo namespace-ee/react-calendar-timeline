@@ -1,5 +1,6 @@
+import type { TimelineGroupBase, TimelineItemBase } from 'lib/types/main'
 
-export const items = [
+export const items: TimelineItemBase<number>[] = [
   {
     id: '0',
     group: '1',
@@ -54,4 +55,8 @@ export const items = [
   }
 ]
 
-export const groups = [{ id: '1' }, { id: '2' }, { id: '3' }]
+export const groups: TimelineGroupBase[] = [
+  { id: '1', title: 'Group 1' },
+  { id: '2', title: 'Group 2' },
+  { id: '3', title: 'Group 3' },
+]

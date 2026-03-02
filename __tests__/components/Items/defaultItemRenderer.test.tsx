@@ -1,13 +1,28 @@
-import React from 'react'
+import { createRef } from 'react'
 import { render } from '@testing-library/react'
 import { defaultItemRenderer } from 'lib/items/defaultItemRenderer'
+import { ItemRendererProps, GetItemPropsParams } from 'lib/items/Item'
+import { TimelineContextType } from 'lib/timeline/TimelineStateContext'
+import { ItemContext, TimelineItemBase, TimelineContext as TimelineContextValue } from 'lib/types/main'
 
-const createRendererProps = (overrides = {}) => {
-  const dimensions = {
+type RendererOverrides = {
+  dimensions?: Partial<ItemContext['dimensions']>
+  item?: Partial<TimelineItemBase<number>>
+  itemContext?: Partial<ItemContext>
+}
+
+const createRendererProps = (overrides: RendererOverrides = {}): ItemRendererProps<TimelineItemBase<number>> => {
+  const dimensions: ItemContext['dimensions'] = {
     left: 100,
     top: 50,
     width: 200,
     height: 30,
+    collisionLeft: 100,
+    collisionWidth: 200,
+    isDragging: false,
+    originalLeft: 100,
+    stack: true,
+    order: { index: 0, group: { id: 1, title: 'Group 1' } },
     ...(overrides.dimensions || {}),
   }
 
@@ -22,11 +37,11 @@ const createRendererProps = (overrides = {}) => {
       ...(overrides.item || {}),
     },
     timelineContext: {
-      getTimelineState: () => ({}),
+      getTimelineState: () => ({}) as TimelineContextValue,
       getLeftOffsetFromDate: () => 0,
       getDateFromLeftOffsetPosition: () => 0,
       showPeriod: () => {},
-    },
+    } as TimelineContextType,
     itemContext: {
       dimensions,
       useResizeHandle: false,
@@ -45,11 +60,11 @@ const createRendererProps = (overrides = {}) => {
       resizeTime: null,
       ...(overrides.itemContext || {}),
     },
-    getItemProps: (props = {}) => ({
+    getItemProps: (props: GetItemPropsParams = {} as GetItemPropsParams) => ({
       key: 'item-1',
-      ref: React.createRef(),
+      ref: createRef<HTMLDivElement>(),
       className: 'rct-item' + (props.className ? ` ${props.className}` : ''),
-      style: { position: 'absolute', left: '100px', top: '50px', width: '200px', height: '30px' },
+      style: { position: 'absolute' as const, left: '100px', top: '50px', width: '200px', height: '30px' },
       title: 'Test Item',
       ...props,
     }),
@@ -57,15 +72,14 @@ const createRendererProps = (overrides = {}) => {
       left: {
         ref: () => {},
         className: 'rct-item-handler rct-item-handler-left rct-item-handler-resize-left',
-        style: { position: 'absolute', width: 24, left: 0 },
+        style: { position: 'absolute' as const, width: 24, left: 0 },
       },
       right: {
         ref: () => {},
         className: 'rct-item-handler rct-item-handler-right rct-item-handler-resize-right',
-        style: { position: 'absolute', width: 24, right: 0 },
+        style: { position: 'absolute' as const, width: 24, right: 0 },
       },
     }),
-    ...overrides,
   }
 }
 
@@ -76,7 +90,7 @@ describe('defaultItemRenderer', () => {
 
     const content = container.querySelector('.rct-item-content')
     expect(content).toBeInTheDocument()
-    expect(content.textContent).toBe('Test Item')
+    expect(content!.textContent).toBe('Test Item')
   })
 
   it('renders rct-item class on wrapper', () => {

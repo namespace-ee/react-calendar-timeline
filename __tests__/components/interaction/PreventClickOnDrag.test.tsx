@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { noop } from 'test-utility'
 import PreventClickOnDrag from 'lib/interaction/PreventClickOnDrag'
@@ -17,7 +16,7 @@ describe('PreventClickOnDrag', () => {
       </PreventClickOnDrag>
     )
 
-    const el = container.firstChild
+    const el = container.firstChild as HTMLElement
     const originalClientX = 100
 
     fireEvent.mouseDown(el, { clientX: originalClientX })
@@ -38,7 +37,7 @@ describe('PreventClickOnDrag', () => {
       </PreventClickOnDrag>
     )
 
-    const el = container.firstChild
+    const el = container.firstChild as HTMLElement
     const originalClientX = 100
 
     fireEvent.mouseDown(el, { clientX: originalClientX })
@@ -59,7 +58,7 @@ describe('PreventClickOnDrag', () => {
       </PreventClickOnDrag>
     )
 
-    const el = container.firstChild
+    const el = container.firstChild as HTMLElement
     const originalClientX = 100
 
     fireEvent.mouseDown(el, { clientX: originalClientX })
@@ -80,7 +79,7 @@ describe('PreventClickOnDrag', () => {
       </PreventClickOnDrag>
     )
 
-    const el = container.firstChild
+    const el = container.firstChild as HTMLElement
     const originalClientX = 100
 
     fireEvent.mouseDown(el, { clientX: originalClientX })
@@ -101,7 +100,7 @@ describe('PreventClickOnDrag', () => {
       </PreventClickOnDrag>
     )
 
-    const el = container.firstChild
+    const el = container.firstChild as HTMLElement
     const originalClientX = 100
 
     // First interaction: drag beyond tolerance
@@ -130,7 +129,7 @@ describe('PreventClickOnDrag', () => {
       </PreventClickOnDrag>
     )
 
-    fireEvent.doubleClick(container.firstChild)
+    fireEvent.doubleClick(container.firstChild as HTMLElement)
 
     expect(doubleClickMock).toHaveBeenCalled()
   })
@@ -139,6 +138,7 @@ describe('PreventClickOnDrag', () => {
     vi.spyOn(console, 'error').mockImplementation(noop)
     expect(() =>
       render(
+        // @ts-expect-error Testing runtime validation with multiple children
         <PreventClickOnDrag
           onClick={noop}
           clickTolerance={defaultClickTolerance}

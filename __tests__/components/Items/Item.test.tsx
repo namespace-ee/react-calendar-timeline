@@ -1,8 +1,9 @@
-import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import Item from 'lib/items/Item'
-import { TimelineContext } from 'lib/timeline/TimelineStateContext'
+import { TimelineContext, TimelineContextType } from 'lib/timeline/TimelineStateContext'
 import { noop } from 'test-utility'
+import { SelectUnits } from 'lib/utility/calendar'
+import { TimelineContext as TimelineContextValue } from 'lib/types/main'
 
 const now = Date.now()
 const oneHour = 1000 * 60 * 60
@@ -20,16 +21,16 @@ const defaultKeys = {
   itemTimeEndKey: 'end_time',
 }
 
-const mockTimelineContext = {
+const mockTimelineContext: TimelineContextType = {
   getTimelineState: () => ({
     visibleTimeStart: now - oneHour,
     visibleTimeEnd: now + 3 * oneHour,
     canvasTimeStart: now - 2 * oneHour,
     canvasTimeEnd: now + 4 * oneHour,
     canvasWidth: 3000,
-    timelineUnit: 'hour',
+    timelineUnit: 'hour' as SelectUnits,
     timelineWidth: 1000,
-  }),
+  }) as TimelineContextValue,
   getLeftOffsetFromDate: () => 0,
   getDateFromLeftOffsetPosition: () => 0,
   showPeriod: noop,
@@ -101,7 +102,7 @@ describe('Item', () => {
     it('renders item title in content', () => {
       const { container } = renderItem()
       const content = container.querySelector('.rct-item-content')
-      expect(content.textContent).toBe('Test Item')
+      expect(content!.textContent).toBe('Test Item')
     })
 
     it('returns null when order is undefined', () => {
@@ -125,7 +126,7 @@ describe('Item', () => {
   describe('styles', () => {
     it('applies positioning from dimensions', () => {
       const { container } = renderItem()
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.left).toBe('100px')
       expect(item.style.top).toBe('50px')
       expect(item.style.width).toBe('200px')
@@ -134,25 +135,25 @@ describe('Item', () => {
 
     it('applies base overridable styles', () => {
       const { container } = renderItem()
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.cursor).toBe('pointer')
     })
 
     it('applies selected styles when selected', () => {
       const { container } = renderItem({ selected: true })
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.background).toBe('rgb(255, 193, 7)') // #ffc107
     })
 
     it('applies move cursor when selected and canMove', () => {
       const { container } = renderItem({ selected: true, canMove: true })
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.cursor).toBe('move')
     })
 
     it('does not apply move cursor when not selected', () => {
       const { container } = renderItem({ selected: false, canMove: true })
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.cursor).toBe('pointer')
     })
   })
@@ -179,7 +180,7 @@ describe('Item', () => {
         onSelect: onSelectMock,
       })
 
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item')!
       fireEvent.mouseDown(item)
       fireEvent.mouseUp(item)
 
@@ -193,7 +194,7 @@ describe('Item', () => {
         onSelect: onSelectMock,
       })
 
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item')!
       fireEvent.mouseDown(item)
       fireEvent.mouseUp(item)
 
@@ -206,7 +207,7 @@ describe('Item', () => {
         onItemDoubleClick: onDoubleClickMock,
       })
 
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item')!
       fireEvent.doubleClick(item)
 
       expect(onDoubleClickMock).toHaveBeenCalledWith(1, expect.anything())
@@ -218,7 +219,7 @@ describe('Item', () => {
         onContextMenu: onContextMenuMock,
       })
 
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item')!
       fireEvent.contextMenu(item)
 
       expect(onContextMenuMock).toHaveBeenCalledWith(1, expect.anything())
@@ -270,7 +271,7 @@ describe('Item', () => {
         canResizeLeft: false,
         canResizeRight: false,
       })
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.borderLeftWidth).toBe('1px')
     })
 
@@ -281,7 +282,7 @@ describe('Item', () => {
         minResizeWidth: 20,
         dimensions: { ...defaultDimensions, width: 200 },
       })
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.borderLeftWidth).toBe('3px')
     })
 
@@ -292,7 +293,7 @@ describe('Item', () => {
         minResizeWidth: 300,
         dimensions: { ...defaultDimensions, width: 200 },
       })
-      const item = container.querySelector('.rct-item')
+      const item = container.querySelector('.rct-item') as HTMLElement
       expect(item.style.borderLeftWidth).toBe('1px')
     })
   })

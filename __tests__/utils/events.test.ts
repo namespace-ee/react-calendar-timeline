@@ -1,13 +1,16 @@
+import { SyntheticEvent } from 'react'
 import { composeEvents } from 'lib/utility/events'
+
+const mockEvent = { type: 'click' } as unknown as SyntheticEvent
 
 describe('composeEvents', () => {
   it('calls all handlers in order', () => {
-    const order = []
+    const order: string[] = []
     const fn1 = () => order.push('first')
     const fn2 = () => order.push('second')
 
     const composed = composeEvents(fn1, fn2)
-    composed({ type: 'click' })
+    composed(mockEvent)
 
     expect(order).toEqual(['first', 'second'])
   })
@@ -16,23 +19,22 @@ describe('composeEvents', () => {
     const fn = vi.fn()
 
     const composed = composeEvents(undefined, fn, undefined)
-    composed({ type: 'click' })
+    composed(mockEvent)
 
     expect(fn).toHaveBeenCalledTimes(1)
   })
 
   it('passes event and extra args to each handler', () => {
     const fn = vi.fn()
-    const event = { type: 'click' }
 
     const composed = composeEvents(fn)
-    composed(event, 'extra1', 'extra2')
+    composed(mockEvent, 'extra1', 'extra2')
 
-    expect(fn).toHaveBeenCalledWith(event, 'extra1', 'extra2')
+    expect(fn).toHaveBeenCalledWith(mockEvent, 'extra1', 'extra2')
   })
 
   it('returns a function even with no handlers', () => {
     const composed = composeEvents()
-    expect(() => composed({ type: 'click' })).not.toThrow()
+    expect(() => composed(mockEvent)).not.toThrow()
   })
 })

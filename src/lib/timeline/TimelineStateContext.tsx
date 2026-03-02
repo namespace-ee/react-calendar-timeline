@@ -34,7 +34,7 @@ const defaultContextState: TimelineContextType = {
 export const TimelineContext = React.createContext<TimelineContextType>(defaultContextState)
 const { Consumer, Provider } = TimelineContext
 
-type TimelineStartProps = {
+export type TimelineStartProps = {
   visibleTimeStart: number
   visibleTimeEnd: number
   canvasTimeStart: number

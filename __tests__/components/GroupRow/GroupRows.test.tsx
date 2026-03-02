@@ -1,4 +1,3 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import { noop } from 'test-utility'
 import GroupRows from 'lib/row/GroupRows'
@@ -33,7 +32,7 @@ describe('GroupRows', () => {
   it('passes props and get right height for first group', () => {
     const { container } = render(<GroupRows {...defaultProps} />)
 
-    const firstRow = container.querySelector('.rct-hl-even')
-    expect(firstRow.style.height).toBe('30px')
+    const firstRow = container.querySelector('.rct-hl-even') as HTMLElement
+    expect(firstRow!.style.height).toBe('30px')
   })
 })

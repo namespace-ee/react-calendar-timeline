@@ -1,6 +1,5 @@
-import React from 'react'
-import { render, cleanup, prettyDOM } from '@testing-library/react'
-import Timeline from 'lib/Timeline'
+import React, { type ReactNode } from 'react'
+import { render, cleanup } from '@testing-library/react'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
@@ -8,6 +7,7 @@ import CustomHeader from 'lib/headers/CustomHeader'
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import { getCustomHeadersInTimeline } from '../../test-utility/headerRenderers'
 import { parsePxToNumbers } from '../../test-utility/index'
+import type { CustomDateHeaderProps } from 'lib/headers/CustomDateHeader'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -129,7 +129,7 @@ describe('CustomHeader Component Test', () => {
 
   it('Given CustomHeader When passing child renderer Then showPeriod should be passed', () => {
     const showPeriod = () => {}
-    const renderer = vi.fn(() => {
+    const renderer = vi.fn<(p: CustomDateHeaderProps<unknown>) => ReactNode>(() => {
       return <div>header</div>
     })
     render(
@@ -147,7 +147,7 @@ describe('CustomHeader Component Test', () => {
   })
 
   it('Given CustomHeader When passing child renderer Then headerContext should be passed', () => {
-    const renderer = vi.fn(() => {
+    const renderer = vi.fn<(p: CustomDateHeaderProps<unknown>) => ReactNode>(() => {
       return <div>header</div>
     })
     render(
@@ -162,7 +162,7 @@ describe('CustomHeader Component Test', () => {
   })
 
   it('Given CustomHeader When passing child renderer Then headerContext should be passed with intervals and unit', () => {
-    const renderer = vi.fn(() => {
+    const renderer = vi.fn<(p: CustomDateHeaderProps<unknown>) => ReactNode>(() => {
       return <div>header</div>
     })
     render(
@@ -190,7 +190,7 @@ describe('CustomHeader Component Test', () => {
   })
 
   it('Given CustomHeader When passing child renderer Then timelineContext should be passed', () => {
-    const renderer = vi.fn(() => {
+    const renderer = vi.fn<(p: CustomDateHeaderProps<unknown>) => ReactNode>(() => {
       return <div>header</div>
     })
     render(
@@ -213,7 +213,7 @@ describe('CustomHeader Component Test', () => {
 
   describe('CustomHeader Intervals', () => {
     it('Given intervals Then they should have the same width', () => {
-      const renderer = vi.fn(() => {
+      const renderer = vi.fn<(p: CustomDateHeaderProps<unknown>) => ReactNode>(() => {
         return <div>header</div>
       })
       render(
@@ -236,7 +236,7 @@ describe('CustomHeader Component Test', () => {
     })
 
     it('Given intervals Then left property should be different', () => {
-      const renderer = vi.fn(() => {
+      const renderer = vi.fn<(p: CustomDateHeaderProps<unknown>) => ReactNode>(() => {
         return <div>header</div>
       })
       render(
@@ -258,12 +258,12 @@ describe('CustomHeader Component Test', () => {
   })
 
   it('Given CustomHeader When passing extra props Then it will be passed to the renderProp', () => {
-    const renderer = vi.fn(() => {
-      return <div>header</div>
-    })
     const props = {
       data: 'some'
     }
+    const renderer = vi.fn<(p: CustomDateHeaderProps<typeof props>) => ReactNode>(() => {
+      return <div>header</div>
+    })
     render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
@@ -298,7 +298,7 @@ describe('CustomHeader Component Test', () => {
                   {...getRootProps({ style: { height: 30 } })}
                 >
                   {intervals.map(interval => {
-                    const intervalStyle = {
+                    const intervalStyle: React.CSSProperties = {
                       // height: 30,
                       lineHeight: '30px',
                       textAlign: 'center',
@@ -316,6 +316,7 @@ describe('CustomHeader Component Test', () => {
                           interval,
                           style: intervalStyle
                         })}
+                        key={interval.startTime.valueOf()}
                       >
                         <div className="sticky">
                           {interval.startTime.format('YYYY')}
@@ -334,7 +335,7 @@ describe('CustomHeader Component Test', () => {
     expect(getByTestId('customHeader')).toBeInTheDocument()
   })
   it('Given Custom Header When passing react stateless component to render prop Then it should render', () => {
-    const Renderer = props => {
+    const Renderer = (): ReactNode => {
       return <div>header</div>
     }
 
@@ -349,7 +350,7 @@ describe('CustomHeader Component Test', () => {
   })
 
   it('Given Custom Header When passing react component to render prop Then it should render', () => {
-    class Renderer extends React.Component {
+    class Renderer extends React.Component<CustomDateHeaderProps<unknown>> {
       render() {
         return <div>header</div>
       }
@@ -358,7 +359,7 @@ describe('CustomHeader Component Test', () => {
     const { getByText } = render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
-          <CustomHeader>{Renderer}</CustomHeader>
+          <CustomHeader>{Renderer as unknown as (p: CustomDateHeaderProps<unknown>) => ReactNode}</CustomHeader>
         </TimelineHeaders>
       </RenderHeadersWrapper>
     )

@@ -1,4 +1,5 @@
 import { getVisibleItems } from 'lib/utility/calendar'
+import type { TimelineItemBase, TimelineKeys } from 'lib/types/main'
 import dayjs from 'dayjs'
 
 const itemTimeStartKey = 'start'
@@ -7,7 +8,7 @@ const itemTimeEndKey = 'end'
 const keys = {
   itemTimeStartKey,
   itemTimeEndKey
-}
+} as unknown as TimelineKeys
 
 describe('getVisibleItems', () => {
   it('returns items within date range - both dates', () => {
@@ -27,7 +28,7 @@ describe('getVisibleItems', () => {
       }
     ]
 
-    const result = getVisibleItems(items, startRange, endRange, keys)
+    const result = getVisibleItems(items as unknown as TimelineItemBase<number>[], startRange, endRange.valueOf(), keys)
 
     expect(result).toMatchObject(items)
   })
@@ -49,7 +50,7 @@ describe('getVisibleItems', () => {
       }
     ]
 
-    const result = getVisibleItems(items, startRange, endRange, keys)
+    const result = getVisibleItems(items as unknown as TimelineItemBase<number>[], startRange, endRange.valueOf(), keys)
 
     expect(result).toMatchObject(items)
   })
@@ -71,7 +72,7 @@ describe('getVisibleItems', () => {
       }
     ]
 
-    const result = getVisibleItems(items, startRange, endRange, keys)
+    const result = getVisibleItems(items as unknown as TimelineItemBase<number>[], startRange, endRange.valueOf(), keys)
 
     expect(result).toMatchObject(items)
   })
@@ -93,7 +94,7 @@ describe('getVisibleItems', () => {
       }
     ]
 
-    const result = getVisibleItems(items, startRange, endRange, keys)
+    const result = getVisibleItems(items as unknown as TimelineItemBase<number>[], startRange, endRange.valueOf(), keys)
 
     expect(result).toMatchObject([])
   })
@@ -115,7 +116,7 @@ describe('getVisibleItems', () => {
       }
     ]
 
-    const result = getVisibleItems(items, startRange, endRange, keys)
+    const result = getVisibleItems(items as unknown as TimelineItemBase<number>[], startRange, endRange.valueOf(), keys)
 
     expect(result).toMatchObject([])
   })

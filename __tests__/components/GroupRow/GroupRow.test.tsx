@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { noop } from 'test-utility'
 import GroupRow from 'lib/row/GroupRow'
@@ -23,7 +22,7 @@ describe('GroupRow', () => {
 
     const { container } = render(<GroupRow {...props} />)
 
-    fireEvent.doubleClick(container.firstChild)
+    fireEvent.doubleClick(container.firstChild as HTMLElement)
 
     expect(onDoubleClickMock).toHaveBeenCalledTimes(1)
   })
@@ -37,7 +36,7 @@ describe('GroupRow', () => {
 
     const { container } = render(<GroupRow {...props} />)
 
-    fireEvent.click(container.firstChild)
+    fireEvent.click(container.firstChild as HTMLElement)
 
     expect(onClickMock).toHaveBeenCalledTimes(1)
   })
@@ -51,7 +50,7 @@ describe('GroupRow', () => {
 
     const { container } = render(<GroupRow {...props} />)
 
-    fireEvent.contextMenu(container.firstChild)
+    fireEvent.contextMenu(container.firstChild as HTMLElement)
 
     expect(onContextMenuMock).toHaveBeenCalledTimes(1)
   })
@@ -64,7 +63,7 @@ describe('GroupRow', () => {
 
     const { container } = render(<GroupRow {...props} />)
 
-    expect(container.firstChild.className.trim()).toBe('rct-hl-even')
+    expect((container.firstChild as HTMLElement).className.trim()).toBe('rct-hl-even')
   })
 
   it('assigns "rct-hl-odd" if isEvenRow is false', () => {
@@ -75,7 +74,7 @@ describe('GroupRow', () => {
 
     const { container } = render(<GroupRow {...props} />)
 
-    expect(container.firstChild.className.trim()).toBe('rct-hl-odd')
+    expect((container.firstChild as HTMLElement).className.trim()).toBe('rct-hl-odd')
   })
 
   it('passes style prop to style', () => {
@@ -86,6 +85,6 @@ describe('GroupRow', () => {
 
     const { container } = render(<GroupRow {...props} />)
 
-    expect(container.firstChild.style.border).toBe('1px solid black')
+    expect((container.firstChild as HTMLElement).style.border).toBe('1px solid black')
   })
 })

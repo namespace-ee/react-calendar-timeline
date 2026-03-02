@@ -1,25 +1,24 @@
-import React from 'react'
 import { render } from '@testing-library/react'
-import { TimelineStateProvider, TimelineStateConsumer, useTimelineState } from 'lib/timeline/TimelineStateContext'
-import { calculateXPositionForTime, calculateTimeForXPosition } from 'lib/utility/calendar'
+import { TimelineStateProvider, TimelineStateConsumer, useTimelineState, TimelineContextType, TimelineStartProps } from 'lib/timeline/TimelineStateContext'
+import { calculateXPositionForTime, calculateTimeForXPosition, SelectUnits } from 'lib/utility/calendar'
 
 const now = Date.now()
 const oneDay = 1000 * 60 * 60 * 24
 
-const defaultProps = {
+const defaultProps: TimelineStartProps = {
   visibleTimeStart: now - oneDay,
   visibleTimeEnd: now + oneDay,
   canvasTimeStart: now - 2 * oneDay,
   canvasTimeEnd: now + 2 * oneDay,
   canvasWidth: 3000,
   showPeriod: vi.fn(),
-  timelineUnit: 'day',
+  timelineUnit: 'day' as SelectUnits,
   timelineWidth: 1000,
 }
 
 describe('TimelineStateContext', () => {
   it('getTimelineState returns correct time bounds and dimensions', () => {
-    let captured
+    let captured: ReturnType<TimelineContextType['getTimelineState']> | undefined
     render(
       <TimelineStateProvider {...defaultProps}>
         <TimelineStateConsumer>
@@ -31,16 +30,16 @@ describe('TimelineStateContext', () => {
       </TimelineStateProvider>
     )
 
-    expect(captured.visibleTimeStart).toBe(defaultProps.visibleTimeStart)
-    expect(captured.visibleTimeEnd).toBe(defaultProps.visibleTimeEnd)
-    expect(captured.canvasTimeStart).toBe(defaultProps.canvasTimeStart)
-    expect(captured.canvasTimeEnd).toBe(defaultProps.canvasTimeEnd)
-    expect(captured.canvasWidth).toBe(defaultProps.canvasWidth)
-    expect(captured.timelineWidth).toBe(defaultProps.timelineWidth)
+    expect(captured!.visibleTimeStart).toBe(defaultProps.visibleTimeStart)
+    expect(captured!.visibleTimeEnd).toBe(defaultProps.visibleTimeEnd)
+    expect(captured!.canvasTimeStart).toBe(defaultProps.canvasTimeStart)
+    expect(captured!.canvasTimeEnd).toBe(defaultProps.canvasTimeEnd)
+    expect(captured!.canvasWidth).toBe(defaultProps.canvasWidth)
+    expect(captured!.timelineWidth).toBe(defaultProps.timelineWidth)
   })
 
   it('getLeftOffsetFromDate returns correct X position', () => {
-    let getLeftOffsetFromDate
+    let getLeftOffsetFromDate: TimelineContextType['getLeftOffsetFromDate'] | undefined
     render(
       <TimelineStateProvider {...defaultProps}>
         <TimelineStateConsumer>
@@ -53,7 +52,7 @@ describe('TimelineStateContext', () => {
     )
 
     const testDate = now
-    const result = getLeftOffsetFromDate(testDate)
+    const result = getLeftOffsetFromDate!(testDate)
     const expected = calculateXPositionForTime(
       defaultProps.canvasTimeStart,
       defaultProps.canvasTimeEnd,
@@ -64,7 +63,7 @@ describe('TimelineStateContext', () => {
   })
 
   it('getDateFromLeftOffsetPosition returns correct timestamp', () => {
-    let getDateFromLeftOffsetPosition
+    let getDateFromLeftOffsetPosition: TimelineContextType['getDateFromLeftOffsetPosition'] | undefined
     render(
       <TimelineStateProvider {...defaultProps}>
         <TimelineStateConsumer>
@@ -77,7 +76,7 @@ describe('TimelineStateContext', () => {
     )
 
     const leftOffset = 1500 // middle of canvas
-    const result = getDateFromLeftOffsetPosition(leftOffset)
+    const result = getDateFromLeftOffsetPosition!(leftOffset)
     const expected = calculateTimeForXPosition(
       defaultProps.canvasTimeStart,
       defaultProps.canvasTimeEnd,
@@ -88,7 +87,7 @@ describe('TimelineStateContext', () => {
   })
 
   it('useTimelineState hook provides the same context', () => {
-    let hookResult
+    let hookResult: TimelineContextType | undefined
     const HookConsumer = () => {
       hookResult = useTimelineState()
       return null
@@ -100,9 +99,9 @@ describe('TimelineStateContext', () => {
       </TimelineStateProvider>
     )
 
-    expect(hookResult.getTimelineState).toBeDefined()
-    expect(hookResult.getLeftOffsetFromDate).toBeDefined()
-    expect(hookResult.getDateFromLeftOffsetPosition).toBeDefined()
-    expect(hookResult.showPeriod).toBeDefined()
+    expect(hookResult!.getTimelineState).toBeDefined()
+    expect(hookResult!.getLeftOffsetFromDate).toBeDefined()
+    expect(hookResult!.getDateFromLeftOffsetPosition).toBeDefined()
+    expect(hookResult!.showPeriod).toBeDefined()
   })
 })

@@ -1,6 +1,11 @@
 import { calculateScrollCanvas } from 'lib/utility/calendar'
+import type { ReactCalendarTimelineProps, ReactCalendarTimelineState } from 'lib/Timeline'
+import type { TimelineItemBase, TimelineGroupBase } from 'lib/types/main'
 import {items, groups} from '../../../__fixtures__/itemsAndGroups'
-import {props, state, visibleTimeStart, visibleTimeEnd} from '../../../__fixtures__/stateAndProps'
+import {props as rawProps, state as rawState, visibleTimeStart, visibleTimeEnd} from '../../../__fixtures__/stateAndProps'
+
+const props = rawProps as unknown as ReactCalendarTimelineProps<TimelineItemBase<number>, TimelineGroupBase>
+const state = rawState as unknown as ReactCalendarTimelineState<TimelineItemBase<number>, TimelineGroupBase>
 
 
 describe('calculateScrollCanvas', () => {
@@ -66,7 +71,7 @@ describe('calculateScrollCanvas', () => {
     expect(result).toHaveProperty('visibleTimeEnd')
     expect(result).toHaveProperty('dimensionItems')
   })
-  it('should calculate new state if zoom changed ', () => {
+  it('should calculate new state if zoom changed', () => {
     const newStartTime = visibleTimeStart
     const newEndTime = visibleTimeEnd +  1 * 60 * 60 * 1000
     const result = calculateScrollCanvas(

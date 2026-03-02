@@ -1,31 +1,36 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import TimelineMarkersRenderer from 'lib/markers/TimelineMarkersRenderer'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
-import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
+import { TimelineStateProvider, type TimelineStartProps } from 'lib/timeline/TimelineStateContext'
+import type { SelectUnits } from 'lib/utility/calendar'
+
 const oneDay = 1000 * 60 * 60 * 24
 
-// eslint-disable-next-line
-export const RenderWrapper = ({ children, timelineState }) => {
+type RenderWrapperProps = {
+  children?: ReactNode
+  timelineState?: TimelineStartProps
+}
+
+export const RenderWrapper = ({ children, timelineState }: RenderWrapperProps) => {
   const now = Date.now()
   const visibleTimeStart = now - oneDay
   const visibleTimeEnd = now + oneDay
-  const defaultTimelineState = {
+  const defaultTimelineState: TimelineStartProps = {
     visibleTimeStart,
     visibleTimeEnd,
     canvasTimeStart: visibleTimeStart - oneDay,
     canvasTimeEnd: visibleTimeEnd + oneDay,
     canvasWidth: 3000,
-    visibleWidth: 1000,
-    showPeriod:()=>{},
-    timelineWidth:1000,
-    timelineUnit:'day'
+    showPeriod: () => {},
+    timelineWidth: 1000,
+    timelineUnit: 'day' as SelectUnits
   }
 
-  timelineState = timelineState != null ? timelineState : defaultTimelineState
+  const state = timelineState ?? defaultTimelineState
 
   return (
     <div>
-      <TimelineStateProvider {...timelineState}>
+      <TimelineStateProvider {...state}>
         <TimelineMarkersProvider>
           <div>
             {children}

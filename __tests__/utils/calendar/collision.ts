@@ -1,12 +1,13 @@
 /* eslint-disable */
 import { collision } from 'lib/utility/calendar'
+import { Dimension } from 'lib/types/dimension'
 
-const buildObject = (x, y, width, height) => ({
+const buildObject = (x: number, y: number, width: number, height: number) => ({
   collisionLeft: x,
   top: y,
   collisionWidth: width,
   height
-})
+} as Dimension)
 
 describe('collision', () => {
   describe('left collision', () => {

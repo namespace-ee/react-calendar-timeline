@@ -3,12 +3,9 @@ import SidebarHeader from 'lib/headers/SidebarHeader'
 import DateHeader from 'lib/headers/DateHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
 
-import React from 'react'
-
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import {
   renderSidebarHeaderWithCustomValues,
-  renderTimelineWithVariantSidebar,
   renderTimelineWithLeftAndRightSidebar
 } from '../../test-utility/headerRenderers'
 
@@ -127,9 +124,7 @@ describe('TimelineHeader', () => {
   })
   it('Given SidebarHeader When passing variant prop with right value Then it should rendered above the right sidebar', () => {
     const {
-      getByTestId,
       getAllByTestId,
-      debug
     } = renderSidebarHeaderWithCustomValues({ variant: 'right' })
     expect(getAllByTestId('sidebarHeader').length).toBeGreaterThanOrEqual(1)
     const sidebars = getAllByTestId('sidebarHeader')
@@ -140,7 +135,7 @@ describe('TimelineHeader', () => {
   })
 
   it('Given SidebarHeader When passing variant prop with unusual value Then it should rendered above the left sidebar by default', () => {
-    const { getByTestId } = renderSidebarHeaderWithCustomValues({ variant: '' })
+    const { getByTestId } = renderSidebarHeaderWithCustomValues({ variant: '' as 'left' | 'right' })
     expect(getByTestId('sidebarHeader')).toBeInTheDocument()
     expect(getByTestId('sidebarHeader').nextElementSibling).toHaveAttribute(
       'data-testid',

@@ -1,9 +1,11 @@
-import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import MarkerCanvas from 'lib/markers/MarkerCanvas'
 import { TimelineStateProvider } from 'lib/timeline/TimelineStateContext'
 import { TimelineMarkersProvider } from 'lib/markers/TimelineMarkersContext'
 import { MarkerCanvasConsumer } from 'lib/markers/MarkerCanvasContext'
+import type { SelectUnits } from 'lib/utility/calendar'
+import type { MarkerCanvasContext } from 'lib/markers/MarkerCanvasContext'
+import type { ReactNode } from 'react'
 
 const now = Date.now()
 const oneDay = 1000 * 60 * 60 * 24
@@ -15,11 +17,11 @@ const defaultTimelineState = {
   canvasTimeEnd: now + 2 * oneDay,
   canvasWidth: 3000,
   showPeriod: () => {},
-  timelineUnit: 'day',
+  timelineUnit: 'day' as SelectUnits,
   timelineWidth: 1000,
 }
 
-const renderMarkerCanvas = (children) =>
+const renderMarkerCanvas = (children: ReactNode) =>
   render(
     <TimelineStateProvider {...defaultTimelineState}>
       <TimelineMarkersProvider>
@@ -39,7 +41,7 @@ describe('MarkerCanvas', () => {
   })
 
   it('provides subscribeToMouseOver via context', () => {
-    let contextValue
+    let contextValue: MarkerCanvasContext | undefined
     renderMarkerCanvas(
       <MarkerCanvasConsumer>
         {(ctx) => {
@@ -49,13 +51,13 @@ describe('MarkerCanvas', () => {
       </MarkerCanvasConsumer>
     )
 
-    expect(contextValue.subscribeToMouseOver).toBeDefined()
-    expect(typeof contextValue.subscribeToMouseOver).toBe('function')
+    expect(contextValue!.subscribeToMouseOver).toBeDefined()
+    expect(typeof contextValue!.subscribeToMouseOver).toBe('function')
   })
 
   it('mouse move triggers subscription with cursor data', () => {
     const subscriber = vi.fn()
-    let subscribe
+    let subscribe: MarkerCanvasContext['subscribeToMouseOver'] | undefined
 
     const { container } = renderMarkerCanvas(
       <MarkerCanvasConsumer>
@@ -66,10 +68,10 @@ describe('MarkerCanvas', () => {
       </MarkerCanvasConsumer>
     )
 
-    subscribe(subscriber)
+    subscribe!(subscriber)
 
     // The MarkerCanvas div is the first child inside the provider div
-    const canvasDiv = container.querySelector('div[style]')
+    const canvasDiv = container.querySelector('div[style]')!
     fireEvent.mouseMove(canvasDiv, { pageX: 100 })
 
     expect(subscriber).toHaveBeenCalledWith(
@@ -83,7 +85,7 @@ describe('MarkerCanvas', () => {
 
   it('mouse leave triggers subscription with isCursorOverCanvas false', () => {
     const subscriber = vi.fn()
-    let subscribe
+    let subscribe: MarkerCanvasContext['subscribeToMouseOver'] | undefined
 
     const { container } = renderMarkerCanvas(
       <MarkerCanvasConsumer>
@@ -94,9 +96,9 @@ describe('MarkerCanvas', () => {
       </MarkerCanvasConsumer>
     )
 
-    subscribe(subscriber)
+    subscribe!(subscriber)
 
-    const canvasDiv = container.querySelector('div[style]')
+    const canvasDiv = container.querySelector('div[style]')!
     fireEvent.mouseLeave(canvasDiv)
 
     expect(subscriber).toHaveBeenCalledWith(

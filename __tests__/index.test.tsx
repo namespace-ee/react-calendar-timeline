@@ -1,7 +1,7 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import Timeline from 'lib/Timeline'
 import dayjs from 'dayjs'
+import type { TimelineItemBase } from 'lib/types/main'
 
 const groups = [
   { id: 2, title: 'group 2' },
@@ -9,7 +9,7 @@ const groups = [
   { id: 3, title: 'group 3' }
 ]
 
-const items = [
+const items: TimelineItemBase<number>[] = [
   {
     id: 1,
     group: 1,
@@ -40,8 +40,8 @@ describe('Timeline', () => {
         <Timeline
           groups={[]}
           items={items}
-          defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').toDate()}
-          defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').toDate()}
+          defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').valueOf()}
+          defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').valueOf()}
         />
       )
     ).not.toThrow()
@@ -63,8 +63,8 @@ describe('Timeline', () => {
         <Timeline
           groups={groups}
           items={itemsNoValidGroup}
-          defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').toDate()}
-          defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').toDate()}
+          defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').valueOf()}
+          defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').valueOf()}
         />
       )
     ).not.toThrow()
@@ -75,8 +75,8 @@ describe('Timeline', () => {
       <Timeline
         items={items}
         groups={groups}
-        defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').toDate()}
-        defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').toDate()}
+        defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').valueOf()}
+        defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').valueOf()}
       />
     )
 
@@ -88,15 +88,13 @@ describe('Timeline', () => {
       <Timeline
         items={items}
         groups={groups}
-        defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').toDate()}
-        defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').toDate()}
+        defaultTimeStart={dayjs('1995-12-25').subtract(12, 'hour').valueOf()}
+        defaultTimeEnd={dayjs('1995-12-25').add(12, 'hour').valueOf()}
         itemRenderer={({
-          item,
           itemContext,
           getItemProps,
-          getResizeProps
         }) => {
-          return <h1 {...getItemProps(item.itemProps)}>{itemContext.title}</h1>
+          return <h1 {...getItemProps({})}>{itemContext.title}</h1>
         }}
       />
     )

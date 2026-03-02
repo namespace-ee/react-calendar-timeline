@@ -8,7 +8,7 @@ describe('calculateXPositionForTime', () => {
 
   it('returns time in middle of timeline', () => {
     const time = startTime + (endTime - startTime) * 0.5
-    const result = calculateXPositionForTime(startTime, endTime, width, time, 0)
+    const result = calculateXPositionForTime(startTime, endTime, width, time)
 
     expect(result).toBe(500)
   })

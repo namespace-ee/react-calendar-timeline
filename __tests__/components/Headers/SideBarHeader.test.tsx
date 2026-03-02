@@ -1,20 +1,21 @@
-import React from 'react'
+import React, { type HTMLProps, type ReactNode } from 'react'
 import { render, cleanup } from '@testing-library/react'
 import DateHeader from 'lib/headers/DateHeader'
 import SidebarHeader from 'lib/headers/SidebarHeader'
 import TimelineHeaders from 'lib/headers/TimelineHeaders'
 import { RenderHeadersWrapper } from '../../test-utility/header-renderer'
 import {
-  renderSidebarHeaderWithCustomValues,
-  renderTwoSidebarHeadersWithCustomValues
+  renderSidebarHeaderWithCustomValues
 } from '../../test-utility/headerRenderers'
+
+type GetRootProps = (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>
 
 describe('Testing SidebarHeader Component', () => {
   afterEach(cleanup)
 
   //TODO: rename test
   it('Given sidebarHeader When pass style with overridden (width) Then it should not override the default values', () => {
-    const { getByTestId, debug } = renderSidebarHeaderWithCustomValues({
+    const { getByTestId } = renderSidebarHeaderWithCustomValues({
       props: { style: { width: 250 } }
     })
     const { width } = getComputedStyle(getByTestId('sidebarHeader'))
@@ -40,7 +41,7 @@ describe('Testing SidebarHeader Component', () => {
       <RenderHeadersWrapper>
         <TimelineHeaders>
           <SidebarHeader>{renderer}</SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
         </TimelineHeaders>
       </RenderHeadersWrapper>
@@ -60,11 +61,11 @@ describe('Testing SidebarHeader Component', () => {
     const extraProps = {
       someData: 'data'
     }
-    const { getByTestId } = render(
+    render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
           <SidebarHeader headerData={extraProps}>{renderer}</SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
         </TimelineHeaders>
       </RenderHeadersWrapper>
@@ -96,7 +97,7 @@ describe('Testing SidebarHeader Component', () => {
               )
             }}
           </SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
         </TimelineHeaders>
       </RenderHeadersWrapper>
@@ -114,7 +115,7 @@ describe('Testing SidebarHeader Component', () => {
     ).toHaveAttribute('data-testid', 'headerContainer')
   })
   it('Given SideBarHeader When passing a react stateless component as a child Then it should render', () => {
-    const Renderer = ({ getRootProps }) => {
+    const Renderer = ({ getRootProps }: { getRootProps: GetRootProps }) => {
       return (
         <div data-testid="leftSidebarHeader" {...getRootProps()}>
           Left
@@ -125,7 +126,7 @@ describe('Testing SidebarHeader Component', () => {
       <RenderHeadersWrapper>
         <TimelineHeaders>
           <SidebarHeader>{Renderer}</SidebarHeader>
-          <DateHeader primaryHeader />
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
         </TimelineHeaders>
       </RenderHeadersWrapper>
@@ -133,7 +134,7 @@ describe('Testing SidebarHeader Component', () => {
     expect(getByText('Left')).toBeInTheDocument()
   })
   it('Given SideBarHeader When passing a react stateful component as a child Then it should render', () => {
-    class Renderer extends React.Component {
+    class Renderer extends React.Component<{ getRootProps: GetRootProps }> {
       render() {
         const { getRootProps } = this.props
         return (
@@ -146,8 +147,8 @@ describe('Testing SidebarHeader Component', () => {
     const { getByText } = render(
       <RenderHeadersWrapper>
         <TimelineHeaders>
-          <SidebarHeader>{Renderer}</SidebarHeader>
-          <DateHeader primaryHeader />
+          <SidebarHeader>{Renderer as unknown as (props: { getRootProps: GetRootProps }) => ReactNode}</SidebarHeader>
+          <DateHeader unit="primaryHeader" />
           <DateHeader />
         </TimelineHeaders>
       </RenderHeadersWrapper>

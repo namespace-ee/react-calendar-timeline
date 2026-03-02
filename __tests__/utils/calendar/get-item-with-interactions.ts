@@ -11,9 +11,9 @@ describe('getItemWithInteractions', () => {
         keys: defaultKeys,
         draggingItem: undefined,
         resizingItem: undefined,
-        dragTime: false,
-        resizingEdge: false,
-        resizeTime: false,
+        dragTime: null,
+        resizingEdge: null,
+        resizeTime: null,
         groups,
         newGroupOrder: 0
       })
@@ -30,8 +30,8 @@ describe('getItemWithInteractions', () => {
         draggingItem: item.id,
         resizingItem: undefined,
         dragTime: item.start_time + dragOffset,
-        resizingEdge: false,
-        resizeTime: false,
+        resizingEdge: null,
+        resizeTime: null,
         groups,
         newGroupOrder: 0
       })
@@ -53,8 +53,8 @@ describe('getItemWithInteractions', () => {
         draggingItem: item.id,
         resizingItem: undefined,
         dragTime: item.start_time + dragOffset,
-        resizingEdge: false,
-        resizeTime: false,
+        resizingEdge: null,
+        resizeTime: null,
         groups,
         newGroupOrder: 1
       })
@@ -75,7 +75,7 @@ describe('getItemWithInteractions', () => {
         keys: defaultKeys,
         draggingItem: undefined,
         resizingItem: item.id,
-        dragTime: undefined,
+        dragTime: null,
         resizingEdge: 'left',
         resizeTime: item.start_time + dragOffset,
         groups,
@@ -96,7 +96,7 @@ describe('getItemWithInteractions', () => {
         keys: defaultKeys,
         draggingItem: undefined,
         resizingItem: item.id,
-        dragTime: undefined,
+        dragTime: null,
         resizingEdge: 'right',
         resizeTime: item.end_time + dragOffset,
         groups,

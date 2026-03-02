@@ -9,7 +9,7 @@ describe('getItemDimensions', () => {
         const item = items[0]
         const {canvasTimeStart, canvasTimeEnd} = state
         expect(getItemDimensions({
-            item,
+            item: item,
             keys: defaultKeys,
             canvasTimeStart,
             canvasTimeEnd,
@@ -17,6 +17,7 @@ describe('getItemDimensions', () => {
             groupOrders: orderedGroups,
             lineHeight: 60,
             itemHeightRatio: 1,
+            itemVerticalGap: undefined,
         })).toMatchSnapshot()
     })
 })

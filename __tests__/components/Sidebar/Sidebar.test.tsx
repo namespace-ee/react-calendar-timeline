@@ -1,4 +1,3 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import Sidebar from 'lib/layout/Sidebar'
 
@@ -26,6 +25,7 @@ const defaultProps = {
     groupIdKey: 'id',
     groupRightTitleKey: 'rightTitle',
     groupTitleKey: 'title',
+    groupLabelKey: 'title',
     itemDivTitleKey: 'title',
     itemGroupKey: 'group',
     itemIdKey: 'id',
@@ -39,7 +39,7 @@ describe('Sidebar', () => {
   it('passes props and get right height for first group', () => {
     const { container } = render(<Sidebar {...defaultProps} />)
 
-    const firstRow = container.querySelector('.rct-sidebar-row')
-    expect(firstRow.style.height).toBe('30px')
+    const firstRow = container.querySelector('.rct-sidebar-row') as HTMLElement
+    expect(firstRow!.style.height).toBe('30px')
   })
 })

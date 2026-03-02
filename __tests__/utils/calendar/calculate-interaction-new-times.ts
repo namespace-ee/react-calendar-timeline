@@ -6,11 +6,11 @@ describe('calculateInteractionNewTimes', () => {
       calculateInteractionNewTimes({
         itemTimeStart: 200,
         itemTimeEnd: 300,
-        dragTime: false,
+        dragTime: null,
         isDragging: false,
         isResizing: false,
-        resizingEdge: false,
-        resizeTime: false
+        resizingEdge: null,
+        resizeTime: null
       })
     ).toMatchObject([200, 300])
   })
@@ -22,8 +22,8 @@ describe('calculateInteractionNewTimes', () => {
         dragTime: 192,
         isDragging: true,
         isResizing: false,
-        resizingEdge: false,
-        resizeTime: false
+        resizingEdge: null,
+        resizeTime: null
       })
     ).toMatchObject([192, 292])
   })
@@ -32,7 +32,7 @@ describe('calculateInteractionNewTimes', () => {
       calculateInteractionNewTimes({
         itemTimeStart: 200,
         itemTimeEnd: 300,
-        dragTime: false,
+        dragTime: null,
         isDragging: false,
         isResizing: true,
         resizingEdge: 'right',
@@ -45,7 +45,7 @@ describe('calculateInteractionNewTimes', () => {
       calculateInteractionNewTimes({
         itemTimeStart: 200,
         itemTimeEnd: 300,
-        dragTime: false,
+        dragTime: null,
         isDragging: false,
         isResizing: true,
         resizingEdge: 'left',
@@ -53,5 +53,5 @@ describe('calculateInteractionNewTimes', () => {
       })
     ).toMatchObject([210, 300])
   })
-  it.skip('the item is moved and snapped to the grid', () => {})
+  it.todo('the item is moved and snapped to the grid', () => {})
 })

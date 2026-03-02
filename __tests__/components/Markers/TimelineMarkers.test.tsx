@@ -1,4 +1,3 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import TodayMarker from 'lib/markers/public/TodayMarker'
@@ -7,21 +6,23 @@ import { RenderWrapper } from 'test-utility/marker-renderer'
 
 describe('TimelineMarkers', () => {
   it('renders', () => {
-    render(
+    const { container } = render(
       <RenderWrapper>
         <TimelineMarkers>
           <TodayMarker />
         </TimelineMarkers>
       </RenderWrapper>
     )
+    expect(container).toBeInTheDocument()
   })
 
   it('doesnt throw error if no markers registered', () => {
-    render(
+    const { container } = render(
       <RenderWrapper>
         <TimelineMarkers />
       </RenderWrapper>
     )
+    expect(container).toBeInTheDocument()
   })
 
   it('is unsubscribed on unmounting after passing new date then hide it', ()=>{

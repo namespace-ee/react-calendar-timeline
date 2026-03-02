@@ -10,7 +10,7 @@ describe('_get', () => {
   })
 
   it('calls .get() when object has a get method (Immutable-like)', () => {
-    const immutableLike = { get: (key) => (key === 'name' ? 'Bob' : undefined) }
+    const immutableLike = { get: (key: string) => (key === 'name' ? 'Bob' : undefined) }
     expect(_get(immutableLike, 'name')).toBe('Bob')
   })
 

@@ -4,6 +4,7 @@ import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
 import CustomMarker from 'lib/markers/public/CustomMarker'
 import { RenderWrapper } from 'test-utility/marker-renderer'
 import { TimelineStateConsumer } from 'lib/timeline/TimelineStateContext'
+import type { SelectUnits } from 'lib/utility/calendar'
 
 describe('CustomMarker', () => {
   afterEach(cleanup)
@@ -91,7 +92,7 @@ describe('CustomMarker', () => {
       canvasWidth,
       showPeriod: () => { },
       timelineWidth: 1000,
-      timelineUnit: 'day'
+      timelineUnit: 'day' as SelectUnits
     }
 
     const markerDate = now + oneDay / 2

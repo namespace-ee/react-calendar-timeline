@@ -1,9 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`groupNoStack > works as expected 1`] = `
-{
-  "groupHeight": 0,
-  "itemTop": 7.5,
-  "verticalMargin": 0,
-}
-`;

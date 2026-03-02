@@ -23,6 +23,7 @@
     "types": ["vitest/globals"],
     "paths": {
       "lib/*": ["./src/lib/*"],
+      "test-utility": ["./__tests__/test-utility/index.ts"],
       "test-utility/*": ["./__tests__/test-utility/*"]
     }
   },

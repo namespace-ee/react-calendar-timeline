@@ -14,6 +14,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -32,6 +33,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -50,6 +52,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -68,6 +71,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -86,6 +90,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -104,6 +109,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
         "order": {
           "group": {
             "id": "3",
+            "title": "Group 3",
           },
           "index": 2,
         },
@@ -127,7 +133,7 @@ exports[`calculateScrollCanvas > should calculate new scroll state correctly 1`]
     90,
   ],
   "height": 120,
-  "newGroupOrder": null,
+  "newGroupOrder": 0,
   "resizeTime": null,
   "resizingEdge": null,
   "resizingItem": null,
@@ -151,6 +157,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -169,6 +176,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -187,6 +195,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -205,6 +214,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -223,6 +233,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
         "order": {
           "group": {
             "id": "1",
+            "title": "Group 1",
           },
           "index": 0,
         },
@@ -241,6 +252,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
         "order": {
           "group": {
             "id": "3",
+            "title": "Group 3",
           },
           "index": 2,
         },
@@ -264,7 +276,7 @@ exports[`calculateScrollCanvas > should calculate new state if zoom changed corr
     90,
   ],
   "height": 120,
-  "newGroupOrder": null,
+  "newGroupOrder": 0,
   "resizeTime": null,
   "resizingEdge": null,
   "resizingItem": null,

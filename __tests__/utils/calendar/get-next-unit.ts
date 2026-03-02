@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { getNextUnit } from 'lib/utility/calendar'
+import { getNextUnit, type SelectUnits } from 'lib/utility/calendar'
 
 //what value do these tests have? :)
 describe('getNextUnit', () => {
@@ -28,6 +27,6 @@ describe('getNextUnit', () => {
     expect(result).toBe('year')
   })
   it('unknown value to throw error', () => {
-    expect(() => getNextUnit('foo')).toThrowErrorMatchingSnapshot()
+    expect(() => getNextUnit('foo' as SelectUnits)).toThrowErrorMatchingSnapshot()
   })
 })

@@ -1,34 +1,43 @@
-export const orderedGroups = {
+import type { GroupOrders } from 'lib/types/main'
+import type { ItemDimension } from 'lib/types/dimension'
+
+export const orderedGroups: GroupOrders = {
   '1': {
     group: {
-      id: '1'
+      id: '1',
+      title: 'Group 1'
     },
     index: 0
   },
   '2': {
     group: {
-      id: '2'
+      id: '2',
+      title: 'Group 2'
     },
     index: 1
   },
   '3': {
     group: {
-      id: '3'
+      id: '3',
+      title: 'Group 3'
     },
     index: 2
   }
 }
 
-export const dimensionItems = [
+export const dimensionItems: ItemDimension[] = [
   {
     dimensions: {
       collisionLeft: 1540540000000,
       collisionWidth: 6803877,
       height: 22.5,
+      isDragging: false,
       left: 907.4074074074074,
+      originalLeft: 907.4074074074074,
       order: {
         group: {
-          id: '1'
+          id: '1',
+          title: 'Group 1'
         },
         index: 0
       },
@@ -43,10 +52,13 @@ export const dimensionItems = [
       collisionLeft: 1540532800000,
       collisionWidth: 21203877,
       height: 22.5,
+      isDragging: false,
       left: 824.074074074074,
+      originalLeft: 824.074074074074,
       order: {
         group: {
-          id: '1'
+          id: '1',
+          title: 'Group 1'
         },
         index: 0
       },
@@ -61,10 +73,13 @@ export const dimensionItems = [
       collisionLeft: 1540550800000,
       collisionWidth: 24803877,
       height: 22.5,
+      isDragging: false,
       left: 1032.4074074074074,
+      originalLeft: 1032.4074074074074,
       order: {
         group: {
-          id: '1'
+          id: '1',
+          title: 'Group 1'
         },
         index: 0
       },
@@ -79,10 +94,13 @@ export const dimensionItems = [
       collisionLeft: 1540570000000,
       collisionWidth: 14875919,
       height: 22.5,
+      isDragging: false,
       left: 1254.6296296296296,
+      originalLeft: 1254.6296296296296,
       order: {
         group: {
-          id: '1'
+          id: '1',
+          title: 'Group 1'
         },
         index: 0
       },
@@ -97,10 +115,13 @@ export const dimensionItems = [
       collisionLeft: 1540620000000,
       collisionWidth: 20397548,
       height: 22.5,
+      isDragging: false,
       left: 1833.3333333333333,
+      originalLeft: 1833.3333333333333,
       order: {
         group: {
-          id: '1'
+          id: '1',
+          title: 'Group 1'
         },
         index: 0
       },
@@ -115,10 +136,13 @@ export const dimensionItems = [
       collisionLeft: 1540656000000,
       collisionWidth: 20397548,
       height: 22.5,
+      isDragging: false,
       left: 2250,
+      originalLeft: 2250,
       order: {
         group: {
-          id: '3'
+          id: '3',
+          title: 'Group 3'
         },
         index: 2
       },

@@ -21,12 +21,12 @@ export const propsNoStack = {
 
 
 export const state = {
-  draggingItem: undefined,
-  dragTime: null,
-  resizingItem: null,
-  resizingEdge: null,
-  resizeTime: null,
-  newGroupOrder: null,
+  draggingItem: undefined as string | undefined,
+  dragTime: null as number | null,
+  resizingItem: null as string | null,
+  resizingEdge: null as 'left' | 'right' | null,
+  resizeTime: null as number | null,
+  newGroupOrder: 0,
   canvasTimeStart: 1540414800000,
   visibleTimeEnd: visibleTimeEnd,
   visibleTimeStart: visibleTimeStart,
@@ -46,7 +46,7 @@ export const stateMoveItem = {
 export const stateResizeItemLeft = {
   ...state,
   resizingItem: items[0].id,
-  resizingEdge: 'left',
+  resizingEdge: 'left' as const,
   resizeTime: items[0].start_time+timeOffset,
   newGroupOrder: 0,
 }
@@ -54,7 +54,7 @@ export const stateResizeItemLeft = {
 export const stateResizeItemRight = {
   ...state,
   resizingItem: items[0].id,
-  resizingEdge: 'right',
+  resizingEdge: 'right' as const,
   resizeTime: items[0].end_time+timeOffset,
   newGroupOrder: 0,
 }
