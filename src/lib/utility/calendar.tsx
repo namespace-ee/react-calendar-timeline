@@ -713,8 +713,8 @@ export function calculateScrollCanvas<
   visibleTimeStart: number,
   visibleTimeEnd: number,
   forceUpdateDimensions: boolean,
-  items: any,
-  groups: any,
+  items: P['items'],
+  groups: P['groups'],
   props: P,
   state: S,
 ): S {

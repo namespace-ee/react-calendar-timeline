@@ -64,7 +64,7 @@ export type OnTimeChange<CustomItem, CustomGroup> = (
     groups?: CustomGroup[],
   ) => void,
   unit: Unit,
-) => any
+) => void
 
 export type ReactCalendarTimelineProps<
   CustomItem extends TimelineItemBase<number>,
@@ -120,7 +120,7 @@ export type ReactCalendarTimelineProps<
   onZoom?(timelineContext: TimelineContext, unit: Unit): void
   moveResizeValidator?: ItemProps<CustomItem>['moveResizeValidator']
   onTimeChange?: OnTimeChange<CustomItem, CustomGroup>
-  onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): any
+  onBoundsChange?(canvasTimeStart: number, canvasTimeEnd: number): void
   itemRenderer?: ItemProps<CustomItem>['itemRenderer']
   groupRenderer?: ((props: ReactCalendarGroupRendererProps<CustomGroup>) => React.ReactNode) | undefined
   verticalLineClassNamesForTime?: (start: number, end: number) => string[]
@@ -346,7 +346,7 @@ export default class ReactCalendarTimeline<
     windowResizeDetector.removeListener(this)
   }
 
-  static getDerivedStateFromProps(nextProps: ReactCalendarTimelineProps<any>, prevState: ReactCalendarTimelineState) {
+  static getDerivedStateFromProps(nextProps: ReactCalendarTimelineProps<TimelineItemBase<number>>, prevState: ReactCalendarTimelineState) {
     const { visibleTimeStart, visibleTimeEnd, items, groups } = nextProps
 
     // This is a gross hack pushing items and groups in to state only to allow
@@ -860,7 +860,7 @@ export default class ReactCalendarTimeline<
     canvasTimeStart: number,
     canvasTimeEnd: number,
     canvasWidth: number,
-    dimensionItems: any[],
+    dimensionItems: ItemDimension[],
     groupHeights: number[],
     groupTops: number[],
     height: number,

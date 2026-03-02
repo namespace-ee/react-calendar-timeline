@@ -67,15 +67,15 @@ export type ItemProps<CustomItem extends TimelineItemBase<number>> = {
   canSelect?: boolean
   dimensions?: ItemContext['dimensions']
   useResizeHandle?: boolean
-  canResizeLeft: any
-  canResizeRight: any
+  canResizeLeft: boolean
+  canResizeRight: boolean
 
   keys: TimelineKeys
   item: CustomItem
 
   onSelect: OnSelect
   onContextMenu?: (i: Id, e: MouseEvent<HTMLDivElement>) => void
-  groupTops: any
+  groupTops: number[]
   onItemDoubleClick: (i: Id, e: MouseEvent<HTMLDivElement>) => void
   scrollRef: HTMLElement | null
   scrollOffset: number
@@ -150,7 +150,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   private get itemDivTitle(): string { return this.props.keys.itemDivTitleKey ? _get(this.props.item, this.props.keys.itemDivTitleKey) : this.itemTitle }
   private get itemTimeStart(): number { return _get(this.props.item, this.props.keys.itemTimeStartKey) }
   private get itemTimeEnd(): number { return _get(this.props.item, this.props.keys.itemTimeEndKey) }
-private itemRef  = createRef<HTMLDivElement>();
+  private itemRef  = createRef<HTMLDivElement>();
   private dragLeft?: HTMLElement
   private dragRight?: HTMLElement
   private startedClicking: boolean = false
@@ -245,7 +245,7 @@ private itemRef  = createRef<HTMLDivElement>();
       const scrolls = getSumScroll(this.props.scrollRef!)
 
       for (const key of Object.keys(groupTops)) {
-        const groupTop = groupTops[key]
+        const groupTop = groupTops[Number(key)]
         if (e.pageY - offset + scrolls.scrollTop > groupTop) {
           groupDelta = parseInt(key, 10) - order!.index
         } else {

@@ -50,7 +50,7 @@ export function CustomDateHeader<Data>({
             intervalText={intervalText}
             primaryHeader={unitProp === 'primaryHeader'}
             getIntervalProps={getIntervalProps}
-            intervalRenderer={intervalRenderer as any}
+            intervalRenderer={intervalRenderer}
             headerData={headerData}
           />
         )

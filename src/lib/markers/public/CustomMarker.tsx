@@ -9,8 +9,6 @@ import {
   TimelineMarkerType,
 } from '../markerType'
 
-type noop = () => any
-
 type CustomMarkerProps = {
   date: number
   children?: MarkerRendererType
@@ -18,8 +16,8 @@ type CustomMarkerProps = {
   subscribeMarker: (newe: MarkerType) => SubscribeReturn
 }
 class CustomMarker extends Component<CustomMarkerProps> {
-  private unsubscribe: noop | null = null
-  private getMarker: noop | null = null
+  private unsubscribe: SubscribeReturn['unsubscribe'] | null = null
+  private getMarker: SubscribeReturn['getMarker'] | null = null
 
   componentDidUpdate(prevProps: CustomMarkerProps) {
     if (prevProps.date !== this.props.date && this.getMarker) {

@@ -8,7 +8,7 @@ type SidebarHeaderProps = {
   rightSidebarWidth?: number
   leftSidebarWidth: number
   variant: typeof LEFT_VARIANT | typeof RIGHT_VARIANT
-  headerData?: any
+  headerData?: unknown
 }
 
 class SidebarHeader extends PureComponent<SidebarHeaderProps> {
@@ -46,7 +46,7 @@ class SidebarHeader extends PureComponent<SidebarHeaderProps> {
 export type SidebarWrapperProps = {
   children?: (props: { getRootProps: GetRootProps }) => ReactNode
   variant?: typeof LEFT_VARIANT | typeof RIGHT_VARIANT
-  headerData?: any
+  headerData?: unknown
 }
 
 const defaultChildren: SidebarWrapperProps['children'] = ({ getRootProps }: { getRootProps: GetRootProps }) => (

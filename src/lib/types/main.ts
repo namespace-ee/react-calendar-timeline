@@ -167,7 +167,7 @@ export interface TimelineHeadersProps {
   className?: string | undefined
   calendarHeaderStyle?: CSSProperties | undefined
   calendarHeaderClassName?: string | undefined
-  headerRef?: Ref<any> | undefined
+  headerRef?: Ref<HTMLDivElement> | undefined
 }
 
 export class TimelineHeaders extends Component<TimelineHeadersProps> {}

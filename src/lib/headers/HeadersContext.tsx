@@ -1,15 +1,21 @@
 import React, { ReactNode, useContext } from 'react'
 import { noop } from '../utility/generic'
+import type { TimelineTimeSteps } from '../types/main'
 
-const defaultContextState = {
+const defaultContextState: {
+  registerScroll: () => () => void
+  rightSidebarWidth: number
+  leftSidebarWidth: number
+  timeSteps: TimelineTimeSteps
+  scrollOffset: number
+} = {
   registerScroll: () => {
-    // eslint-disable-next-line
     console.warn('default registerScroll header used')
     return noop
   },
   rightSidebarWidth: 0,
   leftSidebarWidth: 150,
-  timeSteps: {},
+  timeSteps: { second: 1, minute: 1, hour: 1, day: 1, month: 1, year: 1 },
   scrollOffset: 0,
 }
 
@@ -19,8 +25,7 @@ export type TimelineHeadersProviderProps = {
   children: ReactNode
   rightSidebarWidth?: number
   leftSidebarWidth: number
-  //TODO: maybe this should be skipped?
-  timeSteps: object
+  timeSteps: TimelineTimeSteps
   registerScroll: (e: HTMLDivElement) => void
   scrollOffset: number
 }

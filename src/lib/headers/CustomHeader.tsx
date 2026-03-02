@@ -11,7 +11,7 @@ import { GetIntervalPropsType } from './types'
 export type CustomHeaderProps<Data> = {
   children: (p: CustomDateHeaderProps<Data>) => ReactNode
   unit: keyof TimelineTimeSteps
-  timeSteps: any
+  timeSteps: TimelineTimeSteps
   visibleTimeStart: number
   visibleTimeEnd: number
   canvasTimeStart: number
@@ -19,7 +19,7 @@ export type CustomHeaderProps<Data> = {
   canvasWidth: number
   showPeriod: (start: Dayjs, end: Dayjs) => void
   headerData?: Data
-  getLeftOffsetFromDate: (date: any) => number
+  getLeftOffsetFromDate: (date: number) => number
   height: number
   timelineWidth: number
 }
@@ -28,8 +28,8 @@ type GetHeaderIntervalsParams = {
   canvasTimeStart: number
   canvasTimeEnd: number
   unit: keyof TimelineTimeSteps
-  timeSteps: any
-  getLeftOffsetFromDate: (date: any) => number
+  timeSteps: TimelineTimeSteps
+  getLeftOffsetFromDate: (date: number) => number
 }
 
 type GetHeaderIntervalsFn = (params: GetHeaderIntervalsParams) => Interval[]
@@ -174,7 +174,7 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
       getRootProps: this.getRootProps,
       getIntervalProps: this.getIntervalProps,
       showPeriod,
-      data: headerData as any,
+      data: headerData as CustomDateHeaderProps<Data>['data'],
     }
   }
 

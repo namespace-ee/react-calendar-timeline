@@ -36,7 +36,7 @@ class CursorMarker extends React.Component<CursorMarkerProps, CursorMarkerStat> 
     renderer: defaultRenderer,
   }
 
-  constructor(props: any) {
+  constructor(props: CursorMarkerProps) {
     super(props)
 
     this.state = {

@@ -13,6 +13,7 @@ class PreventClickOnDrag extends Component<Props> {
   handleMouseUp: MouseEventHandler<HTMLElement> = (evt) => {
     if (
       this.props.clickTolerance !== undefined &&
+      this.originClickX !== null &&
       Math.abs(this.originClickX - evt.clientX) > this.props.clickTolerance
     ) {
       this.cancelClick = true
@@ -27,7 +28,7 @@ class PreventClickOnDrag extends Component<Props> {
     this.cancelClick = false
     this.originClickX = null
   }
-  private originClickX: any
+  private originClickX: number | null = null
   private cancelClick: boolean = false
 
   render() {

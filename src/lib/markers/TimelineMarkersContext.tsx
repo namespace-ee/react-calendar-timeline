@@ -15,7 +15,6 @@ export type TimelineMarkersContextValue = {
 const defaultContextState: TimelineMarkersContextValue = {
   markers: [],
   subscribeMarker: () => {
-    // eslint-disable-next-line
     console.warn('default subscribe marker used')
     return {
       unsubscribe: noop,
@@ -23,7 +22,6 @@ const defaultContextState: TimelineMarkersContextValue = {
     } as SubscribeReturn
   },
   updateMarker: () => {
-    // eslint-disable-next-line
     console.warn('default subscribe marker used')
     return noop
   },
@@ -86,7 +84,7 @@ export class TimelineMarkersProvider extends React.Component<
       }
     })
   }
-  constructor(props: any) {
+  constructor(props: PropsWithChildren) {
     super(props)
     this.state = {
       markers: [],

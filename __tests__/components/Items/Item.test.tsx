@@ -80,7 +80,7 @@ const defaultProps = {
   onResizing: noop,
   onResized: noop,
   onItemDoubleClick: noop,
-  groupTops: { 0: 0, 1: 40 },
+  groupTops: [0, 40],
   scrollRef: null,
   scrollOffset: 0,
 }

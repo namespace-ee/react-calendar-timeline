@@ -1,5 +1,6 @@
 import React, { MouseEventHandler, PropsWithChildren } from 'react'
 import {
+  HandleCanvasMouseOver,
   MarkerCanvasContext,
   MarkerCanvasProvider,
 } from './MarkerCanvasContext'
@@ -71,7 +72,7 @@ class MarkerCanvas extends React.Component<
   }
 
   containerEl = React.createRef<HTMLDivElement>()
-  private subscription: ((s: any) => void) | null = null
+  private subscription: HandleCanvasMouseOver | null = null
 
   render() {
     return (
