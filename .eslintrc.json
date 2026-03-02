@@ -1,7 +1,6 @@
 {
   "env": {
     "browser": true,
-    "jest/globals": true,
     "node": true,
     "es6": true
   },
@@ -24,7 +23,6 @@
   "plugins": [
     "@typescript-eslint",
     "react",
-    "jest",
     "prettier"
   ],
   "rules": {

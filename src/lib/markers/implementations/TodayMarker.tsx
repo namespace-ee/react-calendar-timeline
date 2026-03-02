@@ -24,7 +24,7 @@ class TodayMarker extends React.Component<TodayMarkerProps> {
   state = {
     date: Date.now(),
   }
-  private intervalToken: NodeJS.Timeout | undefined
+  private intervalToken: ReturnType<typeof setInterval> | undefined
 
   componentDidMount() {
     this.intervalToken = this.createIntervalUpdater(this.props.interval)
