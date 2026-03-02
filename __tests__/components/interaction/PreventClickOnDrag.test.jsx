@@ -148,7 +148,9 @@ describe('PreventClickOnDrag', () => {
           <div>how are ya</div>
         </PreventClickOnDrag>
       )
-    ).toThrow()
+    ).toThrowError(
+      'React.Children.only expected to receive a single React element child'
+    )
 
     vi.restoreAllMocks()
   })
