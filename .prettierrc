@@ -4,6 +4,5 @@
   "singleQuote": false,
   "printWidth": 120,
   "tabWidth": 2,
-  "useTabs": false,
-  "importOrderSeparation": true
+  "useTabs": false
 }

@@ -19,15 +19,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "types": ["vitest/globals"],
-    "paths": {
-      "lib/*": ["./src/lib/*"],
-      "test-utility": ["./__tests__/test-utility/index.ts"],
-      "test-utility/*": ["./__tests__/test-utility/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/index.ts", "src/index.d.ts", "__tests__/**/*", "__fixtures__/**/*"],
+  "include": ["src/index.ts", "src/index.d.ts"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

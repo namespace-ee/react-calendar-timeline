@@ -4,7 +4,8 @@ import { TimelineStateProvider, TimelineStartProps } from "lib/timeline/Timeline
 import type { SelectUnits } from "lib/utility/calendar";
 import type { TimelineTimeSteps } from "lib/types/main";
 
-const now = Date.now();
+// Fixed to Jan 3 so that Jan 1 (firstOfType for day unit) is within canvas range
+const now = new Date("2024-01-03T12:00:00Z").getTime();
 const oneDay = 1000 * 60 * 60 * 24;
 
 const defaultTimelineState: TimelineStartProps = {
