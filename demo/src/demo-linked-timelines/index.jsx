@@ -1,39 +1,34 @@
 /* eslint-disable no-console */
 /* eslint-disable no-console */
-import React, { Component } from 'react'
-import dayjs from 'dayjs'
+import React, { Component } from "react";
+import dayjs from "dayjs";
 
-import Timeline from 'react-calendar-timeline'
+import Timeline from "react-calendar-timeline";
 // import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
-import generateFakeData from '../generate-fake-data'
+import generateFakeData from "../generate-fake-data";
 
 var keys = {
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemDivTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time'
-}
+  groupIdKey: "id",
+  groupTitleKey: "title",
+  groupRightTitleKey: "rightTitle",
+  itemIdKey: "id",
+  itemTitleKey: "title",
+  itemDivTitleKey: "title",
+  itemGroupKey: "group",
+  itemTimeStartKey: "start_time",
+  itemTimeEndKey: "end_time",
+};
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups: groups1, items: items1 } = generateFakeData(5, 400)
-    const { groups: groups2, items: items2 } = generateFakeData(5, 400)
+    const { groups: groups1, items: items1 } = generateFakeData(5, 400);
+    const { groups: groups2, items: items2 } = generateFakeData(5, 400);
 
-    const visibleTimeStart = dayjs()
-      .startOf('day')
-      .valueOf()
-    const visibleTimeEnd = dayjs()
-      .startOf('day')
-      .add(1, 'day')
-      .valueOf()
+    const visibleTimeStart = dayjs().startOf("day").valueOf();
+    const visibleTimeEnd = dayjs().startOf("day").add(1, "day").valueOf();
 
     this.state = {
       groups1,
@@ -41,22 +36,22 @@ export default class App extends Component {
       groups2,
       items2,
       visibleTimeStart,
-      visibleTimeEnd
-    }
+      visibleTimeEnd,
+    };
   }
 
   handleTimeChangeFirst = (visibleTimeStart, visibleTimeEnd) => {
-    console.log('first', visibleTimeStart, visibleTimeEnd)
-    this.setState({ visibleTimeStart, visibleTimeEnd })
-  }
+    console.log("first", visibleTimeStart, visibleTimeEnd);
+    this.setState({ visibleTimeStart, visibleTimeEnd });
+  };
 
   handleTimeChangeSecond = (visibleTimeStart, visibleTimeEnd) => {
-    console.log('second', visibleTimeStart, visibleTimeEnd)
-    this.setState({ visibleTimeStart, visibleTimeEnd })
-  }
+    console.log("second", visibleTimeStart, visibleTimeEnd);
+    this.setState({ visibleTimeStart, visibleTimeEnd });
+  };
 
   renderFirst() {
-    const { groups1, items1, visibleTimeStart, visibleTimeEnd } = this.state
+    const { groups1, items1, visibleTimeStart, visibleTimeEnd } = this.state;
 
     return (
       <Timeline
@@ -76,11 +71,11 @@ export default class App extends Component {
         visibleTimeEnd={visibleTimeEnd}
         onTimeChange={this.handleTimeChangeFirst}
       />
-    )
+    );
   }
 
   renderSecond() {
-    const { groups2, items2, visibleTimeStart, visibleTimeEnd } = this.state
+    const { groups2, items2, visibleTimeStart, visibleTimeEnd } = this.state;
 
     return (
       <Timeline
@@ -100,7 +95,7 @@ export default class App extends Component {
         visibleTimeEnd={visibleTimeEnd}
         onTimeChange={this.handleTimeChangeSecond}
       />
-    )
+    );
   }
 
   render() {
@@ -109,6 +104,6 @@ export default class App extends Component {
         {this.renderFirst()}
         {this.renderSecond()}
       </div>
-    )
+    );
   }
 }

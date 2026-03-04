@@ -40,8 +40,6 @@ $date-header-color: #fff !default;
   }
 
   .rct-item {
-
-
     &:hover {
       z-index: 88;
     }
@@ -134,7 +132,6 @@ $date-header-color: #fff !default;
     z-index: 51;
   }
 
-
   .rct-dateHeader {
     display: flex;
     align-items: center;
@@ -144,12 +141,12 @@ $date-header-color: #fff !default;
     cursor: pointer;
     font-size: 14px;
     background-color: $date-header-background;
-    border-left:  2px solid $border-color;
+    border-left: 2px solid $border-color;
   }
 
   .rct-dateHeader-primary {
     background-color: initial;
-    border-left:  1px solid $border-color;
+    border-left: 1px solid $border-color;
     border-right: 1px solid $border-color;
     color: $date-header-color;
   }
@@ -161,6 +158,6 @@ $date-header-color: #fff !default;
   }
 
   .rct-calendar-header {
-    border: 1px solid $border-color
+    border: 1px solid $border-color;
   }
 }

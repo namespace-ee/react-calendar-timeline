@@ -1,57 +1,59 @@
-import React, { CSSProperties, HTMLProps, PureComponent, ReactNode } from 'react'
-import { useTimelineHeadersContext } from './HeadersContext'
-import { LEFT_VARIANT, RIGHT_VARIANT } from './constants'
+import React, { CSSProperties, HTMLProps, PureComponent, ReactNode } from "react";
+import { useTimelineHeadersContext } from "./HeadersContext";
+import { LEFT_VARIANT, RIGHT_VARIANT } from "./constants";
 
-type GetRootProps = (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>
+type GetRootProps = (props?: { style?: React.CSSProperties }) => HTMLProps<HTMLDivElement>;
 type SidebarHeaderProps = {
-  children: (props: { getRootProps: GetRootProps }) => ReactNode
-  rightSidebarWidth?: number
-  leftSidebarWidth: number
-  variant: typeof LEFT_VARIANT | typeof RIGHT_VARIANT
-  headerData?: any
-}
+  children: (props: { getRootProps: GetRootProps }) => ReactNode;
+  rightSidebarWidth?: number;
+  leftSidebarWidth: number;
+  variant: typeof LEFT_VARIANT | typeof RIGHT_VARIANT;
+  headerData?: unknown;
+};
 
 class SidebarHeader extends PureComponent<SidebarHeaderProps> {
-  getRootProps:GetRootProps = (props: { style?: CSSProperties } = {}) => {
-    const { style } = props
-    const width = this.props.variant === RIGHT_VARIANT ? this.props.rightSidebarWidth : this.props.leftSidebarWidth
+  getRootProps: GetRootProps = (props: { style?: CSSProperties } = {}) => {
+    const { style } = props;
+    const width = this.props.variant === RIGHT_VARIANT ? this.props.rightSidebarWidth : this.props.leftSidebarWidth;
     return {
       style: {
-        color:style?.color??"#fff",
+        color: style?.color ?? "#fff",
         ...style,
         width,
       },
-    }
-  }
+    };
+  };
 
   getStateAndHelpers = () => {
     return {
       getRootProps: this.getRootProps,
       data: this.props.headerData,
-    }
-  }
+    };
+  };
 
   render() {
-    const props = this.getStateAndHelpers()
-    return this.props.children(props)
+    const props = this.getStateAndHelpers();
+    const Children = this.props.children;
+    if (typeof Children === "function" && Children.prototype?.isReactComponent) {
+      return <Children {...props} />;
+    }
+    return Children(props);
   }
 }
 
-
-
 export type SidebarWrapperProps = {
-  children?: (props: { getRootProps: GetRootProps }) => ReactNode
-  variant?: typeof LEFT_VARIANT | typeof RIGHT_VARIANT
-  headerData?: any
-}
+  children?: (props: { getRootProps: GetRootProps }) => ReactNode;
+  variant?: typeof LEFT_VARIANT | typeof RIGHT_VARIANT;
+  headerData?: unknown;
+};
 
-const defaultChildren: SidebarWrapperProps['children'] = ({ getRootProps }: { getRootProps: GetRootProps }) => (
+const defaultChildren: SidebarWrapperProps["children"] = ({ getRootProps }: { getRootProps: GetRootProps }) => (
   <div data-testid="sidebarHeader" {...getRootProps()} />
-)
+);
 
 const SidebarWrapper = (props: SidebarWrapperProps) => {
-  const { children, variant = LEFT_VARIANT, headerData } = props
-  const { leftSidebarWidth, rightSidebarWidth } = useTimelineHeadersContext()
+  const { children, variant = LEFT_VARIANT, headerData } = props;
+  const { leftSidebarWidth, rightSidebarWidth } = useTimelineHeadersContext();
   return (
     <SidebarHeader
       leftSidebarWidth={leftSidebarWidth}
@@ -61,9 +63,9 @@ const SidebarWrapper = (props: SidebarWrapperProps) => {
     >
       {children || defaultChildren}
     </SidebarHeader>
-  )
-}
+  );
+};
 
-SidebarWrapper.secretKey = 'SidebarHeader'
+SidebarWrapper.secretKey = "SidebarHeader";
 
-export default SidebarWrapper
+export default SidebarWrapper;

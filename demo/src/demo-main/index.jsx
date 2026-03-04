@@ -1,33 +1,33 @@
-import React from 'react'
-import { Component } from 'react'
-import dayjs from 'dayjs'
+import React from "react";
+import { Component } from "react";
+import dayjs from "dayjs";
 
-import Timeline, { TimelineMarkers, TodayMarker, CustomMarker, CursorMarker } from '../../../src/index'
+import Timeline, { TimelineMarkers, TodayMarker, CustomMarker, CursorMarker } from "../../../src/index";
 
-import generateFakeData from '../generate-fake-data'
+import generateFakeData from "../generate-fake-data";
 
-var minTime = dayjs().add(-6, 'months').valueOf()
-var maxTime = dayjs().add(6, 'months').valueOf()
+var minTime = dayjs().add(-6, "months").valueOf();
+var maxTime = dayjs().add(6, "months").valueOf();
 
 var keys = {
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemDivTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time',
-}
+  groupIdKey: "id",
+  groupTitleKey: "title",
+  groupRightTitleKey: "rightTitle",
+  itemIdKey: "id",
+  itemTitleKey: "title",
+  itemDivTitleKey: "title",
+  itemGroupKey: "group",
+  itemTimeStartKey: "start_time",
+  itemTimeEndKey: "end_time",
+};
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups, items } = generateFakeData()
-    const defaultTimeStart = dayjs(items[0].start_time).startOf('day').toDate().valueOf()
-    const defaultTimeEnd = dayjs(items[0].end_time).startOf('day').add(1, 'day').toDate().valueOf()
+    const { groups, items } = generateFakeData();
+    const defaultTimeStart = dayjs(items[0].start_time).startOf("day").toDate().valueOf();
+    const defaultTimeEnd = dayjs(items[0].end_time).startOf("day").add(1, "day").toDate().valueOf();
 
     this.state = {
       groups,
@@ -36,45 +36,45 @@ export default class App extends Component {
           ...item,
           start_time: dayjs(item.start_time).valueOf(),
           end_time: dayjs(item.end_time).valueOf(),
-        }
+        };
       }),
       defaultTimeStart,
       defaultTimeEnd,
-    }
+    };
   }
 
   handleCanvasClick = (groupId, time) => {
-    console.log('Canvas clicked', groupId, dayjs(time).format())
-  }
+    console.log("Canvas clicked", groupId, dayjs(time).format());
+  };
 
   handleCanvasDoubleClick = (groupId, time) => {
-    console.log('Canvas double clicked', groupId, dayjs(time).format())
-  }
+    console.log("Canvas double clicked", groupId, dayjs(time).format());
+  };
 
   handleCanvasContextMenu = (group, time) => {
-    console.log('Canvas context menu', group, dayjs(time).format())
-  }
+    console.log("Canvas context menu", group, dayjs(time).format());
+  };
 
   handleItemClick = (itemId, _, time) => {
-    console.log('Clicked: ' + itemId, dayjs(time).format())
-  }
+    console.log("Clicked: " + itemId, dayjs(time).format());
+  };
 
   handleItemSelect = (itemId, _, time) => {
-    console.log('Selected: ' + itemId, dayjs(time).format())
-  }
+    console.log("Selected: " + itemId, dayjs(time).format());
+  };
 
   handleItemDoubleClick = (itemId, _, time) => {
-    console.log('Double Click: ' + itemId, dayjs(time).format())
-  }
+    console.log("Double Click: " + itemId, dayjs(time).format());
+  };
 
   handleItemContextMenu = (itemId, _, time) => {
-    console.log('Context Menu: ' + itemId, dayjs(time).format())
-  }
+    console.log("Context Menu: " + itemId, dayjs(time).format());
+  };
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    const { items, groups } = this.state
+    const { items, groups } = this.state;
 
-    const group = groups[newGroupOrder]
+    const group = groups[newGroupOrder];
 
     this.setState({
       items: items.map((item) =>
@@ -84,58 +84,58 @@ export default class App extends Component {
               end: dragTime + (item.end - item.start),
               group: group.id,
             })
-          : item,
+          : item
       ),
-    })
+    });
 
-    console.log('Moved', itemId, dragTime, newGroupOrder)
-  }
+    console.log("Moved", itemId, dragTime, newGroupOrder);
+  };
 
   handleItemResize = (itemId, time, edge) => {
-    const { items } = this.state
+    const { items } = this.state;
 
     this.setState({
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time,
+              start: edge === "left" ? time : item.start,
+              end: edge === "left" ? item.end : time,
             })
-          : item,
+          : item
       ),
-    })
+    });
 
-    console.log('Resized', itemId, time, edge)
-  }
+    console.log("Resized", itemId, time, edge);
+  };
 
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
     if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-      updateScrollCanvas(minTime, maxTime)
+      updateScrollCanvas(minTime, maxTime);
     } else if (visibleTimeStart < minTime) {
-      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart));
     } else if (visibleTimeEnd > maxTime) {
-      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime);
     } else {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+      updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
     }
-  }
+  };
 
   handleZoom = (timelineContext, unit) => {
-    console.log('Zoomed', timelineContext, unit)
-  }
+    console.log("Zoomed", timelineContext, unit);
+  };
 
   moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
-      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
-      return newTime
+      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000);
+      return newTime;
     }
 
-    return time
-  }
+    return time;
+  };
 
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
 
     return (
       <Timeline
@@ -165,22 +165,22 @@ export default class App extends Component {
         moveResizeValidator={this.moveResizeValidator}
         buffer={3}
         minZoom={60 * 60 * 1000} // 1 year
-        maxZoom={365*24 * 86400 * 1000 * 20} // 20 years
+        maxZoom={365 * 24 * 86400 * 1000 * 20} // 20 years
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
       >
         <TimelineMarkers>
           <TodayMarker />
-          <CustomMarker date={dayjs().startOf('day').valueOf() + 1000 * 60 * 60 * 2} />
-          <CustomMarker date={dayjs().add(3, 'day').valueOf()}>
+          <CustomMarker date={dayjs().startOf("day").valueOf() + 1000 * 60 * 60 * 2} />
+          <CustomMarker date={dayjs().add(3, "day").valueOf()}>
             {({ styles }) => {
-              const newStyles = { ...styles, backgroundColor: 'blue' }
-              return <div style={newStyles} />
+              const newStyles = { ...styles, backgroundColor: "blue" };
+              return <div style={newStyles} />;
             }}
           </CustomMarker>
-           <CursorMarker />
+          <CursorMarker />
         </TimelineMarkers>
       </Timeline>
-    )
+    );
   }
 }

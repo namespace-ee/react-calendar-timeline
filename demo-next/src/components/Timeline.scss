@@ -1,4 +1,3 @@
-@use 'react-calendar-timeline/dist/Timeline.scss' as * with (
-$sidebar-background-color: #2196f3,
-//$weekend:#29b31a
-) ;
+@use "react-calendar-timeline/dist/Timeline.scss" as * with (
+  $sidebar-background-color: #2196f3 //$weekend:#29b31a
+);

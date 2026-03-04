@@ -1,11 +1,11 @@
-import dayjs from 'dayjs'
-import React, { Component } from 'react'
+import dayjs from "dayjs";
+import React, { Component } from "react";
 
-import generateFakeData from '../generate-fake-data'
-import Timeline from 'react-calendar-timeline'
+import generateFakeData from "../generate-fake-data";
+import Timeline from "react-calendar-timeline";
 
-const format = 'DD.MM.YYYY'
-const year = dayjs().year()
+const format = "DD.MM.YYYY";
+const year = dayjs().year();
 const holidays = [
   dayjs(`01.01.${year}`, format),
   dayjs(`06.01.${year}`, format),
@@ -25,72 +25,68 @@ const holidays = [
   dayjs(`25.12.${year}`, format),
   dayjs(`26.12.${year}`, format),
   dayjs(`31.12.${year}`, format),
-]
+];
 
 const keys = {
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemDivTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time',
-}
+  groupIdKey: "id",
+  groupTitleKey: "title",
+  groupRightTitleKey: "rightTitle",
+  itemIdKey: "id",
+  itemTitleKey: "title",
+  itemDivTitleKey: "title",
+  itemGroupKey: "group",
+  itemTimeStartKey: "start_time",
+  itemTimeEndKey: "end_time",
+};
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups, items } = generateFakeData()
-    const defaultTimeStart = dayjs().startOf('day').toDate()
-    const defaultTimeEnd = dayjs().startOf('day').add(1, 'day').toDate()
+    const { groups, items } = generateFakeData();
+    const defaultTimeStart = dayjs().startOf("day").toDate();
+    const defaultTimeEnd = dayjs().startOf("day").add(1, "day").toDate();
 
     this.state = {
       groups,
       items,
       defaultTimeStart,
       defaultTimeEnd,
-    }
+    };
   }
 
   getMinutesOfDay = (date) => {
-    return date.hour() * 60 + date.minute()
-  }
+    return date.hour() * 60 + date.minute();
+  };
 
   verticalLineClassNamesForTime = (timeStart, timeEnd) => {
-    const currentTimeStart = dayjs(timeStart)
-    const currentTimeEnd = dayjs(timeEnd)
+    const currentTimeStart = dayjs(timeStart);
+    const currentTimeEnd = dayjs(timeEnd);
 
-    let classes = []
+    let classes = [];
 
     // check for public holidays
     for (let holiday of holidays) {
-      if (
-        holiday.isSame(currentTimeStart, 'day') &&
-        holiday.isSame(currentTimeEnd, 'day')
-      ) {
-        classes.push('holiday')
+      if (holiday.isSame(currentTimeStart, "day") && holiday.isSame(currentTimeEnd, "day")) {
+        classes.push("holiday");
       }
     }
 
     // highlight lunch break (12:00-13:00)
-    const lunchStart = dayjs().hour(12).minute(0).second(0)
-    const lunchEnd = dayjs().hour(13).minute(0).second(0)
+    const lunchStart = dayjs().hour(12).minute(0).second(0);
+    const lunchEnd = dayjs().hour(13).minute(0).second(0);
     if (
-      this.getMinutesOfDay(currentTimeStart) >=
-        this.getMinutesOfDay(lunchStart) &&
+      this.getMinutesOfDay(currentTimeStart) >= this.getMinutesOfDay(lunchStart) &&
       this.getMinutesOfDay(currentTimeEnd) <= this.getMinutesOfDay(lunchEnd)
     ) {
-      classes.push('lunch')
+      classes.push("lunch");
     }
 
-    return classes
-  }
+    return classes;
+  };
 
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
 
     return (
       <div style={{ padding: 20, paddingTop: 0 }}>
@@ -117,6 +113,6 @@ export default class App extends Component {
           verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
         />
       </div>
-    )
+    );
   }
 }

@@ -3,28 +3,21 @@
 
 A modern and responsive React timeline component.
 
-**🎉 Version 0.30.0-beta.5 Now Available!**
-
-Latest release includes:
-- [Use buffer prop to calculate when to redraw canvas](https://github.com/namespace-ee/react-calendar-timeline/pull/936)
-- [fix start and end of day when there is daylight saving](https://github.com/namespace-ee/react-calendar-timeline/pull/727)
-- [fix timeSteps don't work properly](https://github.com/namespace-ee/react-calendar-timeline/pull/951)
-- [Add option do drop new tasks to the timeline from an external component](https://github.com/namespace-ee/react-calendar-timeline/pull/941)
-- [fix few other issues](https://github.com/namespace-ee/react-calendar-timeline/pull/944):
-  - Resolved an issue where the timeline would scroll left even when there were no items present
-  - Addressed a problem where anonymous renderers caused headers to unmount and lose their state
-  - Cleaned up unnecessary demo files following updates in the new release.
-* Fix issue where the redraw mechanism was not based on the `buffer` prop.
-* Fix incorrect references to ".umd.js" file paths in the package.json
-* Externalize dayjs dependency. That allows using dayjs locale, but needs consuming application to install dayjs.
-* Added support for dynamic item sizing with an optional per-item `height` override prop.
-* Introduced `itemVerticalGap` timeline prop to ensure consistent spacing between timeline items, which takes precedence over the `itemHeightRatio` setting when specified.
+**Version 0.30.0-beta.17 Now Available!**
 
 We're excited to announce the beta release of v0.30.0 which includes:
-- Full TypeScript rewrite
+- Full TypeScript rewrite with bundled type definitions
+- `moment.js` replaced with `dayjs` (much smaller bundle)
 - Vite as bundler
-- Updated dependencies to latest versions 
-- React 18+ support
+- React 18 and React 19 support
+- Support for dynamic item sizing with an optional per-item `height` override prop
+- `itemVerticalGap` timeline prop for consistent spacing between items
+- Externalized `dayjs` dependency with locale support
+- [Use buffer prop to calculate when to redraw canvas](https://github.com/namespace-ee/react-calendar-timeline/pull/936)
+- [Fix start and end of day when there is daylight saving](https://github.com/namespace-ee/react-calendar-timeline/pull/727)
+- [Fix timeSteps don't work properly](https://github.com/namespace-ee/react-calendar-timeline/pull/951)
+- [Add option to drop new tasks to the timeline from an external component](https://github.com/namespace-ee/react-calendar-timeline/pull/941)
+- [Various bug fixes](https://github.com/namespace-ee/react-calendar-timeline/pull/944)
 
 The beta version is available via:
 ```bash
@@ -33,7 +26,26 @@ npm install react-calendar-timeline@beta
 
 We encourage users to try out the beta and provide feedback before the stable release. Please report any issues on GitHub.
 
- Note: Testing framework has been updated and some tests are currently being migrated.
+## For 0.2x (stable) users
+
+The latest **stable** release is [0.28.0](https://github.com/namespace-ee/react-calendar-timeline/tree/v0.28.0). If you are not ready to upgrade to the beta, install the stable version:
+
+```bash
+npm install react-calendar-timeline
+```
+
+The stable version uses `moment.js` as its date library. For stable version documentation, refer to the [0.28.0 README](https://github.com/namespace-ee/react-calendar-timeline/tree/v0.28.0#readme).
+
+**The rest of this README documents the 0.30.0 beta API.**
+
+## Migrating from 0.2x to 0.30.0
+
+- **Date library**: `moment` has been replaced with `dayjs`. Update your peer dependency and all date-related code accordingly.
+- **CSS import**: `'react-calendar-timeline/lib/Timeline.css'` is now `'react-calendar-timeline/style.css'`
+- **React version**: React 18+ is required (React 16/17 no longer supported)
+- **ImmutableJS**: `immutableJS` arrays are no longer supported — use plain JavaScript arrays
+- **TypeScript**: Full TypeScript rewrite — types are now bundled (no need for `@types/react-calendar-timeline`)
+- **Bundler**: Bundled with Vite instead of webpack/rollup
 
 ![calendar demo](https://raw.githubusercontent.com/namespace-ee/react-calendar-timeline/master/demo.gif)
 
@@ -59,7 +71,7 @@ yarn add react-calendar-timeline
 npm install --save react-calendar-timeline
 ```
 
-`react-calendar-timeline` has [react](https://reactjs.org/), [react-dom](https://reactjs.org/docs/react-dom.html), [`moment`](http://momentjs.com/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
+`react-calendar-timeline` has [react](https://reactjs.org/), [react-dom](https://reactjs.org/docs/react-dom.html), [`dayjs`](https://day.js.org/) and [`interactjs`](http://interactjs.io/docs/) as peer dependencies.
 
 # Usage
 
@@ -68,8 +80,9 @@ At the very minimum:
 ```jsx
 import Timeline from 'react-calendar-timeline'
 // make sure you include the timeline stylesheet or the timeline will not be styled
-import 'react-calendar-timeline/lib/Timeline.css'
-import moment from 'moment'
+import 'react-calendar-timeline/style.css'
+import dayjs from 'dayjs'
+import { createRoot } from 'react-dom/client'
 
 const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
 
@@ -78,36 +91,35 @@ const items = [
     id: 1,
     group: 1,
     title: 'item 1',
-    start_time: moment(),
-    end_time: moment().add(1, 'hour')
+    start_time: dayjs(),
+    end_time: dayjs().add(1, 'hour')
   },
   {
     id: 2,
     group: 2,
     title: 'item 2',
-    start_time: moment().add(-0.5, 'hour'),
-    end_time: moment().add(0.5, 'hour')
+    start_time: dayjs().add(-0.5, 'hour'),
+    end_time: dayjs().add(0.5, 'hour')
   },
   {
     id: 3,
     group: 1,
     title: 'item 3',
-    start_time: moment().add(2, 'hour'),
-    end_time: moment().add(3, 'hour')
+    start_time: dayjs().add(2, 'hour'),
+    end_time: dayjs().add(3, 'hour')
   }
 ]
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <div>
     Rendered by react!
     <Timeline
       groups={groups}
       items={items}
-      defaultTimeStart={moment().add(-12, 'hour')}
-      defaultTimeEnd={moment().add(12, 'hour')}
+      defaultTimeStart={dayjs().add(-12, 'hour')}
+      defaultTimeEnd={dayjs().add(12, 'hour')}
     />
-  </div>,
-  document.getElementById('root')
+  </div>
 )
 ```
 
@@ -119,7 +131,7 @@ The component can take many props:
 
 ## groups
 
-Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
+Expects an array of objects with the following attributes:
 
 ```js
 {
@@ -136,7 +148,7 @@ If you want to overwrite the calculated height with a custom height, you can pas
 
 ## items
 
-Expects either a vanilla JS array or an immutableJS array, consisting of objects with the following attributes:
+Expects an array of objects with the following attributes:
 
 ```js
 {
@@ -161,11 +173,11 @@ Expects either a vanilla JS array or an immutableJS array, consisting of objects
 }
 ```
 
-The preferred (fastest) option is to give Unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript `Date` or `moment()`) will also work, but will be a lot slower.
+The preferred (fastest) option is to give Unix timestamps in milliseconds for `start_time` and `end_time`. Objects that convert to them (JavaScript `Date` or `dayjs()`) will also work, but will be a lot slower.
 
 ## defaultTimeStart and defaultTimeEnd
 
-Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or moment object.
+Unless overridden by `visibleTimeStart` and `visibleTimeEnd`, specify where the calendar begins and where it ends. This parameter expects a Date or dayjs object.
 
 ## visibleTimeStart and visibleTimeEnd
 
@@ -177,7 +189,7 @@ The exact viewport of the calendar. When these are specified, scrolling in the c
 
 a number (default to 3) which represents the extra timeline rendered on right and lift of the visible area which the user will scroll through before the time rerenders.
 
-more explication in section [behind the scenes](#behind-the-scenes)
+more explanation in section [behind the scenes](#behind-the-scenes)
 
 Note: setting buffer to 1 will disable the scrolling on the timeline
 
@@ -270,7 +282,7 @@ Append a special `.rct-drag-right` handle to the elements and only resize if dra
 
 ### stackItems
 
-Stack items under each other, so there is no visual overlap when times collide.  Can be overridden in the `groups` array. Defaults to `false`. Requires millisecond or `Moment` timestamps, not native JavaScript `Date` objects.
+Stack items under each other, so there is no visual overlap when times collide. Can be overridden in the `groups` array. Defaults to `false`.
 
 ## traditionalZoom
 
@@ -392,8 +404,8 @@ Here is an example that limits the timeline to only show dates starting 6 months
 
 ```js
 // this limits the timeline to -6 months ... +6 months
-const minTime = moment().add(-6, 'months').valueOf()
-const maxTime = moment().add(6, 'months').valueOf()
+const minTime = dayjs().add(-6, 'month').valueOf()
+const maxTime = dayjs().add(6, 'month').valueOf()
 
 function (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
   if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
@@ -594,8 +606,8 @@ An example could look like (see: demo/vertical-classes):
 
 ```jsx
 verticalLineClassNamesForTime = (timeStart, timeEnd) => {
-  const currentTimeStart = moment(timeStart)
-  const currentTimeEnd = moment(timeEnd)
+  const currentTimeStart = dayjs(timeStart)
+  const currentTimeEnd = dayjs(timeEnd)
 
   for (let holiday of holidays) {
     if (
@@ -757,7 +769,7 @@ Custom renderer for this marker. Ensure that you always pass `styles` to the roo
 
 # Timeline Headers
 
-Timeline headers are the section above the timeline which consist of two main parts: First, the calender header which is a scrolable div containing the dates of the calendar called `DateHeader`. Second, is the headers for the sidebars, called `SidebarHeader`, the left one and optionally the right one.
+Timeline headers are the section above the timeline which consist of two main parts: First, the calendar header which is a scrollable div containing the dates of the calendar called `DateHeader`. Second, is the headers for the sidebars, called `SidebarHeader`, the left one and optionally the right one.
 
 ## Default usage
 
@@ -786,7 +798,7 @@ import Timeline, {
     <DateHeader unit="primaryHeader" />
     <DateHeader />
   </TimelineHeaders>
-<Timeline>
+</Timeline>
 ```
 ## Components
 
@@ -802,8 +814,8 @@ Is the core component wrapper component for custom headers
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `style`| `object`| applied to the root component of headers |
 | `className` | `string`| applied to the root component of the headers|
-| `calendarHeaderStyle`| `object`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
-| `calendarHeaderClassName`| `string`| applied to the root component of the calendar headers -scrolable div- `DateHeader` and `CustomHeader`)|
+| `calendarHeaderStyle`| `object`| applied to the root component of the calendar headers -scrollable div- `DateHeader` and `CustomHeader`)|
+| `calendarHeaderClassName`| `string`| applied to the root component of the calendar headers -scrollable div- `DateHeader` and `CustomHeader`)|
 | `headerRef` | `function` | used to get the ref of the header element
 
 ### `SidebarHeader`
@@ -863,7 +875,7 @@ import Timeline, {
     <DateHeader unit="primaryHeader" />
     <DateHeader />
   </TimelineHeaders>
-<Timeline>
+</Timeline>
 ```
 
 _Note_ : the Child function renderer can be a component or a function for convenience
@@ -893,20 +905,20 @@ intervals are decided through the prop: `unit`. By default, the unit of the inte
 
 If `primaryHeader` is passed to unit, it will override the unit with a unit a unit larger by 1 of the timeline unit.
 
-If `unit` is set, the unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`.
+If `unit` is set, the unit of the header will be the unit passed through the prop and can be any `unit of time` from `dayjs`.
 
 #### Label format
 
 To format each interval label you can use 2 types of props to format which are:
 
-- `string`: if a string was passed it will be passed to `startTime` method `format` which is a `momentjs` object  .
+- `string`: if a string was passed it will be passed to `startTime` method `format` which is a `dayjs` object.
 
 
 - `Function`: This is the more powerful method and offers the most control over what is rendered. The returned `string` will be rendered inside the interval
 
   ```typescript
     type Unit = `second` | `minute` | `hour` | `day` | `month` | `year`
-  ([startTime, endTime] : [Moment, Moment], unit: Unit, labelWidth: number, formatOptions: LabelFormat = defaultFormat ) => string
+  ([startTime, endTime] : [Dayjs, Dayjs], unit: Unit, labelWidth: number, formatOptions: LabelFormat = defaultFormat ) => string
   ```
 ##### Default format
 
@@ -974,7 +986,7 @@ _Note_: this is only an implementation of the function param. You can do this on
 
 Render prop function used to render a customized interval. The function provides multiple parameters that can be used to render each interval.
 
-Paramters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
+Parameters provided to the function has two types: context params which have the state of the item and timeline, and prop getters functions
 
 _Note_ : the renderProp can be a component or a function for convenience
 
@@ -1060,13 +1072,13 @@ Responsible for rendering the headers above calendar part of the timeline. This 
 
 #### unit
 
-The unit of the header will be the unit passed though the prop and can be any `unit of time` from `momentjs`. The default value for unit is `timelineUnit`
+The unit of the header will be the unit passed through the prop and can be any `unit of time` from `dayjs`. The default value for unit is `timelineUnit`
 
 #### Children
 
 Function as a child component to render the header
 
-Paramters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
+Parameters provided to the function has three types: context params which have the state of the item and timeline, prop getters functions and helper functions.
 
 _Note_ : the Child function renderer can be a component or a function for convenience
 
@@ -1113,7 +1125,7 @@ An object contains context for `timeline` and `header`:
 | `intervals`    | `array` | an array with all intervals|
 | `unit` | `string` | unit passed or timelineUnit |
 
-** `interval`: `[startTime: Moment, endTime: Moment]`
+** `interval`: `[startTime: Dayjs, endTime: Dayjs]`
 
 ##### Prop getters functions
 
@@ -1210,7 +1222,11 @@ import Timeline, {
 
 ## My timeline is unstyled
 
-You need to include the `Timeline.css` file, either via static file reference or webpack stylesheet bundling. The file is located at `lib/Timeline.css`
+You need to include the timeline stylesheet. Import it in your application:
+
+```js
+import 'react-calendar-timeline/style.css'
+```
 
 ## How can I have items with different colors?
 
@@ -1243,27 +1259,6 @@ If you are using Custom Headers then you need to add `SidebarHeader` component u
 ## The timeline header doesn't fix to the top of the container when I scroll down.
 
 you need to add sticky to the header like [this example](https://github.com/FoothillSolutions/react-calendar-timeline/tree/dest-build/examples#sticky-header).
-
-## I'm using Babel with Rollup or Webpack 2+ and I'm getting strange bugs with click events
-
-These module bundlers don't use the transpiled (ES5) code of this module. They load the original ES2015+ source. Thus your babel configuration needs to match ours. We recommend adding the [`stage-0` preset](https://babeljs.io/docs/plugins/preset-stage-0/) to your `.babelrc` to make sure everything works as intended.
-
-If that's too experimental, then the minimum you need is to add is the [`transform-class-properties`](https://babeljs.io/docs/plugins/transform-class-properties/) plugin that's in stage-2 and possibly the [`transform-object-rest-spread`](https://babeljs.io/docs/plugins/transform-object-rest-spread/) plugin from stage-3. However in this case it's easier to make sure you have at least [`stage-2`](https://babeljs.io/docs/plugins/preset-stage-2/) enabled.
-
-See [issue 51](https://github.com/namespace-ee/react-calendar-timeline/issues/51) for more details.
-
-Alternatively you may import the transpiled version of the timeline like this:
-
-```js
-// import Timeline from 'react-calendar-timeline'  // ESnext version
-import Timeline from 'react-calendar-timeline/lib' // ES5 version
-```
-
-However doing so you lose on some of the features of webpack 2 and will potentially get a slightly larger bundle.
-
-## It doesn't work with `create-react-app`
-
-It's the same issue as above. See [issue 134](https://github.com/namespace-ee/react-calendar-timeline/issues/134#issuecomment-314215244) for details and options.
 
 ## What are the zIndex values for all the elements?
 
@@ -1307,13 +1302,13 @@ If you like to improve React Calendar Timeline fork the repo and get started by 
 ```bash
 $ git clone https://github.com/namespace-ee/react-calendar-timeline.git react-calendar-timeline
 $ cd react-calendar-timeline
-$ yarn
-$ yarn start
+$ npm install
+$ npm start
 ```
 
 Check http://0.0.0.0:8888/ in your browser and have fun!
 
-Please run `npm run lint` before you send a pull request. `npm run test` runs the jest tests.
+Please run `npm run lint` before you send a pull request. `npm run test` runs the tests.
 
 <!--
 

@@ -1,188 +1,165 @@
-import React, { Component } from 'react'
-import dayjs from 'dayjs'
+import React, { Component } from "react";
+import dayjs from "dayjs";
 
-import Timeline from 'react-calendar-timeline'
+import Timeline from "react-calendar-timeline";
 // import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
-import generateFakeData from '../generate-fake-data'
+import generateFakeData from "../generate-fake-data";
 
-var minTime = dayjs()
-  .add(-6, 'months')
-  .valueOf()
-var maxTime = dayjs()
-  .add(6, 'months')
-  .valueOf()
+var minTime = dayjs().add(-6, "months").valueOf();
+var maxTime = dayjs().add(6, "months").valueOf();
 
 var keys = {
-  groupIdKey: 'id',
-  groupTitleKey: 'title',
-  groupRightTitleKey: 'rightTitle',
-  itemIdKey: 'id',
-  itemTitleKey: 'title',
-  itemDivTitleKey: 'title',
-  itemGroupKey: 'group',
-  itemTimeStartKey: 'start_time',
-  itemTimeEndKey: 'end_time'
-}
+  groupIdKey: "id",
+  groupTitleKey: "title",
+  groupRightTitleKey: "rightTitle",
+  itemIdKey: "id",
+  itemTitleKey: "title",
+  itemDivTitleKey: "title",
+  itemGroupKey: "group",
+  itemTimeStartKey: "start_time",
+  itemTimeEndKey: "end_time",
+};
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups, items } = generateFakeData()
-    const defaultTimeStart = dayjs()
-      .startOf('day')
-      .toDate()
-    const defaultTimeEnd = dayjs()
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
+    const { groups, items } = generateFakeData();
+    const defaultTimeStart = dayjs().startOf("day").toDate();
+    const defaultTimeEnd = dayjs().startOf("day").add(1, "day").toDate();
 
     this.state = {
       groups,
       items,
       defaultTimeStart,
-      defaultTimeEnd
-    }
+      defaultTimeEnd,
+    };
   }
 
   handleCanvasClick = (groupId, time, event) => {
-    console.log('Canvas clicked', groupId, dayjs(time).format())
-  }
+    console.log("Canvas clicked", groupId, dayjs(time).format());
+  };
 
   handleCanvasContextMenu = (group, time, e) => {
-    console.log('Canvas context menu', group, dayjs(time).format())
-  }
+    console.log("Canvas context menu", group, dayjs(time).format());
+  };
 
   handleItemClick = (itemId, _, time) => {
-    console.log('Clicked: ' + itemId, dayjs(time).format())
-  }
+    console.log("Clicked: " + itemId, dayjs(time).format());
+  };
 
   handleItemSelect = (itemId, _, time) => {
-    console.log('Selected: ' + itemId, dayjs(time).format())
-  }
+    console.log("Selected: " + itemId, dayjs(time).format());
+  };
 
   handleItemDoubleClick = (itemId, _, time) => {
-    console.log('Double Click: ' + itemId, dayjs(time).format())
-  }
+    console.log("Double Click: " + itemId, dayjs(time).format());
+  };
 
   handleItemContextMenu = (itemId, _, time) => {
-    console.log('Context Menu: ' + itemId, dayjs(time).format())
-  }
+    console.log("Context Menu: " + itemId, dayjs(time).format());
+  };
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    const { items, groups } = this.state
+    const { items, groups } = this.state;
 
-    const group = groups[newGroupOrder]
+    const group = groups[newGroupOrder];
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
               start: dragTime,
               end: dragTime + (item.end - item.start),
-              group: group.id
+              group: group.id,
             })
-            : item
-      )
-    })
+          : item
+      ),
+    });
 
-    console.log('Moved', itemId, dragTime, newGroupOrder)
-  }
+    console.log("Moved", itemId, dragTime, newGroupOrder);
+  };
 
   handleItemResize = (itemId, time, edge) => {
-    const { items } = this.state
+    const { items } = this.state;
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-              start: edge === 'left' ? time : item.start,
-              end: edge === 'left' ? item.end : time
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === "left" ? time : item.start,
+              end: edge === "left" ? item.end : time,
             })
-            : item
-      )
-    })
+          : item
+      ),
+    });
 
-    console.log('Resized', itemId, time, edge)
-  }
+    console.log("Resized", itemId, time, edge);
+  };
 
   // this limits the timeline to -6 months ... +6 months
   handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
     if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-      updateScrollCanvas(minTime, maxTime)
+      updateScrollCanvas(minTime, maxTime);
     } else if (visibleTimeStart < minTime) {
-      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart));
     } else if (visibleTimeEnd > maxTime) {
-      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime);
     } else {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+      updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
     }
-  }
+  };
 
   moveResizeValidator = (action, item, time, resizeEdge) => {
     if (time < new Date().getTime()) {
-      var newTime =
-        Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000)
-      return newTime
+      var newTime = Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000);
+      return newTime;
     }
 
-    return time
-  }
+    return time;
+  };
 
-  itemRenderer = ({
-    item,
-    timelineContext,
-    itemContext,
-    getItemProps,
-    getResizeProps,
-  }) => {
-    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
-    const backgroundColor = itemContext.selected ? itemContext.dragging ? 'red' : item.selectedBgColor : item.bgColor;
-    const borderColor = itemContext.resizing ? 'red' : item.color;
+  itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
+    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
+    const backgroundColor = itemContext.selected ? (itemContext.dragging ? "red" : item.selectedBgColor) : item.bgColor;
+    const borderColor = itemContext.resizing ? "red" : item.color;
     return (
       <div
         {...getItemProps({
           style: {
-            backgroundColor:backgroundColor,
+            backgroundColor: backgroundColor,
             color: item.color,
-            borderColor:borderColor,
-            borderStyle: 'solid',
+            borderColor: borderColor,
+            borderStyle: "solid",
             borderTopWidth: 1,
             borderBottomWidth: 1,
             borderRadius: 4,
             borderLeftWidth: itemContext.selected ? 3 : 1,
             borderRightWidth: itemContext.selected ? 3 : 1,
-          }
-        }) }
+          },
+        })}
         key={item.id}
       >
-        {itemContext.useResizeHandle ? (
-          <div {...leftResizeProps} />
-        ) : null}
+        {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
 
         <div
           style={{
             height: itemContext.dimensions.height,
-            overflow: 'hidden',
-            paddingLeft:3,
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
+            overflow: "hidden",
+            paddingLeft: 3,
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
           }}
           key={`${item.id}-content`}
         >
           {itemContext.title}
         </div>
 
-
-        {itemContext.useResizeHandle ? (
-          <div {...rightResizeProps} />
-        ) : null}
+        {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
       </div>
-    )
-  }
+    );
+  };
 
   // groupRenderer = ({ group }) => {
   //   return (
@@ -193,8 +170,8 @@ export default class App extends Component {
   // }
 
   render() {
-    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state
-    console.log("render")
+    const { groups, items, defaultTimeStart, defaultTimeEnd } = this.state;
+    console.log("render");
     return (
       <Timeline
         groups={groups}
@@ -232,6 +209,6 @@ export default class App extends Component {
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
       />
-    )
+    );
   }
 }

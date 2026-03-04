@@ -1,7 +1,6 @@
 {
   "env": {
     "browser": true,
-    "jest/globals": true,
     "node": true,
     "es6": true
   },
@@ -10,23 +9,13 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "prettier"
-  ],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react/recommended", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "jest",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier"],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
@@ -37,5 +26,12 @@
     "arrow-parens": 0,
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["__tests__/**/*.{js,jsx,ts,tsx}"],
+      "plugins": ["@vitest"],
+      "extends": ["plugin:@vitest/legacy-recommended"]
+    }
+  ]
 }
