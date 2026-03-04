@@ -7,6 +7,17 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+## 0.30.0 (beta.18)
+
+* Migrate test suite from Jest/Enzyme to Vitest + React Testing Library.
+* Convert all test files from JavaScript to TypeScript with full type coverage.
+* Add comprehensive test coverage for all major components and utilities, converting remaining placeholder tests to real implementations.
+* Fix all TypeScript errors across test files and fixtures; remove unnecessary `any` types from source files.
+* Separate `tsconfig.json` (build) from `tsconfig.test.json` (test type-checking); add `__tests__/tsconfig.json` for VS Code language service path alias resolution.
+* Set up Prettier with a pre-commit hook (`lint-staged`) and reformat the entire codebase.
+* Add `@vitest/eslint-plugin` for test file globals; switch to ESLint legacy-recommended config for v8 compatibility; remove Jest ESLint plugin.
+* Add test coverage reporting to CI; update CI workflow to run Vitest.
+
 ## 0.30.0 (beta.17)
 
 * Fix vertical page scroll being hijacked by horizontal timeline panning on trackpads
