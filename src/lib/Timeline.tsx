@@ -107,6 +107,10 @@ export type ReactCalendarTimelineProps<
   itemTouchSendsClick?: boolean | undefined;
   timeSteps: TimelineTimeSteps;
   scrollRef?: (el: HTMLDivElement) => void;
+  /**
+   * Continue dragging items when the mouse leaves the scrollRef element.
+   */
+  continueDragOnMouseLeave?: boolean | undefined;
   onItemDrag?(itemDragObject: OnItemDragObjectMove | OnItemDragObjectResize): void;
   onItemMove?(itemId: Id, dragTime: number, newGroupOrder: number): void;
   onItemResize?(itemId: Id, endTimeOrStartTime: number, edge: ResizeEdge): void;
@@ -1054,6 +1058,7 @@ export default class ReactCalendarTimeline<
                   traditionalZoom={!!traditionalZoom}
                   onScroll={this.onScroll}
                   scrollOffset={scrollOffset}
+                  continueDragOnMouseLeave={this.props.continueDragOnMouseLeave}
                 >
                   <MarkerCanvas>
                     {this.columns(canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height)}
