@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Add option to continue scrolling when mouse leaves timeline div.
+
 ## 0.30.0 (beta.18)
 
 * Migrate test suite from Jest/Enzyme to Vitest + React Testing Library.
