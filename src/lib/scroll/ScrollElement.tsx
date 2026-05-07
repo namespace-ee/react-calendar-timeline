@@ -69,9 +69,6 @@ class ScrollElement extends Component<Props, State> {
       this.handleTouchStart(e);
     } else if (e.pointerType === "mouse") {
       this.handleMouseDown(e);
-      if (this.props.continueDragOnMouseLeave) {
-        this.scrollComponentRef.current?.setPointerCapture(e.pointerId);
-      }
     }
   };
 
@@ -80,6 +77,9 @@ class ScrollElement extends Component<Props, State> {
       this.handleTouchMove(e);
     } else if (e.pointerType === "mouse") {
       this.handleMouseMove(e);
+    }
+    if (this.props.continueDragOnMouseLeave) {
+      this.scrollComponentRef.current?.setPointerCapture(e.pointerId);
     }
   };
 
