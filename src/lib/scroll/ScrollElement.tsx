@@ -11,6 +11,7 @@ type Props = {
   onWheelZoom: (speed: number, xPosition: number, deltaY: number) => void;
   onScroll: (n: number) => void;
   scrollOffset: number;
+  continueDragOnMouseLeave?: boolean;
 };
 
 type State = {
@@ -76,6 +77,9 @@ class ScrollElement extends Component<Props, State> {
       this.handleTouchMove(e);
     } else if (e.pointerType === "mouse") {
       this.handleMouseMove(e);
+    }
+    if (this.props.continueDragOnMouseLeave) {
+      this.scrollComponentRef.current?.setPointerCapture(e.pointerId);
     }
   };
 
@@ -169,7 +173,7 @@ class ScrollElement extends Component<Props, State> {
   };
 
   handlePointerLeave = (e: PointerEvent) => {
-    if (e.pointerType === "mouse") {
+    if (e.pointerType === "mouse" && !this.props.continueDragOnMouseLeave) {
       this.dragLastPosition = null;
       this.setState({
         isDragging: false,
