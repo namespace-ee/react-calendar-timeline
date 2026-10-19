@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Fix group heights and item placement being shuffled when some group ids are integer-like (e.g. `"2936407"`), caused by `getGroupedItems` filling slots in `Object.keys` order instead of group order.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.
