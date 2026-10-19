@@ -19,6 +19,8 @@ export * from "./lib/types/main";
 
 export { default as GroupRow } from "./lib/row/GroupRow";
 export { default as RowItems } from "./lib/items/Items";
+export type { ItemRendererProps, GetItemPropsParams, GetResizeProps } from "./lib/items/Item";
+export type { TimelineContextType } from "./lib/timeline/TimelineStateContext";
 
 export { Timeline };
 export type { ReactCalendarTimelineProps, ReactCalendarTimelineState, OnTimeChange };

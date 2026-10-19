@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import Timeline from "lib/Timeline";
 import dayjs from "dayjs";
 import type { TimelineItemBase } from "lib/types/main";
+import type { GetItemPropsParams, ItemRendererProps } from "../src";
 
 const groups = [
   { id: 2, title: "group 2" },
@@ -101,5 +102,24 @@ describe("Timeline", () => {
     renderedItems.forEach((el, index) => {
       expect(el.textContent).toEqual(items[index].title);
     });
+  });
+
+  it("should render a standalone itemRenderer typed with the exported props", () => {
+    const itemProps: GetItemPropsParams = { className: "custom-item" };
+    const CustomItem = ({ item, getItemProps }: ItemRendererProps<TimelineItemBase<number>>) => (
+      <div {...getItemProps(itemProps)}>{item.title}</div>
+    );
+
+    const { container } = render(
+      <Timeline
+        items={items}
+        groups={groups}
+        defaultTimeStart={dayjs("1995-12-25").subtract(12, "hour").valueOf()}
+        defaultTimeEnd={dayjs("1995-12-25").add(12, "hour").valueOf()}
+        itemRenderer={CustomItem}
+      />
+    );
+
+    expect(container.querySelectorAll(".rct-item.custom-item").length).toEqual(3);
   });
 });

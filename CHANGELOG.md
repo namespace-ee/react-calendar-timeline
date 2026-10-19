@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Export `ItemRendererProps`, `GetItemPropsParams`, `GetResizeProps` and `TimelineContextType` so custom `itemRenderer`s can be typed without reaching into internal modules.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.
