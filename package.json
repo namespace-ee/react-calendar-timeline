@@ -15,7 +15,10 @@
   },
   "main": "./dist/react-calendar-timeline.cjs.js",
   "module": "./dist/react-calendar-timeline.es.js",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
   "exports": {
     "./style.css": "./dist/style.css",
     "./dist/*.scss": "./dist/*.scss",
@@ -25,7 +28,7 @@
         "./dist/index.d.ts"
       ],
       "sass": "./dist/Timeline.scss",
-      "style": "./dist/Timeline.css",
+      "style": "./dist/style.css",
       "import": "./dist/react-calendar-timeline.es.js",
       "require": "./dist/react-calendar-timeline.cjs.js"
     }
@@ -95,7 +98,6 @@
   },
   "peerDependencies": {
     "dayjs": "^1.11.10",
-    "interactjs": "1.10.27",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
   },

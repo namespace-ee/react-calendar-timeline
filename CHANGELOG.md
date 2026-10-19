@@ -7,6 +7,10 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Mark `*.css` and `*.scss` as side effects in `package.json` so bundlers no longer tree-shake `import 'react-calendar-timeline/style.css'`.
+* Remove `interactjs` from `peerDependencies`; it is bundled into `dist`, so consumers no longer need to install it.
+* Point the `style` export condition at `dist/style.css`; `dist/Timeline.css` is not emitted by the build.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.
