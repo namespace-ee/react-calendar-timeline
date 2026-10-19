@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, CSSProperties } from "react";
 
 import { _get, arraysEqual } from "../utility/generic";
 import { ReactCalendarGroupRendererProps, TimelineGroupBase, TimelineKeys } from "../types/main";
@@ -59,8 +59,8 @@ export default class Sidebar<CustomGroup extends TimelineGroupBase = TimelineGro
     const groupLines = this.props.groups.map((group, index) => {
       const elementStyle = {
         height: `${groupHeights[index]}px`,
-        lineHeight: `${groupHeights[index]}px`,
-      };
+        "--rct-sidebar-row-height": `${groupHeights[index]}px`,
+      } as CSSProperties;
 
       return (
         <div

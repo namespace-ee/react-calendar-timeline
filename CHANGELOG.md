@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Move the sidebar row `line-height` from an inline style to the stylesheet (via the `--rct-sidebar-row-height` CSS variable), so multi-line `groupRenderer` content can override it with `.rct-sidebar-row { line-height: normal; }`.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.

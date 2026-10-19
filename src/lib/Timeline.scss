@@ -71,6 +71,7 @@ $date-header-color: #fff !default;
     }
 
     .rct-sidebar-row {
+      line-height: var(--rct-sidebar-row-height);
       padding: $list-item-padding;
       overflow: hidden;
       white-space: nowrap;

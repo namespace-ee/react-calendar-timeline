@@ -42,4 +42,12 @@ describe("Sidebar", () => {
     const firstRow = container.querySelector(".rct-sidebar-row") as HTMLElement;
     expect(firstRow!.style.height).toBe("30px");
   });
+
+  it("exposes the row height as a CSS variable instead of an inline line-height", () => {
+    const { container } = render(<Sidebar {...defaultProps} />);
+
+    const firstRow = container.querySelector(".rct-sidebar-row") as HTMLElement;
+    expect(firstRow.style.lineHeight).toBe("");
+    expect(firstRow.style.getPropertyValue("--rct-sidebar-row-height")).toBe("30px");
+  });
 });
