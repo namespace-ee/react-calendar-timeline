@@ -650,7 +650,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       top: `${dimensions.top}px`,
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
-      lineHeight: `${dimensions.height}px`,
+      "--rct-item-height": `${dimensions.height}px`,
     };
 
     const finalStyle = Object.assign(

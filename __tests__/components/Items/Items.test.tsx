@@ -161,7 +161,7 @@ describe("Items", () => {
     // The selected item gets selectedStyle (amber background)
     const itemEls = container.querySelectorAll(".rct-item");
     const firstItemStyle = (itemEls[0] as HTMLElement).style;
-    expect(firstItemStyle.background).toBe("rgb(255, 193, 7)"); // #ffc107
+    expect(firstItemStyle.background).toBe("var(--rct-item-selected-background, #ffc107)");
   });
 
   it("marks selected items via selected array prop", () => {
@@ -170,8 +170,8 @@ describe("Items", () => {
     });
     const itemEls = container.querySelectorAll(".rct-item");
     // Both items should be selected (amber background)
-    expect((itemEls[0] as HTMLElement).style.background).toBe("rgb(255, 193, 7)");
-    expect((itemEls[1] as HTMLElement).style.background).toBe("rgb(255, 193, 7)");
+    expect((itemEls[0] as HTMLElement).style.background).toBe("var(--rct-item-selected-background, #ffc107)");
+    expect((itemEls[1] as HTMLElement).style.background).toBe("var(--rct-item-selected-background, #ffc107)");
   });
 
   it("uses per-item canResize override", () => {

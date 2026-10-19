@@ -137,13 +137,23 @@ describe("Item", () => {
     it("applies base overridable styles", () => {
       const { container } = renderItem();
       const item = container.querySelector(".rct-item") as HTMLElement;
-      expect(item.style.cursor).toBe("pointer");
+      expect(item.style.cursor).toBe("var(--rct-item-cursor, pointer)");
+      expect(item.style.background).toBe("var(--rct-item-background, #2196f3)");
+      expect(item.style.fontSize).toBe("var(--rct-item-font-size, 12px)");
+      expect(item.style.borderStyle).toBe("var(--rct-item-border-style, solid)");
+    });
+
+    it("exposes the item height as a CSS variable instead of an inline line-height", () => {
+      const { container } = renderItem();
+      const item = container.querySelector(".rct-item") as HTMLElement;
+      expect(item.style.lineHeight).toBe("");
+      expect(item.style.getPropertyValue("--rct-item-height")).toBe("30px");
     });
 
     it("applies selected styles when selected", () => {
       const { container } = renderItem({ selected: true });
       const item = container.querySelector(".rct-item") as HTMLElement;
-      expect(item.style.background).toBe("rgb(255, 193, 7)"); // #ffc107
+      expect(item.style.background).toBe("var(--rct-item-selected-background, #ffc107)");
     });
 
     it("applies move cursor when selected and canMove", () => {
@@ -155,7 +165,7 @@ describe("Item", () => {
     it("does not apply move cursor when not selected", () => {
       const { container } = renderItem({ selected: false, canMove: true });
       const item = container.querySelector(".rct-item") as HTMLElement;
-      expect(item.style.cursor).toBe("pointer");
+      expect(item.style.cursor).toBe("var(--rct-item-cursor, pointer)");
     });
   });
 
@@ -273,7 +283,7 @@ describe("Item", () => {
         canResizeRight: false,
       });
       const item = container.querySelector(".rct-item") as HTMLElement;
-      expect(item.style.borderLeftWidth).toBe("1px");
+      expect(item.style.borderLeftWidth).toBe("var(--rct-item-border-width, 1px)");
     });
 
     it("shows left resize border when selected and canResizeLeft with enough width", () => {
@@ -295,7 +305,7 @@ describe("Item", () => {
         dimensions: { ...defaultDimensions, width: 200 },
       });
       const item = container.querySelector(".rct-item") as HTMLElement;
-      expect(item.style.borderLeftWidth).toBe("1px");
+      expect(item.style.borderLeftWidth).toBe("var(--rct-item-border-width, 1px)");
     });
   });
 });

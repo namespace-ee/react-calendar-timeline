@@ -1,3 +1,5 @@
+@use "sass:meta";
+
 $item-color: white !default;
 $item-background: #2196f3 !default;
 $item-border: 1px solid #1a6fb3 !default;
@@ -18,6 +20,40 @@ $weekend: rgba(250, 246, 225, 0.5) !default;
 
 $date-header-background: rgb(240, 240, 240) !default;
 $date-header-color: #fff !default;
+
+@function border-color($border) {
+  @each $part in $border {
+    @if meta.type-of($part) == color {
+      @return $part;
+    }
+  }
+  @return null;
+}
+
+$item-border-color: border-color($item-border);
+$item-selected-border-color: border-color($item-selected-border);
+
+// On :root so a consumer can override these on any ancestor of the timeline.
+:root {
+  --rct-item-color: #{$item-color};
+  --rct-item-background: #{$item-background};
+  --rct-item-selected-color: #{$item-selected-color};
+  --rct-item-selected-background: #{$item-selected-background};
+  --rct-header-background: #{$sidebar-background-color};
+  --rct-border-color: #{$border-color};
+  --rct-row-even-background: #{$row-background-even};
+  --rct-row-odd-background: #{$row-background-odd};
+  --rct-weekend-background: #{$weekend};
+  --rct-date-header-background: #{$date-header-background};
+  --rct-date-header-color: #{$date-header-color};
+  --rct-cursor-line-background: #{$item-background};
+  @if $item-border-color {
+    --rct-item-border-color: #{$item-border-color};
+  }
+  @if $item-selected-border-color {
+    --rct-item-selected-border-color: #{$item-selected-border-color};
+  }
+}
 
 .react-calendar-timeline {
   * {
@@ -40,6 +76,8 @@ $date-header-color: #fff !default;
   }
 
   .rct-item {
+    line-height: var(--rct-item-line-height, var(--rct-item-height));
+
     &:hover {
       z-index: 88;
     }
@@ -63,11 +101,11 @@ $date-header-color: #fff !default;
     vertical-align: top;
     position: relative;
     box-sizing: border-box;
-    border-right: $border-width solid $border-color;
+    border-right: $border-width solid var(--rct-border-color);
 
     &.rct-sidebar-right {
       border-right: 0;
-      border-left: $border-width solid $border-color;
+      border-left: $border-width solid var(--rct-border-color);
     }
 
     .rct-sidebar-row {
@@ -77,13 +115,13 @@ $date-header-color: #fff !default;
       text-overflow: ellipsis;
       box-sizing: border-box;
       margin: 0;
-      border-bottom: $border-width solid $border-color;
+      border-bottom: $border-width solid var(--rct-border-color);
 
       &.rct-sidebar-row-odd {
-        background: $row-background-odd;
+        background: var(--rct-row-odd-background);
       }
       &.rct-sidebar-row-even {
-        background: $row-background-even;
+        background: var(--rct-row-even-background);
       }
     }
   }
@@ -93,14 +131,14 @@ $date-header-color: #fff !default;
   .rct-vertical-lines {
     .rct-vl {
       position: absolute;
-      border-left: 1px solid $border-color;
+      border-left: 1px solid var(--rct-border-color);
       z-index: 30;
       &.rct-vl-first {
         border-left-width: 2px;
       }
       &.rct-day-6,
       &.rct-day-0 {
-        background: $weekend;
+        background: var(--rct-weekend-background);
       }
     }
   }
@@ -113,22 +151,22 @@ $date-header-color: #fff !default;
 
     .rct-hl-even,
     .rct-hl-odd {
-      border-bottom: $border-width solid $border-color;
+      border-bottom: $border-width solid var(--rct-border-color);
       box-sizing: border-box;
       z-index: 40;
     }
     .rct-hl-odd {
-      background: $row-background-odd;
+      background: var(--rct-row-odd-background);
     }
     .rct-hl-even {
-      background: $row-background-even;
+      background: var(--rct-row-even-background);
     }
   }
 
   .rct-cursor-line {
     position: absolute;
     width: 2px;
-    background: $item-background;
+    background: var(--rct-cursor-line-background);
     z-index: 51;
   }
 
@@ -137,27 +175,26 @@ $date-header-color: #fff !default;
     align-items: center;
     justify-content: center;
     height: 100%;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid var(--rct-border-color);
     cursor: pointer;
     font-size: 14px;
-    background-color: $date-header-background;
-    border-left: 2px solid $border-color;
+    background-color: var(--rct-date-header-background);
+    border-left: 2px solid var(--rct-border-color);
   }
 
   .rct-dateHeader-primary {
     background-color: initial;
-    border-left: 1px solid $border-color;
-    border-right: 1px solid $border-color;
-    color: $date-header-color;
+    border-left: 1px solid var(--rct-border-color);
+    border-right: 1px solid var(--rct-border-color);
+    color: var(--rct-date-header-color);
   }
 
   .rct-header-root {
-    background: $sidebar-background-color;
-    //color: #fff;
-    border-bottom: 1px solid $border-color;
+    background: var(--rct-header-background);
+    border-bottom: 1px solid var(--rct-border-color);
   }
 
   .rct-calendar-header {
-    border: 1px solid $border-color;
+    border: 1px solid var(--rct-border-color);
   }
 }

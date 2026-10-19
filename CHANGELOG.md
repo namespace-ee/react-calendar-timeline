@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Make item and timeline chrome styles themeable through `--rct-*` CSS variables, with unchanged defaults. Updated tests to reflect this feature.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.
