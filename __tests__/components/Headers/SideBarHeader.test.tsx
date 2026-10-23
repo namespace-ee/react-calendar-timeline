@@ -27,6 +27,11 @@ describe("Testing SidebarHeader Component", () => {
     expect(getByTestId("sidebarHeader").style.color).toBe("white");
   });
 
+  it("Given sidebarHeader When color is not specified Then it inherits the text color", () => {
+    const { getByTestId } = renderSidebarHeaderWithCustomValues();
+    expect(getByTestId("sidebarHeader").style.color).toBe("");
+  });
+
   it("Given SidebarHeader When a render function Then it will be rendered", () => {
     const renderer = vi.fn(({ getRootProps }) => {
       return (

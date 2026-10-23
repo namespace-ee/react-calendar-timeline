@@ -17,7 +17,6 @@ class SidebarHeader extends PureComponent<SidebarHeaderProps> {
     const width = this.props.variant === RIGHT_VARIANT ? this.props.rightSidebarWidth : this.props.leftSidebarWidth;
     return {
       style: {
-        color: style?.color ?? "#fff",
         ...style,
         width,
       },
