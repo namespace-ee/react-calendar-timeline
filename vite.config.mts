@@ -1,51 +1,59 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import { resolve } from 'path'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
-import typescript from '@rollup/plugin-typescript'
-import { typescriptPaths } from 'rollup-plugin-typescript-paths'
+import { defineConfig } from "vite-plus";
+import { resolve } from "path";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    copyPublicDir: false,
-    outDir: 'dist',
-    sourcemap: true,
-    lib: {
-      entry: {
-        index: resolve("src", 'index.ts'),
-        styles: resolve("src/lib", 'Timeline.scss')
-      },
-      name: 'react-calendar-timeline',
-      fileName: (format) => `react-calendar-timeline.${format}.js`
+  pack: [
+    {
+      format: ["esm", "cjs"],
+      sourcemap: true,
+      dts: true,
+      deps: { resolveDepSubpath: true },
     },
-    rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-dom', 'react-dom/client', 'dayjs'],
-      output: {
-        globals: {
-          react: 'React'
-        }
-      },
-      plugins: [
-        typescriptPaths({
-          preserveExtensions: true,
-        }),
-        typescript({
-          outDir: 'dist',
-          declaration: true,
-        }),
-      ],
+    {
+      // A stylesheet entry breaks dts generation, so it gets its own build.
+      entry: { style: "src/lib/Timeline.scss" },
+      copy: ["src/lib/Timeline.scss"],
     },
-  },
-  server: {
-    port: 3000,
-  },
-  plugins: [react(), viteStaticCopy({
-    targets: [
+  ],
+  lint: {
+    plugins: ["typescript", "react", "oxc"],
+    jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
+    ignorePatterns: ["demo/**", "demo-next/**", "examples/**"],
+    rules: {
+      "react/no-children-prop": "off",
+      "vite-plus/prefer-vite-plus-imports": "error",
+    },
+    overrides: [
       {
-        src: 'src/lib/Timeline.scss',
-        dest: ''
-      }
-    ]
-  })],
-})
+        files: ["__tests__/**"],
+        plugins: ["vitest"],
+        rules: { "vitest/require-mock-type-parameters": "off" },
+      },
+    ],
+    options: { typeAware: true, typeCheck: true },
+  },
+  fmt: {
+    trailingComma: "es5",
+    printWidth: 120,
+    sortPackageJson: false,
+    ignorePatterns: ["**/*.{md,yml,yaml,html}", "demo/**", "demo-next/**", "examples/**"],
+  },
+  staged: {
+    "*.{ts,tsx,js,jsx,json,css,scss}": "vp fmt",
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: ["__tests__/setup.ts"],
+    include: ["__tests__/**/*.{test,spec}.{js,jsx,ts,tsx}", "__tests__/utils/**/*.{js,ts}"],
+    coverage: {
+      include: ["src/**"],
+    },
+  },
+  resolve: {
+    alias: {
+      lib: resolve(__dirname, "src/lib"),
+      "test-utility": resolve(__dirname, "__tests__/test-utility"),
+    },
+  },
+});

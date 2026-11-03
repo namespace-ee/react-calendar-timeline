@@ -577,9 +577,12 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
     }
   }
 
-  //getItemRef = (el: HTMLElement) => (this.item = el)
-  getDragLeftRef = (el: HTMLElement) => (this.dragLeft = el);
-  getDragRightRef = (el: HTMLElement) => (this.dragRight = el);
+  getDragLeftRef = (el: HTMLElement) => {
+    this.dragLeft = el;
+  };
+  getDragRightRef = (el: HTMLElement) => {
+    this.dragRight = el;
+  };
 
   getItemProps = ({
     className: propsClassName,
