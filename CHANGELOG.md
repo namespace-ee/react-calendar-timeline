@@ -7,6 +7,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Move the build, lint, format and test tooling to Vite+ (`vp pack`, Oxlint, Oxfmt, Vitest 5) and update all dependencies. The bundles are now `dist/index.mjs` and `dist/index.cjs` with matching `.d.mts`/`.d.cts` declarations, and `dependencies` and `peerDependencies` (including `interactjs`, whose peer range becomes `^1.10.28`) are no longer bundled.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.

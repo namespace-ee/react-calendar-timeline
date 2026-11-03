@@ -1,7 +1,7 @@
 import React, { Component, MouseEventHandler } from "react";
 
 type Props = {
-  children: React.ReactElement;
+  children: React.ReactElement<React.HTMLAttributes<HTMLElement>>;
   onClick: MouseEventHandler<HTMLElement>;
   clickTolerance?: number;
 };
