@@ -91,7 +91,7 @@ export default class App extends Component {
         rightSidebarWidth={150}
         rightSidebarContent={<div>Above The Right</div>}
         canMove={true}
-        canResize="right"
+        canResize="both"
         canSelect
         itemsSorted
         itemTouchSendsClick={false}

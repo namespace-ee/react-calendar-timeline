@@ -183,7 +183,30 @@ describe("Item", () => {
       const right = container.querySelector(".rct-item-handler-resize-right") as HTMLElement;
 
       expect(item.style.cursor).toBe("move");
+      expect(item.style.borderLeftWidth).toBe("3px");
+      expect(item.style.borderRightWidth).toBe("3px");
       expect(left.style.cursor).toBe("ew-resize");
+      expect(right.style.cursor).toBe("ew-resize");
+      expect(left.style.left).toBe("-3px");
+      expect(right.style.right).toBe("-3px");
+      expect(left.style.width).toBe("20px");
+      expect(right.style.width).toBe("20px");
+    });
+
+    it("covers only the resizable border", () => {
+      const { container } = renderItem({
+        selected: true,
+        canResizeLeft: false,
+        canResizeRight: true,
+      });
+      const item = container.querySelector(".rct-item") as HTMLElement;
+      const right = container.querySelector(".rct-item-handler-resize-right") as HTMLElement;
+
+      expect(container.querySelector(".rct-item-handler-resize-left")).not.toBeInTheDocument();
+      expect(item.style.borderLeftWidth).toBe("1px");
+      expect(item.style.borderRightWidth).toBe("3px");
+      expect(item.style.cursor).toBe("move");
+      expect(right.style.right).toBe("-3px");
       expect(right.style.cursor).toBe("ew-resize");
     });
   });
