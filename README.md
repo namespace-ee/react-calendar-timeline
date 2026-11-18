@@ -5,6 +5,8 @@ A modern and responsive React timeline component.
 
 **Version 0.30.0 Now Available!**
 
+Demos: https://namespace-ee.github.io/react-calendar-timeline/
+
 We're excited to announce the beta release of v0.30.0 which includes:
 - Full TypeScript rewrite with bundled type definitions
 - `moment.js` replaced with `dayjs` (much smaller bundle)
