@@ -3,7 +3,6 @@ import { TimelineStateConsumer } from "../timeline/TimelineStateContext";
 import CustomHeader from "./CustomHeader";
 import { getNextUnit, SelectUnits } from "../utility/calendar";
 import { defaultHeaderFormats } from "../default-config";
-import memoize from "memoize-one";
 import { CustomDateHeader } from "./CustomDateHeader";
 import { IntervalRenderer, SidebarHeaderChildrenFnProps, TimelineTimeSteps } from "../types/main";
 import { Dayjs, UnitType } from "dayjs";
@@ -16,12 +15,12 @@ type GetHeaderData<Data> = (
   unitProp: UnitType | "primaryHeader" | undefined,
   headerData: Data | undefined
 ) => {
-  intervalRenderer?: IntervalRenderer<Data>;
+  intervalRenderer: (p: IntervalRenderer<Data>) => ReactNode;
   style: React.CSSProperties;
-  className: string;
+  className: string | undefined;
   getLabelFormat: (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => string;
   unitProp: UnitType | "primaryHeader" | undefined;
-  headerData: Data;
+  headerData: Data | undefined;
 };
 export interface DateHeaderProps<Data> {
   style?: CSSProperties | undefined;
@@ -45,12 +44,12 @@ class DateHeaderInner<Data> extends React.Component<DateHeaderProps<Data>> {
     return this.props.timelineUnit;
   };
 
-  getRootStyle = memoize((style) => {
+  getRootStyle(style?: CSSProperties) {
     return {
       height: 30,
       ...style,
     };
-  });
+  }
 
   getLabelFormat = (interval: [Dayjs, Dayjs], unit: keyof typeof defaultHeaderFormats, labelWidth: number) => {
     const { labelFormat } = this.props;
@@ -64,18 +63,16 @@ class DateHeaderInner<Data> extends React.Component<DateHeaderProps<Data>> {
     }
   };
 
-  getHeaderData: GetHeaderData<Data> = memoize(
-    (intervalRenderer, style, className, getLabelFormat, unitProp, headerData) => {
-      return {
-        intervalRenderer,
-        style,
-        className,
-        getLabelFormat,
-        unitProp,
-        headerData,
-      };
-    }
-  );
+  getHeaderData: GetHeaderData<Data> = (intervalRenderer, style, className, getLabelFormat, unitProp, headerData) => {
+    return {
+      intervalRenderer,
+      style,
+      className,
+      getLabelFormat,
+      unitProp,
+      headerData,
+    };
+  };
 
   render() {
     const unit = this.getHeaderUnit();

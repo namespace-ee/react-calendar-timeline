@@ -161,7 +161,6 @@ export default class App extends Component {
         canMove
         canResize="right"
         canSelect
-        itemsSorted
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}

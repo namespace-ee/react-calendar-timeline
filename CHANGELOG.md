@@ -7,6 +7,11 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Drop `lodash`, `classnames`, and `memoize-one`. Item updates compare the fields they render, and header class names are joined directly.
+* Remove the Immutable.js input shim. `_get` reads a property, and list equality uses `length`. Pass plain objects.
+* Remove the empty component classes from the type module, and stop exporting `GroupRow` and `RowItems`.
+* Remove the root `index.js` re-export, the Travis deploy, and the unused `itemsSorted` demo prop.
+
 ## 0.30.0 (beta.19)
 
 * Fix crash (`Cannot read properties of null (reading 'x')`) during two-finger pinch-zoom on touch devices in ScrollElement.

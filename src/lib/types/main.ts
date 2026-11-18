@@ -1,5 +1,5 @@
 import { Dayjs } from "dayjs";
-import { ReactNode, CSSProperties, HTMLProps, MouseEventHandler, Ref, Component, ReactElement } from "react";
+import { ReactNode, CSSProperties, HTMLProps, MouseEventHandler, Ref, ReactElement } from "react";
 import { Dimension, ItemDimension } from "./dimension";
 import { ResizeEdge } from "../items/Item";
 import { SelectUnits } from "../utility/calendar";
@@ -137,8 +137,6 @@ export interface TimelineTimeSteps {
   year: number;
 }
 
-export class TimelineMarkers extends Component {}
-
 export interface CustomMarkerChildrenProps {
   styles: CSSProperties;
   date: number;
@@ -149,17 +147,11 @@ export interface MarkerProps {
   children?: ((props: CustomMarkerChildrenProps) => ReactNode) | undefined;
 }
 
-export class CustomMarker extends Component<MarkerProps> {}
-
 export interface TodayMarkerProps extends MarkerProps {
   interval?: number | undefined;
 }
 
-export class TodayMarker extends Component<TodayMarkerProps> {}
-
 export type CursorMarkerProps = Omit<MarkerProps, "date">;
-
-export class CursorMarker extends Component<CursorMarkerProps> {}
 
 export interface TimelineHeadersProps {
   children?: ReactNode;
@@ -169,8 +161,6 @@ export interface TimelineHeadersProps {
   calendarHeaderClassName?: string | undefined;
   headerRef?: Ref<HTMLDivElement> | undefined;
 }
-
-export class TimelineHeaders extends Component<TimelineHeadersProps> {}
 
 export interface SidebarHeaderChildrenFnProps<Data> {
   getRootProps: (propsToOverride?: { style: CSSProperties }) => {
@@ -184,8 +174,6 @@ export interface SidebarHeaderProps<Data> {
   headerData?: Data | undefined;
   children: (props: SidebarHeaderChildrenFnProps<Data>) => ReactNode;
 }
-
-export class SidebarHeader<Data = any> extends Component<SidebarHeaderProps<Data>> {}
 
 export type Unit = "second" | "minute" | "hour" | "day" | "week" | "isoWeek" | "month" | "year";
 
@@ -235,17 +223,6 @@ export interface CustomHeaderProps<Data> {
   height?: number | undefined;
   children: (props?: CustomHeaderPropsChildrenFnProps<Data>) => ReactNode;
 }
-
-export class CustomHeader<Data = any> extends Component<CustomHeaderProps<Data>> {}
-
-// export const defaultKeys: TimelineKeys;
-// export const defaultTimeSteps: TimelineTimeSteps;
-// export const defaultHeaderFormats: LabelFormat;
-
-// export default class ReactCalendarTimeline<
-//       CustomItem extends TimelineItemBase<any> = TimelineItemBase<number>,
-//       CustomGroup extends TimelineGroupBase = TimelineGroupBase,
-//   > extends Component<ReactCalendarTimelineProps<CustomItem, CustomGroup>> {}
 
 export type ElementWithSecret = ReactElement & {
   props: {

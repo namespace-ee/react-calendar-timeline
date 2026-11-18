@@ -31,7 +31,6 @@ import {
 } from "./styles";
 import { Id, ItemContext, TimelineItemBase, TimelineKeys } from "../types/main";
 import { TimelineContext, TimelineContextType } from "../timeline/TimelineStateContext";
-import isEqual from "lodash/isEqual";
 
 dayjs.extend(utc);
 
@@ -175,21 +174,23 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   }
 
   shouldComponentUpdate(nextProps: ItemProps<CustomItem>, nextState: ItemState) {
-    /*const shouldUpdate =
+    return (
       nextState.dragging !== this.state.dragging ||
+      nextState.dragStart !== this.state.dragStart ||
       nextState.dragTime !== this.state.dragTime ||
       nextState.dragGroupDelta !== this.state.dragGroupDelta ||
       nextState.resizing !== this.state.resizing ||
+      nextState.resizeEdge !== this.state.resizeEdge ||
+      nextState.resizeStart !== this.state.resizeStart ||
       nextState.resizeTime !== this.state.resizeTime ||
       nextProps.keys !== this.props.keys ||
-      !deepObjectCompare(nextProps.itemProps, this.props.itemProps) ||
+      nextProps.itemProps !== this.props.itemProps ||
       nextProps.selected !== this.props.selected ||
       nextProps.item !== this.props.item ||
       nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
       nextProps.canvasWidth !== this.props.canvasWidth ||
-      (nextProps.order ? nextProps.order.index : undefined) !==
-        (this.props.order ? this.props.order.index : undefined) ||
+      nextProps.order?.index !== this.props.order?.index ||
       nextProps.dragSnap !== this.props.dragSnap ||
       nextProps.minResizeWidth !== this.props.minResizeWidth ||
       nextProps.canChangeGroup !== this.props.canChangeGroup ||
@@ -197,8 +198,21 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
-      nextProps.dimensions !== this.props.dimensions*/
-    return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState);
+      nextProps.useResizeHandle !== this.props.useResizeHandle ||
+      nextProps.dimensions !== this.props.dimensions ||
+      nextProps.itemRenderer !== this.props.itemRenderer ||
+      nextProps.groupTops !== this.props.groupTops ||
+      nextProps.scrollRef !== this.props.scrollRef ||
+      nextProps.scrollOffset !== this.props.scrollOffset ||
+      nextProps.onDrag !== this.props.onDrag ||
+      nextProps.onDrop !== this.props.onDrop ||
+      nextProps.onResizing !== this.props.onResizing ||
+      nextProps.onResized !== this.props.onResized ||
+      nextProps.moveResizeValidator !== this.props.moveResizeValidator ||
+      nextProps.onSelect !== this.props.onSelect ||
+      nextProps.onContextMenu !== this.props.onContextMenu ||
+      nextProps.onItemDoubleClick !== this.props.onItemDoubleClick
+    );
   }
 
   getTimeRatio() {
