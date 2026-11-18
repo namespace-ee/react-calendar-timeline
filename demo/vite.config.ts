@@ -5,6 +5,8 @@ import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // GitHub Pages serves the demo at /react-calendar-timeline/. Local builds stay at /.
+  base: process.env.DEMO_BASE ?? "/",
   css: {
     preprocessorOptions: {
       scss: {
