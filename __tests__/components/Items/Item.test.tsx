@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { render, fireEvent } from "@testing-library/react";
 import Item from "lib/items/Item";
 import { TimelineContext, TimelineContextType } from "lib/timeline/TimelineStateContext";
@@ -248,6 +249,30 @@ describe("Item", () => {
           timelineContext: mockTimelineContext,
         })
       );
+    });
+  });
+
+  describe("dragTime", () => {
+    const renderWithRef = (item: typeof defaultItem) => {
+      const ref = createRef<Item>();
+      render(
+        <TimelineContext.Provider value={mockTimelineContext}>
+          <Item {...defaultProps} item={item} ref={ref} />
+        </TimelineContext.Provider>
+      );
+      return ref;
+    };
+
+    it("returns a numeric start without wrapping it", () => {
+      const start = 1_700_000_000_000;
+      const ref = renderWithRef({ ...defaultItem, start_time: start });
+      expect(ref.current!.dragTime(new MouseEvent("mousemove"))).toBe(start);
+    });
+
+    it("reads a Date start as milliseconds when idle", () => {
+      const start = new Date("2018-01-01T00:00:00Z");
+      const ref = renderWithRef({ ...defaultItem, start_time: start as unknown as number });
+      expect(ref.current!.dragTime(new MouseEvent("mousemove"))).toBe(start.valueOf());
     });
   });
 

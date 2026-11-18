@@ -10,6 +10,18 @@ type TimelineProps = ReactCalendarTimelineProps<TimelineItemBase<number>, Timeli
 // Timeline.defaultProps contains null for many optional fields and string
 // literals wider than expected union types. We need items & groups to be
 // required while the rest can stay partial.
+function WindowProbe(props: { visibleTimeStart?: unknown; visibleTimeEnd?: unknown }) {
+  return (
+    <div
+      data-testid="window-probe"
+      data-start-type={typeof props.visibleTimeStart}
+      data-end-type={typeof props.visibleTimeEnd}
+      data-start={String(props.visibleTimeStart)}
+      data-end={String(props.visibleTimeEnd)}
+    />
+  );
+}
+
 const defaultProps = {
   ...(Timeline.defaultProps as unknown as Partial<Omit<TimelineProps, "ref">>),
   items: [] as TimelineItemBase<number>[],
@@ -46,6 +58,24 @@ describe("Timeline", () => {
       const { container } = render(<Timeline {...props} />);
 
       expect(container.querySelector(".rct-scroll")).toBeDefined();
+    });
+
+    it("stores a dayjs default window as milliseconds", () => {
+      const start = dayjs("2018-01-01");
+      const end = dayjs("2018-03-01");
+      const props = {
+        ...defaultProps,
+        defaultTimeStart: start as unknown as number,
+        defaultTimeEnd: end as unknown as number,
+        children: <WindowProbe />,
+      };
+
+      const { getByTestId } = render(<Timeline {...props} />);
+      const probe = getByTestId("window-probe");
+      expect(probe.dataset.startType).toBe("number");
+      expect(probe.dataset.endType).toBe("number");
+      expect(probe.dataset.start).toBe(String(start.valueOf()));
+      expect(probe.dataset.end).toBe(String(end.valueOf()));
     });
 
     it("throws error if neither visibleTime or defaultTime props are passed", () => {

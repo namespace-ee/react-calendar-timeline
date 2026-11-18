@@ -281,8 +281,10 @@ export default class ReactCalendarTimeline<
     let visibleTimeEnd: number | null = null;
 
     if (this.props.defaultTimeStart && this.props.defaultTimeEnd) {
-      visibleTimeStart = this.props.defaultTimeStart; //.valueOf()
-      visibleTimeEnd = this.props.defaultTimeEnd; //.valueOf()
+      // Numbers pass through. Date and dayjs are accepted by the README and
+      // must not stay objects in state, or later !== checks never settle.
+      visibleTimeStart = dayjs(this.props.defaultTimeStart).valueOf();
+      visibleTimeEnd = dayjs(this.props.defaultTimeEnd).valueOf();
     } else if (this.props.visibleTimeStart && this.props.visibleTimeEnd) {
       visibleTimeStart = this.props.visibleTimeStart;
       visibleTimeEnd = this.props.visibleTimeEnd;
