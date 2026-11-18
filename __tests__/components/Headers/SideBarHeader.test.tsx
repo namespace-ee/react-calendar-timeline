@@ -20,6 +20,11 @@ describe("Testing SidebarHeader Component", () => {
     expect(width).not.toBe("250px");
   });
 
+  it("leaves the text color unset when none is passed", () => {
+    const { getByTestId } = renderSidebarHeaderWithCustomValues();
+    expect(getByTestId("sidebarHeader").style.color).toBe("");
+  });
+
   it("Given sidebarHeader When pass style Then it show on the sidebar", () => {
     const { getByTestId } = renderSidebarHeaderWithCustomValues({
       props: { style: { color: "white" } },

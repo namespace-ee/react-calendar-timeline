@@ -7,6 +7,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Let the sidebar header inherit `$sidebar-color` instead of forcing inline white text.
 * Mark `*.css` and `*.scss` as side effects so bundlers keep `import "react-calendar-timeline/style.css"`.
 * Remove `interactjs` from `peerDependencies`. It is bundled into `dist`.
 * Point the `style` export condition at `dist/style.css`. The build does not emit `dist/Timeline.css`.
