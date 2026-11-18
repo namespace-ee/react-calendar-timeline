@@ -237,13 +237,11 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   }
 
   dragTime(e: MouseEvent) {
-    const startTime = dayjs(this.itemTimeStart);
-
     if (this.state.dragging) {
       return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart!.offset, true);
-    } else {
-      return startTime.valueOf();
     }
+    const start = this.itemTimeStart;
+    return typeof start === "number" ? start : dayjs(start).valueOf();
   }
 
   timeFor(e: MouseEvent) {

@@ -7,6 +7,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Store the visible window as milliseconds. `defaultTimeStart` and `defaultTimeEnd` are converted once, and an item that is not being dragged reads a numeric start directly.
 * Release the scroll lock when the pointer goes up outside a selected item. An item that cannot move never received that pointerup, so panning stayed disabled.
 * Snap drags with the UTC offset at the target time, so a 24-hour `dragSnap` lands on local midnight across daylight saving.
 * Keep group order when a group id looks like an integer. `getGroupedItems` stores each group at its insertion index.
