@@ -100,6 +100,16 @@ describe("defaultItemRenderer", () => {
     expect(container.querySelector(".rct-item")).toBeInTheDocument();
   });
 
+  it("shows edge cursors when selected and resizable without useResizeHandle", () => {
+    const props = createRendererProps({
+      itemContext: { selected: true, canResizeLeft: true, canResizeRight: true },
+    });
+    const { container } = render(defaultItemRenderer(props));
+
+    expect(container.querySelector(".rct-item-handler-resize-left")).toBeInTheDocument();
+    expect(container.querySelector(".rct-item-handler-resize-right")).toBeInTheDocument();
+  });
+
   it("hides resize handles when useResizeHandle is false", () => {
     const props = createRendererProps();
     // useResizeHandle defaults to false in createRendererProps

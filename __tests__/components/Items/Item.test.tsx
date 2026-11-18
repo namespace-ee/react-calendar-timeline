@@ -171,6 +171,24 @@ describe("Item", () => {
       expect(container.querySelector(".rct-item-handler-resize-left")).toBeInTheDocument();
       expect(container.querySelector(".rct-item-handler-resize-right")).toBeInTheDocument();
     });
+
+    it("uses a resize cursor on the edges and a move cursor on the item", () => {
+      const { container } = renderItem({
+        selected: true,
+        canMove: true,
+        canResizeLeft: true,
+        canResizeRight: true,
+        minResizeWidth: 20,
+        dimensions: { ...defaultDimensions, width: 200 },
+      });
+      const item = container.querySelector(".rct-item") as HTMLElement;
+      const left = container.querySelector(".rct-item-handler-resize-left") as HTMLElement;
+      const right = container.querySelector(".rct-item-handler-resize-right") as HTMLElement;
+
+      expect(item.style.cursor).toBe("move");
+      expect(left.style.cursor).toBe("ew-resize");
+      expect(right.style.cursor).toBe("ew-resize");
+    });
   });
 
   describe("event handlers", () => {

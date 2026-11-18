@@ -28,36 +28,32 @@ export const selectedAndCanMove = {
 export const selectedAndCanResizeLeft = {
   borderLeftWidth: 3,
 };
-export const selectedAndCanResizeLeftAndDragLeft = {
-  cursor: "w-resize",
-};
 export const selectedAndCanResizeRight = {
   borderRightWidth: "3px",
 };
-export const selectedAndCanResizeRightAndDragRight = {
-  cursor: "e-resize",
-};
 
+// Matches interact.js resize.defaultMargin on browsers with pointer events,
+// and its cap of half the item width.
 export const leftResizeStyle = {
   position: "absolute",
-  width: 24,
-  maxWidth: "20%",
+  width: 20,
+  maxWidth: "50%",
   minWidth: 2,
   height: "100%",
   top: 0,
   left: 0,
-  cursor: "pointer",
+  cursor: "ew-resize",
   zIndex: 88,
 };
 
 export const rightResizeStyle = {
   position: "absolute",
-  width: 24,
-  maxWidth: "20%",
+  width: 20,
+  maxWidth: "50%",
   minWidth: 2,
   height: "100%",
   top: 0,
   right: 0,
-  cursor: "pointer",
+  cursor: "ew-resize",
   zIndex: 88,
 };
