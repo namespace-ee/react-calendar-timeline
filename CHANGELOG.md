@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Show an `ew-resize` cursor on the ends of a selected item that can be resized. The rest of the item keeps the move cursor.
+* Keep demo move and resize results by writing `start_time` and `end_time`.
+
 * Publish the Vite demo to GitHub Pages from `main`.
 
 ## 0.30.0 (beta.19)

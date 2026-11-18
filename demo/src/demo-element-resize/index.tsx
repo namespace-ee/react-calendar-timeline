@@ -49,8 +49,8 @@ export default class App extends Component<{}, any> {
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: dragTime,
-              end: dragTime + (item.end - item.start),
+              start_time: dragTime,
+              end_time: dragTime + (item.end_time - item.start_time),
               group: group.id,
             })
           : item
@@ -67,8 +67,8 @@ export default class App extends Component<{}, any> {
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: edge === "left" ? time : item.start,
-              end: edge === "left" ? item.end : time,
+              start_time: edge === "left" ? time : item.start_time,
+              end_time: edge === "left" ? item.end_time : time,
             })
           : item
       ),
