@@ -7,6 +7,9 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Mark `*.css` and `*.scss` as side effects so bundlers keep `import "react-calendar-timeline/style.css"`.
+* Remove `interactjs` from `peerDependencies`. It is bundled into `dist`.
+* Point the `style` export condition at `dist/style.css`. The build does not emit `dist/Timeline.css`.
 * Store the visible window as milliseconds. `defaultTimeStart` and `defaultTimeEnd` are converted once, and an item that is not being dragged reads a numeric start directly.
 * Release the scroll lock when the pointer goes up outside a selected item. An item that cannot move never received that pointerup, so panning stayed disabled.
 * Snap drags with the UTC offset at the target time, so a 24-hour `dragSnap` lands on local midnight across daylight saving.
