@@ -10,8 +10,6 @@ export function defaultItemRenderer<CustomItem extends TimelineItemBase<number>>
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
   const { key, ref, ...rest } = getItemProps(item.itemProps ?? {});
   const { useResizeHandle, selected, canResizeLeft, canResizeRight } = itemContext;
-  const showLeft = useResizeHandle || (selected && canResizeLeft);
-  const showRight = useResizeHandle || (selected && canResizeRight);
 
   return (
     <div {...rest} ref={ref} key={`${key}-outer`}>
@@ -23,8 +21,8 @@ export function defaultItemRenderer<CustomItem extends TimelineItemBase<number>>
         {itemContext.title}
       </div>
 
-      {showLeft ? <div {...leftResizeProps} key={`${key}-lr`} /> : null}
-      {showRight ? <div {...rightResizeProps} key={`${key}-rr`} /> : null}
+      {useResizeHandle || (selected && canResizeLeft) ? <div {...leftResizeProps} key={`${key}-lr`} /> : null}
+      {useResizeHandle || (selected && canResizeRight) ? <div {...rightResizeProps} key={`${key}-rr`} /> : null}
     </div>
   );
 }

@@ -32,8 +32,6 @@ export const selectedAndCanResizeRight = {
   borderRightWidth: "3px",
 };
 
-// Matches interact.js resize.defaultMargin on browsers with pointer events,
-// and its cap of half the item width.
 export const leftResizeStyle = {
   position: "absolute",
   width: 20,
