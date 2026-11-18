@@ -298,4 +298,51 @@ describe("Item", () => {
       expect(item.style.borderLeftWidth).toBe("1px");
     });
   });
+
+  describe("scroll lock", () => {
+    const renderSelectable = (selected: boolean) => (
+      <div
+        ref={(node) => {
+          if (!node || node.dataset.listening === "1") return;
+          node.dataset.listening = "1";
+          node.addEventListener("itemInteraction", (event) => {
+            seen.push((event as CustomEvent<{ itemInteraction: boolean }>).detail.itemInteraction);
+          });
+        }}
+      >
+        <TimelineContext.Provider value={mockTimelineContext}>
+          <Item {...defaultProps} selected={selected} canMove={false} canSelect />
+        </TimelineContext.Provider>
+      </div>
+    );
+
+    let seen: boolean[];
+
+    beforeEach(() => {
+      seen = [];
+    });
+
+    it("clears the lock when the pointer is released outside the item", () => {
+      const { container, rerender } = render(renderSelectable(false));
+      rerender(renderSelectable(true));
+
+      fireEvent.pointerDown(container.querySelector(".rct-item")!);
+      expect(seen).toEqual([true]);
+
+      fireEvent.pointerUp(window);
+      expect(seen).toEqual([true, false]);
+    });
+
+    it("clears the lock on pointercancel", () => {
+      const { container, rerender, unmount } = render(renderSelectable(false));
+      rerender(renderSelectable(true));
+
+      fireEvent.pointerDown(container.querySelector(".rct-item")!);
+      fireEvent.pointerCancel(window);
+      expect(seen).toEqual([true, false]);
+
+      unmount();
+      fireEvent.pointerUp(window);
+    });
+  });
 });
