@@ -5,6 +5,7 @@
   "packageManager": "npm@10.1.0",
   "scripts": {
     "build": "npm run clean && tsc && vite build",
+    "build:demo": "npm --prefix demo run build",
     "clean": "rimraf ./dist",
     "lint": "eslint --ext .ts --ext .tsx ./src",
     "lint:fix": "npm run lint --fix",

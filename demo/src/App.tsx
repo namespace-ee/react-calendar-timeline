@@ -99,7 +99,8 @@ function withLayout(Component: ComponentType<any>) {
 }
 
 function App() {
-  return <RouterProvider router={createBrowserRouter(routes)} />;
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
+  return <RouterProvider router={createBrowserRouter(routes, { basename })} />;
 }
 
 export default App;
