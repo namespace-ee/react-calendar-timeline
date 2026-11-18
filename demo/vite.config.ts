@@ -5,6 +5,8 @@ import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // GitHub Pages serves the demo at /react-calendar-timeline/. Local builds stay at /.
+  base: process.env.DEMO_BASE ?? "/",
   css: {
     preprocessorOptions: {
       scss: {
@@ -16,6 +18,9 @@ export default defineConfig({
     },
   },
   resolve: {
+    // The demo depends on React 18. Library source next to it resolves React 19
+    // from the repo root. Two copies make Timeline children unreadable.
+    dedupe: ["react", "react-dom"],
     alias: {
       // "~": resolve(__dirname, "node_modules/"),
 

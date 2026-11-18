@@ -3,6 +3,8 @@
 
 A modern and responsive React timeline component.
 
+Demos: https://namespace-ee.github.io/react-calendar-timeline/
+
 **Version 0.30.0-beta.17 Now Available!**
 
 We're excited to announce the beta release of v0.30.0 which includes:
