@@ -7,6 +7,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Compare item start and end directly in `getVisibleItems`. Unix timestamps, `Date`, and `dayjs` objects already compare through `valueOf`.
 * Drop `lodash`, `classnames`, and `memoize-one`. Item updates compare the fields they render, and header class names are joined directly.
 * Remove the Immutable.js input shim. `_get` reads a property, and list equality uses `length`. Pass plain objects.
 * Remove the empty component classes from the type module, and stop exporting `GroupRow` and `RowItems`.

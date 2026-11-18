@@ -309,10 +309,9 @@ export function getVisibleItems<
   const { itemTimeStartKey, itemTimeEndKey } = keys;
 
   return items.filter((item) => {
-    const afterStart = dayjs(_get(item, itemTimeStartKey)).valueOf() <= canvasTimeEnd;
-    const beforeEnd = dayjs(_get(item, itemTimeEndKey)).valueOf() >= canvasTimeStart;
-
-    return afterStart && beforeEnd;
+    // Numbers, Date, and dayjs all compare through valueOf. Wrapping each
+    // timestamp in dayjs() only allocates.
+    return _get(item, itemTimeStartKey) <= canvasTimeEnd && _get(item, itemTimeEndKey) >= canvasTimeStart;
   });
 }
 
