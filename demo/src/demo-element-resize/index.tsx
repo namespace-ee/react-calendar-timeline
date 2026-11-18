@@ -27,6 +27,11 @@ export default class App extends Component<{}, any> {
     super(props);
 
     const { groups, items } = generateFakeData(10, 200);
+    // The generator locks move/resize from the clock. This page's own canMove and canResize should win.
+    for (const item of items) {
+      delete item.canMove;
+      delete item.canResize;
+    }
     const defaultTimeStart = dayjs().startOf("day").toDate();
     const defaultTimeEnd = dayjs().startOf("day").add(1, "day").toDate();
     const width = 80;
