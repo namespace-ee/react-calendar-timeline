@@ -282,7 +282,9 @@ export function getGroupedItems(items: ItemDimension[], groupOrders: GroupOrders
   // Initialize with result object for each group
   for (let i = 0; i < keys.length; i++) {
     const groupOrder = groupOrders[keys[i]];
-    groupedItems[i] = {
+    // Key by insertion index. Object.keys sorts integer-like ids ("2", "10")
+    // ahead of the order the groups were given.
+    groupedItems[groupOrder.index] = {
       index: groupOrder.index,
       group: groupOrder.group,
       items: [],
