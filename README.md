@@ -3,7 +3,9 @@
 
 A modern and responsive React timeline component.
 
-**Version 0.30.0-beta.17 Now Available!**
+**Version 0.30.0 Now Available!**
+
+Demos: https://namespace-ee.github.io/react-calendar-timeline/
 
 We're excited to announce the beta release of v0.30.0 which includes:
 - Full TypeScript rewrite with bundled type definitions
@@ -1273,9 +1275,9 @@ This is useful when using the plugins (that you pass as children to the componen
 
 The timeline is built with speed, usability and extensibility in mind.
 
-Speed: The calendar itself is actually a 3x wide scrolling canvas of the screen. All scroll events left and right happen naturally, like scrolling any website. When the timeline has scrolled enough (50% of the invisible surface on one side), we change the "position:absolute;left:{num}px;" variables of each of the visible items and scroll the canvas back. When this happens, the `onBoundsChange` prop is called.
+Speed: The calendar draws a canvas three times as wide as the screen. Horizontal movement is a CSS `translateX`, updated once per animation frame. When the viewport crosses halfway to either edge of that canvas, item positions are recalculated and `onBoundsChange` runs.
 
-This results in a visually endless scrolling canvas with optimal performance.
+This keeps a visually endless canvas without moving every item on each pixel of scroll.
 
 Extensibility and usability: While some parameters (`onTimeChange`, `moveResizeValidator`) might be hard to configure, these are design decisions to make it as extensible as possible. If you have recipes for common tasks regarding those parameters, send a PR to add them to this doc.
 
