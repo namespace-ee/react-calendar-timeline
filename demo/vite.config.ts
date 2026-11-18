@@ -18,6 +18,9 @@ export default defineConfig({
     },
   },
   resolve: {
+    // The demo depends on React 18. Library source next to it resolves React 19
+    // from the repo root. Two copies make Timeline children unreadable.
+    dedupe: ["react", "react-dom"],
     alias: {
       // "~": resolve(__dirname, "node_modules/"),
 
