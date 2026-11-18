@@ -299,7 +299,7 @@ const App = () => {
             sidebarWidth={150}
             sidebarContent={<div>Above The Left</div>}
             canMove
-            canResize="right"
+            canResize="both"
             canSelect
             dragSnap={24 * 60 * 60 * 1000}
             defaultTimeStart={start}

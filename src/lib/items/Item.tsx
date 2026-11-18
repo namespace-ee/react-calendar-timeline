@@ -21,6 +21,7 @@ import { getSumOffset, getSumScroll } from "../utility/dom-helpers";
 import {
   leftResizeStyle,
   overridableStyles,
+  resizeMargin,
   rightResizeStyle,
   selectedAndCanMove,
   selectedAndCanResizeLeft,
@@ -300,6 +301,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
           top: false,
           bottom: false,
         },
+        margin: resizeMargin,
         enabled: this.props.selected && (this.canResizeLeft() || this.canResizeRight()),
       })
       .draggable({
@@ -505,6 +507,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
 
         interact(this.itemRef.current).resizable({
           enabled: willBeAbleToResizeLeft || willBeAbleToResizeRight,
+          margin: resizeMargin,
           edges: {
             top: false,
             bottom: false,

@@ -25,33 +25,40 @@ export const selectedAndCanMove = {
   willChange: "left, top, width",
   cursor: "move",
 };
+/** interactjs resize margin, in px. The handle is this wide. */
+export const resizeMargin = 20;
+const selectedResizeBorder = 3;
+
 export const selectedAndCanResizeLeft = {
-  borderLeftWidth: 3,
+  borderLeftWidth: selectedResizeBorder,
 };
 export const selectedAndCanResizeRight = {
-  borderRightWidth: "3px",
+  borderRightWidth: selectedResizeBorder,
 };
 
+// Absolute left/right sit on the padding edge, inside the border. Pull the
+// handle out by the border width so it covers that border and lines up with
+// interact's margin, which is measured from the outer edge.
 export const leftResizeStyle = {
   position: "absolute",
-  width: 20,
+  width: resizeMargin,
   maxWidth: "50%",
   minWidth: 2,
   height: "100%",
   top: 0,
-  left: 0,
+  left: -selectedResizeBorder,
   cursor: "ew-resize",
   zIndex: 88,
 };
 
 export const rightResizeStyle = {
   position: "absolute",
-  width: 20,
+  width: resizeMargin,
   maxWidth: "50%",
   minWidth: 2,
   height: "100%",
   top: 0,
-  right: 0,
+  right: -selectedResizeBorder,
   cursor: "ew-resize",
   zIndex: 88,
 };

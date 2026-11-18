@@ -51,14 +51,9 @@ export default function (groupCount = 30, itemCount = 1000, daysInPast = 30) {
       start_time: startValue,
       end_time: endValue,
       canMove: startValue > new Date().getTime(),
-      canResize:
-        startValue > new Date().getTime()
-          ? endValue > new Date().getTime()
-            ? "both"
-            : "left"
-          : endValue > new Date().getTime()
-            ? "right"
-            : false,
+      // Both ends unless the bar is entirely in the past. A bar that only
+      // crosses now used to be right-only, so its left end had no resize cursor.
+      canResize: endValue > new Date().getTime() ? "both" : false,
       className: dayjs(startDate).day() === 6 || dayjs(startDate).day() === 0 ? "item-weekend" : "",
       bgColor: randomColor({
         luminosity: "light",

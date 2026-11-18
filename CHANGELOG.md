@@ -7,6 +7,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+* Keep the resize cursor across the selected border. The handle covers that border and uses the same 20px band as the resize hit area. Demo bars resize from both ends; the element-resize page stays right-only.
 * Show an `ew-resize` cursor on the ends of a selected item that can be resized. The rest of the item keeps the move cursor.
 * Keep demo move and resize results by writing `start_time` and `end_time`.
 * Let every bar on the element-resize demo move and resize from the right. Per-item clock flags no longer override that page.

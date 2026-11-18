@@ -180,7 +180,7 @@ export default class App extends Component {
         rightSidebarWidth={150}
         rightSidebarContent={<div>Above The Right</div>}
         canMove
-        canResize="right"
+        canResize="both"
         canSelect
         itemTouchSendsClick={false}
         stackItems
