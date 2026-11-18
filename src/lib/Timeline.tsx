@@ -15,6 +15,7 @@ import {
   getCanvasWidth,
   stackTimelineItems,
   coordinateToTimeRatio,
+  snapTime,
 } from "./utility/calendar";
 import { _get } from "./utility/generic";
 import { defaultKeys, defaultTimeSteps } from "./default-config";
@@ -969,9 +970,8 @@ export default class ReactCalendarTimeline<
 
     if (!this.props.dragSnap) return { time: dragTime, groupIndex: groupDelta };
 
-    const consideredOffset = dayjs().utcOffset() * 60 * 1000;
     return {
-      time: Math.round(dragTime / this.props.dragSnap) * this.props.dragSnap - (consideredOffset % this.props.dragSnap),
+      time: snapTime(dragTime, this.props.dragSnap),
       groupIndex: groupDelta,
     };
   };
