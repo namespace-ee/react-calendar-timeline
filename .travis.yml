@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - "8"
-after_success:
-  - bash deploy-gh-pages.sh
-env:
-  global:
-  - ENCRYPTION_LABEL: "d8c751632116"
-  - COMMIT_AUTHOR_EMAIL: "deploy@travis"

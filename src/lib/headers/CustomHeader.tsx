@@ -5,7 +5,6 @@ import { iterateTimes } from "../utility/calendar";
 import { Interval, TimelineTimeSteps } from "../types/main";
 import { Dayjs } from "dayjs";
 import { CustomDateHeaderProps } from "./CustomDateHeader";
-import isEqual from "lodash/isEqual";
 import { GetIntervalPropsType } from "./types";
 
 export type CustomHeaderProps<Data> = {
@@ -60,30 +59,14 @@ class CustomHeader<Data> extends React.Component<CustomHeaderProps<Data>, State>
     height: 30,
   };
 
-  /*shouldComponentUpdate(nextProps: CustomHeaderProps<Data>) {
-    if (
-      nextProps.canvasTimeStart !== this.props.canvasTimeStart ||
-      nextProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
-      nextProps.canvasWidth !== this.props.canvasWidth ||
-      nextProps.unit !== this.props.unit ||
-      nextProps.timeSteps !== this.props.timeSteps ||
-      nextProps.showPeriod !== this.props.showPeriod ||
-      nextProps.children !== this.props.children ||
-      nextProps.headerData !== this.props.headerData
-    ) {
-      return true
-    }
-    return false
-  }*/
   componentDidUpdate(prevProps: CustomHeaderProps<Data>) {
     if (
-      !isEqual(prevProps, this.props)
-      //prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
-      //prevProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
-      //prevProps.canvasWidth !== this.props.canvasWidth ||
-      //prevProps.unit !== this.props.unit ||
-      //prevProps.timeSteps !== this.props.timeSteps ||
-      //prevProps.showPeriod !== this.props.showPeriod
+      prevProps.canvasTimeStart !== this.props.canvasTimeStart ||
+      prevProps.canvasTimeEnd !== this.props.canvasTimeEnd ||
+      prevProps.canvasWidth !== this.props.canvasWidth ||
+      prevProps.unit !== this.props.unit ||
+      prevProps.timeSteps !== this.props.timeSteps ||
+      prevProps.getLeftOffsetFromDate !== this.props.getLeftOffsetFromDate
     ) {
       const { canvasTimeStart, canvasTimeEnd, unit, timeSteps, getLeftOffsetFromDate } = this.props;
 

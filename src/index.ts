@@ -17,9 +17,6 @@ export type { DateHeaderWrapper as DateHeaderProps } from "./lib/headers/DateHea
 export * as calendarUtils from "./lib/utility/calendar";
 export * from "./lib/types/main";
 
-export { default as GroupRow } from "./lib/row/GroupRow";
-export { default as RowItems } from "./lib/items/Items";
-
 export { Timeline };
 export type { ReactCalendarTimelineProps, ReactCalendarTimelineState, OnTimeChange };
 export default Timeline;

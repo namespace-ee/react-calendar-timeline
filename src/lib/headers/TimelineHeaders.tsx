@@ -1,5 +1,4 @@
-import React, { ReactNode, LegacyRef, CSSProperties } from "react";
-import classNames from "classnames";
+import React, { CSSProperties, ReactNode, LegacyRef } from "react";
 import { useTimelineHeadersContext } from "./HeadersContext";
 import SidebarHeader from "./SidebarHeader";
 import { RIGHT_VARIANT } from "./constants";
@@ -71,13 +70,13 @@ class TimelineHeaders extends React.Component<TimelineHeadersProps> {
       <div
         data-testid="headerRootDiv"
         style={this.getRootStyle()}
-        className={classNames("rct-header-root", this.props.className)}
+        className={["rct-header-root", this.props.className].filter(Boolean).join(" ")}
       >
         {leftSidebarHeader}
         <div
           ref={this.props.registerScroll}
           style={this.getCalendarHeaderStyle()}
-          className={classNames("rct-calendar-header", this.props.calendarHeaderClassName)}
+          className={["rct-calendar-header", this.props.calendarHeaderClassName].filter(Boolean).join(" ")}
           data-testid="headerContainer"
         >
           <div style={{ transform: `translateX(${-this.props.scrollOffset}px)` }}>{calendarHeaders}</div>

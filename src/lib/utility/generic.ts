@@ -1,32 +1,11 @@
-import isEqual from "lodash/isEqual";
-
-// so we could use both immutable.js objects and regular objects
-
 type GetObject = Record<string, any>;
 
 export function _get(object: GetObject, key: string): any {
-  return typeof object.get === "function" ? object.get(key) : object[key];
-}
-
-interface CountObject {
-  count?(): number;
-  length?: number;
-}
-export function _length(object: CountObject) {
-  return typeof object.count === "function" ? object.count() : object.length;
+  return object[key];
 }
 
 export function arraysEqual<T>(array1: T[], array2: T[]): boolean {
-  return (
-    _length(array1) === _length(array2) &&
-    array1.every((element, index) => {
-      return element === _get(array2, index.toString());
-    })
-  );
-}
-
-export function deepObjectCompare(obj1: unknown, obj2: unknown): boolean {
-  return isEqual(obj1, obj2);
+  return array1.length === array2.length && array1.every((element, index) => element === array2[index]);
 }
 
 export function keyBy<T>(value: T[], key: keyof T): Record<string, T> {
