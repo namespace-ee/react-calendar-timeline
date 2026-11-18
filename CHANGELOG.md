@@ -9,6 +9,7 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 * Show an `ew-resize` cursor on the ends of a selected item that can be resized. The rest of the item keeps the move cursor.
 * Keep demo move and resize results by writing `start_time` and `end_time`.
+* Let every bar on the element-resize demo move and resize from the right. Per-item clock flags no longer override that page.
 
 * Publish the Vite demo to GitHub Pages from `main`.
 
