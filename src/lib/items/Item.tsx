@@ -168,6 +168,7 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
   private startedClicking: boolean = false;
   private startedTouching: boolean = false;
   private dragInProgress: boolean = false;
+  private interactionClaimed: boolean = false;
 
   constructor(props: ItemProps<CustomItem>) {
     super(props);
@@ -443,23 +444,35 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
         this.actualClick(e, e.pointerType === "mouse" ? "click" : "touch");
       });
 
-    // Native pointerdown fires on the item element during bubble phase, before the
-    // event reaches ScrollElement's div listener. This ensures isItemInteraction is
-    // set synchronously before ScrollElement's handleMouseDown runs.
-    // Guard on selected: listeners persist after deselection since mountInteract is
-    // only called once, so we must not fire when the item is no longer selected.
-    this.itemRef.current!.addEventListener("pointerdown", () => {
-      if (this.props.selected) this.fireInteractEvent(true);
-    });
-    // Reset on pointerup to handle clicks that don't become drags or resizes.
-    // dragend/resizeend handle the reset for actual interactions.
-    this.itemRef.current!.addEventListener("pointerup", () => {
-      if (this.props.selected) this.fireInteractEvent(false);
-    });
+    // pointerdown on the item runs before ScrollElement's listener, so the
+    // scroll lock is set before panning can start. Release is listened for on
+    // window: pointerup on the item does not fire when the pointer is released
+    // outside it, and that left the timeline unable to scroll.
+    this.itemRef.current!.addEventListener("pointerdown", this.claimItemInteraction);
 
     this.setState({
       interactMounted: true,
     });
+  }
+
+  claimItemInteraction = () => {
+    if (!this.props.selected || this.interactionClaimed) return;
+    this.interactionClaimed = true;
+    this.fireInteractEvent(true);
+    window.addEventListener("pointerup", this.endItemInteraction);
+    window.addEventListener("pointercancel", this.endItemInteraction);
+  };
+
+  endItemInteraction = () => {
+    this.interactionClaimed = false;
+    window.removeEventListener("pointerup", this.endItemInteraction);
+    window.removeEventListener("pointercancel", this.endItemInteraction);
+    this.fireInteractEvent(false);
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener("pointerup", this.endItemInteraction);
+    window.removeEventListener("pointercancel", this.endItemInteraction);
   }
 
   canResizeLeft(props = this.props) {
