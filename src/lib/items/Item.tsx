@@ -16,7 +16,7 @@ import utc from "dayjs/plugin/utc";
 import { _get } from "../utility/generic";
 import { composeEvents } from "../utility/events";
 import { defaultItemRenderer } from "./defaultItemRenderer";
-import { coordinateToTimeRatio } from "../utility/calendar";
+import { coordinateToTimeRatio, snapPreservingPhase, snapTime } from "../utility/calendar";
 import { getSumOffset, getSumScroll } from "../utility/dom-helpers";
 import {
   leftResizeStyle,
@@ -222,22 +222,17 @@ export default class Item<CustomItem extends TimelineItemBase<number>> extends C
 
   dragTimeSnap(dragTime: number, considerOffset?: boolean) {
     const { dragSnap } = this.props;
-    if (dragSnap) {
-      const offset = considerOffset ? dayjs().utcOffset() * 60 * 1000 : 0;
-      return Math.round(dragTime / dragSnap) * dragSnap - (offset % dragSnap);
-    } else {
-      return dragTime;
-    }
+    if (!dragSnap) return dragTime;
+    // Pixel deltas stay on a millisecond grid. A drag uses the offset at the
+    // target instant, so a 24h snap lands on local midnight across DST.
+    if (!considerOffset) return Math.round(dragTime / dragSnap) * dragSnap;
+    return snapTime(dragTime, dragSnap);
   }
 
   resizeTimeSnap(dragTime: number) {
     const { dragSnap } = this.props;
-    if (dragSnap) {
-      const endTime = this.itemTimeEnd! % dragSnap;
-      return Math.round((dragTime - endTime) / dragSnap) * dragSnap + endTime;
-    } else {
-      return dragTime;
-    }
+    if (!dragSnap) return dragTime;
+    return snapPreservingPhase(dragTime, this.itemTimeEnd, dragSnap);
   }
 
   dragTime(e: MouseEvent) {

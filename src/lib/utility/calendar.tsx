@@ -319,6 +319,47 @@ export function getVisibleItems<
 
 const EPSILON = 0.001;
 
+/** Snap `time` onto `interval` using a UTC offset in milliseconds. */
+export function snapToInterval(time: number, interval: number, offsetMs: number): number {
+  return Math.round(time / interval) * interval - (offsetMs % interval);
+}
+
+function offsetAt(instant: number): number {
+  return dayjs(instant).utcOffset() * 60 * 1000;
+}
+
+/**
+ * Snap `time` using the UTC offset at that instant. If rounding crosses a
+ * daylight-saving change, snap once more with the offset at the result.
+ * A 24h interval then lands on local midnight on both sides of the change.
+ */
+export function snapTime(time: number, interval: number): number {
+  const firstOffset = offsetAt(time);
+  const first = snapToInterval(time, interval, firstOffset);
+  const atFirst = offsetAt(first);
+  if (atFirst === firstOffset) return first;
+  return snapToInterval(time, interval, atFirst);
+}
+
+/**
+ * Snap `time` so it keeps the local time-of-day of `anchor`.
+ * A 15-minute grid is unchanged where the offset divides the interval.
+ */
+export function snapPreservingPhase(time: number, anchor: number, interval: number): number {
+  const anchorOffset = offsetAt(anchor);
+  const localAnchor = anchor + anchorOffset;
+  const phase = ((localAnchor % interval) + interval) % interval;
+  const apply = (offset: number) => {
+    const local = time + offset;
+    return Math.round((local - phase) / interval) * interval + phase - offset;
+  };
+  const firstOffset = offsetAt(time);
+  const first = apply(firstOffset);
+  const atFirst = offsetAt(first);
+  if (atFirst === firstOffset) return first;
+  return apply(atFirst);
+}
+
 export function collision(a: Dimension, b: Dimension, verticalMargin: number, collisionPadding: number = EPSILON) {
   // 2d collisions detection - https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 
