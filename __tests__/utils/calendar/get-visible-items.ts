@@ -95,6 +95,27 @@ describe("getVisibleItems", () => {
     expect(result).toMatchObject([]);
   });
 
+  it("includes items whose start and end are Date or dayjs objects", () => {
+    const startRange = dayjs().add(-1, "day").valueOf();
+    const endRange = dayjs(startRange).add(1, "day").valueOf();
+    const items = [
+      {
+        [itemTimeStartKey]: new Date(dayjs(startRange).add(10, "minute").valueOf()),
+        [itemTimeEndKey]: new Date(dayjs(startRange).add(20, "minute").valueOf()),
+        id: 1,
+      },
+      {
+        [itemTimeStartKey]: dayjs(startRange).add(30, "minute"),
+        [itemTimeEndKey]: dayjs(startRange).add(40, "minute"),
+        id: 2,
+      },
+    ];
+
+    const result = getVisibleItems(items as unknown as TimelineItemBase<number>[], startRange, endRange, keys);
+
+    expect(result).toMatchObject(items);
+  });
+
   it("does not return items outside of date range - after end date", () => {
     const startRange = dayjs().add(-1, "day").valueOf();
     const endRange = dayjs(startRange).add(1, "day");
